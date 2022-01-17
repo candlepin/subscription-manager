@@ -111,7 +111,7 @@
 %global use_rhsm_icons 0%{use_cockpit}
 
 Name: subscription-manager
-Version: 1.29.21
+Version: 1.29.23
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -870,6 +870,131 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 
 
 %changelog
+* Mon Jan 17 2022 Christopher Snyder <csnyder@redhat.com> 1.29.23-1
+- Ignore debian architecture ALL (schmidt@atix.de)
+- 2028894: Don't allow service-level --serverurl on registered system
+  (mhorky@redhat.com)
+- 2037771: Cockpit registration dialog: enable insights by default
+  (jhnidek@redhat.com)
+- 2039322: fix string representation of DMI facts (ptoscano@redhat.com)
+- Drop usage of six.python_2_unicode_compatible (ptoscano@redhat.com)
+- ENT-4588: Switch away from six iterators (mhorky@redhat.com)
+- ENT-4590: Switch away from six.callable (mhorky@redhat.com)
+- ENT-4587: Switch away from six types (mhorky@redhat.com)
+- Adding permissive coverage publishing (jmolet@redhat.com)
+- Ensure that prompted environment entry follows state of multiples
+  (wpoteat@redhat.com)
+- 2026316: Do not delete cache of content_access during refresh
+  (jhnidek@redhat.com)
+- More SUSE compliance (jhnidek@redhat.com)
+- Updates for non-multi-environment scenario (wpoteat@redhat.com)
+- Fix some minor issues related to syspurpose (jhnidek@redhat.com)
+- syspurpose: handle users w/o organizations (ptoscano@redhat.com)
+- service-level: drop useless check (ptoscano@redhat.com)
+- 2026286: consider user-specified --org in any case (ptoscano@redhat.com)
+- Drop the Vagrant bits (ptoscano@redhat.com)
+- 1995032: Use multiple environments (wpoteat@redhat.com)
+- cache: fix typo in debug message (ptoscano@redhat.com)
+- Switch away from Thread.getName() (ptoscano@redhat.com)
+- Fix indentation of ProductStatus. (jhnidek@redhat.com)
+- 2028969: Do not try to load compliance status from cache (jhnidek@redhat.com)
+- Switch comma-separated join to space-separated join (schmidt@atix.de)
+- 2029927: Fix bash autocompletion (mhorky@redhat.com)
+- utils: use shutil.get_terminal_size() (ptoscano@redhat.com)
+- Remove PyXML leftovers (ptoscano@redhat.com)
+- 2026320: fix format of HTTP-date headers (ptoscano@redhat.com)
+- connection: move HTTP-date formatting to own helper (ptoscano@redhat.com)
+- Ensure datetime.timezone.utc objects for parsed UTC dates
+  (ptoscano@redhat.com)
+- rhsm: drop custom which() implementation (ptoscano@redhat.com)
+- facts: switch to shutil.which() (ptoscano@redhat.com)
+- test: unconditionally use hashlib (ptoscano@redhat.com)
+- 1999048: Fixed partially subscribed product in Cockpit plugin
+  (jhnidek@redhat.com)
+- test: rename tests to default pytest filename pattern (ptoscano@redhat.com)
+- Fixed last bits related to updated D-Bus Register method.
+  (jhnidek@redhat.com)
+- Cockpit plugin: display syspurpose card without attributes
+  (jhnidek@redhat.com)
+- 2023257: Disallowed attaching using D-Bus in SCA mode (jhnidek@redhat.com)
+- 2023257: Disallowed attaching pool in SCA mode: (jhnidek@redhat.com)
+- Refactoring of temporary disablement of dir watchers. (jhnidek@redhat.com)
+- Ignore enable_content option in RegisterWithActivationKeys()
+  (jhnidek@redhat.com)
+- Use benefits of enable_content in cockpit plugin. (jhnidek@redhat.com)
+- Added enable_content option to Register() D-Bus method (jhnidek@redhat.com)
+- Added refresh() method to entitlement service (jhnidek@redhat.com)
+- Fixed issue with status cache (jhnidek@redhat.com)
+- Add information about content access mode to consumer (jhnidek@redhat.com)
+- 2024929: build: fix build on 'build' target (ptoscano@redhat.com)
+- 2023391: libdnf: respect environment CFLAGS (ptoscano@redhat.com)
+- Drop unused ssl_verify_depth config option (ptoscano@redhat.com)
+- tests: drop test_po_files.py (ptoscano@redhat.com)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+
+* Mon Jan 17 2022 Christopher Snyder <csnyder@redhat.com>
+- Ignore debian architecture ALL (schmidt@atix.de)
+- 2028894: Don't allow service-level --serverurl on registered system
+  (mhorky@redhat.com)
+- 2037771: Cockpit registration dialog: enable insights by default
+  (jhnidek@redhat.com)
+- 2039322: fix string representation of DMI facts (ptoscano@redhat.com)
+- Drop usage of six.python_2_unicode_compatible (ptoscano@redhat.com)
+- ENT-4588: Switch away from six iterators (mhorky@redhat.com)
+- ENT-4590: Switch away from six.callable (mhorky@redhat.com)
+- ENT-4587: Switch away from six types (mhorky@redhat.com)
+- Adding permissive coverage publishing (jmolet@redhat.com)
+- Ensure that prompted environment entry follows state of multiples
+  (wpoteat@redhat.com)
+- 2026316: Do not delete cache of content_access during refresh
+  (jhnidek@redhat.com)
+- More SUSE compliance (jhnidek@redhat.com)
+- Updates for non-multi-environment scenario (wpoteat@redhat.com)
+- Fix some minor issues related to syspurpose (jhnidek@redhat.com)
+- syspurpose: handle users w/o organizations (ptoscano@redhat.com)
+- service-level: drop useless check (ptoscano@redhat.com)
+- 2026286: consider user-specified --org in any case (ptoscano@redhat.com)
+- 1995032: Use multiple environments (wpoteat@redhat.com)
+- cache: fix typo in debug message (ptoscano@redhat.com)
+- Switch away from Thread.getName() (ptoscano@redhat.com)
+- Fix indentation of ProductStatus. (jhnidek@redhat.com)
+- 2028969: Do not try to load compliance status from cache (jhnidek@redhat.com)
+- Switch comma-separated join to space-separated join (schmidt@atix.de)
+- 2029927: Fix bash autocompletion (mhorky@redhat.com)
+- utils: use shutil.get_terminal_size() (ptoscano@redhat.com)
+- Remove PyXML leftovers (ptoscano@redhat.com)
+- 2026320: fix format of HTTP-date headers (ptoscano@redhat.com)
+- connection: move HTTP-date formatting to own helper (ptoscano@redhat.com)
+- Ensure datetime.timezone.utc objects for parsed UTC dates
+  (ptoscano@redhat.com)
+- rhsm: drop custom which() implementation (ptoscano@redhat.com)
+- facts: switch to shutil.which() (ptoscano@redhat.com)
+- test: unconditionally use hashlib (ptoscano@redhat.com)
+- 1999048: Fixed partially subscribed product in Cockpit plugin
+  (jhnidek@redhat.com)
+- test: rename tests to default pytest filename pattern (ptoscano@redhat.com)
+- Fixed last bits related to updated D-Bus Register method.
+  (jhnidek@redhat.com)
+- Cockpit plugin: display syspurpose card without attributes
+  (jhnidek@redhat.com)
+- 2023257: Disallowed attaching using D-Bus in SCA mode (jhnidek@redhat.com)
+- 2023257: Disallowed attaching pool in SCA mode: (jhnidek@redhat.com)
+- Refactoring of temporary disablement of dir watchers. (jhnidek@redhat.com)
+- Ignore enable_content option in RegisterWithActivationKeys()
+  (jhnidek@redhat.com)
+- Use benefits of enable_content in cockpit plugin. (jhnidek@redhat.com)
+- Added enable_content option to Register() D-Bus method (jhnidek@redhat.com)
+- Added refresh() method to entitlement service (jhnidek@redhat.com)
+- Fixed issue with status cache (jhnidek@redhat.com)
+- Add information about content access mode to consumer (jhnidek@redhat.com)
+- 2024929: build: fix build on 'build' target (ptoscano@redhat.com)
+- 2023391: libdnf: respect environment CFLAGS (ptoscano@redhat.com)
+- Drop unused ssl_verify_depth config option (ptoscano@redhat.com)
+- tests: drop test_po_files.py (ptoscano@redhat.com)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+
 * Thu Nov 11 2021 Christopher Snyder <csnyder@redhat.com> 1.29.21-1
 - 2020248: handle server-side consumer deletion in syspurpose commands
   (ptoscano@redhat.com)
