@@ -46,11 +46,11 @@ class EnvironmentsCommand(OrgCommand):
                                                   False)
         self._add_url_options()
         self.parser.add_argument("--set", dest="set",
-                                 help=_("set a comma-separated list of environments for this consumer"))
+                                 help=_("set an ordered comma-separated list of environments for this consumer"))
         self.parser.add_argument("--list", action="store_true",
                                  default=False, help=_("list all environments for the organization"))
         self.parser.add_argument("--list-enabled", action="store_true", dest="enabled",
-                                 default=False, help=_("list the environments enabled for this consumer"))
+                                 default=False, help=_("list the environments enabled for this consumer in order"))
         self.parser.add_argument("--list-disabled", action="store_true", dest="disabled",
                                  default=False, help=_("list the environments not enabled for this consumer"))
 
