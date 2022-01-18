@@ -751,34 +751,6 @@ class ContentAccessCache(object):
             return cache.read()
 
 
-class RhsmIconCache(CacheManager):
-    """
-    Cache to keep track of last status returned by the StatusCache.
-    This cache is specifically used to ensure RHSM icon pops up only
-    when the status changes.
-    """
-
-    CACHE_FILE = "/var/lib/rhsm/cache/rhsm_icon.json"
-
-    def __init__(self, data=None):
-        self.data = data or {}
-
-    def to_dict(self):
-        return self.data
-
-    def _load_data(self, open_file):
-        try:
-            self.data = json.loads(open_file.read()) or {}
-            return self.data
-        except IOError as err:
-            log.error("Unable to read cache: %s" % self.CACHE_FILE)
-            log.exception(err)
-        except ValueError:
-            # ignore json file parse errors, we are going to generate
-            # a new as if it didn't exist
-            pass
-
-
 class WrittenOverrideCache(CacheManager):
     """
     Cache to keep track of the overrides used last time the a redhat.repo

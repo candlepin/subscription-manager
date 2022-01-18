@@ -17,7 +17,7 @@ import subscription_manager.injection as inj
 
 from subscription_manager.cache import ProductStatusCache, EntitlementStatusCache, \
     OverrideStatusCache, ProfileManager, InstalledProductsManager, PoolTypeCache, \
-    ReleaseStatusCache, RhsmIconCache, ContentAccessCache, PoolStatusCache, \
+    ReleaseStatusCache, ContentAccessCache, PoolStatusCache, \
     SyspurposeComplianceStatusCache, SupportedResourcesCache, AvailableEntitlementsCache, \
     CurrentOwnerCache, SyspurposeValidFieldsCache, ContentAccessModeCache
 
@@ -54,7 +54,6 @@ def init_dep_injection():
     #        but runs a new version of injectioninit...)
     inj.provide(inj.ENTITLEMENT_STATUS_CACHE, EntitlementStatusCache, singleton=True)
     inj.provide(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, SyspurposeComplianceStatusCache, singleton=True)
-    inj.provide(inj.RHSM_ICON_CACHE, RhsmIconCache, singleton=True)
     inj.provide(inj.CONTENT_ACCESS_MODE_CACHE, ContentAccessModeCache, singleton=True)
     inj.provide(inj.CURRENT_OWNER_CACHE, CurrentOwnerCache, singleton=True)
     inj.provide(inj.SYSPURPOSE_VALID_FIELDS_CACHE, SyspurposeValidFieldsCache)
