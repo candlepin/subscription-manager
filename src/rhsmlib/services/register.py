@@ -33,7 +33,7 @@ class RegisterService(object):
         self.identity = inj.require(inj.IDENTITY)
         self.cp = cp
 
-    def register(self, org, activation_keys=None, environment=None, force=None, name=None, consumerid=None,
+    def register(self, org, activation_keys=None, environments=None, force=None, name=None, consumerid=None,
             type=None, role=None, addons=None, service_level=None, usage=None, jwt_token=None, **kwargs):
         # We accept a kwargs argument so that the DBus object can pass the options dictionary it
         # receives transparently to the service via dictionary unpacking.  This strategy allows the
@@ -72,7 +72,7 @@ class RegisterService(object):
 
         options = {
             'activation_keys': activation_keys,
-            'environment': environment,
+            'environments': environments,
             'force': force,
             'name': name,
             'consumerid': consumerid,
@@ -81,7 +81,7 @@ class RegisterService(object):
         }
         self.validate_options(options)
 
-        environment = options['environment']
+        environments = options['environments']
         facts_dict = self.facts.get_facts()
 
         # Default to the hostname if no name is given
@@ -99,7 +99,7 @@ class RegisterService(object):
                 name=consumer_name,
                 facts=facts_dict,
                 owner=org,
-                environment=environment,
+                environments=environments,
                 keys=options.get('activation_keys'),
                 installed_products=self.installed_mgr.format_for_server(),
                 content_tags=self.installed_mgr.tags,
@@ -178,7 +178,7 @@ class RegisterService(object):
             elif options['consumerid']:
                 raise exceptions.ValidationError(_("Error: Activation keys can not be used with previously"
                     " registered IDs."))
-            elif options['environment']:
+            elif options['environments']:
                 raise exceptions.ValidationError(_("Error: Activation keys do not allow environments to be"
                     " specified."))
         elif options.get('jwt_token') is not None:

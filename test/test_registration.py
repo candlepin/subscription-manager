@@ -144,7 +144,8 @@ class CliRegistrationTests(SubManFixture):
             rc = RegisterCommand()
             rc.options = Mock()
             rc.options.activation_keys = None
-            env_id = rc._get_environment_id(mock_uep, 'owner', None)
+            rc.options.environments = None
+            env_id = rc._process_environments(mock_uep, 'owner', None)
 
             expected = None
             self.assertEqual(expected, env_id)
@@ -161,7 +162,8 @@ class CliRegistrationTests(SubManFixture):
             rc = RegisterCommand()
             rc.options = Mock()
             rc.options.activation_keys = None
-            env_id = rc._get_environment_id(mock_uep, 'owner', None)
+            rc.options.environments = None
+            env_id = rc._process_environments(mock_uep, 'owner', None)
 
             expected = "1234"
             self.assertEqual(expected, env_id)
@@ -177,10 +179,12 @@ class CliRegistrationTests(SubManFixture):
             self.stub_cp_provider.basic_auth_cp = mock_uep
 
             rc = RegisterCommand()
+            rc.cp = mock_uep
             rc.options = Mock()
             rc.options.activation_keys = None
+            rc.options.environments = None
             rc._prompt_for_environment = Mock(return_value="othername")
-            env_id = rc._get_environment_id(mock_uep, 'owner', None)
+            env_id = rc._process_environments(mock_uep, 'owner', None)
 
             expected = "5678"
             self.assertEqual(expected, env_id)
@@ -196,13 +200,81 @@ class CliRegistrationTests(SubManFixture):
             self.stub_cp_provider.basic_auth_cp = mock_uep
 
             rc = RegisterCommand()
+            rc.cp = mock_uep
             rc.options = Mock()
             rc.options.activation_keys = None
+            rc.options.environments = None
             rc._prompt_for_environment = Mock(return_value="not_an_env")
 
             with Capture(silent=True):
                 with self.assertRaises(SystemExit):
-                    rc._get_environment_id(mock_uep, 'owner', None)
+                    rc._process_environments(mock_uep, 'owner', None)
+
+    def test_set_multi_environment_id_multi_available(self):
+        def env_list(*args, **kwargs):
+            return [{"id": "1234", "name": "somename"},
+                    {"id": "5678", "name": "othername"}]
+
+        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+            mock_uep.getEnvironmentList = env_list
+            mock_uep.supports_resource = Mock(return_value=True)
+            mock_uep.has_capability = Mock(return_value=True)
+            self.stub_cp_provider.basic_auth_cp = mock_uep
+
+            rc = RegisterCommand()
+            rc.cp = mock_uep
+            rc.options = Mock()
+            rc.options.activation_keys = None
+            rc.options.environments = None
+            rc._prompt_for_environment = Mock(return_value="somename,othername")
+            env_id = rc._process_environments(mock_uep, 'owner', None)
+            expected = "1234,5678"
+            self.assertEqual(expected, env_id)
+
+    def test_validate_multi_capable_multi_entry(self):
+        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+            rc = RegisterCommand()
+            rc.cp = mock_uep
+            rc.is_registered = Mock(return_value=False)
+            rc.options = Mock()
+            rc.options.activation_keys = None
+            rc.options.force = None
+            rc.options.consumertype = None
+            rc.options.environments = 'One,Two'
+
+            mock_uep.has_capability = Mock(return_value=False)
+            try:
+                rc._validate_options()
+                self.fail("No Exception Raised")
+            except SystemExit as e:
+                self.assertEqual(e.code, os.EX_USAGE)
+
+            mock_uep.has_capability = Mock(return_value=True)
+            try:
+                rc._validate_options()
+            except SystemExit:
+                self.fail("Exception Raised")
+
+    def test_set_duplicate_multi_environment(self):
+        def env_list(*args, **kwargs):
+            return [{"id": "1234", "name": "somename"},
+                    {"id": "5678", "name": "othername"}]
+
+        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+            mock_uep.getEnvironmentList = env_list
+            mock_uep.supports_resource = Mock(return_value=True)
+            self.stub_cp_provider.basic_auth_cp = mock_uep
+
+            rc = RegisterCommand()
+            rc.cp = mock_uep
+            rc.options = Mock()
+            rc.options.activation_keys = None
+            rc.options.environments = None
+            rc._prompt_for_environment = Mock(return_value="somename,othername,somename")
+
+            with Capture(silent=True):
+                with self.assertRaises(SystemExit):
+                    rc._process_environments(mock_uep, 'owner', None)
 
     def test_registration_with_failed_profile_upload(self):
 
