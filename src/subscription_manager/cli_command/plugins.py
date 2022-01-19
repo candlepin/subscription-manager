@@ -14,8 +14,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-import six
-
 from subscription_manager.cli_command.cli import CliCommand
 from subscription_manager.i18n import ugettext as _
 
@@ -72,5 +70,5 @@ class PluginsCommand(CliCommand):
                 print(slot)
                 for hook in sorted(self.plugin_manager._slot_to_funcs[slot],
                                    key=lambda func: func.__name__):
-                    hook_key = six.get_method_self(hook).__class__.get_plugin_key()
+                    hook_key = hook.__self__.__class__.get_plugin_key()
                     print("\t{key}.{name}".format(key=hook_key, name=hook.__name__))
