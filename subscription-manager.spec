@@ -867,7 +867,9 @@ fi
 # Remove old *.egg-info empty directories not removed be previous versions of RPMs
 # due to this BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1927245
 rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-empty
-
+# Remove old cache files
+# The -f flag ensures that exit code 0 will be returned even if the file does not exist.
+rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
 * Mon Jan 17 2022 Christopher Snyder <csnyder@redhat.com> 1.29.23-1
