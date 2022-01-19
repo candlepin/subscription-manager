@@ -13,7 +13,6 @@
 
 import logging
 import sys
-import six
 import decorator
 import dbus.service
 import json
@@ -90,7 +89,7 @@ def dbus_handle_exceptions(func, *args, **kwargs):
                 "message": err_msg
             }
         )
-        six.reraise(exceptions.RHSM1DBusException, exceptions.RHSM1DBusException(error_msg), trace)
+        raise exceptions.RHSM1DBusException(error_msg).with_traceback(trace)
 
 
 def dbus_service_method(*args, **kwargs):
