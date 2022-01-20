@@ -101,13 +101,13 @@ class TestOverrideCommand(TestCliProxyCommand):
         with Capture() as cap:
             self.cc._list(data, None)
             output = cap.out
-            self.assertTrue(re.search('Repository: x', output))
-            self.assertTrue(re.search('\s+hello:\s+world', output))
-            self.assertTrue(re.search('\s+blast-off:\s+space', output))
-            self.assertTrue(re.search('Repository: y', output))
-            self.assertTrue(re.search('\s+goodbye:\s+earth', output))
-            self.assertTrue(re.search('Repository: z', output))
-            self.assertTrue(re.search('\s+greetings:\s+mars', output))
+            self.assertTrue(re.search(r'Repository: x', output))
+            self.assertTrue(re.search(r'\s+hello:\s+world', output))
+            self.assertTrue(re.search(r'\s+blast-off:\s+space', output))
+            self.assertTrue(re.search(r'Repository: y', output))
+            self.assertTrue(re.search(r'\s+goodbye:\s+earth', output))
+            self.assertTrue(re.search(r'Repository: z', output))
+            self.assertTrue(re.search(r'\s+greetings:\s+mars', output))
 
     def test_list_specific_repos(self):
         data = [
@@ -117,9 +117,9 @@ class TestOverrideCommand(TestCliProxyCommand):
         with Capture() as cap:
             self.cc._list(data, ['x'])
             output = cap.out
-            self.assertTrue(re.search('Repository: x', output))
-            self.assertTrue(re.search('\s+hello:\s+world', output))
-            self.assertFalse(re.search('Repository: z', output))
+            self.assertTrue(re.search(r'Repository: x', output))
+            self.assertTrue(re.search(r'\s+hello:\s+world', output))
+            self.assertFalse(re.search(r'Repository: z', output))
 
     def test_list_nonexistant_repos(self):
         data = [
@@ -128,6 +128,6 @@ class TestOverrideCommand(TestCliProxyCommand):
         with Capture() as cap:
             self.cc._list(data, ['x', 'z'])
             output = cap.out
-            self.assertTrue(re.search("Nothing is known about 'z'", output))
-            self.assertTrue(re.search('Repository: x', output))
-            self.assertTrue(re.search('\s+hello:\s+world', output))
+            self.assertTrue(re.search(r"Nothing is known about 'z'", output))
+            self.assertTrue(re.search(r'Repository: x', output))
+            self.assertTrue(re.search(r'\s+hello:\s+world', output))

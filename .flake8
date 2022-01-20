@@ -17,9 +17,6 @@ ignore =
     # W504: line break after binary operator
     # we break after binary operators, newer style breaks before
     W504,
-    # W605: invalid escape sequence '*'
-    # it is a DeprecationWarning since Python 3.6, will become SyntaxError
-    W605
 per-file-ignores =
     # cpinfo fake data as unindented """...""" block
     test/test_utils.py: E122

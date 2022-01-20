@@ -171,11 +171,11 @@ class HardwareCollector(collector.FactsCollector):
             version = data['VERSION_ID']
             distname = data['NAME']
             dist_id = data['VERSION']
-            dist_id_search = re.search('\((.*?)\)', dist_id)
+            dist_id_search = re.search(r'\((.*?)\)', dist_id)
             if dist_id_search:
                 dist_id = dist_id_search.group(1)
             # Split on ':' that is not preceded by '\'
-            vers_mod_data = re.split('(?<!\\\):', data['CPE_NAME'])
+            vers_mod_data = re.split(r'(?<!\\):', data['CPE_NAME'])
             if len(vers_mod_data) >= 6:
                 version_modifier = vers_mod_data[5].lower().replace('\\:', ':')
         elif os.path.exists('/etc/redhat-release'):

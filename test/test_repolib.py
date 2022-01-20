@@ -266,7 +266,7 @@ class RepoActionReportTests(fixture.SubManFixture):
         # needs tests run in eng locale, coupled to report format since
         # I managed to typo them
         report_label_regexes = ['^Repo updates$', '^Total repo updates:',
-                                '^Updated$', '^Added \(new\)$', '^Deleted$']
+                                '^Updated$', r'^Added \(new\)$', '^Deleted$']
         for report_label_regex in report_label_regexes:
             if not re.search(report_label_regex, res, re.MULTILINE):
                 self.fail("Expected to match the report label regex  %s but did not" % report_label_regex)

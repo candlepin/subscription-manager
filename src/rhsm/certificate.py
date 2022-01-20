@@ -36,12 +36,12 @@ log = logging.getLogger(__name__)
 
 
 # Regex used to scan for OIDs:
-OID_PATTERN = re.compile('([0-9]+\.)+[0-9]+:')
+OID_PATTERN = re.compile(r'([0-9]+\.)+[0-9]+:')
 
 
 # Regex used to parse OID values such as:
 #    0:d=0  hl=2 l=   3 prim: UTF8STRING        :2.0
-VALUE_PATTERN = re.compile('.*prim:\s(\w*)\s*:*(.*)')
+VALUE_PATTERN = re.compile(r'.*prim:\s(\w*)\s*:*(.*)')
 
 
 # NOTE: These factory methods create new style certificate objects from
