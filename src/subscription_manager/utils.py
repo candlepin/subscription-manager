@@ -568,7 +568,7 @@ def get_process_names():
     This assumes an accessible and standard procfs at "/proc/".
     It will only work on unix-like systems.
     """
-    proc_name_expr = "[Nn][Aa][Mm][Ee]:?[\s]*(?P<proc_name>.*)"
+    proc_name_expr = r"[Nn][Aa][Mm][Ee]:?[\s]*(?P<proc_name>.*)"
     for subdir in os.listdir('/proc'):
         if re.match('[0-9]+', subdir):
             process_status_file_path = os.path.join(os.path.sep, 'proc', subdir, 'status')

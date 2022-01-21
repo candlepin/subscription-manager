@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 
 CONTAINER_CONTENT_TYPE = "containerimage"
 
-RH_CDN_REGEX = re.compile('^cdn\.(?:.*\.)?redhat\.com$')
+RH_CDN_REGEX = re.compile(r'^cdn\.(?:.*\.)?redhat\.com$')
 RH_CDN_CA = "/etc/rhsm/ca/redhat-entitlement-authority.pem"
 
 

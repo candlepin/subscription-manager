@@ -181,7 +181,7 @@ class RhsmConfigParser(SafeConfigParser):
         except InterpolationMissingOptionError:
             # if there is an interpolation error, resolve it
             raw_val = super(RhsmConfigParser, self).get(section, prop, True)
-            interpolations = re.findall("%\((.*?)\)s", raw_val)
+            interpolations = re.findall(r"%\((.*?)\)s", raw_val)
             changed = False
             for interp in interpolations:
                 # Defaults aren't interpolated by default, so bake them in as necessary

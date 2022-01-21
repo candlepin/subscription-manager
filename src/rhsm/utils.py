@@ -74,8 +74,8 @@ def has_bad_scheme(url):
     :returns: True if the url schme is "bad"
     :rtype: boolean
     """
-    match_bad = '(https?[:/])|(:/)|(\S+://)'
-    match_good = 'https?://'
+    match_bad = r'(https?[:/])|(:/)|(\S+://)'
+    match_good = r'https?://'
     # Testing good first allows us to exclude some regex for bad
     if re.match(match_good, url):
         return False
@@ -85,7 +85,7 @@ def has_bad_scheme(url):
 
 
 def has_good_scheme(url):
-    match = re.match("https?://(\S+)?", url)
+    match = re.match(r"https?://(\S+)?", url)
     if not match:
         return False
     # a good scheme alone is not really a good scheme

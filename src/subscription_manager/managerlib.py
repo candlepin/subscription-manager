@@ -698,7 +698,7 @@ class ImportFileExtractor(object):
     _REGEX_START_GROUP = "start"
     _REGEX_CONTENT_GROUP = "content"
     _REGEX_END_GROUP = "end"
-    _REGEX = "(?P<%s>[-]*BEGIN[\w\ ]*[-]*)(?P<%s>[^-]*)(?P<%s>[-]*END[\w\ ]*[-]*)" % \
+    _REGEX = r"(?P<%s>[-]*BEGIN[\w\ ]*[-]*)(?P<%s>[^-]*)(?P<%s>[-]*END[\w\ ]*[-]*)" % \
         (_REGEX_START_GROUP, _REGEX_CONTENT_GROUP, _REGEX_END_GROUP)
     _PATTERN = re.compile(_REGEX)
 
