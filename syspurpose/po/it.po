@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 14:02-0500\n"
+"POT-Creation-Date: 2021-06-30 02:22-0400\n"
 "PO-Revision-Date: 2021-09-17 12:05+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
@@ -31,13 +31,15 @@ msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr "Se desideri sovrascrivere sul server esegui: {command}"
 
 #: src/syspurpose/cli.py:47
-#, python-brace-format
-msgid "Added {value} to {prop_name}."
+#, fuzzy, python-brace-format
+#| msgid "Added {value} to {prop_name}."
+msgid "Added \"{value}\" to {prop_name}."
 msgstr "Aggunto \"{value}\" a \"{prop_name}\"."
 
 #: src/syspurpose/cli.py:50
-#, python-brace-format
-msgid "Not adding value {value} to {prop_name}; it already exists."
+#, fuzzy, python-brace-format
+#| msgid "Not adding value {value} to {prop_name}; it already exists."
+msgid "Not adding value \"{value}\" to {prop_name}; it already exists."
 msgstr "Non viene aggiunto \"{value}\" a \"{prop_name}\": esiste già."
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
@@ -142,9 +144,13 @@ msgid "Show the current system syspurpose"
 msgstr "Mostra il sistema attuale condiviso"
 
 #: src/syspurpose/cli.py:348
+#, fuzzy
+#| msgid ""
+#| "WARNING: Setting syspurpose in containers has no effect.Please run "
+#| "syspurpose on the host.\n"
 msgid ""
-"WARNING: Setting syspurpose in containers has no effect.Please run "
-"syspurpose on the host.\n"
+"WARNING: Setting syspurpose in containers has no effect.\n"
+"Please run syspurpose on the host.\n"
 msgstr ""
 "AVVISO: l'impostazione di syspurpose nei container non ha alcun effetto. "
 "Eseguire syspurpose sull'host.\n"
