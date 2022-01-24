@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-29 12:56-0400\n"
-"PO-Revision-Date: 2021-10-01 02:05+0000\n"
+"PO-Revision-Date: 2021-11-16 14:16+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-27/ko/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.9\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python2.7/optparse.py:140
@@ -82,7 +82,7 @@ msgstr "도움말 보기 및 종료"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python2.7/optparse.py:1256
 msgid "show program's version number and exit"
-msgstr "프로그램의 버전 보기 및 종료"
+msgstr "프로그램의 버전 번호 보기 및 종료"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python2.7/optparse.py:1279
@@ -129,7 +129,7 @@ msgstr "시스템 등록"
 
 #: cockpit/src/insights.jsx:57 cockpit/src/insights.jsx:260
 msgid "The $0 package is not available from any repository."
-msgstr "$0 패키지는 레포지터리에서 사용 할 수 없습니다."
+msgstr "$0 꾸러미는 저장소에서 사용 할 수 없습니다."
 
 #: cockpit/src/insights.jsx:60
 msgid ""
@@ -627,7 +627,7 @@ msgstr "잘못된 인수가 지정됨: %s\n"
 
 #: src/dnf-plugins/product-id.py:78
 msgid "Installed products updated."
-msgstr "설치된 제품이 업데이트되었습니다."
+msgstr "설치된 제품이 최신화되었습니다."
 
 #: src/dnf-plugins/subscription-manager.py:40
 #, python-format
@@ -1181,7 +1181,7 @@ msgstr "필요한 태그"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:118
 msgid "Arches"
-msgstr "아치"
+msgstr "아키텍처"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:130
@@ -1525,7 +1525,7 @@ msgstr "오류: 이 시스템은 등록되어 있지 않습니다"
 
 #: src/rhsmlib/services/register.py:126
 msgid "This system is already registered. Add force to options to override."
-msgstr "이 시스템은 이미 등록되어 있습니다. 덮어쓰기하려면 옵션에 force를 추가합니다."
+msgstr "이 시스템은 이미 등록되어 있습니다. 덮어쓰기 하려면 옵션에 force를 추가합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:129
@@ -1683,7 +1683,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:19
 msgid "RHN Classic"
-msgstr "RHN Classic"
+msgstr "RHN 클래식"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:22
@@ -1803,7 +1803,7 @@ msgstr "예상 (UEP) 일련 번호# %s"
 #: src/subscription_manager/entcertlib.py:466
 #: src/subscription_manager/repolib.py:647
 msgid "Added (new)"
-msgstr "추가됨(신규)"
+msgstr "추가됨 (신규)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/entcertlib.py:467
@@ -2487,7 +2487,7 @@ msgstr "시스템과 일치"
 msgid ""
 "Only show subscriptions which can be attached to this machine and "
 "architecture"
-msgstr "이 시스템 및 구조에 할당 할 수 있는 서브스크립션만 표시"
+msgstr "이 장비와 구조에 할당 할 수 있는 서브스크립션만 표시"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/filters.glade:46
@@ -2603,13 +2603,13 @@ msgstr "인증서 상태 텍스트"
 #: src/subscription_manager/gui/data/glade/installed.glade:345
 #: src/subscription_manager/gui/data/ui/installed.ui:348
 msgid "<b>Arch:</b>"
-msgstr "<b>구조:</b>"
+msgstr "<b>아키텍처:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/installed.glade:368
 #: src/subscription_manager/gui/data/ui/installed.ui:370
 msgid "Arch Text"
-msgstr "구조 문서"
+msgstr "아키텍처 텍스트"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/mainwindow.glade:9
@@ -3126,7 +3126,7 @@ msgstr "등록해야 하는 이유"
 msgid ""
 "Registering your system with Red Hat allows you to take full advantage of "
 "the benefits of a paid subscription, including:"
-msgstr "Red Hat에 시스템을 등록하면 다음과 같은 유료 서브스크립션 혜택을 받을 수 있습니다:"
+msgstr "Red Hat에 시스템을 등록하면 다음과 같은 유료 서브스크립션의 혜택을 받을 수 있습니다:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:252
@@ -4562,7 +4562,7 @@ msgstr "사용자 이름: "
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:785
 msgid "Password: "
-msgstr "암호: "
+msgstr "비밀번호: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:817
@@ -4942,7 +4942,7 @@ msgstr "오류: 활성키와 함께 --org를 지정하셔야 합니다."
 
 #: src/subscription_manager/managercli.py:1317
 msgid "Error: The --type option has been deprecated and may not be used."
-msgstr "오류: --type 옵션은 더 이상 사용할 수 없습니다."
+msgstr "오류: --type 옵션은 더 이상 사용 할 수 없습니다."
 
 #: src/subscription_manager/managercli.py:1350
 #: src/subscription_manager/managercli.py:1584
@@ -5108,7 +5108,7 @@ msgstr "릴리즈가 설정됨: %s"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1753
 msgid "No release versions available, please check subscriptions."
-msgstr "사용 가능한 출시 버전이 없습니다. 서브스크립션을 확인하십시오."
+msgstr "사용 가능한 출시 버전이 없으며, 서브스크립션을 확인하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1756
@@ -5134,7 +5134,7 @@ msgstr "이 시스템에 호환 가능한 서브스크립션을 자동 첨부합
 msgid ""
 "Automatically attach only subscriptions matching the specified service "
 "level; only used with --auto"
-msgstr "지정된 서비스 수준에 일치하는 서브스크립션만 자동으로 할당합니다; --auto만 함께 사용됨"
+msgstr "지정된 서비스 수준에 일치하는 서브스크립션만 자동으로 할당합니다; --auto와만 함께 사용됨"
 
 #: src/subscription_manager/managercli.py:1785
 msgid ""
@@ -5163,7 +5163,7 @@ msgstr "오류: 풀을 지정할 때 --auto를 사용할 수 없습니다."
 
 #: src/subscription_manager/managercli.py:1813
 msgid "Error: The --servicelevel option cannot be used when specifying pools."
-msgstr "오류: 풀을 지정할 때 --servicelevel 옵션을 사용할 수 없습니다."
+msgstr "오류: 풀을 지정할 때 --servicelevel 옵션을 사용 할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1820
@@ -5249,7 +5249,7 @@ msgid ""
 "Error: The registered entitlement server does not support remove --pool.\n"
 "Instead, use the remove --serial option."
 msgstr ""
-"오류: 등록된 인타이틀먼트 서버는 remove --pool을 지원하지 않습니다.\n"
+"오류: 등록된 자격 서버는 remove --pool을 지원하지 않습니다.\n"
 "대신 remove --serial 옵션을 사용합니다."
 
 #: src/subscription_manager/managercli.py:2012
@@ -5510,7 +5510,7 @@ msgstr "섹션: %s, 이름: %s"
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
-msgstr "오류: --list는 설정 구성 또는 삭제를 위한 다른 옵션과 함께 사용할 수 없습니다."
+msgstr "오류: --list는 설정 구성 또는 삭제를 위한 다른 옵션과 함께 사용 할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2533
@@ -5608,8 +5608,8 @@ msgid ""
 "the subscription or product information, varying with the list requested and "
 "the server version (case-insensitive)."
 msgstr ""
-"서브스크립션 또는 제품 정보에 지정된 표현식을 포함하는 서브스크립션 또는 제품만 나열합니다. 요청 목록 및 버전에 따라 달라집니다. ("
-"대소문자 구분)."
+"서브스크립션 또는 제품 정보에 지정된 표현식을 포함하는 서브스크립션 또는 제품만 나열합니다. 요청 목록 및 서버 버전에 따라 달라집니다. "
+"(대소문자 구분)."
 
 #: src/subscription_manager/managercli.py:2618
 msgid ""
@@ -5727,14 +5727,14 @@ msgstr "수정할 레포지터리 (하나 이상을 지정할 수 있음)"
 msgid ""
 "name of the override to remove (can be specified more than once); used with -"
 "-repo option."
-msgstr "제거할 재정의 이름입니다 (한 번 이상 지정할 수 있음); --repo 옵션과 함께 사용합니다."
+msgstr "제거할 재정의 이름입니다 (한 번 이상 지정 할 수 있음); --repo 옵션과 함께 사용합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2838
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
-msgstr "재정의할 옵션 이름과 값을 쌍점(:)으로 구분합니다 (한번 이상 지정할 수 있음); --repo 선택과 함께 사용됩니다."
+msgstr "재정의할 옵션 이름과 값을 쌍점(:)으로 구분합니다 (한번 이상 지정 할 수 있음); --repo 선택과 함께 사용됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2840
@@ -5900,7 +5900,7 @@ msgstr "%s에서 기존 시스템 ID를 읽을 수 없습니다"
 
 #: src/subscription_manager/migrate/migrate.py:201
 msgid "Legacy password: "
-msgstr "기존 암호: "
+msgstr "기존 비밀번호: "
 
 #: src/subscription_manager/migrate/migrate.py:201
 msgid "Legacy username: "
@@ -5908,7 +5908,7 @@ msgstr "기존 사용자 이름: "
 
 #: src/subscription_manager/migrate/migrate.py:207
 msgid "Destination password: "
-msgstr "대상 암호: "
+msgstr "대상 비밀번호: "
 
 #: src/subscription_manager/migrate/migrate.py:207
 msgid "Destination username: "
@@ -6201,7 +6201,7 @@ msgstr "대상 서버에서 암호를 지정합니다"
 #: src/subscription_manager/migrate/migrate.py:947
 msgid ""
 "The --activation-key and --environment options cannot be used together."
-msgstr "--activation-key 및 --environment 옵션을 함께 사용할 수 없습니다."
+msgstr "--activation-key 및 --environment 옵션을 함께 사용 할 수 없습니다."
 
 #: src/subscription_manager/migrate/migrate.py:949
 msgid ""
@@ -6217,17 +6217,17 @@ msgstr "--activation-key 옵션에는 --org를 지정해야 합니다."
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/migrate/migrate.py:955
 msgid "The --servicelevel and --no-auto options cannot be used together."
-msgstr "--servicelevel 및 --no-auto 옵션은 함께 사용할 수 없습니다."
+msgstr "--servicelevel 및 --no-auto 옵션은 함께 사용 할 수 없습니다."
 
 #: src/subscription_manager/migrate/migrate.py:958
 msgid "The --remove-rhn-packages and --keep options cannot be used together."
-msgstr "--remove-rhn-packages 및 --keep 옵션은 동시에 사용할 수 없습니다."
+msgstr "--remove-rhn-packages와 --keep 옵션은 동시에 사용 할 수 없습니다."
 
 #: src/subscription_manager/migrate/migrate.py:961
 msgid ""
 "The --remove-rhn-packages option must be used with --registration-state="
 "purge."
-msgstr "--remove-rhn-packages 옵션은 --registration-state=purge로 사용해야 합니다."
+msgstr "--remove-rhn-packages 옵션은 --registration-state=purge 와 함께 사용해야 합니다."
 
 #: src/subscription_manager/plugin/container/__init__.py:234
 #: src/subscription_manager/plugin/ostree/action_invoker.py:147
@@ -6289,7 +6289,7 @@ msgstr "총 레포지터리 업데이트: %d"
 
 #: src/subscription_manager/repolib.py:645
 msgid "Updated"
-msgstr "최신화됨"
+msgstr "최신화됩니다"
 
 #: src/subscription_manager/repolib.py:649
 msgid "Deleted"

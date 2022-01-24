@@ -1,12 +1,13 @@
 # Ondřej Januš <ojanus@redhat.com>, 2019. #zanata
 # John Sefler <jsefler@redhat.com>, 2021.
+# Emilio Herrera <ehespinosa57@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-29 13:05-0400\n"
-"PO-Revision-Date: 2021-02-11 01:40+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2021-12-29 03:16+0000\n"
+"Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-27/es/>\n"
 "Language: es\n"
@@ -14,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -23,12 +24,16 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Advertencia: Un {attr} de \"{download_value}\" se estableció recientemente "
+"para este sistema por el administrador del servidor de derechos.\n"
+"{advice}"
 
 #: src/syspurpose/cli.py:31
 #, python-brace-format
 msgid ""
 "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
+"Si desea sobrescribir el cambio del lado del servidor, ejecute: {command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
@@ -58,12 +63,12 @@ msgstr ""
 #: src/syspurpose/cli.py:108
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr ""
+msgstr "{attr} fijado a \"{val}\"."
 
 #: src/syspurpose/cli.py:129
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} desarmado."
 
 #: src/syspurpose/cli.py:181
 msgid "Sets the value for the given property"
