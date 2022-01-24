@@ -15,7 +15,6 @@ import glob
 import inspect
 import logging
 import os
-import six
 import importlib.util
 
 from iniparse import SafeConfigParser
@@ -767,9 +766,9 @@ class BasePluginManager(object):
                     func_module_name = module.__name__
                 else:
                     func_module_name = 'unknown_module'
-            func_class_name = six.get_method_self(func).__class__.__name__
+            func_class_name = func.__self__.__class__.__name__
             plugin_key = ".".join([func_module_name, func_class_name])
-            log.debug("Running %s in %s" % (six.get_method_function(func).__name__, plugin_key))
+            log.debug("Running %s in %s" % (func.__name__, plugin_key))
             # resolve slot_name to conduit
             # FIXME: handle cases where we don't have a conduit for a slot_name
             #   (should be able to handle this since we map those at the same time)
@@ -778,7 +777,7 @@ class BasePluginManager(object):
             try:
                 # create a Conduit
                 # FIXME: handle cases where we can't create a Conduit()
-                conduit_instance = conduit(six.get_method_self(func).__class__, **kwargs)
+                conduit_instance = conduit(func.__self__.__class__, **kwargs)
             # TypeError tends to mean we provided the wrong kwargs for this
             # conduit
             # if we get an Exception above, should we exit early, or
