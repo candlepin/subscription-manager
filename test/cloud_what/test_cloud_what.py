@@ -1108,7 +1108,7 @@ class TestCloudProvider(unittest.TestCase):
         host_facts = {
             'virt.is_guest': True,
             'virt.host_type': 'hyperv',
-            'dmi.bios.vendor': 'Foo company',
+            'dmi.bios.vendor': 'Microsoft',
             'dmi.bios.version': '1.0',
             'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77'
         }
@@ -1116,9 +1116,57 @@ class TestCloudProvider(unittest.TestCase):
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['azure'])
 
-    def test_detect_cloud_provider_azure_heuristics(self):
+    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=True))
+    def test_detect_cloud_provider_azure_with_dmidecode(self):
+        """
+        Test the case, when detecting of azure with dmidecode and azure linux agent works as expected
+        """
+        host_facts = {
+            'virt.is_guest': True,
+            'virt.host_type': 'hyperv',
+            'dmi.bios.vendor': 'Microsoft',
+            'dmi.bios.version': '1.0',
+            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77'
+        }
+        self.host_fact_collector_instance.get_all.return_value = host_facts
+        detected_clouds = detect_cloud_provider()
+        self.assertEqual(detected_clouds, ['azure'])
+
+    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=True))
+    def test_detect_cloud_provider_azure_without_dmidecode(self):
+        """
+        Test the case, when detecting of azure without dmidecode but with azure linux agent works as expected
+        """
+        host_facts = {
+            'virt.is_guest': True,
+            'virt.host_type': 'hyperv',
+        }
+        self.host_fact_collector_instance.get_all.return_value = host_facts
+        detected_clouds = detect_cloud_provider()
+        self.assertEqual(detected_clouds, ['azure'])
+
+    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=True))
+    def test_detect_cloud_provider_azure_heuristics_with_azure_linux_agent(self):
         """
         Test the case, when detecting of azure does not work using strong signs, but it is necessary
+        to use heuristics method. Azure linux agent exists.
+        """
+        host_facts = {
+            'virt.is_guest': True,
+            'virt.host_type': 'hyperv',
+            'dmi.bios.vendor': 'Microsoft',
+            'dmi.bios.version': '1.0',
+            'dmi.system.manufacturer': 'Google',
+            'dmi.chassis.manufacturer': 'Amazon'
+        }
+        self.host_fact_collector_instance.get_all.return_value = host_facts
+        detected_clouds = detect_cloud_provider()
+        self.assertEqual(detected_clouds, ['azure'])
+
+    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=False))
+    def test_detect_cloud_provider_azure_heuristics_without_azure_linux_agent(self):
+        """
+        Test the case, when detecting of azure does not work using strong signs and without azure linux agent
         to use heuristics method
         """
         host_facts = {
@@ -1133,12 +1181,36 @@ class TestCloudProvider(unittest.TestCase):
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['azure'])
 
-    def test_conclict_in_strong_signs(self):
+    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=True))
+    def test_conclict_in_strong_signs_with_azure_linux_agent(self):
         """
         Test the case, when cloud providers change strong signs and there is conflict (two providers
         are detected using strong signs). In such case result using strong signs should be dropped
         and heuristics should be used, because strong signs do not work with probability and original
         order is influenced by the order of classes in 'constant' CLOUD_DETECTORS.
+        Azure Linux Agent exists.
+        """
+        host_facts = {
+            'virt.is_guest': True,
+            'virt.host_type': 'kvm',
+            'dmi.bios.vendor': 'Google',
+            'dmi.bios.version': 'Amazon EC2',
+            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
+            'dmi.chassis.manufacturer': 'Microsoft'
+        }
+        self.host_fact_collector_instance.get_all.return_value = host_facts
+        detected_clouds = detect_cloud_provider()
+        detected_clouds.sort()
+        self.assertEqual(detected_clouds, ['aws', 'azure', 'gcp'])
+
+    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=False))
+    def test_conclict_in_strong_signs_without_azure_linux_agent(self):
+        """
+        Test the case, when cloud providers change strong signs and there is conflict (two providers
+        are detected using strong signs). In such case result using strong signs should be dropped
+        and heuristics should be used, because strong signs do not work with probability and original
+        order is influenced by the order of classes in 'constant' CLOUD_DETECTORS.
+        Azure Linux Agent does not exist.
         """
         host_facts = {
             'virt.is_guest': True,

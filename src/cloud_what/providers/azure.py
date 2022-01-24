@@ -20,6 +20,7 @@ This is module implementing detector and metadata collector of virtual machine r
 import logging
 import json
 from typing import Union, List
+from shutil import which
 
 from cloud_what._base_provider import BaseCloudProvider
 
@@ -113,6 +114,10 @@ class AzureCloudProvider(BaseCloudProvider):
                 self.hw_info['dmi.chassis.asset_tag'] == '7783-7084-3265-9085-8269-3286-77':
             probability += 0.3
 
+        # The waagent is installed
+        if self._has_azure_linux_agent() is True:
+            probability += 0.3
+
         # Try to find "Azure" or "Microsoft" keywords in output of dmidecode
         found_microsoft = False
         found_azure = False
@@ -145,6 +150,14 @@ class AzureCloudProvider(BaseCloudProvider):
             if 'apiVersions' in api_versions_dict:
                 api_versions = api_versions_dict['apiVersions']
         return api_versions
+
+    def _has_azure_linux_agent(self):
+        """
+        Determine, if the waagent is installed. The waagent manages Linux & FreeBSD provisioning
+        on Azure. See: https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/agent-linux
+        :return: True if waagent is installed
+        """
+        return which('waagent') is not None
 
     def _fix_supported_api_version(self) -> Union[str, None]:
         """
