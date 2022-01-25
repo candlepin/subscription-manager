@@ -157,7 +157,6 @@ Requires:  %{py_package_prefix}-iniparse
 Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what
 Requires:  %{rhsm_package_name} = %{version}
-Requires:  %{py_package_prefix}-six
 
 %if 0%{?suse_version}
 Requires: %{py_package_prefix}-python-dateutil
@@ -213,7 +212,6 @@ BuildRequires: %{py_package_prefix}-setuptools
 BuildRequires: gettext
 BuildRequires: intltool
 BuildRequires: libnotify-devel
-BuildRequires: %{py_package_prefix}-six
 
 %if %{use_cockpit}
 BuildRequires: desktop-file-utils
@@ -365,7 +363,6 @@ Requires:  %{py_package_prefix}-python-dateutil
 Requires: %{py_package_prefix}-dateutil
 %endif
 Requires: %{py_package_prefix}-iniparse
-Requires: %{py_package_prefix}-six
 Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
 # Required by Fedora packaging guidelines
 %{?python_provide:%python_provide %{py_package_prefix}-rhsm}
