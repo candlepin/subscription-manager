@@ -269,7 +269,6 @@ class GettextWithArgparse(i18n.Gettext):
 setup_requires = []
 
 install_requires = [
-    'six',
     'iniparse',
     'python-dateutil',
     'ethtool',
