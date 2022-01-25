@@ -99,14 +99,12 @@ class rpm_version_release_build_py(_build_py):
 class install(_install):
     user_options = _install.user_options + [
         ('rpm-version=', None, 'version and release of the RPM this is built for'),
-        ('with-systemd=', None, 'whether to install w/ systemd support or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
     ]
 
     def initialize_options(self):
         _install.initialize_options(self)
         self.rpm_version = None
-        self.with_systemd = None
         self.with_cockpit_desktop_entry = None
 
     def finalize_options(self):
@@ -170,24 +168,17 @@ class install_data(_install_data):
     or desktop files with merged translations) or an entire tree of data files.
     """
     user_options = _install_data.user_options + [
-        ('with-systemd=', None, 'whether to install w/ systemd support or not'),
         ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
     ]
 
     def initialize_options(self):
         _install_data.initialize_options(self)
-        self.with_systemd = None
         self.with_cockpit_desktop_entry = None
         # Can't use super() because Command isn't a new-style class.
 
     def finalize_options(self):
         _install_data.finalize_options(self)
-        self.set_undefined_options('install', ('with_systemd', 'with_systemd'))
         self.set_undefined_options('install', ('with_cockpit_desktop_entry', 'with_cockpit_desktop_entry'))
-        if self.with_systemd is None:
-            self.with_systemd = True  # default to True
-        else:
-            self.with_systemd = self.with_systemd == 'true'
         # Set self.with_cockpit_desktop_entry to True when it is equal to 'true'
         if self.with_cockpit_desktop_entry is None:
             self.with_cockpit_desktop_entry = True  # default to True
@@ -225,10 +216,7 @@ class install_data(_install_data):
         Add D-Bus service files to the list of files installed to the system
         """
         dbus_service_directory = self.join('share', 'dbus-1', 'system-services')
-        if self.with_systemd:
-            source_dir = self.join('build', 'dbus', 'system-services-systemd')
-        else:
-            source_dir = self.join('build', 'dbus', 'system-services')
+        source_dir = self.join('build', 'dbus', 'system-services-systemd')
         for template_file in os.listdir(source_dir):
             self.data_files.append((dbus_service_directory, [self.join(source_dir, template_file)]))
 
@@ -236,8 +224,6 @@ class install_data(_install_data):
         """
         Add .service files for systemd
         """
-        if not self.with_systemd:
-            return  # if we're not installing for systemd, stop!
         systemd_install_directory = self.join('lib', 'systemd', 'system')
         source_dir = self.join('build', 'dbus', 'systemd')
         for file in os.listdir(self.join('build', 'dbus', 'systemd')):

@@ -67,8 +67,6 @@
 %global install_dnf_plugins INSTALL_DNF_PLUGINS=false
 %endif
 
-%global with_systemd WITH_SYSTEMD=true
-
 %if %{use_cockpit}
 %global with_cockpit WITH_COCKPIT=true
 %else
@@ -479,7 +477,6 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?install_ostree} %{?install_container} \
     %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
-    %{?with_systemd} \
     %{?with_cockpit} \
     %{?subpackages} \
     %{?exclude_packages}
