@@ -6,18 +6,18 @@ pipeline {
   stages {
     stage('Test') {
       parallel {
-        stage('Python stylish') {
+        stage('stylish') {
           steps {
-            sh readFile(file: 'jenkins/python3-stylish-tests.sh')
+            sh readFile(file: 'jenkins/stylish.sh')
           }
         }
-        stage('Fedora tito') {
+        stage('tito') {
           agent { label 'rpmbuild' }
-          steps { sh readFile(file: 'jenkins/tito-tests.sh') }
+          steps { sh readFile(file: 'jenkins/tito.sh') }
         }
-        stage('Fedora unit') {
+        stage('unit') {
           steps {
-            sh readFile(file: 'jenkins/python3-tests.sh')
+            sh readFile(file: 'jenkins/unit.sh')
           }
           post {
             always {
@@ -40,9 +40,9 @@ pipeline {
           }
         }
         // Unit tests of libdnf plugins
-        stage('Libdnf unit') {
+        stage('libdnf') {
           steps {
-            sh readFile(file: 'jenkins/libdnf-tests.sh')
+            sh readFile(file: 'jenkins/libdnf.sh')
           }
         }
       }
