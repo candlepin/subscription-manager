@@ -56,7 +56,6 @@ INSTALL_OSTREE_PLUGIN ?= true
 # from spec file
 INSTALL_CONTAINER_PLUGIN ?= true
 
-WITH_SYSTEMD ?= true
 WITH_COCKPIT ?= true
 
 # for fc22 or newer
@@ -199,7 +198,7 @@ install-example-plugins: install-plugins
 .PHONY: install-via-setup
 install-via-setup: install-subpackages-via-setup
 	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
-	--with-systemd=$(WITH_SYSTEMD) --with-cockpit-desktop-entry=${WITH_COCKPIT} \
+	--with-cockpit-desktop-entry=${WITH_COCKPIT} \
 	$(SETUP_PY_INSTALL_PARAMS)
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
 	mkdir -p $(DESTDIR)/$(LIBEXEC_DIR)/
@@ -231,23 +230,12 @@ install-files: dbus-install install-conf install-plugins
 	install -d -m 750 $(DESTDIR)/var/lib/rhsm/{cache,facts,packages,repo_server_val}
 	install -d -m 750 $(DESTDIR)/var/cache/cloud-what
 
-	# Set up rhsmcertd daemon. Installation location depends on distro...
-	# if WITH_SYSTEMD == true: sles12, opensuse42, el7+, or fedora
-	# otherwise, if /etc/redhat-release exists: el6
-	# otherwise, if SuSE-release says 11, sles11
-	if [ "$(WITH_SYSTEMD)" == "true" ]; then \
-		install -d $(DESTDIR)/$(SYSTEMD_INST_DIR); \
-		install -d $(DESTDIR)/$(PREFIX)/lib/tmpfiles.d; \
-		install etc-conf/rhsmcertd.service $(DESTDIR)/$(SYSTEMD_INST_DIR); \
-		install etc-conf/subscription-manager.conf.tmpfiles \
-			$(DESTDIR)/$(PREFIX)/lib/tmpfiles.d/subscription-manager.conf; \
-	elif [ -f /etc/redhat-release ]; then \
-		install etc-conf/rhsmcertd.init.d \
-			$(DESTDIR)/etc/rc.d/init.d/rhsmcertd; \
-	elif [ "$(shell cat /etc/SuSE-release | grep VERSION | awk '{ print $$3 }')" == "11" ]; then \
-		install etc-conf/rhsmcertd.init.d \
-			$(DESTDIR)/etc/init.d/rhsmcertd; \
-	fi;
+	# Set up rhsmcertd daemon.
+	install -d $(DESTDIR)/$(SYSTEMD_INST_DIR)
+	install -d $(DESTDIR)/$(PREFIX)/lib/tmpfiles.d
+	install etc-conf/rhsmcertd.service $(DESTDIR)/$(SYSTEMD_INST_DIR)
+	install etc-conf/subscription-manager.conf.tmpfiles \
+		$(DESTDIR)/$(PREFIX)/lib/tmpfiles.d/subscription-manager.conf
 
 	# SUSE Linux does not make use of consolehelper
 	if [ -f /etc/redhat-release ]; then \
