@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # needs tito installed
 # needs subscription-manager build deps installed
 

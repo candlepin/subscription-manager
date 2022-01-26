@@ -8,16 +8,18 @@ pipeline {
       parallel {
         stage('stylish') {
           steps {
-            sh readFile(file: 'jenkins/stylish.sh')
+            sh('./jenkins/stylish.sh')
           }
         }
         stage('tito') {
           agent { label 'rpmbuild' }
-          steps { sh readFile(file: 'jenkins/tito.sh') }
+          steps {
+            sh('./jenkins/tito.sh')
+          }
         }
         stage('unit') {
           steps {
-            sh readFile(file: 'jenkins/unit.sh')
+            sh('./jenkins/unit.sh')
           }
           post {
             always {
@@ -42,7 +44,7 @@ pipeline {
         // Unit tests of libdnf plugins
         stage('libdnf') {
           steps {
-            sh readFile(file: 'jenkins/libdnf.sh')
+            sh('./jenkins/libdnf.sh')
           }
         }
       }
