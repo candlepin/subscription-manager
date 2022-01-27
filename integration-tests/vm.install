@@ -12,9 +12,10 @@ tar -xzf subscription-manager.tar.gz --transform 's,[^/]*,/sm,'
 cd sm
 tar xzf ../subscription-manager-build-extra.tar.gz
 python3 ./setup.py build
-python3 ./setup.py install --prefix /usr
+python3 ./setup.py install --prefix /usr --root /
 
 mv /usr/bin/{rhsm-facts-service,rhsm-service,rhsmcertd-worker} /usr/libexec
+mv /usr/bin/subscription-manager /usr/sbin
 
 # don't force https:// (self-signed cert)
 printf "[WebService]\\nAllowUnencrypted=true\\n" > /etc/cockpit/cockpit.conf
