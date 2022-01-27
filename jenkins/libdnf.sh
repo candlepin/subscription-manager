@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "GIT_COMMIT:" "${GIT_COMMIT}"
 
 export BUILD_DIR='./build'

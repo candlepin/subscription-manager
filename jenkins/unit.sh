@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # needs polib installed, http://pypi.python.org/pypi/polib
 # probably will need coverage tools installed
 # needs python-rhsm

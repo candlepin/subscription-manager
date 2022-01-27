@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # needs xorg-x11-server-Xvfb rpm installed
 # needs python-rhsm
 
