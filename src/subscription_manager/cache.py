@@ -267,8 +267,9 @@ class StatusCache(CacheManager):
         the disk cache to the in-memory cache to avoid reading again.
         """
         if self.server_status is None:
-            log.debug('Trying to read status from %s file' % self.CACHE_FILE)
-            self.server_status = super(StatusCache, self)._read_cache()
+            if self._cache_exists():
+                log.debug('Trying to read status from %s file' % self.CACHE_FILE)
+                self.server_status = super(StatusCache, self)._read_cache()
         else:
             log.debug('Reading status from in-memory cache of %s file' % self.CACHE_FILE)
         return self.server_status
@@ -297,7 +298,9 @@ class StatusCache(CacheManager):
         """
 
         if self.server_status is None:
-            self.server_status = self.load_status(uep, uuid, on_date)
+            self.server_status = self._read_cache()
+            if self.server_status is None:
+                self.server_status = self.load_status(uep, uuid, on_date)
         else:
             log.debug('Reading status from in-memory cache of %s file' % self.CACHE_FILE)
         return self.server_status
@@ -862,6 +865,19 @@ class ConsumerCache(CacheManager):
         """
         return False
 
+    def set_data(self, current_data, identity=None):
+        """
+        Set data into internal cache
+        :param current_data: data to set
+        :param identity: object of identity
+        :return: None
+        """
+
+        if identity is None:
+            identity = inj.require(inj.IDENTITY)
+
+        self.data = {identity.uuid: current_data}
+
     def read_data(self, uep=None, identity=None):
         """
         This function tries to get data from cache or server
@@ -925,8 +941,7 @@ class ConsumerCache(CacheManager):
                 raise rest_err
             else:
                 # Write data to cache
-                data = {identity.uuid: current_data}
-                self.data = data
+                self.set_data(current_data, identity)
                 self.write_cache(debug=True)
 
         return current_data

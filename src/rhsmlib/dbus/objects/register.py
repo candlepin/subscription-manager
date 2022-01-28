@@ -21,6 +21,8 @@ import dbus.service
 
 from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
 from rhsmlib.services.register import RegisterService
+from rhsmlib.services.attach import AttachService
+from rhsmlib.services.entitlement import EntitlementService
 
 from subscription_manager.i18n import Locale
 from subscription_manager.i18n import ugettext as _
@@ -194,6 +196,54 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         # We return None here, because we cannot know what will be selected by user
         return None
 
+    @staticmethod
+    def _enable_content(cp, consumer: dict) -> None:
+        """
+        Try to enable content. Try to do auto-attach in non-SCA mode or try to do refresh SCA mode.
+        :param cp: Object representing connection to candlepin server
+        :param consumer: Dictionary representing consumer
+        :return: None
+        """
+        content_access_mode = consumer['owner']['contentAccessMode']
+        enabled_content = None
+
+        if content_access_mode == 'entitlement':
+            log.debug('Auto-attaching due to enable_content option')
+            attach_service = AttachService(cp)
+            enabled_content = attach_service.attach_auto()
+        elif content_access_mode == 'org_environment':
+            log.debug('Refreshing due to enabled_content option and simple content access mode')
+            entitlement_service = EntitlementService(cp)
+            # TODO: try get anything useful from refresh result. It is not possible atm.
+            entitlement_service.refresh(remove_cache=False, force=False)
+        else:
+            log.error(f"Unable to enable content due to unsupported content access mode: "
+                      f"{content_access_mode}")
+
+        # When it was possible to enable content, then extend consumer
+        # with information about enabled content
+        if enabled_content is not None:
+            consumer['enabledContent'] = enabled_content
+
+    @staticmethod
+    def _remove_enable_content_option(options: dict) -> bool:
+        """
+        Try to remove enable_content option from options used in Register() and
+        RegisterWithActivationKeys() methods
+        :param options: dictionary with options
+        :return: Value of enable_options
+        """
+        if 'enable_content' in options:
+            log.debug(
+                f"Value and type of enable_content: '{options['enable_content']}' "
+                f"({type(options['enable_content'])})"
+            )
+            enable_content = bool(options.pop('enable_content'))
+            log.debug(f"Value of converted enable_content: {enable_content}")
+        else:
+            enable_content = False
+        return enable_content
+
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='sssa{sv}a{sv}s',
@@ -240,7 +290,15 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         if not org:
             raise OrgNotSpecifiedException(username=connection_options['username'])
 
+        # Remove 'enable_content' option, because it will not be proceed in register service
+        enable_content = self._remove_enable_content_option(options)
+
         consumer = register_service.register(org, **options)
+
+        # When consumer is created, then we can try to enabled content, when it was
+        # requested in options.
+        if enable_content is True:
+            self._enable_content(cp, consumer)
 
         return json.dumps(consumer)
 
@@ -266,7 +324,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         consumer = register_service.register(org, **options)
 
         log.debug("System registered, updating entitlements if needed")
-        entcertlib = EntCertActionInvoker()
-        entcertlib.update()
+        ent_cert_lib = EntCertActionInvoker()
+        ent_cert_lib.update()
 
         return json.dumps(consumer)

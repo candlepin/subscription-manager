@@ -190,6 +190,14 @@ function dbus_str(value) {
     };
 }
 
+/* convenience function for specifying d-bus boolean */
+function dbus_bool(value) {
+    return {
+        t: 'b',
+        v: value,
+    };
+}
+
 client.closeRegisterDialog = false;
 let isRegistering = false;
 
@@ -335,6 +343,10 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                     }
                     else {
                         console.debug('registering using username and password');
+                        const registration_options = {
+                            "enable_content": dbus_bool(subscriptionDetails.auto_attach)
+                        };
+                        console.log('registration_options:', registration_options);
                         if (update_progress)
                             update_progress(_("Registering using username and password ..."), null);
                         let result = registerService.call(
@@ -343,7 +355,7 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                                 subscriptionDetails.org,
                                 subscriptionDetails.user,
                                 subscriptionDetails.password,
-                                {},
+                                registration_options,
                                 connection_options,
                                 userLang
                             ]
@@ -358,7 +370,12 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                     registered = false;
                     dfd.reject(parseErrorMessage(error));
                 })
-                .then(() => {
+                .then(result => {
+                    console.debug('Result of registration: ', result);
+                    if (result) {
+                        let consumer = JSON.parse(result);
+                        client.org = consumer.owner;
+                    }
                     if (update_progress)
                         update_progress(_("Stopping registration service ..."), null);
                     console.debug('stopping registration server');
@@ -395,50 +412,6 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                                         });
                             }
                         });
-
-                        // When system is registered and config options are saved,
-                        // then we can try to auto-attach, when user decided to do so
-                        if (subscriptionDetails.auto_attach) {
-                            if (update_progress)
-                                update_progress(_("Attaching subscriptions ..."), null);
-                            console.debug('auto-attaching');
-                            if (connection_options.proxy_hostname.v) {
-                                let proxy_options = {};
-                                proxy_options.proxy_hostname = connection_options.proxy_hostname;
-                                if (connection_options.proxy_port.v) {
-                                // FIXME: change D-Bus implementation to be able to use string too
-                                    proxy_options.proxy_port = {
-                                        't': 'i',
-                                        'v': Number(connection_options.proxy_port.v)
-                                    };
-                                }
-                                if (connection_options.proxy_user.v) {
-                                    proxy_options.proxy_user = connection_options.proxy_user;
-                                }
-                                if (connection_options.proxy_password.v) {
-                                    proxy_options.proxy_password = connection_options.proxy_password;
-                                }
-                                attachService.AutoAttach('', proxy_options, userLang)
-                                        .catch(error => {
-                                            console.error('error during auto-attach (using proxy)', error);
-                                            client.subscriptionStatus.error = {
-                                                'severity': parseErrorSeverity(error),
-                                                'msg': parseErrorMessage(error)
-                                            };
-                                            dfd.resolve();
-                                        });
-                            } else {
-                                attachService.AutoAttach('', {}, userLang)
-                                        .catch(error => {
-                                            console.error('error during auto-attach', error);
-                                            client.subscriptionStatus.error = {
-                                                'severity': parseErrorSeverity(error),
-                                                'msg': parseErrorMessage(error)
-                                            };
-                                            dfd.resolve();
-                                        });
-                            }
-                        }
                     }
                 })
                 .catch(error => {

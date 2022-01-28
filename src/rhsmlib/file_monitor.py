@@ -12,6 +12,7 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+import threading
 
 from rhsm.config import get_config_parser
 from rhsmlib.services import config
@@ -167,7 +168,6 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
             self.notifier.process_events()
             # We use timeout to keep checks reasonably fast while still timing out
             if self.notifier.check_events(self.TIMEOUT):
-                log.debug('Some i-notify event occured')
                 self.notifier.read_events()
 
             for dir_watch in self.dir_watches.values():
@@ -181,7 +181,10 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
         default process function for pyinotify notifier
         :param event: pyinotify Event object, has path and mask of flags representing file modification
         """
-        log.debug('Some event occured: %s (%s)' % (event.path, event.pathname))
+        log.debug(
+            'Thread %s: Some event occurred: %s (%s)' %
+            (threading.current_thread().getName(), event.path, event.pathname)
+        )
 
         for dir_watch in self.dir_watches.values():
             # When watcher is temporary disabled, ten
@@ -304,6 +307,12 @@ class DirectoryWatch(object):
         log.debug('Temporary disabled watcher: %s for %d seconds' % (self.path, self.DISABLEMENT_TIMEOUT))
         self.temporary_disabled = True
         self._time_tmp_dis = time.time()
+
+    def enable(self):
+        """
+        Enable watcher
+        """
+        self.temporary_disabled = False
 
     def update_temporary_disabled_watcher(self):
         """
