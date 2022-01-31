@@ -20,7 +20,6 @@ import logging
 import os
 
 from rhsmlib.facts import collector
-from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
@@ -60,7 +59,7 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
         try:
             import dmidecode
         except ImportError:
-            log.warn("Unable to load dmidecode module. No DMI info will be collected")
+            log.warning("Unable to load dmidecode module. No DMI info will be collected")
             raise
 
         dmiinfo = {}
@@ -84,7 +83,7 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
             for tag, func in list(dmi_data.items()):
                 dmiinfo = self._get_dmi_data(func, tag, dmiinfo)
         except Exception as e:
-            log.warn(_("Error reading system DMI information: {exception}").format(exception=e), exc_info=True)
+            log.warning(f"Error reading system DMI information: {e}", exc_info=True)
         finally:
             self.log_warnings(dmidecode)
         return dmiinfo
@@ -93,8 +92,7 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
         try:
             return func()
         except Exception as e:
-            log.warn(_("Error reading system DMI information with {function}: {exception}").format(function=func,
-                                                                                                   exception=e))
+            log.warning(f"Error reading system DMI information with {func.__name__}: {e}")
             return {}
 
     def _get_dmi_data(self, func, tag, ddict):
@@ -124,5 +122,5 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
     def log_warnings(self, dmidecode):
         dmiwarnings = dmidecode.get_warnings()
         if dmiwarnings:
-            log.warning(_("Error reading system DMI information: {dmiwarnings}").format(dmiwarnings=dmiwarnings), exc_info=True)
+            log.warning(f"Warnings while reading system DMI information:\n{dmiwarnings}")
             dmidecode.clear_warnings()
