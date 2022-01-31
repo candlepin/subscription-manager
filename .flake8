@@ -22,3 +22,17 @@ per-file-ignores =
     test/test_utils.py: E122
     # we need to mock some modules before importing additional files
     test/test_repolib.py: E402
+    test/certdata.py:
+        # trailing whitespace in test data
+        W291
+        # wrong way to do a continuation line, however it is for test data
+        E122
+    # cannot import the cockpit modules
+    integration-tests/packagelib.py: F40
+exclude =
+    # cockpit bits downloaded during the cockpit CI run
+    bots/,
+    cockpit/,
+    # old scripts, possibly no more useful, ignore them for now
+    scripts/,
+max-line-length = 300
