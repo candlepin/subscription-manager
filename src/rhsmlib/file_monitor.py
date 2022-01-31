@@ -19,9 +19,14 @@ import logging
 import os.path
 import fnmatch
 import time
+import warnings
 
 try:
-    import pyinotify
+    # temporarily disable DeprecationWarning's while importing pyinotify,
+    # as it uses asyncore which is deprecated since Python 3.6
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", DeprecationWarning)
+        import pyinotify
 except ImportError:
     pyinotify = None
 
