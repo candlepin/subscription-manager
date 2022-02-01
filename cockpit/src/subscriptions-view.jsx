@@ -489,21 +489,32 @@ class SubscriptionsView extends React.Component {
         let description;
         let message;
 
-        if (this.props.status === "service-unavailable") {
+        if (!subscriptionsClient.config.loaded &&
+            (this.props.status === undefined ||
+             this.props.status === 'valid' ||
+             this.props.status === 'invalid' ||
+             this.props.status === 'partial' ||
+             this.props.status === 'disabled' ||
+             this.props.status === 'unknown')) {
+            loading = true;
+            message = _("Updating");
+            description = _("Retrieving subscription status...");
+        } else if (this.props.status === "service-unavailable") {
             message = _("The rhsm service is unavailable. Make sure subscription-manager is installed " +
                 "and try reloading the page. Additionally, make sure that you have checked the " +
                 "'Reuse my password for privileged tasks' checkbox on the login page.");
             description = _("Unable to the reach the rhsm service.");
-        } else if (this.props.status === undefined && !subscriptionsClient.config.loaded) {
-            loading = true;
-            message = _("Updating");
-            description = _("Retrieving subscription status...");
         } else if (this.props.status === 'access-denied') {
             message = _("Access denied");
             description = _("The current user isn't allowed to access system subscription status.");
         } else {
             message = _("Unable to connect");
-            description = _("Couldn't get system subscription status. Please ensure subscription-manager is installed.");
+            description = cockpit.format(
+                _("Couldn't get system subscription status. Please ensure subscription-manager " +
+                    "is installed. Reported status: $0 ($1)"),
+                this.props.status_msg,
+                this.props.status,
+            );
         }
 
         return <EmptyStatePanel icon={loading ? null : ExclamationCircleIcon} paragraph={description} loading={loading} title={message} />;
@@ -540,6 +551,7 @@ class SubscriptionsView extends React.Component {
         if (this.props.status === undefined ||
             this.props.status === 'not-found' ||
             this.props.status === 'access-denied' ||
+            this.props.status === 'service-unavailable' ||
             !subscriptionsClient.config.loaded) {
             return this.renderCurtains();
         } else {
