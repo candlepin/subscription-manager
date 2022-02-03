@@ -28,7 +28,7 @@ import socket
 import sys
 import time
 import traceback
-import tempfile
+from pathlib import Path
 
 from email.utils import format_datetime
 
@@ -636,6 +636,8 @@ class BaseRestLib(object):
             else:
                 msg = blue_col + "Making request:" + end_col
             msg += red_col + " %s:%s %s %s" % (self.host, self.ssl_port, request_type, handler) + end_col
+            if self.proxy_hostname and self.proxy_port:
+                msg += blue_col + " using proxy " + red_col + f"{self.proxy_hostname}:{self.proxy_port}" + end_col
             if 'SUBMAN_DEBUG_PRINT_REQUEST_HEADER' in os.environ:
                 msg += blue_col + " %s" % final_headers + end_col
             if 'SUBMAN_DEBUG_PRINT_REQUEST_BODY' in os.environ and body is not None:
@@ -643,17 +645,26 @@ class BaseRestLib(object):
             print()
             print(msg)
             print()
-            if os.path.isdir('/tmp/sub-man') is False:
-                os.mkdir('/tmp/sub-man')
             if 'SUBMAN_DEBUG_SAVE_TRACEBACKS' in os.environ:
-                with tempfile.NamedTemporaryFile(
-                        dir='/tmp/sub-man',
-                        mode='w',
-                        prefix='traceback-',
-                        delete=False) as tmp_file:
-                    traceback.print_stack(file=tmp_file.file)
-                    print(green_col + '    traceback saved in: %s' % tmp_file.name + end_col)
-                    print()
+                debug_dir = Path("/tmp/rhsm/")
+                debug_dir.mkdir(exist_ok=True)
+
+                timestamp: str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+                # make sure we don't overwrite previous logs
+                i = 0
+                while True:
+                    filename = Path(f"{timestamp}_{i}.log")
+                    debug_log = debug_dir / filename
+                    if not debug_log.exists():
+                        break
+                    i += 1
+
+                with debug_log.open("w", encoding="utf-8") as handle:
+                    traceback.print_stack(file=handle)
+
+                print(green_col + f'Traceback saved to {str(debug_log)}.' + end_col)
+                print()
 
     @staticmethod
     def _print_debug_info_about_response(result):
