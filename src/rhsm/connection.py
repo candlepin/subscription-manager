@@ -411,6 +411,13 @@ class ContentConnection(object):
         return self._request("GET", method)
 
     def get_versions(self, path, ent_cert_key_pairs=None):
+        """
+        Get list of available release versions from the given path
+        :param path: path, where is simple text file containing supported release versions
+        :param ent_cert_key_pairs: optional argument including list of supported cert and keys
+            to reduce number of failed http requests.
+        :return:
+        """
         handler = "%s/%s" % (self.handler, path)
         result = self._request("GET", handler, body="", ent_cert_key_pairs=ent_cert_key_pairs)
 
