@@ -133,7 +133,7 @@
 
 Name: subscription-manager
 Version: 1.24.13
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1150,6 +1150,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Feb 03 2022 Christopher Snyder <csnyder@redhat.com> 1.24.13-5
+- 2044629: Fix getting releases, when SCA is used (jhnidek@redhat.com)
+- 1591315: Fewer warning messages when golden ticket is used; ENT-671
+  (jhnidek@redhat.com)
+
 * Mon Mar 02 2020 Christopher Snyder <csnyder@redhat.com> 1.24.13-4
 - 1809221: Yum loaded subscription-manager plugin multiple times
   (hyu@redhat.com)
