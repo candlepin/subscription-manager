@@ -311,8 +311,11 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
         self.mock_attach.attach_auto.return_value = CONTENT_JSON
 
         dbus_method_args = ['service_level', {}, '']
-        with self.assertRaises(dbus.exceptions.DBusException):
-            self.dbus_request(None, self.interface.AutoAttach, dbus_method_args)
+
+        # TODO: change following code to assert, when calling AutoAttach will not be supported in SCA mode
+        # with self.assertRaises(dbus.exceptions.DBusException):
+        #     self.dbus_request(None, self.interface.AutoAttach, dbus_method_args)
+        self.dbus_request(None, self.interface.AutoAttach, dbus_method_args)
 
     def test_attach_pool_sca(self):
         """
@@ -323,5 +326,7 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
         self.mock_attach.attach_pool.return_value = CONTENT_JSON
         dbus_method_args = [['x', 'y'], 1, {}, '']
 
-        with self.assertRaises(dbus.exceptions.DBusException):
-            self.dbus_request(None, self.interface.PoolAttach, dbus_method_args)
+        # TODO: change following code to assert, when calling PoolAttach will not be supported in SCA mode
+        # with self.assertRaises(dbus.exceptions.DBusException):
+        #     self.dbus_request(None, self.interface.PoolAttach, dbus_method_args)
+        self.dbus_request(None, self.interface.PoolAttach, dbus_method_args)
