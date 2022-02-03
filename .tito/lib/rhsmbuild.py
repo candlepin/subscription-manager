@@ -4,6 +4,7 @@ import subprocess
 from tito.builder.main import Builder
 from tito.common import info_out
 
+
 class ScriptBuilder(Builder):
     """Builder that also runs a script to produce one or more additional tarballs.
 
