@@ -1509,7 +1509,7 @@ class EnvironmentsCommand(OrgCommand):
             system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support multi-environment operations."))
         environments = []
         if self.options.enabled:
-            environments = self.cp.getConsumer(self.identity.uuid)['environments']
+            environments = self.cp.getConsumer(self.identity.uuid)['environments'] or []
         else:
             org_environments = self._get_environments(self.org)
             if self.options.disabled:
