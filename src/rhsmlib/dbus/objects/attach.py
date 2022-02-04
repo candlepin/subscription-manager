@@ -56,8 +56,13 @@ class AttachDBusObject(base_object.BaseObject):
 
         cp = self.build_uep(proxy_options, proxy_only=True)
 
+        # TODO: Change log.info() to:
+        # raise dbus.DBusException('Auto-attaching is not allowed in simple content access mode')
+        # in the next minor release of subscription-manager
         if is_simple_content_access(uep=cp) is True:
-            raise dbus.DBusException('Auto-attaching is not allowed in simple content access mode')
+            log.info('Calling D-Bus method AutoAttach() is deprecated, when Simple Content Access mode '
+                     'is used and it will be not be supported in the next minor release of '
+                     'subscription-manager')
 
         attach_service = AttachService(cp)
 
@@ -91,8 +96,13 @@ class AttachDBusObject(base_object.BaseObject):
 
         cp = self.build_uep(proxy_options, proxy_only=True)
 
+        # TODO: Change log.info() to:
+        # raise dbus.DBusException('Attaching of pool(s) is not allowed in simple content access mode')
+        # in the next minor release of subscription-manager
         if is_simple_content_access(uep=cp) is True:
-            raise dbus.DBusException('Attaching of pool(s) is not allowed in simple content access mode')
+            log.info('Calling D-Bus method PoolAttach() is deprecated, when Simple Content Access mode '
+                     'is used and it will be not be supported in the next minor release of '
+                     'subscription-manager')
 
         attach_service = AttachService(cp)
 
