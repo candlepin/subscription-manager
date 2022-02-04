@@ -484,27 +484,33 @@ class SubscriptionStatus extends React.Component {
  * unregister   callback, triggered when user clicks on unregister
  */
 class SubscriptionsView extends React.Component {
-    renderCurtains() {
+    /*
+     * This method has the following arguments: loaded, status and status_msg, because.
+     * Using properties is not safe here due to asynchronous changes. Using properties
+     * (this.props.status, etc.) for decision here could lead to invalid state.
+     */
+    renderCurtains(loaded, status, status_msg) {
         let loading = false;
         let description;
         let message;
 
-        if (!subscriptionsClient.config.loaded &&
-            (this.props.status === undefined ||
-             this.props.status === 'valid' ||
-             this.props.status === 'invalid' ||
-             this.props.status === 'partial' ||
-             this.props.status === 'disabled' ||
-             this.props.status === 'unknown')) {
+        if (!loaded &&
+            (status === undefined ||
+             status === 'valid' ||
+             status === 'invalid' ||
+             status === 'partial' ||
+             status === 'disabled' ||
+             status === 'unknown'))
+        {
             loading = true;
             message = _("Updating");
             description = _("Retrieving subscription status...");
-        } else if (this.props.status === "service-unavailable") {
+        } else if (status === "service-unavailable") {
             message = _("The rhsm service is unavailable. Make sure subscription-manager is installed " +
                 "and try reloading the page. Additionally, make sure that you have checked the " +
                 "'Reuse my password for privileged tasks' checkbox on the login page.");
             description = _("Unable to the reach the rhsm service.");
-        } else if (this.props.status === 'access-denied') {
+        } else if (status === 'access-denied') {
             message = _("Access denied");
             description = _("The current user isn't allowed to access system subscription status.");
         } else {
@@ -512,8 +518,8 @@ class SubscriptionsView extends React.Component {
             description = cockpit.format(
                 _("Couldn't get system subscription status. Please ensure subscription-manager " +
                     "is installed. Reported status: $0 ($1)"),
-                this.props.status_msg,
-                this.props.status,
+                status_msg,
+                status,
             );
         }
 
@@ -548,12 +554,15 @@ class SubscriptionsView extends React.Component {
     }
 
     render() {
-        if (this.props.status === undefined ||
-            this.props.status === 'not-found' ||
-            this.props.status === 'access-denied' ||
-            this.props.status === 'service-unavailable' ||
-            !subscriptionsClient.config.loaded) {
-            return this.renderCurtains();
+        let status = this.props.status;
+        let status_msg = this.props.status_msg;
+        let loaded = subscriptionsClient.config.loaded;
+        if (!loaded ||
+            status === undefined ||
+            status === 'not-found' ||
+            status === 'access-denied' ||
+            status === 'service-unavailable') {
+            return this.renderCurtains(loaded, status, status_msg);
         } else {
             return this.renderSubscriptions();
         }
