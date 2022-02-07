@@ -489,18 +489,16 @@ class SubscriptionsView extends React.Component {
      * Using properties is not safe here due to asynchronous changes. Using properties
      * (this.props.status, etc.) for decision here could lead to invalid state.
      */
-    renderCurtains(loaded, status, status_msg) {
+    renderCurtains(status, status_msg) {
         let loading = false;
         let description;
         let message;
 
-        if (!loaded &&
-            (status === undefined ||
+        if (status === undefined ||
              status === 'valid' ||
              status === 'invalid' ||
              status === 'partial' ||
-             status === 'disabled' ||
-             status === 'unknown'))
+             status === 'disabled')
         {
             loading = true;
             message = _("Updating");
@@ -514,6 +512,7 @@ class SubscriptionsView extends React.Component {
             message = _("Access denied");
             description = _("The current user isn't allowed to access system subscription status.");
         } else {
+            console.debug('Unable to connect:', status, status_msg);
             message = _("Unable to connect");
             description = cockpit.format(
                 _("Couldn't get system subscription status. Please ensure subscription-manager " +
@@ -557,12 +556,14 @@ class SubscriptionsView extends React.Component {
         let status = this.props.status;
         let status_msg = this.props.status_msg;
         let loaded = subscriptionsClient.config.loaded;
-        if (!loaded ||
+        // When configuration is loaded, then it is obvious that cockpit
+        // can communicate with D-Bus API
+        if (!loaded && (
             status === undefined ||
             status === 'not-found' ||
             status === 'access-denied' ||
-            status === 'service-unavailable') {
-            return this.renderCurtains(loaded, status, status_msg);
+            status === 'service-unavailable')) {
+            return this.renderCurtains(status, status_msg);
         } else {
             return this.renderSubscriptions();
         }
