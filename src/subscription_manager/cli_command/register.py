@@ -342,6 +342,11 @@ class RegisterCommand(UserPassCommand):
                 system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
             return None
 
+        # We have an activation key, so don't need to fill/check the bits
+        # related to environments, as they are part of the activation key
+        if self.options.activation_keys:
+            return None
+
         all_env_list = admin_cp.getEnvironmentList(owner_key)
         if self.options.environments:
             environments = self.options.environments
