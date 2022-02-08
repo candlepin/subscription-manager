@@ -249,7 +249,7 @@
 
 Name: subscription-manager
 Version: 1.28.21
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
 Group:   Productivity/Networking/System
@@ -1490,6 +1490,14 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Feb 08 2022 Christopher Snyder <csnyder@redhat.com> 1.28.21-5
+- 2044349: Fix redundant API calls to Candlepin (hyu@redhat.com)
+- Update translation files (noreply@weblate.org)
+- build: pin flake8 to < 4 (ptoscano@redhat.com)
+- cockpit: Move from obsolete node-sass to Dart sass (martin@piware.de)
+- cockpit: wait 5 seconds for candlepin at first (ptoscano@redhat.com)
+- cockpit: use the self-signed key in mock-insights (ptoscano@redhat.com)
+
 * Thu Sep 16 2021 Christopher Snyder <csnyder@redhat.com> 1.28.21-4
 - Translated using Weblate (Spanish) (ehespinosa57@gmail.com)
 
