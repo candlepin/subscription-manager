@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
 "PO-Revision-Date: 2023-05-10 05:37+0000\n"
-"Last-Translator: Transtats <suanand@redhat.com>\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ja/>\n"
 "Language: ja\n"
@@ -300,13 +300,12 @@ msgid ""
 msgstr ""
 "\n"
 "このシステムは、エンタイトルメントーバーに登録されていますが、更新は受信して"
-"いません。subscription-manager でサブスクリプションを割り当てることができま"
-"す。\n"
+"いません。subscription-manager "
+"でサブスクリプションを割り当てることができます。\n"
 
 #: src/plugins/dnf/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
-msgstr ""
-"root ではありません。サブスクリプション管理リポジトリーは更新されていません"
+msgstr "root ではありません。サブスクリプション管理リポジトリーは更新されていません"
 
 #: src/plugins/dnf/subscription-manager.py:115
 #, python-format
@@ -348,9 +347,8 @@ msgstr "パッケージプロファイルのアップロードを強制します
 #: src/plugins/dnf/upload-profile.py:66
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
-msgstr ""
-"実行された更新はありません。詳細は /var/log/rhsm/rhsm.log を参照してくださ"
-"い。"
+msgstr "実行された更新はありません。詳細は /var/log/rhsm/rhsm.log "
+"を参照してください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:33
@@ -660,9 +658,8 @@ msgstr "存在する可能性のあるファイルを上書きする"
 #: src/rct/manifest_commands.py:348
 #, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
-msgstr ""
-"\"{filename}\" というファイルは存在しています。-f を使用して、このファイルを"
-"強制的に上書きします。"
+msgstr "\"{filename}\" というファイルは存在しています。-f "
+"を使用して、このファイルを強制的に上書きします。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rct/manifest_commands.py:354
@@ -1126,8 +1123,7 @@ msgstr "システム情報の zip ファイルを作成できません: {error}"
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
-msgstr ""
-"ユーザー %s はより多くの組織に所属していますが、選択された組織はありません"
+msgstr "ユーザー %s はより多くの組織に所属していますが、選択された組織はありません"
 
 #: src/rhsmlib/dbus/objects/register.py:120
 #, python-format
@@ -1230,8 +1226,8 @@ msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
 msgstr ""
-"エラー: 無効な一覧表示タイプが指定されました。\"installed\"、\"consumed"
-"\"、\"available\" だけが利用できます"
+"エラー: 無効な一覧表示タイプが指定されました。\"installed\"、\"consumed\"、"
+"\"available\" だけが利用できます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:497
@@ -1480,8 +1476,7 @@ msgstr "RHN Classic と Red Hat サブスクリプション管理"
 msgid ""
 "Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password"
-msgstr ""
-"ヒント: ログインまたはパスワードをお忘れの場合は、https://redhat.com/"
+msgstr "ヒント: ログインまたはパスワードをお忘れの場合は、https://redhat.com/"
 "forgot_password で確認してください"
 
 #: src/subscription_manager/cache.py:176
@@ -1592,9 +1587,8 @@ msgstr "--add は --remove と併用できません"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:151
 msgid "Error: you can specify --username or --token not both"
-msgstr ""
-"エラー: --username または --token のどちらかを指定することができますが、両方"
-"ではありません"
+msgstr "エラー: --username または --token "
+"のどちらかを指定することができますが、両方ではありません"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:156
 #, python-brace-format
@@ -1607,9 +1601,8 @@ msgstr "エラー: リスト {attr} に、--username と --password "
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
-msgstr ""
-"エラー: --username、--password、--token、--org は、未登録のシステムでのみ使用"
-"できます"
+msgstr "エラー: --username、--password、--token、--org "
+"は、未登録のシステムでのみ使用できます"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:251
@@ -1673,9 +1666,8 @@ msgstr "利用可能な {syspurpose_attr}"
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr ""
-"この組織には、利用可能なサブスクリプションからシステム目的の"
-"「{syspurpose_attr}」に使用できる値がありません。"
+msgstr "この組織には、利用可能なサブスクリプションからシステム目的の「{syspurpose_att"
+"r}」に使用できる値がありません。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:409
 #, python-brace-format
@@ -1752,8 +1744,7 @@ msgstr "この時点では、サブスクリプションの更新は必要あり
 msgid ""
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr ""
-"システムがシンプルコンテンツアクセスモードを使用していない場合には、登録済み"
+msgstr "システムがシンプルコンテンツアクセスモードを使用していない場合には、登録済み"
 "システムに、指定のサブスクリプションを割り当てます"
 
 #: src/subscription_manager/cli_command/attach.py:111
@@ -1939,9 +1930,8 @@ msgstr "進捗のメッセージを表示しない"
 #: src/subscription_manager/cli_command/cli.py:209
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr ""
-"コンシューマー識別子が存在しないか、破損しています。register --help を試して"
-"ください"
+msgstr "コンシューマー識別子が存在しないか、破損しています。register --help "
+"を試してください"
 
 #: src/subscription_manager/cli_command/cli.py:267
 msgid ""
@@ -2771,8 +2761,7 @@ msgstr "変更するリポジトリー (複数回の指定が可能)"
 msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
-msgstr ""
-"削除する上書きの名前 (複数回の指定が可能)。--repo オプションと併用します。"
+msgstr "削除する上書きの名前 (複数回の指定が可能)。--repo オプションと併用します。"
 
 #: src/subscription_manager/cli_command/override.py:56
 msgid ""
@@ -2984,9 +2973,9 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
-"宛先組織に含まれる特定の環境 (単一の値) または複数の環境 (コンマ区切りリス"
-"ト) を指定して登録します。複数の環境を使用する機能は、エンタイトルメントサー"
-"バーで制御します"
+"宛先組織に含まれる特定の環境 (単一の値) または複数の環境 (コンマ区切りリスト)"
+" を指定して登録します。複数の環境を使用する機能は、エンタイトルメントサーバー"
+"で制御します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:107
@@ -3024,15 +3013,13 @@ msgstr "自動サブスクリプション時に使用されるシステムの詳
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:140
 msgid "This system is already registered. Use --force to override"
-msgstr ""
-"このシステムはすでに登録されています。上書きするには --force を使用します"
+msgstr "このシステムはすでに登録されています。上書きするには --force を使用します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:152
 msgid "Error: Activation keys cannot be used with --auto-attach."
-msgstr ""
-"エラー: --auto-attach を指定する場合は、アクティブキーを使用することができま"
-"せん。"
+msgstr "エラー: --auto-attach "
+"を指定する場合は、アクティブキーを使用することができません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:157
@@ -3043,9 +3030,8 @@ msgstr "エラー: --auto-attach を使用する場合は、--servicelevel "
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:159
 msgid "Error: Must provide --org with activation keys."
-msgstr ""
-"エラー: --org を指定する場合は、アクティベーションキーを指定する必要がありま"
-"す。"
+msgstr "エラー: --org "
+"を指定する場合は、アクティベーションキーを指定する必要があります。"
 
 #: src/subscription_manager/cli_command/register.py:173
 msgid "Error: The --type option has been deprecated and may not be used."
@@ -3368,9 +3354,8 @@ msgstr "システム目的のサービスレベルの設定の表示または変
 
 #: src/subscription_manager/cli_command/service_level.py:70
 msgid "Error: --org is only supported with the --list or --set option"
-msgstr ""
-"エラー: --org は、 --list または --set オプションとの併用でのみサポートされま"
-"す"
+msgstr "エラー: --org は、 --list または --set "
+"オプションとの併用でのみサポートされます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/service_level.py:78
@@ -3385,8 +3370,8 @@ msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
 msgstr ""
-"エラー: --username、--password、--token、--org および --serverurl は、未登録"
-"のシステムでのみ使用できます"
+"エラー: --username、--password、--token、--org および --serverurl "
+"は、未登録のシステムでのみ使用できます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:126
@@ -3594,8 +3579,7 @@ msgstr "削除済み (不正):"
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
-msgstr ""
-"ネットワークエラーでサーバーに接続できません。詳細は /var/log/rhsm/rhsm.log "
+msgstr "ネットワークエラーでサーバーに接続できません。詳細は /var/log/rhsm/rhsm.log "
 "をご覧ください。"
 
 #: src/subscription_manager/exceptions.py:34
@@ -3656,9 +3640,8 @@ msgstr "禁止: 要求に対して無効な認証情報です。"
 msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
-msgstr ""
-"リモートサーバーエラーです。接続詳細を確認するか、/var/log/rhsm/rhsm.log をご"
-"覧ください。"
+msgstr "リモートサーバーエラーです。接続詳細を確認するか、/var/log/rhsm/rhsm.log "
+"をご覧ください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/exceptions.py:50
