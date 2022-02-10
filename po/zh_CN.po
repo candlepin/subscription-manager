@@ -3,7 +3,7 @@
 # John Sefler <jsefler@redhat.com>, 2018. #zanata, 2021.
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # tfu <tfu@redhat.com>, 2018. #zanata
-# Ludek Janda <ljanda@redhat.com>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 # Sundeep Anand <suanand@redhat.com>, 2021.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
 msgid ""
@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-19 14:16+0100\n"
-"PO-Revision-Date: 2021-12-14 13:16+0000\n"
+"PO-Revision-Date: 2022-02-09 14:16+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9.1\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -514,17 +514,13 @@ msgstr "已订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:115
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed"
-msgstr "部分已订阅"
+msgstr "部分订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:117
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed ($0)"
-msgstr "部分已订阅"
+msgstr "部分订阅($0)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:121
@@ -533,17 +529,13 @@ msgstr "未订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:123
-#, fuzzy
-#| msgid "Not subscribed"
 msgid "Not subscribed ($0)"
-msgstr "未订阅"
+msgstr "未订阅($0)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:128
-#, fuzzy
-#| msgid "Unknown"
 msgid "Unknown status"
-msgstr "未知的"
+msgstr "未知状态"
 
 #: cockpit/src/subscriptions-view.jsx:179
 msgid "Product ID"
@@ -622,10 +614,8 @@ msgid "Add-ons"
 msgstr "附加组件"
 
 #: cockpit/src/subscriptions-view.jsx:381
-#, fuzzy
-#| msgid "Modify system purpose role"
 msgid "No system purpose attributes set"
-msgstr "修改系统目的角色"
+msgstr "未设置系统用途属性"
 
 #: cockpit/src/subscriptions-view.jsx:392
 msgid "System purpose"
@@ -806,20 +796,13 @@ msgstr ""
 "本系统尚未在权利服务器中注册。可使用 subscription-manager 进行注册。\n"
 
 #: src/plugins/dnf/subscription-manager.py:47
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is registered with and entitlement server, but is not "
-#| "receiving updates. You can use subscription-manager to assign "
-#| "subscriptions.\n"
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"本系统已在权利服务器中注册，但没有接收更新。可使用 subscription-manager 分配"
-"订阅。\n"
+"本系统已在权利服务器中注册，但没有接收更新。可使用 subscription-manager 分配订阅。\n"
 
 #: src/plugins/dnf/subscription-manager.py:80
 msgid "Not root, Subscription Management repositories not updated"
@@ -1163,10 +1146,9 @@ msgstr "覆盖可能已存在的文件"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:325
-#, fuzzy, python-brace-format
-#| msgid "File {filename} exists. Use -f to force overwriting the file."
+#, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
-msgstr "文件 {filename} 已存在。请使用 -f 强制覆盖该文件。"
+msgstr "文件 \"{filename}\" 存在。请使用 -f 来强制覆盖该文件。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:328
@@ -2039,12 +2021,10 @@ msgstr "这次不需要更新订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:82
-#, fuzzy
-#| msgid "Attach a specified subscription to the registered system"
 msgid ""
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr "在注册的系统中附加指定的订阅"
+msgstr "系统不使用简单内容访问模式时，将指定的订阅附加到注册系统"
 
 #: src/subscription_manager/cli_command/attach.py:95
 msgid "Error: --auto may not be used when specifying pools."
@@ -2079,16 +2059,11 @@ msgstr "错误：文件 \"{file}\" 不存在或不可读。"
 
 # translation manually copied from candlepin
 #: src/subscription_manager/cli_command/attach.py:131
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
-#| "because of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring request to attach. It is disabled for org \"{owner_id}\" because of "
 "the content access mode setting."
-msgstr ""
-"忽略自动附加的请求。 因为内容访问模式的设置 ，组织“ {owner_id}”禁用了这个功"
-"能。"
+msgstr "忽略附加请求。由于内容访问模式设置，org \"{owner_id}\"禁用了它。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:174
@@ -2272,7 +2247,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:29
 msgid "List, set, or remove the configuration parameters in use by this system"
-msgstr "列出、设置或删除这个系统使用的配置参数。"
+msgstr "列出、设置或删除这个系统使用的配置参数"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:33
@@ -2345,32 +2320,26 @@ msgid "specify organization for environment list, using organization key"
 msgstr "为环境列表指定机构，使用机构密钥"
 
 #: src/subscription_manager/cli_command/environments.py:49
-#, fuzzy
-#| msgid "comma-separated list of hostnames/domains"
 msgid "set an ordered comma-separated list of environments for this consumer"
-msgstr "逗号分隔的主机名/域"
+msgstr "为这个消费者设置一个有序的、以逗号分隔的环境列表"
 
 #: src/subscription_manager/cli_command/environments.py:51
 msgid "list all environments for the organization"
-msgstr ""
+msgstr "列出机构的所有环境"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:53
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments enabled for this consumer in order"
-msgstr "显示用户可用的环境"
+msgstr "按顺序列出为此消费者启用的环境"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:55
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments not enabled for this consumer"
-msgstr "显示用户可用的环境"
+msgstr "列出没有为此消费者启用的环境"
 
 #: src/subscription_manager/cli_command/environments.py:63
 msgid "You may not specify an --org for environments when registered."
-msgstr ""
+msgstr "注册时可以不为环境指定 --org。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:72
@@ -2380,10 +2349,8 @@ msgstr "错误：服务器不支持环境。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:79
-#, fuzzy
-#| msgid "%s option requires %d arguments"
 msgid "This operation requires user credentials"
-msgstr "%s 选项需要 %d 参数"
+msgstr "此操作需要用户凭证"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:94
@@ -2392,24 +2359,18 @@ msgstr "错误：无法从服务器中搜索环境列表"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:111
-#, fuzzy
-#| msgid "Environments"
 msgid "Environments updated."
-msgstr "环境"
+msgstr "环境更新了。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:113
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support environment updates."
-msgstr "错误：服务器不支持环境。"
+msgstr "错误：服务器不支持环境更新。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:121
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support multi-environment operations."
-msgstr "错误：服务器不支持环境。"
+msgstr "错误：服务器不支持多环境操作。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:139
@@ -2418,22 +2379,19 @@ msgstr "环境"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:145
-#, fuzzy
-#| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
-msgstr "这个机构没有任何环境。"
+msgstr "此列表操作不报告任何环境。"
 
 #: src/subscription_manager/cli_command/environments.py:182
 msgid "Error: The same environment may not be listed more than once. "
-msgstr ""
+msgstr "错误：相同的环境可能不会被多次列出。 "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:187
-#, fuzzy, python-brace-format
-#| msgid "No such environment: {name}"
+#, python-brace-format
 msgid "No such environment: {names}"
 msgid_plural "No such environments: {names}"
-msgstr[0] "没有这个环境：{name}"
+msgstr[0] "没有这样的环境：{names}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/facts.py:34
@@ -2524,8 +2482,7 @@ msgstr "无"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:100
-#, fuzzy, python-brace-format
-#| msgid "environment name: {environment_name}"
+#, python-brace-format
 msgid "environment name: {environment_name}"
 msgid_plural "environment names: {environment_name}"
 msgstr[0] "环境名称：{environment_name}"
@@ -3019,10 +2976,9 @@ msgid "Organization: "
 msgstr "机构： "
 
 #: src/subscription_manager/cli_command/org.py:58
-#, fuzzy, python-brace-format
-#| msgid "User %s is not member of any organization"
+#, python-brace-format
 msgid "Error: User {username} is not member of any organization."
-msgstr "用户 %s 不是任何机构的成员"
+msgstr "错误：用户 {username} 不是任何机构的成员。"
 
 #: src/subscription_manager/cli_command/org.py:70
 #: src/subscription_manager/cli_command/register.py:383
@@ -3261,7 +3217,7 @@ msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
-msgstr ""
+msgstr "在目标机构中注册特定环境（单个值）或多个环境（以逗号分隔的列表）。使用多个环境的能力由授权服务器控制"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:72
@@ -3322,10 +3278,8 @@ msgstr "错误: --type 参数已过时，可能无法使用。"
 
 #: src/subscription_manager/cli_command/register.py:117
 #: src/subscription_manager/cli_command/register.py:362
-#, fuzzy
-#| msgid "The entitlement server failed to remove these serial numbers:"
 msgid "The entitlement server does not allow multiple environments"
-msgstr "从权利服务器中删除这些序列号失败："
+msgstr "授权服务器不允许多个环境"
 
 #: src/subscription_manager/cli_command/register.py:181
 #: src/subscription_manager/cli_command/unregister.py:41
@@ -3367,8 +3321,6 @@ msgstr "服务等级设定为：{level}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:326
-#, fuzzy
-#| msgid "Environment: "
 msgid "Environments: "
 msgstr "环境： "
 
@@ -3636,15 +3588,10 @@ msgid ""
 msgstr "错误：您必须注册或指定 --username 和 --password 方可列出服务等级"
 
 #: src/subscription_manager/cli_command/service_level.py:92
-#, fuzzy
-#| msgid ""
-#| "Error: --username, --password, --token and --org can be used only on "
-#| "unregistered systems"
 msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
-msgstr ""
-"错误： --username、--password、--token 和 --org 只能在未注册的系统上使用"
+msgstr "错误: --username、--password、-token、--org 和 --serverurl 只能在未注册的系统上使用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:119
