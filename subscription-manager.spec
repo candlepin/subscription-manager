@@ -133,7 +133,7 @@
 
 Name: subscription-manager
 Version: 1.24.13
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
 License: GPLv2
@@ -1150,6 +1150,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Feb 10 2022 Christopher Snyder <csnyder@redhat.com> 1.24.13-6
+- yum/dnf plugins: properly check for SCA (ptoscano@redhat.com)
+- utils: add is_simple_content_access & get_content_access_mode
+  (ptoscano@redhat.com)
+
 * Thu Feb 03 2022 Christopher Snyder <csnyder@redhat.com> 1.24.13-5
 - 2044629: Fix getting releases, when SCA is used (jhnidek@redhat.com)
 - 1591315: Fewer warning messages when golden ticket is used; ENT-671
