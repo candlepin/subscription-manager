@@ -26,7 +26,7 @@ from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.certlib import Locker
-from subscription_manager.utils import chroot
+from subscription_manager.utils import chroot, is_simple_content_access
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager import logutil
 from rhsm import connection
@@ -150,26 +150,7 @@ def warnOrGiveUsageMessage(conduit):
         # Don't warn people to register if we see entitelements, but no identity:
         if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
             msg = not_registered_warning
-        elif len(ent_dir.list_valid()) == 0:
-            # XXX: Importing inline as you must be root to read the config file
-            from subscription_manager.identity import ConsumerIdentity
-
-            cert_file = ConsumerIdentity.certpath()
-            key_file = ConsumerIdentity.keypath()
-
-            # In containers we have no identity, but we may have entitlements inherited
-            # from the host, which need to generate a redhat.repo.
-            if identity.is_valid():
-                try:
-                    uep = connection.UEPConnection(cert_file=cert_file, key_file=key_file)
-                # FIXME: catchall exception
-                except Exception:
-                    pass
-                else:
-                    owner = uep.getOwner(identity.uuid)
-                    if owner['contentAccessMode'] != "org_environment":
-                        return
-
+        elif len(ent_dir.list_valid()) == 0 and not is_simple_content_access(identity=identity):
             msg = no_subs_warning
         if config.in_container() and len(ent_dir.list_valid()) == 0:
             msg = no_subs_container_warning
