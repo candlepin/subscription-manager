@@ -6,15 +6,15 @@
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
 # John Sefler <jsefler@redhat.com>, 2021.
-# Ludek Janda <ljanda@redhat.com>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 # Jérôme Fenal <jfenal@free.fr>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-14 11:41+0100\n"
-"PO-Revision-Date: 2022-01-16 21:19+0000\n"
-"Last-Translator: Jérôme Fenal <jfenal@free.fr>\n"
+"PO-Revision-Date: 2022-02-10 11:15+0000\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/fr/>\n"
 "Language: fr\n"
@@ -556,17 +556,13 @@ msgstr "Abonné"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: cockpit/src/subscriptions-view.jsx:115
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed"
-msgstr "Partiellement abonné"
+msgstr "Partiellement souscrit"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: cockpit/src/subscriptions-view.jsx:117
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed ($0)"
-msgstr "Partiellement abonné"
+msgstr "Partiellement souscrit ($0)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:121
@@ -575,17 +571,13 @@ msgstr "Non abonné"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:123
-#, fuzzy
-#| msgid "Not subscribed"
 msgid "Not subscribed ($0)"
-msgstr "Non abonné"
+msgstr "Non abonné ($0)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: cockpit/src/subscriptions-view.jsx:128
-#, fuzzy
-#| msgid "Unknown"
 msgid "Unknown status"
-msgstr "Inconnu"
+msgstr "Statut inconnu"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:183 src/rct/printing.py:50
@@ -653,10 +645,8 @@ msgid "Add-ons"
 msgstr "Extensions"
 
 #: cockpit/src/subscriptions-view.jsx:381
-#, fuzzy
-#| msgid "System Purpose Status: %s"
 msgid "No system purpose attributes set"
-msgstr "Statut de l'objectif du système : %s"
+msgstr "Aucun attribut de finalité du système n'est défini"
 
 #: cockpit/src/subscriptions-view.jsx:392
 msgid "System purpose"
@@ -1622,32 +1612,22 @@ msgid "User %s is not member of any organization"
 msgstr "L'utilisateur %s n'est membre d'aucune organisation"
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:71
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: A {attr} of \"{download_value}\" was recently set for this "
-#| "system by the entitlement server administrator.\n"
-#| "{advice}"
+#, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} was recently set for this system by the "
 "entitlement server administrator."
 msgstr ""
-"Avertissement : L'administrateur du serveur de droits d’accès a récemment "
-"défini un {attr} de \"{download_value}\" pour ce système.\n"
-"{advice}"
+"Avertissement : l'administrateur du serveur de droits d’accès a récemment "
+"défini {conflict_msg} pour ce système."
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:78
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: A {attr} of \"{download_value}\" was recently set for this "
-#| "system by the entitlement server administrator.\n"
-#| "{advice}"
+#, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
 "entitlement server administrator."
 msgstr ""
-"Avertissement : L'administrateur du serveur de droits d’accès a récemment "
-"défini un {attr} de \"{download_value}\" pour ce système.\n"
-"{advice}"
+"Avertissement : l'administrateur du serveur de droits d’accès a récemment "
+"défini {conflict_msg} pour ce système."
 
 #: src/rhsmlib/dbus/service_wrapper.py:45
 #, python-brace-format
@@ -5056,17 +5036,16 @@ msgid "Organization: "
 msgstr "Organisation : "
 
 #: src/subscription_manager/managercli.py:1092
-#, fuzzy, python-brace-format
-#| msgid "User %s is not member of any organization"
+#, python-brace-format
 msgid "Error: User {username} is not member of any organization."
-msgstr "L'utilisateur %s n'est membre d'aucune organisation"
+msgstr "Erreur : L'utilisateur {username} n'est membre d'aucune organisation."
 
 #: src/subscription_manager/managercli.py:1104
-#, fuzzy, python-brace-format
-#| msgid "Hint: User \"%s\" is member of following organizations: %s"
+#, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr ""
-"Indice : l'utilisateur \"%s\" est membre des organisations suivantes : %s"
+"Indice : l'utilisateur \"{name}\" est membre des organisations suivantes : "
+"{orgs}"
 
 #: src/subscription_manager/managercli.py:1126
 msgid "Convenient module for managing all system purpose settings"
@@ -5691,12 +5670,12 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:2290
-#, fuzzy
-#| msgid "Attach a specified subscription to the registered system"
 msgid ""
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr "Assigner l'abonnement spécifié au système inscrit"
+msgstr ""
+"Attachez un abonnement spécifié au système enregistré, lorsque le système "
+"n'utilise pas le mode d'accès simple au contenu"
 
 #: src/subscription_manager/managercli.py:2303
 msgid "Error: --auto may not be used when specifying pools."
@@ -5734,17 +5713,13 @@ msgstr "Erreur : le fichier « %s » n'existe pas ou ne peut pas être lu."
 
 # translation manually copied from candlepin
 #: src/subscription_manager/managercli.py:2337
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
-#| "because of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring request to attach. It is disabled for org \"{owner_id}\" because of "
 "the content access mode setting."
 msgstr ""
-"Requête auto-attach ignorée. L'organisation \"{owner_id}\" a déjà la "
-"fonction d'auto-assignée désactivée à cause de la configuration de mode "
-"d'accès au contenu."
+"Ignorer la demande d'attachement. Il est désactivé pour l'org \"{owner_id}\" "
+"en raison du paramétrage du mode d'accès au contenu."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:2380

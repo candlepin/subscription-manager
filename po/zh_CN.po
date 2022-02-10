@@ -4,13 +4,13 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # tfu <tfu@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
-# Ludek Janda <ljanda@redhat.com>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-14 11:41+0100\n"
-"PO-Revision-Date: 2021-12-14 12:57+0000\n"
+"PO-Revision-Date: 2022-02-09 07:18+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-1-28/zh_CN/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9.1\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -537,17 +537,13 @@ msgstr "已订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:115
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed"
-msgstr "部分已订阅"
+msgstr "部分订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:117
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed ($0)"
-msgstr "部分已订阅"
+msgstr "部分订阅($0)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:121
@@ -556,17 +552,13 @@ msgstr "未订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:123
-#, fuzzy
-#| msgid "Not subscribed"
 msgid "Not subscribed ($0)"
-msgstr "未订阅"
+msgstr "未订阅($0)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:128
-#, fuzzy
-#| msgid "Unknown"
 msgid "Unknown status"
-msgstr "未知的"
+msgstr "未知状态"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:183 src/rct/printing.py:50
@@ -633,10 +625,8 @@ msgid "Add-ons"
 msgstr "附加组件"
 
 #: cockpit/src/subscriptions-view.jsx:381
-#, fuzzy
-#| msgid "System Purpose Status: %s"
 msgid "No system purpose attributes set"
-msgstr "系统目的状态：%s"
+msgstr "未设置系统用途属性"
 
 #: cockpit/src/subscriptions-view.jsx:392
 msgid "System purpose"
@@ -1571,32 +1561,18 @@ msgid "User %s is not member of any organization"
 msgstr "用户 %s 不是任何机构的成员"
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:71
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: A {attr} of \"{download_value}\" was recently set for this "
-#| "system by the entitlement server administrator.\n"
-#| "{advice}"
+#, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} was recently set for this system by the "
 "entitlement server administrator."
-msgstr ""
-"警告：\"{download_value}\" 的 {attr} 当前已由权利服务器管理员为这个系统设"
-"置。\n"
-"{advice}"
+msgstr "警告：授权服务器管理员最近为这个系统设置了 {conflict_msg}。"
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:78
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: A {attr} of \"{download_value}\" was recently set for this "
-#| "system by the entitlement server administrator.\n"
-#| "{advice}"
+#, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
 "entitlement server administrator."
-msgstr ""
-"警告：\"{download_value}\" 的 {attr} 当前已由权利服务器管理员为这个系统设"
-"置。\n"
-"{advice}"
+msgstr "警告：授权服务器管理员最近为这个系统设置了 {conflict_msg}。"
 
 #: src/rhsmlib/dbus/service_wrapper.py:45
 #, python-brace-format
@@ -4900,16 +4876,14 @@ msgid "Organization: "
 msgstr "机构： "
 
 #: src/subscription_manager/managercli.py:1092
-#, fuzzy, python-brace-format
-#| msgid "User %s is not member of any organization"
+#, python-brace-format
 msgid "Error: User {username} is not member of any organization."
-msgstr "用户 %s 不是任何机构的成员"
+msgstr "错误：用户 {username} 不是任何机构的成员。"
 
 #: src/subscription_manager/managercli.py:1104
-#, fuzzy, python-brace-format
-#| msgid "Hint: User \"%s\" is member of following organizations: %s"
+#, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
-msgstr "提示：用户 \"%s\" 是以下机构的成员：%s"
+msgstr "提示：用户 \"{name}\" 是以下机构的成员：{orgs}"
 
 #: src/subscription_manager/managercli.py:1126
 msgid "Convenient module for managing all system purpose settings"
@@ -5483,12 +5457,10 @@ msgstr "这次不需要更新订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2290
-#, fuzzy
-#| msgid "Attach a specified subscription to the registered system"
 msgid ""
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr "在注册的系统中附加指定的订阅"
+msgstr "系统不使用简单内容访问模式时，将指定的订阅附加到注册系统"
 
 #: src/subscription_manager/managercli.py:2303
 msgid "Error: --auto may not be used when specifying pools."
@@ -5523,16 +5495,11 @@ msgstr "错误：文件 \"%s\" 不存在或者无法读取。"
 
 # translation manually copied from candlepin
 #: src/subscription_manager/managercli.py:2337
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
-#| "because of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring request to attach. It is disabled for org \"{owner_id}\" because of "
 "the content access mode setting."
-msgstr ""
-"忽略自动附加的请求。 因为内容访问模式的设置 ，组织“ {owner_id}”禁用了这个功"
-"能。"
+msgstr "忽略附加请求。由于内容访问模式设置，org \"{owner_id}\"禁用了它。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2380
@@ -5836,7 +5803,7 @@ msgstr "为这个系统禁用软件仓库 '%s'。"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3002
 msgid "List, set, or remove the configuration parameters in use by this system"
-msgstr "列出、设置或删除这个系统使用的配置参数。"
+msgstr "列出、设置或删除这个系统使用的配置参数"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3006

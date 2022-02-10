@@ -4,13 +4,13 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # myamamot <myamamot@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
-# Ludek Janda <ljanda@redhat.com>, 2021.
+# Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-14 11:41+0100\n"
-"PO-Revision-Date: 2021-12-14 12:57+0000\n"
+"PO-Revision-Date: 2022-02-09 07:18+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ja/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9.1\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -524,11 +524,11 @@ msgstr "自動アタッチ"
 #: src/subscription_manager/gui/data/ui/installed.ui:111
 #: src/subscription_manager/gui/data/ui/installed.ui:117
 msgid "Auto-attach"
-msgstr "自動割り当て"
+msgstr "自動アタッチ"
 
 #: cockpit/src/subscriptions-view.jsx:55
 msgid "Auto-attaching ..."
-msgstr "オートアタッチしています..."
+msgstr "自動アタッチしています..."
 
 #: cockpit/src/subscriptions-view.jsx:74 cockpit/src/subscriptions-view.jsx:175
 msgid "Product name"
@@ -543,36 +543,28 @@ msgstr "サブスクライブ済み"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: cockpit/src/subscriptions-view.jsx:115
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed"
 msgstr "部分的にサブスクライブ済み"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: cockpit/src/subscriptions-view.jsx:117
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed ($0)"
-msgstr "部分的にサブスクライブ済み"
+msgstr "部分的にサブスクライブ済み ($0)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:121
 msgid "Not subscribed"
-msgstr "サブスクライブされていない"
+msgstr "サブスクライブなし"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:123
-#, fuzzy
-#| msgid "Not subscribed"
 msgid "Not subscribed ($0)"
-msgstr "サブスクライブされていない"
+msgstr "サブスクライブなし ($0)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: cockpit/src/subscriptions-view.jsx:128
-#, fuzzy
-#| msgid "Unknown"
 msgid "Unknown status"
-msgstr "不明"
+msgstr "不明なステータス"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:183 src/rct/printing.py:50
@@ -641,10 +633,8 @@ msgid "Add-ons"
 msgstr "アドオン"
 
 #: cockpit/src/subscriptions-view.jsx:381
-#, fuzzy
-#| msgid "System Purpose Status: %s"
 msgid "No system purpose attributes set"
-msgstr "システムの目的の状態: %s"
+msgstr "設定されているシステム目的属性なし"
 
 #: cockpit/src/subscriptions-view.jsx:392
 msgid "System purpose"
@@ -4956,16 +4946,14 @@ msgid "Organization: "
 msgstr "組織: "
 
 #: src/subscription_manager/managercli.py:1092
-#, fuzzy, python-brace-format
-#| msgid "User %s is not member of any organization"
+#, python-brace-format
 msgid "Error: User {username} is not member of any organization."
-msgstr "ユーザー %s は、いかなる組織のメンバーでもありません"
+msgstr "エラー: ユーザー {username} はどの組織にも所属していません。"
 
 #: src/subscription_manager/managercli.py:1104
-#, fuzzy, python-brace-format
-#| msgid "Hint: User \"%s\" is member of following organizations: %s"
+#, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
-msgstr "ヒント: ユーザー \"%s\" は、次の組織のメンバーです: %s"
+msgstr "ヒント: ユーザー \"{name}\" は、次の組織のメンバーです: {orgs}"
 
 #: src/subscription_manager/managercli.py:1126
 msgid "Convenient module for managing all system purpose settings"
@@ -5578,12 +5566,10 @@ msgstr "この時点では、サブスクリプションの更新は必要あり
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:2290
-#, fuzzy
-#| msgid "Attach a specified subscription to the registered system"
 msgid ""
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr "指定したサブスクリプションを登録済みのシステムに割り当てます"
+msgstr "システムがシンプルコンテンツアクセスモードを使用していない場合には、登録済みシステムに、指定のサブスクリプションを割り当てます"
 
 #: src/subscription_manager/managercli.py:2303
 msgid "Error: --auto may not be used when specifying pools."
@@ -5619,16 +5605,12 @@ msgstr "エラー: ファイル \"%s\" が存在せず、読み取りできま�
 
 # translation manually copied from candlepin
 #: src/subscription_manager/managercli.py:2337
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
-#| "because of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring request to attach. It is disabled for org \"{owner_id}\" because of "
 "the content access mode setting."
 msgstr ""
-"自動割り当ての要求を無視します。これは、コンテンツアクセスモードの設定によ"
-"り、組織 \"{owner_id}\" に対して無効となっています。"
+"アタッチする要求を無視します。組織 \"{owner_id}\" に対するこの設定は、コンテンツアクセスモードの設定が理由で無効になっています。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:2380
