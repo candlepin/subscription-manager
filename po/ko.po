@@ -4,14 +4,14 @@
 # eukim <eukim@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
-# simmon <simmon@nplob.com>, 2021.
+# simmon <simmon@nplob.com>, 2021, 2022.
 # Ludek Janda <ljanda@redhat.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-14 11:41+0100\n"
-"PO-Revision-Date: 2021-10-04 13:05+0000\n"
+"PO-Revision-Date: 2022-01-25 17:16+0000\n"
 "Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -541,17 +541,13 @@ msgstr "등록됨"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:115
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed"
 msgstr "부분적으로 등록됨"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:117
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed ($0)"
-msgstr "부분적으로 등록됨"
+msgstr "부분적으로 등록됨 ($0)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:121
@@ -560,17 +556,13 @@ msgstr "등록되지 않음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:123
-#, fuzzy
-#| msgid "Not subscribed"
 msgid "Not subscribed ($0)"
-msgstr "등록되지 않음"
+msgstr "등록되지 않음 ($0)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:128
-#, fuzzy
-#| msgid "Unknown"
 msgid "Unknown status"
-msgstr "알 수 없음"
+msgstr "알 수 없는 상태"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:183 src/rct/printing.py:50
@@ -638,10 +630,8 @@ msgid "Add-ons"
 msgstr "애드온"
 
 #: cockpit/src/subscriptions-view.jsx:381
-#, fuzzy
-#| msgid "System Purpose Status: %s"
 msgid "No system purpose attributes set"
-msgstr "시스템 목적 상태: %s"
+msgstr "시스템 목적 속성이 설정되지 않았습니다"
 
 #: cockpit/src/subscriptions-view.jsx:392
 msgid "System purpose"
@@ -1587,32 +1577,18 @@ msgid "User %s is not member of any organization"
 msgstr "사용자 %s은(는) 조직의 멤버가 아닙니다"
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:71
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: A {attr} of \"{download_value}\" was recently set for this "
-#| "system by the entitlement server administrator.\n"
-#| "{advice}"
+#, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} was recently set for this system by the "
 "entitlement server administrator."
-msgstr ""
-"경고: 최근 자격 서버 관리자가 \"{download_value}\"의 {attr}를 이 시스템에 설"
-"정했습니다.\n"
-"{advice}"
+msgstr "경고: 최근 자격 서버 관리자가 이 시스템에 대해 {conflict_msg}를 설정했습니다."
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:78
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: A {attr} of \"{download_value}\" was recently set for this "
-#| "system by the entitlement server administrator.\n"
-#| "{advice}"
+#, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
 "entitlement server administrator."
-msgstr ""
-"경고: 최근 자격 서버 관리자가 \"{download_value}\"의 {attr}를 이 시스템에 설"
-"정했습니다.\n"
-"{advice}"
+msgstr "경고: 자격 서버 관리자가 최근에 이 시스템에 대하여 {conflict_msg}를 설정했습니다."
 
 #: src/rhsmlib/dbus/service_wrapper.py:45
 #, python-brace-format
@@ -4963,16 +4939,14 @@ msgid "Organization: "
 msgstr "조직: "
 
 #: src/subscription_manager/managercli.py:1092
-#, fuzzy, python-brace-format
-#| msgid "User %s is not member of any organization"
+#, python-brace-format
 msgid "Error: User {username} is not member of any organization."
-msgstr "사용자 %s은(는) 조직의 멤버가 아닙니다"
+msgstr "오류: 사용자 {username}는 조직의 구성원이 아닙니다."
 
 #: src/subscription_manager/managercli.py:1104
-#, fuzzy, python-brace-format
-#| msgid "Hint: User \"%s\" is member of following organizations: %s"
+#, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
-msgstr "팁: 사용자 \"%s\"는 다음 조직의 구성원입니다. %s"
+msgstr "암시: 사용자 \"{name}\"는 다음 조직의 구성원입니다: {orgs}"
 
 #: src/subscription_manager/managercli.py:1126
 msgid "Convenient module for managing all system purpose settings"
@@ -5562,12 +5536,10 @@ msgstr "현재로서는 서브스크립션을 최신화 할 필요가 없습니�
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2290
-#, fuzzy
-#| msgid "Attach a specified subscription to the registered system"
 msgid ""
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr "등록된 시스템에 지정된 서브스크립션을 첨부합니다"
+msgstr "시스템이 단순 컨텐츠 접근 방식을 사용하지 않을 경우 등록된 시스템에 지정된 서브스크립션을 첨부"
 
 #: src/subscription_manager/managercli.py:2303
 msgid "Error: --auto may not be used when specifying pools."
@@ -5602,16 +5574,11 @@ msgstr "오류: 파일 \"%s\"은 존재하지 않거나 읽을 수 없습니다.
 
 # translation manually copied from candlepin
 #: src/subscription_manager/managercli.py:2337
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
-#| "because of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring request to attach. It is disabled for org \"{owner_id}\" because of "
 "the content access mode setting."
-msgstr ""
-"자동 첨부 요청을 무시합니다. 콘텐츠 액세스 모드 설정으로 인해 \"{owner_id}\" "
-"조직에 대해 비활성화되어 있습니다."
+msgstr "첨부 요청을 무시합니다. 콘텐츠 접근 방식 설정으로 인하여 \"{owner_id}\" 조직에 대해 비활성화 되었습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2380
