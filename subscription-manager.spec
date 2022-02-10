@@ -248,7 +248,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.25
+Version: 1.28.26
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1491,6 +1491,33 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Feb 10 2022 Christopher Snyder <csnyder@redhat.com> 1.28.26-1
+- 2049441: [1.28] Cockpit registration dialog: enable insights by default
+  (jhnidek@redhat.com)
+- Reverting disabling AutoAttach() and PoolAttach() in SCA mode
+  (jhnidek@redhat.com)
+- 2046302: Apply Conscious language initiative changes (mhorky@redhat.com)
+- ENT-4671: Improve debug logging to stdout (mhorky@redhat.com)
+- Fix indentation of ProductStatus. (jhnidek@redhat.com)
+- 2028969: Do not try to load compliance status from cache (jhnidek@redhat.com)
+- Fixed last bits related to updated D-Bus Register method.
+  (jhnidek@redhat.com)
+- Refactoring of temporary disablement of dir watchers. (jhnidek@redhat.com)
+- Ignore enable_content option in RegisterWithActivationKeys()
+  (jhnidek@redhat.com)
+- Use benefits of enable_content in cockpit plugin. (jhnidek@redhat.com)
+- Added enable_content option to Register() D-Bus method (jhnidek@redhat.com)
+- Added refresh() method to entitlement service (jhnidek@redhat.com)
+- Fixed issue with status cache (jhnidek@redhat.com)
+- Add information about content access mode to consumer (jhnidek@redhat.com)
+- cockpit: fix system installation of subscription-manager
+  (ptoscano@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Adding permissive coverage publishing (jmolet@redhat.com)
+- WIP: try to not use junit('coverage.xml') (jhnidek@redhat.com)
+- 2024573: [1.28] Do not delete cache of content_access during refresh
+  (jhnidek@redhat.com)
+
 * Thu Jan 06 2022 Christopher Snyder <csnyder@redhat.com> 1.28.25-1
 - syspurpose: handle users w/o organizations (ptoscano@redhat.com)
 - service-level: drop useless check (ptoscano@redhat.com)
