@@ -109,7 +109,7 @@
 %global use_rhsm_icons 0%{use_cockpit}
 
 Name: subscription-manager
-Version: 1.29.23
+Version: 1.29.24
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -866,6 +866,33 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Feb 10 2022 Christopher Snyder <csnyder@redhat.com> 1.29.24-1
+- 2023430: Cockpit: another improvement of curtain view (jhnidek@redhat.com)
+- environments: fix list for account in env-less org (ptoscano@redhat.com)
+- Reverting disabling AutoAttach() and PoolAttach() in SCA mode
+  (jhnidek@redhat.com)
+- 2023430: cockpit: improve handling of main curtain view (ptoscano@redhat.com)
+- Squelch DeprecationWarning's when importing pyinotify (ptoscano@redhat.com)
+- Drop tox.ini, no more needed now (ptoscano@redhat.com)
+- flake8: improve, and integrate bits from tox.ini (ptoscano@redhat.com)
+- flake8: misc fixes in tito/tests (ptoscano@redhat.com)
+- 2035662: facts: tweak message for dmidecode warnings (ptoscano@redhat.com)
+- facts: improve/tweak logging of warnings (ptoscano@redhat.com)
+- jenkins: use custom settings for the RH internal npmjs repo
+  (ptoscano@redhat.com)
+- jenkins: switch away from readFile() (ptoscano@redhat.com)
+- jenkins: simplify script filenames & labels (ptoscano@redhat.com)
+- jenkins: remove old scripts (ptoscano@redhat.com)
+- ENT-4671: Improve debug logging to stdout (mhorky@redhat.com)
+- Drop non-systemd support (ptoscano@redhat.com)
+- ENT-4650: Remove python-six from build system (mhorky@redhat.com)
+- ENT-4093: Fix flake8 warning W605 (mhorky@redhat.com)
+- ENT-4618: Switch away from six.get_method_* (mhorky@redhat.com)
+- ENT-4414: Remove RhsmIconCache (mhorky@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- ENT-4589: Switch away from six.reraise (mhorky@redhat.com)
+- 2041968: Update man and help for environments options (wpoteat@redhat.com)
+
 * Mon Jan 17 2022 Christopher Snyder <csnyder@redhat.com> 1.29.23-1
 - Ignore debian architecture ALL (schmidt@atix.de)
 - 2028894: Don't allow service-level --serverurl on registered system
