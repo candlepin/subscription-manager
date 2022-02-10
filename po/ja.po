@@ -3,15 +3,15 @@
 # John Sefler <jsefler@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # myamamot <myamamot@redhat.com>, 2018. #zanata
-# Sundeep Anand <suanand@redhat.com>, 2021.
+# Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-14 11:41+0100\n"
-"PO-Revision-Date: 2022-02-09 07:18+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2022-02-09 10:10+0000\n"
+"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ja/>\n"
 "Language: ja\n"
@@ -514,7 +514,7 @@ msgstr "サブスクリプション"
 
 #: cockpit/src/subscriptions-register.jsx:167
 msgid "Attach automatically"
-msgstr "自動アタッチ"
+msgstr "自動割り当て"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:42 cockpit/src/subscriptions-view.jsx:61
@@ -524,11 +524,11 @@ msgstr "自動アタッチ"
 #: src/subscription_manager/gui/data/ui/installed.ui:111
 #: src/subscription_manager/gui/data/ui/installed.ui:117
 msgid "Auto-attach"
-msgstr "自動アタッチ"
+msgstr "自動割り当て"
 
 #: cockpit/src/subscriptions-view.jsx:55
 msgid "Auto-attaching ..."
-msgstr "自動アタッチしています..."
+msgstr "自動割り当てしています..."
 
 #: cockpit/src/subscriptions-view.jsx:74 cockpit/src/subscriptions-view.jsx:175
 msgid "Product name"
@@ -1588,32 +1588,18 @@ msgid "User %s is not member of any organization"
 msgstr "ユーザー %s は、いかなる組織のメンバーでもありません"
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:71
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: A {attr} of \"{download_value}\" was recently set for this "
-#| "system by the entitlement server administrator.\n"
-#| "{advice}"
+#, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} was recently set for this system by the "
 "entitlement server administrator."
-msgstr ""
-"警告: \"{download_value}\" の {attr} は最近、エンタイトルメントサーバー管理者"
-"によってこのシステムに設定されました。\n"
-"{advice}"
+msgstr "警告: {conflict_msg} は最近、エンタイトルメントサーバーの管理者によってこのシステムに設定されました。"
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:78
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: A {attr} of \"{download_value}\" was recently set for this "
-#| "system by the entitlement server administrator.\n"
-#| "{advice}"
+#, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
 "entitlement server administrator."
-msgstr ""
-"警告: \"{download_value}\" の {attr} は最近、エンタイトルメントサーバー管理者"
-"によってこのシステムに設定されました。\n"
-"{advice}"
+msgstr "警告: {conflict_msg} は最近、エンタイトルメントサーバーの管理者によってこのシステムに設定されました。"
 
 #: src/rhsmlib/dbus/service_wrapper.py:45
 #, python-brace-format
