@@ -1,13 +1,14 @@
 # croe <croe@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021.
 # Ludek Janda <ljanda@redhat.com>, 2021.
+# Jérôme Fenal <jfenal@free.fr>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-09 12:25-0500\n"
-"PO-Revision-Date: 2021-12-14 12:57+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2022-01-16 21:19+0000\n"
+"Last-Translator: Jérôme Fenal <jfenal@free.fr>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/fr/>\n"
 "Language: fr\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.9.1\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -81,7 +82,7 @@ msgstr "les arguments mutuellement exclusifs doivent être facultatifs"
 
 #: /usr/lib64/python3.6/argparse.py:1637
 msgid "positional arguments"
-msgstr "arguments de position"
+msgstr "Arguments positionnels"
 
 #: /usr/lib64/python3.6/argparse.py:1638
 msgid "optional arguments"
@@ -184,13 +185,13 @@ msgstr ""
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
-"Si vous souhaitez écraser le changement côté du serveur, veuillez exécuter : "
-"{command}"
+"Si vous souhaitez remplacer des données au niveau serveur, veuillez exécuter "
+": {command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
 msgid "Added \"{value}\" to {prop_name}."
-msgstr "Ajout de «{value} » à {prop_name}."
+msgstr "{value} ajouté à {prop_name}."
 
 #: src/syspurpose/cli.py:50
 #, python-brace-format
@@ -282,11 +283,11 @@ msgstr "Supprimer le rôle défini"
 
 #: src/syspurpose/cli.py:278
 msgid "Add addons to the system syspurpose"
-msgstr "Ajout d'extensions au syspurpose système"
+msgstr "Ajoute les extensions au syspurpose du système"
 
 #: src/syspurpose/cli.py:286
 msgid "Remove addons from the system syspurpose"
-msgstr "Ajout d'extensions en provenance du syspurpose système"
+msgstr "Supprime les extensions en provenance du syspurpose système"
 
 #: src/syspurpose/cli.py:293
 msgid "Clear set addons"
@@ -317,17 +318,16 @@ msgid ""
 "WARNING: Setting syspurpose in containers has no effect.\n"
 "Please run syspurpose on the host.\n"
 msgstr ""
-"AVERTISSEMENT : La définition de syspurpose dans les conteneurs n'a aucun "
-"effet. \n"
-"Exécutez syspurpose sur l'hôte.\n"
+"ATTENTION : l'installation de syspurpose dans les conteneurs\n"
+"n'a aucun effet. Veuillez exécuter syspurpose sur l'hôte.\n"
 
 #: src/syspurpose/cli.py:364
 msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
 msgstr ""
-"Avertissement : impossible de synchroniser le syspurpose système avec le "
-"serveur de gestion des abonnements : le module subscription_manager n'est "
+"Avertissement : impossible de synchroniser le syspurpose du système avec le "
+"serveur de gestion des abonnements : le module subscription_manager n'est "
 "pas disponible."
 
 #: src/syspurpose/files.py:106
@@ -350,7 +350,7 @@ msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
 msgstr ""
-"Avertissement : La valeur fournie \"{val}\" ne figure pas dans la liste des "
+"Avertissement : La valeur fournie « {val} » ne figure pas dans la liste des "
 "valeurs valides de l’attribut {attr} :"
 
 #: src/syspurpose/files.py:438
@@ -358,7 +358,7 @@ msgstr ""
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
-"Avertissement : La clé fournie \"{key}\" ne figure pas dans la liste des "
+"Avertissement : La clé fournie « {key} » ne figure pas dans la liste des "
 "clés valides :"
 
 #: src/syspurpose/main.py:32
