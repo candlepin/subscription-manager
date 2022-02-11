@@ -109,7 +109,7 @@
 %global use_rhsm_icons 0%{use_cockpit}
 
 Name: subscription-manager
-Version: 1.29.24
+Version: 1.29.25
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -866,6 +866,15 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Fri Feb 11 2022 Christopher Snyder <csnyder@redhat.com> 1.29.25-1
+- 2046516: register: do not check environments w/ activation keys
+  (ptoscano@redhat.com)
+- No-op refactor of RegisterCommand._process_environments()
+  (ptoscano@redhat.com)
+- 1935446: Use updated cert with SHA-256 algorithm (jhnidek@redhat.com)
+- build: pin pytest to < 7 (ptoscano@redhat.com)
+- Update translation files (noreply@weblate.org)
+
 * Thu Feb 10 2022 Christopher Snyder <csnyder@redhat.com> 1.29.24-1
 - 2023430: Cockpit: another improvement of curtain view (jhnidek@redhat.com)
 - environments: fix list for account in env-less org (ptoscano@redhat.com)
