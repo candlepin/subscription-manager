@@ -142,7 +142,7 @@ class CliRegistrationTests(SubManFixture):
             rc.options = Mock()
             rc.options.activation_keys = None
             rc.options.environments = None
-            env_id = rc._process_environments(mock_uep, 'owner', None)
+            env_id = rc._process_environments(mock_uep, 'owner')
 
             expected = None
             self.assertEqual(expected, env_id)
@@ -160,7 +160,7 @@ class CliRegistrationTests(SubManFixture):
             rc.options = Mock()
             rc.options.activation_keys = None
             rc.options.environments = None
-            env_id = rc._process_environments(mock_uep, 'owner', None)
+            env_id = rc._process_environments(mock_uep, 'owner')
 
             expected = "1234"
             self.assertEqual(expected, env_id)
@@ -181,7 +181,7 @@ class CliRegistrationTests(SubManFixture):
             rc.options.activation_keys = None
             rc.options.environments = None
             rc._prompt_for_environment = Mock(return_value="othername")
-            env_id = rc._process_environments(mock_uep, 'owner', None)
+            env_id = rc._process_environments(mock_uep, 'owner')
 
             expected = "5678"
             self.assertEqual(expected, env_id)
@@ -205,7 +205,7 @@ class CliRegistrationTests(SubManFixture):
 
             with Capture(silent=True):
                 with self.assertRaises(SystemExit):
-                    rc._process_environments(mock_uep, 'owner', None)
+                    rc._process_environments(mock_uep, 'owner')
 
     def test_set_multi_environment_id_multi_available(self):
         def env_list(*args, **kwargs):
@@ -224,7 +224,7 @@ class CliRegistrationTests(SubManFixture):
             rc.options.activation_keys = None
             rc.options.environments = None
             rc._prompt_for_environment = Mock(return_value="somename,othername")
-            env_id = rc._process_environments(mock_uep, 'owner', None)
+            env_id = rc._process_environments(mock_uep, 'owner')
             expected = "1234,5678"
             self.assertEqual(expected, env_id)
 
@@ -252,6 +252,19 @@ class CliRegistrationTests(SubManFixture):
             except SystemExit:
                 self.fail("Exception Raised")
 
+    def test_validate_multi_environment_with_activation_key(self):
+        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+            mock_uep.supports_resource = Mock(return_value=True)
+            self.stub_cp_provider.basic_auth_cp = mock_uep
+
+            rc = RegisterCommand()
+            rc.cp = mock_uep
+            rc.options = Mock()
+            rc.options.activation_keys = 'someAK'
+            rc.options.environments = None
+            ret = rc._process_environments(mock_uep, 'owner')
+            self.assertIsNone(ret)
+
     def test_set_duplicate_multi_environment(self):
         def env_list(*args, **kwargs):
             return [{"id": "1234", "name": "somename"},
@@ -271,7 +284,7 @@ class CliRegistrationTests(SubManFixture):
 
             with Capture(silent=True):
                 with self.assertRaises(SystemExit):
-                    rc._process_environments(mock_uep, 'owner', None)
+                    rc._process_environments(mock_uep, 'owner')
 
     def test_registration_with_failed_profile_upload(self):
 

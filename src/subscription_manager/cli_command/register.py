@@ -231,7 +231,7 @@ class RegisterCommand(UserPassCommand):
                         get_owner_cb=self._get_owner_cb,
                         no_owner_cb=self._no_owner_cb
                     )
-                environment_ids = self._process_environments(admin_cp, owner_key, self.options)
+                environment_ids = self._process_environments(admin_cp, owner_key)
                 consumer = service.register(
                     owner_key,
                     activation_keys=self.options.activation_keys,
@@ -329,7 +329,7 @@ class RegisterCommand(UserPassCommand):
         readline.clear_history()
         return environment or self._prompt_for_environment()
 
-    def _process_environments(self, admin_cp, owner_key, options):
+    def _process_environments(self, admin_cp, owner_key):
         """
         Confirms that environment(s) have been chosen if they are supported
         and a choice needs to be made
@@ -337,31 +337,37 @@ class RegisterCommand(UserPassCommand):
         supported_resources = get_supported_resources()
         supports_environments = 'environments' in supported_resources
 
-        if not supports_environments and self.options.environments is not None:
-            system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
+        if not supports_environments:
+            if self.options.environments is not None:
+                system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
+            return None
 
-        if supports_environments:
-            all_env_list = admin_cp.getEnvironmentList(owner_key)
-            if self.options.environments:
-                environments = options.environments
-            else:
-                # If there aren't any environments, don't prompt for one
-                if not all_env_list:
-                    return None
+        # We have an activation key, so don't need to fill/check the bits
+        # related to environments, as they are part of the activation key
+        if self.options.activation_keys:
+            return None
 
-                # If the envronment list is len 1, pick that environment
-                if len(all_env_list) == 1:
-                    log.debug("Using the only available environment: \"{name}\"".format(name=all_env_list[0]["name"]))
-                    return all_env_list[0]['id']
+        all_env_list = admin_cp.getEnvironmentList(owner_key)
+        if self.options.environments:
+            environments = self.options.environments
+        else:
+            # If there aren't any environments, don't prompt for one
+            if not all_env_list:
+                return None
 
-                env_name_list = [env['name'] for env in all_env_list]
-                print(_('Hint: Organization "{key}" contains following environments: {list}').format(
-                      key=owner_key, list=", ".join(env_name_list)))
-                environments = self._prompt_for_environment()
-                if not self.cp.has_capability(MULTI_ENV) and ',' in environments:
-                    system_exit(os.EX_USAGE, _("The entitlement server does not allow multiple environments"))
+            # If the envronment list is len 1, pick that environment
+            if len(all_env_list) == 1:
+                log.debug("Using the only available environment: \"{name}\"".format(name=all_env_list[0]["name"]))
+                return all_env_list[0]['id']
 
-            return check_set_environment_names(all_env_list, environments)
+            env_name_list = [env['name'] for env in all_env_list]
+            print(_('Hint: Organization "{key}" contains following environments: {list}').format(
+                  key=owner_key, list=", ".join(env_name_list)))
+            environments = self._prompt_for_environment()
+            if not self.cp.has_capability(MULTI_ENV) and ',' in environments:
+                system_exit(os.EX_USAGE, _("The entitlement server does not allow multiple environments"))
+
+        return check_set_environment_names(all_env_list, environments)
 
     @staticmethod
     def _no_owner_cb(username):
