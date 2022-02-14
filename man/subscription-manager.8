@@ -252,8 +252,8 @@ Assigns the system to an organization. Infrastructures which are managed on-site
 meaning that there are multiple organizations within one customer unit. A system may be assigned manually to one of these organizations. When a system is registered with the Customer Portal, this is not required. When a system is registered with an on-premise application such as Subscription Asset Manager, this argument \fIis\fP required, unless there is only a single organization configured.
 
 .TP
-.B --environment=ENV
-Registers the system to an environment within an organization.
+.B --environments=ENV
+Registers the system to one or more environments within an organization. This is a comma-separated list and the order is maintained.
 
 .TP
 .B --release=VERSION
@@ -684,6 +684,22 @@ Token to use when authorizing against the server.
 .TP
 .B --org=ORG
 Identifies the organization for which to list the configured environments.
+
+.TP
+.B --list
+Lists all of the environments that have been configured for an organization.
+
+.TP
+.B --list-enabled
+Lists the environments in the order that they have been enabled for this consumer.
+
+.TP
+.B --list-disabled
+Lists all of the environments that have been configured for an organization but not enabled for this consumer.
+
+.TP
+.B --set=SET
+Sets an ordered list of one or more comma-separated environments for this consumer.
 
 
 .SS REPOS OPTIONS

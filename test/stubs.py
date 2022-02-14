@@ -475,7 +475,7 @@ class StubUEP(object):
 
     def updateConsumer(self, consumer, facts=None, installed_products=None,
                        guest_uuids=None, service_level=None, release=None, autoheal=None,
-                       content_tags=None, addons=None, role=None, usage=None):
+                       content_tags=None, addons=None, role=None, usage=None, environments=None):
         return consumer
 
     def setEnvironmentList(self, env_list):
