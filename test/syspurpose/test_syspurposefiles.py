@@ -17,6 +17,7 @@ import io
 import json
 import os
 import mock
+import tempfile
 
 from syspurpose import files, utils
 from syspurpose.files import detect_changed, three_way_merge, UNSUPPORTED, SyncedStore, SyncResult
@@ -28,7 +29,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         A smoke test to ensure nothing bizarre happens on SyspurposeStore object creation
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
         self.assertEqual(syspurpose_store.contents, {})
         self.assertEqual(syspurpose_store.path, temp_dir)
@@ -37,7 +39,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Can the SyspurposeStore.read_file method handle attempting to read a file which does not exist?
         """
-        temp_file = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_file = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         self.assertFalse(os.path.exists(temp_file))
 
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_file)
@@ -48,7 +51,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         The SyspurposeStore.read_file method should return True if the file was successfully read.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
@@ -63,7 +67,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         The SyspurposeStore.read_file method should return True if the file with unicode content was successfully read.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'key1': 'Νίκος', 'key2': ['value_with_ř']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
@@ -81,7 +86,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         :param expected_contents:
         :return: None
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             if file_contents and not isinstance(file_contents, str):
                 utils.write_to_file_utf8(f, file_contents)
@@ -113,7 +119,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the create method will create the directory (if needed), and that the resulting \
         file in the directory is writable by us.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
 
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
         self.assertRaisesNothing(syspurpose_store.create)
@@ -126,7 +133,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the add method of SyspurposeStore is able to add items to lists of items
         in the store, whether they existed prior or not.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
@@ -151,7 +159,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the add method of SyspurposeStore is able to add item to key with
         null value
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": None}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
@@ -170,7 +179,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the add method of SyspurposeStore is able to add items to a property
         in the store, without overriding an existing scalar value the property might already contain.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": "preexisting_scalar_value"}
         with open(temp_dir, 'w') as f:
             json.dump(test_data, f)
@@ -189,7 +199,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the add method of SyspurposeStore is able to add unicode strings to lists of items
         in the store.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'ονόματα': ['Νίκος']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
@@ -208,7 +219,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the add method of SyspurposeStore will not add an item to a list, if that list already contains
         the item we're trying to add.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
         with open(temp_dir, 'w') as f:
             json.dump(test_data, f)
@@ -226,7 +238,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the remove method can remove items from the store.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
@@ -249,7 +262,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the remove_command, in case the value specified for removal is a scalar/non-list value,
         unsets this value.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": "preexisting_scalar_value"}
         with open(temp_dir, 'w') as f:
             json.dump(test_data, f)
@@ -267,7 +281,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the remove method of SyspurposeStore is able to remove unicode strings from lists of items
         in the store.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'ονόματα': ['Νίκος', 'Κώστας']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
@@ -285,7 +300,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify the operation of the unset method of SyspurposeStore
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
 
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
@@ -306,7 +322,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the unset method of SyspurposeStore is able to unset unicode strings from items
         in the store.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'ονόματα': ['Νίκος']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
@@ -328,7 +345,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify the unset operation handles the special case for the SLA field
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"service_level_agreement": "preexisting_value"}
 
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
@@ -345,7 +363,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify the operation of the set method of SyspurposeStore
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": "old_value"}
 
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
@@ -373,7 +392,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify the operation of the set method of SyspurposeStore when using unicode strings
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'ονόματα': 'Νίκος'}
 
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
@@ -401,7 +421,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the SyspurposeStore can write changes to the expected file.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"arbitrary_key": "arbitrary_value"}
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
         syspurpose_store.contents = dict(**test_data)
@@ -417,7 +438,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the SyspurposeStore can write changes that include unicode strings to the expected file.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'όνομα': 'Νίκος'}
         syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
         syspurpose_store.contents = dict(**test_data)
@@ -433,7 +455,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Does read properly initialize a new SyspurposeStore?
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"arbitrary_key": "arbitrary_value"}
 
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
@@ -460,20 +483,20 @@ class TestSyncedStore(SyspurposeTestBase):
     }
 
     def setUp(self):
-        self.temp_dir = self._mktmp()
-        self.temp_cache_dir = self._mktmp()
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.temp_cache_dir = tempfile.TemporaryDirectory()
         # For these tests we want to make sure that the paths that are used are our mock files
 
-        user_syspurpose_dir_patch = mock.patch('syspurpose.files.USER_SYSPURPOSE_DIR', self.temp_dir)
+        user_syspurpose_dir_patch = mock.patch('syspurpose.files.USER_SYSPURPOSE_DIR', self.temp_dir.name)
         user_syspurpose_dir_patch.start()
         self.addCleanup(user_syspurpose_dir_patch.stop)
 
-        cache_dir_patch = mock.patch('syspurpose.files.CACHE_DIR', self.temp_cache_dir)
+        cache_dir_patch = mock.patch('syspurpose.files.CACHE_DIR', self.temp_cache_dir.name)
         cache_dir_patch.start()
         self.addCleanup(cache_dir_patch.stop)
 
-        self.local_syspurpose_file = os.path.join(self.temp_dir, 'syspurpose.json')
-        self.cache_syspurpose_file = os.path.join(self.temp_cache_dir, 'cache.json')
+        self.local_syspurpose_file = os.path.join(self.temp_dir.name, 'syspurpose.json')
+        self.cache_syspurpose_file = os.path.join(self.temp_cache_dir.name, 'cache.json')
 
         # For these tests we want to make sure that the paths that are used are our mock files
         synced_store_local_patch = mock.patch('syspurpose.files.SyncedStore.PATH',
@@ -1050,7 +1073,7 @@ class TestSyncedStore(SyspurposeTestBase):
         does not exist
         """
         # Delete the temporary directory
-        os.rmdir(self.temp_dir)
+        os.rmdir(self.temp_dir.name)
 
         consumer_uuid = "something"
         synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
@@ -1058,7 +1081,7 @@ class TestSyncedStore(SyspurposeTestBase):
         self.assertEqual(local_content, {})
 
         # Make sure that the directory was created
-        res = os.path.isdir(self.temp_dir)
+        res = os.path.isdir(self.temp_dir.name)
         self.assertTrue(res)
 
     def test_read_file_non_existent_cache_directory(self):
@@ -1067,7 +1090,7 @@ class TestSyncedStore(SyspurposeTestBase):
         does not exist
         """
         # Delete the temporary directory
-        os.rmdir(self.temp_cache_dir)
+        os.rmdir(self.temp_cache_dir.name)
 
         consumer_uuid = "something"
         synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
@@ -1075,7 +1098,7 @@ class TestSyncedStore(SyspurposeTestBase):
         self.assertEqual(local_content, {})
 
         # Make sure that the directory was created
-        res = os.path.isdir(self.temp_dir)
+        res = os.path.isdir(self.temp_dir.name)
         self.assertTrue(res)
 
 
