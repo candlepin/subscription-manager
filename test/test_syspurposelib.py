@@ -59,7 +59,7 @@ class SyspurposeLibTests(SubManFixture):
                 self.mock_json.dump.assert_called_with(test_values, mock_open, ensure_ascii=True,
                                                        indent=2)
                 self.assertEqual(result, True)
-                self.assert_equal_dict(json.loads(mock_open.content_out()), test_values)
+                self.assertEqual(json.loads(mock_open.content_out()), test_values)
 
     def test_write_syspurpose_with_no_syspurpose_store_and_os_error(self):
         """

@@ -860,8 +860,8 @@ class TestSyncedStore(SyspurposeTestBase):
             'service_level_agreement': ''
         }
 
-        self.assert_equal_dict(expected_local, local_result)
-        self.assert_equal_dict(expected_cache, cache_result)
+        self.assertEqual(expected_local, local_result)
+        self.assertEqual(expected_cache, cache_result)
 
     def test_same_values_not_synced_with_server(self):
         cache_contents = {
@@ -908,8 +908,8 @@ class TestSyncedStore(SyspurposeTestBase):
             'addons': None
         }
 
-        self.assert_equal_dict(expected_cache, cache_result)
-        self.assert_equal_dict(expected_local, local_result)
+        self.assertEqual(expected_cache, cache_result)
+        self.assertEqual(expected_local, local_result)
 
     def test_server_does_not_support_syspurpose(self):
         # This is how we detect if we have syspurpose support
@@ -932,8 +932,8 @@ class TestSyncedStore(SyspurposeTestBase):
         cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
 
         # The cache should not be updated at all
-        self.assert_equal_dict({}, cache_result)
-        self.assert_equal_dict({'role': 'new_role'}, local_result)
+        self.assertEqual({}, cache_result)
+        self.assertEqual({'role': 'new_role'}, local_result)
 
         self.uep.updateConsumer.assert_not_called()
 
@@ -980,8 +980,8 @@ class TestSyncedStore(SyspurposeTestBase):
         local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
         cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
 
-        self.assert_equal_dict({'role': 'initial'}, local_result)
-        self.assert_equal_dict({}, cache_result)
+        self.assertEqual({'role': 'initial'}, local_result)
+        self.assertEqual({}, cache_result)
 
         # Now the "fake" upgrade
 
@@ -1003,8 +1003,8 @@ class TestSyncedStore(SyspurposeTestBase):
             'addons': self.default_remote_values['addOns']
         }
 
-        self.assert_equal_dict({'role': 'initial'}, local_result)
-        self.assert_equal_dict(expected_cache, cache_result)
+        self.assertEqual({'role': 'initial'}, local_result)
+        self.assertEqual(expected_cache, cache_result)
 
     def test_user_deletes_syspurpose_file(self):
         cache_contents = {
@@ -1035,8 +1035,8 @@ class TestSyncedStore(SyspurposeTestBase):
         local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
         cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
 
-        self.assert_equal_dict(expected_local, local_result)
-        self.assert_equal_dict(expected_cache, cache_result)
+        self.assertEqual(expected_local, local_result)
+        self.assertEqual(expected_cache, cache_result)
         self.uep.updateConsumer.assert_called_once_with(consumer_uuid,
                                                         role="",
                                                         usage="",
@@ -1194,7 +1194,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_empty_base_no_conflict(self):
         base = {}
@@ -1209,7 +1209,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"A": "remote", "B": "local"}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_local_only(self):
         base = {}
@@ -1218,7 +1218,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = local
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_remote_only(self):
         base = {}
@@ -1227,7 +1227,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = remote
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_key_removed_no_conflict(self):
         base = {"C": "base"}
@@ -1236,7 +1236,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"C": None}  # C should have the None value
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_key_removed_remote_not_in_base(self):
         base = {}
@@ -1245,7 +1245,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = local  # Expect Local to win
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_key_no_longer_supported_from_remote(self):
         base = {"C": "base"}
@@ -1254,7 +1254,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = local
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_key_unset_from_remote_with_false_value(self):
         base = {"C": "base"}
@@ -1263,7 +1263,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"C": None}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_key_removed_from_local(self):
         base = {"C": "base"}
@@ -1272,13 +1272,13 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"C": None}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
         # Now with the on_conflict param set to "local"
 
         expected = {"C": None}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_merge_no_potential_conflict(self):
         base = {"C": "base"}
@@ -1289,7 +1289,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"A": "remote", "B": "local", "C": "base"}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_merge(self):
         """
@@ -1301,12 +1301,12 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"A": "remote", "B": "local", "C": "remote"}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
         # Now with local as the on_conflict winner
         expected = {"A": "remote", "B": "local", "C": "remote"}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_concurrent_modification(self):
         """
@@ -1322,12 +1322,12 @@ class TestThreeWayMerge(SyspurposeTestBase):
         expected = {"A": "remote", "B": "local", shared_key: "remote"}
 
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
         # Now with local set to win
         expected = {"A": "remote", "B": "local", shared_key: "local"}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_concurrent_modification_key_added(self):
         """
@@ -1344,12 +1344,12 @@ class TestThreeWayMerge(SyspurposeTestBase):
         expected = {"A": "remote", "B": "local", shared_key: "remote"}
 
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
         # Now with local set to win
         expected = {"A": "remote", "B": "local", shared_key: "local"}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_merge_conflicting_lists(self):
         """
@@ -1363,12 +1363,12 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"A": "remote", "B": "local", shared_key: ["remote"]}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
         # Now with local set to win
         expected = {"A": "remote", "B": "local", shared_key: ["local"]}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_invalid_on_conflict_value(self):
         self.assertRaises(ValueError, three_way_merge, local={}, base={}, remote={},
@@ -1385,7 +1385,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
         expected = {"B": "local"}
 
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_merge_remote_empty_field(self):
         """
@@ -1398,7 +1398,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
         expected = {"B": "local"}
 
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_merge_missing_remote_list(self):
         """
@@ -1411,4 +1411,4 @@ class TestThreeWayMerge(SyspurposeTestBase):
         expected = {"B": ["local"]}
 
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
