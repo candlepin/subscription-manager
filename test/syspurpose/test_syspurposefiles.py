@@ -11,7 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from .base import SyspurposeTestBase, write_to_file_utf8
+from .base import SyspurposeTestBase
 from ..fixture import Capture
 import io
 import json
@@ -592,7 +592,7 @@ class TestSyncedStore(SyspurposeTestBase):
         Test that synced store is automatically synced, when unset method is used
         in block of with statement
         """
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             self.assertFalse(synced_store.changed)
             synced_store.unset('foo')
@@ -662,7 +662,7 @@ class TestSyncedStore(SyspurposeTestBase):
         Test that synced store is automatically synced, when remove method is used
         in block of with statement
         """
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar'], 'cool': 'shark'})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar'], 'cool': 'shark'})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             self.assertFalse(synced_store.changed)
             synced_store.remove('foo', 'bar')
@@ -681,7 +681,7 @@ class TestSyncedStore(SyspurposeTestBase):
         Test that synced store is automatically synced, when remove method is used
         in block of with statement. Test the case, when value is not list.
         """
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             self.assertFalse(synced_store.changed)
             synced_store.remove('foo', 'bar')
@@ -693,7 +693,7 @@ class TestSyncedStore(SyspurposeTestBase):
         """
         Test that removing non-existent value will not mark synced store as changed
         """
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar']})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar']})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             self.assertFalse(synced_store.changed)
             synced_store.remove('foo', 'boooo')
@@ -705,7 +705,7 @@ class TestSyncedStore(SyspurposeTestBase):
         """
         Test that removing non-existent key will not mark synced store as changed
         """
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar']})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar']})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             self.assertFalse(synced_store.changed)
             synced_store.remove('non-existent', 'foo_bar')
@@ -741,7 +741,7 @@ class TestSyncedStore(SyspurposeTestBase):
         Test that local syncing does not overwrite existing values
         """
         self.uep.has_capability = mock.Mock(side_effect=lambda x: False)
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             synced_store.set('cool', 'dear')
         local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
@@ -781,8 +781,8 @@ class TestSyncedStore(SyspurposeTestBase):
     def _assert_falsey_values_removed_from_local(self, remote_contents, local_contents, cache_contents):
         self.uep.getConsumer.return_value = remote_contents
 
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
         result = self.assertRaisesNothing(synced_store.sync)
@@ -801,8 +801,8 @@ class TestSyncedStore(SyspurposeTestBase):
         self.uep.getConsumer.return_value = {'addOns': addons}
 
         # Write an out of order list to both the local and cache
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'addons': addons[::-1]})
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {'addons': addons[::-1]})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'addons': addons[::-1]})
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {'addons': addons[::-1]})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
         result = self.assertRaisesNothing(synced_store.sync)
@@ -823,8 +823,8 @@ class TestSyncedStore(SyspurposeTestBase):
         self.uep.getConsumer.return_value = remote_contents
 
         # Write an out of order list to both the local and cache
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), initial_syspurpose)
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), initial_syspurpose)
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), initial_syspurpose)
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), initial_syspurpose)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
         result = self.assertRaisesNothing(synced_store.sync)
@@ -861,8 +861,8 @@ class TestSyncedStore(SyspurposeTestBase):
         self.uep.getConsumer.return_value = remote_contents
 
         # Write an out of order list to both the local and cache
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
         result = self.assertRaisesNothing(synced_store.sync)
@@ -905,8 +905,8 @@ class TestSyncedStore(SyspurposeTestBase):
         }
 
         self.uep.getConsumer.return_value = remote_contents
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
         result = self.assertRaisesNothing(synced_store.sync)
@@ -939,8 +939,8 @@ class TestSyncedStore(SyspurposeTestBase):
         # This is how we detect if we have syspurpose support
         self.uep.has_capability = mock.Mock(side_effect=lambda x: x in [])
 
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': 'initial'})
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': 'initial'})
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
 
@@ -962,8 +962,8 @@ class TestSyncedStore(SyspurposeTestBase):
         self.uep.updateConsumer.assert_not_called()
 
     def test_server_setting_unsupported_value(self):
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': ''})
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': ''})
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something", use_valid_fields=True)
 
@@ -974,8 +974,8 @@ class TestSyncedStore(SyspurposeTestBase):
             self.assertTrue("SP Server" in captured.out)
 
     def test_server_setting_unsupported_key(self):
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': ''})
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': ''})
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something", use_valid_fields=True)
 
@@ -993,8 +993,8 @@ class TestSyncedStore(SyspurposeTestBase):
         # values
 
         self.uep.has_capability = mock.Mock(side_effect=lambda x: x in [])
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': 'initial'})
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': 'initial'})
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
         result = self.assertRaisesNothing(synced_store.sync)
@@ -1045,7 +1045,7 @@ class TestSyncedStore(SyspurposeTestBase):
         }
         consumer_uuid = "something"
         self.uep.getConsumer.return_value = remote_contents
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
         # We don't write anything to the self.local_syspurpose_file anywhere else, so not making
         # one is equivalent to removing an existing one.
 
