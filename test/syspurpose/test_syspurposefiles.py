@@ -31,7 +31,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         self.assertEqual(syspurpose_store.contents, {})
         self.assertEqual(syspurpose_store.path, temp_dir)
 
@@ -43,8 +43,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         temp_file = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         self.assertFalse(os.path.exists(temp_file))
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_file)
-        res = self.assertRaisesNothing(syspurpose_store.read_file)
+        syspurpose_store = files.SyspurposeStore(temp_file)
+        res = syspurpose_store.read_file()
         self.assertFalse(bool(res))
 
     def test_read_file_existent_file(self):
@@ -59,8 +59,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
 
         self.assertTrue(os.path.exists(temp_dir))
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
-        res = self.assertRaisesNothing(syspurpose_store.read_file)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
+        res = syspurpose_store.read_file()
         self.assertTrue(bool(res))
 
     def test_read_file_with_unicode_content(self):
@@ -75,8 +75,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
 
         self.assertTrue(os.path.exists(temp_dir))
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
-        res = self.assertRaisesNothing(syspurpose_store.read_file)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
+        res = syspurpose_store.read_file()
         self.assertTrue(bool(res))
 
     def _read_file(self, file_contents=None, expected_contents=None):
@@ -97,8 +97,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertTrue(os.path.exists(temp_dir), "Unable to create test file in temp dir")
 
         # Actually do the test
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
-        self.assertRaisesNothing(syspurpose_store.read_file)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
+        syspurpose_store.read_file()
         self.assertEqual(syspurpose_store.contents, expected_contents)
 
     def test_read_file_empty_file(self):
@@ -122,8 +122,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
-        self.assertRaisesNothing(syspurpose_store.create)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
+        syspurpose_store.create()
         # We should have a new file in the temp_dir that we can access for writing
         self.assertTrue(os.path.exists(temp_dir))
         self.assertTrue(os.access(temp_dir, os.W_OK))
@@ -139,17 +139,17 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Brand new unseen key is added
-        res = self.assertRaisesNothing(syspurpose_store.add, "new_key", "new_value")
+        res = syspurpose_store.add("new_key", "new_value")
         self.assertIn("new_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["new_key"], ["new_value"])
         self.assertTrue(res, "The add method should return true when the store has changed")
 
         # Add to an already seen existing key
-        res = self.assertRaisesNothing(syspurpose_store.add, "already_present_key", "new_value_2")
+        res = syspurpose_store.add("already_present_key", "new_value_2")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], ["preexisting_value", "new_value_2"])
         self.assertTrue(res, "The add method should return true when the store has changed")
@@ -165,11 +165,11 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Brand new unseen key is added
-        res = self.assertRaisesNothing(syspurpose_store.add, "already_present_key", "new_value")
+        res = syspurpose_store.add("already_present_key", "new_value")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], ["new_value"])
         self.assertTrue(res, "The add method should return true when the store has changed")
@@ -185,11 +185,11 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         with open(temp_dir, 'w') as f:
             json.dump(test_data, f)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Add to an already seen existing key, that contains a scalar value
-        res = self.assertRaisesNothing(syspurpose_store.add, "already_present_key", "new_value_2")
+        res = syspurpose_store.add("already_present_key", "new_value_2")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], ["preexisting_scalar_value", "new_value_2"])
         self.assertTrue(res, "The add method should return true when the store has changed")
@@ -205,11 +205,11 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Add to an already seen existing key
-        res = self.assertRaisesNothing(syspurpose_store.add, 'ονόματα', 'Κώστας')
+        res = syspurpose_store.add('ονόματα', 'Κώστας')
         self.assertIn('ονόματα', syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents['ονόματα'], ['Νίκος', 'Κώστας'])
         self.assertTrue(res, "The add method should return true when the store has changed")
@@ -225,11 +225,11 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         with open(temp_dir, 'w') as f:
             json.dump(test_data, f)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Try to add a value that already exists to an already seen existing key
-        self.assertRaisesNothing(syspurpose_store.add, "already_present_key", "preexisting_value")
+        syspurpose_store.add("already_present_key", "preexisting_value")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(len(syspurpose_store.contents["already_present_key"]), 1)
         self.assertEqual(syspurpose_store.contents["already_present_key"], ["preexisting_value"])
@@ -244,17 +244,17 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Remove an item from the store which we have previously seen
-        res = self.assertRaisesNothing(syspurpose_store.remove, "already_present_key", "preexisting_value")
+        res = syspurpose_store.remove("already_present_key", "preexisting_value")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], [])
         self.assertTrue(res, "The remove method should return true when the store has changed")
 
         # Try to remove an item that we've previously not seen
-        res = self.assertRaisesNothing(syspurpose_store.remove, "new_key", "any_value")
+        res = syspurpose_store.remove("new_key", "any_value")
         self.assertFalse(res, "The remove method should return false when the store has not changed")
 
     def test_remove_unsets_existing_scalar_value(self):
@@ -268,11 +268,11 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         with open(temp_dir, 'w') as f:
             json.dump(test_data, f)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Remove an item from the store which we have previously seen, whose value is scalar / not contained in a list
-        res = self.assertRaisesNothing(syspurpose_store.remove, "already_present_key", "preexisting_scalar_value")
+        res = syspurpose_store.remove("already_present_key", "preexisting_scalar_value")
         self.assertNotIn("already_present_key", syspurpose_store.contents)
         self.assertTrue(res, "The remove method should return true when the store has changed")
 
@@ -287,11 +287,11 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Remove from an already seen existing key
-        res = self.assertRaisesNothing(syspurpose_store.remove, 'ονόματα', 'Κώστας')
+        res = syspurpose_store.remove('ονόματα', 'Κώστας')
         self.assertIn('ονόματα', syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents['ονόματα'], ['Νίκος'])
         self.assertTrue(res, "The add method should return true when the store has changed")
@@ -304,15 +304,15 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
-        res = self.assertRaisesNothing(syspurpose_store.unset, "already_present_key")
+        res = syspurpose_store.unset("already_present_key")
         # We expect a value of true from this method when the store was changed
         self.assertTrue(res, "The unset method should return true when the store has changed")
         self.assertNotIn("already_present_key", syspurpose_store.contents, msg="Expected the key to no longer be present")
 
-        res = self.assertRaisesNothing(syspurpose_store.unset, "unseen_key")
+        res = syspurpose_store.unset("unseen_key")
         # We expect falsey values when the store was not modified
         self.assertFalse(res, "The unset method should return false when the store has not changed")
         self.assertNotIn("unseen_key", syspurpose_store.contents, msg="The key passed to unset, has been added to the store")
@@ -328,15 +328,15 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
-        res = self.assertRaisesNothing(syspurpose_store.unset, "ονόματα")
+        res = syspurpose_store.unset("ονόματα")
         # We expect a value of true from this method when the store was changed
         self.assertTrue(res, "The unset method should return true when the store has changed")
         self.assertNotIn('ονόματα', syspurpose_store.contents, msg="Expected the key to no longer be present")
 
-        res = self.assertRaisesNothing(syspurpose_store.unset, 'άκυρο_κλειδί')
+        res = syspurpose_store.unset('άκυρο_κλειδί')
         # We expect falsey values when the store was not modified
         self.assertFalse(res, "The unset method should return false when the store has not changed")
         self.assertNotIn('άκυρο_κλειδί', syspurpose_store.contents, msg="The key passed to unset, has been added to the store")
@@ -349,10 +349,10 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"service_level_agreement": "preexisting_value"}
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
-        res = self.assertRaisesNothing(syspurpose_store.unset, "service_level_agreement")
+        res = syspurpose_store.unset("service_level_agreement")
         # We expect a value of true from this method when the store was changed
         self.assertTrue(res, "The unset method should return true when the store has changed")
         self.assertIn("service_level_agreement", syspurpose_store.contents, msg="Expected the key to still be in the contents, but reset to an empty string")
@@ -367,23 +367,23 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": "old_value"}
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Check the behaviour of manipulating an existing key with an identical value (no update)
-        res = self.assertRaisesNothing(syspurpose_store.set, "already_present_key", "old_value")
+        res = syspurpose_store.set("already_present_key", "old_value")
         self.assertFalse(res, "When a value is not actually changed, set should return false")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], "old_value")
 
         # Modify existing item
-        res = self.assertRaisesNothing(syspurpose_store.set, "already_present_key", "new_value")
+        res = syspurpose_store.set("already_present_key", "new_value")
         self.assertTrue(res, "When an item is set to a new value, set should return true")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], "new_value")
 
         # Add new item set to a new value
-        res = self.assertRaisesNothing(syspurpose_store.set, "new_key", "new_value_2")
+        res = syspurpose_store.set("new_key", "new_value_2")
         self.assertTrue(res, "When an item is set to a new value, set should return true")
         self.assertIn("new_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["new_key"], "new_value_2")
@@ -396,23 +396,23 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'ονόματα': 'Νίκος'}
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Check the behaviour of manipulating an existing key with an identical value (no update)
-        res = self.assertRaisesNothing(syspurpose_store.set, 'ονόματα', 'Νίκος')
+        res = syspurpose_store.set('ονόματα', 'Νίκος')
         self.assertFalse(res, "When a value is not actually changed, set should return false")
         self.assertIn('ονόματα', syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents['ονόματα'], 'Νίκος')
 
         # Modify existing item
-        res = self.assertRaisesNothing(syspurpose_store.set, 'ονόματα', 'Κώστας')
+        res = syspurpose_store.set('ονόματα', 'Κώστας')
         self.assertTrue(res, "When an item is set to a new value, set should return true")
         self.assertIn('ονόματα', syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents['ονόματα'], 'Κώστας')
 
         # Add new item set to a new value
-        res = self.assertRaisesNothing(syspurpose_store.set, 'καινούργιο', 'Άλεξανδρος')
+        res = syspurpose_store.set('καινούργιο', 'Άλεξανδρος')
         self.assertTrue(res, "When an item is set to a new value, set should return true")
         self.assertIn('καινούργιο', syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents['καινούργιο'], 'Άλεξανδρος')
@@ -424,13 +424,13 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"arbitrary_key": "arbitrary_value"}
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
-        self.assertRaisesNothing(syspurpose_store.write)
+        syspurpose_store.write()
 
         with io.open(temp_dir, 'r', encoding='utf-8') as f:
-            actual_contents = self.assertRaisesNothing(json.load, f)
+            actual_contents = json.load(f)
 
         self.assertDictEqual(actual_contents, test_data)
 
@@ -441,13 +441,13 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'όνομα': 'Νίκος'}
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
-        self.assertRaisesNothing(syspurpose_store.write)
+        syspurpose_store.write()
 
         with io.open(temp_dir, 'r', encoding='utf-8') as f:
-            actual_contents = self.assertRaisesNothing(json.load, f)
+            actual_contents = json.load(f)
 
         self.assertDictEqual(actual_contents, test_data)
 
@@ -462,7 +462,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore.read, temp_dir)
+        syspurpose_store = files.SyspurposeStore.read(temp_dir)
         self.assertDictEqual(syspurpose_store.contents, test_data)
 
 
@@ -785,7 +785,7 @@ class TestSyncedStore(SyspurposeTestBase):
         utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
         local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
@@ -805,7 +805,7 @@ class TestSyncedStore(SyspurposeTestBase):
         utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {'addons': addons[::-1]})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -827,7 +827,7 @@ class TestSyncedStore(SyspurposeTestBase):
         utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), initial_syspurpose)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -865,7 +865,7 @@ class TestSyncedStore(SyspurposeTestBase):
         utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -909,7 +909,7 @@ class TestSyncedStore(SyspurposeTestBase):
         utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -947,8 +947,8 @@ class TestSyncedStore(SyspurposeTestBase):
         remote_content = synced_store.get_remote_contents()
         self.assertEqual(remote_content, {})
 
-        self.assertRaisesNothing(synced_store.set, 'role', 'new_role')
-        result = self.assertRaisesNothing(synced_store.sync)
+        synced_store.set('role', 'new_role')
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -997,7 +997,7 @@ class TestSyncedStore(SyspurposeTestBase):
         utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -1013,7 +1013,7 @@ class TestSyncedStore(SyspurposeTestBase):
         self.uep.getConsumer.return_value = self.default_remote_values
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -1050,7 +1050,7 @@ class TestSyncedStore(SyspurposeTestBase):
         # one is equivalent to removing an existing one.
 
         synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
-        self.assertRaisesNothing(synced_store.sync)
+        synced_store.sync()
 
         expected_cache = {'service_level_agreement': '',
                           'addons': []}
@@ -1077,7 +1077,7 @@ class TestSyncedStore(SyspurposeTestBase):
 
         consumer_uuid = "something"
         synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
-        local_content = self.assertRaisesNothing(synced_store.get_local_contents)
+        local_content = synced_store.get_local_contents()
         self.assertEqual(local_content, {})
 
         # Make sure that the directory was created
@@ -1094,7 +1094,7 @@ class TestSyncedStore(SyspurposeTestBase):
 
         consumer_uuid = "something"
         synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
-        local_content = self.assertRaisesNothing(synced_store.get_local_contents)
+        local_content = synced_store.get_local_contents()
         self.assertEqual(local_content, {})
 
         # Make sure that the directory was created
