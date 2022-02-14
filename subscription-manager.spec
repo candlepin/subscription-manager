@@ -248,7 +248,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.26
+Version: 1.28.27
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1491,6 +1491,16 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Feb 14 2022 Christopher Snyder <csnyder@redhat.com> 1.28.27-1
+- Update translation files (noreply@weblate.org)
+- 1887600: Use updated cert with SHA-256 algorithm (jhnidek@redhat.com)
+- 2046516: register: do not check environments w/ activation keys
+  (ptoscano@redhat.com)
+- No-op refactor of RegisterCommand._process_environments()
+  (ptoscano@redhat.com)
+- environments: fix list for account in env-less org (ptoscano@redhat.com)
+- 1994056: Multiple environment capability (wpoteat@redhat.com)
+
 * Thu Feb 10 2022 Christopher Snyder <csnyder@redhat.com> 1.28.26-1
 - 2049441: [1.28] Cockpit registration dialog: enable insights by default
   (jhnidek@redhat.com)
