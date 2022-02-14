@@ -11,7 +11,8 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from .base import SyspurposeTestBase, write_to_file_utf8, Capture
+from .base import SyspurposeTestBase, write_to_file_utf8
+from ..fixture import Capture
 import io
 import json
 import os
