@@ -7,13 +7,14 @@
 # Sundeep Anand <suanand@redhat.com>, 2021.
 # simmon <simmon@nplob.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
+# Kim InSoo <simmon@nplob.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-19 14:16+0100\n"
-"PO-Revision-Date: 2022-01-20 12:03+0000\n"
-"Last-Translator: simmon <simmon@nplob.com>\n"
+"PO-Revision-Date: 2022-02-15 08:16+0000\n"
+"Last-Translator: Kim InSoo <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
 "Language: ko\n"
@@ -2370,25 +2371,25 @@ msgstr "조직 키를 사용하여 환경 목록에 조직을 지정"
 
 #: src/subscription_manager/cli_command/environments.py:49
 msgid "set an ordered comma-separated list of environments for this consumer"
-msgstr "해당 고객을 위해 순서가 지정된 쉼표로 구분된 환경 목록을 설정합니다"
+msgstr "이 소비자에 대해 순서가 지정된 쉼표로-구분된 환경 목록을 설정합니다"
 
 #: src/subscription_manager/cli_command/environments.py:51
 msgid "list all environments for the organization"
-msgstr "조직의 모든 환경 목록"
+msgstr "조직을 위해 모든 환경을 나열합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:53
 msgid "list the environments enabled for this consumer in order"
-msgstr "해당 고객을 위해 활성화된 환경을 순서대로 목록화합니다"
+msgstr "순서대로 이 소비자를 위해 활성화된 환경을 나열합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:55
 msgid "list the environments not enabled for this consumer"
-msgstr "해당 고객을 위해 활성화 되지 않은 환경을 목록화합니다"
+msgstr "이 사용자를 위해 비활성화된 환경을 나열합니다"
 
 #: src/subscription_manager/cli_command/environments.py:63
 msgid "You may not specify an --org for environments when registered."
-msgstr "당신은 등록 할 때에 환경을 위해 --org를 지정 할 수 없을지도 모릅니다."
+msgstr "당신은 등록 할 때 환경을 위해 --org를 지정 할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:72
@@ -2414,12 +2415,12 @@ msgstr "환경이 최신화되었습니다."
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:113
 msgid "Error: Server does not support environment updates."
-msgstr "오류: 서버는 환경 최신화를 지원하지 않습니다."
+msgstr "오류: 서버가 환경 최신화를 지원하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:121
 msgid "Error: Server does not support multi-environment operations."
-msgstr "오류: 서버는 다중-환경 동작을 지원하지 않습니다."
+msgstr "오류: 서버가 다중-환경 동작을 지원하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:139
@@ -2429,11 +2430,11 @@ msgstr "환경"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:145
 msgid "This list operation does not have any environments to report."
-msgstr "이 목록 동작은 보고되는 환경을 갖지 않습니다."
+msgstr "이와 같이 나열된 동작은 보고 할 환경이 없습니다."
 
 #: src/subscription_manager/cli_command/environments.py:182
 msgid "Error: The same environment may not be listed more than once. "
-msgstr "오류: 동일한 환경은 두 번 이상 목록화 되지 않을지도 모릅니다. "
+msgstr "오류: 동일한 환경은 두 번 이상 나열되지 않습니다. "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:187
@@ -3302,8 +3303,8 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
-"대상 조직에서 특정 환경(단일 값) 또는 다중 환경(쉼표-구분된 목록)으로 등록합니다. 자격 서버에 의해 다중 환경을 사용하는 기능은 "
-"통제됩니다"
+"대상 조직에서 특정 환경 (단일 값) 또는 다중 환경(쉼표로-구분된 목록)에 등록합니다. 다중 환경을 사용하는 기능은 자격 부여 서버에 "
+"의해 제어됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:72
