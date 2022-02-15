@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 18:42+0100\n"
-"PO-Revision-Date: 2022-02-09 10:10+0000\n"
+"PO-Revision-Date: 2022-02-15 13:16+0000\n"
 "Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ja/>\n"
@@ -5062,11 +5062,10 @@ msgstr "組織 ID: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:1353
-#, fuzzy, python-brace-format
-#| msgid "environment name: %s"
+#, python-brace-format
 msgid "environment name: {environment_name}"
 msgid_plural "environment names: {environment_name}"
-msgstr[0] "環境名: %s"
+msgstr[0] "環境名: {environment_name}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:1371
@@ -5112,32 +5111,26 @@ msgid "specify organization for environment list, using organization key"
 msgstr "組織キーを使用して、 環境の一覧に組織を指定します"
 
 #: src/subscription_manager/managercli.py:1437
-#, fuzzy
-#| msgid "comma-separated list of hostnames/domains"
 msgid "set an ordered comma-separated list of environments for this consumer"
-msgstr "ホスト名/ドメインのコンマ区切り一覧"
+msgstr "このコンシューマーの環境の順序付きリストを設定します"
 
 #: src/subscription_manager/managercli.py:1439
 msgid "list all environments for the organization"
-msgstr ""
+msgstr "組織の全環境を一覧表示します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:1441
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments enabled for this consumer in order"
-msgstr "ユーザーが使用可能な環境を表示します"
+msgstr "このコンシューマーに対して有効化された環境を順番に表示します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:1443
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments not enabled for this consumer"
-msgstr "ユーザーが使用可能な環境を表示します"
+msgstr "このコンシューマーに対して有効化されていない環境を表示します"
 
 #: src/subscription_manager/managercli.py:1451
 msgid "You may not specify an --org for environments when registered."
-msgstr ""
+msgstr "登録時には、--org を環境には指定できません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:1460
@@ -5147,10 +5140,8 @@ msgstr "エラー: サーバーは環境をサポートしません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1467
-#, fuzzy
-#| msgid "%s option requires %d arguments"
 msgid "This operation requires user credentials"
-msgstr "%s オプションは %d 個の引数を必要とします"
+msgstr "この操作にはユーザーの認証情報が必要です"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:1482
@@ -5159,24 +5150,18 @@ msgstr "エラー: サーバーから環境一覧を取得できません"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:1499
-#, fuzzy
-#| msgid "Environments"
 msgid "Environments updated."
-msgstr "環境"
+msgstr "環境が更新されました。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:1501
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support environment updates."
-msgstr "エラー: サーバーは環境をサポートしません。"
+msgstr "エラー: サーバーでは環境の更新をサポートしません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:1509
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support multi-environment operations."
-msgstr "エラー: サーバーは環境をサポートしません。"
+msgstr "エラー: サーバーでは複数の環境の操作をサポートしません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:1527
@@ -5184,22 +5169,19 @@ msgid "Environments"
 msgstr "環境"
 
 #: src/subscription_manager/managercli.py:1533
-#, fuzzy
-#| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
-msgstr "この組織には環境がありません。"
+msgstr "このリストの操作には、レポートする環境がありません。"
 
 #: src/subscription_manager/managercli.py:1570
 msgid "Error: The same environment may not be listed more than once. "
-msgstr ""
+msgstr "エラー: 同じ環境を複数回、表示できない場合があります。 "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:1575
-#, fuzzy, python-brace-format
-#| msgid "No such environment: %s"
+#, python-brace-format
 msgid "No such environment: {names}"
 msgid_plural "No such environments: {names}"
-msgstr[0] "そのような環境はありません: %s"
+msgstr[0] "そのような環境はありません: {names}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:1588
@@ -5332,6 +5314,8 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
+"宛先組織に含まれる特定の環境 (単一の値) または複数の環境 (コンマ区切りリスト) "
+"を指定して登録します。複数の環境を使用する機能は、エンタイトルメントサーバーで制御します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1834
@@ -5401,11 +5385,8 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:1879
 #: src/subscription_manager/managercli.py:2129
-#, fuzzy
-#| msgid "The entitlement server failed to remove these serial numbers:"
 msgid "The entitlement server does not allow multiple environments"
-msgstr ""
-"エンタイトルメントサーバーが、これらのシリアル番号を削除できませんでした:"
+msgstr "エンタイトルメントサーバーでは複数の環境を使用できません"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1904
@@ -5459,8 +5440,6 @@ msgstr "サービスレベルを設定します: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:2087
-#, fuzzy
-#| msgid "Environment: "
 msgid "Environments: "
 msgstr "環境: "
 

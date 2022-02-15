@@ -6,13 +6,14 @@
 # Sundeep Anand <suanand@redhat.com>, 2021.
 # simmon <simmon@nplob.com>, 2021, 2022.
 # Ludek Janda <ljanda@redhat.com>, 2021.
+# Kim InSoo <simmon@nplob.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 18:42+0100\n"
-"PO-Revision-Date: 2022-01-25 17:16+0000\n"
-"Last-Translator: simmon <simmon@nplob.com>\n"
+"PO-Revision-Date: 2022-02-15 08:16+0000\n"
+"Last-Translator: Kim InSoo <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
 "Language: ko\n"
@@ -5068,11 +5069,10 @@ msgstr "조직 ID: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1353
-#, fuzzy, python-brace-format
-#| msgid "environment name: %s"
+#, python-brace-format
 msgid "environment name: {environment_name}"
 msgid_plural "environment names: {environment_name}"
-msgstr[0] "환경 이름: %s"
+msgstr[0] "환경 이름: {environment_name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1371
@@ -5118,32 +5118,26 @@ msgid "specify organization for environment list, using organization key"
 msgstr "조직 키를 사용하여 환경 목록에 조직을 지정"
 
 #: src/subscription_manager/managercli.py:1437
-#, fuzzy
-#| msgid "comma-separated list of hostnames/domains"
 msgid "set an ordered comma-separated list of environments for this consumer"
-msgstr "쉼표로 구분된 호스트 이름/도메인 목록"
+msgstr "이 소비자에 대해 순서가 지정된 쉼표로-구분된 환경 목록을 설정합니다"
 
 #: src/subscription_manager/managercli.py:1439
 msgid "list all environments for the organization"
-msgstr ""
+msgstr "조직을 위해 모든 환경을 나열합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1441
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments enabled for this consumer in order"
-msgstr "사용자에 대해 사용가능한 환경 표시"
+msgstr "순서대로 이 소비자를 위해 활성화된 환경을 나열합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1443
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments not enabled for this consumer"
-msgstr "사용자에 대해 사용가능한 환경 표시"
+msgstr "이 사용자를 위해 비활성화된 환경을 나열합니다"
 
 #: src/subscription_manager/managercli.py:1451
 msgid "You may not specify an --org for environments when registered."
-msgstr ""
+msgstr "당신은 등록 할 때 환경을 위해 --org를 지정 할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1460
@@ -5153,10 +5147,8 @@ msgstr "오류: 서버가 환경을 지원하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1467
-#, fuzzy
-#| msgid "%s option requires %d arguments"
 msgid "This operation requires user credentials"
-msgstr "%s 옵션에는 %d 인수가 필요함"
+msgstr "이와 같은 동작은 사용자 인증이 필요합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1482
@@ -5165,24 +5157,18 @@ msgstr "오류: 서버에서 환경 목록을 검색할 수 없음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1499
-#, fuzzy
-#| msgid "Environments"
 msgid "Environments updated."
-msgstr "환경"
+msgstr "환경이 최신화되었습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1501
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support environment updates."
-msgstr "오류: 서버가 환경을 지원하지 않습니다."
+msgstr "오류: 서버가 환경 최신화를 지원하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1509
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support multi-environment operations."
-msgstr "오류: 서버가 환경을 지원하지 않습니다."
+msgstr "오류: 서버가 다중-환경 동작을 지원하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1527
@@ -5191,22 +5177,19 @@ msgstr "환경"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1533
-#, fuzzy
-#| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
-msgstr "이 조직에는 환경이 없습니다."
+msgstr "이와 같이 나열된 동작은 보고 할 환경이 없습니다."
 
 #: src/subscription_manager/managercli.py:1570
 msgid "Error: The same environment may not be listed more than once. "
-msgstr ""
+msgstr "오류: 동일한 환경은 두 번 이상 나열되지 않습니다. "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1575
-#, fuzzy, python-brace-format
-#| msgid "No such environment: %s"
+#, python-brace-format
 msgid "No such environment: {names}"
 msgid_plural "No such environments: {names}"
-msgstr[0] "해당 환경이 없음: %s"
+msgstr[0] "해당 환경이 없음: {names}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1588
@@ -5333,6 +5316,8 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
+"대상 조직에서 특정 환경 (단일 값) 또는 다중 환경(쉼표로-구분된 목록)에 등록합니다. 다중 환경을 사용하는 기능은 자격 부여 서버에 "
+"의해 제어됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1834
@@ -5393,10 +5378,8 @@ msgstr "오류: --type 옵션은 더 이상 사용 할 수 없습니다."
 
 #: src/subscription_manager/managercli.py:1879
 #: src/subscription_manager/managercli.py:2129
-#, fuzzy
-#| msgid "The entitlement server failed to remove these serial numbers:"
 msgid "The entitlement server does not allow multiple environments"
-msgstr "인타이틀먼트 서버가 일련 번호 삭제에 실패했습니다:"
+msgstr "자격 서버는 다중 환경을 허용하지 않습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1904
@@ -5450,8 +5433,6 @@ msgstr "서비스 레벨 설정: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2087
-#, fuzzy
-#| msgid "Environment: "
 msgid "Environments: "
 msgstr "환경: "
 
