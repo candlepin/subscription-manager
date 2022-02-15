@@ -1546,7 +1546,7 @@ class EnvironmentsCommand(OrgCommand):
         An override is needed here because we need to use the org from the
         identity for this command if this system is already registered
         """
-        self.identity = require(IDENTITY)
+        self.identity = inj.require(inj.IDENTITY)
         if self.identity.is_valid():
             self._org = self.cp.getOwner(self.identity.uuid)['key']
             return self._org
