@@ -109,7 +109,7 @@
 %global use_rhsm_icons 0%{use_cockpit}
 
 Name: subscription-manager
-Version: 1.29.25
+Version: 1.29.26
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -866,6 +866,12 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Tue Feb 15 2022 Christopher Snyder <csnyder@redhat.com> 1.29.26-1
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (German) (atalanttore@googlemail.com)
+- Revert "1935446: Use updated cert with SHA-256 algorithm"
+  (csnyder@redhat.com)
+
 * Fri Feb 11 2022 Christopher Snyder <csnyder@redhat.com> 1.29.25-1
 - 2046516: register: do not check environments w/ activation keys
   (ptoscano@redhat.com)
