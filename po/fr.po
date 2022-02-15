@@ -4,7 +4,7 @@
 # khowell <khowell@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2019. #zanata
-# Sundeep Anand <suanand@redhat.com>, 2021.
+# Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # John Sefler <jsefler@redhat.com>, 2021.
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 # Jérôme Fenal <jfenal@free.fr>, 2022.
@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 18:42+0100\n"
-"PO-Revision-Date: 2022-02-10 11:15+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2022-02-15 13:16+0000\n"
+"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/fr/>\n"
 "Language: fr\n"
@@ -5165,12 +5165,11 @@ msgstr "ID de l'organisation : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1353
-#, fuzzy, python-brace-format
-#| msgid "environment name: %s"
+#, python-brace-format
 msgid "environment name: {environment_name}"
 msgid_plural "environment names: {environment_name}"
-msgstr[0] "nom de l'environnement : %s"
-msgstr[1] "nom de l'environnement : %s"
+msgstr[0] "nom de l'environnement : {environment_name}"
+msgstr[1] "noms d'environnement : {environment_name}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1371
@@ -5221,32 +5220,30 @@ msgstr ""
 "clé de l'organisation"
 
 #: src/subscription_manager/managercli.py:1437
-#, fuzzy
-#| msgid "comma-separated list of hostnames/domains"
 msgid "set an ordered comma-separated list of environments for this consumer"
-msgstr "liste séparée par des virgules de noms d’hôte/domaines"
+msgstr ""
+"définir une liste ordonnée d'environnements séparés par des virgules pour ce "
+"consommateur"
 
 #: src/subscription_manager/managercli.py:1439
 msgid "list all environments for the organization"
-msgstr ""
+msgstr "liste de tous les environnements de l'organisation"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1441
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments enabled for this consumer in order"
-msgstr "Afficher les environnements disponibles pour un utilisateur"
+msgstr "liste les environnements activés pour ce consommateur dans l'ordre"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1443
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments not enabled for this consumer"
-msgstr "Afficher les environnements disponibles pour un utilisateur"
+msgstr "liste des environnements non activés pour ce consommateur"
 
 #: src/subscription_manager/managercli.py:1451
 msgid "You may not specify an --org for environments when registered."
 msgstr ""
+"Vous ne pouvez pas spécifier un --org pour les environnements lors de "
+"l'enregistrement."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1460
@@ -5256,10 +5253,9 @@ msgstr "Erreur : le serveur ne prend pas en charges les environnements."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1467
-#, fuzzy
-#| msgid "%s option requires %d arguments"
 msgid "This operation requires user credentials"
-msgstr "l'option %s requiert %d arguments"
+msgstr ""
+"Cette opération nécessite des informations d'identification de l'utilisateur"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1482
@@ -5269,24 +5265,21 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1499
-#, fuzzy
-#| msgid "Environments"
 msgid "Environments updated."
-msgstr "Environnements"
+msgstr "Environnements mis à jour."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1501
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support environment updates."
-msgstr "Erreur : le serveur ne prend pas en charges les environnements."
+msgstr ""
+"Erreur : Le serveur ne prend pas en charge les mises à jour d'environnement."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1509
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support multi-environment operations."
-msgstr "Erreur : le serveur ne prend pas en charges les environnements."
+msgstr ""
+"Erreur : Le serveur ne prend pas en charge les opérations multi-"
+"environnements."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1527
@@ -5294,23 +5287,20 @@ msgid "Environments"
 msgstr "Environnements"
 
 #: src/subscription_manager/managercli.py:1533
-#, fuzzy
-#| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
-msgstr "Cette organisation ne possède aucun environnement."
+msgstr "Cette opération de liste n'a pas d'environnement à signaler."
 
 #: src/subscription_manager/managercli.py:1570
 msgid "Error: The same environment may not be listed more than once. "
-msgstr ""
+msgstr "Erreur : un même environnement ne peut pas être listé plus d'une fois. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1575
-#, fuzzy, python-brace-format
-#| msgid "No such environment: %s"
+#, python-brace-format
 msgid "No such environment: {names}"
 msgid_plural "No such environments: {names}"
-msgstr[0] "Pas de tel environnement : %s"
-msgstr[1] "Pas de tel environnement : %s"
+msgstr[0] "Cet environnement n'existe pas : {names}"
+msgstr[1] "Aucun environnement de ce type : {names}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1588
@@ -5448,6 +5438,10 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
+"s'inscrire à un environnement spécifique (valeur unique) ou à plusieurs "
+"environnements (liste séparée par des virgules) dans l'org de destination. "
+"La possibilité d'utiliser plusieurs environnements est contrôlée par le "
+"serveur d'autorisation"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1834
@@ -5513,11 +5507,8 @@ msgstr "Erreur : l'option --type est dépréciée et ne doit pas être utilisée
 
 #: src/subscription_manager/managercli.py:1879
 #: src/subscription_manager/managercli.py:2129
-#, fuzzy
-#| msgid "The entitlement server failed to remove these serial numbers:"
 msgid "The entitlement server does not allow multiple environments"
-msgstr ""
-"Le serveur de droits d'accès n'a pas pu supprimer ces numéros de série :"
+msgstr "Le serveur d'autorisation ne permet pas les environnements multiples"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1904
@@ -5571,10 +5562,8 @@ msgstr "Niveau de service paramétré sur : %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:2087
-#, fuzzy
-#| msgid "Environment: "
 msgid "Environments: "
-msgstr "Environnement : "
+msgstr "Environnements : "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:2089
