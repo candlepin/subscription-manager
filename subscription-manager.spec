@@ -248,7 +248,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.27
+Version: 1.28.28
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1491,6 +1491,11 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Feb 15 2022 Christopher Snyder <csnyder@redhat.com> 1.28.28-1
+- Revert "1887600: Use updated cert with SHA-256 algorithm"
+  (csnyder@redhat.com)
+- environments: fix usage of injection (ptoscano@redhat.com)
+
 * Mon Feb 14 2022 Christopher Snyder <csnyder@redhat.com> 1.28.27-1
 - Update translation files (noreply@weblate.org)
 - 1887600: Use updated cert with SHA-256 algorithm (jhnidek@redhat.com)
