@@ -1022,6 +1022,13 @@ class TestCloudProvider(unittest.TestCase):
         gcp.GCPCloudProvider._instance = None
         gcp.GCPCloudProvider._initialized = False
 
+        custom_facts_collector_patcher = patch('cloud_what.provider.CustomFactsCollector')
+        self.custom_facts_collector_mock = custom_facts_collector_patcher.start()
+        self.custom_facts_collector_instance = Mock()
+        self.custom_facts_collector_instance.get_all = Mock(return_value={})
+        self.custom_facts_collector_mock.return_value = self.custom_facts_collector_instance
+        self.addCleanup(custom_facts_collector_patcher.stop)
+
         host_collector_patcher = patch('cloud_what.provider.HostCollector')
         self.host_collector_mock = host_collector_patcher.start()
         self.host_fact_collector_instance = Mock()
@@ -1070,6 +1077,28 @@ class TestCloudProvider(unittest.TestCase):
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider(methods=DetectionMethod.STRONG)
         self.assertEqual(detected_clouds, [])
+
+    def test_detection_influenced_by_custom_facts(self):
+        """
+        When file with custom fact is set, then detection of cloud provider
+        should be influenced by custom facts
+        """
+        host_facts = {
+            'virt.is_guest': True,
+            'virt.host_type': 'kvm',
+            'dmi.bios.vendor': 'Amazon EC2'
+        }
+        self.host_fact_collector_instance.get_all.return_value = host_facts
+        # Following custom facts should override host_facts
+        custom_facts = {
+            'virt.is_guest': True,
+            'virt.host_type': 'hyperv',
+            'dmi.bios.vendor': 'Microsoft',
+            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77'
+        }
+        self.custom_facts_collector_instance.get_all.return_value = custom_facts
+        detected_clouds = detect_cloud_provider()
+        self.assertEqual(detected_clouds, ['azure'])
 
     def test_detect_cloud_provider_aws_heuristics(self):
         """
