@@ -1,13 +1,13 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
-# Pino Toscano <toscano.pino@tiscali.it>, 2021.
+# Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-19 14:16+0100\n"
-"PO-Revision-Date: 2021-08-28 22:04+0000\n"
+"PO-Revision-Date: 2022-02-19 16:16+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -547,10 +547,8 @@ msgstr "Non sottoscritte"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-view.jsx:128
-#, fuzzy
-#| msgid "Unknown"
 msgid "Unknown status"
-msgstr "Sconosciuto"
+msgstr "Stato sconosciuto"
 
 #: cockpit/src/subscriptions-view.jsx:179
 msgid "Product ID"
@@ -2501,10 +2499,8 @@ msgstr "Errore: impossibile recuperare l'elenco degli ambienti dal server"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/environments.py:111
-#, fuzzy
-#| msgid "Environments"
 msgid "Environments updated."
-msgstr "Ambienti"
+msgstr "Ambienti aggiornati."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/environments.py:113
@@ -3171,10 +3167,9 @@ msgid "Organization: "
 msgstr "Organizzazione: "
 
 #: src/subscription_manager/cli_command/org.py:58
-#, fuzzy, python-brace-format
-#| msgid "User %s is not member of any organization"
+#, python-brace-format
 msgid "Error: User {username} is not member of any organization."
-msgstr "L'utente %s non è parte di alcuna organizzazione"
+msgstr "Errore: l'utente {username} non è parte di alcuna organizzazione."
 
 #: src/subscription_manager/cli_command/org.py:70
 #: src/subscription_manager/cli_command/register.py:383
@@ -3546,10 +3541,8 @@ msgstr "Livello del servizio impostato su: {level}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/register.py:326
-#, fuzzy
-#| msgid "Environment: "
 msgid "Environments: "
-msgstr "Ambiente: "
+msgstr "Ambienti: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/register.py:328
@@ -3839,16 +3832,12 @@ msgstr ""
 "elencare i livelli dei servizi"
 
 #: src/subscription_manager/cli_command/service_level.py:92
-#, fuzzy
-#| msgid ""
-#| "Error: --username, --password, --token and --org can be used only on "
-#| "unregistered systems"
 msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
 msgstr ""
-"Errore: --username, --password, --token e --org possono essere usati solo in "
-"sistemi non registrati"
+"Errore: --username, --password, --token, --org e --serverurl possono essere "
+"usati solo in sistemi non registrati"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:119
