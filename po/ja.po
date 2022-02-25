@@ -819,8 +819,9 @@ msgid ""
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"このシステムは、エンタイトルメントーバーに登録されていますが、更新は受信していません。subscription-manager "
-"でサブスクリプションを割り当てることができます。\n"
+"このシステムは、エンタイトルメントーバーに登録されていますが、更新は受信して"
+"いません。subscription-manager でサブスクリプションを割り当てることができま"
+"す。\n"
 
 #: src/plugins/dnf/subscription-manager.py:80
 msgid "Not root, Subscription Management repositories not updated"
@@ -1172,7 +1173,9 @@ msgstr "存在する可能性のあるファイルを上書きする"
 #: src/rct/manifest_commands.py:325
 #, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
-msgstr "\"{filename}\" というファイルは存在しています。-f を使用して、このファイルを強制的に上書きします。"
+msgstr ""
+"\"{filename}\" というファイルは存在しています。-f を使用して、このファイルを"
+"強制的に上書きします。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rct/manifest_commands.py:328
@@ -2081,7 +2084,9 @@ msgstr "この時点では、サブスクリプションの更新は必要あり
 msgid ""
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr "システムがシンプルコンテンツアクセスモードを使用していない場合には、登録済みシステムに、指定のサブスクリプションを割り当てます"
+msgstr ""
+"システムがシンプルコンテンツアクセスモードを使用していない場合には、登録済み"
+"システムに、指定のサブスクリプションを割り当てます"
 
 #: src/subscription_manager/cli_command/attach.py:95
 msgid "Error: --auto may not be used when specifying pools."
@@ -2122,7 +2127,8 @@ msgid ""
 "Ignoring request to attach. It is disabled for org \"{owner_id}\" because of "
 "the content access mode setting."
 msgstr ""
-"アタッチする要求を無視します。組織 \"{owner_id}\" に対するこの設定は、コンテンツアクセスモードの設定が理由で無効になっています。"
+"アタッチする要求を無視します。組織 \"{owner_id}\" に対するこの設定は、コンテ"
+"ンツアクセスモードの設定が理由で無効になっています。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/attach.py:174
@@ -3324,8 +3330,9 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
-"宛先組織に含まれる特定の環境 (単一の値) または複数の環境 (コンマ区切りリスト) "
-"を指定して登録します。複数の環境を使用する機能は、エンタイトルメントサーバーで制御します"
+"宛先組織に含まれる特定の環境 (単一の値) または複数の環境 (コンマ区切りリス"
+"ト) を指定して登録します。複数の環境を使用する機能は、エンタイトルメントサー"
+"バーで制御します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:72
@@ -3728,7 +3735,8 @@ msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
 msgstr ""
-"エラー: --username、--password、--token、--org および --serverurl は、未登録のシステムでのみ使用できます"
+"エラー: --username、--password、--token、--org および --serverurl は、未登録"
+"のシステムでのみ使用できます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:119

@@ -2064,7 +2064,9 @@ msgstr "현재로서는 서브스크립션을 최신화 할 필요가 없습니�
 msgid ""
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr "시스템이 단순 컨텐츠 접근 방식을 사용하지 않을 경우 등록된 시스템에 지정된 서브스크립션을 첨부"
+msgstr ""
+"시스템이 단순 컨텐츠 접근 방식을 사용하지 않을 경우 등록된 시스템에 지정된 서"
+"브스크립션을 첨부"
 
 #: src/subscription_manager/cli_command/attach.py:95
 msgid "Error: --auto may not be used when specifying pools."
@@ -2103,7 +2105,9 @@ msgstr "오류: 파일 \"{file}\"은 존재하지 않거나 읽을 수 없습니
 msgid ""
 "Ignoring request to attach. It is disabled for org \"{owner_id}\" because of "
 "the content access mode setting."
-msgstr "첨부 요청을 무시합니다. 콘텐츠 접근 방식 설정으로 인하여 \"{owner_id}\" 조직에 대해 비활성화 되었습니다."
+msgstr ""
+"첨부 요청을 무시합니다. 콘텐츠 접근 방식 설정으로 인하여 \"{owner_id}\" 조직"
+"에 대해 비활성화 되었습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:174
@@ -3303,8 +3307,8 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
-"대상 조직에서 특정 환경 (단일 값) 또는 다중 환경(쉼표로-구분된 목록)에 등록합니다. 다중 환경을 사용하는 기능은 자격 부여 서버에 "
-"의해 제어됩니다"
+"대상 조직에서 특정 환경 (단일 값) 또는 다중 환경(쉼표로-구분된 목록)에 등록합"
+"니다. 다중 환경을 사용하는 기능은 자격 부여 서버에 의해 제어됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:72
@@ -3687,8 +3691,8 @@ msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
 msgstr ""
-"오류: --username, --password, --token, --org과 --serverurl은 등록되지 않은 시스템에서만 사용 할 "
-"수 있습니다"
+"오류: --username, --password, --token, --org과 --serverurl은 등록되지 않은 시"
+"스템에서만 사용 할 수 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:119
