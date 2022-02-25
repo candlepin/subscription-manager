@@ -65,13 +65,20 @@ def gather_system_facts() -> dict:
     return facts
 
 
-def _get_cloud_providers(facts: dict = None, threshold: float = 0.5) -> Tuple[list, bool]:
+def _get_cloud_providers(facts: dict = None,
+                         threshold: float = 0.5,
+                         methods: set = ('strong', 'heuristics')) -> Tuple[list, bool]:
     """
     This method tries to detect cloud providers and return list of possible cloud providers
     :param facts: Dictionary with system facts
     :param threshold: Threshold using for detection of cloud provider
+    :param methods: The set of methods used for detecting of cloud providers
     :return: List of cloud providers
     """
+
+    if not ('strong' in methods or 'heuristics' in methods):
+        raise ValueError(f'Method _get_cloud_providers() called with unsupported method(s) {methods}')
+
     if facts is None:
         facts = gather_system_facts()
 
@@ -80,56 +87,59 @@ def _get_cloud_providers(facts: dict = None, threshold: float = 0.5) -> Tuple[li
 
     log.debug('Trying to detect cloud provider')
 
-    # First try to detect cloud providers using strong signs
-    cloud_list = []
-    cloud_provider: BaseCloudProvider
-    for cloud_provider in cloud_providers:
-        cloud_detected = cloud_provider.is_running_on_cloud()
-        if cloud_detected is True:
-            cloud_list.append(cloud_provider)
+    if 'strong' in methods:
+        # First try to detect cloud providers using strong signs
+        cloud_list = []
+        cloud_provider: BaseCloudProvider
+        for cloud_provider in cloud_providers:
+            cloud_detected = cloud_provider.is_running_on_cloud()
+            if cloud_detected is True:
+                cloud_list.append(cloud_provider)
 
-    # When only one cloud provider was detected, then return this cloud provider
-    # probability
-    if len(cloud_list) == 1:
-        log.debug('Detected one cloud provider using strong signs: {provider}'.format(
-            provider=cloud_list[0].CLOUD_PROVIDER_ID)
-        )
-        return cloud_list, True
-    elif len(cloud_list) == 0:
-        log.debug('No cloud provider detected using strong signs')
-    elif len(cloud_list) > 1:
-        log.error('More than one cloud provider detected using strong signs ({providers})'.format(
-            providers=", ".join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
-        ))
+        # When only one cloud provider was detected, then return this cloud provider
+        if len(cloud_list) == 1:
+            log.debug('Detected one cloud provider using strong signs: {provider}'.format(
+                provider=cloud_list[0].CLOUD_PROVIDER_ID)
+            )
+            return cloud_list, True
+        elif len(cloud_list) == 0:
+            log.debug('No cloud provider detected using strong signs')
+        elif len(cloud_list) > 1:
+            log.error('More than one cloud provider detected using strong signs ({providers})'.format(
+                providers=", ".join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
+            ))
 
-    # When no cloud provider detected using strong signs, because behavior of cloud providers
-    # has changed, then try to detect cloud provider using some heuristics
-    cloud_list = []
-    for cloud_provider in cloud_providers:
-        probability: float = cloud_provider.is_likely_running_on_cloud()
-        # We have to filter out VMs, where is low probability that it runs on public cloud,
-        # because it would cause further attempts to contact IMDS servers of cloud providers.
-        # Default value 0.5 was just estimated from observation of existing data returned
-        # by cloud providers.
-        log.debug(f'Cloud provider {cloud_provider.CLOUD_PROVIDER_ID} has probability: {probability}')
-        if probability > threshold:
-            cloud_list.append((probability, cloud_provider))
-    # Sort list according only probability (provider with highest probability first)
-    cloud_list.sort(key=lambda x: x[0], reverse=True)
-    # We care only about order, not probability in the result (filter probability out)
-    cloud_list = [item[1] for item in cloud_list]
+    if 'heuristics' in methods:
+        # When no cloud provider detected using strong signs, because behavior of cloud providers
+        # has changed, then try to detect cloud provider using some heuristics
+        cloud_list = []
+        for cloud_provider in cloud_providers:
+            probability: float = cloud_provider.is_likely_running_on_cloud()
+            # We have to filter out VMs, where is low probability that it runs on public cloud,
+            # because it would cause further attempts to contact IMDS servers of cloud providers.
+            # Default value 0.5 was just estimated from observation of existing data returned
+            # by cloud providers.
+            log.debug(f'Cloud provider {cloud_provider.CLOUD_PROVIDER_ID} has probability: {probability}')
+            if probability > threshold:
+                cloud_list.append((probability, cloud_provider))
+        # Sort list according only probability (provider with the highest probability first)
+        cloud_list.sort(key=lambda x: x[0], reverse=True)
+        # We care only about order, not probability in the result (filter probability out)
+        cloud_list = [item[1] for item in cloud_list]
 
-    if len(cloud_list) == 0:
-        log.debug('No cloud provider detected using heuristics')
-    else:
-        log.debug('Following cloud providers detected using heuristics: {providers}'.format(
-            providers=', '.join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
-        ))
+        if len(cloud_list) == 0:
+            log.debug('No cloud provider detected using heuristics')
+        else:
+            log.debug('Following cloud providers detected using heuristics: {providers}'.format(
+                providers=', '.join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
+            ))
 
     return cloud_list, False
 
 
-def get_cloud_provider(facts: dict = None, threshold: float = 0.5) -> Union[
+def get_cloud_provider(facts: dict = None,
+                       threshold: float = 0.5,
+                       methods: set = ('strong', 'heuristics')) -> Union[
     BaseCloudProvider, AWSCloudProvider, AzureCloudProvider, GCPCloudProvider, None
 ]:
     """
@@ -137,9 +147,10 @@ def get_cloud_provider(facts: dict = None, threshold: float = 0.5) -> Union[
     cloud provider.
     :param facts: Dictionary with system facts
     :param threshold: Threshold used for heuristic detection of cloud provider
+    :param methods: set of methods to be used for detecting of cloud providers
     :return: Instance of cloud provider or None
     """
-    cloud_list, strong_sign = _get_cloud_providers(facts, threshold)
+    cloud_list, strong_sign = _get_cloud_providers(facts, threshold, methods)
 
     # When only one cloud provider detected using strong signs, then it is not
     # necessary to try to gather metadata from cloud provider
@@ -163,7 +174,9 @@ def get_cloud_provider(facts: dict = None, threshold: float = 0.5) -> Union[
     return None
 
 
-def detect_cloud_provider(facts: dict = None, threshold: float = 0.5) -> List[str]:
+def detect_cloud_provider(facts: dict = None,
+                          threshold: float = 0.5,
+                          methods: set = ('strong', 'heuristics')) -> List[str]:
     """
     This method tries to detect cloud provider using hardware information provided by dmidecode.
     When there is strong sign that the VM is running on one of the cloud provider, then return
@@ -173,10 +186,16 @@ def detect_cloud_provider(facts: dict = None, threshold: float = 0.5) -> List[st
     :param facts: dictionary of facts. When no facts are provided, then hardware, virtualization
         and custom facts are gathered.
     :param threshold: Threshold used for heuristic detection of cloud provider
+    :param methods: The set of methods used for detection of cloud providers (possible values
+        are following: 'strong', 'heuristics'). When only 'strong' is listed in the set, then
+        detection is performed only using strong signs. When only 'heuristics' is listed in the
+        list, then only heuristics detections is used. When both methods are listed, then first
+        this method tries to use first detection using strong signs and if no cloud provider
+        is detected, then it falls back to heuristics detection.
     :return: List of string representing detected cloud providers. E.g. ['aws'] or ['aws', 'gcp']
     """
 
-    cloud_list, strong_sign = _get_cloud_providers(facts, threshold)
+    cloud_list, strong_sign = _get_cloud_providers(facts, threshold, methods)
 
     # We care only about IDs of cloud providers in this method
     cloud_list = [cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list]
