@@ -1057,6 +1057,22 @@ class TestCloudProvider(unittest.TestCase):
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['aws'])
 
+    def test_detect_cloud_provider_only_strong_signs(self):
+        """
+        Test the case, when detecting of aws does not work using strong signs, but detecting
+        using only strong signs is requested
+        """
+        host_facts = {
+            'virt.is_guest': True,
+            'virt.host_type': 'kvm',
+            'dmi.bios.vendor': 'AWS',
+            'dmi.bios.version': '1.0',
+            'dmi.system.manufacturer': 'Amazon'
+        }
+        self.host_fact_collector_instance.get_all.return_value = host_facts
+        detected_clouds = detect_cloud_provider(methods={'strong'})
+        self.assertEqual(detected_clouds, [])
+
     def test_detect_cloud_provider_aws_heuristics(self):
         """
         Test the case, when detecting of aws does not work using strong signs, but it is necessary
