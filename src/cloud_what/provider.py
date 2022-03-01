@@ -17,7 +17,7 @@ This module contains several utils used for VMs running on clouds
 """
 
 from typing import Union, Tuple, List
-
+import enum
 import logging
 
 try:
@@ -48,6 +48,21 @@ CLOUD_PROVIDERS = [
 log = logging.getLogger(__name__)
 
 
+class DetectionMethod(enum.Flag):
+    """
+    Enumeration of allowed methods used for detection of cloud providers
+    """
+
+    # When this flag is set, then strong method will be used
+    STRONG = enum.auto()
+
+    # When this flag is set, then heuristic method will be used
+    HEURISTIC = enum.auto()
+
+    # All flags together
+    ALL = HEURISTIC | STRONG
+
+
 def gather_system_facts() -> dict:
     """
     Try to gather system facts necessary for detection of cloud provider
@@ -65,19 +80,18 @@ def gather_system_facts() -> dict:
     return facts
 
 
-def _get_cloud_providers(facts: dict = None,
-                         threshold: float = 0.5,
-                         methods: set = ('strong', 'heuristics')) -> Tuple[list, bool]:
+def _get_cloud_providers(
+        facts: dict = None,
+        threshold: float = 0.5,
+        methods: DetectionMethod = DetectionMethod.ALL
+) -> Tuple[list, bool]:
     """
     This method tries to detect cloud providers and return list of possible cloud providers
     :param facts: Dictionary with system facts
     :param threshold: Threshold using for detection of cloud provider
-    :param methods: The set of methods used for detecting of cloud providers
+    :param methods: The flag of methods used for detecting of cloud providers
     :return: List of cloud providers
     """
-
-    if not ('strong' in methods or 'heuristics' in methods):
-        raise ValueError(f'Method _get_cloud_providers() called with unsupported method(s) {methods}')
 
     if facts is None:
         facts = gather_system_facts()
@@ -87,9 +101,9 @@ def _get_cloud_providers(facts: dict = None,
 
     log.debug('Trying to detect cloud provider')
 
-    if 'strong' in methods:
+    cloud_list = []
+    if DetectionMethod.STRONG in methods:
         # First try to detect cloud providers using strong signs
-        cloud_list = []
         cloud_provider: BaseCloudProvider
         for cloud_provider in cloud_providers:
             cloud_detected = cloud_provider.is_running_on_cloud()
@@ -108,8 +122,10 @@ def _get_cloud_providers(facts: dict = None,
             log.error('More than one cloud provider detected using strong signs ({providers})'.format(
                 providers=", ".join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
             ))
+    else:
+        log.debug('Skipping detection of cloud provider using strong signs')
 
-    if 'heuristics' in methods:
+    if DetectionMethod.HEURISTIC in methods:
         # When no cloud provider detected using strong signs, because behavior of cloud providers
         # has changed, then try to detect cloud provider using some heuristics
         cloud_list = []
@@ -133,13 +149,17 @@ def _get_cloud_providers(facts: dict = None,
             log.debug('Following cloud providers detected using heuristics: {providers}'.format(
                 providers=', '.join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
             ))
+    else:
+        log.debug('Skipping detection of cloud providers using heuristic')
 
     return cloud_list, False
 
 
-def get_cloud_provider(facts: dict = None,
-                       threshold: float = 0.5,
-                       methods: set = ('strong', 'heuristics')) -> Union[
+def get_cloud_provider(
+        facts: dict = None,
+        threshold: float = 0.5,
+        methods: DetectionMethod = DetectionMethod.ALL
+) -> Union[
     BaseCloudProvider, AWSCloudProvider, AzureCloudProvider, GCPCloudProvider, None
 ]:
     """
@@ -147,7 +167,7 @@ def get_cloud_provider(facts: dict = None,
     cloud provider.
     :param facts: Dictionary with system facts
     :param threshold: Threshold used for heuristic detection of cloud provider
-    :param methods: set of methods to be used for detecting of cloud providers
+    :param methods: The flag of methods used for detecting of cloud providers
     :return: Instance of cloud provider or None
     """
     cloud_list, strong_sign = _get_cloud_providers(facts, threshold, methods)
@@ -174,9 +194,11 @@ def get_cloud_provider(facts: dict = None,
     return None
 
 
-def detect_cloud_provider(facts: dict = None,
-                          threshold: float = 0.5,
-                          methods: set = ('strong', 'heuristics')) -> List[str]:
+def detect_cloud_provider(
+        facts: dict = None,
+        threshold: float = 0.5,
+        methods: DetectionMethod = DetectionMethod.ALL
+) -> List[str]:
     """
     This method tries to detect cloud provider using hardware information provided by dmidecode.
     When there is strong sign that the VM is running on one of the cloud provider, then return
@@ -186,12 +208,12 @@ def detect_cloud_provider(facts: dict = None,
     :param facts: dictionary of facts. When no facts are provided, then hardware, virtualization
         and custom facts are gathered.
     :param threshold: Threshold used for heuristic detection of cloud provider
-    :param methods: The set of methods used for detection of cloud providers (possible values
-        are following: 'strong', 'heuristics'). When only 'strong' is listed in the set, then
-        detection is performed only using strong signs. When only 'heuristics' is listed in the
-        list, then only heuristics detections is used. When both methods are listed, then first
-        this method tries to use first detection using strong signs and if no cloud provider
-        is detected, then it falls back to heuristics detection.
+    :param methods: The flag of methods used for detection of cloud providers (possible enumerates
+        are following in DetectionMethod). When only STRONG is listed, then detection is
+        performed only using strong signs. When only HEURISTIC is listed, then only heuristics
+        detections is used. When both methods are listed, then this method tries to use detection
+        using strong signs first and if no cloud provider is detected, then it falls back to
+        heuristics detection.
     :return: List of string representing detected cloud providers. E.g. ['aws'] or ['aws', 'gcp']
     """
 
