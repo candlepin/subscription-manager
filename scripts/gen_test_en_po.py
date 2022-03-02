@@ -14,6 +14,7 @@ class PotFile(object):
 
         self.msgids.sort()
 
+
 po = polib.POFile()
 po.metadata = {
     'Project-Id-Version': '1.0',
@@ -57,11 +58,12 @@ def main():
         entry = polib.POEntry(
             msgid=pot_entry.msgid,
             msgstr=gen_msg(pot_entry.msgid, tall, longstring, wrap),
-            occurrences=pot_entry.occurrences
-            )
+            occurrences=pot_entry.occurrences,
+        )
         po.append(entry)
 
     po.save("po/en_US.po")
+
 
 if __name__ == "__main__":
     main()

@@ -37,6 +37,7 @@ class UnregisterDBusObject(base_object.BaseObject):
     A D-Bus object interacting with subscription-manager to unregister
     system form Candlepin server.
     """
+
     default_dbus_path = constants.UNREGISTER_DBUS_PATH
     interface_name = constants.UNREGISTER_INTERFACE
 
@@ -46,7 +47,8 @@ class UnregisterDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.UNREGISTER_INTERFACE,
         in_signature='a{sv}s',
-        out_signature='')
+        out_signature='',
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Unregister(self, proxy_options, locale, sender=None):

@@ -51,15 +51,35 @@ log = logging.getLogger(__name__)
 
 
 class ManagerCLI(CLI):
-
     def __init__(self):
-        commands = [RegisterCommand, UnRegisterCommand, AddonsCommand, ConfigCommand, ListCommand,
-                    IdentityCommand, OwnersCommand, RefreshCommand, CleanCommand,
-                    RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
-                    EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
-                    VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand,
-                    FactsCommand, SyspurposeCommand]
+        commands = [
+            RegisterCommand,
+            UnRegisterCommand,
+            AddonsCommand,
+            ConfigCommand,
+            ListCommand,
+            IdentityCommand,
+            OwnersCommand,
+            RefreshCommand,
+            CleanCommand,
+            RedeemCommand,
+            ReposCommand,
+            ReleaseCommand,
+            StatusCommand,
+            EnvironmentsCommand,
+            ImportCertCommand,
+            ServiceLevelCommand,
+            VersionCommand,
+            RemoveCommand,
+            AttachCommand,
+            PluginsCommand,
+            AutohealCommand,
+            OverrideCommand,
+            RoleCommand,
+            UsageCommand,
+            FactsCommand,
+            SyspurposeCommand,
+        ]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):

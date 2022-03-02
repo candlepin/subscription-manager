@@ -7,16 +7,13 @@ import os
 
 from subscription_manager import syspurposelib
 from subscription_manager import managercli, managerlib
-from subscription_manager.injection import provide, \
-    CERT_SORTER, PROD_DIR
+from subscription_manager.injection import provide, CERT_SORTER, PROD_DIR
 from rhsmlib.services.products import InstalledProducts
 from subscription_manager.cli_command.cli import handle_exception, system_exit
 from subscription_manager.cli_command import cli
 
-from .stubs import StubEntitlementCertificate, StubUEP, StubProductDirectory, \
-    StubCertSorter
-from .fixture import FakeException, FakeLogger, SubManFixture, \
-    Capture
+from .stubs import StubEntitlementCertificate, StubUEP, StubProductDirectory, StubCertSorter
+from .fixture import FakeException, FakeLogger, SubManFixture, Capture
 
 from mock import patch
 
@@ -26,7 +23,6 @@ from rhsm.https import ssl
 
 
 class InstalledProductStatusTests(SubManFixture):
-
     def test_entitlement_for_not_installed_product_shows_nothing(self):
         product_directory = StubProductDirectory([])
         provide(PROD_DIR, product_directory)
@@ -51,8 +47,7 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEqual("subscribed", product_status[0][4])
 
     def test_expired_entitlement_for_installed_product_shows_expired(self):
-        ent_cert = StubEntitlementCertificate('product1',
-                                              end_date=(datetime.now() - timedelta(days=2)))
+        ent_cert = StubEntitlementCertificate('product1', end_date=(datetime.now() - timedelta(days=2)))
 
         product_directory = StubProductDirectory(pids=['product1'])
         provide(PROD_DIR, product_directory)
@@ -80,8 +75,7 @@ class InstalledProductStatusTests(SubManFixture):
     def test_future_dated_entitlement_shows_future_subscribed(self):
         product_directory = StubProductDirectory(pids=['product1'])
         provide(PROD_DIR, product_directory)
-        ent_cert = StubEntitlementCertificate('product1',
-                                              start_date=(datetime.now() + timedelta(days=1365)))
+        ent_cert = StubEntitlementCertificate('product1', start_date=(datetime.now() + timedelta(days=1365)))
         stub_sorter = StubCertSorter()
         stub_sorter.future_products['product1'] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
@@ -91,8 +85,7 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEqual("future_subscribed", product_status[0][4])
 
     def test_one_product_with_two_entitlements_lists_product_twice(self):
-        ent_cert = StubEntitlementCertificate('product1',
-                                              ['product2', 'product3'], sockets=10)
+        ent_cert = StubEntitlementCertificate('product1', ['product2', 'product3'], sockets=10)
         product_directory = StubProductDirectory(pids=['product1'])
         provide(PROD_DIR, product_directory)
         stub_sorter = StubCertSorter()
@@ -105,8 +98,7 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEqual(1, len(product_status))
 
     def test_one_subscription_with_bundled_products_lists_once(self):
-        ent_cert = StubEntitlementCertificate('product1',
-                                              ['product2', 'product3'], sockets=10)
+        ent_cert = StubEntitlementCertificate('product1', ['product2', 'product3'], sockets=10)
         product_directory = StubProductDirectory(pids=['product1'])
         provide(PROD_DIR, product_directory)
         stub_sorter = StubCertSorter()
@@ -123,8 +115,7 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEqual("subscribed", product_status[0][4])
 
     def test_one_subscription_with_bundled_products_lists_once_part_two(self):
-        ent_cert = StubEntitlementCertificate('product1',
-                                              ['product2', 'product3'], sockets=10)
+        ent_cert = StubEntitlementCertificate('product1', ['product2', 'product3'], sockets=10)
 
         prod_dir = StubProductDirectory(pids=['product1', 'product2'])
         provide(PROD_DIR, prod_dir)
@@ -218,7 +209,8 @@ class TestCliCommand(SubManFixture):
 
     def test_unknown_args_cause_exit(self):
         with Capture() as cap, patch.object(
-            sys, 'argv',
+            sys,
+            'argv',
             # test with some subcommand; sub-man prints help without it
             ['subscription-manager', 'attach', '--foo', 'bar', 'baz'],
         ):
@@ -254,8 +246,10 @@ class TestCliCommand(SubManFixture):
     def test_cli_in_container_error_message(self, mock_in_container):
         with patch.object(sys, 'argv', ['subscription-manager', 'version']):
             mock_in_container.return_value = True
-            err_msg = 'subscription-manager is disabled when running inside a container.'\
-                      ' Please refer to your host system for subscription management.\n\n'
+            err_msg = (
+                'subscription-manager is disabled when running inside a container.'
+                ' Please refer to your host system for subscription management.\n\n'
+            )
             with Capture() as cap:
                 try:
                     self.cc.main()
@@ -385,7 +379,7 @@ class HandleExceptionTests(unittest.TestCase):
 
     def test_he_unicode(self):
         e = Exception("Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
-    #    e = FakeException(msg="Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
+        #    e = FakeException(msg="Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
         try:
             handle_exception("a: %s" % e, e)
         except SystemExit as e:
@@ -411,8 +405,9 @@ class HandleExceptionTests(unittest.TestCase):
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
     def test_he_restlib_exception_unicode(self):
-        e = connection.RestlibException(404,
-                                        "Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
+        e = connection.RestlibException(
+            404, "Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log"
+        )
         try:
             handle_exception("обновлении", e)
         except SystemExit as e:

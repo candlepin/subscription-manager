@@ -29,12 +29,12 @@ logutil.init_logger()
 
 try:
     from subscription_manager.injectioninit import init_dep_injection
+
     init_dep_injection()
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")
 except ImportError as err:
-    system_exit(2, "Unable to find Subscription Manager module.\n"
-                   "Error: %s" % err)
+    system_exit(2, "Unable to find Subscription Manager module.\n" "Error: %s" % err)
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:

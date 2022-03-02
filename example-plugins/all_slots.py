@@ -16,11 +16,13 @@ import types
 
 
 from subscription_manager.base_plugin import SubManPlugin
+
 requires_api_version = "1.0"
 
 
 class AllSlotsPlugin(SubManPlugin):
     """Plugin with hooks for all slots."""
+
     name = "all_slots"
     all_slots = True
 
@@ -33,8 +35,9 @@ class AllSlotsPlugin(SubManPlugin):
             # "handler", set a slot_name attribute on it, and bind it
             # to our class with correct attribute name
             def handler(self, conduit):
-                conduit.log.debug("%s all_slots_handler: %s slot_name: %s" %
-                                  (self.name, handler, handler.slot_name))
+                conduit.log.debug(
+                    "%s all_slots_handler: %s slot_name: %s" % (self.name, handler, handler.slot_name)
+                )
 
             # add a slot_name attr to the handler method obj itself
             setattr(handler, 'slot_name', attrname[:-5])

@@ -31,7 +31,6 @@ DEFAULT_PRODUCT_CERT_DIR = "/etc/pki/product-default"
 
 
 class Directory(object):
-
     def __init__(self, path):
         self.path = Path.abs(path)
 
@@ -180,7 +179,6 @@ class CertificateDirectory(Directory):
 
 
 class ProductCertificateDirectory(CertificateDirectory):
-
     def get_provided_tags(self):
         """
         Iterates all product certificates in the directory and extracts a set
@@ -229,12 +227,7 @@ class ProductDirectory(ProductCertificateDirectory):
         # Product IDs in installed_prod dir.
         pids = set([cert.products[0].id for cert in installed_prod_list])
         # Everything from /etc/pki/product, only use product-default for pids that don't already exist
-        return installed_prod_list + [
-            cert
-            for cert
-            in default_prod_list
-            if cert.products[0].id not in pids
-        ]
+        return installed_prod_list + [cert for cert in default_prod_list if cert.products[0].id not in pids]
 
     def refresh(self):
         self.installed_prod_dir.refresh()
@@ -337,7 +330,9 @@ class EntitlementDirectory(CertificateDirectory):
         Returns all entitlement certificates provided by the given
         pool ID.
         """
-        entitlements = [entitlement for entitlement in self.list() if str(entitlement.pool.id) == str(pool_id)]
+        entitlements = [
+            entitlement for entitlement in self.list() if str(entitlement.pool.id) == str(pool_id)
+        ]
         return entitlements
 
     def list_serials_for_pool_ids(self, pool_ids):
@@ -363,7 +358,7 @@ class Path(object):
 
     @classmethod
     def abs(cls, path):
-        """ Append the ROOT path to the given path. """
+        """Append the ROOT path to the given path."""
         if os.path.isabs(path):
             return os.path.join(cls.ROOT, path[1:])
         else:
@@ -375,7 +370,6 @@ class Path(object):
 
 
 class Writer(object):
-
     def __init__(self):
         self.ent_dir = require(ENT_DIR)
 

@@ -88,9 +88,7 @@ class DnfProductManager(ProductManager):
         ProductManager.__init__(self)
 
     def update_all(self, enabled_repos):
-        return self.update(self.get_certs_for_enabled_repos(enabled_repos),
-                           self.get_active(),
-                           True)
+        return self.update(self.get_certs_for_enabled_repos(enabled_repos), self.get_active(), True)
 
     def _download_productid(self, repo, tmpdir):
         if hasattr(repo, 'get_metadata_content'):
@@ -147,8 +145,7 @@ class DnfProductManager(ProductManager):
                 self.meta_data_errors.append(repo.id)
 
         if self.meta_data_errors:
-            log.debug("Unable to load productid metadata for repos: %s",
-                      self.meta_data_errors)
+            log.debug("Unable to load productid metadata for repos: %s", self.meta_data_errors)
 
         if len(cache) > 0:
             self.write_productid_cache(cache)

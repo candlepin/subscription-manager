@@ -115,6 +115,7 @@ class DefaultCpuFields(object):
     'model' in the sluggified field in X86_64ProcessorModel. For aarch64,
     the field 'cpu_part' is it's MODEL.
     """
+
     MODEL_NAME = "model_name"
     MODEL = "model"
 
@@ -209,6 +210,7 @@ class X86_64ProcessorModel(dict):
 
 class Ppc64ProcessorModel(dict):
     "The info corresponding to the info about each ppc64 processor entry in cpuinfo"
+
     @classmethod
     def from_stanza(cls, stanza):
         cpu_data = cls()
@@ -221,6 +223,7 @@ class X86_64CpuinfoModel(CpuinfoModel):
 
     ie, all the data in /proc/cpuinfo field as opposed to X86_64ProcessModel which
     is the info for 1 processor."""
+
     fields_class = X86_64Fields
 
 
@@ -361,8 +364,7 @@ class Aarch64CpuInfo(BaseCpuInfo):
 
         # Yes, there is a 'Processor' field and multiple lower case 'processor'
         # fields.
-        kv_iter = (self._capital_processor_to_model_name(item)
-                   for item in raw_kv_iter)
+        kv_iter = (self._capital_processor_to_model_name(item) for item in raw_kv_iter)
 
         slugged_kv_list = [fact_sluggify_item(item) for item in kv_iter]
 
@@ -461,10 +463,12 @@ class Ppc64CpuInfo(BaseCpuInfo):
 
 
 class SystemCpuInfoFactory(object):
-    uname_to_cpuinfo = {'x86_64': X86_64CpuInfo,
-                        'aarch64': Aarch64CpuInfo,
-                        'ppc64': Ppc64CpuInfo,
-                        'ppc64le': Ppc64CpuInfo}
+    uname_to_cpuinfo = {
+        'x86_64': X86_64CpuInfo,
+        'aarch64': Aarch64CpuInfo,
+        'ppc64': Ppc64CpuInfo,
+        'ppc64le': Ppc64CpuInfo,
+    }
     proc_cpuinfo_path = '/proc/cpuinfo'
 
     @classmethod

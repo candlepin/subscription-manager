@@ -27,7 +27,6 @@ def yesterday():
 
 
 class ProductTests(unittest.TestCase):
-
     def test_no_provided_tags(self):
         p = StubProduct('product')
         self.assertEqual(0, len(p.provided_tags))
@@ -50,17 +49,16 @@ class ProductTests(unittest.TestCase):
 
 
 class EntitlementCertificateTests(unittest.TestCase):
-
     def test_valid_order_date_gives_valid_cert(self):
-        cert = StubEntitlementCertificate(StubProduct('product'),
-                                          start_date=datetime(2010, 7, 27),
-                                          end_date=datetime(2050, 7, 26))
+        cert = StubEntitlementCertificate(
+            StubProduct('product'), start_date=datetime(2010, 7, 27), end_date=datetime(2050, 7, 26)
+        )
 
         self.assertTrue(cert.is_valid())
 
     def test_expired_order_date_gives_invalid_cert(self):
-        cert = StubEntitlementCertificate(StubProduct('product'),
-                                          start_date=datetime(2010, 7, 27),
-                                          end_date=yesterday())
+        cert = StubEntitlementCertificate(
+            StubProduct('product'), start_date=datetime(2010, 7, 27), end_date=yesterday()
+        )
 
         self.assertFalse(cert.is_valid())

@@ -18,6 +18,7 @@ class SubManPlugin(object):
 
     Plugins need to subclass SubManPlugin() to be found
     """
+
     name = None
     conf = None
     # if all_slots is set, the plugin will get registered to all slots

@@ -53,12 +53,12 @@ def get_arch(prefix=None):
         log.exception(e)
         raise
 
+
 # An empty FactsCollector should just return an empty dict on get_all()
 
 
 class FactsCollector(object):
-    def __init__(self, arch=None, prefix=None, testing=None,
-                 hardware_methods=None, collected_hw_info=None):
+    def __init__(self, arch=None, prefix=None, testing=None, hardware_methods=None, collected_hw_info=None):
         """Base class for facts collecting classes.
 
         self._collected_hw_info will reference the passed collected_hw_info

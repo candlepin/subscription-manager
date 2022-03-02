@@ -19,7 +19,6 @@ from rhsmlib.facts import host_collector
 
 
 class HostCollectorTest(unittest.TestCase):
-
     @mock.patch('locale.getdefaultlocale')
     def test_unknown_locale(self, mock_locale):
         collector = host_collector.HostCollector()

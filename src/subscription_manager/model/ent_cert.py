@@ -27,23 +27,28 @@ class EntitlementCertContent(Content):
         Because the rhsm Content does not carry a cert (it originates
         from one), we have to pass this in separately.
         """
-        return cls(content_type=ent_cert_content.content_type,
-                   name=ent_cert_content.name, label=ent_cert_content.label,
-                   url=ent_cert_content.url, gpg=ent_cert_content.gpg,
-                   tags=ent_cert_content.required_tags, cert=cert,
-                   enabled=ent_cert_content.enabled,
-                   metadata_expire=ent_cert_content.metadata_expire,
-                   arches=ent_cert_content.arches)
+        return cls(
+            content_type=ent_cert_content.content_type,
+            name=ent_cert_content.name,
+            label=ent_cert_content.label,
+            url=ent_cert_content.url,
+            gpg=ent_cert_content.gpg,
+            tags=ent_cert_content.required_tags,
+            cert=cert,
+            enabled=ent_cert_content.enabled,
+            metadata_expire=ent_cert_content.metadata_expire,
+            arches=ent_cert_content.arches,
+        )
 
 
 class EntitlementCertEntitlement(Entitlement):
     """A Entitlement created from an EntitlementCertificate."""
+
     @classmethod
     def from_ent_cert(cls, ent_cert):
         content_set = []
         for ent_cert_content in ent_cert.content:
-            ent_cert_ent_content = EntitlementCertContent.from_cert_content(
-                ent_cert_content, ent_cert)
+            ent_cert_ent_content = EntitlementCertContent.from_cert_content(ent_cert_content, ent_cert)
             content_set.append(ent_cert_ent_content)
 
         # create a :EntitlementCertEntitlement with a EntitledContents
@@ -68,5 +73,4 @@ class EntitlementDirEntitlementSource(EntitlementSource):
         # populate from ent certs
         self._entitlements = []
         for ent_cert in ent_dir.list_valid_with_content_access():
-            self._entitlements.append(
-                EntitlementCertEntitlement.from_ent_cert(ent_cert))
+            self._entitlements.append(EntitlementCertEntitlement.from_ent_cert(ent_cert))

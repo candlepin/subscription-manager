@@ -1,8 +1,7 @@
 from .fixture import SubManFixture, open_mock
 import mock
 from subscription_manager import syspurposelib
-from subscription_manager.syspurposelib import SyspurposeSyncActionCommand, \
-    SyspurposeSyncActionReport
+from subscription_manager.syspurposelib import SyspurposeSyncActionCommand, SyspurposeSyncActionReport
 import json
 
 
@@ -27,11 +26,12 @@ class SyspurposeLibTests(SubManFixture):
         Test that shows that the write_syspurpose method uses the SyspurposeStore when possible.
         :return:
         """
-        test_values = {"role": "Test Role",
-                       "addons": ["Some addon"],
-                       "service_level_agreement": "Premium",
-                       "usage": "Dev",
-                       }
+        test_values = {
+            "role": "Test Role",
+            "addons": ["Some addon"],
+            "service_level_agreement": "Premium",
+            "usage": "Dev",
+        }
 
         # First mock out the SyspurposeStore
         with mock.patch.object(syspurposelib, 'SyncedStore') as sp_store:
@@ -47,17 +47,17 @@ class SyspurposeLibTests(SubManFixture):
         Test that shows the backup method of writing to the syspurpose.json file works.
         :return:
         """
-        test_values = {"role": "Test Role",
-                       "addons": ["Some addon"],
-                       "service_level_agreement": "Premium",
-                       "usage": "Dev",
-                       }
+        test_values = {
+            "role": "Test Role",
+            "addons": ["Some addon"],
+            "service_level_agreement": "Premium",
+            "usage": "Dev",
+        }
 
         with mock.patch.object(syspurposelib, 'SyncedStore', new=None):
             with open_mock() as mock_open:
                 result = syspurposelib.write_syspurpose(test_values)
-                self.mock_json.dump.assert_called_with(test_values, mock_open, ensure_ascii=True,
-                                                       indent=2)
+                self.mock_json.dump.assert_called_with(test_values, mock_open, ensure_ascii=True, indent=2)
                 self.assertEqual(result, True)
                 self.assertEqual(json.loads(mock_open.content_out()), test_values)
 
@@ -66,19 +66,19 @@ class SyspurposeLibTests(SubManFixture):
         Test that shows how the write_syspurpose method works with an error opening the file
         :return:
         """
-        test_values = {"role": "Test Role",
-                       "addons": ["Some addon"],
-                       "service_level_agreement": "Premium",
-                       "usage": "Dev",
-                       }
+        test_values = {
+            "role": "Test Role",
+            "addons": ["Some addon"],
+            "service_level_agreement": "Premium",
+            "usage": "Dev",
+        }
 
         self.mock_json.dump.side_effect = OSError
 
         with mock.patch.object(syspurposelib, 'SyncedStore', new=None):
             with open_mock() as mock_open:
                 result = syspurposelib.write_syspurpose(test_values)
-                self.mock_json.dump.assert_called_with(test_values, mock_open, ensure_ascii=True,
-                                                       indent=2)
+                self.mock_json.dump.assert_called_with(test_values, mock_open, ensure_ascii=True, indent=2)
                 self.assertEqual(result, False)
 
                 # We expect the file not to have been modified.
@@ -86,27 +86,29 @@ class SyspurposeLibTests(SubManFixture):
 
 
 class SyspurposeSyncActionCommandTests(SubManFixture):
-
     def setUp(self):
         super(SyspurposeSyncActionCommandTests, self).setUp()
 
         self.command = SyspurposeSyncActionCommand()
         # Some mock data to use in tests
-        self.remote_sp = {"role": "The best role",
-                          "addOns": ["Super shiny Addon 1"],
-                          "serviceLevel": "Topmost",
-                          "usage": "Deviousness",
-                          }
-        self.base = {"role": self.remote_sp["role"],
-                     "addons": self.remote_sp["addOns"],
-                     "service_level_agreement": self.remote_sp["serviceLevel"],
-                     "usage": self.remote_sp["usage"],
-                     }
-        self.local_sp = {"role": "Some Other Role",
-                         "addons": self.remote_sp["addOns"],
-                         "service_level_agreement": self.remote_sp["serviceLevel"],
-                         "usage": self.remote_sp["usage"],
-                         }
+        self.remote_sp = {
+            "role": "The best role",
+            "addOns": ["Super shiny Addon 1"],
+            "serviceLevel": "Topmost",
+            "usage": "Deviousness",
+        }
+        self.base = {
+            "role": self.remote_sp["role"],
+            "addons": self.remote_sp["addOns"],
+            "service_level_agreement": self.remote_sp["serviceLevel"],
+            "usage": self.remote_sp["usage"],
+        }
+        self.local_sp = {
+            "role": "Some Other Role",
+            "addons": self.remote_sp["addOns"],
+            "service_level_agreement": self.remote_sp["serviceLevel"],
+            "usage": self.remote_sp["usage"],
+        }
 
     def test_perform(self):
         """

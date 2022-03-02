@@ -188,7 +188,7 @@ class BaseCloudProvider(object):
         token_cache_content = {
             "ctime": str(self._token_ctime),
             "ttl": str(self._token_ttl),
-            "token": self._token
+            "token": self._token,
         }
 
         token_cache_dir = os.path.dirname(self.TOKEN_CACHE_FILE)
@@ -235,7 +235,7 @@ class BaseCloudProvider(object):
         return self._is_in_memory_cache_valid(
             self._token,
             self._token_ctime,
-            self.CLOUD_PROVIDER_TOKEN_TTL
+            self.CLOUD_PROVIDER_TOKEN_TTL,
         )
 
     def _get_token_from_cache_file(self) -> Union[str, None]:
@@ -254,7 +254,9 @@ class BaseCloudProvider(object):
         log.debug(f'Reading cache file with {self.CLOUD_PROVIDER_ID} token: {self.TOKEN_CACHE_FILE}')
 
         if not os.path.exists(self.TOKEN_CACHE_FILE):
-            log.debug(f'Cache file: {self.TOKEN_CACHE_FILE} with {self.CLOUD_PROVIDER_ID} token does not exist')
+            log.debug(
+                f'Cache file: {self.TOKEN_CACHE_FILE} with {self.CLOUD_PROVIDER_ID} token does not exist'
+            )
             return None
 
         with open(self.TOKEN_CACHE_FILE, "r") as token_cache_file:
@@ -295,10 +297,14 @@ class BaseCloudProvider(object):
         self._token_ttl = ttl
 
         if time.time() < ctime + ttl:
-            log.debug(f'Cache file: {self.TOKEN_CACHE_FILE} with {self.CLOUD_PROVIDER_ID} token read successfully')
+            log.debug(
+                f'Cache file: {self.TOKEN_CACHE_FILE} with {self.CLOUD_PROVIDER_ID} token read successfully'
+            )
             return cache['token']
         else:
-            log.debug(f'Cache file with {self.CLOUD_PROVIDER_ID} token file: {self.TOKEN_CACHE_FILE} timed out')
+            log.debug(
+                f'Cache file with {self.CLOUD_PROVIDER_ID} token file: {self.TOKEN_CACHE_FILE} timed out'
+            )
             return None
 
     def _get_metadata_from_in_memory_cache(self) -> Union[str, None]:
@@ -309,7 +315,7 @@ class BaseCloudProvider(object):
         valid = self._is_in_memory_cache_valid(
             self._cached_metadata,
             self._cached_metadata_ctime,
-            self.IN_MEMORY_CACHE_TTL
+            self.IN_MEMORY_CACHE_TTL,
         )
 
         if valid is True:
@@ -355,11 +361,15 @@ class BaseCloudProvider(object):
         :param **kwargs: Not used
         :return: Instance of response
         """
-        print('\n{code} {{{headers}}}\n{body}\n'.format(
-            code=response.status_code,
-            headers=', '.join('{key}: {value}'.format(key=k, value=v) for k, v in response.headers.items()),
-            body=response.text,
-        ))
+        print(
+            '\n{code} {{{headers}}}\n{body}\n'.format(
+                code=response.status_code,
+                headers=', '.join(
+                    '{key}: {value}'.format(key=k, value=v) for k, v in response.headers.items()
+                ),
+                body=response.text,
+            )
+        )
         return response
 
     def _get_data_from_server(self, data_type: str, url: str, headers: dict = None) -> Union[str, None]:
@@ -399,7 +409,7 @@ class BaseCloudProvider(object):
         self._cached_metadata = self._get_data_from_server(
             data_type="metadata",
             url=self.CLOUD_PROVIDER_METADATA_URL,
-            headers=headers
+            headers=headers,
         )
         if self._cached_metadata is not None:
             self._cached_metadata_ctime = time.time()
@@ -413,7 +423,7 @@ class BaseCloudProvider(object):
         valid = self._is_in_memory_cache_valid(
             self._cached_signature,
             self._cached_signature_ctime,
-            self.IN_MEMORY_CACHE_TTL
+            self.IN_MEMORY_CACHE_TTL,
         )
 
         if valid is True:

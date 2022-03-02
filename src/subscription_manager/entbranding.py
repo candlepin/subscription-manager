@@ -112,6 +112,7 @@ class Brand(object):
 
 class ProductBrand(Brand):
     """A brand for a branded product"""
+
     def __init__(self, name):
         self.brand_file = self._get_brand_file()
         self.name = name
@@ -137,6 +138,7 @@ class ProductBrand(Brand):
 
 class CurrentBrand(Brand):
     """The currently installed brand"""
+
     def __init__(self):
         self.brand_file = self._get_brand_file()
         self.load()

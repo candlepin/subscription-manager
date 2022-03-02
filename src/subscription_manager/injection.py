@@ -47,6 +47,7 @@ class FeatureBroker(object):
 
     Do not use this class directly, rather the global instance created below.
     """
+
     def __init__(self):
         self.providers = {}
 
@@ -88,8 +89,10 @@ def nonSingleton(other):
     Creates a factory method for a class. Passes args to the constructor
     in order to create a new object every time it is required.
     """
+
     def factory(*args, **kwargs):
         return other(*args, **kwargs)
+
     return factory
 
 

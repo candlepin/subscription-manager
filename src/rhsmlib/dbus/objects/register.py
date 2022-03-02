@@ -44,7 +44,8 @@ class RegisterDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.REGISTER_INTERFACE,
         in_signature='s',
-        out_signature='s')
+        out_signature='s',
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Start(self, locale, sender=None):
@@ -58,9 +59,7 @@ class RegisterDBusObject(base_object.BaseObject):
             log.debug('Attempting to create new domain socket server')
             cmd_line = DBusSender.get_cmd_line(sender)
             self.server = server.DomainSocketServer(
-                object_classes=[DomainSocketRegisterDBusObject],
-                sender=sender,
-                cmd_line=cmd_line
+                object_classes=[DomainSocketRegisterDBusObject], sender=sender, cmd_line=cmd_line
             )
             address = self.server.run()
             log.debug('DomainSocketServer for sender %s created and listening on "%s"' % (sender, address))
@@ -69,7 +68,8 @@ class RegisterDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.REGISTER_INTERFACE,
         in_signature='s',
-        out_signature='b')
+        out_signature='b',
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Stop(self, locale, sender=None):
@@ -90,6 +90,7 @@ class OrgNotSpecifiedException(dbus.DBusException):
     This exception is intended for signaling that user is member of more
     organizations and no organization was specified
     """
+
     _dbus_error_name = "%s.Error" % constants.REGISTER_INTERFACE
     include_traceback = False
     severity = "info"
@@ -106,6 +107,7 @@ class NoOrganizationException(dbus.DBusException):
     This exception is intended for signaling that user is not member of any
     organization and such user cannot register to candlepin server.
     """
+
     _dbus_error_name = "%s.Error" % constants.REGISTER_INTERFACE
     include_traceback = False
 
@@ -124,9 +126,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         # On our DomainSocket DBus server since a private connection is not a "bus", we have to treat
         # it slightly differently. In particular there are no names, no discovery and so on.
         super(DomainSocketRegisterDBusObject, self).__init__(
-            conn=conn,
-            object_path=object_path,
-            bus_name=bus_name
+            conn=conn, object_path=object_path, bus_name=bus_name
         )
         self.sender = sender
         self.cmd_line = cmd_line
@@ -134,7 +134,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='ssa{sv}s',
-        out_signature='s'
+        out_signature='s',
     )
     @util.dbus_handle_exceptions
     def GetOrgs(self, username, password, connection_options, locale):
@@ -164,7 +164,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
     @util.dbus_service_signal(
         constants.PRIVATE_REGISTER_INTERFACE,
-        signature='s'
+        signature='s',
     )
     @util.dbus_handle_exceptions
     def UserMemberOfOrgs(self, orgs):
@@ -175,8 +175,10 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         :param orgs: string with json.dump of org dictionary
         :return: None
         """
-        log.debug("D-Bus signal UserMemberOfOrgs emitted on the interface %s with arg: %s" %
-                  (constants.PRIVATE_REGISTER_INTERFACE, orgs))
+        log.debug(
+            "D-Bus signal UserMemberOfOrgs emitted on the interface %s with arg: %s"
+            % (constants.PRIVATE_REGISTER_INTERFACE, orgs)
+        )
         return None
 
     def _no_owner_cb(self, username):
@@ -225,8 +227,9 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             # TODO: try get anything useful from refresh result. It is not possible atm.
             entitlement_service.refresh(remove_cache=False, force=False)
         else:
-            log.error(f"Unable to enable content due to unsupported content access mode: "
-                      f"{content_access_mode}")
+            log.error(
+                f"Unable to enable content due to unsupported content access mode: " f"{content_access_mode}"
+            )
 
         # When it was possible to enable content, then extend consumer
         # with information about enabled content
@@ -255,7 +258,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='sssa{sv}a{sv}s',
-        out_signature='s'
+        out_signature='s',
     )
     @util.dbus_handle_exceptions
     def Register(self, org, username, password, options, connection_options, locale):
@@ -292,7 +295,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
                 org = register_service.determine_owner_key(
                     username=connection_options['username'],
                     get_owner_cb=self._get_owner_cb,
-                    no_owner_cb=self._no_owner_cb
+                    no_owner_cb=self._no_owner_cb,
                 )
 
             # When there is more organizations, then signal was triggered in callback method
@@ -317,7 +320,8 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='sasa{sv}a{sv}s',
-        out_signature='s')
+        out_signature='s',
+    )
     @util.dbus_handle_exceptions
     def RegisterWithActivationKeys(self, org, activation_keys, options, connection_options, locale):
         """

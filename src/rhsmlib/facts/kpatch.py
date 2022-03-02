@@ -32,7 +32,7 @@ class KPatchCollector(collector.FactsCollector):
     DIRS_WITH_LOADED_MODULE = [
         "/sys/kernel/livepatch",
         "/sys/kernel/kpatch/patches",
-        "/sys/kernel/kpatch"
+        "/sys/kernel/kpatch",
     ]
 
     def get_all(self):

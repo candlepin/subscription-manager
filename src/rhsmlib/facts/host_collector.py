@@ -53,9 +53,7 @@ class HostCollector(collector.FactsCollector):
         firmware_info_dict = firmware_collector.get_all()
 
         virt_collector = virt.VirtCollector(
-            prefix=self.prefix,
-            testing=self.testing,
-            collected_hw_info=firmware_info_dict
+            prefix=self.prefix, testing=self.testing, collected_hw_info=firmware_info_dict
         )
         virt_collector_info = virt_collector.get_all()
 
@@ -81,9 +79,7 @@ class HostCollector(collector.FactsCollector):
         # NOTE: we are passing the facts we've already collected into
         # cleanup_collector.
         cleanup_collector = cleanup.CleanupCollector(
-            prefix=self.prefix,
-            testing=self.testing,
-            collected_hw_info=host_facts
+            prefix=self.prefix, testing=self.testing, collected_hw_info=host_facts
         )
         cleanup_info = cleanup_collector.get_all()
 

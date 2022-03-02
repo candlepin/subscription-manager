@@ -31,15 +31,10 @@ class InsightsCollector(collector.FactsCollector):
 
     def __init__(self, arch=None, prefix=None, testing=None, collected_hw_info=None):
         super(InsightsCollector, self).__init__(
-            arch=arch,
-            prefix=prefix,
-            testing=testing,
-            collected_hw_info=collected_hw_info
+            arch=arch, prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
         )
 
-        self.hardware_methods = [
-            self.get_insights_machine_id
-        ]
+        self.hardware_methods = [self.get_insights_machine_id]
 
     def get_insights_machine_id(self):
         """
@@ -62,9 +57,7 @@ class InsightsCollector(collector.FactsCollector):
             except IOError as err:
                 log.debug("Unable to read insights machine_id file: %s, error: %s" % (filepath, err))
             else:
-                insights_id = {
-                    "insights_id": machine_id
-                }
+                insights_id = {"insights_id": machine_id}
                 break
 
         return insights_id

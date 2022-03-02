@@ -20,7 +20,6 @@ from dateutil.tz import tzlocal
 
 
 class TestParseDate(unittest.TestCase):
-
     def _test_local_tz(self):
         tz = tzlocal()
         dt_no_tz = datetime.datetime(year=2000, month=1, day=1, hour=12, minute=34)

@@ -70,7 +70,6 @@ INST_PID_3 = '69'
 
 
 class ValidProductDateRangeCalculatorTests(SubManFixture):
-
     def setUp(self):
         SubManFixture.setUp(self)
         self.status = json.loads(INST_PROD_STATUS)['installedProducts']

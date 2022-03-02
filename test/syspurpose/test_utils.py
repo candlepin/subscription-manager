@@ -25,7 +25,6 @@ from syspurpose import utils
 
 
 class UtilsTests(unittest.TestCase):
-
     def tearDown(self):
         utils.HOST_CONFIG_DIR = "/etc/rhsm-host/"
 

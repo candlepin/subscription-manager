@@ -36,7 +36,6 @@ USAGE = _("%(prog)s [OPTIONS]")
 
 
 class ArgumentParser(_ArgumentParser):
-
     def print_help(self):
         sys.stdout.write(self.format_help())
 

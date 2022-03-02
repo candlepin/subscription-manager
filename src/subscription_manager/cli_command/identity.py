@@ -38,16 +38,23 @@ log = logging.getLogger(__name__)
 
 class IdentityCommand(UserPassCommand):
     def __init__(self):
-        shortdesc = _("Display the identity certificate for this system or "
-                      "request a new one")
+        shortdesc = _("Display the identity certificate for this system or " "request a new one")
 
         super(IdentityCommand, self).__init__("identity", shortdesc, False)
 
-        self.parser.add_argument("--regenerate", action='store_true',
-                                 help=_("request a new certificate be generated"))
-        self.parser.add_argument("--force", action='store_true',
-                                 help=_("force certificate regeneration (requires username and password); "
-                                        "Only used with --regenerate"))
+        self.parser.add_argument(
+            "--regenerate",
+            action='store_true',
+            help=_("request a new certificate be generated"),
+        )
+        self.parser.add_argument(
+            "--force",
+            action='store_true',
+            help=_(
+                "force certificate regeneration (requires username and password); "
+                "Only used with --regenerate"
+            ),
+        )
 
     def _validate_options(self):
         self.assert_should_be_registered()
@@ -94,12 +101,18 @@ class IdentityCommand(UserPassCommand):
                         if evn_key == 'environment':
                             environment_names = environments['name']
                         else:
-                            environment_names = (','.join([environment['name'] for environment in environments]))
+                            environment_names = ','.join(
+                                [environment['name'] for environment in environments]
+                            )
                     else:
                         environment_names = _("None")
-                    print(ungettext('environment name: {environment_name}',
-                                    'environment names: {environment_name}',
-                                    len(environment_names.split(','))).format(environment_name=environment_names))
+                    print(
+                        ungettext(
+                            'environment name: {environment_name}',
+                            'environment names: {environment_name}',
+                            len(environment_names.split(',')),
+                        ).format(environment_name=environment_names)
+                    )
             else:
                 if self.options.force:
                     # get an UEP with basic auth or keycloak auth

@@ -25,21 +25,24 @@ class PluginsCommand(CliCommand):
         shortdesc = _("View and configure with 'subscription-manager plugins'")
         super(PluginsCommand, self).__init__("plugins", shortdesc, False)
 
-        self.parser.add_argument("--list", action="store_true",
-                                 help=_("list {SM} plugins").format(SM=SM))
-        self.parser.add_argument("--listslots", action="store_true",
-                                 help=_("list {SM} plugin slots").format(SM=SM))
-        self.parser.add_argument("--listhooks", action="store_true",
-                                 help=_("list {SM} plugin hooks").format(SM=SM))
-        self.parser.add_argument("--verbose", action="store_true",
-                                 default=False,
-                                 help=_("show verbose plugin info"))
+        self.parser.add_argument(
+            "--list",
+            action="store_true",
+            help=_("list {SM} plugins").format(SM=SM),
+        )
+        self.parser.add_argument(
+            "--listslots", action="store_true", help=_("list {SM} plugin slots").format(SM=SM)
+        )
+        self.parser.add_argument(
+            "--listhooks", action="store_true", help=_("list {SM} plugin hooks").format(SM=SM)
+        )
+        self.parser.add_argument(
+            "--verbose", action="store_true", default=False, help=_("show verbose plugin info")
+        )
 
     def _validate_options(self):
         # default to list
-        if not (self.options.list or
-                self.options.listslots or
-                self.options.listhooks):
+        if not (self.options.list or self.options.listslots or self.options.listhooks):
             self.options.list = True
 
     def require_connection(self):
@@ -68,7 +71,6 @@ class PluginsCommand(CliCommand):
             # get_slots is nicely sorted for presentation
             for slot in self.plugin_manager.get_slots():
                 print(slot)
-                for hook in sorted(self.plugin_manager._slot_to_funcs[slot],
-                                   key=lambda func: func.__name__):
+                for hook in sorted(self.plugin_manager._slot_to_funcs[slot], key=lambda func: func.__name__):
                     hook_key = hook.__self__.__class__.get_plugin_key()
                     print("\t{key}.{name}".format(key=hook_key, name=hook.__name__))

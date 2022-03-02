@@ -36,7 +36,9 @@ def _set_enable_for_yum_repositories(setting, *repo_ids):
     cp_provider = inj.require(inj.CP_PROVIDER)
 
     if identity.is_valid() and cp_provider.get_consumer_auth_cp().supports_resource('content_overrides'):
-        overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': setting} for repo in repos_to_change]
+        overrides = [
+            {'contentLabel': repo.id, 'name': 'enabled', 'value': setting} for repo in repos_to_change
+        ]
         cp = cp_provider.get_consumer_auth_cp()
         results = cp.setContentOverrides(identity.uuid, overrides)
 

@@ -61,6 +61,7 @@ class UnsupportedOperationException(Exception):
     state.  For example, if a call is made to a deprecated API when
     a newer API is available.
     """
+
     pass
 
 
@@ -94,12 +95,14 @@ def has_good_scheme(url):
     return True
 
 
-def parse_url(local_server_entry,
-              default_hostname=None,
-              default_port=None,
-              default_prefix=None,
-              default_username=None,
-              default_password=None):
+def parse_url(
+    local_server_entry,
+    default_hostname=None,
+    default_port=None,
+    default_prefix=None,
+    default_username=None,
+    default_password=None,
+):
     """
     Parse hostname, port, and webapp prefix from the string a user entered.
 
@@ -200,10 +203,12 @@ def parse_url(local_server_entry,
 
 
 def get_env_proxy_info():
-    the_proxy = {'proxy_username': '',
-                 'proxy_hostname': '',
-                 'proxy_port': '',
-                 'proxy_password': ''}
+    the_proxy = {
+        'proxy_username': '',
+        'proxy_hostname': '',
+        'proxy_port': '',
+        'proxy_password': '',
+    }
 
     # get the proxy information from the environment variable
     # if available
@@ -275,4 +280,5 @@ def suppress_output(func):
             sys.stdout = stdout
             sys.stderr = stderr
             devnull.close()
+
     return wrapper

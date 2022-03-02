@@ -21,10 +21,20 @@ import tempfile
 
 from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
-from subscription_manager.cache import EntitlementStatusCache, ProductStatusCache, \
-    OverrideStatusCache, ProfileManager, InstalledProductsManager, ReleaseStatusCache, \
-    PoolStatusCache, SupportedResourcesCache, AvailableEntitlementsCache, \
-    SyspurposeValidFieldsCache, CurrentOwnerCache, ContentAccessModeCache
+from subscription_manager.cache import (
+    EntitlementStatusCache,
+    ProductStatusCache,
+    OverrideStatusCache,
+    ProfileManager,
+    InstalledProductsManager,
+    ReleaseStatusCache,
+    PoolStatusCache,
+    SupportedResourcesCache,
+    AvailableEntitlementsCache,
+    SyspurposeValidFieldsCache,
+    CurrentOwnerCache,
+    ContentAccessModeCache,
+)
 from subscription_manager.facts import Facts
 from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
@@ -32,8 +42,7 @@ from rhsm.certificate2 import Version
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 
 from rhsm.certificate import parse_tags
-from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, \
-    Product, Content, Order
+from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, Product, Content, Order
 from rhsm import profile
 from rhsm import ourjson as json
 from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
@@ -136,10 +145,16 @@ class MockActionLock(ActionLock):
 
 
 class StubProduct(Product):
-
-    def __init__(self, product_id, name=None, version=None,
-                 architectures=None, provided_tags=None,
-                 os=None, brand_name=None):
+    def __init__(
+        self,
+        product_id,
+        name=None,
+        version=None,
+        architectures=None,
+        provided_tags=None,
+        os=None,
+        brand_name=None,
+    ):
 
         # Initialize some defaults:
         if not name:
@@ -155,32 +170,50 @@ class StubProduct(Product):
         if provided_tags:
             provided_tags = parse_tags(provided_tags)
 
-        super(StubProduct, self).__init__(id=product_id, name=name, version=version,
-                                          architectures=architectures,
-                                          provided_tags=provided_tags,
-                                          brand_type=os, brand_name=brand_name)
+        super(StubProduct, self).__init__(
+            id=product_id,
+            name=name,
+            version=version,
+            architectures=architectures,
+            provided_tags=provided_tags,
+            brand_type=os,
+            brand_name=brand_name,
+        )
 
 
 class StubContent(Content):
-
-    def __init__(self, label, name=None, vendor="",
-                 url="", gpg="", enabled=1, metadata_expire=None, required_tags="",
-                 content_type="yum"):
+    def __init__(
+        self,
+        label,
+        name=None,
+        vendor="",
+        url="",
+        gpg="",
+        enabled=1,
+        metadata_expire=None,
+        required_tags="",
+        content_type="yum",
+    ):
         name = label
         if name:
             name = name
         if required_tags:
             required_tags = parse_tags(required_tags)
-        super(StubContent, self).__init__(content_type=content_type, name=name, label=label,
-                                          vendor=vendor, url=url, gpg=gpg, enabled=enabled,
-                                          metadata_expire=metadata_expire,
-                                          required_tags=required_tags)
+        super(StubContent, self).__init__(
+            content_type=content_type,
+            name=name,
+            label=label,
+            vendor=vendor,
+            url=url,
+            gpg=gpg,
+            enabled=enabled,
+            metadata_expire=metadata_expire,
+            required_tags=required_tags,
+        )
 
 
 class StubProductCertificate(ProductCertificate):
-
-    def __init__(self, product, provided_products=None, start_date=None,
-                 end_date=None, provided_tags=None):
+    def __init__(self, product, provided_products=None, start_date=None, end_date=None, provided_tags=None):
 
         products = [product]
         if provided_products:
@@ -208,10 +241,14 @@ class StubProductCertificate(ProductCertificate):
 
         path = "/path/to/fake_product.pem"
 
-        super(StubProductCertificate, self).__init__(products=products,
-                                                     serial=random.randint(1, 10000000),
-                                                     start=start_date, end=end_date,
-                                                     version=version, path=path)
+        super(StubProductCertificate, self).__init__(
+            products=products,
+            serial=random.randint(1, 10000000),
+            start=start_date,
+            end=end_date,
+            version=version,
+            path=path,
+        )
 
     def __str__(self):
         s = []
@@ -223,10 +260,22 @@ class StubProductCertificate(ProductCertificate):
 
 
 class StubEntitlementCertificate(EntitlementCertificate):
-
-    def __init__(self, product, provided_products=None, start_date=None, end_date=None,
-                 content=None, quantity=1, stacking_id=None, sockets=2, service_level=None,
-                 ram=None, pool=None, ent_id=None, entitlement_type=None):
+    def __init__(
+        self,
+        product,
+        provided_products=None,
+        start_date=None,
+        end_date=None,
+        content=None,
+        quantity=1,
+        stacking_id=None,
+        sockets=2,
+        service_level=None,
+        ram=None,
+        pool=None,
+        ent_id=None,
+        entitlement_type=None,
+    ):
 
         # If we're given strings, create stub products for them:
         if isinstance(product, str):
@@ -254,10 +303,16 @@ class StubEntitlementCertificate(EntitlementCertificate):
         if product:
             sku = product.id
             name = product.name
-        order = Order(name=name, number="592837", sku=sku,
-                      stacking_id=stacking_id, socket_limit=sockets,
-                      service_level=service_level, quantity_used=quantity,
-                      ram_limit=ram)
+        order = Order(
+            name=name,
+            number="592837",
+            sku=sku,
+            stacking_id=stacking_id,
+            socket_limit=sockets,
+            service_level=service_level,
+            quantity_used=quantity,
+            ram_limit=ram,
+        )
         order.warning_period = 42
 
         if content is None:
@@ -273,9 +328,17 @@ class StubEntitlementCertificate(EntitlementCertificate):
         # write these to tmp, could we abuse PATH thing in certs for tests?
 
         path = "/tmp/fake_ent_cert-%s.pem" % self.serial
-        super(StubEntitlementCertificate, self).__init__(path=path, products=products, order=order,
-                                                         content=content, pool=pool, start=start_date,
-                                                         end=end_date, serial=self.serial, version=version)
+        super(StubEntitlementCertificate, self).__init__(
+            path=path,
+            products=products,
+            order=order,
+            content=content,
+            pool=pool,
+            start=start_date,
+            end=end_date,
+            serial=self.serial,
+            version=version,
+        )
         if ent_id:
             self.subject = {'CN': ent_id}
 
@@ -410,11 +473,21 @@ class StubConsumerIdentity(object):
 
 
 class StubUEP(object):
-    def __init__(self, host=None, ssl_port=None, handler=None,
-                 username=None, password=None,
-                 proxy_hostname=None, proxy_port=None,
-                 proxy_user=None, proxy_password=None,
-                 cert_file=None, key_file=None, restlib_class=None):
+    def __init__(
+        self,
+        host=None,
+        ssl_port=None,
+        handler=None,
+        username=None,
+        password=None,
+        proxy_hostname=None,
+        proxy_port=None,
+        proxy_user=None,
+        proxy_password=None,
+        cert_file=None,
+        key_file=None,
+        restlib_class=None,
+    ):
         self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid'}
         self.environment_list = []
         self.called_unregister_uuid = None
@@ -443,8 +516,7 @@ class StubUEP(object):
     def get_supported_resources(self):
         return []
 
-    def registerConsumer(self, name, type, facts, owner, environment, keys,
-                         installed_products, content_tags):
+    def registerConsumer(self, name, type, facts, owner, environment, keys, installed_products, content_tags):
         return self.registered_consumer_info
 
     def unregisterConsumer(self, uuid):
@@ -468,9 +540,21 @@ class StubUEP(object):
     def getServiceLevelList(self, owner):
         return ['Pro', 'Super Pro', 'ProSumer']
 
-    def updateConsumer(self, consumer, facts=None, installed_products=None,
-                       guest_uuids=None, service_level=None, release=None, autoheal=None,
-                       content_tags=None, addons=None, role=None, usage=None, environments=None):
+    def updateConsumer(
+        self,
+        consumer,
+        facts=None,
+        installed_products=None,
+        guest_uuids=None,
+        service_level=None,
+        release=None,
+        autoheal=None,
+        content_tags=None,
+        addons=None,
+        role=None,
+        usage=None,
+        environments=None,
+    ):
         return consumer
 
     def setEnvironmentList(self, env_list):
@@ -524,12 +608,8 @@ class StubUEP(object):
 
     def getOwnerSyspurposeValidFields(self, owner_key):
         return {
-            "owner": {
-                "key": "ff80808172dc51a10172dc51cb3e000"
-            },
-            "systemPurposeAttributes": {
-                "addons": [], "usage": [], "support_level": [], "roles": []
-            }
+            "owner": {"key": "ff80808172dc51a10172dc51cb3e000"},
+            "systemPurposeAttributes": {"addons": [], "usage": [], "support_level": [], "roles": []},
         }
 
 
@@ -607,7 +687,6 @@ class StubEntActionInvoker(object):
 
 
 class StubCertSorter(CertSorter):
-
     def __init__(self):
         super(StubCertSorter, self).__init__()
 
@@ -621,7 +700,6 @@ class StubCertSorter(CertSorter):
 
 
 class StubCPProvider(object):
-
     def __init__(self):
         self.cert_file = StubConsumerIdentity.certpath()
         self.key_file = StubConsumerIdentity.keypath()
@@ -630,19 +708,21 @@ class StubCPProvider(object):
         self.no_auth_cp = StubUEP()
         self.content_connection = StubContentConnection()
 
-    def set_connection_info(self,
-                            host=None,
-                            ssl_port=None,
-                            handler=None,
-                            cert_file=None,
-                            key_file=None,
-                            proxy_hostname_arg=None,
-                            proxy_port_arg=None,
-                            proxy_user_arg=None,
-                            proxy_password_arg=None,
-                            no_proxy_arg=None,
-                            correlation_id=None,
-                            restlib_class=None):
+    def set_connection_info(
+        self,
+        host=None,
+        ssl_port=None,
+        handler=None,
+        cert_file=None,
+        key_file=None,
+        proxy_hostname_arg=None,
+        proxy_port_arg=None,
+        proxy_user_arg=None,
+        proxy_password_arg=None,
+        no_proxy_arg=None,
+        correlation_id=None,
+        restlib_class=None,
+    ):
         pass
 
     def set_content_connection_info(self, cdn_hostname=None, cdn_port=None):
@@ -672,7 +752,6 @@ class StubCPProvider(object):
 
 
 class StubEntitlementStatusCache(EntitlementStatusCache):
-
     def write_cache(self, debug=False):
         pass
 
@@ -681,7 +760,6 @@ class StubEntitlementStatusCache(EntitlementStatusCache):
 
 
 class StubPoolStatusCache(PoolStatusCache):
-
     def write_cache(self, debug=False):
         pass
 
@@ -690,7 +768,6 @@ class StubPoolStatusCache(PoolStatusCache):
 
 
 class StubProductStatusCache(ProductStatusCache):
-
     def write_cache(self, debug=False):
         pass
 
@@ -699,7 +776,6 @@ class StubProductStatusCache(ProductStatusCache):
 
 
 class StubOverrideStatusCache(OverrideStatusCache):
-
     def write_cache(self, debug=False):
         pass
 
@@ -708,7 +784,6 @@ class StubOverrideStatusCache(OverrideStatusCache):
 
 
 class StubReleaseStatusCache(ReleaseStatusCache):
-
     def write_cache(self, debug=False):
         pass
 
@@ -717,7 +792,6 @@ class StubReleaseStatusCache(ReleaseStatusCache):
 
 
 class StubAvailableEntitlementsCache(AvailableEntitlementsCache):
-
     def write_cache(self, debug=False):
         pass
 
@@ -726,7 +800,6 @@ class StubAvailableEntitlementsCache(AvailableEntitlementsCache):
 
 
 class StubContentAccessModeCache(ContentAccessModeCache):
-
     def write_cache(self, debug=False):
         pass
 
@@ -735,7 +808,6 @@ class StubContentAccessModeCache(ContentAccessModeCache):
 
 
 class StubSupportedResourcesCache(SupportedResourcesCache):
-
     def write_cache(self, debug=False):
         pass
 
@@ -744,7 +816,6 @@ class StubSupportedResourcesCache(SupportedResourcesCache):
 
 
 class StubSyspurposeValidFieldsCache(SyspurposeValidFieldsCache):
-
     def write_cache(self, debug=False):
         pass
 
@@ -753,7 +824,6 @@ class StubSyspurposeValidFieldsCache(SyspurposeValidFieldsCache):
 
 
 class StubCurrentOwnerCache(CurrentOwnerCache):
-
     def write_cache(self, debug=False):
         pass
 
@@ -762,7 +832,6 @@ class StubCurrentOwnerCache(CurrentOwnerCache):
 
 
 class StubPool(object):
-
     def __init__(self, poolid):
         self.id = poolid
 
@@ -776,7 +845,6 @@ class StubInstalledProductsManager(InstalledProductsManager):
 
 
 class StubProfileManager(ProfileManager):
-
     def write_cache(self):
         pass
 
@@ -786,7 +854,8 @@ class StubProfileManager(ProfileManager):
     def _get_current_profile(self):
         mock_packages = [
             profile.Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-            profile.Package(name="package2", version="2.0.0", release=2, arch="x86_64")]
+            profile.Package(name="package2", version="2.0.0", release=2, arch="x86_64"),
+        ]
         self._current_profile = StubRpmProfile(mock_packages=mock_packages)
         return self._current_profile
 
@@ -828,6 +897,5 @@ class StubRpmProfile(profile.RPMProfile):
 
 
 class StubDeb822(dict):
-
     def __init__(self, init_dict):
         pass

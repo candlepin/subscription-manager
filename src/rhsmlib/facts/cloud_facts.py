@@ -32,7 +32,7 @@ class CloudFactsCollector(collector.FactsCollector):
             arch=arch,
             prefix=prefix,
             testing=testing,
-            collected_hw_info=collected_hw_info
+            collected_hw_info=collected_hw_info,
         )
 
         self.hardware_methods = []
@@ -40,7 +40,7 @@ class CloudFactsCollector(collector.FactsCollector):
         # Try to detect cloud provider using only strong method
         self.cloud_provider = get_cloud_provider(
             facts=self._collected_hw_info,
-            methods=DetectionMethod.STRONG
+            methods=DetectionMethod.STRONG,
         )
 
         if self.cloud_provider is not None:
@@ -48,13 +48,11 @@ class CloudFactsCollector(collector.FactsCollector):
             cloud_provider_dispatcher = {
                 "aws": self.get_aws_facts,
                 "azure": self.get_azure_facts,
-                "gcp": self.get_gcp_facts
+                "gcp": self.get_gcp_facts,
             }
             # Set method according detected cloud provider
             if self.cloud_provider.CLOUD_PROVIDER_ID in cloud_provider_dispatcher:
-                self.hardware_methods = [
-                    cloud_provider_dispatcher[self.cloud_provider.CLOUD_PROVIDER_ID]
-                ]
+                self.hardware_methods = [cloud_provider_dispatcher[self.cloud_provider.CLOUD_PROVIDER_ID]]
 
     def get_aws_facts(self):
         """
@@ -139,12 +137,12 @@ class CloudFactsCollector(collector.FactsCollector):
             jose_header, metadata, signature = self.cloud_provider.decode_jwt(encoded_jwt_token)
             if metadata is not None:
                 values = self.parse_json_content(metadata)
-                if 'google' in values and \
-                        'compute_engine' in values['google'] and \
-                        'instance_id' in values['google']['compute_engine']:
-                    facts = {
-                        "gcp_instance_id": values['google']['compute_engine']['instance_id']
-                    }
+                if (
+                    'google' in values
+                    and 'compute_engine' in values['google']
+                    and 'instance_id' in values['google']['compute_engine']
+                ):
+                    facts = {"gcp_instance_id": values['google']['compute_engine']['instance_id']}
                 else:
                     log.debug('GCP instance_id not found in JWT token')
         return facts

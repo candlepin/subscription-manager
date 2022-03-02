@@ -17,7 +17,6 @@ from subscription_manager.utils import is_true_value
 
 
 class PoolWrapper(object):
-
     def __init__(self, pool_json):
         self.data = pool_json
 

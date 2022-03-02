@@ -81,10 +81,12 @@ class YumPluginManager(object):
 
     @staticmethod
     def warning_message(enabled_yum_plugins):
-        message = _('The yum/dnf plugins: %s were automatically enabled for the benefit of '
-                    'Red Hat Subscription Management. If not desired, use '
-                    '"subscription-manager config --rhsm.auto_enable_yum_plugins=0" to '
-                    'block this behavior.') % ', '.join(enabled_yum_plugins)
+        message = _(
+            'The yum/dnf plugins: %s were automatically enabled for the benefit of '
+            'Red Hat Subscription Management. If not desired, use '
+            '"subscription-manager config --rhsm.auto_enable_yum_plugins=0" to '
+            'block this behavior.'
+        ) % ', '.join(enabled_yum_plugins)
         return message
 
     @classmethod
@@ -110,21 +112,22 @@ class YumPluginManager(object):
                 # Capture all errors during reading yum plugin conf file
                 # report them and skip this conf file
                 log.error(
-                    "Error during reading %s plugin config file '%s': %s. Skipping this file." %
-                    (pkg_mgr_name, plugin_file_name, err)
+                    "Error during reading %s plugin config file '%s': %s. Skipping this file."
+                    % (pkg_mgr_name, plugin_file_name, err)
                 )
                 continue
 
             if len(result) == 0:
-                log.warn('Configuration file of %s plugin: "%s" cannot be read' %
-                         (pkg_mgr_name, plugin_file_name))
+                log.warn(
+                    'Configuration file of %s plugin: "%s" cannot be read' % (pkg_mgr_name, plugin_file_name)
+                )
                 continue
 
             is_plugin_enabled = False
             if not plugin_config.has_section('main'):
                 log.warning(
-                    'Configuration file of %s plugin: "%s" does not include main section. Adding main section.' %
-                    (pkg_mgr_name, plugin_file_name)
+                    'Configuration file of %s plugin: "%s" does not include main section. Adding main section.'
+                    % (pkg_mgr_name, plugin_file_name)
                 )
                 plugin_config.add_section('main')
             elif plugin_config.has_option('main', 'enabled'):
@@ -137,13 +140,14 @@ class YumPluginManager(object):
                         is_plugin_enabled = plugin_config.getboolean('main', 'enabled')
                     except ValueError:
                         log.warning(
-                            "File %s has wrong value of options: 'enabled' in section: 'main' (not a int nor boolean)" %
-                            plugin_file_name
+                            "File %s has wrong value of options: 'enabled' in section: 'main' (not a int nor boolean)"
+                            % plugin_file_name
                         )
 
             if is_plugin_enabled == cls.PLUGIN_ENABLED:
-                log.debug('%s plugin: "%s" already enabled. Nothing to do.' %
-                          (pkg_mgr_name, plugin_file_name))
+                log.debug(
+                    '%s plugin: "%s" already enabled. Nothing to do.' % (pkg_mgr_name, plugin_file_name)
+                )
             else:
                 log.warning('Enabling %s plugin: "%s".' % (pkg_mgr_name, plugin_file_name))
                 # Change content of plugin configuration file and enable this plugin.
@@ -178,6 +182,7 @@ class YumPluginManager(object):
 
 class RepoActionInvoker(BaseActionInvoker):
     """Invoker for yum/dnf repo updating related actions."""
+
     def __init__(self, cache_only=False, locker=None):
         super(RepoActionInvoker, self).__init__(locker=locker)
         self.cache_only = cache_only
@@ -246,6 +251,7 @@ class YumReleaseverSource(object):
     get_expansion() gets 'release' from consumer info from server,
     using the cache as required.
     """
+
     marker = "$releasever"
     # if all eles fails the default is to leave the marker un expanded
     default = marker
@@ -328,6 +334,7 @@ class RepoUpdateActionCommand(object):
 
     Returns an RepoActionReport.
     """
+
     def __init__(self, cache_only=False, apply_overrides=True):
         self.identity = inj.require(inj.IDENTITY)
 
@@ -348,7 +355,9 @@ class RepoUpdateActionCommand(object):
         self.override_supported = False
 
         try:
-            self.override_supported = 'content_overrides' in get_supported_resources(uep=None, identity=self.identity)
+            self.override_supported = 'content_overrides' in get_supported_resources(
+                uep=None, identity=self.identity
+            )
         except (socket.error, connection.ConnectionException) as e:
             # swallow the error to fix bz 1298327
             log.exception(e)
@@ -397,8 +406,7 @@ class RepoUpdateActionCommand(object):
             for repo_class, _dummy in get_repo_file_classes():
                 repo_file = repo_class()
                 if repo_file.exists():
-                    log.info("Removing %s due to manage_repos configuration." %
-                             repo_file.path)
+                    log.info("Removing %s due to manage_repos configuration." % repo_file.path)
             RepoActionInvoker.delete_repo_file()
             return 0
 
@@ -480,8 +488,7 @@ class RepoUpdateActionCommand(object):
     def matching_content(self):
         content = []
         for content_type in ALLOWED_CONTENT_TYPES:
-            content += model.find_content(self.ent_source,
-                                          content_type=content_type)
+            content += model.find_content(self.ent_source, content_type=content_type)
         return content
 
     def get_all_content(self, baseurl, ca_cert):
@@ -498,8 +505,7 @@ class RepoUpdateActionCommand(object):
         release_source = YumReleaseverSource()
 
         for content in matching_content:
-            repo = Repo.from_ent_cert_content(content, baseurl, ca_cert,
-                                              release_source)
+            repo = Repo.from_ent_cert_content(content, baseurl, ca_cert, release_source)
 
             # overrides are yum repo only at the moment, but
             # content sources will likely need to learn how to
@@ -552,10 +558,12 @@ class RepoUpdateActionCommand(object):
             # otherwise left alone. However if we see that the property was overridden
             # but that override has since been removed, we need to revert to the default
             # value.
-            if mutable and not self._is_overridden(old_repo, key) \
-                    and not self._was_overridden(old_repo, key, old_repo.get(key)):
-                if not old_repo.get(key) or \
-                        old_repo.get(key) == server_value_repo.get(key):
+            if (
+                mutable
+                and not self._is_overridden(old_repo, key)
+                and not self._was_overridden(old_repo, key, old_repo.get(key))
+            ):
+                if not old_repo.get(key) or old_repo.get(key) == server_value_repo.get(key):
                     if old_repo.get(key) == new_val:
                         continue
                     if new_val is None:
@@ -581,7 +589,7 @@ class RepoUpdateActionCommand(object):
                 old_repo[key] = new_val
                 changes_made += 1
 
-            if (mutable and new_val is not None):
+            if mutable and new_val is not None:
                 server_value_repo[key] = new_val
 
         return changes_made
@@ -598,6 +606,7 @@ class RepoUpdateActionCommand(object):
 
 class RepoActionReport(ActionReport):
     """Report class for reporting yum repo updates."""
+
     name = "Repo Updates"
 
     def __init__(self):

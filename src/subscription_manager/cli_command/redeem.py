@@ -25,22 +25,32 @@ from subscription_manager.i18n import ugettext as _
 
 
 class RedeemCommand(CliCommand):
-
     def __init__(self):
         shortdesc = _("Attempt to redeem a subscription for a preconfigured system")
         super(RedeemCommand, self).__init__("redeem", shortdesc, False)
 
-        self.parser.add_argument("--email", dest="email", action='store',
-                                 help=_("email address to notify when "
-                                        "subscription redemption is complete"))
-        self.parser.add_argument("--locale", dest="locale", action='store',
-                                 help=_("optional language to use for email "
-                                        "notification when subscription redemption is "
-                                        "complete (Examples: en-us, de-de)"))
+        self.parser.add_argument(
+            "--email",
+            dest="email",
+            action='store',
+            help=_("email address to notify when " "subscription redemption is complete"),
+        )
+        self.parser.add_argument(
+            "--locale",
+            dest="locale",
+            action='store',
+            help=_(
+                "optional language to use for email "
+                "notification when subscription redemption is "
+                "complete (Examples: en-us, de-de)"
+            ),
+        )
 
     def _validate_options(self):
         if not self.options.email:
-            system_exit(os.EX_USAGE, _("Error: This command requires that you specify an email address with --email."))
+            system_exit(
+                os.EX_USAGE, _("Error: This command requires that you specify an email address with --email.")
+            )
 
     def _do_command(self):
         """

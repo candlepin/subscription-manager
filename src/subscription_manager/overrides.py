@@ -33,8 +33,7 @@ class Overrides(object):
         return self._build_from_json(self.cache.load_status(self._getuep(), consumer_uuid))
 
     def add_overrides(self, consumer_uuid, overrides):
-        return self._build_from_json(self._getuep().setContentOverrides(consumer_uuid,
-                                                                        self._add(overrides)))
+        return self._build_from_json(self._getuep().setContentOverrides(consumer_uuid, self._add(overrides)))
 
     def remove_overrides(self, consumer_uuid, overrides):
         return self._delete_overrides(consumer_uuid, self._remove(overrides))

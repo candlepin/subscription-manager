@@ -11,7 +11,12 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-from iniparse.compat import NoOptionError, InterpolationMissingOptionError, InterpolationDepthError, NoSectionError
+from iniparse.compat import (
+    NoOptionError,
+    InterpolationMissingOptionError,
+    InterpolationDepthError,
+    NoSectionError,
+)
 import os
 from tempfile import NamedTemporaryFile
 import unittest
@@ -176,26 +181,21 @@ def write_temp_file(data):
 
 
 class BaseConfigTests(unittest.TestCase):
-
     def setUp(self):
         self.fid = write_temp_file(self.cfgfile_data)
         self.cfgParser = RhsmConfigParser(self.fid.name)
 
 
 class HostConfigTests(unittest.TestCase):
-
     @patch('os.path.exists')
     def test_normal_case(self, exists_mock):
         # Mock that /etc/pki/entitlement-host exists:
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEqual('/etc/rhsm-host/ca',
-                         config.get('rhsm', 'ca_cert_dir'))
-        self.assertEqual('/etc/rhsm-host/redhat-uep-non-default.pem',
-                         config.get('rhsm', 'repo_ca_cert'))
-        self.assertEqual('/etc/pki/entitlement-host',
-                         config.get('rhsm', 'entitlementCertDir'))
+        self.assertEqual('/etc/rhsm-host/ca', config.get('rhsm', 'ca_cert_dir'))
+        self.assertEqual('/etc/rhsm-host/redhat-uep-non-default.pem', config.get('rhsm', 'repo_ca_cert'))
+        self.assertEqual('/etc/pki/entitlement-host', config.get('rhsm', 'entitlementCertDir'))
 
     @patch('os.path.exists')
     def test_host_config_regular_entcertdir(self, exists_mock):
@@ -204,12 +204,9 @@ class HostConfigTests(unittest.TestCase):
         exists_mock.return_value = False
         temp_file = write_temp_file(HOST_CONFIG)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEqual('/etc/rhsm-host/ca',
-                         config.get('rhsm', 'ca_cert_dir'))
-        self.assertEqual('/etc/rhsm-host/redhat-uep-non-default.pem',
-                         config.get('rhsm', 'repo_ca_cert'))
-        self.assertEqual('/etc/pki/entitlement',
-                         config.get('rhsm', 'entitlementCertDir'))
+        self.assertEqual('/etc/rhsm-host/ca', config.get('rhsm', 'ca_cert_dir'))
+        self.assertEqual('/etc/rhsm-host/redhat-uep-non-default.pem', config.get('rhsm', 'repo_ca_cert'))
+        self.assertEqual('/etc/pki/entitlement', config.get('rhsm', 'entitlementCertDir'))
 
     @patch('os.path.exists')
     def test_repo_ca_cert_macro(self, exists_mock):
@@ -217,10 +214,8 @@ class HostConfigTests(unittest.TestCase):
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG_MACRO)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEqual('/etc/rhsm-host/ca/',
-                         config.get('rhsm', 'ca_cert_dir'))
-        self.assertEqual('/etc/rhsm-host/ca/redhat-uep.pem',
-                         config.get('rhsm', 'repo_ca_cert'))
+        self.assertEqual('/etc/rhsm-host/ca/', config.get('rhsm', 'ca_cert_dir'))
+        self.assertEqual('/etc/rhsm-host/ca/redhat-uep.pem', config.get('rhsm', 'repo_ca_cert'))
 
     @patch('os.path.exists')
     def test_no_replacements(self, exists_mock):
@@ -228,12 +223,9 @@ class HostConfigTests(unittest.TestCase):
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG_NOREPLACE)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEqual('/etc/rhsm-other/ca',
-                         config.get('rhsm', 'ca_cert_dir'))
-        self.assertEqual('/etc/pki/ca/redhat-uep.pem',
-                         config.get('rhsm', 'repo_ca_cert'))
-        self.assertEqual('/etc/pki/entitlement-other',
-                         config.get('rhsm', 'entitlementCertDir'))
+        self.assertEqual('/etc/rhsm-other/ca', config.get('rhsm', 'ca_cert_dir'))
+        self.assertEqual('/etc/pki/ca/redhat-uep.pem', config.get('rhsm', 'repo_ca_cert'))
+        self.assertEqual('/etc/pki/entitlement-other', config.get('rhsm', 'entitlementCertDir'))
 
     @patch('os.path.exists')
     def test_ent_dir_trailing_slash(self, exists_mock):
@@ -241,8 +233,7 @@ class HostConfigTests(unittest.TestCase):
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG_ENTDIR_TRAILING_SLASH)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEqual('/etc/pki/entitlement-host',
-                         config.get('rhsm', 'entitlementCertDir'))
+        self.assertEqual('/etc/pki/entitlement-host', config.get('rhsm', 'entitlementCertDir'))
 
 
 class ConfigTests(BaseConfigTests):
@@ -305,26 +296,17 @@ class ConfigTests(BaseConfigTests):
         self.assertEqual("/etc/rhsm/ca-test/redhat-uep-non-default.pem", value)
 
     def test_get_item_does_not_exist(self):
-        self.assertRaises(NoOptionError,
-                          self.cfgParser.get,
-                          "rhsm",
-                          "this_isnt_a_thing")
+        self.assertRaises(NoOptionError, self.cfgParser.get, "rhsm", "this_isnt_a_thing")
 
     def test_get_int_un_set(self):
         value = self.cfgParser.get_int("server", "proxy_port")
         self.assertEqual(None, value)
 
     def test_get_int_does_not_exist(self):
-        self.assertRaises(NoOptionError,
-                          self.cfgParser.get_int,
-                          "rhsm",
-                          "this_isnt_a_thing")
+        self.assertRaises(NoOptionError, self.cfgParser.get_int, "rhsm", "this_isnt_a_thing")
 
     def test_get_int_not_an_int(self):
-        self.assertRaises(ValueError,
-                          self.cfgParser.get_int,
-                          "rhsm",
-                          "baseurl")
+        self.assertRaises(ValueError, self.cfgParser.get_int, "rhsm", "baseurl")
 
     def test_get_int_big_int(self):
         value = self.cfgParser.get_int("foo", "bigger_than_32_bit")
@@ -348,7 +330,7 @@ class BlankWithDefaultConfigTest(BaseConfigTests):
         default_returned = False
         for (name, value) in self.cfgParser.items("rhsm"):
             if name == "manage_repos":
-                default_returned = (value == "1")
+                default_returned = value == "1"
         self.assertTrue(default_returned)
 
 
@@ -373,30 +355,24 @@ class BrokenConfigTests(ConfigTests):
 
     # our repo_ca_cert is busted, so expect an exception
     def test_get_repo_ca_cert(self):
-        self.assertRaises(InterpolationMissingOptionError,
-                          self.cfgParser.get, "rhsm", "repo_ca_cert")
+        self.assertRaises(InterpolationMissingOptionError, self.cfgParser.get, "rhsm", "repo_ca_cert")
 
     # interp fails, expect interpolation exception
     def test_interpolation(self):
-        self.assertRaises(InterpolationMissingOptionError,
-                          self.cfgParser.get, "rhsm", "repo_ca_cert")
+        self.assertRaises(InterpolationMissingOptionError, self.cfgParser.get, "rhsm", "repo_ca_cert")
 
     def test_nested_interpolation(self):
-        self.assertRaises(InterpolationMissingOptionError,
-                          self.cfgParser.get, "rhsm", "some_option")
+        self.assertRaises(InterpolationMissingOptionError, self.cfgParser.get, "rhsm", "some_option")
 
     def test_not_a_section(self):
-        self.assertRaises(NoSectionError,
-                          self.cfgParser.get, "not_a_section", "not_an_option")
+        self.assertRaises(NoSectionError, self.cfgParser.get, "not_a_section", "not_an_option")
 
 
 class InterpErrorTests(BaseConfigTests):
     cfgfile_data = INTERPOLATION_ERROR_CONFIG
 
     def test_get_interp_key(self):
-        self.assertRaises(InterpolationMissingOptionError,
-                          self.cfgParser.get,
-                          "bar", "interp_key")
+        self.assertRaises(InterpolationMissingOptionError, self.cfgParser.get, "bar", "interp_key")
 
     def test_deeper(self):
         value = self.cfgParser.get("deeper", "deeper")
@@ -407,9 +383,7 @@ class InterpErrorTests(BaseConfigTests):
         self.assertEqual("level_one_1_2", value)
 
     def test_one_more(self):
-        self.assertRaises(InterpolationDepthError,
-                          self.cfgParser.get,
-                          "deeper", "one_more")
+        self.assertRaises(InterpolationDepthError, self.cfgParser.get, "deeper", "one_more")
 
 
 class CaCertDirTests(BaseConfigTests):
@@ -429,7 +403,6 @@ class NoCaCertDirTests(BaseConfigTests):
 
 
 class InContainerTests(unittest.TestCase):
-
     def test_in_container_off(self):
         # This must be set in the test environment by CI in order to know for
         # sure one way or the other whether we really are in a container.

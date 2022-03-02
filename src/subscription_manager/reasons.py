@@ -79,10 +79,12 @@ class Reasons(object):
                     result[reason_id] = []
                 if reason['key'] in [res['key'] for res in result[reason_id]]:
                     continue
-                result[reason_id].append({
-                    'key': reason['key'],
-                    'product_name': reason['attributes']['name']
-                })
+                result[reason_id].append(
+                    {
+                        'key': reason['key'],
+                        'product_name': reason['attributes']['name'],
+                    }
+                )
         return result
 
     def get_stack_subscriptions(self, stack_id):
@@ -145,6 +147,7 @@ class Reasons(object):
         Returns a list of subscriptions that provide
         the product.
         """
-        results = [valid_ent for valid_ent in self.sorter.valid_entitlement_certs
-                   if prod in valid_ent.products]
+        results = [
+            valid_ent for valid_ent in self.sorter.valid_entitlement_certs if prod in valid_ent.products
+        ]
         return results

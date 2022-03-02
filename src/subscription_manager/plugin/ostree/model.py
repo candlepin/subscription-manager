@@ -49,10 +49,12 @@ class OstreeRemote(object):
     ostree repo config (/ostree/repo/config by default).
     """
 
-    items_to_data = {'gpg-verify': 'gpg_verify',
-                     'tls-client-cert-path': 'tls_client_cert_path',
-                     'tls-client-key-path': 'tls_client_key_path',
-                     'tls-ca-path': 'tls_ca_path'}
+    items_to_data = {
+        'gpg-verify': 'gpg_verify',
+        'tls-client-cert-path': 'tls_client_cert_path',
+        'tls-client-key-path': 'tls_client_key_path',
+        'tls-ca-path': 'tls_ca_path',
+    }
 
     report_template = OSTREE_REPORT_TEMPLATE
 
@@ -156,9 +158,7 @@ class OstreeRemote(object):
         if result:
             return result.groupdict()['remote_name']
 
-        raise RemoteSectionNameParseError(
-            "Unable to find a name in section %s" % section,
-            section=section)
+        raise RemoteSectionNameParseError("Unable to find a name in section %s" % section, section=section)
 
     @classmethod
     def from_ent_cert_content(cls, content):
@@ -219,12 +219,20 @@ class OstreeRemote(object):
 
     def __repr__(self):
         r = super(OstreeRemote, self).__repr__()
-        template = "%s\n (name=%s\n url=%s\n gpg_verify=%s\n " \
-                   "tls_client_cert_path=%s\n tls_client_key_path=%s\n " \
-                   "proxy=%s)"
-        return template % (r, self.name, self.url, self.gpg_verify,
-                           self.tls_client_cert_path, self.tls_client_key_path,
-                           self.proxy)
+        template = (
+            "%s\n (name=%s\n url=%s\n gpg_verify=%s\n "
+            "tls_client_cert_path=%s\n tls_client_key_path=%s\n "
+            "proxy=%s)"
+        )
+        return template % (
+            r,
+            self.name,
+            self.url,
+            self.gpg_verify,
+            self.tls_client_cert_path,
+            self.tls_client_key_path,
+            self.proxy,
+        )
 
     def report(self):
         return self.report_template.format(self=self)
@@ -275,11 +283,11 @@ class OstreeRemotes(object):
 
 class OstreeConfigFileStore(object):
     """For loading/saving a ostree remotes repo config file."""
+
     default_repo_file_path = OSTREE_REPO_CONFIG_PATH
 
     def __init__(self, config_file_path=None):
-        self.config_file_path = config_file_path or \
-            self.default_config_file_path
+        self.config_file_path = config_file_path or self.default_config_file_path
         self.config_file = None
 
     def load(self):
@@ -353,12 +361,13 @@ class OstreeConfigUpdatesBuilder(object):
             # mutliple contents to the same remote?
             content_to_remote[content] = remote
 
-        new_ostree_config = OstreeConfig(core=self.orig_ostree_config.core,
-                                         remotes=new_remotes,
-                                         repo_file_path=self.orig_ostree_config.repo_file_path)
+        new_ostree_config = OstreeConfig(
+            core=self.orig_ostree_config.core,
+            remotes=new_remotes,
+            repo_file_path=self.orig_ostree_config.repo_file_path,
+        )
 
-        ostree_config_updates = OstreeConfigUpdates(self.orig_ostree_config,
-                                                    new_ostree_config)
+        ostree_config_updates = OstreeConfigUpdates(self.orig_ostree_config, new_ostree_config)
         ostree_config_updates.content_to_remote = content_to_remote
 
         return ostree_config_updates
@@ -369,6 +378,7 @@ class OstreeConfigUpdatesBuilder(object):
 
 class OstreeCore(dict):
     """Represents the info from the ostree repo config [core] section."""
+
     pass
 
 
@@ -381,6 +391,7 @@ class OstreeConfig(object):
     OstreeConfig saving serializes OstreeConfig state to the configuration
     files.
     """
+
     default_repo_file_path = None
 
     def __init__(self, core=None, remotes=None, repo_file_path=None):

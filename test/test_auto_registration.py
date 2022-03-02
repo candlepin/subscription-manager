@@ -98,7 +98,6 @@ def mock_prepare_request(request):
 
 
 class TestAutomaticRegistration(unittest.TestCase):
-
     def setUp(self):
         aws.AWSCloudProvider._instance = None
         aws.AWSCloudProvider._initialized = False
@@ -135,10 +134,7 @@ class TestAutomaticRegistration(unittest.TestCase):
         self.assertTrue('signature' in cloud_info)
         b64_signature = cloud_info['signature']
         signature = base64.b64decode(b64_signature).decode('utf-8')
-        self.assertEqual(
-            signature,
-            '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
-        )
+        self.assertEqual(signature, '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----')
 
     @patch('cloud_what.providers.aws.requests.Session')
     def test_collect_cloud_info_more_cloud_providers_detected(self, mock_session_class):
@@ -171,7 +167,4 @@ class TestAutomaticRegistration(unittest.TestCase):
         self.assertTrue('signature' in cloud_info)
         b64_signature = cloud_info['signature']
         signature = base64.b64decode(b64_signature).decode('utf-8')
-        self.assertEqual(
-            signature,
-            '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
-        )
+        self.assertEqual(signature, '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----')

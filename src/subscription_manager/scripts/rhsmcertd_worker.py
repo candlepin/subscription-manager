@@ -60,9 +60,7 @@ def _collect_cloud_info(cloud_list: list, log) -> dict:
     """
 
     # Create dispatcher dictionary from the list of supported cloud providers
-    cloud_providers = {
-        provider_cls.CLOUD_PROVIDER_ID: provider_cls for provider_cls in CLOUD_PROVIDERS
-    }
+    cloud_providers = {provider_cls.CLOUD_PROVIDER_ID: provider_cls for provider_cls in CLOUD_PROVIDERS}
 
     result = {}
     # Go through the list of detected cloud providers and try to collect
@@ -99,7 +97,7 @@ def _collect_cloud_info(cloud_list: list, log) -> dict:
         result = {
             'cloud_id': cloud_provider_id,
             'metadata': b64_metadata,
-            'signature': b64_signature
+            'signature': b64_signature,
         }
         break
 
@@ -145,7 +143,7 @@ def _auto_register(cp_provider, log):
         jwt_token = cp.getJWToken(
             cloud_id=cloud_info['cloud_id'],
             metadata=cloud_info['metadata'],
-            signature=cloud_info['signature']
+            signature=cloud_info['signature'],
         )
     except Exception as err:
         log.error('Unable to get JWT token: {err}'.format(err=str(err)))
@@ -191,13 +189,16 @@ def _main(options, log):
         _auto_register(cp_provider, log)
 
     if not ConsumerIdentity.existsAndValid():
-        log.error('Either the consumer is not registered or the certificates' +
-                  ' are corrupted. Certificate update using daemon failed.')
+        log.error(
+            'Either the consumer is not registered or the certificates'
+            + ' are corrupted. Certificate update using daemon failed.'
+        )
         sys.exit(-1)
     print(_('Updating entitlement certificates & repositories'))
 
     cp = cp_provider.get_consumer_auth_cp()
-    cp.supports_resource(None)  # pre-load supported resources; serves as a way of failing before locking the repos
+    # pre-load supported resources; serves as a way of failing before locking the repos
+    cp.supports_resource(None)
 
     try:
         if options.autoheal:
@@ -239,9 +240,14 @@ def _main(options, log):
         # cert, but making a request for a different consumer uuid, so unlikely. Could register
         # with --consumerid get there?
         if ge.deleted_id == uuid:
-            log.critical("Consumer profile \"%s\" has been deleted from the server. Its local certificates will now be archived", uuid)
+            log.critical(
+                "Consumer profile \"%s\" has been deleted from the server. Its local certificates will now be archived",
+                uuid,
+            )
             managerlib.clean_all_data()
-            log.critical("Certificates archived to '/etc/pki/consumer.old'. Contact your system administrator if you need more information.")
+            log.critical(
+                "Certificates archived to '/etc/pki/consumer.old'. Contact your system administrator if you need more information."
+            )
 
         raise ge
 
@@ -251,13 +257,20 @@ def main():
     log = logging.getLogger('rhsm-app.' + __name__)
 
     parser = ArgumentParser(usage=USAGE)
-    parser.add_argument("--autoheal", dest="autoheal", action="store_true",
-                        default=False, help="perform an autoheal check")
-    parser.add_argument("--force", dest="force", action="store_true",
-                        default=False, help=SUPPRESS)
     parser.add_argument(
-        "--auto-register", dest="auto_register", action="store_true",
-        default=False, help="perform auto-registration"
+        "--autoheal",
+        dest="autoheal",
+        action="store_true",
+        default=False,
+        help="perform an autoheal check",
+    )
+    parser.add_argument("--force", dest="force", action="store_true", default=False, help=SUPPRESS)
+    parser.add_argument(
+        "--auto-register",
+        dest="auto_register",
+        action="store_true",
+        default=False,
+        help="perform auto-registration",
     )
 
     (options, args) = parser.parse_known_args()

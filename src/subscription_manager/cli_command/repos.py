@@ -56,23 +56,46 @@ class ReposAddRemoveAction(argparse.Action):
 
 
 class ReposCommand(CliCommand):
-
     def __init__(self):
         shortdesc = _("List the repositories which this system is entitled to use")
         super(ReposCommand, self).__init__("repos", shortdesc, False)
 
-        self.parser.add_argument("--list", action='store_true', dest="list",
-                                 help=_("list all known repositories for this system"))
-        self.parser.add_argument("--list-enabled", action='store_true', dest="list_enabled",
-                                 help=_("list known, enabled repositories for this system"))
-        self.parser.add_argument("--list-disabled", action='store_true', dest="list_disabled",
-                                 help=_("list known, disabled repositories for this system"))
-        self.parser.add_argument("--enable", dest="repo_actions", action=ReposAddRemoveAction, metavar="REPOID",
-                                 help=_(
-                                     "repository to enable (can be specified more than once). Wildcards (* and ?) are supported."))
-        self.parser.add_argument("--disable", dest="repo_actions", action=ReposAddRemoveAction, metavar="REPOID",
-                                 help=_(
-                                     "repository to disable (can be specified more than once). Wildcards (* and ?) are supported."))
+        self.parser.add_argument(
+            "--list",
+            action='store_true',
+            dest="list",
+            help=_("list all known repositories for this system"),
+        )
+        self.parser.add_argument(
+            "--list-enabled",
+            action='store_true',
+            dest="list_enabled",
+            help=_("list known, enabled repositories for this system"),
+        )
+        self.parser.add_argument(
+            "--list-disabled",
+            action='store_true',
+            dest="list_disabled",
+            help=_("list known, disabled repositories for this system"),
+        )
+        self.parser.add_argument(
+            "--enable",
+            dest="repo_actions",
+            action=ReposAddRemoveAction,
+            metavar="REPOID",
+            help=_(
+                "repository to enable (can be specified more than once). Wildcards (* and ?) are supported."
+            ),
+        )
+        self.parser.add_argument(
+            "--disable",
+            dest="repo_actions",
+            action=ReposAddRemoveAction,
+            metavar="REPOID",
+            help=_(
+                "repository to disable (can be specified more than once). Wildcards (* and ?) are supported."
+            ),
+        )
 
     def _reconcile_list_options(self):
         """
@@ -82,11 +105,17 @@ class ReposCommand(CliCommand):
         Allows for --list to perform identically to --list-enabled --list-disabled
         """
         # covers the default case if no list options are specified
-        default_list = not(self.options.list or self.options.list_enabled or self.options.list_disabled)
+        default_list = not (self.options.list or self.options.list_enabled or self.options.list_disabled)
         repo_actions = self.options.repo_actions is not None
-        self.list_enabled = (self.options.list or self.options.list_enabled or default_list) and not repo_actions
-        self.list_disabled = (self.options.list or self.options.list_disabled or default_list) and not repo_actions
-        self.list = (self.options.list or self.options.list_enabled or self.options.list_disabled or default_list) and not repo_actions
+        self.list_enabled = (
+            self.options.list or self.options.list_enabled or default_list
+        ) and not repo_actions
+        self.list_disabled = (
+            self.options.list or self.options.list_disabled or default_list
+        ) and not repo_actions
+        self.list = (
+            self.options.list or self.options.list_enabled or self.options.list_disabled or default_list
+        ) and not repo_actions
 
     def _do_command(self):
         self._reconcile_list_options()
@@ -124,8 +153,8 @@ class ReposCommand(CliCommand):
                 def filter_repos(repo):
                     disabled_values = ['false', '0']
                     repo_enabled = repo['enabled'].lower()
-                    show_enabled = (self.list_enabled and repo_enabled not in disabled_values)
-                    show_disabled = (self.list_disabled and repo_enabled in disabled_values)
+                    show_enabled = self.list_enabled and repo_enabled not in disabled_values
+                    show_disabled = self.list_disabled and repo_enabled in disabled_values
 
                     return show_enabled or show_disabled
 
@@ -137,11 +166,17 @@ class ReposCommand(CliCommand):
                     print("+----------------------------------------------------------+")
 
                     for repo in repos:
-                        print(columnize(REPOS_LIST, echo_columnize_callback,
-                                        repo.id,
-                                        repo["name"],
-                                        repo["baseurl"],
-                                        repo["enabled"]) + "\n")
+                        print(
+                            columnize(
+                                REPOS_LIST,
+                                echo_columnize_callback,
+                                repo.id,
+                                repo["name"],
+                                repo["baseurl"],
+                                repo["enabled"],
+                            )
+                            + "\n"
+                        )
                 else:
                     print(_("There were no available repositories matching the specified criteria."))
             else:
@@ -170,8 +205,12 @@ class ReposCommand(CliCommand):
             matches = set([repo for repo in repos if fnmatch.fnmatch(repo.id, repoid)])
             if not matches:
                 rc = 1
-                print(_("Error: '{repoid}' does not match a valid repository ID. "
-                        "Use \"subscription-manager repos --list\" to see valid repositories.").format(repoid=repoid))
+                print(
+                    _(
+                        "Error: '{repoid}' does not match a valid repository ID. "
+                        "Use \"subscription-manager repos --list\" to see valid repositories."
+                    ).format(repoid=repoid)
+                )
                 log.warning("'{repoid}' does not match a valid repository ID.".format(repoid=repoid))
 
             # Overwrite repo if it's already in the dict, we want the last
@@ -185,11 +224,14 @@ class ReposCommand(CliCommand):
             cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
 
             if self.is_registered() and self.use_overrides:
-                overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': repos_to_modify[repo]} for repo in
-                             repos_to_modify]
+                overrides = [
+                    {'contentLabel': repo.id, 'name': 'enabled', 'value': repos_to_modify[repo]}
+                    for repo in repos_to_modify
+                ]
                 metadata_overrides = [
-                    {'contentLabel': repo.id, 'name': 'enabled_metadata', 'value': repos_to_modify[repo]} for repo in
-                    repos_to_modify]
+                    {'contentLabel': repo.id, 'name': 'enabled_metadata', 'value': repos_to_modify[repo]}
+                    for repo in repos_to_modify
+                ]
                 overrides.extend(metadata_overrides)
                 results = self.cp.setContentOverrides(self.identity.uuid, overrides)
 

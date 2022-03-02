@@ -294,11 +294,11 @@ class TestRoleCommand(TestCliProxyCommand):
 
         self.assertIn(
             'Warning: A role of "Foo" was recently set for this system by the entitlement server administrator.',
-            cap.err
+            cap.err,
         )
         self.assertIn(
             'If you\'d like to overwrite the server side change please run: subscription-manager syspurpose role --set "Bar"',
-            cap.err
+            cap.err,
         )
 
     @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
@@ -340,6 +340,7 @@ class InvalidOrg(Exception):
     Small Exception to be used in TestRoleOrgCheckingCommand; it will be
     passed through handle_exception().
     """
+
     def __init__(self, org_key):
         self.org_key = org_key
 
@@ -355,6 +356,7 @@ class OrgCheckingStubUEP(StubUEP):
     The extra implementation on top of StubUEP is the minimal one to check
     AbstractSyspurposeCommand in TestRoleOrgCheckingCommand.
     """
+
     def __init__(self, allowed_orgs):
         super(OrgCheckingStubUEP, self).__init__()
         self.allowed_orgs = allowed_orgs

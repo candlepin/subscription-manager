@@ -17,8 +17,7 @@ import zlib
 
 from rhsm.bitstream import GhettoBitStream
 
-DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                    'entitlement_data.bin')
+DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'entitlement_data.bin')
 entitlement_data = open(DATA, 'rb').read()
 decompresser = zlib.decompressobj()
 decompresser.decompress(entitlement_data)

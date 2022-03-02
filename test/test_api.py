@@ -21,6 +21,7 @@ from .stubs import StubUEP
 class ApiVersionTest(SubManFixture):
     def test_version_is_available(self):
         from subscription_manager import version
+
         self.assertEqual(version.rpm_version, api.version)
 
 
@@ -120,11 +121,13 @@ class RepoApiTest(SubManFixture):
 
                 result = api.enable_yum_repositories('hello')
 
-                expected_overrides = [{
-                    'contentLabel': 'hello',
-                    'name': 'enabled',
-                    'value': '1',
-                }]
+                expected_overrides = [
+                    {
+                        'contentLabel': 'hello',
+                        'name': 'enabled',
+                        'value': '1',
+                    }
+                ]
                 self.assertTrue(call("123", expected_overrides) in mock_uep.setContentOverrides.mock_calls)
 
                 self.invoker.return_value.update.assert_called_with()

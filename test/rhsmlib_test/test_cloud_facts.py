@@ -181,10 +181,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_result.status_code = 200
         mock_result.text = AWS_METADATA
         mock_session = Mock(name="_test_get_aws_facts.mock_session")
-        mock_session.send = Mock(
-            return_value=mock_result,
-            name="_test_get_aws_facts.mock_session.send"
-        )
+        mock_session.send = Mock(return_value=mock_result, name="_test_get_aws_facts.mock_session.send")
         mock_session.prepare_request = mock_prepare_request
         mock_session.hooks = {'response': []}
         mock_session_class.return_value = mock_session
@@ -193,10 +190,7 @@ class TestCloudCollector(unittest.TestCase):
         self.requests_patcher.stop()
 
         self.collector = cloud_facts.CloudFactsCollector(
-            collected_hw_info={
-                "virt.is_guest": True,
-                "dmi.bios.version": "4.2.amazon"
-            }
+            collected_hw_info={"virt.is_guest": True, "dmi.bios.version": "4.2.amazon"}
         )
 
         facts = self.collector.get_all()
@@ -237,10 +231,7 @@ class TestCloudCollector(unittest.TestCase):
 }
         """
         mock_session = Mock(name="mock_session")
-        mock_session.send = Mock(
-            return_value=mock_result,
-            name="mock_session.send"
-        )
+        mock_session.send = Mock(return_value=mock_result, name="mock_session.send")
         mock_session.prepare_request = mock_prepare_request
         mock_session.hooks = {'response': []}
         mock_session_class.return_value = mock_session
@@ -249,10 +240,7 @@ class TestCloudCollector(unittest.TestCase):
         self.requests_patcher.stop()
 
         self.collector = cloud_facts.CloudFactsCollector(
-            collected_hw_info={
-                "virt.is_guest": True,
-                "dmi.bios.version": "4.2.amazon"
-            }
+            collected_hw_info={"virt.is_guest": True, "dmi.bios.version": "4.2.amazon"}
         )
         facts = self.collector.get_all()
 
@@ -282,7 +270,7 @@ class TestCloudCollector(unittest.TestCase):
         self.collector = cloud_facts.CloudFactsCollector(
             collected_hw_info={
                 "virt.is_guest": True,
-                "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77"
+                "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77",
             }
         )
         facts = self.collector.get_all()
@@ -316,10 +304,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_write_token_to_cache_file.return_value = None
 
         self.collector = cloud_facts.CloudFactsCollector(
-            collected_hw_info={
-                "virt.is_guest": True,
-                "dmi.bios.vendor": "google"
-            }
+            collected_hw_info={"virt.is_guest": True, "dmi.bios.vendor": "google"}
         )
         facts = self.collector.get_all()
 
@@ -335,10 +320,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_result.status_code = 200
         mock_result.text = '{"foo": "bar"}'
         mock_session = Mock(name="mock_session")
-        mock_session.send = Mock(
-            return_value=mock_result,
-            name="mock_session.send"
-        )
+        mock_session.send = Mock(return_value=mock_result, name="mock_session.send")
         mock_session.prepare_request = mock_prepare_request
         mock_session.hooks = {'response': []}
         mock_session_class.return_value = mock_session
@@ -346,10 +328,7 @@ class TestCloudCollector(unittest.TestCase):
         self.requests_patcher.stop()
 
         self.collector = cloud_facts.CloudFactsCollector(
-            collected_hw_info={
-                "virt.is_guest": True,
-                "dmi.bios.version": "Foo"
-            }
+            collected_hw_info={"virt.is_guest": True, "dmi.bios.version": "Foo"}
         )
         facts = self.collector.get_all()
 
@@ -364,10 +343,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_result.status_code = 200
         mock_result.text = "not json document"
         mock_session = Mock(name="mock_session")
-        mock_session.send = Mock(
-            return_value=mock_result,
-            name="mock_session.send"
-        )
+        mock_session.send = Mock(return_value=mock_result, name="mock_session.send")
         mock_session.prepare_request = mock_prepare_request
         mock_session.hooks = {'response': []}
         mock_session_class.return_value = mock_session
@@ -375,10 +351,7 @@ class TestCloudCollector(unittest.TestCase):
         self.requests_patcher.stop()
 
         self.collector = cloud_facts.CloudFactsCollector(
-            collected_hw_info={
-                "virt.is_guest": True,
-                "dmi.bios.version": "4.2.amazon"
-            }
+            collected_hw_info={"virt.is_guest": True, "dmi.bios.version": "4.2.amazon"}
         )
         facts = self.collector.get_all()
 
@@ -393,10 +366,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_result.status_code = 200
         mock_result.text = AWS_METADATA
         mock_session = Mock(name="mock_session")
-        mock_session.send = Mock(
-            return_value=mock_result,
-            name="mock_session.send"
-        )
+        mock_session.send = Mock(return_value=mock_result, name="mock_session.send")
         mock_session.send.side_effect = socket.timeout
         mock_session.prepare_request = mock_prepare_request
         mock_session.hooks = {'response': []}
@@ -405,10 +375,7 @@ class TestCloudCollector(unittest.TestCase):
         self.requests_patcher.stop()
 
         self.collector = cloud_facts.CloudFactsCollector(
-            collected_hw_info={
-                "virt.is_guest": True,
-                "dmi.bios.version": "4.2.amazon"
-            }
+            collected_hw_info={"virt.is_guest": True, "dmi.bios.version": "4.2.amazon"}
         )
         facts = self.collector.get_all()
 
@@ -423,10 +390,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_result.status_code = 500
         mock_result.text = "error"
         mock_session = Mock(name="mock_session")
-        mock_session.send = Mock(
-            return_value=mock_result,
-            name="mock_session.send"
-        )
+        mock_session.send = Mock(return_value=mock_result, name="mock_session.send")
         mock_session.side_effect = requests.exceptions.HTTPError()
         mock_session.prepare_request = mock_prepare_request
         mock_session.hooks = {'response': []}
@@ -435,10 +399,7 @@ class TestCloudCollector(unittest.TestCase):
         self.requests_patcher.stop()
 
         self.collector = cloud_facts.CloudFactsCollector(
-            collected_hw_info={
-                "virt.is_guest": True,
-                "dmi.bios.version": "4.2.amazon"
-            }
+            collected_hw_info={"virt.is_guest": True, "dmi.bios.version": "4.2.amazon"}
         )
         facts = self.collector.get_all()
 

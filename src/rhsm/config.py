@@ -73,7 +73,7 @@ RHSM_DEFAULTS = {
     'pluginconfdir': '/etc/rhsm/pluginconf.d',
     'auto_enable_yum_plugins': '1',
     'package_profile_on_trans': '0',
-    'inotify': '1'
+    'inotify': '1',
 }
 
 RHSMCERTD_DEFAULTS = {
@@ -82,11 +82,11 @@ RHSMCERTD_DEFAULTS = {
     'splay': '1',
     'disable': '0',
     'auto_registration': '0',
-    'auto_registration_interval': '60'
+    'auto_registration_interval': '60',
 }
 
 LOGGING_DEFAULTS = {
-    'default_log_level': 'INFO'
+    'default_log_level': 'INFO',
 }
 
 # Defaults are applied to each section in the config file.
@@ -94,7 +94,7 @@ DEFAULTS = {
     'server': SERVER_DEFAULTS,
     'rhsm': RHSM_DEFAULTS,
     'rhsmcertd': RHSMCERTD_DEFAULTS,
-    'logging': LOGGING_DEFAULTS
+    'logging': LOGGING_DEFAULTS,
 }
 
 
@@ -128,6 +128,7 @@ def in_container():
 
 class RhsmConfigParser(SafeConfigParser):
     """Config file parser for rhsm configuration."""
+
     # defaults unused but kept to preserve compatibility
     def __init__(self, config_file=None, defaults=None):
         self.config_file = config_file
@@ -223,11 +224,15 @@ class RhsmConfigParser(SafeConfigParser):
         valid = ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG']
         if value not in valid + ["NOTSET"]:
             if print_warning is True:
-                print("Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value), file=sys.stderr)
+                print(
+                    "Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value),
+                    file=sys.stderr,
+                )
                 print(
                     "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set "
                     "the default_log_level to a valid value.",
-                    file=sys.stderr)
+                    file=sys.stderr,
+                )
                 valid_str = ", ".join(valid)
                 print("Valid Values: {valid_str}".format(valid_str=valid_str), file=sys.stderr)
             return False
@@ -255,9 +260,7 @@ class RhsmConfigParser(SafeConfigParser):
             # we could also try to handle port name
             # strings (ie, 'http') here with getservbyname
         except (ValueError, TypeError):
-            raise ValueError(
-                "Section: %s, Property: %s - Integer value expected"
-                % (section, prop))
+            raise ValueError("Section: %s, Property: %s - Integer value expected" % (section, prop))
         return value_int
 
     # Overriding this method to address
@@ -334,6 +337,7 @@ class RhsmHostConfigParser(RhsmConfigParser):
     A similar adjustment is necessary for /etc/pki/entitlement-host if
     present.
     """
+
     def __init__(self, config_file=None, defaults=None):
         RhsmConfigParser.__init__(self, config_file, defaults)
 
@@ -352,8 +356,7 @@ class RhsmHostConfigParser(RhsmConfigParser):
         # able to handle it anyhow.
         if os.path.exists(HOST_ENT_CERT_DIR):
             ent_cert_dir = self.get('rhsm', 'entitlementcertdir')
-            if ent_cert_dir == DEFAULT_ENT_CERT_DIR or \
-                    ent_cert_dir == DEFAULT_ENT_CERT_DIR + "/":
+            if ent_cert_dir == DEFAULT_ENT_CERT_DIR or ent_cert_dir == DEFAULT_ENT_CERT_DIR + "/":
                 ent_cert_dir = HOST_ENT_CERT_DIR
             self.set('rhsm', 'entitlementcertdir', ent_cert_dir)
 
@@ -377,8 +380,7 @@ def get_config_parser():
         # Load alternate config file implementation if we detect that we're
         # running in a container.
         if in_container():
-            CFG = RhsmHostConfigParser(
-                config_file=os.path.join(HOST_CONFIG_DIR, 'rhsm.conf'))
+            CFG = RhsmHostConfigParser(config_file=os.path.join(HOST_CONFIG_DIR, 'rhsm.conf'))
         else:
             CFG = RhsmConfigParser(config_file=DEFAULT_CONFIG_PATH)
 

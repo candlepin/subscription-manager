@@ -29,9 +29,7 @@ FIRMWARE_DUMP_FILENAME = "dmi.dump"
 class DmiFirmwareInfoCollector(collector.FactsCollector):
     def __init__(self, prefix=None, testing=None, collected_hw_info=None):
         super(DmiFirmwareInfoCollector, self).__init__(
-            prefix=prefix,
-            testing=testing,
-            collected_hw_info=collected_hw_info
+            prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
         )
 
         self._socket_designation = []

@@ -19,12 +19,14 @@ def create_mock_content(name=None, url=None, gpg=None, enabled=None, content_typ
 
 class TestContent(fixture.SubManFixture):
     def test_init(self):
-        content = model.Content("content-label",
-                                "content name",
-                                "http://contenturl.example.com",
-                                "/path/to/gpg",
-                                ["product-content-tag"],
-                                cert=None)
+        content = model.Content(
+            "content-label",
+            "content name",
+            "http://contenturl.example.com",
+            "/path/to/gpg",
+            ["product-content-tag"],
+            cert=None,
+        )
 
         self._check_attrs(content)
         self.assertTrue(isinstance(content.tags, list))
@@ -189,8 +191,7 @@ class TestFindContent(fixture.SubManFixture):
         self.assertEqual(len(res), 4)
 
     def test_product_tags_and_content_tags_match(self):
-        content = create_mock_content(tags=['awesomeos-ostree-1'],
-                                      content_type="ostree")
+        content = create_mock_content(tags=['awesomeos-ostree-1'], content_type="ostree")
         content_list = [content]
 
         entitlement = model.Entitlement(contents=content_list)
@@ -204,11 +205,10 @@ class TestFindContent(fixture.SubManFixture):
         self.assertEqual(res[0], content)
 
     def test_product_tags_and_content_tags_no_match(self):
-        content1 = create_mock_content(tags=['awesomeos-ostree-23'],
-                                       content_type="ostree")
-        content2 = create_mock_content(name="more-test-content",
-                                       tags=['awesomeos-ostree-24'],
-                                       content_type="ostree")
+        content1 = create_mock_content(tags=['awesomeos-ostree-23'], content_type="ostree")
+        content2 = create_mock_content(
+            name="more-test-content", tags=['awesomeos-ostree-24'], content_type="ostree"
+        )
         content_list = [content1, content2]
 
         entitlement = model.Entitlement(contents=content_list)
@@ -221,11 +221,10 @@ class TestFindContent(fixture.SubManFixture):
         self.assertEqual(len(res), 0)
 
     def test_product_tags_and_content_tags_no_match_no_product_tags(self):
-        content1 = create_mock_content(tags=['awesomeos-ostree-23'],
-                                       content_type="ostree")
-        content2 = create_mock_content(name="more-test-content",
-                                       tags=['awesomeos-ostree-24'],
-                                       content_type="ostree")
+        content1 = create_mock_content(tags=['awesomeos-ostree-23'], content_type="ostree")
+        content2 = create_mock_content(
+            name="more-test-content", tags=['awesomeos-ostree-24'], content_type="ostree"
+        )
         content_list = [content1, content2]
 
         entitlement = model.Entitlement(contents=content_list)
@@ -237,11 +236,10 @@ class TestFindContent(fixture.SubManFixture):
         self.assertEqual(len(res), 0)
 
     def test_product_tags_and_content_tags_no_match_empty_product_tags(self):
-        content1 = create_mock_content(tags=['awesomeos-ostree-23'],
-                                       content_type="ostree")
-        content2 = create_mock_content(name="more-test-content",
-                                       tags=['awesomeos-ostree-24'],
-                                       content_type="ostree")
+        content1 = create_mock_content(tags=['awesomeos-ostree-23'], content_type="ostree")
+        content2 = create_mock_content(
+            name="more-test-content", tags=['awesomeos-ostree-24'], content_type="ostree"
+        )
         content_list = [content1, content2]
 
         entitlement = model.Entitlement(contents=content_list)
@@ -254,11 +252,10 @@ class TestFindContent(fixture.SubManFixture):
         self.assertEqual(len(res), 0)
 
     def test_product_tags_and_content_tags_multiple_content_one_match(self):
-        content1 = create_mock_content(tags=['awesomeos-ostree-23'],
-                                       content_type="ostree")
-        content2 = create_mock_content(name="more-test-content",
-                                       tags=['awesomeos-ostree-1'],
-                                       content_type="ostree")
+        content1 = create_mock_content(tags=['awesomeos-ostree-23'], content_type="ostree")
+        content2 = create_mock_content(
+            name="more-test-content", tags=['awesomeos-ostree-1'], content_type="ostree"
+        )
         content_list = [content1, content2]
 
         entitlement = model.Entitlement(contents=content_list)
@@ -285,9 +282,9 @@ class TestFindContent(fixture.SubManFixture):
         self.assertEqual(res[0], content)
 
     def test_find_container_content(self):
-        container_content = create_mock_content(name="container_content",
-                                                tags=["awesomeos-1"],
-                                                content_type="containerImage")
+        container_content = create_mock_content(
+            name="container_content", tags=["awesomeos-1"], content_type="containerImage"
+        )
 
         ent1 = model.Entitlement(contents=[container_content])
 
@@ -295,8 +292,7 @@ class TestFindContent(fixture.SubManFixture):
         ent_src._entitlements = [ent1]
         ent_src.product_tags = ["awesomeos-1"]
 
-        cont_list = model.find_content(ent_src,
-                                       content_type='containerImage')
+        cont_list = model.find_content(ent_src, content_type='containerImage')
         self.assertEqual(1, len(cont_list))
         self.assertEqual('container_content', cont_list[0].name)
 
@@ -309,21 +305,19 @@ class TestFindContent(fixture.SubManFixture):
         content_tags_htb = ["awesomeos-ostree-htb-7"]
         content_tags_os = ["awesomeos-ostree-7"]
 
-        beta_ostree_content = create_mock_content(name="awesomeos_beta_ostree_content",
-                                                  tags=content_tags_beta,
-                                                  content_type="ostree")
+        beta_ostree_content = create_mock_content(
+            name="awesomeos_beta_ostree_content", tags=content_tags_beta, content_type="ostree"
+        )
 
-        htb_ostree_content = create_mock_content(name="awesomeos_htb_ostree_content",
-                                                 tags=content_tags_htb,
-                                                 content_type="ostree")
+        htb_ostree_content = create_mock_content(
+            name="awesomeos_htb_ostree_content", tags=content_tags_htb, content_type="ostree"
+        )
 
-        ostree_content = create_mock_content(name="awesomeos_ostree_content",
-                                             tags=content_tags_os,
-                                             content_type="ostree")
+        ostree_content = create_mock_content(
+            name="awesomeos_ostree_content", tags=content_tags_os, content_type="ostree"
+        )
 
-        ent = model.Entitlement(contents=[ostree_content,
-                                          htb_ostree_content,
-                                          beta_ostree_content])
+        ent = model.Entitlement(contents=[ostree_content, htb_ostree_content, beta_ostree_content])
 
         ent_src = model.EntitlementSource()
         ent_src._entitlements = [ent]
@@ -353,17 +347,14 @@ class TestFindContent(fixture.SubManFixture):
         self.assertEqual(0, len(ostree_list))
 
         # awesomeos product, no os content, beta, htb content
-        ent = model.Entitlement(contents=[htb_ostree_content,
-                                          beta_ostree_content])
+        ent = model.Entitlement(contents=[htb_ostree_content, beta_ostree_content])
         ent_src._entitlements = [ent]
         ent_src.product_tags = product_tags_os
         ostree_list = model.find_content(ent_src, content_type='ostree')
         self.assertEqual(0, len(ostree_list))
 
         # awesomeos and beta product, all content
-        ent = model.Entitlement(contents=[ostree_content,
-                                          htb_ostree_content,
-                                          beta_ostree_content])
+        ent = model.Entitlement(contents=[ostree_content, htb_ostree_content, beta_ostree_content])
         ent_src._entitlements = [ent]
         ent_src.product_tags = product_tags_os + product_tags_beta
         ostree_list = model.find_content(ent_src, content_type='ostree')
@@ -375,15 +366,13 @@ class TestFindContent(fixture.SubManFixture):
         self.assertFalse('awesomeos_htb_ostree_content' in content_names)
 
     def test_find_content_everything(self):
-        yum_content = create_mock_content(name="yum_content",
-                                          tags=["awesomeos-1"],
-                                          content_type="yum")
-        container_content = create_mock_content(name="container_content",
-                                                tags=["awesomeos-1"],
-                                                content_type="containerImage")
-        ostree_content = create_mock_content(name="ostree_content",
-                                             tags=["awesomeos-1"],
-                                             content_type="ostree")
+        yum_content = create_mock_content(name="yum_content", tags=["awesomeos-1"], content_type="yum")
+        container_content = create_mock_content(
+            name="container_content", tags=["awesomeos-1"], content_type="containerImage"
+        )
+        ostree_content = create_mock_content(
+            name="ostree_content", tags=["awesomeos-1"], content_type="ostree"
+        )
 
         ent1 = model.Entitlement(contents=[yum_content])
         ent2 = model.Entitlement(contents=[container_content, ostree_content])
@@ -396,12 +385,10 @@ class TestFindContent(fixture.SubManFixture):
         self.assertEqual(1, len(yum_list))
         self.assertEqual('yum_content', yum_list[0].name)
 
-        cont_list = model.find_content(ent_src,
-                                       content_type='containerImage')
+        cont_list = model.find_content(ent_src, content_type='containerImage')
         self.assertEqual(1, len(cont_list))
         self.assertEqual('container_content', cont_list[0].name)
 
-        ostree_list = model.find_content(ent_src,
-                                         content_type="ostree")
+        ostree_list = model.find_content(ent_src, content_type="ostree")
         self.assertEqual(1, len(ostree_list))
         self.assertEqual('ostree_content', ostree_list[0].name)

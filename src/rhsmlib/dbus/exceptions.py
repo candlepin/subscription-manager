@@ -26,6 +26,7 @@ __all__ = [
 
 class RHSM1DBusException(dbus.DBusException):
     """Base exceptions."""
+
     include_traceback = False
     _dbus_error_name = "%s.Error" % constants.INTERFACE_BASE
 
@@ -35,8 +36,7 @@ class UnknownProperty(dbus.DBusException):
 
     def __init__(self, property_name):
         super(UnknownProperty, self).__init__(
-            "Property '%s' does not exist" % property_name,
-            name="org.freedesktop.DBus.Error.UnknownProperty"
+            "Property '%s' does not exist" % property_name, name="org.freedesktop.DBus.Error.UnknownProperty"
         )
 
 
@@ -45,8 +45,7 @@ class UnknownInterface(dbus.DBusException):
 
     def __init__(self, interface_name):
         super(UnknownInterface, self).__init__(
-            "Interface '%s' is unknown" % interface_name,
-            name="org.freedesktop.DBus.Error.UnknownInterface"
+            "Interface '%s' is unknown" % interface_name, name="org.freedesktop.DBus.Error.UnknownInterface"
         )
 
 
@@ -55,8 +54,7 @@ class InvalidArguments(dbus.DBusException):
 
     def __init__(self, argument):
         super(InvalidArguments, self).__init__(
-            "Argument '%s' is invalid" % argument,
-            name="org.freedesktop.DBus.Error.InvalidArgs"
+            "Argument '%s' is invalid" % argument, name="org.freedesktop.DBus.Error.InvalidArgs"
         )
 
 
@@ -66,7 +64,7 @@ class AccessDenied(dbus.DBusException):
     def __init__(self, prop, interface):
         super(AccessDenied, self).__init__(
             "Property '%s' isn't exported (or does not exist) on interface: %s" % (prop, interface),
-            name="org.freedesktop.DBus.Error.AccessDenied"
+            name="org.freedesktop.DBus.Error.AccessDenied",
         )
 
 
@@ -76,7 +74,7 @@ class PropertyMissing(dbus.DBusException):
     def __init__(self, prop, interface):
         super(PropertyMissing, self).__init__(
             "Property '%s' does not exist on interface: %s" % (prop, interface),
-            name="org.freedesktop.DBus.Error.AccessDenied"
+            name="org.freedesktop.DBus.Error.AccessDenied",
         )
 
 
@@ -84,7 +82,4 @@ class Failed(dbus.DBusException):
     include_traceback = True
 
     def __init__(self, msg=None):
-        super(Failed, self).__init__(
-            msg or "Operation failed",
-            name="org.freedesktop.DBus.Error.Failed"
-        )
+        super(Failed, self).__init__(msg or "Operation failed", name="org.freedesktop.DBus.Error.Failed")

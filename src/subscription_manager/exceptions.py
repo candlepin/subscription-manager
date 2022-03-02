@@ -23,13 +23,19 @@ from subscription_manager.entcertlib import Disconnected
 
 from subscription_manager.i18n import ugettext as _
 
-SOCKET_MESSAGE = _('Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.')
-NETWORK_MESSAGE = _('Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.')
+SOCKET_MESSAGE = _(
+    'Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'
+)
+NETWORK_MESSAGE = _(
+    'Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.'
+)
 PROXY_MESSAGE = _("Proxy error, unable to connect to proxy server.")
 UNAUTHORIZED_MESSAGE = _("Unauthorized: Invalid credentials for request.")
 TOKEN_AUTH_UNSUPPORTED_MESSAGE = _("Token authentication not supported by the entitlement server")
 FORBIDDEN_MESSAGE = _("Forbidden: Invalid credentials for request.")
-REMOTE_SERVER_MESSAGE = _("Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.")
+REMOTE_SERVER_MESSAGE = _(
+    "Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."
+)
 BAD_CA_CERT_MESSAGE = _("Bad CA certificate: %s")
 EXPIRED_ID_CERT_MESSAGE = _("Your identity certificate has expired")
 SSL_MESSAGE = _('Unable to verify server\'s identity: %s')
@@ -39,7 +45,9 @@ PERROR_NONE_MESSAGE = _("Server URL can not be None")
 PERROR_PORT_MESSAGE = _("Server URL port should be numeric")
 PERROR_SCHEME_MESSAGE = _("Server URL has an invalid scheme. http:// and https:// are supported")
 RATE_LIMIT_MESSAGE = _("The server rate limit has been exceeded, please try again later.")
-RATE_LIMIT_EXPIRATION = _("The server rate limit has been exceeded, please try again later. (Expires in %s seconds)")
+RATE_LIMIT_EXPIRATION = _(
+    "The server rate limit has been exceeded, please try again later. (Expires in %s seconds)"
+)
 
 # TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 # (the part before the opening bracket originates on the server)
@@ -89,9 +97,7 @@ class ExceptionMapper(object):
 
     def format_restlib_exception(self, restlib_exception, message_template):
         return message_template.format(
-            message=restlib_exception.msg,
-            code=restlib_exception.code,
-            title=restlib_exception.title
+            message=restlib_exception.msg, code=restlib_exception.code, title=restlib_exception.title
         )
 
     def format_rate_limit_exception(self, rate_limit_exception, _):

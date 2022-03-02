@@ -18,7 +18,7 @@ test_require = [
     'pytest',
     'pytest-randomly',
     'pytest-timeout',
-    'mock'
+    'mock',
 ]
 
 install_requires = [

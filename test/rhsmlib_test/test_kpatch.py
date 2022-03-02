@@ -27,10 +27,7 @@ class TestKPatchCollector(unittest.TestCase):
         os.mkdir(os.path.join(self.DIR_WITH_INSTALLED_KPATCH_MODULES, "3.10.0-1062.el7.x86_64"))
         os.mkdir(os.path.join(self.DIR_WITH_INSTALLED_KPATCH_MODULES, "3.10.0-1062.1.1.el7.x86_64"))
         os.mkdir(os.path.join(self.DIR_WITH_INSTALLED_KPATCH_MODULES, "3.10.0-1062.1.2.el7.x86_64"))
-        self.DIRS_WITH_LOADED_MODULE = [
-            "/path/to/not-existing-directory",
-            tempfile.mkdtemp()
-        ]
+        self.DIRS_WITH_LOADED_MODULE = ["/path/to/not-existing-directory", tempfile.mkdtemp()]
         os.mkdir(os.path.join(self.DIRS_WITH_LOADED_MODULE[1], "3.10.0-1062.el7.x86_64"))
 
     def tearDown(self):
@@ -58,5 +55,5 @@ class TestKPatchCollector(unittest.TestCase):
         self.assertEqual(len(installed_kpatches), 3)
         self.assertEqual(
             installed_kpatches,
-            ['3.10.0-1062.1.1.el7.x86_64', '3.10.0-1062.1.2.el7.x86_64', '3.10.0-1062.el7.x86_64']
+            ['3.10.0-1062.1.1.el7.x86_64', '3.10.0-1062.1.2.el7.x86_64', '3.10.0-1062.el7.x86_64'],
         )

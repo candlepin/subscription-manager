@@ -16,6 +16,7 @@ import dbus.service
 import dbus.glib
 
 from subscription_manager.base_plugin import SubManPlugin
+
 requires_api_version = "1.0"
 
 # This connects to the dbus system bus and emits dbus
@@ -53,6 +54,7 @@ class SubManEventDbus(dbus.service.Object):
 
 class DbusEventPlugin(SubManPlugin):
     """Plugin to emit dbus signals for each hook"""
+
     name = "all_dbus"
 
     def __init__(self, conf=None):

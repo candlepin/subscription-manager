@@ -62,7 +62,7 @@ class AzureCloudProvider(BaseCloudProvider):
     # HTTP header "Metadata" has to be equal to "true" to be able to get metadata
     HTTP_HEADERS = {
         'User-Agent': 'cloud-what/1.0',
-        "Metadata": "true"
+        "Metadata": "true",
     }
 
     # Increased timeout for Azure, because response can have long delay, when wrong
@@ -86,8 +86,10 @@ class AzureCloudProvider(BaseCloudProvider):
         if self.is_vm() is False:
             return False
         # This is valid for virtual machines running on Azure
-        if 'dmi.chassis.asset_tag' in self.hw_info and \
-                self.hw_info['dmi.chassis.asset_tag'] == '7783-7084-3265-9085-8269-3286-77':
+        if (
+            'dmi.chassis.asset_tag' in self.hw_info
+            and self.hw_info['dmi.chassis.asset_tag'] == '7783-7084-3265-9085-8269-3286-77'
+        ):
             return True
         # In other cases return False
         return False
@@ -110,8 +112,10 @@ class AzureCloudProvider(BaseCloudProvider):
             if 'hyperv' in self.hw_info['virt.host_type']:
                 probability += 0.3
 
-        if 'dmi.chassis.asset_tag' in self.hw_info and \
-                self.hw_info['dmi.chassis.asset_tag'] == '7783-7084-3265-9085-8269-3286-77':
+        if (
+            'dmi.chassis.asset_tag' in self.hw_info
+            and self.hw_info['dmi.chassis.asset_tag'] == '7783-7084-3265-9085-8269-3286-77'
+        ):
             probability += 0.3
 
         # The waagent is installed
@@ -283,10 +287,12 @@ def _smoke_tests():
 
         # Test getting metadata and signature with too old API version
         AzureCloudProvider.API_VERSION = '2011-01-01'
-        AzureCloudProvider.CLOUD_PROVIDER_METADATA_URL = \
+        AzureCloudProvider.CLOUD_PROVIDER_METADATA_URL = (
             "http://169.254.169.254/metadata/instance?api-version=2011-01-01"
-        AzureCloudProvider.CLOUD_PROVIDER_SIGNATURE_URL = \
+        )
+        AzureCloudProvider.CLOUD_PROVIDER_SIGNATURE_URL = (
             "http://169.254.169.254/metadata/attested/document?api-version=2011-01-01"
+        )
         azure_cloud_provider = AzureCloudProvider({})
         azure_cloud_provider._cached_metadata = None
         azure_cloud_provider._cached_signature = None

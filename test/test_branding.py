@@ -17,30 +17,27 @@ from subscription_manager.branding import Branding
 
 
 class TestBranding(object):
-
     def __init__(self):
         self.CLI_REGISTER = "register with awesomeness"
 
 
 class BrandingTests(unittest.TestCase):
-
     def test_default_branding(self):
         branding = Branding()
 
-        self.assertEqual("Register the system to the server",
-                         branding.CLI_REGISTER)
+        self.assertEqual("Register the system to the server", branding.CLI_REGISTER)
 
     # XXX this test requires the mo files installed
-#    def test_default_branding_with_i18n(self):
-#        os.environ['LANG'] = "de_DE"
-#        configure_i18n()
-#        branding = Branding()
-#
-#        self.assertEquals("Client bei RHN registrieren",
-#                          branding.CLI_REGISTER)
-#
-#        os.environ['LANG'] = ""
-#        configure_i18n()
+    #    def test_default_branding_with_i18n(self):
+    #        os.environ['LANG'] = "de_DE"
+    #        configure_i18n()
+    #        branding = Branding()
+    #
+    #        self.assertEquals("Client bei RHN registrieren",
+    #                          branding.CLI_REGISTER)
+    #
+    #        os.environ['LANG'] = ""
+    #        configure_i18n()
 
     def test_override_defaults(self):
         custom_branding = TestBranding()
@@ -52,5 +49,4 @@ class BrandingTests(unittest.TestCase):
         custom_branding = TestBranding()
         branding = Branding(custom_branding)
 
-        self.assertEqual("Unregister the system from the server",
-                         branding.CLI_UNREGISTER)
+        self.assertEqual("Unregister the system from the server", branding.CLI_UNREGISTER)

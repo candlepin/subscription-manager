@@ -29,16 +29,24 @@ from subscription_manager.i18n import ugettext as _
 @dnf.plugin.register_command
 class UploadProfileCommand(dnf.cli.Command):
     name = "upload-profile"
-    aliases = ("uploadprofile", "upload-profile",)
-    summary = _("Upload combined profile to Satellite server (list of installed rpms, enabled repositories and modules")
+    aliases = (
+        "uploadprofile",
+        "upload-profile",
+    )
+    summary = _(
+        "Upload combined profile to Satellite server (list of installed rpms, enabled repositories and modules"
+    )
 
     def __init__(self, cli):
         super(UploadProfileCommand, self).__init__(cli)
 
     @staticmethod
     def set_argparser(parser):
-        parser.add_argument('--force-upload', action='store_true',
-                            help=_('Force package profile upload'))
+        parser.add_argument(
+            '--force-upload',
+            action='store_true',
+            help=_('Force package profile upload'),
+        )
 
     def configure(self):
         pass

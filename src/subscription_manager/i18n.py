@@ -39,6 +39,7 @@ def configure_i18n():
     called once per invocation. (once for CLI, once for GUI)
     """
     import locale
+
     try:
         locale.setlocale(category=locale.LC_ALL, locale='')
     except locale.Error:
@@ -52,7 +53,10 @@ def configure_i18n():
         elif 'LC_ALL' in os.environ:
             _locale = os.environ['LC_ALL']
         if _locale is not None and Locale.is_locale_supported(_locale):
-            print('You are attempting to use a locale: "%s" that is not fully supported by this system.' % _locale)
+            print(
+                'You are attempting to use a locale: "%s" that is not fully supported by this system.'
+                % _locale
+            )
         os.environ['LC_ALL'] = 'C.UTF-8'
         locale.setlocale(locale.LC_ALL, 'C.UTF-8')
 

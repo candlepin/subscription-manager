@@ -41,7 +41,7 @@ from cloud_what.providers.gcp import GCPCloudProvider
 CLOUD_PROVIDERS = [
     AWSCloudProvider,
     AzureCloudProvider,
-    GCPCloudProvider
+    GCPCloudProvider,
 ]
 
 
@@ -81,9 +81,9 @@ def gather_system_facts() -> dict:
 
 
 def _get_cloud_providers(
-        facts: dict = None,
-        threshold: float = 0.5,
-        methods: DetectionMethod = DetectionMethod.ALL
+    facts: dict = None,
+    threshold: float = 0.5,
+    methods: DetectionMethod = DetectionMethod.ALL,
 ) -> Tuple[list, bool]:
     """
     This method tries to detect cloud providers and return list of possible cloud providers
@@ -112,16 +112,20 @@ def _get_cloud_providers(
 
         # When only one cloud provider was detected, then return this cloud provider
         if len(cloud_list) == 1:
-            log.debug('Detected one cloud provider using strong signs: {provider}'.format(
-                provider=cloud_list[0].CLOUD_PROVIDER_ID)
+            log.debug(
+                'Detected one cloud provider using strong signs: {provider}'.format(
+                    provider=cloud_list[0].CLOUD_PROVIDER_ID
+                )
             )
             return cloud_list, True
         elif len(cloud_list) == 0:
             log.debug('No cloud provider detected using strong signs')
         elif len(cloud_list) > 1:
-            log.error('More than one cloud provider detected using strong signs ({providers})'.format(
-                providers=", ".join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
-            ))
+            log.error(
+                'More than one cloud provider detected using strong signs ({providers})'.format(
+                    providers=", ".join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
+                )
+            )
     else:
         log.debug('Skipping detection of cloud provider using strong signs')
 
@@ -146,9 +150,11 @@ def _get_cloud_providers(
         if len(cloud_list) == 0:
             log.debug('No cloud provider detected using heuristics')
         else:
-            log.debug('Following cloud providers detected using heuristics: {providers}'.format(
-                providers=', '.join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
-            ))
+            log.debug(
+                'Following cloud providers detected using heuristics: {providers}'.format(
+                    providers=', '.join([cloud_provider.CLOUD_PROVIDER_ID for cloud_provider in cloud_list])
+                )
+            )
     else:
         log.debug('Skipping detection of cloud providers using heuristic')
 
@@ -156,12 +162,10 @@ def _get_cloud_providers(
 
 
 def get_cloud_provider(
-        facts: dict = None,
-        threshold: float = 0.5,
-        methods: DetectionMethod = DetectionMethod.ALL
-) -> Union[
-    BaseCloudProvider, AWSCloudProvider, AzureCloudProvider, GCPCloudProvider, None
-]:
+    facts: dict = None,
+    threshold: float = 0.5,
+    methods: DetectionMethod = DetectionMethod.ALL,
+) -> Union[BaseCloudProvider, AWSCloudProvider, AzureCloudProvider, GCPCloudProvider, None]:
     """
     This method tries to detect cloud provider and return corresponding instance of
     cloud provider.
@@ -184,8 +188,10 @@ def get_cloud_provider(
         for cloud_provider in cloud_list:
             metadata = cloud_provider.get_metadata()
             if metadata is not None:
-                log.info('Metadata gathered from cloud provider detected using heuristics: {provider}'.format(
-                    provider=cloud_provider.CLOUD_PROVIDER_ID)
+                log.info(
+                    'Metadata gathered from cloud provider detected using heuristics: {provider}'.format(
+                        provider=cloud_provider.CLOUD_PROVIDER_ID
+                    )
                 )
                 return cloud_provider
 
@@ -195,9 +201,9 @@ def get_cloud_provider(
 
 
 def detect_cloud_provider(
-        facts: dict = None,
-        threshold: float = 0.5,
-        methods: DetectionMethod = DetectionMethod.ALL
+    facts: dict = None,
+    threshold: float = 0.5,
+    methods: DetectionMethod = DetectionMethod.ALL,
 ) -> List[str]:
     """
     This method tries to detect cloud provider using hardware information provided by dmidecode.
@@ -245,6 +251,7 @@ if __name__ == '__main__':
 
     # Try to detect cloud provider using own detector
     from cloud_what.fact_collector import MiniHostCollector
+
     collector = MiniHostCollector()
     _facts = collector.get_all()
     _detector_result = detect_cloud_provider(_facts)

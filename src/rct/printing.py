@@ -33,7 +33,6 @@ def xstr(value):
 
 
 class ProductPrinter(object):
-
     def as_str(self, product):
         s = []
         s.append("%s:" % _("Product"))
@@ -58,7 +57,6 @@ class ProductPrinter(object):
 
 
 class OrderPrinter(object):
-
     def as_str(self, order):
 
         if order is None:
@@ -93,7 +91,6 @@ class OrderPrinter(object):
 
 
 class ContentPrinter(object):
-
     def as_str(self, content):
         s = []
         s.append("%s:" % _("Content"))
@@ -113,7 +110,6 @@ class ContentPrinter(object):
 
 
 class CertificatePrinter(object):
-
     def cert_to_str(self, cert):
         s = []
         s.append("\n+-------------------------------------------+")
@@ -156,7 +152,6 @@ class CertificatePrinter(object):
 
 
 class IdentityCertPrinter(CertificatePrinter):
-
     def __init__(self, **kwargs):
         CertificatePrinter.__init__(self)
 
@@ -213,8 +208,11 @@ class EntitlementCertificatePrinter(ProductCertificatePrinter):
                 for c in sorted_content:
                     s.append("\n%s" % content_printer.as_str(c))
 
-        return "%s\n%s%s" % (ProductCertificatePrinter.cert_to_str(self, cert),
-                             order_printer.as_str(cert.order), "\n".join(s))
+        return "%s\n%s%s" % (
+            ProductCertificatePrinter.cert_to_str(self, cert),
+            order_printer.as_str(cert.order),
+            "\n".join(s),
+        )
 
     def _append_to_cert_section(self, cert, str_parts_list):
         pool_id = _("Not Available")
@@ -231,7 +229,6 @@ class EntitlementCertificatePrinter(ProductCertificatePrinter):
 
 
 class CertificatePrinterFactory(object):
-
     def get_printer(self, cert, **kwargs):
         if isinstance(cert, EntitlementCertificate):
             return EntitlementCertificatePrinter(**kwargs)

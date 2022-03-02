@@ -77,8 +77,7 @@ class TestEntitlementCertEntitlement(TestEntitlement):
         self.assertEqual(ece.contents[0].name, contents[0].name)
         self.assertEqual(ece.contents[0].label, contents[0].label)
         self.assertEqual(ece.contents[0].gpg, contents[0].gpg)
-        self.assertEqual(ece.contents[0].content_type,
-                         contents[0].content_type)
+        self.assertEqual(ece.contents[0].content_type, contents[0].content_type)
         self.assertEqual(len(ece.contents), 1)
 
         # for ostree content, gpg is likely to change
@@ -89,14 +88,12 @@ class TestEntitlementCertEntitlement(TestEntitlement):
 # The installed product ids don't have brand_type/brand_name, just the
 # Product from the ent cert
 class DefaultStubInstalledProduct(certificate2.Product):
-    def __init__(self, id=123, name="Awesome OS",
-                 provided_tags=None,
-                 brand_type=None, brand_name=None):
+    def __init__(self, id=123, name="Awesome OS", provided_tags=None, brand_type=None, brand_name=None):
 
         tags = provided_tags or ["awesomeos-ostree-1"]
-        super(DefaultStubInstalledProduct, self).__init__(id=id, name=name, provided_tags=tags,
-                                                          brand_type=brand_type,
-                                                          brand_name=brand_name)
+        super(DefaultStubInstalledProduct, self).__init__(
+            id=id, name=name, provided_tags=tags, brand_type=brand_type, brand_name=brand_name
+        )
 
 
 class TestEntitlementDirEntitlementSource(test_model.TestEntitlementSource):

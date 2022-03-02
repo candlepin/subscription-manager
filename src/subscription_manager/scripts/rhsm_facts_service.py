@@ -28,10 +28,10 @@ def main():
         object_classes = [
             base.AllFacts,
         ]
-        sys.exit(service_wrapper.main(
-            sys.argv,
-            object_classes=object_classes,
-            default_bus_name=constants.FACTS_DBUS_NAME)
+        sys.exit(
+            service_wrapper.main(
+                sys.argv, object_classes=object_classes, default_bus_name=constants.FACTS_DBUS_NAME
+            )
         )
     except Exception:
         log.exception("DBus service startup failed")

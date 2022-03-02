@@ -23,7 +23,6 @@ import mock
 
 
 class SyspurposeStoreInterfaceTests(unittest.TestCase):
-
     def setUp(self):
         temp_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, temp_dir)

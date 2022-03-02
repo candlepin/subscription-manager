@@ -25,6 +25,7 @@ import sys
 
 try:
     from debian.deb822 import Deb822
+
     HAS_DEB822 = True
 except ImportError:
     HAS_DEB822 = False
@@ -65,7 +66,8 @@ class Repo(dict):
         'proxy': (0, None),
         'proxy_username': (0, None),
         'proxy_password': (0, None),
-        'ui_repoid_vars': (0, None)}
+        'ui_repoid_vars': (0, None),
+    }
 
     def __init__(self, repo_id, existing_values=None):
         if HAS_DEB822 is True:
@@ -205,8 +207,7 @@ class Repo(dict):
         #       mutually authed cdn, or a tls mutual auth api)
         # NOTE: The on disk cache is more vulnerable, since it is
         #       trusted.
-        return contenturl.replace(release_source.marker,
-                                  expansion)
+        return contenturl.replace(release_source.marker, expansion)
 
     def _clean_id(self, repo_id):
         """
@@ -234,8 +235,7 @@ class Repo(dict):
         #
         # all values will be in _order, since the key has to have been set
         # to get into our dict.
-        return tuple([(k, self[k]) for k in self._order if
-                     k in self and self[k]])
+        return tuple([(k, self[k]) for k in self._order if k in self and self[k]])
 
     def __setitem__(self, key, value):
         if key not in self._order:
@@ -254,7 +254,7 @@ class Repo(dict):
         return '\n'.join(s)
 
     def __eq__(self, other):
-        return (self.id == other.id)
+        return self.id == other.id
 
     def __hash__(self):
         return hash(self.id)
@@ -388,6 +388,7 @@ class RepoFileBase(object):
 
 
 if HAS_DEB822:
+
     class AptRepoFile(RepoFileBase):
 
         PATH = 'etc/apt/sources.list.d'
@@ -413,8 +414,7 @@ if HAS_DEB822:
 
         def read(self):
             if not self.manage_repos:
-                log.debug("Skipping read due to manage_repos setting: %s" %
-                          self.path)
+                log.debug("Skipping read due to manage_repos setting: %s" % self.path)
                 return
             with open(self.path, 'r') as f:
                 for repo822 in Deb822.iter_paragraphs(f, shared_storage=False):
@@ -422,8 +422,7 @@ if HAS_DEB822:
 
         def write(self):
             if not self.manage_repos:
-                log.debug("Skipping write due to manage_repos setting: %s" %
-                          self.path)
+                log.debug("Skipping write due to manage_repos setting: %s" % self.path)
                 return
             with open(self.path, 'w') as f:
                 f.write(self.REPOFILE_HEADER)
@@ -442,7 +441,9 @@ if HAS_DEB822:
         def update(self, repo):
             repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
             repo_dict['id'] = repo.id
-            self.repos822[:] = [repo822 if repo822['id'] != repo.id else Deb822(repo_dict) for repo822 in self.repos822]
+            self.repos822[:] = [
+                repo822 if repo822['id'] != repo.id else Deb822(repo_dict) for repo822 in self.repos822
+            ]
 
         def section(self, repo_id):
             result = [repo822 for repo822 in self.repos822 if repo822['id'] == repo_id]
@@ -526,8 +527,7 @@ class YumRepoFile(RepoFileBase, ConfigParser):
 
     def write(self):
         if not self.manage_repos:
-            log.debug("Skipping write due to manage_repos setting: %s" %
-                      self.path)
+            log.debug("Skipping write due to manage_repos setting: %s" % self.path)
             return
         if self._has_changed():
             with open(self.path, 'w') as f:
@@ -675,7 +675,9 @@ class ZypperRepoFile(YumRepoFile):
             zypper_query_args['proxypass'] = proxy_password
         zypper_query = urlencode(zypper_query_args)
 
-        new_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, zypper_query, parsed.fragment))
+        new_url = urlunparse(
+            (parsed.scheme, parsed.netloc, parsed.path, parsed.params, zypper_query, parsed.fragment)
+        )
         zypper_cont['baseurl'] = new_url
 
         return zypper_cont
@@ -691,9 +693,7 @@ def init_repo_file_classes():
     if HAS_DEB822:
         repo_file_classes.append(AptRepoFile)
     _repo_files = [
-        (RepoFile, RepoFile.server_value_repo_file)
-        for RepoFile in repo_file_classes
-        if RepoFile.installed()
+        (RepoFile, RepoFile.server_value_repo_file) for RepoFile in repo_file_classes if RepoFile.installed()
     ]
     return _repo_files
 

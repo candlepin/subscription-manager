@@ -96,7 +96,7 @@ class TestOverrideCommand(TestCliProxyCommand):
             Override('x', 'hello', 'world'),
             Override('x', 'blast-off', 'space'),
             Override('y', 'goodbye', 'earth'),
-            Override('z', 'greetings', 'mars')
+            Override('z', 'greetings', 'mars'),
         ]
         with Capture() as cap:
             self.cc._list(data, None)
@@ -110,10 +110,7 @@ class TestOverrideCommand(TestCliProxyCommand):
             self.assertTrue(re.search(r'\s+greetings:\s+mars', output))
 
     def test_list_specific_repos(self):
-        data = [
-            Override('x', 'hello', 'world'),
-            Override('z', 'greetings', 'mars')
-        ]
+        data = [Override('x', 'hello', 'world'), Override('z', 'greetings', 'mars')]
         with Capture() as cap:
             self.cc._list(data, ['x'])
             output = cap.out
@@ -122,9 +119,7 @@ class TestOverrideCommand(TestCliProxyCommand):
             self.assertFalse(re.search(r'Repository: z', output))
 
     def test_list_nonexistant_repos(self):
-        data = [
-            Override('x', 'hello', 'world')
-        ]
+        data = [Override('x', 'hello', 'world')]
         with Capture() as cap:
             self.cc._list(data, ['x', 'z'])
             output = cap.out

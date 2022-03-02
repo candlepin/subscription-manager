@@ -19,6 +19,7 @@ from threading import RLock as Mutex
 import time
 
 import logging
+
 log = logging.getLogger(__name__)
 
 # how long to sleep before rechecking if we can
@@ -27,7 +28,6 @@ LOCK_WAIT_DURATION = 0.5
 
 
 class LockFile(object):
-
     def __init__(self, path):
         self.path = path
         self.pid = None
@@ -56,7 +56,7 @@ class LockFile(object):
         self.fp.flush()
 
     def mypid(self):
-        return (os.getpid() == self.getpid())
+        return os.getpid() == self.getpid()
 
     def valid(self):
         status = False
@@ -83,7 +83,7 @@ class LockFile(object):
         self.fp = None
 
     def notcreated(self):
-        return (not os.path.exists(self.path))
+        return not os.path.exists(self.path)
 
     def __del__(self):
         self.close()
@@ -177,7 +177,7 @@ class Lock(object):
         mutex = self.mutex
         mutex.acquire()
         try:
-            return (self.depth > 0)
+            return self.depth > 0
         finally:
             mutex.release()
 
@@ -190,6 +190,7 @@ class Lock(object):
         finally:
             mutex.release()
         return self
+
     P = wait
 
     # V
@@ -201,6 +202,7 @@ class Lock(object):
                 self.depth -= 1
         finally:
             mutex.release()
+
     V = signal
 
     def __del__(self):

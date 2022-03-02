@@ -17,6 +17,7 @@ from distutils.spawn import spawn
 from build_ext.utils import Utils, BaseCommand
 import os
 import subprocess
+
 # These dependencies aren't available in build environments.  We won't need any
 # linting functionality there though, so just create a dummy class so we can proceed.
 try:
@@ -32,6 +33,7 @@ except ImportError:
 try:
     from flake8.main.setuptools_command import Flake8
 except ImportError:
+
     class Flake8(object):
         def __init__(self, *args, **kwargs):
             raise NotImplementedError("flake8 could not be imported")
@@ -65,8 +67,7 @@ class RpmLint(BaseCommand):
     description = "run rpmlint on spec files"
 
     def run(self):
-        files = subprocess.run(['git', 'ls-files', '--full-name'],
-                               capture_output=True).stdout
+        files = subprocess.run(['git', 'ls-files', '--full-name'], capture_output=True).stdout
         files = files.decode().splitlines()
         files = [x for x in files if x.endswith(".spec")]
         for f in files:
@@ -116,14 +117,14 @@ class DebugImportVisitor(AstVisitor):
         for alias in node.names:
             module_name = alias.name
             if module_name in self.DEBUG_MODULES:
-                return(node, "X200 imports of debug module '%s' should be removed" % module_name)
+                return (node, "X200 imports of debug module '%s' should be removed" % module_name)
 
     def visit_ImportFrom(self, node):
         # Likely not necessary but prudent
         self.generic_visit(node)
         module_name = node.module
         if module_name in self.DEBUG_MODULES:
-            return(node, "X200 imports of debug module '%s' should be removed" % module_name)
+            return (node, "X200 imports of debug module '%s' should be removed" % module_name)
 
 
 class GettextVisitor(AstVisitor):
@@ -134,6 +135,7 @@ class GettextVisitor(AstVisitor):
         "b")
     Also look for _(a) usages
     """
+
     codes = ['X300', 'X301', 'X302']
 
     def visit_Call(self, node):
@@ -160,7 +162,10 @@ class GettextVisitor(AstVisitor):
 
             # _("%s is great" % some_variable) should be _("%s is great") % some_variable
             if isinstance(arg, ast.BinOp) and isinstance(arg.op, ast.Mod):
-                return (node, "X302 string formatting within gettext function: _('%s' % foo) should be _('%s') % foo")
+                return (
+                    node,
+                    "X302 string formatting within gettext function: _('%s' % foo) should be _('%s') % foo",
+                )
 
 
 class AstChecker(object):
@@ -216,12 +221,13 @@ class PluginLoadingFlake8(Flake8):
 
     See http://peak.telecommunity.com/DevCenter/PkgResources
     """
+
     def __init__(self, *args, **kwargs):
         ext_dir = pkg_resources.normalize_path('build_ext')
         dist = pkg_resources.Distribution(
             ext_dir,
             project_name='build_ext',
-            metadata=pkg_resources.PathMetadata(ext_dir, ext_dir)
+            metadata=pkg_resources.PathMetadata(ext_dir, ext_dir),
         )
         pkg_resources.working_set.add(dist)
         Flake8.__init__(self, *args, **kwargs)

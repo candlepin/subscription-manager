@@ -77,6 +77,7 @@ class VirtUuidCollectorTest(unittest.TestCase):
     def test_strips_null_byte_on_uuid_vm_uuid(self, mock_isfile):
         def is_uuid_file(path):
             return path.endswith('/vm,uuid')
+
         mock_isfile.side_effect = is_uuid_file
         with test.fixture.open_mock(content="123\0"):
             collector = virt.VirtUuidCollector(arch='ppc64')
@@ -87,6 +88,7 @@ class VirtUuidCollectorTest(unittest.TestCase):
     def test_strips_null_byte_on_uuid_ibm_partition_uuid(self, mock_isfile):
         def is_uuid_file(path):
             return path.endswith('/ibm,partition-uuid')
+
         mock_isfile.side_effect = is_uuid_file
         with test.fixture.open_mock(content="123\0"):
             collector = virt.VirtUuidCollector(arch='ppc64')
@@ -95,19 +97,13 @@ class VirtUuidCollectorTest(unittest.TestCase):
 
     def test_default_virt_uuid_physical(self):
         """Check that physical systems dont set an 'Unknown' virt.uuid."""
-        collected = {
-            'virt.host_type': 'Not Applicable',
-            'virt.is_guest': False
-        }
+        collected = {'virt.host_type': 'Not Applicable', 'virt.is_guest': False}
         result = virt.VirtUuidCollector(collected_hw_info=collected).get_all()
         self.assertFalse('virt.uuid' in result)
 
     def test_default_virt_uuid_guest_no_uuid(self):
         """Check that virt guest systems dont set an 'Unknown' virt.uuid if not found."""
-        collected = {
-            'virt.host_type': 'kvm',
-            'virt.is_guest': True
-        }
+        collected = {'virt.host_type': 'kvm', 'virt.is_guest': True}
         result = virt.VirtUuidCollector(collected_hw_info=collected).get_all()
         self.assertFalse('virt.uuid' in result)
 
@@ -116,7 +112,7 @@ class VirtUuidCollectorTest(unittest.TestCase):
         collected = {
             'dmi.system.uuid': 'this-is-a-weird-uuid',
             'virt.host_type': 'kvm',
-            'virt.is_guest': True
+            'virt.is_guest': True,
         }
         result = virt.VirtUuidCollector(collected_hw_info=collected).get_all()
         self.assertTrue('virt.uuid' in result)

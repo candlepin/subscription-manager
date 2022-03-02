@@ -31,7 +31,6 @@ log = logging.getLogger(__name__)
 
 
 class OwnersCommand(UserPassCommand):
-
     def __init__(self):
         shortdesc = _("Display the organizations against which a user can register a system")
 
@@ -56,8 +55,10 @@ class OwnersCommand(UserPassCommand):
                 print("+-------------------------------------------+")
                 print("")
                 for owner in owners:
-                    print(columnize(ORG_LIST, echo_columnize_callback,
-                                    owner['displayName'], owner['key']) + "\n")
+                    print(
+                        columnize(ORG_LIST, echo_columnize_callback, owner['displayName'], owner['key'])
+                        + "\n"
+                    )
             else:
                 print(_("{username} cannot register with any organizations.").format(username=self.username))
 

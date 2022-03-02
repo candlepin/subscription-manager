@@ -40,6 +40,7 @@ from rhsm import utils
 
 try:
     import subscription_manager.version
+
     subman_version = subscription_manager.version.rpm_version
 except ImportError:
     subman_version = "unknown"
@@ -103,6 +104,7 @@ log = logging.getLogger(__name__)
 
 class NoValidEntitlement(Exception):
     """Throw when there is no valid entitlement certificate for accessing CDN"""
+
     pass
 
 
@@ -119,10 +121,10 @@ class ConnectionSetupException(ConnectionException):
 
 
 class BadCertificateException(ConnectionException):
-    """ Thrown when an error parsing a certificate is encountered. """
+    """Thrown when an error parsing a certificate is encountered."""
 
     def __init__(self, cert_path):
-        """ Pass the full path to the bad certificate. """
+        """Pass the full path to the bad certificate."""
         self.cert_path = cert_path
 
     def __str__(self):
@@ -131,28 +133,28 @@ class BadCertificateException(ConnectionException):
 
 class BaseConnection(object):
     def __init__(
-            self,
-            restlib_class=None,
-            host=None,
-            ssl_port=None,
-            handler=None,
-            ca_dir=None,
-            insecure=None,
-            proxy_hostname=None,
-            proxy_port=None,
-            proxy_user=None,
-            proxy_password=None,
-            no_proxy=None,
-            username=None,
-            password=None,
-            cert_file=None,
-            key_file=None,
-            cert_dir=None,
-            token=None,
-            user_agent=None,
-            correlation_id=None,
-            timeout=None,
-            **kwargs
+        self,
+        restlib_class=None,
+        host=None,
+        ssl_port=None,
+        handler=None,
+        ca_dir=None,
+        insecure=None,
+        proxy_hostname=None,
+        proxy_port=None,
+        proxy_user=None,
+        proxy_password=None,
+        no_proxy=None,
+        username=None,
+        password=None,
+        cert_file=None,
+        key_file=None,
+        cert_dir=None,
+        token=None,
+        user_agent=None,
+        correlation_id=None,
+        timeout=None,
+        **kwargs,
     ):
 
         restlib_class = restlib_class or Restlib
@@ -224,28 +226,50 @@ class BaseConnection(object):
         elif token:
             using_keycloak_auth = True
 
-        if len([value for value in (
-            using_basic_auth,
-            using_id_cert_auth,
-            using_keycloak_auth,
-            using_ent_cert_auth
-        ) if value]) > 1:
+        if (
+            len(
+                [
+                    value
+                    for value in (
+                        using_basic_auth,
+                        using_id_cert_auth,
+                        using_keycloak_auth,
+                        using_ent_cert_auth,
+                    )
+                    if value
+                ]
+            )
+            > 1
+        ):
             raise Exception("Cannot specify multiple auth types")
 
         proxy_description = None
         if self.proxy_hostname and self.proxy_port:
-            proxy_description = "http_proxy=%s:%s " % \
-                                (normalized_host(self.proxy_hostname),
-                                 safe_int(self.proxy_port))
+            proxy_description = "http_proxy=%s:%s " % (
+                normalized_host(self.proxy_hostname),
+                safe_int(self.proxy_port),
+            )
         # initialize connection
-        self.conn = restlib_class(self.host, self.ssl_port, self.handler,
-                                  username=self.username, password=self.password,
-                                  token=self.token, cert_file=self.cert_file, key_file=self.key_file,
-                                  proxy_hostname=self.proxy_hostname, proxy_port=self.proxy_port,
-                                  proxy_user=self.proxy_user, proxy_password=self.proxy_password,
-                                  ca_dir=self.ca_dir, insecure=self.insecure, cert_dir=cert_dir,
-                                  timeout=self.timeout,
-                                  correlation_id=correlation_id, user_agent=user_agent)
+        self.conn = restlib_class(
+            self.host,
+            self.ssl_port,
+            self.handler,
+            username=self.username,
+            password=self.password,
+            token=self.token,
+            cert_file=self.cert_file,
+            key_file=self.key_file,
+            proxy_hostname=self.proxy_hostname,
+            proxy_port=self.proxy_port,
+            proxy_user=self.proxy_user,
+            proxy_password=self.proxy_password,
+            ca_dir=self.ca_dir,
+            insecure=self.insecure,
+            cert_dir=cert_dir,
+            timeout=self.timeout,
+            correlation_id=correlation_id,
+            user_agent=user_agent,
+        )
 
         if using_keycloak_auth:
             auth_description = "auth=bearer %s" % token
@@ -263,8 +287,12 @@ class BaseConnection(object):
         connection_description = ""
         if proxy_description:
             connection_description += proxy_description
-        connection_description += "host=%s port=%s handler=%s %s" % (self.host, self.ssl_port,
-                                                                     self.handler, auth_description)
+        connection_description += "host=%s port=%s handler=%s %s" % (
+            self.host,
+            self.ssl_port,
+            self.handler,
+            auth_description,
+        )
         log.debug("Connection built: %s", connection_description)
 
 
@@ -274,7 +302,7 @@ class TokenAuthException(Exception):
 
 class KeycloakConnection(BaseConnection):
     """
-      Keycloak Based Authentication
+    Keycloak Based Authentication
     """
 
     def __init__(self, realm, auth_url, resource, **kwargs):
@@ -331,6 +359,7 @@ class GoneException(RestlibException):
     front of it, or it's app server, or an injected response) from causing
     accidental consumer cert deletion.
     """
+
     def __init__(self, code, msg, deleted_id):
         # Exception doesn't inherit from object on el5 python version
         RestlibException.__init__(self, code, msg)
@@ -357,18 +386,19 @@ class RemoteServerException(ConnectionException):
     Thrown when the response to a request has no valid json content and
     one of these http status codes: [404, 410, 500, 502, 503, 504]
     """
-    def __init__(self, code,
-                 request_type=None,
-                 handler=None):
+
+    def __init__(self, code, request_type=None, handler=None):
         self.code = code
         self.request_type = request_type
         self.handler = handler
 
     def __str__(self):
         if self.request_type and self.handler:
-            return "Server error attempting a %s to %s returned status %s" % (self.request_type,
-                                                                              self.handler,
-                                                                              self.code)
+            return "Server error attempting a %s to %s returned status %s" % (
+                self.request_type,
+                self.handler,
+                self.code,
+            )
         return "Server returned %s" % self.code
 
 
@@ -389,6 +419,7 @@ class RateLimitExceededException(RestlibException):
     The retry_after attribute is an int of seconds to retry the request after.
     The retry_after attribute may not be included in the response.
     """
+
     def __init__(self, code, msg=None, headers=None):
         super(RateLimitExceededException, self).__init__(code, msg)
         self.headers = headers or {}
@@ -402,6 +433,7 @@ class UnauthorizedException(AuthenticationException):
     """
     Thrown in response to http status code 401 with no valid json content
     """
+
     prefix = "Unauthorized"
 
 
@@ -409,6 +441,7 @@ class ForbiddenException(AuthenticationException):
     """
     Thrown in response to http status code 403 with no valid json content
     """
+
     prefix = "Forbidden"
 
 
@@ -430,8 +463,9 @@ class ContentConnection(BaseConnection):
         if 'client_version' in kwargs:
             user_agent += kwargs['client_version']
         cert_dir = cert_dir or '/etc/pki/entitlement'
-        super(ContentConnection, self).__init__(handler='/', cert_dir=cert_dir, user_agent=user_agent,
-                                                **kwargs)
+        super(ContentConnection, self).__init__(
+            handler='/', cert_dir=cert_dir, user_agent=user_agent, **kwargs
+        )
 
     def get_versions(self, path, cert_key_pairs=None):
         """
@@ -477,13 +511,27 @@ class BaseRestLib(object):
 
     ALPHA = 0.9
 
-    def __init__(self, host, ssl_port, apihandler,
-                 username=None, password=None,
-                 proxy_hostname=None, proxy_port=None,
-                 proxy_user=None, proxy_password=None,
-                 cert_file=None, key_file=None, cert_dir=None,
-                 ca_dir=None, insecure=False, timeout=None,
-                 correlation_id=None, token=None, user_agent=None):
+    def __init__(
+        self,
+        host,
+        ssl_port,
+        apihandler,
+        username=None,
+        password=None,
+        proxy_hostname=None,
+        proxy_port=None,
+        proxy_user=None,
+        proxy_password=None,
+        cert_file=None,
+        key_file=None,
+        cert_dir=None,
+        ca_dir=None,
+        insecure=False,
+        timeout=None,
+        correlation_id=None,
+        token=None,
+        user_agent=None,
+    ):
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
@@ -491,9 +539,11 @@ class BaseRestLib(object):
         # Default, updated by UepConnection
         self.user_agent = user_agent or "python-rhsm-user-agent"
 
-        self.headers = {"Content-type": "application/json",
-                        "Accept": "application/json",
-                        "x-subscription-manager-version": subman_version}
+        self.headers = {
+            "Content-type": "application/json",
+            "Accept": "application/json",
+            "x-subscription-manager-version": subman_version,
+        }
 
         if correlation_id:
             self.headers["X-Correlation-ID"] = correlation_id
@@ -594,14 +644,18 @@ class BaseRestLib(object):
             context.load_cert_chain(cert_file, keyfile=key_file)
 
         if self.proxy_hostname and self.proxy_port:
-            log.debug("Using proxy: %s:%s" % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port)))
+            log.debug(
+                "Using proxy: %s:%s" % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port))
+            )
             proxy_headers = {
                 'User-Agent': self.user_agent,
-                'Host': '%s:%s' % (normalized_host(self.host), safe_int(self.ssl_port))
+                'Host': '%s:%s' % (normalized_host(self.host), safe_int(self.ssl_port)),
             }
             if self.proxy_user and self.proxy_password:
                 proxy_headers['Proxy-Authorization'] = _encode_auth(self.proxy_user, self.proxy_password)
-            conn = httplib.HTTPSConnection(self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout)
+            conn = httplib.HTTPSConnection(
+                self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout
+            )
             conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
             self.headers['Host'] = '%s:%s' % (normalized_host(self.host), safe_int(self.ssl_port))
         else:
@@ -636,7 +690,13 @@ class BaseRestLib(object):
                 msg = blue_col + "Making request:" + end_col
             msg += red_col + " %s:%s %s %s" % (self.host, self.ssl_port, request_type, handler) + end_col
             if self.proxy_hostname and self.proxy_port:
-                msg += blue_col + " using proxy " + red_col + f"{self.proxy_hostname}:{self.proxy_port}" + end_col
+                msg += (
+                    blue_col
+                    + " using proxy "
+                    + red_col
+                    + f"{self.proxy_hostname}:{self.proxy_port}"
+                    + end_col
+                )
             if 'SUBMAN_DEBUG_PRINT_REQUEST_HEADER' in os.environ:
                 msg += blue_col + " %s" % final_headers + end_col
             if 'SUBMAN_DEBUG_PRINT_REQUEST_BODY' in os.environ and body is not None:
@@ -686,6 +746,7 @@ class BaseRestLib(object):
         """
         try:
             import subscription_manager.i18n
+
             try:
                 language = subscription_manager.i18n.LOCALE.language
             except AttributeError:
@@ -714,9 +775,11 @@ class BaseRestLib(object):
         if cert_key_pairs is None or len(cert_key_pairs) == 0:
             cert_key_pairs = self._get_cert_key_list()
 
-        if headers is not None and \
-                'Content-type' in headers and \
-                headers['Content-type'] == 'application/x-www-form-urlencoded':
+        if (
+            headers is not None
+            and 'Content-type' in headers
+            and headers['Content-type'] == 'application/x-www-form-urlencoded'
+        ):
             body = urlencode(info).encode('utf-8')
         elif info is not None:
             body = json.dumps(info, default=json.encode)
@@ -750,14 +813,13 @@ class BaseRestLib(object):
                 result = {
                     "content": response.read().decode('utf-8'),
                     "status": response.status,
-                    "headers": dict(response.getheaders())
+                    "headers": dict(response.getheaders()),
                 }
                 if response.status == 200:
                     self.is_consumer_cert_key_valid = True
                     break  # this client cert worked, no need to try more
                 elif self.cert_dir:
-                    log.debug("Unable to get valid response: %s from CDN: %s" %
-                              (result, self.host))
+                    log.debug("Unable to get valid response: %s from CDN: %s" % (result, self.host))
 
             except ssl.SSLError:
                 if self.cert_file and not self.cert_dir:
@@ -769,21 +831,20 @@ class BaseRestLib(object):
                     raise
             except socket.gaierror as err:
                 if self.proxy_hostname and self.proxy_port:
-                    raise ProxyException("Unable to connect to: %s:%s %s "
-                                         % (normalized_host(self.proxy_hostname),
-                                            safe_int(self.proxy_port),
-                                            err))
+                    raise ProxyException(
+                        "Unable to connect to: %s:%s %s "
+                        % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port), err)
+                    )
                 raise
             except (socket.error, OSError) as err:
                 # If we get a ConnectionError here and we are using a proxy,
                 # then the issue was the connection to the proxy, not to the
                 # destination host.
-                if isinstance(err, ConnectionError) \
-                    and self.proxy_hostname and self.proxy_port:
-                    raise ProxyException("Unable to connect to: %s:%s %s "
-                                         % (normalized_host(self.proxy_hostname),
-                                            safe_int(self.proxy_port),
-                                            err))
+                if isinstance(err, ConnectionError) and self.proxy_hostname and self.proxy_port:
+                    raise ProxyException(
+                        "Unable to connect to: %s:%s %s "
+                        % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port), err)
+                    )
                 code = httplib.PROXY_AUTHENTICATION_REQUIRED.value
                 if str(code) in str(err):
                     raise ProxyException(err)
@@ -792,15 +853,18 @@ class BaseRestLib(object):
         else:
             if self.cert_dir:
                 raise NoValidEntitlement(
-                    "Cannot access CDN content on: %s using any of entitlement cert-key pair: %s" %
-                    (self.host, cert_key_pairs)
+                    "Cannot access CDN content on: %s using any of entitlement cert-key pair: %s"
+                    % (self.host, cert_key_pairs)
                 )
 
         self._print_debug_info_about_response(result)
 
         response_log = 'Response: status=' + str(result['status'])
         if response.getheader('x-candlepin-request-uuid'):
-            response_log = "%s, requestUuid=%s" % (response_log, response.getheader('x-candlepin-request-uuid'))
+            response_log = "%s, requestUuid=%s" % (
+                response_log,
+                response.getheader('x-candlepin-request-uuid'),
+            )
         response_log = "%s, request=\"%s %s\"" % (response_log, request_type, handler)
         log.debug(response_log)
 
@@ -853,9 +917,7 @@ class BaseRestLib(object):
                 # RemoteServerException and will not cause the client
                 # to delete the consumer cert.
                 if str(response['status']) == "410":
-                    raise GoneException(response['status'],
-                                        parsed['displayMessage'],
-                                        parsed['deletedId'])
+                    raise GoneException(response['status'], parsed['displayMessage'], parsed['deletedId'])
 
                 elif str(response['status']) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
                     raise ProxyException
@@ -866,9 +928,9 @@ class BaseRestLib(object):
 
                 error_msg = self._parse_msg_from_error_response_body(parsed)
                 if str(response['status']) in ['429']:
-                    raise RateLimitExceededException(response['status'],
-                                                     error_msg,
-                                                     headers=response.get('headers'))
+                    raise RateLimitExceededException(
+                        response['status'], error_msg, headers=response.get('headers')
+                    )
 
                 if str(response['status']) in ["401"]:
                     # If the proxy is not configured correctly
@@ -878,10 +940,14 @@ class BaseRestLib(object):
                         if self.cert_file:
                             id_cert = certificate.create_from_file(self.cert_file)
                             if id_cert.is_valid():
-                                raise RestlibException(response['status'],
-                                                       ("Unable to make a connection using SSL client certificate. "
-                                                        "Please review proxy configuration and connectivity."),
-                                                       response.get('headers'))
+                                raise RestlibException(
+                                    response['status'],
+                                    (
+                                        "Unable to make a connection using SSL client certificate. "
+                                        "Please review proxy configuration and connectivity."
+                                    ),
+                                    response.get('headers'),
+                                )
 
                 # FIXME: we can get here with a valid json response that
                 # could be anything, we don't verify it anymore
@@ -889,20 +955,17 @@ class BaseRestLib(object):
             else:
                 # This really needs an exception mapper too...
                 if str(response['status']) in ["404", "410", "500", "502", "503", "504"]:
-                    raise RemoteServerException(response['status'],
-                                                request_type=request_type,
-                                                handler=handler)
+                    raise RemoteServerException(
+                        response['status'], request_type=request_type, handler=handler
+                    )
                 elif str(response['status']) in ["401"]:
-                    raise UnauthorizedException(response['status'],
-                                                request_type=request_type,
-                                                handler=handler)
+                    raise UnauthorizedException(
+                        response['status'], request_type=request_type, handler=handler
+                    )
                 elif str(response['status']) in ["403"]:
-                    raise ForbiddenException(response['status'],
-                                             request_type=request_type,
-                                             handler=handler)
+                    raise ForbiddenException(response['status'], request_type=request_type, handler=handler)
                 elif str(response['status']) in ['429']:
-                    raise RateLimitExceededException(response['status'],
-                                                     headers=response.get('headers'))
+                    raise RateLimitExceededException(response['status'], headers=response.get('headers'))
 
                 elif str(response['status']) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
                     raise ProxyException
@@ -952,14 +1015,15 @@ class BaseRestLib(object):
 # was decomposed from the api handling parts
 class Restlib(BaseRestLib):
     """
-     A wrapper around httplib to make rest calls easier
-     See validateResponse() to learn when exceptions are raised as a result
-     of communication with the server.
+    A wrapper around httplib to make rest calls easier
+    See validateResponse() to learn when exceptions are raised as a result
+    of communication with the server.
     """
 
     def _request(self, request_type, method, info=None, headers=None, cert_key_pairs=None):
-        result = super(Restlib, self)._request(request_type, method,
-                                               info=info, headers=headers, cert_key_pairs=cert_key_pairs)
+        result = super(Restlib, self)._request(
+            request_type, method, info=info, headers=headers, cert_key_pairs=cert_key_pairs
+        )
 
         # Handle 204s
         if not len(result['content']):
@@ -1010,8 +1074,7 @@ class UEPConnection(BaseConnection):
         resources_list = self.conn.request_get("/")
         for r in resources_list:
             self.resources[r['rel']] = r['href']
-        log.debug("Server supports the following resources: %s",
-                  self.resources)
+        log.debug("Server supports the following resources: %s", self.resources)
 
     def get_supported_resources(self):
         """
@@ -1042,12 +1105,18 @@ class UEPConnection(BaseConnection):
         status = self.getStatus()
         capabilities = status.get('managerCapabilities')
         if capabilities is None:
-            log.debug("The status retrieved did not \
-                      include key 'managerCapabilities'.\nStatus:'%s'" % status)
+            log.debug(
+                "The status retrieved did not \
+                      include key 'managerCapabilities'.\nStatus:'%s'"
+                % status
+            )
             capabilities = []
         elif isinstance(capabilities, list) and not capabilities:
-            log.debug("The managerCapabilities list \
-                      was empty\nStatus:'%s'" % status)
+            log.debug(
+                "The managerCapabilities list \
+                      was empty\nStatus:'%s'"
+                % status
+            )
         else:
             log.debug("Server has the following capabilities: %s", capabilities)
         return capabilities
@@ -1081,31 +1150,46 @@ class UEPConnection(BaseConnection):
         params = {
             "type": cloud_id,
             "metadata": metadata,
-            "signature": signature
+            "signature": signature,
         }
         # "Accept" http header has to be text/plain, because candlepin return
         # token as simple text and it is not wrapped in json document
         headers = {
             "Content-type": "application/json",
-            "Accept": "text/plain"
+            "Accept": "text/plain",
         }
         return self.conn.request_post(
             method="/cloud/authorize",
             params=params,
-            headers=headers
+            headers=headers,
         )
 
-    def registerConsumer(self, name="unknown", type="system", facts={},
-                         owner=None, environments=None, keys=None,
-                         installed_products=None, uuid=None, hypervisor_id=None,
-                         content_tags=None, role=None, addons=None, service_level=None, usage=None,
-                         jwt_token=None):
+    def registerConsumer(
+        self,
+        name="unknown",
+        type="system",
+        facts={},
+        owner=None,
+        environments=None,
+        keys=None,
+        installed_products=None,
+        uuid=None,
+        hypervisor_id=None,
+        content_tags=None,
+        role=None,
+        addons=None,
+        service_level=None,
+        usage=None,
+        jwt_token=None,
+    ):
         """
         Creates a consumer on candlepin server
         """
-        params = {"type": type,
-                  "name": name,
-                  "facts": facts}
+        params = {
+            "type": type,
+            "name": name,
+            "facts": facts,
+        }
         if installed_products:
             params['installedProducts'] = installed_products
 
@@ -1163,7 +1247,7 @@ class UEPConnection(BaseConnection):
             have been made in the given time period.
 
         """
-        if (self.has_capability("hypervisors_async")):
+        if self.has_capability("hypervisors_async"):
             priorContentType = self.conn.headers['Content-type']
             self.conn.headers['Content-type'] = 'text/plain'
 
@@ -1193,7 +1277,9 @@ class UEPConnection(BaseConnection):
             have been made in the given time period.
         """
         # Return None early if the connected UEP does not support hypervisors_heartbeat or if there is no reporter_id provided.
-        if not self.has_capability("hypervisors_heartbeat") or not (options and options.reporter_id and len(options.reporter_id) > 0):
+        if not self.has_capability("hypervisors_heartbeat") or not (
+            options and options.reporter_id and len(options.reporter_id) > 0
+        ):
             return
 
         params = {}
@@ -1208,10 +1294,22 @@ class UEPConnection(BaseConnection):
         """
         return self.updateConsumer(consumer_uuid, facts=facts)
 
-    def updateConsumer(self, uuid, facts=None, installed_products=None,
-                       guest_uuids=None, service_level=None, release=None,
-                       autoheal=None, hypervisor_id=None, content_tags=None, role=None, addons=None,
-                       usage=None, environments=None):
+    def updateConsumer(
+        self,
+        uuid,
+        facts=None,
+        installed_products=None,
+        guest_uuids=None,
+        service_level=None,
+        release=None,
+        autoheal=None,
+        hypervisor_id=None,
+        content_tags=None,
+        role=None,
+        addons=None,
+        usage=None,
+        environments=None,
+    ):
         """
         Update a consumer on the server.
 
@@ -1345,8 +1443,7 @@ class UEPConnection(BaseConnection):
         """
         method = '/consumers/%s/compliance' % self.sanitize(uuid)
         if on_date:
-            method = "%s?on_date=%s" % (method,
-                                        self.sanitize(on_date.isoformat(), plus=True))
+            method = "%s?on_date=%s" % (method, self.sanitize(on_date.isoformat(), plus=True))
         return self.conn.request_get(method)
 
     def getSyspurposeCompliance(self, uuid, on_date=None):
@@ -1355,8 +1452,7 @@ class UEPConnection(BaseConnection):
         """
         method = '/consumers/%s/purpose_compliance' % self.sanitize(uuid)
         if on_date:
-            method = "%s?on_date=%s" % (method,
-                                        self.sanitize(on_date.isoformat(), plus=True))
+            method = "%s?on_date=%s" % (method, self.sanitize(on_date.isoformat(), plus=True))
         return self.conn.request_get(method)
 
     def getOwnerSyspurposeValidFields(self, owner_key):
@@ -1424,7 +1520,7 @@ class UEPConnection(BaseConnection):
 
     def unregisterConsumer(self, consumerId):
         """
-         Deletes a consumer from candlepin server
+        Deletes a consumer from candlepin server
         """
         method = '/consumers/%s' % self.sanitize(consumerId)
         return self.conn.request_delete(method)
@@ -1464,7 +1560,7 @@ class UEPConnection(BaseConnection):
 
     def bindByEntitlementPool(self, consumerId, poolId, quantity=None):
         """
-         Subscribe consumer to a subscription by pool ID.
+        Subscribe consumer to a subscription by pool ID.
         """
         method = "/consumers/%s/entitlements?pool=%s" % (self.sanitize(consumerId), self.sanitize(poolId))
         if quantity:
@@ -1492,8 +1588,7 @@ class UEPConnection(BaseConnection):
 
         # add the optional date to the url
         if entitle_date:
-            method = "%s?entitle_date=%s" % (method,
-                                             self.sanitize(entitle_date.isoformat(), plus=True))
+            method = "%s?entitle_date=%s" % (method, self.sanitize(entitle_date.isoformat(), plus=True))
 
         return self.conn.request_post(method)
 
@@ -1509,8 +1604,10 @@ class UEPConnection(BaseConnection):
         if service_level is None:
             method = "/consumers/%s/entitlements/dry-run" % self.sanitize(consumer_uuid)
         else:
-            method = "/consumers/%s/entitlements/dry-run?service_level=%s" % \
-                     (self.sanitize(consumer_uuid), self.sanitize(service_level))
+            method = "/consumers/%s/entitlements/dry-run?service_level=%s" % (
+                self.sanitize(consumer_uuid),
+                self.sanitize(service_level),
+            )
         return self.conn.request_get(method)
 
     def unbindBySerial(self, consumerId, serial):
@@ -1529,13 +1626,22 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s/checkin" % self.sanitize(consumerId)
         # add the optional date to the url
         if checkin_date:
-            method = "%s?checkin_date=%s" % (method,
-                                             self.sanitize(checkin_date.isoformat(), plus=True))
+            method = "%s?checkin_date=%s" % (method, self.sanitize(checkin_date.isoformat(), plus=True))
 
         return self.conn.request_put(method)
 
-    def getPoolsList(self, consumer=None, listAll=False, active_on=None, owner=None, filter_string=None, future=None,
-                     after_date=None, page=0, items_per_page=0):
+    def getPoolsList(
+        self,
+        consumer=None,
+        listAll=False,
+        active_on=None,
+        owner=None,
+        filter_string=None,
+        future=None,
+        after_date=None,
+        page=0,
+        items_per_page=0,
+    ):
         """
         List pools for a given consumer or owner.
 
@@ -1641,8 +1747,7 @@ class UEPConnection(BaseConnection):
         different URL.
         """
         if name and not owner_key:
-            raise Exception("Must specify owner key to query environment "
-                            "by name")
+            raise Exception("Must specify owner key to query environment " "by name")
 
         query_param = urlencode({"name": name})
         url = "/owners/%s/environments?%s" % (self.sanitize(owner_key), query_param)
@@ -1690,7 +1795,10 @@ class UEPConnection(BaseConnection):
         Regenerates the specified entitlement for the given consumer
         """
 
-        method = "/consumers/%s/certificates?entitlement=%s" % (self.sanitize(consumer_id), self.sanitize(entitlement_id))
+        method = "/consumers/%s/certificates?entitlement=%s" % (
+            self.sanitize(consumer_id),
+            self.sanitize(entitlement_id),
+        )
 
         if lazy_regen:
             method += "&lazy_regen=true"

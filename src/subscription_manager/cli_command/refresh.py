@@ -50,7 +50,9 @@ class RefreshCommand(CliCommand):
                 consumer_identity = inj.require(inj.IDENTITY)
                 # Force a regen of the entitlement certs for this consumer
                 if not self.cp.regenEntitlementCertificates(consumer_identity.uuid, True):
-                    log.debug("Warning: Unable to refresh entitlement certificates; service likely unavailable")
+                    log.debug(
+                        "Warning: Unable to refresh entitlement certificates; service likely unavailable"
+                    )
 
             self.entcertlib.update()
 
@@ -62,6 +64,8 @@ class RefreshCommand(CliCommand):
             mapped_message: str = ExceptionMapper().get_message(re)
             system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
-            handle_exception(_("Unable to perform refresh due to the following exception: {e}").format(e=e), e)
+            handle_exception(
+                _("Unable to perform refresh due to the following exception: {e}").format(e=e), e
+            )
 
         self._request_validity_check()

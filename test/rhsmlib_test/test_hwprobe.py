@@ -220,15 +220,15 @@ LSCPU_JSON_EXPECTED = {
     'lscpu.stepping': '2',
     'lscpu.bogomips': '3999.99',
     'lscpu.flags': 'fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca '
-                   'cmov pat pse36 clflush mmx fxsr sse sse2 ss syscall nx '
-                   'pdpe1gb rdtscp lm constant_tsc rep_good nopl cpuid '
-                   'tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 '
-                   'sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave '
-                   'avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch '
-                   'invpcid_single pti fsgsbase bmi1 hle avx2 smep bmi2 erms '
-                   'invpcid rtm rdseed adx smap xsaveopt',
+    'cmov pat pse36 clflush mmx fxsr sse sse2 ss syscall nx '
+    'pdpe1gb rdtscp lm constant_tsc rep_good nopl cpuid '
+    'tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 '
+    'sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave '
+    'avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch '
+    'invpcid_single pti fsgsbase bmi1 hle avx2 smep bmi2 erms '
+    'invpcid rtm rdseed adx smap xsaveopt',
     'lscpu.hypervisor_vendor': 'KVM',
-    'lscpu.virtualization_type': 'full'
+    'lscpu.virtualization_type': 'full',
 }
 
 
@@ -294,9 +294,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         # Note this is patching an *instance* of HardwareCollector, not the class.
         self.hw_check_topo = hwprobe.HardwareCollector()
         self.hw_check_topo_patcher = patch.object(
-            self.hw_check_topo,
-            'check_for_cpu_topo',
-            Mock(return_value=True)
+            self.hw_check_topo, 'check_for_cpu_topo', Mock(return_value=True)
         )
         self.hw_check_topo_patcher.start()
         super(HardwareProbeTest, self).setUp()
@@ -322,7 +320,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
                 'distribution.version': 'Unknown',
                 'distribution.name': 'Unknown',
                 'distribution.id': 'Unknown',
-                'distribution.version.modifier': ''
+                'distribution.version.modifier': '',
             }
             self.assertEqual(hw.get_release_info(), expected)
 
@@ -336,7 +334,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             'distribution.version': '42',
             'distribution.name': 'Awesome OS',
             'distribution.id': 'Go4It',
-            'distribution.version.modifier': ''
+            'distribution.version.modifier': '',
         }
         self.assertEqual(hw.get_release_info(), expected)
 
@@ -350,7 +348,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             'distribution.version': '42',
             'distribution.name': 'Awesome OS',
             'distribution.id': 'Go4It',
-            'distribution.version.modifier': ''
+            'distribution.version.modifier': '',
         }
         self.assertEqual(hw.get_release_info(), expected)
 
@@ -365,7 +363,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
                 'distribution.version': 'Unknown',
                 'distribution.name': 'Unknown',
                 'distribution.id': 'Unknown',
-                'distribution.version.modifier': ''
+                'distribution.version.modifier': '',
             }
             self.assertEqual(hw.get_release_info(), expected)
 
@@ -393,7 +391,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
             'distribution.version': '42',
             'distribution.name': 'Awesome OS',
             'distribution.id': 'Go4It',
-            'distribution.version.modifier': 'mega'
+            'distribution.version.modifier': 'mega',
         }
         self.assertEqual(hw.get_release_info(), expected)
 
@@ -422,7 +420,10 @@ class HardwareProbeTest(test.fixture.SubManFixture):
         self.assertTrue(last_boot.endswith(" UTC"))
 
     @patch("os.path.exists")
-    @patch(OPEN_FUNCTION, mock_open(read_data="""
+    @patch(
+        OPEN_FUNCTION,
+        mock_open(
+            read_data="""
 NAME=Awesome OS
 VERSION="42 (Go4It)"
 ID=awesome
@@ -440,7 +441,9 @@ BUG_REPORT_URL="https://bugzilla.awesomeproject.org/"
 PRIVACY_POLICY_URL="https://awesomeproject.org/wiki/Legal:PrivacyPolicy"
 VARIANT="Go4It"
 VARIANT_ID=server
-    """))
+    """
+        ),
+    )
     def test_distro_with_os_release(self, mock_exists):
         """
         Test reading release information from /etc/os-release
@@ -463,7 +466,7 @@ VARIANT_ID=server
             'distribution.version': '42',
             'distribution.name': 'Awesome OS',
             'distribution.id': 'Go4It',
-            'distribution.version.modifier': ''
+            'distribution.version.modifier': '',
         }
         self.assertEqual(hw.get_release_info(), expected)
 
@@ -478,7 +481,7 @@ VARIANT_ID=server
                 'distribution.version': '42',
                 'distribution.name': 'Awesome OS',
                 'distribution.id': 'Go4It',
-                'distribution.version.modifier': 'mega'
+                'distribution.version.modifier': 'mega',
             }
             self.assertEqual(hw.get_release_info(), expected)
 
@@ -493,7 +496,7 @@ VARIANT_ID=server
                 'distribution.version': '42',
                 'distribution.name': 'Awesome OS',
                 'distribution.id': 'Go4It',
-                'distribution.version.modifier': 'beta'
+                'distribution.version.modifier': 'beta',
             }
             self.assertEqual(hw.get_release_info(), expected)
 
@@ -508,7 +511,7 @@ VARIANT_ID=server
                 'distribution.version': '42',
                 'distribution.name': 'Awesome OS',
                 'distribution.id': 'Go4It',
-                'distribution.version.modifier': 'be:ta'
+                'distribution.version.modifier': 'be:ta',
             }
             self.assertEqual(hw.get_release_info(), expected)
 
@@ -551,8 +554,10 @@ VARIANT_ID=server
         MockGetDevices.return_value = ['eth0']
         mock_info = Mock(mac_address="00:00:00:00:00:00", device="eth0")
         mock_info.get_ipv6_addresses.return_value = []
-        mock_ipv4s = [Mock(address="10.0.0.1", netmask="24", broadcast="Unknown"),
-                      Mock(address="10.0.0.2", netmask="24", broadcast="Unknown")]
+        mock_ipv4s = [
+            Mock(address="10.0.0.1", netmask="24", broadcast="Unknown"),
+            Mock(address="10.0.0.2", netmask="24", broadcast="Unknown"),
+        ]
         mock_info.get_ipv4_addresses = Mock(return_value=mock_ipv4s)
         MockGetInterfacesInfo.return_value = [mock_info]
 
@@ -569,28 +574,29 @@ VARIANT_ID=server
         MockGetDevices.return_value = ['eth0']
         mock_info = Mock(mac_address="00:00:00:00:00:00", device="eth0")
         mock_info.get_ipv4_addresses.return_value = []
-        mock_ipv6s = [Mock(address="::1", netmask="/128", scope="link"),
-                      Mock(address="fe80::f00d:f00d:f00d:f00d", netmask="/64", scope="link")]
+        mock_ipv6s = [
+            Mock(address="::1", netmask="/128", scope="link"),
+            Mock(address="fe80::f00d:f00d:f00d:f00d", netmask="/64", scope="link"),
+        ]
         mock_info.get_ipv6_addresses = Mock(return_value=mock_ipv6s)
         MockGetInterfacesInfo.return_value = [mock_info]
 
         net_int = hw.get_network_interfaces()
 
         self.assertEqual(net_int['net.interface.eth0.ipv6_address.link'], '::1')
-        self.assertEqual(net_int['net.interface.eth0.ipv6_address.link_list'], '::1, fe80::f00d:f00d:f00d:f00d')
+        self.assertEqual(
+            net_int['net.interface.eth0.ipv6_address.link_list'], '::1, fe80::f00d:f00d:f00d:f00d'
+        )
 
     @patch("ethtool.get_devices")
     @patch("ethtool.get_interfaces_info")
     def test_network_interfaces_just_lo(self, MockGetInterfacesInfo, MockGetDevices):
         hw = hwprobe.HardwareCollector()
         MockGetDevices.return_value = ['lo']
-        mock_info = Mock(mac_address="00:00:00:00:00:00",
-                         device="lo")
+        mock_info = Mock(mac_address="00:00:00:00:00:00", device="lo")
 
         mock_info.get_ipv6_addresses.return_value = []
-        mock_ipv4 = Mock(address="127.0.0.1",
-                         netmask="24",
-                         broadcase="Unknown")
+        mock_ipv4 = Mock(address="127.0.0.1", netmask="24", broadcase="Unknown")
         mock_info.get_ipv4_addresses = Mock(return_value=[mock_ipv4])
         MockGetInterfacesInfo.return_value = [mock_info]
         net_int = hw.get_network_interfaces()
@@ -602,12 +608,9 @@ VARIANT_ID=server
     def test_network_interfaces_sit(self, MockGetInterfacesInfo, MockGetDevices):
         hw = hwprobe.HardwareCollector()
         MockGetDevices.return_value = ['sit0']
-        mock_ipv6 = Mock(address="::1",
-                         netmask="/128",
-                         scope="global")
+        mock_ipv6 = Mock(address="::1", netmask="/128", scope="global")
 
-        mock_info = Mock(mac_address="00:00:00:00:00:00",
-                         device="sit0")
+        mock_info = Mock(mac_address="00:00:00:00:00:00", device="sit0")
         mock_info.get_ipv6_addresses.return_value = [mock_ipv6]
         mock_info.get_ipv4_addresses.return_value = []
         MockGetInterfacesInfo.return_value = [mock_info]
@@ -618,16 +621,19 @@ VARIANT_ID=server
 
     @patch("ethtool.get_devices")
     @patch("ethtool.get_interfaces_info")
-    def test_network_interfaces_just_lo_ethtool_no_get_ipv4_addresses(self,
-                                                                      MockGetInterfacesInfo, MockGetDevices):
+    def test_network_interfaces_just_lo_ethtool_no_get_ipv4_addresses(
+        self, MockGetInterfacesInfo, MockGetDevices
+    ):
 
         hw = hwprobe.HardwareCollector()
         MockGetDevices.return_value = ['lo']
-        mock_info = Mock(mac_address="00:00:00:00:00:00",
-                         device="lo",
-                         ipv4_address="127.0.0.1",
-                         ipv4_netmask="24",
-                         ipv4_broadcast="Unknown")
+        mock_info = Mock(
+            mac_address="00:00:00:00:00:00",
+            device="lo",
+            ipv4_address="127.0.0.1",
+            ipv4_netmask="24",
+            ipv4_broadcast="Unknown",
+        )
         mock_info.get_ipv6_addresses.return_value = []
 
         # mock etherinfo not having a get_ipv4_addresses method
@@ -650,12 +656,9 @@ VARIANT_ID=server
         hw = hwprobe.HardwareCollector()
         MockGetDevices.return_value = ['lo']
 
-        mock_ipv6 = Mock(address="::1",
-                         netmask="/128",
-                         scope="global")
+        mock_ipv6 = Mock(address="::1", netmask="/128", scope="global")
 
-        mock_info = Mock(mac_address="00:00:00:00:00:00",
-                         device="lo")
+        mock_info = Mock(mac_address="00:00:00:00:00:00", device="lo")
         mock_info.get_ipv6_addresses.return_value = [mock_ipv6]
         mock_info.get_ipv4_addresses.return_value = []
         MockGetInterfacesInfo.return_value = [mock_info]
@@ -717,11 +720,7 @@ VARIANT_ID=server
         # 8 sockets per book, = each cpu has 8 core siblings
         # 2 books, each check has 16 book siblings
         def count_cpumask(cpu, field):
-            cpumask_vals = {
-                'thread_siblings_list': 1,
-                'core_siblings_list': 1,
-                'book_siblings_list': 1
-            }
+            cpumask_vals = {'thread_siblings_list': 1, 'core_siblings_list': 1, 'book_siblings_list': 1}
             return cpumask_vals[field]
 
         with patch.object(self.hw_check_topo, 'count_cpumask_entries', Mock(side_effect=count_cpumask)):
@@ -733,7 +732,7 @@ VARIANT_ID=server
                 'cpu.cpu_socket(s)': 3,
                 'cpu.book(s)': 3,
                 'cpu.book(s)_per_cpu': 1,
-                'cpu.topology_source': 's390 book_siblings_list'
+                'cpu.topology_source': 's390 book_siblings_list',
             }
 
             self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
@@ -766,11 +765,7 @@ VARIANT_ID=server
         # (and in this setup, actually only 18 of those
         # are "configured").
         def count_cpumask(cpu, field):
-            cpumask_vals = {
-                'thread_siblings_list': 1,
-                'core_siblings_list': 1,
-                'book_siblings_list': 1
-            }
+            cpumask_vals = {'thread_siblings_list': 1, 'core_siblings_list': 1, 'book_siblings_list': 1}
             return cpumask_vals[field]
 
         # for this case, we prefer the sysinfo numbers
@@ -782,7 +777,7 @@ VARIANT_ID=server
                 'cpu.thread(s)_per_core': 1,
                 'cpu.book(s)': 4,
                 'cpu.cpu_socket(s)': 24,
-                'cpu.topology_source': 's390x sysinfo'
+                'cpu.topology_source': 's390x sysinfo',
             }
             self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
@@ -790,11 +785,7 @@ VARIANT_ID=server
     @patch("os.listdir")
     def test_cpu_info(self, mock_list_dir, mock_count):
         def count_cpumask(cpu, field):
-            cpumask_vals = {
-                'thread_siblings_list': 1,
-                'core_siblings_list': 2,
-                'book_siblings_list': None
-            }
+            cpumask_vals = {'thread_siblings_list': 1, 'core_siblings_list': 2, 'book_siblings_list': None}
             return cpumask_vals[field]
 
         mock_list_dir.return_value = ["cpu0", "cpu1"]
@@ -804,7 +795,7 @@ VARIANT_ID=server
                 'cpu.core(s)_per_socket': 2,
                 'cpu.cpu_socket(s)': 1,
                 'cpu.thread(s)_per_core': 1,
-                'cpu.topology_source': 'kernel /sys cpu sibling lists'
+                'cpu.topology_source': 'kernel /sys cpu sibling lists',
             }
             self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
@@ -814,7 +805,7 @@ VARIANT_ID=server
             cpumask_vals = {
                 'thread_siblings_list': None,
                 'core_siblings_list': None,
-                'book_siblings_list': None
+                'book_siblings_list': None,
             }
             return cpumask_vals[field]
 
@@ -826,14 +817,13 @@ VARIANT_ID=server
                 'cpu.core(s)_per_socket': 1,
                 'cpu.cpu_socket(s)': 16,
                 'cpu.thread(s)_per_core': 1,
-                'cpu.topology_source': "fallback one socket"
+                'cpu.topology_source': "fallback one socket",
             }
             self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
     @patch.object(hwprobe.HardwareCollector, "read_physical_id")
     @patch("os.listdir")
-    def test_cpu_info_no_topo_ppc64_physical_id(self, mock_list_dir,
-                                                mock_read_physical):
+    def test_cpu_info_no_topo_ppc64_physical_id(self, mock_list_dir, mock_read_physical):
         self.hw_check_topo.arch = "ppc64"
 
         def get_physical(cpu_file):
@@ -844,7 +834,7 @@ VARIANT_ID=server
             cpumask_vals = {
                 'thread_siblings_list': None,
                 'core_siblings_list': None,
-                'book_siblings_list': None
+                'book_siblings_list': None,
             }
             return cpumask_vals[field]
 
@@ -856,7 +846,7 @@ VARIANT_ID=server
                     'cpu.core(s)_per_socket': 4,
                     'cpu.cpu_socket(s)': 2,
                     'cpu.thread(s)_per_core': 1,
-                    'cpu.topology_source': 'ppc64 physical_package_id'
+                    'cpu.topology_source': 'ppc64 physical_package_id',
                 }
                 self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
@@ -869,7 +859,7 @@ VARIANT_ID=server
                 'thread_siblings_list': 1,
                 # 'core_siblings_list': 2,
                 'core_siblings_list': 2000,
-                'book_siblings_list': None
+                'book_siblings_list': None,
             }
             return vals[field]
 
@@ -879,21 +869,22 @@ VARIANT_ID=server
                 'cpu.core(s)_per_socket': 2000,
                 'cpu.thread(s)_per_core': 1,
                 'cpu.cpu_socket(s)': 1,
-                'cpu.topology_source': 'kernel /sys cpu sibling lists'
+                'cpu.topology_source': 'kernel /sys cpu sibling lists',
             }
             self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
     @patch("os.listdir")
     def test_cpu_info_other_files(self, mock_list_dir):
         mock_list_dir.return_value = [
-            "cpu0", "cpu1",  # normal cpu ids (valid)
-            "cpu123123",     # big cpu   (valid)
-            "cpu_",          # not valid
-            "cpufreq",       # this exists but is not a cpu
-            "cpuidle",       # also exists
-            "cpu0foo",       # only cpuN are valid
+            "cpu0",
+            "cpu1",  # normal cpu ids (valid)
+            "cpu123123",  # big cpu   (valid)
+            "cpu_",  # not valid
+            "cpufreq",  # this exists but is not a cpu
+            "cpuidle",  # also exists
+            "cpu0foo",  # only cpuN are valid
             "cpu11111111 ",  # trailing space, not valie
-            "cpu00"          # odd name, but valid I guess
+            "cpu00",  # odd name, but valid I guess
         ]
 
         def count_cpumask(cpu, field):
@@ -901,7 +892,7 @@ VARIANT_ID=server
                 'thread_siblings_list': 1,
                 # 'core_siblings_list': 2,
                 'core_siblings_list': 4,
-                'book_siblings_list': None
+                'book_siblings_list': None,
             }
             return vals[field]
 
@@ -911,18 +902,21 @@ VARIANT_ID=server
                 'cpu.core(s)_per_socket': 4,
                 'cpu.thread(s)_per_core': 1,
                 'cpu.cpu_socket(s)': 1,
-                'cpu.topology_source': 'kernel /sys cpu sibling lists'
+                'cpu.topology_source': 'kernel /sys cpu sibling lists',
             }
             self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
 
 class TestLscpu(unittest.TestCase):
-    @patch('os.environ', {
-        'LANGUAGE': 'ja_JP.eucJP',
-        'LC_ALL': 'ja_JP.eucJP',
-        'LC_CTYPE': 'ja_JP.eucJP',
-        'LANG': 'ja_JP.eucJP',
-    })
+    @patch(
+        'os.environ',
+        {
+            'LANGUAGE': 'ja_JP.eucJP',
+            'LC_ALL': 'ja_JP.eucJP',
+            'LC_CTYPE': 'ja_JP.eucJP',
+            'LANG': 'ja_JP.eucJP',
+        },
+    )
     def test_lscpu_ignores_locale(self):
         hw_check_topo = hwprobe.HardwareCollector()
         facts = hw_check_topo.get_ls_cpu_info()

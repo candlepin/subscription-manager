@@ -49,6 +49,7 @@ class AbstractCLICommand(object):
     Base class for rt commands. This class provides a templated run
     strategy.
     """
+
     def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
         self.name = name
         self.shortdesc = shortdesc
@@ -94,7 +95,6 @@ class AbstractCLICommand(object):
 
 # taken wholseale from rho...
 class CLI(object):
-
     def __init__(self, command_classes=None):
         command_classes = command_classes or []
         self.cli_commands = {}
@@ -125,9 +125,12 @@ class CLI(object):
             else:
                 items_other.append(("  " + name, cmd.shortdesc))
 
-        all_items = [(_("Primary Modules:"), '\n')] + \
-            items_primary + [('\n' + _("Other Modules:"), '\n')] + \
-            items_other
+        all_items = (
+            [(_("Primary Modules:"), '\n')]
+            + items_primary
+            + [('\n' + _("Other Modules:"), '\n')]
+            + items_other
+        )
         self._do_columnize(all_items)
 
     def _do_columnize(self, items_list):
@@ -194,7 +197,7 @@ def system_exit(code, msgs=None):
 
     if msgs:
         if type(msgs) not in [type([]), type(())]:
-            msgs = (msgs, )
+            msgs = (msgs,)
         for msg in msgs:
             # see bz #590094 and #744536
             # most of our errors are just str types, but error's returned

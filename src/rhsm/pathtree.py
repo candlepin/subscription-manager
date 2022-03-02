@@ -59,8 +59,7 @@ class PathTree(object):
         path_leaves = self._generate_path_leaves(bitstream)
         HuffmanNode.build_tree(path_leaves)
         path_dict = dict((node.code, node) for node in path_leaves)
-        self.path_tree = self._generate_path_tree(
-            path_dict, path_leaves, word_dict, bitstream)
+        self.path_tree = self._generate_path_tree(path_dict, path_leaves, word_dict, bitstream)
 
     def match_path(self, path):
         """
@@ -171,9 +170,7 @@ class PathTree(object):
         weighted_words = list(zip(itertools.count(1), words))
         # huffman nodes, without having put them in a tree. These will all be
         # leaves in the tree.
-        nodes = [
-            HuffmanNode(weight, value) for weight, value in weighted_words
-        ]
+        nodes = [HuffmanNode(weight, value) for weight, value in weighted_words]
         return nodes, decompress.unused_data
 
     @staticmethod

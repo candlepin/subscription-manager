@@ -53,7 +53,6 @@ def get_branding():
 
 
 class Branding(object):
-
     def __init__(self, custom_branding=None):
         self._default = DefaultBranding()
         if custom_branding is None:
@@ -77,18 +76,16 @@ class DefaultBranding(object):
     def __init__(self):
         self.CLI_REGISTER = _("Register the system to the server")
         self.CLI_UNREGISTER = _("Unregister the system from the server")
-        self.RHSMD_REGISTERED_TO_OTHER = \
-            _("This system is registered to spacewalk")
-        self.REGISTERED_TO_OTHER_WARNING = _("WARNING") + \
-            "\n" + \
-            _("You have already registered with spacewalk.")
+        self.RHSMD_REGISTERED_TO_OTHER = _("This system is registered to spacewalk")
+        self.REGISTERED_TO_OTHER_WARNING = (
+            _("WARNING") + "\n" + _("You have already registered with spacewalk.")
+        )
 
-        self.GUI_REGISTRATION_HEADER = \
-            _("Please enter your account information:")
-        self.GUI_FORGOT_LOGIN_TIP = \
-            _("Contact your system administrator if you have forgotten your login or password")
-        self.REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY = \
-            _("Red Hat Subscription Management")
+        self.GUI_REGISTRATION_HEADER = _("Please enter your account information:")
+        self.GUI_FORGOT_LOGIN_TIP = _(
+            "Contact your system administrator if you have forgotten your login or password"
+        )
+        self.REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY = _("Red Hat Subscription Management")
 
 
 class EmptyBranding(object):
@@ -96,4 +93,5 @@ class EmptyBranding(object):
     Empty branding object to use in place of a custom branding
     (so we always fall back to the defaults.
     """
+
     pass

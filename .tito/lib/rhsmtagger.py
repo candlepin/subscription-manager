@@ -5,7 +5,6 @@ from tito.common import debug, replace_version, run_command
 
 
 class MultiPythonPackageVersionTagger(VersionTagger):
-
     def __init__(self, config=None, *args, **kwargs):
         super(MultiPythonPackageVersionTagger, self).__init__(config=config, *args, **kwargs)
         if config.has_option('tagconfig', 'python_subpackages'):

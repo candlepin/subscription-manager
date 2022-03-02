@@ -25,24 +25,28 @@ USER_LOGFILE_DIR = os.path.join(
 )
 USER_LOGFILE_PATH = os.path.join(USER_LOGFILE_DIR, "rhsm.log")
 
-LOG_FORMAT = '%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d:' \
-             '%(threadName)s @%(filename)s:%(lineno)d - %(message)s'
+LOG_FORMAT = (
+    '%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d:'
+    '%(threadName)s @%(filename)s:%(lineno)d - %(message)s'
+)
 
 _rhsm_log_handler = None
 _subman_debug_handler = None
 log = None
-ROOT_NAMESPACES = ['subscription_manager',
-                   'rhsm',
-                   'rhsm-app',
-                   'rhsmlib',
-                   'syspurpose',
-                   'cloud_what'
-                   ]
+ROOT_NAMESPACES = [
+    'subscription_manager',
+    'rhsm',
+    'rhsm-app',
+    'rhsmlib',
+    'syspurpose',
+    'cloud_what',
+]
 
 
 # Don't need this for syslog
 class ContextLoggingFilter(object):
     """Find the name of the process as 'cmd_name'"""
+
     current_cmd = os.path.basename(sys.argv[0])
     cmd_line = ' '.join(sys.argv)
 
@@ -70,10 +74,9 @@ class SubmanDebugLoggingFilter(object):
         return self.on
 
 
-def RHSMLogHandler(root_log_file: str, user_log_file: str) -> Tuple[
-    Union[logging.handlers.RotatingFileHandler, logging.StreamHandler],
-    Optional[str]
-]:
+def RHSMLogHandler(
+    root_log_file: str, user_log_file: str
+) -> Tuple[Union[logging.handlers.RotatingFileHandler, logging.StreamHandler], Optional[str]]:
     """Factory for the file logging handler.
 
     If the subscription-manager is run as root, log location of
@@ -131,6 +134,7 @@ class PyWarningsLoggingFilter(object):
 
 class PyWarningsLogger(logging.getLoggerClass()):
     """Logger for py.warnings for use in file based logging config."""
+
     level = logging.WARNING
 
     def __init__(self, name):

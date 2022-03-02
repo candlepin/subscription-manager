@@ -20,7 +20,6 @@ from subscription_manager.i18n import ugettext as _
 
 
 class UsageCommand(AbstractSyspurposeCommand, OrgCommand):
-
     def __init__(self, subparser=None):
         shortdesc = _("Show or modify the system purpose usage setting")
         super(UsageCommand, self).__init__(
@@ -29,5 +28,5 @@ class UsageCommand(AbstractSyspurposeCommand, OrgCommand):
             shortdesc,
             False,
             attr='usage',
-            commands=('set', 'unset', 'show', 'list')
+            commands=('set', 'unset', 'show', 'list'),
         )

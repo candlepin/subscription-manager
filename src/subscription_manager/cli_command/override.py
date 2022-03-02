@@ -32,30 +32,53 @@ class OverrideCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Manage custom content repository settings")
         super(OverrideCommand, self).__init__("repo-override", shortdesc, False)
-        self.parser.add_argument("--repo", dest="repos", action="append", metavar="REPOID",
-                                 help=_("repository to modify (can be specified more than once)"))
-        self.parser.add_argument("--remove", dest="removals", action="append", metavar="NAME",
-                                 help=_(
-                                     "name of the override to remove (can be specified more than once); used with --repo option."))
-        self.parser.add_argument("--add", dest="additions", action='append', metavar="NAME:VALUE",
-                                 help=_(
-                                     "name and value of the option to override separated by a colon (can be specified more than once); used with --repo option."))
-        self.parser.add_argument("--remove-all", action="store_true",
-                                 help=_("remove all overrides; can be specific to a repository by providing --repo"))
-        self.parser.add_argument("--list", action="store_true",
-                                 help=_("list all overrides; can be specific to a repository by providing --repo"))
+        self.parser.add_argument(
+            "--repo",
+            dest="repos",
+            action="append",
+            metavar="REPOID",
+            help=_("repository to modify (can be specified more than once)"),
+        )
+        self.parser.add_argument(
+            "--remove",
+            dest="removals",
+            action="append",
+            metavar="NAME",
+            help=_(
+                "name of the override to remove (can be specified more than once); used with --repo option."
+            ),
+        )
+        self.parser.add_argument(
+            "--add",
+            dest="additions",
+            action='append',
+            metavar="NAME:VALUE",
+            help=_(
+                "name and value of the option to override separated by a colon (can be specified more than once); used with --repo option."
+            ),
+        )
+        self.parser.add_argument(
+            "--remove-all",
+            action="store_true",
+            help=_("remove all overrides; can be specific to a repository by providing --repo"),
+        )
+        self.parser.add_argument(
+            "--list",
+            action="store_true",
+            help=_("list all overrides; can be specific to a repository by providing --repo"),
+        )
 
     def _additions_colon_split(self):
         additions = {}
         for value in self.options.additions or {}:
             if value.strip() == '':
-                system_exit(os.EX_USAGE, _(
-                    "You must specify an override in the form of \"name:value\" with --add."))
+                system_exit(
+                    os.EX_USAGE, _("You must specify an override in the form of \"name:value\" with --add.")
+                )
 
             k, _colon, v = value.partition(':')
             if not v or not k:
-                system_exit(os.EX_USAGE, _(
-                    "--add arguments should be in the form of \"name:value\""))
+                system_exit(os.EX_USAGE, _("--add arguments should be in the form of \"name:value\""))
 
             additions[k] = v
         self.options.additions = additions
@@ -67,19 +90,29 @@ class OverrideCommand(CliCommand):
             if not self.options.repos:
                 system_exit(os.EX_USAGE, _("Error: You must specify a repository to modify"))
             if self.options.remove_all or self.options.list:
-                system_exit(os.EX_USAGE, _("Error: You may not use --add or --remove with --remove-all and --list"))
+                system_exit(
+                    os.EX_USAGE, _("Error: You may not use --add or --remove with --remove-all and --list")
+                )
         if self.options.list and self.options.remove_all:
             system_exit(os.EX_USAGE, _("Error: You may not use --list with --remove-all"))
-        if self.options.repos and not (self.options.list or self.options.additions or
-                                       self.options.removals or self.options.remove_all):
-            system_exit(os.EX_USAGE, _("Error: The --repo option must be used with --list or --add or --remove."))
+        if self.options.repos and not (
+            self.options.list or self.options.additions or self.options.removals or self.options.remove_all
+        ):
+            system_exit(
+                os.EX_USAGE, _("Error: The --repo option must be used with --list or --add or --remove.")
+            )
         if self.options.removals:
             stripped_removals = [removal.strip() for removal in self.options.removals]
             if '' in stripped_removals:
                 system_exit(os.EX_USAGE, _("Error: You must specify an override name with --remove."))
         # If no relevant options were given, just show a list
-        if not (self.options.repos or self.options.additions or
-                self.options.removals or self.options.remove_all or self.options.list):
+        if not (
+            self.options.repos
+            or self.options.additions
+            or self.options.removals
+            or self.options.remove_all
+            or self.options.list
+        ):
             self.options.list = True
 
     def _do_command(self):
@@ -89,7 +122,9 @@ class OverrideCommand(CliCommand):
 
         supported_resources = get_supported_resources()
         if 'content_overrides' not in supported_resources:
-            system_exit(os.EX_UNAVAILABLE, _("Error: The 'repo-override' command is not supported by the server."))
+            system_exit(
+                os.EX_UNAVAILABLE, _("Error: The 'repo-override' command is not supported by the server.")
+            )
 
         # update entitlement certificates if necessary. If we do have new entitlements
         # CertLib.update() will call RepoActionInvoker.update().
@@ -112,8 +147,11 @@ class OverrideCommand(CliCommand):
 
         if self.options.additions:
             repo_ids = [repo.id for repo in overrides.repo_lib.get_repos(apply_overrides=False)]
-            to_add = [Override(repo, name, value) for repo in self.options.repos for name, value in
-                      list(self.options.additions.items())]
+            to_add = [
+                Override(repo, name, value)
+                for repo in self.options.repos
+                for name, value in list(self.options.additions.items())
+            ]
             try:
                 results = overrides.add_overrides(self.identity.uuid, to_add)
             except connection.RestlibException as ex:
@@ -128,10 +166,16 @@ class OverrideCommand(CliCommand):
             # Print out warning messages if the specified repo does not exist in the repo file.
             for repo in self.options.repos:
                 if repo not in repo_ids:
-                    print(_("Repository '{repo}' does not currently exist, but the override has been added.").format(repo=repo))
+                    print(
+                        _(
+                            "Repository '{repo}' does not currently exist, but the override has been added."
+                        ).format(repo=repo)
+                    )
 
         if self.options.removals:
-            to_remove = [Override(repo, item) for repo in self.options.repos for item in self.options.removals]
+            to_remove = [
+                Override(repo, item) for repo in self.options.repos for item in self.options.removals
+            ]
             results = overrides.remove_overrides(self.identity.uuid, to_remove)
         if self.options.remove_all:
             results = overrides.remove_all_overrides(self.identity.uuid, self.options.repos)

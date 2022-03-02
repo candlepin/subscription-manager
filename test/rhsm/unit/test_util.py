@@ -1,16 +1,23 @@
 import unittest
 
 from mock import patch
-from rhsm.utils import remove_scheme, get_env_proxy_info, \
-    ServerUrlParseErrorEmpty, ServerUrlParseErrorNone, \
-    ServerUrlParseErrorPort, ServerUrlParseErrorScheme, \
-    ServerUrlParseErrorJustScheme, has_bad_scheme, has_good_scheme, \
-    parse_url, cmd_name
+from rhsm.utils import (
+    remove_scheme,
+    get_env_proxy_info,
+    ServerUrlParseErrorEmpty,
+    ServerUrlParseErrorNone,
+    ServerUrlParseErrorPort,
+    ServerUrlParseErrorScheme,
+    ServerUrlParseErrorJustScheme,
+    has_bad_scheme,
+    has_good_scheme,
+    parse_url,
+    cmd_name,
+)
 from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME
 
 
 class TestParseServerInfo(unittest.TestCase):
-
     def test_fully_specified(self):
         local_url = "myhost.example.com:900/myapp"
         (username, password, hostname, port, prefix) = parse_url(local_url)
@@ -56,9 +63,8 @@ class TestParseServerInfo(unittest.TestCase):
     def test_hostname_just_slash_with_defaults(self):
         local_url = "/"
         (username, password, hostname, port, prefix) = parse_url(
-            local_url,
-            default_hostname=DEFAULT_HOSTNAME,
-            default_port=DEFAULT_PORT)
+            local_url, default_hostname=DEFAULT_HOSTNAME, default_port=DEFAULT_PORT
+        )
         self.assertEqual(DEFAULT_HOSTNAME, hostname)
         self.assertEqual(DEFAULT_PORT, port)
         self.assertEqual("/", prefix)
@@ -72,15 +78,11 @@ class TestParseServerInfo(unittest.TestCase):
 
     def test_hostname_nothing(self):
         local_url = ""
-        self.assertRaises(ServerUrlParseErrorEmpty,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorEmpty, parse_url, local_url)
 
     def test_hostname_none(self):
         local_url = None
-        self.assertRaises(ServerUrlParseErrorNone,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorNone, parse_url, local_url)
 
     def test_hostname_with_scheme(self):
         # this is the default, so test it here
@@ -117,54 +119,40 @@ class TestParseServerInfo(unittest.TestCase):
         # throw an error, especially if it's not a valid hostname
         local_url = "a"
         (username, password, hostname, port, prefix) = parse_url(
-            local_url,
-            default_port=DEFAULT_PORT, default_prefix=DEFAULT_PREFIX)
+            local_url, default_port=DEFAULT_PORT, default_prefix=DEFAULT_PREFIX
+        )
         self.assertEqual("a", hostname)
         self.assertEqual(DEFAULT_PORT, port)
         self.assertEqual(DEFAULT_PREFIX, prefix)
 
     def test_wrong_scheme(self):
         local_url = "git://git.fedorahosted.org/candlepin.git"
-        self.assertRaises(ServerUrlParseErrorScheme,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorScheme, parse_url, local_url)
 
     def test_bad_http_scheme(self):
         # note missing /
         local_url = "https:/myhost.example.com:8443/myapp"
-        self.assertRaises(ServerUrlParseErrorScheme,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorScheme, parse_url, local_url)
 
     def test_colon_but_no_port(self):
         local_url = "https://myhost.example.com:/myapp"
-        self.assertRaises(ServerUrlParseErrorPort,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorPort, parse_url, local_url)
 
     def test_colon_but_no_port_no_scheme(self):
         local_url = "myhost.example.com:/myapp"
-        self.assertRaises(ServerUrlParseErrorPort,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorPort, parse_url, local_url)
 
     def test_colon_slash_slash_but_nothing_else(self):
         local_url = "http://"
-        self.assertRaises(ServerUrlParseErrorJustScheme,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorJustScheme, parse_url, local_url)
 
     def test_colon_slash_but_nothing_else(self):
         local_url = "http:/"
-        self.assertRaises(ServerUrlParseErrorScheme,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorScheme, parse_url, local_url)
 
     def test_colon_no_slash(self):
         local_url = "http:example.com/foobar"
-        self.assertRaises(ServerUrlParseErrorScheme,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorScheme, parse_url, local_url)
 
     # Note: this means if you have a local server named
     # "http", and you like redundant slashes, this actually
@@ -173,28 +161,20 @@ class TestParseServerInfo(unittest.TestCase):
     # But seriously, really?
     def test_no_colon_double_slash(self):
         local_url = "http//example.com/api"
-        self.assertRaises(ServerUrlParseErrorScheme,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorScheme, parse_url, local_url)
 
     def test_https_no_colon_double_slash(self):
         local_url = "https//example.com/api"
-        self.assertRaises(ServerUrlParseErrorScheme,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorScheme, parse_url, local_url)
 
     # fail at internet
     def test_just_colon_slash(self):
         local_url = "://"
-        self.assertRaises(ServerUrlParseErrorScheme,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorScheme, parse_url, local_url)
 
     def test_one_slash(self):
         local_url = "http/example.com"
-        self.assertRaises(ServerUrlParseErrorScheme,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorScheme, parse_url, local_url)
 
     def test_host_named_http(self):
         local_url = "http://http/prefix"
@@ -205,9 +185,7 @@ class TestParseServerInfo(unittest.TestCase):
 
     def test_one_slash_port_prefix(self):
         local_url = "https/bogaddy:80/candlepin"
-        self.assertRaises(ServerUrlParseErrorScheme,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorScheme, parse_url, local_url)
 
     def test_host_named_http_port_prefix(self):
         local_url = "https://https:8000/prefix"
@@ -218,9 +196,7 @@ class TestParseServerInfo(unittest.TestCase):
 
     def test_host_name_non_numeric_port(self):
         local_url = "https://example.com:https/prefix"
-        self.assertRaises(ServerUrlParseErrorPort,
-                          parse_url,
-                          local_url)
+        self.assertRaises(ServerUrlParseErrorPort, parse_url, local_url)
 
 
 class TestRemoveScheme(unittest.TestCase):
@@ -246,7 +222,6 @@ class TestRemoveScheme(unittest.TestCase):
 
 
 class TestHasBadScheme(unittest.TestCase):
-
     def test_bad(self):
         self.assertTrue(has_bad_scheme("://example.com"))
         self.assertTrue(has_bad_scheme("http/example.com"))
@@ -259,7 +234,6 @@ class TestHasBadScheme(unittest.TestCase):
 
 
 class TestHasGoodScheme(unittest.TestCase):
-
     def test_good(self):
         self.assertTrue(has_good_scheme("http://example.com"))
         self.assertTrue(has_good_scheme("https://example.com"))
@@ -272,7 +246,6 @@ class TestHasGoodScheme(unittest.TestCase):
 
 
 class TestParseUrl(unittest.TestCase):
-
     def test_username_password(self):
         local_url = "http://user:pass@hostname:1111/prefix"
         (username, password, hostname, port, prefix) = parse_url(local_url)
@@ -316,8 +289,7 @@ class TestProxyInfo(unittest.TestCase):
         Return an environment with everything empty except
         those passed in variables.
         """
-        proxy_env = {'HTTPS_PROXY': '', 'https_proxy': '',
-                     'HTTP_PROXY': '', 'http_proxy': ''}
+        proxy_env = {'HTTPS_PROXY': '', 'https_proxy': '', 'HTTP_PROXY': '', 'http_proxy': ''}
         if variables:
             for (key, value) in list(variables.items()):
                 proxy_env[key] = value
@@ -357,7 +329,12 @@ class TestProxyInfo(unittest.TestCase):
 
     def test_order(self):
         # should follow the order: HTTPS, https, HTTP, http
-        with patch.dict('os.environ', self._gen_env({'HTTPS_PROXY': 'http://u:p@host:1111', 'http_proxy': 'http://notme:orme@host:2222'})):
+        with patch.dict(
+            'os.environ',
+            self._gen_env(
+                {'HTTPS_PROXY': 'http://u:p@host:1111', 'http_proxy': 'http://notme:orme@host:2222'}
+            ),
+        ):
             proxy_info = get_env_proxy_info()
             self.assertEqual("u", proxy_info["proxy_username"])
             self.assertEqual("p", proxy_info["proxy_password"])

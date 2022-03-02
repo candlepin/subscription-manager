@@ -35,7 +35,8 @@ class BaseFacts(base_object.BaseObject):
 
     @util.dbus_service_method(
         dbus_interface=constants.FACTS_DBUS_INTERFACE,
-        out_signature='a{ss}')
+        out_signature='a{ss}',
+    )
     @util.dbus_handle_exceptions
     def GetFacts(self, sender=None):
         collection = self.facts_collector.collect()
@@ -45,11 +46,11 @@ class BaseFacts(base_object.BaseObject):
 
 def class_factory(name, facts_collector=None):
     """Function used for creating subclasses of class BaseFact"""
+
     def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(self.__class__, self).__init__(conn=conn,
-                                             object_path=object_path,
-                                             bus_name=bus_name)
+        super(self.__class__, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
         self.facts_collector = facts_collector
+
     return type(name, (BaseFacts,), {"__init__": __init__})
 
 

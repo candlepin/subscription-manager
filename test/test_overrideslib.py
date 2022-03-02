@@ -3,7 +3,6 @@ from subscription_manager.overrides import Overrides, Override
 
 
 class OverrideTests(SubManFixture):
-
     def setUp(self):
         SubManFixture.setUp(self)
         self.overrides = Overrides()
@@ -11,7 +10,9 @@ class OverrideTests(SubManFixture):
     def test_add_function(self):
         repos = ['x', 'y']
         override_props = {'a': 'b', 'c': 'd'}
-        overrides = [Override(repo, name, value) for repo in repos for name, value in list(override_props.items())]
+        overrides = [
+            Override(repo, name, value) for repo in repos for name, value in list(override_props.items())
+        ]
         expected = [
             {'contentLabel': 'x', 'name': 'a', 'value': 'b'},
             {'contentLabel': 'x', 'name': 'c', 'value': 'd'},

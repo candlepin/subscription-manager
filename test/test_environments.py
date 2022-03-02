@@ -20,17 +20,17 @@ from .fixture import SubManFixture, Capture
 
 
 class CliEnvironmentTests(SubManFixture):
-
     def setUp(self):
         super(CliEnvironmentTests, self).setUp()
-        get_supported_resources_patcher = patch('subscription_manager.cli_command.environments.get_supported_resources')
+        get_supported_resources_patcher = patch(
+            'subscription_manager.cli_command.environments.get_supported_resources'
+        )
         self.mock_get_resources = get_supported_resources_patcher.start()
         self.mock_get_resources.return_value = ['environments']
         self.addCleanup(self.mock_get_resources.stop)
 
     def env_list(*args, **kwargs):
-        return [{"id": "1234", "name": "somename"},
-                {"id": "5678", "name": "othername"}]
+        return [{"id": "1234", "name": "somename"}, {"id": "5678", "name": "othername"}]
 
     def test_update_environments(self):
         with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:

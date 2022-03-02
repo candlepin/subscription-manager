@@ -23,8 +23,15 @@ from datetime import datetime, timedelta
 from rhsm import _certificate
 
 from rhsm.connection import safe_int
-from rhsm.certificate import Extensions, OID, DateRange, GMT, \
-    get_datetime_from_x509, parse_tags, CertificateException
+from rhsm.certificate import (
+    Extensions,
+    OID,
+    DateRange,
+    GMT,
+    get_datetime_from_x509,
+    parse_tags,
+    CertificateException,
+)
 from rhsm.pathtree import PathTree
 from rhsm import ourjson as json
 
@@ -343,7 +350,7 @@ class _CertFactory(object):
             core_limit=sub.get('cores', None),
             roles=sub.get('roles', None),
             usage=sub.get('usage', None),
-            addons=sub.get('addons', None)
+            addons=sub.get('addons', None),
         )
 
     def _parse_v3_products(self, payload):
@@ -355,14 +362,16 @@ class _CertFactory(object):
         products = []
         for product in product_payload:
 
-            products.append(Product(
-                id=product['id'],
-                name=product['name'],
-                version=product.get('version', None),
-                architectures=product.get('architectures', []),
-                brand_type=product.get('brand_type', None),
-                brand_name=product.get('brand_name', None)
-            ))
+            products.append(
+                Product(
+                    id=product['id'],
+                    name=product['name'],
+                    version=product.get('version', None),
+                    architectures=product.get('architectures', []),
+                    brand_type=product.get('brand_type', None),
+                    brand_name=product.get('brand_name', None),
+                )
+            )
             # TODO: skipping provided tags here, we don't yet generate
             # v3 product certs, we may never, which is the only place provided
             # tags can exist.
@@ -372,18 +381,20 @@ class _CertFactory(object):
         content = []
         for product in payload['products']:
             for c in product['content']:
-                content.append(Content(
-                    content_type=c['type'],
-                    name=c['name'],
-                    label=c['label'],
-                    vendor=c.get('vendor', None),
-                    url=c.get('path', None),
-                    gpg=c.get('gpg_url', None),
-                    enabled=c.get('enabled', True),
-                    metadata_expire=c.get('metadata_expire', None),
-                    required_tags=c.get('required_tags', []),
-                    arches=c.get('arches', []),
-                ))
+                content.append(
+                    Content(
+                        content_type=c['type'],
+                        name=c['name'],
+                        label=c['label'],
+                        vendor=c.get('vendor', None),
+                        url=c.get('path', None),
+                        gpg=c.get('gpg_url', None),
+                        enabled=c.get('enabled', True),
+                        metadata_expire=c.get('metadata_expire', None),
+                        required_tags=c.get('required_tags', []),
+                        arches=c.get('arches', []),
+                    )
+                )
         return content
 
     def _parse_v3_pool(self, payload):
@@ -404,12 +415,12 @@ class _CertFactory(object):
             return json.loads(decompressed)
         except Exception as e:
             log.exception(e)
-            raise CertificateException("Error decompressing/parsing "
-                                       "certificate payload.")
+            raise CertificateException("Error decompressing/parsing " "certificate payload.")
 
 
 class Version(object):
-    """ Small wrapper for version string comparisons. """
+    """Small wrapper for version string comparisons."""
+
     def __init__(self, version_str):
         self.version_str = version_str
         self.segments = version_str.split(".")
@@ -427,7 +438,6 @@ class Version(object):
 
 
 class _Extensions2(Extensions):
-
     def _parse(self, x509):
         """
         Override parent method for an X509 object from the new C wrapper.
@@ -439,9 +449,20 @@ class _Extensions2(Extensions):
 
 
 class Certificate(object):
-    """ Parent class of all x509 certificate types. """
-    def __init__(self, x509=None, path=None, version=None, serial=None, start=None,
-                 end=None, subject=None, pem=None, issuer=None):
+    """Parent class of all x509 certificate types."""
+
+    def __init__(
+        self,
+        x509=None,
+        path=None,
+        version=None,
+        serial=None,
+        start=None,
+        end=None,
+        subject=None,
+        pem=None,
+        issuer=None,
+    ):
 
         # The rhsm._certificate X509 object for this certificate.
         # WARNING: May be None in tests
@@ -547,7 +568,6 @@ class ProductCertificate(Certificate):
 
 
 class EntitlementCertificate(ProductCertificate):
-
     def __init__(self, order=None, content=None, pool=None, extensions=None, **kwargs):
         ProductCertificate.__init__(self, **kwargs)
         self.order = order
@@ -573,8 +593,7 @@ class EntitlementCertificate(ProductCertificate):
         """
         # This data was not present in certificates prior to v3.
         if self.version.major < 3:
-            raise AttributeError(
-                'path tree not used for v%d certs' % self.version.major)
+            raise AttributeError('path tree not used for v%d certs' % self.version.major)
         if not self._path_tree_object:
             # generate and cache the tree
             data = self.extensions[EXT_ENT_PAYLOAD]
@@ -686,9 +705,11 @@ class EntitlementCertificate(ProductCertificate):
             key_filename = "%s-key.%s" % tuple(cert_filename.rsplit(".", 1))
         except TypeError as e:
             log.exception(e)
-            raise CertificateException("Entitlement certificate path \"%s\" is not in "
-                                       "in the expected format so the key file path "
-                                       "could not be based on it." % self.path)
+            raise CertificateException(
+                "Entitlement certificate path \"%s\" is not in "
+                "in the expected format so the key file path "
+                "could not be based on it." % self.path
+            )
         key_path = os.path.join(dir_path, key_filename)
         return key_path
 
@@ -697,8 +718,17 @@ class Product(object):
     """
     Represents the product information from a certificate.
     """
-    def __init__(self, id=None, name=None, version=None, architectures=None,
-                 provided_tags=None, brand_type=None, brand_name=None):
+
+    def __init__(
+        self,
+        id=None,
+        name=None,
+        version=None,
+        architectures=None,
+        provided_tags=None,
+        brand_type=None,
+        brand_name=None,
+    ):
 
         if name is None:
             raise CertificateException("Product missing name")
@@ -725,7 +755,7 @@ class Product(object):
         self.brand_name = brand_name
 
     def __eq__(self, other):
-        return (self.id == other.id)
+        return self.id == other.id
 
 
 class Order(object):
@@ -734,13 +764,30 @@ class Order(object):
     originated from.
     """
 
-    def __init__(self, name=None, number=None, sku=None, subscription=None,
-                 quantity=None, virt_limit=None, socket_limit=None,
-                 contract=None, quantity_used=None, warning_period=None,
-                 account=None, provides_management=None, service_level=None,
-                 service_type=None, stacking_id=None, virt_only=None,
-                 ram_limit=None, core_limit=None, roles=None, usage=None,
-                 addons=None):
+    def __init__(
+        self,
+        name=None,
+        number=None,
+        sku=None,
+        subscription=None,
+        quantity=None,
+        virt_limit=None,
+        socket_limit=None,
+        contract=None,
+        quantity_used=None,
+        warning_period=None,
+        account=None,
+        provides_management=None,
+        service_level=None,
+        service_type=None,
+        stacking_id=None,
+        virt_only=None,
+        ram_limit=None,
+        core_limit=None,
+        roles=None,
+        usage=None,
+        addons=None,
+    ):
 
         self.name = name
         self.number = number  # order number
@@ -778,14 +825,23 @@ class Order(object):
         self.core_limit = safe_int(core_limit, None)
 
     def __str__(self):
-        return "<Order: name=%s number=%s sku=%s>" % \
-               (self.name, self.number, self.sku)
+        return "<Order: name=%s number=%s sku=%s>" % (self.name, self.number, self.sku)
 
 
 class Content(object):
-
-    def __init__(self, content_type=None, name=None, label=None, vendor=None, url=None,
-                 gpg=None, enabled=None, metadata_expire=None, required_tags=None, arches=None):
+    def __init__(
+        self,
+        content_type=None,
+        name=None,
+        label=None,
+        vendor=None,
+        url=None,
+        gpg=None,
+        enabled=None,
+        metadata_expire=None,
+        required_tags=None,
+        arches=None,
+    ):
 
         if (name is None) or (label is None):
             raise CertificateException("Content missing name/label")
@@ -800,9 +856,8 @@ class Content(object):
         if not content_type:
             raise CertificateException("Content does not have a type set.")
 
-        if (enabled not in (None, 0, 1, "0", "1")):
-            raise CertificateException("Invalid content enabled setting: %s"
-                                       % enabled)
+        if enabled not in (None, 0, 1, "0", "1"):
+            raise CertificateException("Invalid content enabled setting: %s" % enabled)
 
         # Convert possible incoming None or string (0/1) to a boolean:
         # If enabled isn't specified in cert we assume True.
@@ -819,8 +874,12 @@ class Content(object):
         return isinstance(other, self.__class__) and (self.label == other.label)
 
     def __str__(self):
-        return "<Content: content_type=%s name=%s label=%s enabled=%s>" % \
-               (self.content_type, self.name, self.label, self.enabled)
+        return "<Content: content_type=%s name=%s label=%s enabled=%s>" % (
+            self.content_type,
+            self.name,
+            self.label,
+            self.enabled,
+        )
 
     def __hash__(self):
         return hash(self.label)
@@ -830,10 +889,11 @@ class Pool(object):
     """
     Represents the pool an entitlement originates from.
     """
+
     def __init__(self, id=None):
         if id is None:
             raise CertificateException("Pool is missing ID")
         self.id = id
 
     def __eq__(self, other):
-        return (self.id == other.id)
+        return self.id == other.id

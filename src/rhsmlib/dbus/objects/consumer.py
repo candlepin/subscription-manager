@@ -38,6 +38,7 @@ class ConsumerDBusObject(base_object.BaseObject):
     A D-Bus object interacting with subscription-manager to get
     information about current consumer.
     """
+
     default_dbus_path = constants.CONSUMER_DBUS_PATH
     interface_name = constants.CONSUMER_INTERFACE
 
@@ -47,7 +48,8 @@ class ConsumerDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.CONSUMER_INTERFACE,
         in_signature='s',
-        out_signature='s')
+        out_signature='s',
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetUuid(self, locale, sender=None):
@@ -72,7 +74,8 @@ class ConsumerDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.CONSUMER_INTERFACE,
         in_signature='s',
-        out_signature='s')
+        out_signature='s',
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetOrg(self, locale, sender=None):
@@ -91,7 +94,7 @@ class ConsumerDBusObject(base_object.BaseObject):
 
     @util.dbus_service_signal(
         constants.CONSUMER_INTERFACE,
-        signature=''
+        signature='',
     )
     @util.dbus_handle_exceptions
     def ConsumerChanged(self):

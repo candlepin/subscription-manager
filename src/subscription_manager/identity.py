@@ -56,8 +56,7 @@ class ConsumerIdentity(object):
 
     @classmethod
     def exists(cls):
-        return (os.path.exists(cls.keypath()) and
-                os.path.exists(cls.certpath()))
+        return os.path.exists(cls.keypath()) and os.path.exists(cls.certpath())
 
     @classmethod
     def existsAndValid(cls):
@@ -93,6 +92,7 @@ class ConsumerIdentity(object):
     # why this landed in a parallel disjoint class wrapping the actual cert.
     def write(self):
         from subscription_manager import managerlib
+
         self.__mkdir()
         with open(self.keypath(), 'w') as key_file:
             key_file.write(self.key)
@@ -115,13 +115,12 @@ class ConsumerIdentity(object):
             os.mkdir(path)
 
     def __str__(self):
-        return 'consumer: name="%s", uuid=%s' % \
-            (self.getConsumerName(),
-             self.getConsumerId())
+        return 'consumer: name="%s", uuid=%s' % (self.getConsumerName(), self.getConsumerId())
 
 
 class Identity(object):
     """Wrapper for sharing consumer identity without constant reloading."""
+
     def __init__(self):
         self.consumer = None
         self._lock = threading.Lock()
@@ -141,8 +140,10 @@ class Identity(object):
             except (CertificateException, IOError) as err:
                 self.consumer = None
                 err_msg = err
-                msg = "Reload of consumer identity cert %s raised an exception with msg: %s" \
-                    % (ConsumerIdentity.certpath(), err_msg)
+                msg = "Reload of consumer identity cert %s raised an exception with msg: %s" % (
+                    ConsumerIdentity.certpath(),
+                    err_msg,
+                )
                 if isinstance(err, IOError) and err.errno == errno.ENOENT:
                     log.debug(msg)
                 else:

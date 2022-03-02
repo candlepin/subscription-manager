@@ -17,7 +17,13 @@ import unittest
 
 from test.rhsm.unit import certdata
 from rhsm.certificate import create_from_pem, CertificateException
-from rhsm.certificate2 import Content, EntitlementCertificate, IdentityCertificate, Product, ProductCertificate
+from rhsm.certificate2 import (
+    Content,
+    EntitlementCertificate,
+    IdentityCertificate,
+    Product,
+    ProductCertificate,
+)
 
 from mock import patch
 
@@ -35,8 +41,7 @@ class V1ProductCertTests(unittest.TestCase):
         self.assertEqual("1.0", str(self.prod_cert_1.version))
         self.assertTrue(isinstance(self.prod_cert_1, ProductCertificate))
         self.assertEqual(1, len(self.prod_cert_1.products))
-        self.assertEqual('Awesome OS for x86_64 Bits',
-                         self.prod_cert_1.products[0].name)
+        self.assertEqual('Awesome OS for x86_64 Bits', self.prod_cert_1.products[0].name)
         self.assertEqual('100000000000002', self.prod_cert_1.subject['CN'])
 
     def test_os_old_cert(self):
@@ -73,7 +78,6 @@ class V1ProductCertTests(unittest.TestCase):
 
 
 class V1EntCertTests(unittest.TestCase):
-
     def setUp(self):
         self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V1_0)
 
@@ -81,8 +85,7 @@ class V1EntCertTests(unittest.TestCase):
         self.assertRaises(CertificateException, create_from_pem, "")
 
     def test_junk_contents_throws_exception(self):
-        self.assertRaises(CertificateException, create_from_pem,
-                          "DOESTHISLOOKLIKEACERTTOYOU?")
+        self.assertRaises(CertificateException, create_from_pem, "DOESTHISLOOKLIKEACERTTOYOU?")
 
     def test_factory_method_on_ent_cert(self):
         self.assertEqual("1.0", str(self.ent_cert.version))
@@ -91,8 +94,7 @@ class V1EntCertTests(unittest.TestCase):
         self.assertEqual(2013, self.ent_cert.end.year)
         self.assertEqual("Awesome OS for x86_64", self.ent_cert.order.name)
         self.assertEqual(1, len(self.ent_cert.products))
-        self.assertEqual('Awesome OS for x86_64 Bits',
-                         self.ent_cert.products[0].name)
+        self.assertEqual('Awesome OS for x86_64 Bits', self.ent_cert.products[0].name)
         self.assertEqual('ff80808138574bd20138574d85a50b2f', self.ent_cert.subject['CN'])
 
     def test_is_valid(self):
@@ -103,15 +105,14 @@ class V1EntCertTests(unittest.TestCase):
         self.assertEqual("Awesome OS for x86_64", self.ent_cert.order.name)
 
     def _find_content_by_label(self, content, label):
-        """ Just pulls out content from a list if label matches. """
+        """Just pulls out content from a list if label matches."""
         for c in content:
             if c.label == label:
                 return c
 
     def test_content(self):
         self.assertEqual(4, len(self.ent_cert.content))
-        content = self._find_content_by_label(self.ent_cert.content,
-                                              "always-enabled-content")
+        content = self._find_content_by_label(self.ent_cert.content, "always-enabled-content")
         self.assertEqual("always-enabled-content", content.name)
         self.assertEqual(True, content.enabled)
         self.assertEqual("/foo/path/always/$releasever", content.url)
@@ -153,7 +154,6 @@ class V1EntCertTests(unittest.TestCase):
 
 
 class V3CertTests(unittest.TestCase):
-
     def setUp(self):
         self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V3_0)
 
@@ -166,10 +166,8 @@ class V3CertTests(unittest.TestCase):
         self.assertEqual("Awesome OS for x86_64", self.ent_cert.order.name)
 
         self.assertEqual(1, len(self.ent_cert.products))
-        self.assertEqual('Awesome OS for x86_64 Bits',
-                         self.ent_cert.products[0].name)
-        self.assertEqual('ff80808139d9e26c0139da23489a0066',
-                         self.ent_cert.subject['CN'])
+        self.assertEqual('Awesome OS for x86_64 Bits', self.ent_cert.products[0].name)
+        self.assertEqual('ff80808139d9e26c0139da23489a0066', self.ent_cert.subject['CN'])
 
     def test_factory_method_without_ent_data(self):
         data = certdata.ENTITLEMENT_CERT_V3_0.split('-----BEGIN ENTITLEMENT DATA-----')[0]
@@ -183,7 +181,7 @@ class V3CertTests(unittest.TestCase):
         self.assertFalse(self.ent_cert.is_valid(on_date=datetime(2014, 12, 1)))
 
     def _find_content_by_label(self, content, label):
-        """ Just pulls out content from a list if label matches. """
+        """Just pulls out content from a list if label matches."""
         for c in content:
             if c.label == label:
                 return c
@@ -195,8 +193,7 @@ class V3CertTests(unittest.TestCase):
 
     def test_content_enabled(self):
         self.assertEqual(4, len(self.ent_cert.content))
-        content = self._find_content_by_label(self.ent_cert.content,
-                                              "always-enabled-content")
+        content = self._find_content_by_label(self.ent_cert.content, "always-enabled-content")
         self.assertEqual("always-enabled-content", content.name)
         self.assertEqual(True, content.enabled)
         self.assertEqual(200, content.metadata_expire)
@@ -205,22 +202,20 @@ class V3CertTests(unittest.TestCase):
 
     def test_content_disabled(self):
         self.assertEqual(4, len(self.ent_cert.content))
-        content = self._find_content_by_label(self.ent_cert.content,
-                                              "never-enabled-content")
+        content = self._find_content_by_label(self.ent_cert.content, "never-enabled-content")
         self.assertEqual("never-enabled-content", content.name)
         self.assertEqual(False, content.enabled)
 
     def test_content_no_arches(self):
         """Handle entitlement certs with no arch info on content"""
-        content = self._find_content_by_label(self.ent_cert.content,
-                                              "always-enabled-content")
+        content = self._find_content_by_label(self.ent_cert.content, "always-enabled-content")
         # we should get the default empty list if there are no arches
         # specified, ala the test entitlement cert
         self.assertEqual([], content.arches)
 
     @patch('os.unlink')
     def test_delete(self, unlink_mock):
-        """ Entitlement cert deletion should cleanup key as well. """
+        """Entitlement cert deletion should cleanup key as well."""
         cert_path = "/etc/pki/entitlement/12345.pem"
         key_path = "/etc/pki/entitlement/12345-key.pem"
         self.ent_cert.path = cert_path
@@ -252,15 +247,13 @@ class V3CertTests(unittest.TestCase):
 
 
 class V3_2CertTests(unittest.TestCase):
-
     def setUp(self):
         self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V3_2)
 
     def test_read_pool(self):
         self.assertEqual("3.2", str(self.ent_cert.version))
         self.assertTrue(isinstance(self.ent_cert, EntitlementCertificate))
-        self.assertEqual('8a8d01f53cda9dd0013cda9ed5100475',
-                         self.ent_cert.pool.id)
+        self.assertEqual('8a8d01f53cda9dd0013cda9ed5100475', self.ent_cert.pool.id)
 
 
 class TestEntCertV1KeyPath(unittest.TestCase):
@@ -304,7 +297,6 @@ class TestEntCertV3_2KeyPath(TestEntCertV1KeyPath):
 
 
 class V3_2ContentArchCertTests(unittest.TestCase):
-
     def setUp(self):
         self.ent_cert = create_from_pem(certdata.ENTITLEMENT_CERT_V3_2_WITH_CONTENT_ARCH)
 
@@ -320,7 +312,6 @@ class V3_2ContentArchCertTests(unittest.TestCase):
 
 
 class IdentityCertTests(unittest.TestCase):
-
     def test_creation(self):
         id_cert = create_from_pem(certdata.IDENTITY_CERT)
         self.assertTrue(isinstance(id_cert, IdentityCertificate))
@@ -341,7 +332,6 @@ class IdentityCertTests(unittest.TestCase):
 
 
 class ContentTests(unittest.TestCase):
-
     def test_enabled(self):
         c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=None)
         self.assertTrue(c.enabled)
@@ -351,16 +341,35 @@ class ContentTests(unittest.TestCase):
         self.assertTrue(c.enabled)
         c = Content(content_type="yum", name="mycontent", label="mycontent", enabled="0")
         self.assertFalse(c.enabled)
-        self.assertRaises(CertificateException, Content, content_type="yum",
-                          name="mycontent", label="mycontent", enabled="5")
+        self.assertRaises(
+            CertificateException,
+            Content,
+            content_type="yum",
+            name="mycontent",
+            label="mycontent",
+            enabled="5",
+        )
 
     def test_content_requires_type(self):
-        self.assertRaises(CertificateException, Content, name="testcontent",
-                          label="testcontent", enabled=True)
-        self.assertRaises(CertificateException, Content, content_type=None,
-                          name="testcontent", label="testcontent", enabled=True)
-        self.assertRaises(CertificateException, Content, content_type="",
-                          name="testcontent", label="testcontent", enabled=True)
+        self.assertRaises(
+            CertificateException, Content, name="testcontent", label="testcontent", enabled=True
+        )
+        self.assertRaises(
+            CertificateException,
+            Content,
+            content_type=None,
+            name="testcontent",
+            label="testcontent",
+            enabled=True,
+        )
+        self.assertRaises(
+            CertificateException,
+            Content,
+            content_type="",
+            name="testcontent",
+            label="testcontent",
+            enabled=True,
+        )
 
     def test_arches_not_set(self):
         c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1)
@@ -373,7 +382,9 @@ class ContentTests(unittest.TestCase):
         self.assertEqual([], c.arches)
 
     def test_arches(self):
-        c = Content(content_type="yum", name="mycontent", label="mycontent", enabled=1, arches=['i386', 's390'])
+        c = Content(
+            content_type="yum", name="mycontent", label="mycontent", enabled=1, arches=['i386', 's390']
+        )
         self.assertTrue(isinstance(c.arches, list))
         self.assertTrue('i386' in c.arches)
         self.assertTrue('s390' in c.arches)
@@ -398,7 +409,6 @@ class ContentTests(unittest.TestCase):
 
 
 class ProductTests(unittest.TestCase):
-
     def test_arch_multi_valued(self):
         p = Product(id="pid", name="pname", architectures="i386,x86_64")
         self.assertEqual(2, len(p.architectures))
@@ -415,18 +425,15 @@ class ProductTests(unittest.TestCase):
         self.assertTrue(p.brand_type is None)
 
     def test_brand_type(self):
-        p = Product(id="pid", name="pname",
-                    brand_type="pbrand_type")
+        p = Product(id="pid", name="pname", brand_type="pbrand_type")
         self.assertTrue(p.brand_type == "pbrand_type")
 
     def test_brand_type_none(self):
-        p = Product(id="pid", name="pname",
-                    brand_type=None)
+        p = Product(id="pid", name="pname", brand_type=None)
         self.assertTrue(p.brand_type is None)
 
     def test_brand_type_empty_string(self):
-        p = Product(id='pid', name='pname',
-                    brand_type="")
+        p = Product(id='pid', name='pname', brand_type="")
         self.assertEqual(p.brand_type, "")
 
     def test_no_brand_name(self):
@@ -434,16 +441,13 @@ class ProductTests(unittest.TestCase):
         self.assertTrue(p.brand_name is None)
 
     def test_brand_name(self):
-        p = Product(id="pid", name="pname",
-                    brand_name="pbrand_name")
+        p = Product(id="pid", name="pname", brand_name="pbrand_name")
         self.assertTrue(p.brand_name == "pbrand_name")
 
     def test_brand_name_none(self):
-        p = Product(id="pid", name="pname",
-                    brand_name=None)
+        p = Product(id="pid", name="pname", brand_name=None)
         self.assertTrue(p.brand_name is None)
 
     def test_brand_name_empty_string(self):
-        p = Product(id="pid", name="pname",
-                    brand_name="")
+        p = Product(id="pid", name="pname", brand_name="")
         self.assertEqual(p.brand_name, "")

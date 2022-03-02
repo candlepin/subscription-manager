@@ -30,6 +30,7 @@ class ContentPluginActionReport(certlib.ActionReport):
     Just a set of reports that include info about the content
     plugin that created it.
     """
+
     name = "Content Plugin Reports"
 
     def __init__(self):
@@ -51,6 +52,7 @@ class ContentPluginActionCommand(object):
     perform() runs the PluginHookRunner and returns the ContentActionReport
       that PluginHookRunner.run() adds to the content plugin conduit.
     """
+
     def __init__(self, content_plugin_runner):
         self.runner = content_plugin_runner
 
@@ -62,6 +64,7 @@ class ContentPluginActionCommand(object):
 
 class ContentPluginActionInvoker(certlib.BaseActionInvoker):
     """ActionInvoker for ContentPluginActionCommands."""
+
     def __init__(self, content_plugin_runner):
         """Create a ContentPluginActionInvoker to wrap content plugin PluginHookRunner.
 
@@ -81,7 +84,6 @@ class ContentPluginActionInvoker(certlib.BaseActionInvoker):
 
 
 class ContentActionClient(base_action_client.BaseActionClient):
-
     def _get_libset(self):
         """Return a generator that creates a ContentPluginAction* for each update_content plugin.
 
@@ -101,8 +103,10 @@ class ContentActionClient(base_action_client.BaseActionClient):
         # update.
         ent_dir_ent_source = EntitlementDirEntitlementSource()
 
-        for runner in plugin_manager.runiter('update_content',
-                                             reports=content_plugins_reports,
-                                             ent_source=ent_dir_ent_source):
+        for runner in plugin_manager.runiter(
+            'update_content',
+            reports=content_plugins_reports,
+            ent_source=ent_dir_ent_source,
+        ):
             invoker = ContentPluginActionInvoker(runner)
             yield invoker

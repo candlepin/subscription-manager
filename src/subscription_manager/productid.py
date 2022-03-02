@@ -16,6 +16,7 @@
 from gzip import GzipFile
 import logging
 import os
+
 # for labelCompare
 import rpm
 
@@ -43,13 +44,11 @@ class DatabaseDirectory(Directory):
 
 
 class ProductIdRepoMap(utils.DefaultDict):
-
     def __init__(self, *args, **kwargs):
         self.default_factory = list
 
 
 class ProductDatabase(object):
-
     def __init__(self):
         self.dir = DatabaseDirectory()
         self.content = ProductIdRepoMap()
@@ -108,6 +107,7 @@ class ProductDatabase(object):
 
 class ComparableMixin(object):
     """Needs compare_keys to be implemented."""
+
     def _compare(self, keys, method):
         return method(keys[0], keys[1]) if keys else NotImplemented
 
@@ -157,8 +157,9 @@ class RpmVersion(object):
         def no_suff(s):
             for suff in self.suffixes:
                 if s and s.lower().endswith(suff):
-                    return s[:-len(suff)].strip('- ')
+                    return s[: -len(suff)].strip('- ')
             return s
+
         return (self.epoch, no_suff(self.version), self.release)
 
     def compare(self, other):
@@ -224,6 +225,7 @@ class ComparableProduct(ComparableMixin):
     There aren't any standard product version comparison rules, but the
     rpm rules are pretty flexible, documented, and well understood.
     """
+
     def __init__(self, product):
         self.product = product
 
@@ -236,13 +238,16 @@ class ComparableProduct(ComparableMixin):
         only comparing the difference in the version attribute.
         """
         if self.product.id == other.product.id:
-            return (RpmVersion(version=self.product.version),
-                    RpmVersion(version=other.product.version))
+            return (RpmVersion(version=self.product.version), RpmVersion(version=other.product.version))
         return None
 
     def __str__(self):
-        return "<ComparableProduct id=%s version=%s name=%s product=%s>" % \
-            (self.product.id, self.product.version, self.product.name, self.product)
+        return "<ComparableProduct id=%s version=%s name=%s product=%s>" % (
+            self.product.id,
+            self.product.version,
+            self.product.name,
+            self.product,
+        )
 
 
 class ComparableProductCert(ComparableMixin):
@@ -382,16 +387,20 @@ class ProductManager(object):
         self.update_installed(enabled, active)
 
     def _is_workstation(self, product_cert):
-        if product_cert.name == "Red Hat Enterprise Linux Workstation" and \
-                "rhel-5-client-workstation" in product_cert.provided_tags and \
-                product_cert.version[0] == '5':
+        if (
+            product_cert.name == "Red Hat Enterprise Linux Workstation"
+            and "rhel-5-client-workstation" in product_cert.provided_tags
+            and product_cert.version[0] == '5'
+        ):
             return True
         return False
 
     def _is_desktop(self, product_cert):
-        if product_cert.name == "Red Hat Enterprise Linux Desktop" and \
-                "rhel-5-client" in product_cert.provided_tags and \
-                product_cert.version[0] == '5':
+        if (
+            product_cert.name == "Red Hat Enterprise Linux Desktop"
+            and "rhel-5-client" in product_cert.provided_tags
+            and product_cert.version[0] == '5'
+        ):
             return True
         return False
 
@@ -501,13 +510,16 @@ class ProductManager(object):
                 cmp_product_cert = ComparableProductCert(cert)
                 cmp_installed_product_cert = ComparableProductCert(installed_product_cert)
                 if cmp_product_cert > cmp_installed_product_cert:
-                    log.debug("Updating installed product cert for %s %s to %s %s" %
-                              (installed_product.name, installed_product.version,
-                               p.name, p.version))
+                    log.debug(
+                        "Updating installed product cert for %s %s to %s %s"
+                        % (installed_product.name, installed_product.version, p.name, p.version)
+                    )
                     products_to_update.append((p, cert))
                 else:
-                    log.debug("Latest version of product cert for %s %s is already installed, not updating" %
-                              (p.name, p.version))
+                    log.debug(
+                        "Latest version of product cert for %s %s is already installed, not updating"
+                        % (p.name, p.version)
+                    )
 
             # look up what repo's we know about for that prod id
 
@@ -644,8 +656,7 @@ class ProductManager(object):
         temp_disabled_repos = temp_disabled_repos or []
         certs_to_delete = []
 
-        log.debug("Checking for product certs to remove. Active include: %s",
-                  active)
+        log.debug("Checking for product certs to remove. Active include: %s", active)
 
         log.debug('Temporary disabled repos: %s' % temp_disabled_repos)
 
@@ -686,8 +697,11 @@ class ProductManager(object):
 
                 # If product id maps to a repo that we know is disabled, don't delete it.
                 if repo in disabled_repos and repo in active:
-                    log.info("%s is disabled, but RPMs from this repo are installed. Not deleting product cert %s",
-                             repo, prod_hash)
+                    log.info(
+                        "%s is disabled, but RPMs from this repo are installed. Not deleting product cert %s",
+                        repo,
+                        prod_hash,
+                    )
                     delete_product_cert = False
                     continue
 
@@ -701,7 +715,9 @@ class ProductManager(object):
                 # If product id maps to a repo that we know is only temporarily
                 # disabled, don't delete it.
                 if repo in temp_disabled_repos:
-                    log.warning("%s is disabled via yum cmdline. Not deleting product cert %s", repo, prod_hash)
+                    log.warning(
+                        "%s is disabled via yum cmdline. Not deleting product cert %s", repo, prod_hash
+                    )
                     delete_product_cert = False
                     continue
 
@@ -712,9 +728,7 @@ class ProductManager(object):
 
         # TODO: plugin hook for pre_product_id_delete
         for product, cert in certs_to_delete:
-            log.debug("None of the repos for %s are active: %s",
-                      product.id,
-                      self.db.find_repos(product.id))
+            log.debug("None of the repos for %s are active: %s", product.id, self.db.find_repos(product.id))
             log.info("product cert %s for %s is being deleted" % (product.id, product.id))
             cert.delete()
             self.pdir.refresh()
@@ -744,6 +758,7 @@ class ProductManager(object):
 
 if __name__ == '__main__':
     from subscription_manager.injectioninit import init_dep_injection
+
     init_dep_injection()
 
     logging.basicConfig(filename='/var/log/rhsm/rhsm.log', level=logging.DEBUG)

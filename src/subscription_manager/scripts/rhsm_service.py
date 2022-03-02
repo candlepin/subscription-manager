@@ -39,7 +39,7 @@ def main():
             objects.EntitlementDBusObject,
             objects.ConsumerDBusObject,
             objects.SyspurposeDBusObject,
-            objects.Main
+            objects.Main,
         ]
         sys.exit(service_wrapper.main(sys.argv, object_classes=object_classes))
     except Exception:

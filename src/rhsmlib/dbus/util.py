@@ -27,7 +27,7 @@ __all__ = [
     'dbus_handle_exceptions',
     'dbus_handle_sender',
     'dbus_service_method',
-    'dbus_service_signal'
+    'dbus_service_signal',
 ]
 
 
@@ -86,7 +86,7 @@ def dbus_handle_exceptions(func, *args, **kwargs):
             {
                 "exception": type(err).__name__,
                 "severity": severity,
-                "message": err_msg
+                "message": err_msg,
             }
         )
         raise exceptions.RHSM1DBusException(error_msg).with_traceback(trace)

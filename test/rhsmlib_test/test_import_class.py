@@ -19,7 +19,6 @@ from rhsmlib import import_class
 
 
 class TestImportClass(unittest.TestCase):
-
     def test_import_class(self):
         """
         Simple test of importing class. It seems that we cannot use mock,

@@ -30,6 +30,7 @@ class ProductsDBusObject(base_object.BaseObject):
     A D-Bus object interacting with subscription-manager to list
     all installed products.
     """
+
     default_dbus_path = constants.PRODUCTS_DBUS_PATH
     interface_name = constants.PRODUCTS_INTERFACE
 
@@ -38,7 +39,7 @@ class ProductsDBusObject(base_object.BaseObject):
 
     @util.dbus_service_signal(
         constants.PRODUCTS_INTERFACE,
-        signature=''
+        signature='',
     )
     @util.dbus_handle_exceptions
     def InstalledProductsChanged(self):
@@ -52,7 +53,8 @@ class ProductsDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.PRODUCTS_INTERFACE,
         in_signature='sa{sv}s',
-        out_signature='s')
+        out_signature='s',
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def ListInstalledProducts(self, filter_string, proxy_options, locale, sender=None):

@@ -15,8 +15,14 @@
 from subscription_manager import managercli
 from subscription_manager import injection as inj
 
-from .stubs import StubEntitlementDirectory, StubProductDirectory, StubEntActionInvoker, \
-    StubEntitlementCertificate, StubProduct, StubPool
+from .stubs import (
+    StubEntitlementDirectory,
+    StubProductDirectory,
+    StubEntActionInvoker,
+    StubEntitlementCertificate,
+    StubProduct,
+    StubPool,
+)
 from . import fixture
 
 
@@ -42,7 +48,9 @@ class CliRemoveTests(fixture.SubManFixture):
         cmd.cp.reset()
 
         pool_id1 = '39993922b'
-        cmd.main(['--serial=%s' % serial1, '--serial=%s' % serial2, '--pool=%s' % pool_id1, '--pool=%s' % pool_id1])
+        cmd.main(
+            ['--serial=%s' % serial1, '--serial=%s' % serial2, '--pool=%s' % pool_id1, '--pool=%s' % pool_id1]
+        )
         self.assertEqual(cmd.cp.called_unbind_serial, [serial1, serial2])
         self.assertEqual(cmd.cp.called_unbind_pool_id, [pool_id1])
 

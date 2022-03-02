@@ -63,7 +63,7 @@ class GCPCloudProvider(BaseCloudProvider):
 
     HTTP_HEADERS = {
         'User-Agent': 'cloud-what/1.0',
-        'Metadata-Flavor': 'Google'
+        'Metadata-Flavor': 'Google',
     }
 
     # Metadata are provided in JWT token and this token is valid for one hour.
@@ -101,8 +101,7 @@ class GCPCloudProvider(BaseCloudProvider):
         if self.is_vm() is False:
             return False
         # This is valid for virtual machines running on Google Cloud Platform
-        if 'dmi.bios.vendor' in self.hw_info and \
-                'google' in self.hw_info['dmi.bios.vendor'].lower():
+        if 'dmi.bios.vendor' in self.hw_info and 'google' in self.hw_info['dmi.bios.vendor'].lower():
             return True
         # In other cases return False
         return False

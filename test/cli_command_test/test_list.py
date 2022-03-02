@@ -6,8 +6,7 @@ from subscription_manager import managercli
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 from subscription_manager.injection import provide, CERT_SORTER
 
-from ..stubs import StubProductCertificate, StubEntitlementCertificate, \
-    StubProduct, StubCertSorter, StubPool
+from ..stubs import StubProductCertificate, StubEntitlementCertificate, StubProduct, StubCertSorter, StubPool
 from ..fixture import Capture
 
 from mock import patch, Mock, MagicMock
@@ -22,9 +21,11 @@ class TestListCommand(TestCliProxyCommand):
         self.indent = 1
         self.max_length = 40
         self.cert_with_service_level = StubEntitlementCertificate(
-            StubProduct("test-product"), service_level="Premium")
+            StubProduct("test-product"), service_level="Premium"
+        )
         self.cert_with_content_access = StubEntitlementCertificate(
-            StubProduct("test-product"), entitlement_type=CONTENT_ACCESS_CERT_TYPE)
+            StubProduct("test-product"), entitlement_type=CONTENT_ACCESS_CERT_TYPE
+        )
         argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'list'])
         argv_patcher.start()
         self.addCleanup(argv_patcher.stop)
@@ -35,9 +36,11 @@ class TestListCommand(TestCliProxyCommand):
             try:
                 method()
             except SystemExit as e:
-                self.assertEqual(e.code, expected_exit_code,
-                                 """Cli should have exited with code '{}', got '{}'""".format(expected_exit_code,
-                                                                                              e.code))
+                self.assertEqual(
+                    e.code,
+                    expected_exit_code,
+                    """Cli should have exited with code '{}', got '{}'""".format(expected_exit_code, e.code),
+                )
                 fail = False
             except Exception as e:
                 fail = True
@@ -51,8 +54,7 @@ class TestListCommand(TestCliProxyCommand):
                 self.fail(msg)
 
     def test_afterdate_option_bad_date(self):
-        argv = ['subscription-manager', 'list', '--all', '--available', '--afterdate',
-                'not_a_real_date']
+        argv = ['subscription-manager', 'list', '--all', '--available', '--afterdate', 'not_a_real_date']
         self._test_afterdate_option(argv, self.cc.main, expected_exit_code=os.EX_DATAERR)
 
     def test_afterdate_option_no_date(self):
@@ -70,32 +72,35 @@ class TestListCommand(TestCliProxyCommand):
         self._test_afterdate_option(argv, self.cc.main, expected_exit_code=os.EX_USAGE)
 
     def test_afterdate_option_with_ondate(self):
-        argv = ['subscription-manager', 'list', '--afterdate', self.valid_date, '--ondate',
-                self.valid_date]
+        argv = ['subscription-manager', 'list', '--afterdate', self.valid_date, '--ondate', self.valid_date]
         self._test_afterdate_option(argv, self.cc.main, expected_exit_code=os.EX_USAGE)
 
     @patch('subscription_manager.managerlib.get_available_entitlements')
     def test_afterdate_option_valid(self, es):
         def create_pool_list(*args, **kwargs):
-            return [{'productName': 'dummy-name',
-                     'productId': 'dummy-id',
-                     'providedProducts': [],
-                     'id': '888888888888',
-                     'management_enabled': True,
-                     'attributes': [{'name': 'is_virt_only',
-                                     'value': 'false'}],
-                     'pool_type': 'Some Type',
-                     'quantity': '4',
-                     'service_type': '',
-                     'roles': 'awsome server',
-                     'service_level': '',
-                     'usage': 'Testing',
-                     'addons': 'ADDON1',
-                     'contractNumber': '5',
-                     'multi-entitlement': 'false',
-                     'startDate': '',
-                     'endDate': '',
-                     'suggested': '2'}]
+            return [
+                {
+                    'productName': 'dummy-name',
+                    'productId': 'dummy-id',
+                    'providedProducts': [],
+                    'id': '888888888888',
+                    'management_enabled': True,
+                    'attributes': [{'name': 'is_virt_only', 'value': 'false'}],
+                    'pool_type': 'Some Type',
+                    'quantity': '4',
+                    'service_type': '',
+                    'roles': 'awsome server',
+                    'service_level': '',
+                    'usage': 'Testing',
+                    'addons': 'ADDON1',
+                    'contractNumber': '5',
+                    'multi-entitlement': 'false',
+                    'startDate': '',
+                    'endDate': '',
+                    'suggested': '2',
+                }
+            ]
+
         es.return_value = create_pool_list()
 
         argv = ['subscription-manager', 'list', '--all', '--available', '--afterdate', self.valid_date]
@@ -106,25 +111,29 @@ class TestListCommand(TestCliProxyCommand):
         list_command = managercli.ListCommand()
 
         def create_pool_list(*args, **kwargs):
-            return [{'productName': 'dummy-name',
-                     'productId': 'dummy-id',
-                     'providedProducts': [],
-                     'id': '888888888888',
-                     'management_enabled': True,
-                     'attributes': [{'name': 'is_virt_only',
-                                     'value': 'false'}],
-                     'pool_type': 'Some Type',
-                     'quantity': '4',
-                     'service_type': '',
-                     'roles': 'awesome server',
-                     'service_level': '',
-                     'usage': 'Production',
-                     'addons': '',
-                     'contractNumber': '5',
-                     'multi-entitlement': 'false',
-                     'startDate': '',
-                     'endDate': '',
-                     'suggested': '2'}]
+            return [
+                {
+                    'productName': 'dummy-name',
+                    'productId': 'dummy-id',
+                    'providedProducts': [],
+                    'id': '888888888888',
+                    'management_enabled': True,
+                    'attributes': [{'name': 'is_virt_only', 'value': 'false'}],
+                    'pool_type': 'Some Type',
+                    'quantity': '4',
+                    'service_type': '',
+                    'roles': 'awesome server',
+                    'service_level': '',
+                    'usage': 'Production',
+                    'addons': '',
+                    'contractNumber': '5',
+                    'multi-entitlement': 'false',
+                    'startDate': '',
+                    'endDate': '',
+                    'suggested': '2',
+                }
+            ]
+
         mget_ents.return_value = create_pool_list()
 
         with Capture() as cap:
@@ -136,25 +145,29 @@ class TestListCommand(TestCliProxyCommand):
         list_command = managercli.ListCommand()
 
         def create_pool_list(*args, **kwargs):
-            return [{'productName': 'dummy-name',
-                     'productId': 'dummy-id',
-                     'providedProducts': [],
-                     'id': '888888888888',
-                     'management_enabled': True,
-                     'attributes': [{'name': 'is_virt_only',
-                                     'value': 'false'}],
-                     'pool_type': 'Some Type',
-                     'quantity': '4',
-                     'service_type': '',
-                     'roles': 'Awesome Server, Cool Server',
-                     'service_level': 'Premium',
-                     'usage': 'Production',
-                     'addons': 'ADDON1,ADDON2',
-                     'contractNumber': '5',
-                     'multi-entitlement': 'false',
-                     'startDate': '',
-                     'endDate': '',
-                     'suggested': '2'}]
+            return [
+                {
+                    'productName': 'dummy-name',
+                    'productId': 'dummy-id',
+                    'providedProducts': [],
+                    'id': '888888888888',
+                    'management_enabled': True,
+                    'attributes': [{'name': 'is_virt_only', 'value': 'false'}],
+                    'pool_type': 'Some Type',
+                    'quantity': '4',
+                    'service_type': '',
+                    'roles': 'Awesome Server, Cool Server',
+                    'service_level': 'Premium',
+                    'usage': 'Production',
+                    'addons': 'ADDON1,ADDON2',
+                    'contractNumber': '5',
+                    'multi-entitlement': 'false',
+                    'startDate': '',
+                    'endDate': '',
+                    'suggested': '2',
+                }
+            ]
+
         mget_ents.return_value = create_pool_list()
 
         with Capture() as cap:
@@ -177,7 +190,7 @@ class TestListCommand(TestCliProxyCommand):
         """
         installed_product_certs = [
             StubProductCertificate(product=StubProduct(name="test product", product_id="8675309")),
-            StubProductCertificate(product=StubProduct(name="another test product", product_id="123456"))
+            StubProductCertificate(product=StubProduct(name="another test product", product_id="123456")),
         ]
 
         stub_sorter = StubCertSorter()
@@ -209,7 +222,7 @@ class TestListCommand(TestCliProxyCommand):
 
         installed_product_certs = [
             StubProductCertificate(product=StubProduct(name="test product", product_id="8675309")),
-            StubProductCertificate(product=StubProduct(name="another test product", product_id="123456"))
+            StubProductCertificate(product=StubProduct(name="another test product", product_id="123456")),
         ]
 
         stub_sorter = StubCertSorter()
@@ -237,7 +250,7 @@ class TestListCommand(TestCliProxyCommand):
     def test_list_installed_with_ctfilter(self):
         installed_product_certs = [
             StubProductCertificate(product=StubProduct(name="test product*", product_id="8675309")),
-            StubProductCertificate(product=StubProduct(name="another(?) test\\product", product_id="123456"))
+            StubProductCertificate(product=StubProduct(name="another(?) test\\product", product_id="123456")),
         ]
 
         test_data = [
@@ -272,27 +285,26 @@ class TestListCommand(TestCliProxyCommand):
 
             for (index, expected) in enumerate(data[1]):
                 if expected:
-                    self.assertTrue(installed_product_certs[index].name in captured.out,
-                                    "Expected product was not found in output for test data %i" % test_num)
+                    self.assertTrue(
+                        installed_product_certs[index].name in captured.out,
+                        "Expected product was not found in output for test data %i" % test_num,
+                    )
                 else:
-                    self.assertFalse(installed_product_certs[index].name in captured.out,
-                                     "Unexpected product was found in output for test data %i" % test_num)
+                    self.assertFalse(
+                        installed_product_certs[index].name in captured.out,
+                        "Unexpected product was found in output for test data %i" % test_num,
+                    )
 
     def test_list_consumed_with_ctfilter(self):
         consumed = [
-            StubEntitlementCertificate(product=StubProduct(name="Test Entitlement 1", product_id="123"), provided_products=[
-                "test product a",
-                "beta product 1",
-                "shared product",
-                "troll* product?"
-            ]),
-
-            StubEntitlementCertificate(product=StubProduct(name="Test Entitlement 2", product_id="456"), provided_products=[
-                "test product b",
-                "beta product 1",
-                "shared product",
-                "back\\slash"
-            ])
+            StubEntitlementCertificate(
+                product=StubProduct(name="Test Entitlement 1", product_id="123"),
+                provided_products=["test product a", "beta product 1", "shared product", "troll* product?"],
+            ),
+            StubEntitlementCertificate(
+                product=StubProduct(name="Test Entitlement 2", product_id="456"),
+                provided_products=["test product b", "beta product 1", "shared product", "back\\slash"],
+            ),
         ]
 
         test_data = [
@@ -325,9 +337,15 @@ class TestListCommand(TestCliProxyCommand):
 
             for (index, expected) in enumerate(data[1]):
                 if expected:
-                    self.assertTrue(consumed[index].order.name in captured.out, "Expected product was not found in output for test data %i" % test_num)
+                    self.assertTrue(
+                        consumed[index].order.name in captured.out,
+                        "Expected product was not found in output for test data %i" % test_num,
+                    )
                 else:
-                    self.assertFalse(consumed[index].order.name in captured.out, "Unexpected product was found in output for test data %i" % test_num)
+                    self.assertFalse(
+                        consumed[index].order.name in captured.out,
+                        "Unexpected product was found in output for test data %i" % test_num,
+                    )
 
     def test_print_consumed_one_ent_one_product(self):
         product = StubProduct("product1")
@@ -338,8 +356,7 @@ class TestListCommand(TestCliProxyCommand):
         self.cc.print_consumed()
 
     def test_print_consumed_one_ent_no_product(self):
-        self.ent_dir.certs.append(StubEntitlementCertificate(
-            product=None))
+        self.ent_dir.certs.append(StubEntitlementCertificate(product=None))
         self.cc.sorter = Mock()
         self.cc.sorter.get_subscription_reasons_map = Mock()
         self.cc.sorter.get_subscription_reasons_map.return_value = {}
@@ -372,7 +389,7 @@ class TestListCommand(TestCliProxyCommand):
     def test_list_installed_with_pidonly(self):
         installed_product_certs = [
             StubProductCertificate(product=StubProduct(name="test product*", product_id="8675309")),
-            StubProductCertificate(product=StubProduct(name="another(?) test\\product", product_id="123456"))
+            StubProductCertificate(product=StubProduct(name="another(?) test\\product", product_id="123456")),
         ]
 
         stub_sorter = StubCertSorter()
@@ -395,19 +412,16 @@ class TestListCommand(TestCliProxyCommand):
 
     def test_list_consumed_with_pidonly(self):
         consumed = [
-            StubEntitlementCertificate(product=StubProduct(name="Test Entitlement 1", product_id="123"), pool=StubPool("abc"), provided_products=[
-                "test product a",
-                "beta product 1",
-                "shared product",
-                "troll* product?"
-            ]),
-
-            StubEntitlementCertificate(product=StubProduct(name="Test Entitlement 2", product_id="456"), pool=StubPool("def"), provided_products=[
-                "test product b",
-                "beta product 1",
-                "shared product",
-                "back\\slash"
-            ])
+            StubEntitlementCertificate(
+                product=StubProduct(name="Test Entitlement 1", product_id="123"),
+                pool=StubPool("abc"),
+                provided_products=["test product a", "beta product 1", "shared product", "troll* product?"],
+            ),
+            StubEntitlementCertificate(
+                product=StubProduct(name="Test Entitlement 2", product_id="456"),
+                pool=StubPool("def"),
+                provided_products=["test product b", "beta product 1", "shared product", "back\\slash"],
+            ),
         ]
 
         for stubby in consumed:

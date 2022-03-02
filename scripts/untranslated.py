@@ -13,7 +13,7 @@
 import glob
 import polib
 
-#FIXME
+# FIXME
 PO_PATH = "po/"
 
 po_files = glob.glob("%s/*.po" % PO_PATH)

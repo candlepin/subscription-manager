@@ -89,8 +89,9 @@ class Candlepin(object):
             log.error("Could not authenticate with server. Check registration status.")
             log.exception(ex)
             self.last_error = ex
-            raise CandlepinApiAuthenticationError("Could not authenticate with server. "
-                  "Check registration status.: %s" % ex)
+            raise CandlepinApiAuthenticationError(
+                "Could not authenticate with server. " "Check registration status.: %s" % ex
+            )
         except rhsm.connection.ExpiredIdentityCertException as ex:
             log.exception(ex)
             self.last_error = ex

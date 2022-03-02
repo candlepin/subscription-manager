@@ -19,8 +19,7 @@ from rhsm.bitstream import GhettoBitStream
 from rhsm.huffman import HuffmanNode
 from rhsm.pathtree import PathTree, PATH_END
 
-DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                    'entitlement_data.bin')
+DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'entitlement_data.bin')
 
 
 class TestPathTree(unittest.TestCase):
@@ -103,7 +102,7 @@ class TestPathTree(unittest.TestCase):
             '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/rh-common/os',
             '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/rhn-tools/os',
             '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/extras/os',
-            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/sat-tools/6.3/os'
+            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/sat-tools/6.3/os',
         ]
         # Assert the lists contain the same items regardless of order
         self.assertCountEqual(expected, paths)
@@ -148,14 +147,24 @@ class TestPathTree(unittest.TestCase):
         self.assertFalse(pt.match_path('/boo/path/abc'))
 
     def test_match_different_variables(self):
-        tree1 = {'foo': [{'$releasever': [{'bar': [{PATH_END: None}]}],
-                         'jarjar': [{'binks': [{PATH_END: None}]}]}]}
-        tree2 = {'foo': [{'jarjar': [{'binks': [{PATH_END: None}]}],
-                         '$releasever': [{'bar': [{PATH_END: None}]}]}]}
-        tree3 = {'foo': [{'$releasever': [{'bar': [{PATH_END: None}]}]},
-                         {'jarjar': [{'binks': [{PATH_END: None}]}]}]}
-        tree4 = {'foo': [{'jarjar': [{'binks': [{PATH_END: None}]}]},
-                         {'$releasever': [{'bar': [{PATH_END: None}]}]}]}
+        tree1 = {
+            'foo': [{'$releasever': [{'bar': [{PATH_END: None}]}], 'jarjar': [{'binks': [{PATH_END: None}]}]}]
+        }
+        tree2 = {
+            'foo': [{'jarjar': [{'binks': [{PATH_END: None}]}], '$releasever': [{'bar': [{PATH_END: None}]}]}]
+        }
+        tree3 = {
+            'foo': [
+                {'$releasever': [{'bar': [{PATH_END: None}]}]},
+                {'jarjar': [{'binks': [{PATH_END: None}]}]},
+            ]
+        }
+        tree4 = {
+            'foo': [
+                {'jarjar': [{'binks': [{PATH_END: None}]}]},
+                {'$releasever': [{'bar': [{PATH_END: None}]}]},
+            ]
+        }
         trees = [tree1, tree2, tree3, tree4]
         data = open(DATA, 'rb').read()
         pt = PathTree(data)

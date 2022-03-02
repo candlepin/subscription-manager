@@ -23,7 +23,6 @@ log = logging.getLogger(__name__)
 
 
 class VersionCommand(CliCommand):
-
     def __init__(self):
         shortdesc = _("Print version information")
 
@@ -32,6 +31,12 @@ class VersionCommand(CliCommand):
     def _do_command(self):
         self.log_server_version()
         print(_("server type: {type}").format(type=self.server_versions["server-type"]))
-        print(_("subscription management server: {version}").format(version=self.server_versions["candlepin"]))
-        print(_("subscription management rules: {version}").format(version=self.server_versions["rules-version"]))
+        print(
+            _("subscription management server: {version}").format(version=self.server_versions["candlepin"])
+        )
+        print(
+            _("subscription management rules: {version}").format(
+                version=self.server_versions["rules-version"]
+            )
+        )
         print("subscription-manager: {version}".format(version=self.client_versions["subscription-manager"]))

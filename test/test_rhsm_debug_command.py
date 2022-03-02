@@ -71,13 +71,21 @@ class TestCompileCommand(TestCliCommand):
         # monkeypatch cli commands assemble path
         self.cc.assemble_path = self.assemble_path
 
-        self.expected_paths = ["consumer.json", "compliance.json", "entitlements.json",
-                               "pools.json", "version.json",
-                               "/etc/rhsm", "/var/log/rhsm", "/var/lib/rhsm",
-                               # we use a test specific config, with default values
-                               "/etc/pki/product",
-                               "/etc/pki/entitlement", "/etc/pki/consumer",
-                               "/etc/pki/product-default"]
+        self.expected_paths = [
+            "consumer.json",
+            "compliance.json",
+            "entitlements.json",
+            "pools.json",
+            "version.json",
+            "/etc/rhsm",
+            "/var/log/rhsm",
+            "/var/lib/rhsm",
+            # we use a test specific config, with default values
+            "/etc/pki/product",
+            "/etc/pki/entitlement",
+            "/etc/pki/consumer",
+            "/etc/pki/product-default",
+        ]
 
     def _rmtree_error_callback(self, function, path, excinfo):
         """Ignore errors in rmtree, but log them."""
@@ -93,8 +101,7 @@ class TestCompileCommand(TestCliCommand):
         try:
             os.unlink(path)
         except OSError as e:
-            log.debug("error %s likely because we deleted it's parent already",
-                      e)
+            log.debug("error %s likely because we deleted it's parent already", e)
 
     def tearDown(self):
         super(TestCompileCommand, self).tearDown()
@@ -111,8 +118,7 @@ class TestCompileCommand(TestCliCommand):
             return False
 
         self.cc._dirs_on_same_device = faux_dirs_on_same_device
-        self.assertRaises(InvalidCLIOptionError, self.cc.main,
-                          ["--destination", self.path, "--no-archive"])
+        self.assertRaises(InvalidCLIOptionError, self.cc.main, ["--destination", self.path, "--no-archive"])
 
     def _assert_expected_paths_exists(self):
         tree_path = path_join(self.path, self.code)
@@ -120,16 +126,16 @@ class TestCompileCommand(TestCliCommand):
             full_path = path_join(tree_path, expected_path)
             if os.path.exists(full_path):
                 continue
-            self.fail("Expected the path %s to exists in the destination path,"
-                      "but it does not" % full_path)
+            self.fail("Expected the path %s to exists in the destination path," "but it does not" % full_path)
 
     def _assert_unexpected_paths_do_not_exist(self, unexpected):
         tree_path = path_join(self.path, self.code)
         for unexpected_path in unexpected:
             full_path = path_join(tree_path, unexpected_path)
             if os.path.exists(full_path):
-                self.fail("Expected the path %s to not exists in the destination path,"
-                          "but it does." % full_path)
+                self.fail(
+                    "Expected the path %s to not exists in the destination path," "but it does." % full_path
+                )
 
     # Runs the tar file creation.
     # It does not write the certs or log files because of
@@ -170,9 +176,15 @@ class TestCompileCommand(TestCliCommand):
         except SystemExit:
             self.fail("Exception Raised")
 
-        non_sos_paths = ["/etc/rhsm", "/var/log/rhsm", "/var/lib/rhsm",
-                         "/etc/pki/product", "/etc/pki/entitlement",
-                         "/etc/pki/consumer", "/etc/pki/product-default"]
+        non_sos_paths = [
+            "/etc/rhsm",
+            "/var/log/rhsm",
+            "/var/lib/rhsm",
+            "/etc/pki/product",
+            "/etc/pki/entitlement",
+            "/etc/pki/consumer",
+            "/etc/pki/product-default",
+        ]
 
         # TODO: these would make more sense as set()'s
         for non_sos_path in non_sos_paths:
@@ -237,10 +249,17 @@ class TestCompileCommand(TestCliCommand):
     def _create_assemble_dir(self, assemble_top_dir):
         assemble_dir_path = path_join(assemble_top_dir, "/%s" % datetime.now().strftime("%Y%m%d-%f"))
 
-        assemble_paths = ["/etc/rhsm/ca", "/etc/rhsm/pluginconf.d/", "/etc/rhsm/facts",
-                          "/var/log/rhsm", "/var/lib/rhsm", "/etc/pki/product",
-                          "/etc/pki/entitlement", "/etc/pki/consumer",
-                          "/etc/pki/product-default"]
+        assemble_paths = [
+            "/etc/rhsm/ca",
+            "/etc/rhsm/pluginconf.d/",
+            "/etc/rhsm/facts",
+            "/var/log/rhsm",
+            "/var/lib/rhsm",
+            "/etc/pki/product",
+            "/etc/pki/entitlement",
+            "/etc/pki/consumer",
+            "/etc/pki/product-default",
+        ]
 
         for assemble_path in assemble_paths:
             os.makedirs(path_join(assemble_dir_path, assemble_path))

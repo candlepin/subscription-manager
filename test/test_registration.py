@@ -31,19 +31,23 @@ from rhsmlib.services import exceptions
 class CliRegistrationTests(SubManFixture):
     def setUp(self):
         super(CliRegistrationTests, self).setUp()
-        register_patcher = patch('subscription_manager.cli_command.register.register.RegisterService',
-                                 spec=RegisterService)
+        register_patcher = patch(
+            'subscription_manager.cli_command.register.register.RegisterService', spec=RegisterService
+        )
         self.mock_register = register_patcher.start().return_value
         self.mock_register.register.return_value = MagicMock(name="MockConsumer")
         self.addCleanup(register_patcher.stop)
 
-        get_supported_resources_patcher = patch('subscription_manager.cli_command.register.get_supported_resources')
+        get_supported_resources_patcher = patch(
+            'subscription_manager.cli_command.register.get_supported_resources'
+        )
         self.mock_get_resources = get_supported_resources_patcher.start()
         self.mock_get_resources.return_value = ['environments']
         self.addCleanup(self.mock_get_resources.stop)
 
-        identity_patcher = patch('subscription_manager.cli_command.register.identity.ConsumerIdentity',
-                                 spec=ConsumerIdentity)
+        identity_patcher = patch(
+            'subscription_manager.cli_command.register.identity.ConsumerIdentity', spec=ConsumerIdentity
+        )
         self.mock_consumer_identity = identity_patcher.start().return_value
         self.addCleanup(identity_patcher.stop)
 
@@ -117,7 +121,14 @@ class CliRegistrationTests(SubManFixture):
 
         with Capture(silent=True):
             with self.assertRaises(SystemExit) as e:
-                cmd.main(['--consumerid=TaylorSwift', '--username=testuser1', '--password=password', '--org=test_org'])
+                cmd.main(
+                    [
+                        '--consumerid=TaylorSwift',
+                        '--username=testuser1',
+                        '--password=password',
+                        '--org=test_org',
+                    ]
+                )
                 self.assertEqual(e.code, os.EX_USAGE)
 
     def test_strip_username_and_password(self):
@@ -167,8 +178,7 @@ class CliRegistrationTests(SubManFixture):
 
     def test_get_environment_id_multi_available(self):
         def env_list(*args, **kwargs):
-            return [{"id": "1234", "name": "somename"},
-                    {"id": "5678", "name": "othername"}]
+            return [{"id": "1234", "name": "somename"}, {"id": "5678", "name": "othername"}]
 
         with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
             mock_uep.getEnvironmentList = env_list
@@ -188,8 +198,7 @@ class CliRegistrationTests(SubManFixture):
 
     def test_get_environment_id_multi_available_bad_name(self):
         def env_list(*args, **kwargs):
-            return [{"id": "1234", "name": "somename"},
-                    {"id": "5678", "name": "othername"}]
+            return [{"id": "1234", "name": "somename"}, {"id": "5678", "name": "othername"}]
 
         with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
             mock_uep.getEnvironmentList = env_list
@@ -209,8 +218,7 @@ class CliRegistrationTests(SubManFixture):
 
     def test_set_multi_environment_id_multi_available(self):
         def env_list(*args, **kwargs):
-            return [{"id": "1234", "name": "somename"},
-                    {"id": "5678", "name": "othername"}]
+            return [{"id": "1234", "name": "somename"}, {"id": "5678", "name": "othername"}]
 
         with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
             mock_uep.getEnvironmentList = env_list
@@ -267,8 +275,7 @@ class CliRegistrationTests(SubManFixture):
 
     def test_set_duplicate_multi_environment(self):
         def env_list(*args, **kwargs):
-            return [{"id": "1234", "name": "somename"},
-                    {"id": "5678", "name": "othername"}]
+            return [{"id": "1234", "name": "somename"}, {"id": "5678", "name": "othername"}]
 
         with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
             mock_uep.getEnvironmentList = env_list
@@ -294,10 +301,11 @@ class CliRegistrationTests(SubManFixture):
             def raise_remote_server_exception(*args, **kwargs):
                 """Raise remote server exception (uploading of profile failed)"""
                 from rhsm.connection import RemoteServerException
+
                 raise RemoteServerException(
                     502,
                     request_type="PUT",
-                    handler="/subscription/consumers/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/profiles"
+                    handler="/subscription/consumers/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/profiles",
                 )
 
             profile_mgr.update_check = Mock(side_effect=raise_remote_server_exception)

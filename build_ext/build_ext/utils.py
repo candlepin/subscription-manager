@@ -37,7 +37,7 @@ class clean(_clean):
 
 
 def memoize(f):
-    """ Memoization decorator for functions taking one or more arguments. """
+    """Memoization decorator for functions taking one or more arguments."""
     # Thanks to http://code.activestate.com/recipes/578231-probably-the-fastest-memoization-decorator-in-the-/
     class memodict(dict):
         def __init__(self, f):
@@ -58,6 +58,7 @@ class BaseCommand(cmd.Command):
     and user_options to be defined.  This class provides stub definitions and other
     utility methods.
     """
+
     user_options = []
 
     def initialize_options(self):

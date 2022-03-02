@@ -19,13 +19,19 @@ import unittest
 
 from test import subman_marker_functional
 
-from rhsm.connection import ContentConnection, UEPConnection, Restlib,\
-    UnauthorizedException, ForbiddenException, RestlibException
+from rhsm.connection import (
+    ContentConnection,
+    UEPConnection,
+    Restlib,
+    UnauthorizedException,
+    ForbiddenException,
+    RestlibException,
+)
 from mock import patch
 
 
 def random_string(name, target_length=32):
-    ''' Returns a len 32 string starting with "name"'''
+    '''Returns a len 32 string starting with "name"'''
     for i in range(max(target_length - len(name), 0)):
         name += random.choice(string.ascii_lowercase)
     return name
@@ -33,7 +39,6 @@ def random_string(name, target_length=32):
 
 @subman_marker_functional
 class ConnectionTests(unittest.TestCase):
-
     def setUp(self):
         self.cp = UEPConnection(username="admin", password="admin", insecure=True)
 
@@ -69,8 +74,9 @@ class ConnectionTests(unittest.TestCase):
 
     def test_create_consumer_sets_hypervisor_id(self):
         testing_hypervisor_id = random_string("someId")
-        consumerInfo = self.cp.registerConsumer("other-test-consumer",
-                                                "system", owner="admin", hypervisor_id=testing_hypervisor_id)
+        consumerInfo = self.cp.registerConsumer(
+            "other-test-consumer", "system", owner="admin", hypervisor_id=testing_hypervisor_id
+        )
         # Unregister before making assertions, that way it should always happen
         self.cp.unregisterConsumer(consumerInfo['uuid'])
         # Hypervisor ID should be set and lower case
@@ -234,7 +240,6 @@ class BindRequestTests(unittest.TestCase):
 
 @subman_marker_functional
 class ContentConnectionTests(unittest.TestCase):
-
     def testInsecure(self):
         ContentConnection(host="127.0.0.1", insecure=True)
 
@@ -267,8 +272,7 @@ class ContentConnectionTests(unittest.TestCase):
         assert 'https_proxy' not in os.environ
 
     def testEnvNoProxy(self):
-        with patch.dict('os.environ', {'no_proxy': '.localdomain',
-                                       'https_proxy': 'https://example.com'}):
+        with patch.dict('os.environ', {'no_proxy': '.localdomain', 'https_proxy': 'https://example.com'}):
             cc = ContentConnection(host="localhost.localdomain")
             self.assertEquals(None, cc.proxy_user)
             self.assertEquals(None, cc.proxy_password)
@@ -277,8 +281,7 @@ class ContentConnectionTests(unittest.TestCase):
         assert 'no_proxy' not in os.environ and 'https_proxy' not in os.environ
 
     def testEnvNoProxyWithAsterisk(self):
-        with patch.dict('os.environ', {'no_proxy': '*.localdomain',
-                                       'https_proxy': 'https://example.com'}):
+        with patch.dict('os.environ', {'no_proxy': '*.localdomain', 'https_proxy': 'https://example.com'}):
             cc = ContentConnection(host="localhost.localdomain")
             self.assertEquals(None, cc.proxy_user)
             self.assertEquals(None, cc.proxy_password)
@@ -289,10 +292,8 @@ class ContentConnectionTests(unittest.TestCase):
 
 @subman_marker_functional
 class HypervisorCheckinTests(unittest.TestCase):
-
     def setUp(self):
-        self.cp = UEPConnection(username="admin", password="admin",
-                                insecure=True)
+        self.cp = UEPConnection(username="admin", password="admin", insecure=True)
 
     def test_hypervisor_checkin_can_pass_empty_map_and_updates_nothing(self):
         response = self.cp.hypervisorCheckIn("admin", "", {})
@@ -306,7 +307,6 @@ class HypervisorCheckinTests(unittest.TestCase):
 
 @subman_marker_functional
 class RestlibTests(unittest.TestCase):
-
     def setUp(self):
         # Get handle to Restlib
         self.conn = UEPConnection().conn
@@ -315,14 +315,11 @@ class RestlibTests(unittest.TestCase):
 
     def _validate_response(self, response):
         # wrapper to specify request_type and handler
-        return self.conn.validateResponse(response,
-                                          request_type=self.request_type,
-                                          handler=self.handler)
+        return self.conn.validateResponse(response, request_type=self.request_type, handler=self.handler)
 
     def test_invalid_credentitals_thrown_on_401_with_empty_body(self):
         mock_response = {"status": 401}
-        self.assertRaises(UnauthorizedException, self._validate_response,
-                          mock_response)
+        self.assertRaises(UnauthorizedException, self._validate_response, mock_response)
 
     def test_standard_error_handling_on_401_with_defined_body(self):
         self._run_standard_error_handling_test(401)
@@ -332,8 +329,7 @@ class RestlibTests(unittest.TestCase):
 
     def test_invalid_credentitals_thrown_on_403_with_empty_body(self):
         mock_response = {"status": 403}
-        self.assertRaises(ForbiddenException, self._validate_response,
-                          mock_response)
+        self.assertRaises(ForbiddenException, self._validate_response, mock_response)
 
     def test_standard_error_handling_on_403_with_defined_body(self):
         self._run_standard_error_handling_test(403)
@@ -341,19 +337,14 @@ class RestlibTests(unittest.TestCase):
     def test_standard_error_handling_on_403_with_invalid_json_body(self):
         self._run_standard_error_handling_test_invalid_json(403, ForbiddenException)
 
-    def _run_standard_error_handling_test_invalid_json(self, expected_error_code,
-                                                       expected_exception):
-        mock_response = {"status": expected_error_code,
-                         "content": '<this is not valid json>>'}
+    def _run_standard_error_handling_test_invalid_json(self, expected_error_code, expected_exception):
+        mock_response = {"status": expected_error_code, "content": '<this is not valid json>>'}
 
-        self._check_for_remote_server_exception(expected_error_code,
-                                                expected_exception,
-                                                mock_response)
+        self._check_for_remote_server_exception(expected_error_code, expected_exception, mock_response)
 
     def _run_standard_error_handling_test(self, expected_error):
         expected_error = "My Expected Error."
-        mock_response = {"status": expected_error,
-                         "content": '{"displayMessage":"%s"}' % expected_error}
+        mock_response = {"status": expected_error, "content": '{"displayMessage":"%s"}' % expected_error}
 
         try:
             self._validate_response(mock_response)
@@ -363,8 +354,7 @@ class RestlibTests(unittest.TestCase):
             self.assertEqual(expected_error, ex.code)
             self.assertEqual(expected_error, str(ex))
 
-    def _check_for_remote_server_exception(self, expected_error_code,
-                                           expected_exception, mock_response):
+    def _check_for_remote_server_exception(self, expected_error_code, expected_exception, mock_response):
         try:
             self._validate_response(mock_response)
             self.fail("An %s exception should have been thrown." % expected_exception)
@@ -376,11 +366,9 @@ class RestlibTests(unittest.TestCase):
 @subman_marker_functional
 class OwnerInfoTests(unittest.TestCase):
     def setUp(self):
-        self.cp = UEPConnection(username="admin", password="admin",
-                                insecure=True)
+        self.cp = UEPConnection(username="admin", password="admin", insecure=True)
         self.owner_key = "test_owner_%d" % (random.randint(1, 5000))
-        self.cp.conn.request_post('/owners', {'key': self.owner_key,
-                                              'displayName': self.owner_key})
+        self.cp.conn.request_post('/owners', {'key': self.owner_key, 'displayName': self.owner_key})
 
     def test_get_owner_info(self):
         owner_info = self.cp.getOwnerInfo(self.owner_key)

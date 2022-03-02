@@ -56,9 +56,7 @@ class CPProviderTests(unittest.TestCase):
 
     @patch('subscription_manager.cp_provider.utils.get_client_versions')
     def test_consumer_auth_setting_user_agent_version(self, mock_client_version):
-        mock_client_version.return_value = {
-            'subscription-manager': '1.23.45'
-        }
+        mock_client_version.return_value = {'subscription-manager': '1.23.45'}
         connection = self.cp_provider.get_consumer_auth_cp()
         self.assertTrue('subscription-manager/1.23.45' in connection.conn.user_agent)
 
@@ -72,9 +70,7 @@ class CPProviderTests(unittest.TestCase):
 
     @patch('subscription_manager.cp_provider.utils.get_client_versions')
     def test_basic_auth_setting_user_agent_version(self, mock_client_version):
-        mock_client_version.return_value = {
-            'subscription-manager': '1.23.45'
-        }
+        mock_client_version.return_value = {'subscription-manager': '1.23.45'}
         self.cp_provider.set_user_pass(username='admin', password='admin')
         connection = self.cp_provider.get_basic_auth_cp()
         self.assertTrue('subscription-manager/1.23.45' in connection.conn.user_agent)
@@ -88,9 +84,7 @@ class CPProviderTests(unittest.TestCase):
 
     @patch('subscription_manager.cp_provider.utils.get_client_versions')
     def test_no_auth_setting_user_agent_version(self, mock_client_version):
-        mock_client_version.return_value = {
-            'subscription-manager': '1.23.45'
-        }
+        mock_client_version.return_value = {'subscription-manager': '1.23.45'}
         connection = self.cp_provider.get_no_auth_cp()
         self.assertTrue('subscription-manager/1.23.45' in connection.conn.user_agent)
 
@@ -104,9 +98,7 @@ class CPProviderTests(unittest.TestCase):
 
     @patch('subscription_manager.cp_provider.utils.get_client_versions')
     def test_content_conn_setting_user_agent_version(self, mock_client_version):
-        mock_client_version.return_value = {
-            'subscription-manager': '1.23.45'
-        }
+        mock_client_version.return_value = {'subscription-manager': '1.23.45'}
         self.cp_provider.set_content_connection_info(cdn_hostname=None, cdn_port=None)
         connection = self.cp_provider.get_content_connection()
         self.assertTrue('subscription-manager/1.23.45' in connection.conn.user_agent)

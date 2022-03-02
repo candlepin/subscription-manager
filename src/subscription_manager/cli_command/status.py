@@ -35,13 +35,16 @@ log = logging.getLogger(__name__)
 
 
 class StatusCommand(CliCommand):
-
     def __init__(self):
         shortdesc = _("Show status information for this system's subscriptions and products")
         super(StatusCommand, self).__init__("status", shortdesc, True)
-        self.parser.add_argument("--ondate", dest="on_date",
-                                 help=_("future date to check status on, defaults to today's date (example: {example})").format(
-                                     example=strftime("%Y-%m-%d", localtime())))
+        self.parser.add_argument(
+            "--ondate",
+            dest="on_date",
+            help=_("future date to check status on, defaults to today's date (example: {example})").format(
+                example=strftime("%Y-%m-%d", localtime())
+            ),
+        )
 
     def _do_command(self):
         # list status and all reasons it is not valid
@@ -65,8 +68,9 @@ class StatusCommand(CliCommand):
             result = 1
 
         ca_message = ""
-        has_cert = (_(
-            "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n"))
+        has_cert = _(
+            "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n"
+        )
 
         certs = self.entitlement_dir.list_with_content_access()
         ca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
@@ -76,7 +80,11 @@ class StatusCommand(CliCommand):
             if is_simple_content_access(uep=self.cp, identity=self.identity):
                 ca_message = has_cert
 
-        print(_("Overall Status: {status}\n{message}").format(status=service_status['status'], message=ca_message))
+        print(
+            _("Overall Status: {status}\n{message}").format(
+                status=service_status['status'], message=ca_message
+            )
+        )
 
         columns = get_terminal_width()
         for name in reasons:

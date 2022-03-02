@@ -84,6 +84,7 @@ def gather_entries(entries_string):
 class GenericPlatformSpecificInfoProvider(object):
     """Default provider for platform without a specific platform info provider.
     ie, all platforms except those with DMI (ie, intel platforms)"""
+
     def __init__(self, hardware_info, dump_file=None):
         self.info = {}
 
@@ -97,10 +98,7 @@ class HardwareCollector(collector.FactsCollector):
 
     def __init__(self, arch=None, prefix=None, testing=None, collected_hw_info=None):
         super(HardwareCollector, self).__init__(
-            arch=arch,
-            prefix=prefix,
-            testing=testing,
-            collected_hw_info=None
+            arch=arch, prefix=prefix, testing=testing, collected_hw_info=None
         )
 
         self.hardware_methods = [
@@ -310,7 +308,7 @@ class HardwareCollector(collector.FactsCollector):
                     'cores_count': cores_count,
                     'book_count': book_count,
                     'sockets_per_book': sockets_per_book,
-                    'cores_per_socket': cores_per_socket
+                    'cores_per_socket': cores_per_socket,
                 }
         log.debug("Looking for 'CPU Topology SW' in sysinfo, but it was not found")
         return None
@@ -374,10 +372,7 @@ class HardwareCollector(collector.FactsCollector):
         proc_cpuinfo = {}
         fact_namespace = 'proc_cpuinfo'
 
-        proc_cpuinfo_source = cpuinfo.SystemCpuInfoFactory.from_uname_machine(
-            self.arch,
-            prefix=self.prefix
-        )
+        proc_cpuinfo_source = cpuinfo.SystemCpuInfoFactory.from_uname_machine(self.arch, prefix=self.prefix)
 
         for key, value in list(proc_cpuinfo_source.cpu_info.common.items()):
             proc_cpuinfo['%s.common.%s' % (fact_namespace, key)] = value
@@ -664,8 +659,7 @@ class HardwareCollector(collector.FactsCollector):
         try:
             main_object = output_json['lscpu']
         except KeyError:
-            log.warning('Failed to load the lscpu JSON: missing \'lscpu\' '
-                        'root object')
+            log.warning('Failed to load the lscpu JSON: missing \'lscpu\' ' 'root object')
             return {}
 
         lscpu_info = {}
@@ -678,8 +672,11 @@ class HardwareCollector(collector.FactsCollector):
                 key = obj['field']
                 value = obj['data']
             except KeyError:
-                log.warning('Failed to load the lscpu JSON: object lacks '
-                            'missing \'field\' and \'data\' fields: %s', obj)
+                log.warning(
+                    'Failed to load the lscpu JSON: object lacks '
+                    'missing \'field\' and \'data\' fields: %s',
+                    obj,
+                )
                 return
             # 'data' is null, which means the field is an "header"; ignore it
             if value is not None:
@@ -755,7 +752,7 @@ class HardwareCollector(collector.FactsCollector):
                     socket.AF_UNSPEC,  # (family) IPv4/IPv6
                     socket.SOCK_DGRAM,  # (type) hostname uses SOCK_DGRAM
                     0,  # (proto) no need to specify transport protocol
-                    socket.AI_CANONNAME  # (flags) we DO NEED to get canonical name
+                    socket.AI_CANONNAME,  # (flags) we DO NEED to get canonical name
                 )
             except Exception:
                 net_info['network.fqdn'] = hostname
@@ -861,9 +858,7 @@ class HardwareCollector(collector.FactsCollector):
                     for meta_key, values in ipv4_values.items():
                         # append 'ipv4_' to match the older interface and keeps facts
                         # consistent
-                        key = 'net.interface.{device}.ipv4_{key}'.format(
-                            device=info.device, key=meta_key
-                        )
+                        key = 'net.interface.{device}.ipv4_{key}'.format(device=info.device, key=meta_key)
                         list_key = key + "_list"
                         netinfdict[key] = values[0]
                         netinfdict[list_key] = ', '.join(values)
@@ -960,7 +955,7 @@ if __name__ == '__main__':
         ('cpu.cpu_socket(s)', 'lscpu.socket(s)'),
         ('cpu.book(s)', 'lscpu.book(s)'),
         ('cpu.thread(s)_per_core', 'lscpu.thread(s)_per_core'),
-        ('cpu.socket(s)_per_book', 'lscpu.socket(s)_per_book')
+        ('cpu.socket(s)_per_book', 'lscpu.socket(s)_per_book'),
     ]
     failed = False
     failed_list = []

@@ -192,8 +192,7 @@ class RegisterServiceTest(InjectionMockingTest):
 
         # Add a mock for content access mode cache
         self.mock_content_access_mode_cache = mock.Mock(
-            spec=ContentAccessModeCache,
-            name="ContentAccessModeCache"
+            spec=ContentAccessModeCache, name="ContentAccessModeCache"
         )
         self.mock_content_access_mode_cache.read_data = mock.Mock(return_value='entitlement')
 
@@ -202,8 +201,9 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp_provider.get_basic_auth_cp.return_value = self.mock_cp
 
         self.mock_pm = mock.Mock(spec=PluginManager, name="PluginManager")
-        self.mock_installed_products = mock.Mock(spec=InstalledProductsManager,
-                                                 name="InstalledProductsManager")
+        self.mock_installed_products = mock.Mock(
+            spec=InstalledProductsManager, name="InstalledProductsManager"
+        )
         self.mock_facts = mock.Mock(spec=Facts, name="Facts")
         self.mock_facts.get_facts.return_value = {}
 
@@ -255,14 +255,15 @@ class RegisterServiceTest(InjectionMockingTest):
             role="",
             addons=[],
             service_level="",
-            usage="")
+            usage="",
+        )
         self.mock_installed_products.write_cache.assert_called()
 
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
             mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
@@ -295,14 +296,15 @@ class RegisterServiceTest(InjectionMockingTest):
             role="",
             addons=[],
             service_level="",
-            usage="")
+            usage="",
+        )
         self.mock_installed_products.write_cache.assert_called()
 
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
             mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
         assert 'owner' in consumer
@@ -338,14 +340,15 @@ class RegisterServiceTest(InjectionMockingTest):
             role="",
             addons=[],
             service_level="",
-            usage="")
+            usage="",
+        )
         self.mock_installed_products.write_cache.assert_called()
 
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
             mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
         assert 'owner' not in consumer
@@ -375,7 +378,7 @@ class RegisterServiceTest(InjectionMockingTest):
                 "contentAccessMode": "entitlement",
                 "contentAccessModeList": "entitlement,org_environment",
                 "lastRefreshed": None,
-                "href": "/owners/snowwhite"
+                "href": "/owners/snowwhite",
             }
         ]
         self.mock_identity.is_valid.return_value = False
@@ -393,9 +396,7 @@ class RegisterServiceTest(InjectionMockingTest):
             pass
 
         org = register_service.determine_owner_key(
-            username=self.mock_cp.username,
-            get_owner_cb=_get_owner_cb,
-            no_owner_cb=_no_owner_cb
+            username=self.mock_cp.username, get_owner_cb=_get_owner_cb, no_owner_cb=_no_owner_cb
         )
 
         self.assertIsNotNone(org)
@@ -415,14 +416,15 @@ class RegisterServiceTest(InjectionMockingTest):
             role="",
             addons=[],
             service_level="",
-            usage="")
+            usage="",
+        )
         self.mock_installed_products.write_cache.assert_called()
 
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
             mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
@@ -454,7 +456,7 @@ class RegisterServiceTest(InjectionMockingTest):
             role="",
             addons=[],
             service_level="",
-            usage=""
+            usage="",
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -462,7 +464,7 @@ class RegisterServiceTest(InjectionMockingTest):
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
             mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
@@ -486,7 +488,7 @@ class RegisterServiceTest(InjectionMockingTest):
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
             mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={})
+            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
@@ -496,7 +498,7 @@ class RegisterServiceTest(InjectionMockingTest):
             'environments': environments,
             'force': force,
             'name': name,
-            'consumerid': consumerid
+            'consumerid': consumerid,
         }
 
     def test_fails_when_previously_registered(self):
@@ -540,7 +542,8 @@ class RegisterServiceTest(InjectionMockingTest):
             role="test_role",
             service_level="test_sla",
             type="system",
-            usage="test_usage")
+            usage="test_usage",
+        )
         mock_write_cache.assert_called_once()
 
     def test_does_not_require_basic_auth_with_activation_keys(self):
@@ -753,12 +756,8 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
             'admin',
             ['key1', 'key2'],
             {},
-            {
-                'host': 'localhost',
-                'port': '8443',
-                'handler': '/candlepin'
-            },
-            ''
+            {'host': 'localhost', 'port': '8443', 'handler': '/candlepin'},
+            '',
         ]
 
         self.dbus_request(assertions, self._build_interface().RegisterWithActivationKeys, dbus_method_args)

@@ -22,14 +22,12 @@ log = logging.getLogger(__name__)
 
 
 class ValidProductDateRangeCalculator(object):
-
     def __init__(self, uep=None):
         uep = uep or inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
         self.identity = inj.require(inj.IDENTITY)
         if self.identity.is_valid():
             self.prod_status_cache = inj.require(inj.PROD_STATUS_CACHE)
-            self.prod_status = self.prod_status_cache.load_status(
-                uep, self.identity.uuid)
+            self.prod_status = self.prod_status_cache.load_status(uep, self.identity.uuid)
 
     def calculate(self, product_hash):
         """
@@ -61,8 +59,7 @@ class ValidProductDateRangeCalculator(object):
                 if prod['startDate'] is None or prod['endDate'] is None:
                     return None
 
-                return DateRange(parse_date(prod['startDate']),
-                                 parse_date(prod['endDate']))
+                return DateRange(parse_date(prod['startDate']), parse_date(prod['endDate']))
             else:
                 # If startDate / endDate not supported
                 log.warning("Server does not support product date ranges.")
@@ -72,6 +69,5 @@ class ValidProductDateRangeCalculator(object):
         # asked for, which could indicate the server somehow doesn't know
         # about it yet. This is extremely weird and should be unlikely,
         # but we will log and handle gracefully:
-        log.error("Requested status for installed product server does not "
-                  "know about: %s" % product_hash)
+        log.error("Requested status for installed product server does not " "know about: %s" % product_hash)
         return None

@@ -27,9 +27,13 @@ log = logging.getLogger(__name__)
 
 def parse_argv(argv, default_dbus_name):
     parser = argparse.ArgumentParser(usage="usage: %(prog)s [options] [class name]")
-    parser.add_argument("-b", "--bus",
-                        action="store", dest="bus",
-                        help="Bus to use (defaults to dbus.SystemBus)")
+    parser.add_argument(
+        "-b",
+        "--bus",
+        action="store",
+        dest="bus",
+        help="Bus to use (defaults to dbus.SystemBus)",
+    )
     parser.add_argument("-n", "--bus-name", default=default_dbus_name)
     parser.add_argument("-v", "--verbose", action="store_true")
     (opts, args) = parser.parse_known_args(argv[1:])
@@ -67,12 +71,11 @@ def main(argv=sys.argv, object_classes=None, default_bus_name=None):
 
     try:
         log.debug('Starting DBus service with name %s' % options.bus_name)
-        server.Server(
-            bus_class=options.bus,
-            bus_name=options.bus_name,
-            object_classes=object_classes).run()
+        server.Server(bus_class=options.bus, bus_name=options.bus_name, object_classes=object_classes).run()
     except dbus.exceptions.DBusException as e:
         if e._dbus_error_name == "org.freedesktop.DBus.Error.AccessDenied":
-            print("Access to DBus denied.  You need to edit /etc/dbus-1/system.conf to allow %s or run with "
-                  "dbus-daemon and a custom config file." % options.bus_name)
+            print(
+                "Access to DBus denied.  You need to edit /etc/dbus-1/system.conf to allow %s or run with "
+                "dbus-daemon and a custom config file." % options.bus_name
+            )
     return 0

@@ -43,7 +43,7 @@ exclude_packages = [x.strip() for x in os.environ.get('EXCLUDE_PACKAGES', '').sp
 exclude_packages.extend(
     [
         '*.plugin.ostree',
-        '*.services.examples'
+        '*.services.examples',
     ]
 )
 
@@ -55,7 +55,8 @@ RPM_VERSION = None
 # from a guess generated from 'git describe'
 class rpm_version_release_build_py(_build_py):
     user_options = _build_py.user_options + [
-        ('rpm-version=', None, 'version and release of the RPM this is built for')]
+        ('rpm-version=', None, 'version and release of the RPM this is built for')
+    ]
 
     def initialize_options(self):
         _build_py.initialize_options(self)
@@ -99,7 +100,11 @@ class rpm_version_release_build_py(_build_py):
 class install(_install):
     user_options = _install.user_options + [
         ('rpm-version=', None, 'version and release of the RPM this is built for'),
-        ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
+        (
+            'with-cockpit-desktop-entry=',
+            None,
+            'whether to install desktop entry for subman cockpit plugin or not',
+        ),
     ]
 
     def initialize_options(self):
@@ -147,7 +152,7 @@ class build(_build):
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
             output = process.communicate()[0].decode('utf-8').strip()
             if output.startswith(self.git_tag_prefix):
-                return output[len(self.git_tag_prefix):]
+                return output[len(self.git_tag_prefix) :]
         except OSError:
             # When building the RPM there won't be a git repo to introspect so
             # builders *must* specify the version via the --rpm-version option
@@ -167,8 +172,13 @@ class install_data(_install_data):
     """Used to intelligently install data files.  For example, files that must be generated (such as .mo files
     or desktop files with merged translations) or an entire tree of data files.
     """
+
     user_options = _install_data.user_options + [
-        ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
+        (
+            'with-cockpit-desktop-entry=',
+            None,
+            'whether to install desktop entry for subman cockpit plugin or not',
+        ),
     ]
 
     def initialize_options(self):
@@ -245,6 +255,7 @@ class GettextWithArgparse(i18n.Gettext):
 
         # We need to grab some strings out of argparse for translation
         import argparse
+
         argparse_source = "%s.py" % os.path.splitext(argparse.__file__)[0]
         if not os.path.exists(argparse_source):
             raise RuntimeError("Could not find argparse.py at %s" % argparse_source)
@@ -261,15 +272,19 @@ install_requires = [
     'dbus-python',
 ]
 
-test_require = [
-    'mock',
-    'pytest',
-    'pytest-randomly',
-    'pytest-timeout',
-    'coverage',
-    'polib',
-    'flake8',
-] + install_requires + setup_requires
+test_require = (
+    [
+        'mock',
+        'pytest',
+        'pytest-randomly',
+        'pytest-timeout',
+        'coverage',
+        'polib',
+        'flake8',
+    ]
+    + install_requires
+    + setup_requires
+)
 
 cmdclass = {
     'clean': utils.clean,
@@ -284,7 +299,7 @@ cmdclass = {
     'gettext': GettextWithArgparse,
     'lint': lint.Lint,
     'lint_rpm': lint.RpmLint,
-    'flake8': lint.PluginLoadingFlake8
+    'flake8': lint.PluginLoadingFlake8,
 }
 
 setup(
@@ -310,10 +325,7 @@ setup(
     },
     data_files=[
         # man pages for gui are added in add_gui_doc_files(), when GUI package is created
-        (
-            'share/man/man8',
-            set(glob('man/*.8'))
-        ),
+        ('share/man/man8', set(glob('man/*.8'))),
         ('share/man/man5', glob('man/*.5')),
     ],
     command_options={
@@ -334,6 +346,7 @@ setup(
     setup_requires=setup_requires,
     install_requires=install_requires,
     tests_require=test_require,
-    ext_modules=[Extension('rhsm._certificate', ['src/certificate.c'],
-                           libraries=['ssl', 'crypto'])],
+    ext_modules=[
+        Extension('rhsm._certificate', ['src/certificate.c'], libraries=['ssl', 'crypto']),
+    ],
 )

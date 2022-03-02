@@ -38,142 +38,134 @@ NOW_DATE = datetime.datetime.now()
 END_DATE = datetime.datetime.now() + datetime.timedelta(days=265)
 
 
-NO_CONTENT_JSON = [{
-    "id": "4028fa7a5da1fbc2015da203aba209b7",
-    "uuid": "57b7dbff-9489-43ac-991a-b848324b423a",
-    "name": "localhost.localdomain",
-    "username": "admin",
-    "entitlementStatus": "valid",
-    "serviceLevel": "",
-    "releaseVer": {
-        "releaseVer": None
-    },
-    "idCert": {
-        "key": "FAKE RSA PRIVATE KEY",
-        "cert": "FAKE CERTIFICATE",
-        "serial": {
-            "id": 8134386700568860251,
-            "revoked": False,
-            "collected": False,
-            "expiration": END_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-            "serial": 8134386700568860251,
+NO_CONTENT_JSON = [
+    {
+        "id": "4028fa7a5da1fbc2015da203aba209b7",
+        "uuid": "57b7dbff-9489-43ac-991a-b848324b423a",
+        "name": "localhost.localdomain",
+        "username": "admin",
+        "entitlementStatus": "valid",
+        "serviceLevel": "",
+        "releaseVer": {"releaseVer": None},
+        "idCert": {
+            "key": "FAKE RSA PRIVATE KEY",
+            "cert": "FAKE CERTIFICATE",
+            "serial": {
+                "id": 8134386700568860251,
+                "revoked": False,
+                "collected": False,
+                "expiration": END_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+                "serial": 8134386700568860251,
+                "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+                "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+            },
+            "id": "4028fa7a5da1fbc2015da203ad8c09b9",
             "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-            "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000")
+            "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
         },
-        "id": "4028fa7a5da1fbc2015da203ad8c09b9",
+        "type": {"id": "1000", "label": "system", "manifest": False},
+        "owner": {
+            "id": "4028fa7a5da1fbc2015da1fdb5380004",
+            "key": "admin",
+            "displayName": "Admin Owner",
+            "href": "/owners/admin",
+        },
+        "environment": None,
+        "entitlementCount": 0,
+        "facts": {},
+        "lastCheckin": NOW_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+        "installedProducts": [],
+        "canActivate": False,
+        "capabilities": [],
+        "hypervisorId": None,
+        "contentTags": [],
+        "autoheal": True,
+        "contentAccessMode": None,
+        "recipientOwnerKey": None,
+        "annotations": None,
+        "href": "/consumers/57b7dbff-9489-43ac-991a-b848324b423a",
+        "dev": False,
         "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-        "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000")
-    },
-    "type": {
-        "id": "1000",
-        "label": "system",
-        "manifest": False
-    },
-    "owner": {
-        "id": "4028fa7a5da1fbc2015da1fdb5380004",
-        "key": "admin",
-        "displayName": "Admin Owner",
-        "href": "/owners/admin"
-    },
-    "environment": None,
-    "entitlementCount": 0,
-    "facts": {},
-    "lastCheckin": NOW_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-    "installedProducts": [],
-    "canActivate": False,
-    "capabilities": [],
-    "hypervisorId": None,
-    "contentTags": [],
-    "autoheal": True,
-    "contentAccessMode": None,
-    "recipientOwnerKey": None,
-    "annotations": None,
-    "href": "/consumers/57b7dbff-9489-43ac-991a-b848324b423a",
-    "dev": False,
-    "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-    "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000")
-}]
+        "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+    }
+]
 
-CONTENT_JSON = [{
-    "id": "4028fa7a5da1fbc2015da203aba209b7",
-    "uuid": "57b7dbff-9489-43ac-991a-b848324b423a",
-    "name": "localhost.localdomain",
-    "username": "admin",
-    "entitlementStatus": "valid",
-    "serviceLevel": "",
-    "releaseVer": {
-        "releaseVer": None
-    },
-    "idCert": {
-        "key": "FAKE RSA PRIVATE KEY",
-        "cert": "FAKE CERTIFICATE",
-        "serial": {
-            "id": 8134386700568860251,
-            "revoked": False,
-            "collected": False,
-            "expiration": END_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-            "serial": 8134386700568860251,
+CONTENT_JSON = [
+    {
+        "id": "4028fa7a5da1fbc2015da203aba209b7",
+        "uuid": "57b7dbff-9489-43ac-991a-b848324b423a",
+        "name": "localhost.localdomain",
+        "username": "admin",
+        "entitlementStatus": "valid",
+        "serviceLevel": "",
+        "releaseVer": {"releaseVer": None},
+        "idCert": {
+            "key": "FAKE RSA PRIVATE KEY",
+            "cert": "FAKE CERTIFICATE",
+            "serial": {
+                "id": 8134386700568860251,
+                "revoked": False,
+                "collected": False,
+                "expiration": END_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+                "serial": 8134386700568860251,
+                "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+                "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+            },
+            "id": "4028fa7a5da1fbc2015da203ad8c09b9",
             "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-            "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000")
+            "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
         },
-        "id": "4028fa7a5da1fbc2015da203ad8c09b9",
+        "type": {"id": "1000", "label": "system", "manifest": False},
+        "owner": {
+            "id": "4028fa7a5da1fbc2015da1fdb5380004",
+            "key": "admin",
+            "displayName": "Admin Owner",
+            "href": "/owners/admin",
+        },
+        "environment": None,
+        "entitlementCount": 0,
+        "facts": {},
+        "lastCheckin": "2017-08-02T08:16:39+0000",
+        "installedProducts": [
+            {
+                "id": "8a99f9895d8b4f96015d9db99e9971fb",
+                "productId": "69",
+                "productName": "Red Hat Enterprise Linux Server",
+                "version": "7.4",
+                "arch": "x86_64",
+                "status": "green",
+                "startDate": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+                "endDate": END_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+                "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+                "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+            },
+            {
+                "id": "8a99f9895d8b4f96015d9db99e9971fc",
+                "productId": "70",
+                "productName": "Red Hat Enterprise Linux Server - Extended Update Support",
+                "version": "7.2",
+                "arch": "x86_64",
+                "status": "green",
+                "startDate": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+                "endDate": END_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+                "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+                "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+            },
+        ],
+        "canActivate": False,
+        "capabilities": [],
+        "hypervisorId": None,
+        "contentTags": [],
+        "autoheal": True,
+        "contentAccessMode": None,
+        "recipientOwnerKey": None,
+        "annotations": None,
+        "href": "/consumers/57b7dbff-9489-43ac-991a-b848324b423a",
+        "dev": False,
         "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-        "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000")
-    },
-    "type": {
-        "id": "1000",
-        "label": "system",
-        "manifest": False
-    },
-    "owner": {
-        "id": "4028fa7a5da1fbc2015da1fdb5380004",
-        "key": "admin",
-        "displayName": "Admin Owner",
-        "href": "/owners/admin"
-    },
-    "environment": None,
-    "entitlementCount": 0,
-    "facts": {},
-    "lastCheckin": "2017-08-02T08:16:39+0000",
-    "installedProducts": [
-        {
-            "id": "8a99f9895d8b4f96015d9db99e9971fb",
-            "productId": "69",
-            "productName": "Red Hat Enterprise Linux Server",
-            "version": "7.4",
-            "arch": "x86_64",
-            "status": "green",
-            "startDate": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-            "endDate": END_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-            "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-            "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000")
-        },
-        {
-            "id": "8a99f9895d8b4f96015d9db99e9971fc",
-            "productId": "70",
-            "productName": "Red Hat Enterprise Linux Server - Extended Update Support",
-            "version": "7.2",
-            "arch": "x86_64",
-            "status": "green",
-            "startDate": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-            "endDate": END_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-            "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-            "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000")
-        }
-    ],
-    "canActivate": False,
-    "capabilities": [],
-    "hypervisorId": None,
-    "contentTags": [],
-    "autoheal": True,
-    "contentAccessMode": None,
-    "recipientOwnerKey": None,
-    "annotations": None,
-    "href": "/consumers/57b7dbff-9489-43ac-991a-b848324b423a",
-    "dev": False,
-    "created": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
-    "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000")
-}]
+        "updated": START_DATE.strftime("%Y-%m-%dT%H:%M:%S+0000"),
+    }
+]
 
 
 class TestProductService(InjectionMockingTest):
@@ -181,7 +173,9 @@ class TestProductService(InjectionMockingTest):
         super(TestProductService, self).setUp()
         self.mock_cert_sorter = mock.Mock(spec=CertSorter, name="CertSorter")
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
-        self.mock_calculator = mock.Mock(spec=ValidProductDateRangeCalculator, name="ValidProductDateRangeCalculator")
+        self.mock_calculator = mock.Mock(
+            spec=ValidProductDateRangeCalculator, name="ValidProductDateRangeCalculator"
+        )
 
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.CERT_SORTER:
@@ -192,24 +186,24 @@ class TestProductService(InjectionMockingTest):
             return None
 
     def _create_rhel74_cert(self):
-        return self._create_cert("69", "Red Hat Enterprise Linux Server",
-                                 "7.4", "rhel-7,rhel-7-server")
+        return self._create_cert("69", "Red Hat Enterprise Linux Server", "7.4", "rhel-7,rhel-7-server")
 
     def _create_rhel72_ues_cert(self):
-        return self._create_cert("70", "Red Hat Enterprise Linux Server - Extended Update Support",
-                                 "7.2", "rhel-7-eus-server,rhel-7-server")
+        return self._create_cert(
+            "70",
+            "Red Hat Enterprise Linux Server - Extended Update Support",
+            "7.2",
+            "rhel-7-eus-server,rhel-7-server",
+        )
 
     @staticmethod
     def _create_cert(product_id, name, version, provided_tags):
         cert = stubs.StubProductCertificate(
             product=stubs.StubProduct(
-                product_id=product_id,
-                name=name,
-                version=version,
-                provided_tags=provided_tags
+                product_id=product_id, name=name, version=version, provided_tags=provided_tags
             ),
             start_date=START_DATE,
-            end_date=END_DATE
+            end_date=END_DATE,
         )
         cert.delete = mock.Mock()
         cert.write = mock.Mock()
@@ -232,13 +226,13 @@ class TestProductService(InjectionMockingTest):
 
         self.mock_calculator.calculate.return_value.begin = mock.Mock()
         self.mock_calculator.calculate.return_value.begin.return_value.astimezone = mock.Mock()
-        self.mock_calculator.calculate.return_value.begin.return_value.astimezone.return_value.strftime = mock.Mock(
-            return_value='{d.day}.{d.month}.{d.year}'.format(d=START_DATE)
+        self.mock_calculator.calculate.return_value.begin.return_value.astimezone.return_value.strftime = (
+            mock.Mock(return_value='{d.day}.{d.month}.{d.year}'.format(d=START_DATE))
         )
         self.mock_calculator.calculate.return_value.end = mock.Mock()
         self.mock_calculator.calculate.return_value.end.return_value.astimezone = mock.Mock()
-        self.mock_calculator.calculate.return_value.end.return_value.astimezone.return_value.strftime = mock.Mock(
-            return_value='{d.day}.{d.month}.{d.year}'.format(d=END_DATE)
+        self.mock_calculator.calculate.return_value.end.return_value.astimezone.return_value.strftime = (
+            mock.Mock(return_value='{d.day}.{d.month}.{d.year}'.format(d=END_DATE))
         )
 
         expected_result = [
@@ -250,7 +244,7 @@ class TestProductService(InjectionMockingTest):
                 'subscribed',
                 [],
                 '{d.day}.{d.month}.{d.year}'.format(d=START_DATE),
-                '{d.day}.{d.month}.{d.year}'.format(d=END_DATE)
+                '{d.day}.{d.month}.{d.year}'.format(d=END_DATE),
             ),
             (
                 'Red Hat Enterprise Linux Server - Extended Update Support',
@@ -260,13 +254,13 @@ class TestProductService(InjectionMockingTest):
                 'subscribed',
                 [],
                 '{d.day}.{d.month}.{d.year}'.format(d=START_DATE),
-                '{d.day}.{d.month}.{d.year}'.format(d=END_DATE)
+                '{d.day}.{d.month}.{d.year}'.format(d=END_DATE),
             ),
         ]
 
         self.mock_cert_sorter.installed_products = {
             '69': self._create_rhel74_cert(),
-            '70': self._create_rhel72_ues_cert()
+            '70': self._create_rhel72_ues_cert(),
         }
 
         result = products.InstalledProducts(self.mock_cp).list()
@@ -283,13 +277,13 @@ class TestProductService(InjectionMockingTest):
 
         self.mock_calculator.calculate.return_value.begin = mock.Mock()
         self.mock_calculator.calculate.return_value.begin.return_value.astimezone = mock.Mock()
-        self.mock_calculator.calculate.return_value.begin.return_value.astimezone.return_value.strftime = mock.Mock(
-            return_value='{d.day}.{d.month}.{d.year}'.format(d=START_DATE)
+        self.mock_calculator.calculate.return_value.begin.return_value.astimezone.return_value.strftime = (
+            mock.Mock(return_value='{d.day}.{d.month}.{d.year}'.format(d=START_DATE))
         )
         self.mock_calculator.calculate.return_value.end = mock.Mock()
         self.mock_calculator.calculate.return_value.end.return_value.astimezone = mock.Mock()
-        self.mock_calculator.calculate.return_value.end.return_value.astimezone.return_value.strftime = mock.Mock(
-            return_value='{d.day}.{d.month}.{d.year}'.format(d=END_DATE)
+        self.mock_calculator.calculate.return_value.end.return_value.astimezone.return_value.strftime = (
+            mock.Mock(return_value='{d.day}.{d.month}.{d.year}'.format(d=END_DATE))
         )
 
         expected_result = [
@@ -301,13 +295,13 @@ class TestProductService(InjectionMockingTest):
                 'subscribed',
                 [],
                 '{d.day}.{d.month}.{d.year}'.format(d=START_DATE),
-                '{d.day}.{d.month}.{d.year}'.format(d=END_DATE)
+                '{d.day}.{d.month}.{d.year}'.format(d=END_DATE),
             ),
         ]
 
         self.mock_cert_sorter.installed_products = {
             '69': self._create_rhel74_cert(),
-            '70': self._create_rhel72_ues_cert()
+            '70': self._create_rhel72_ues_cert(),
         }
 
         result = products.InstalledProducts(self.mock_cp).list("*Extended*")
@@ -351,7 +345,7 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
                 'subscribed',
                 [],
                 START_DATE.strftime("%Y-%m-%d"),
-                END_DATE.strftime("%Y-%m-%d")
+                END_DATE.strftime("%Y-%m-%d"),
             ),
             (
                 'Red Hat Enterprise Linux Server - Extended Update Support',
@@ -361,7 +355,7 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
                 'subscribed',
                 [],
                 START_DATE.strftime("%Y-%m-%d"),
-                END_DATE.strftime("%Y-%m-%d")
+                END_DATE.strftime("%Y-%m-%d"),
             ),
         ]
 

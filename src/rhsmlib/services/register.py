@@ -31,8 +31,22 @@ class RegisterService(object):
         self.identity = inj.require(inj.IDENTITY)
         self.cp = cp
 
-    def register(self, org, activation_keys=None, environments=None, force=None, name=None, consumerid=None,
-                 type=None, role=None, addons=None, service_level=None, usage=None, jwt_token=None, **kwargs):
+    def register(
+        self,
+        org,
+        activation_keys=None,
+        environments=None,
+        force=None,
+        name=None,
+        consumerid=None,
+        type=None,
+        role=None,
+        addons=None,
+        service_level=None,
+        usage=None,
+        jwt_token=None,
+        **kwargs
+    ):
         # We accept a kwargs argument so that the DBus object can pass the options dictionary it
         # receives transparently to the service via dictionary unpacking.  This strategy allows the
         # DBus object to be more independent of the service implementation.
@@ -75,7 +89,7 @@ class RegisterService(object):
             'name': name,
             'consumerid': consumerid,
             'type': type,
-            'jwt_token': jwt_token
+            'jwt_token': jwt_token,
         }
         self.validate_options(options)
 
@@ -91,7 +105,8 @@ class RegisterService(object):
             consumer = self.cp.getConsumer(consumerid)
             if consumer.get('type', {}).get('manifest', {}):
                 raise exceptions.ServiceError(
-                    "Registration attempted with a consumer ID that is not of type 'system'")
+                    "Registration attempted with a consumer ID that is not of type 'system'"
+                )
         else:
             consumer = self.cp.registerConsumer(
                 name=consumer_name,
@@ -106,7 +121,7 @@ class RegisterService(object):
                 addons=addons,
                 service_level=service_level,
                 usage=usage,
-                jwt_token=jwt_token
+                jwt_token=jwt_token,
             )
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
@@ -120,10 +135,12 @@ class RegisterService(object):
             syspurposelib.write_syspurpose(syspurpose)
 
         syspurpose_dict = {
-            'service_level_agreement': consumer['serviceLevel'] if 'serviceLevel' in list(consumer.keys()) else '',
+            'service_level_agreement': consumer['serviceLevel']
+            if 'serviceLevel' in list(consumer.keys())
+            else '',
             'role': consumer['role'] if 'role' in list(consumer.keys()) else '',
             'usage': consumer['usage'] if 'usage' in list(consumer.keys()) else '',
-            'addons': consumer['addOns'] if 'addOns' in list(consumer.keys()) else []
+            'addons': consumer['addOns'] if 'addOns' in list(consumer.keys()) else [],
         }
 
         # Try to do three-way merge and then save result to syspurpose.json file
@@ -157,14 +174,19 @@ class RegisterService(object):
 
     def validate_options(self, options):
         if self.identity.is_valid() and options['force'] is not True:
-            raise exceptions.ValidationError(_("This system is already registered. Add force to options to "
-                                               "override."))
+            raise exceptions.ValidationError(
+                _("This system is already registered. Add force to options to " "override.")
+            )
         elif options.get('name') == '':
             raise exceptions.ValidationError(_("Error: system name can not be empty."))
         elif options['consumerid'] and options['force'] is True:
-            raise exceptions.ValidationError(_("Error: Can not force registration while attempting to "
-                                               "recover registration with consumerid. Please use --force without --consumerid to re-register"
-                                               " or use the clean command and try again without --force."))
+            raise exceptions.ValidationError(
+                _(
+                    "Error: Can not force registration while attempting to "
+                    "recover registration with consumerid. Please use --force without --consumerid to re-register"
+                    " or use the clean command and try again without --force."
+                )
+            )
 
         # If 'activation_keys' already exists in the dictionary, leave it.  Otherwise, set to None.
         if options['activation_keys']:
@@ -174,11 +196,13 @@ class RegisterService(object):
             elif getattr(self.cp, 'username', None) or getattr(self.cp, 'password', None):
                 raise exceptions.ValidationError(_("Error: Activation keys do not require user credentials."))
             elif options['consumerid']:
-                raise exceptions.ValidationError(_("Error: Activation keys can not be used with previously"
-                                                   " registered IDs."))
+                raise exceptions.ValidationError(
+                    _("Error: Activation keys can not be used with previously" " registered IDs.")
+                )
             elif options['environments']:
-                raise exceptions.ValidationError(_("Error: Activation keys do not allow environments to be"
-                                                   " specified."))
+                raise exceptions.ValidationError(
+                    _("Error: Activation keys do not allow environments to be" " specified.")
+                )
         elif options.get('jwt_token') is not None:
             # TODO: add more checks here
             pass

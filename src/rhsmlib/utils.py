@@ -34,10 +34,12 @@ def no_reinitialization(init_method):
             self = args[0]
 
             # Using this wrapper with something else will cause exception
-            assert hasattr(self, "_initialized") is True, \
-                "The {cls} does not include _initialized attribute".format(cls=self.__class__)
-            assert hasattr(self, '_lock') is True, \
-                "The {cls} does not include _lock attribute".format(cls=self.__class__)
+            assert (
+                hasattr(self, "_initialized") is True
+            ), "The {cls} does not include _initialized attribute".format(cls=self.__class__)
+            assert hasattr(self, '_lock') is True, "The {cls} does not include _lock attribute".format(
+                cls=self.__class__
+            )
 
             # When we know that the object contains _lock, then we can lock it
             self._lock.acquire(blocking=True)
@@ -90,6 +92,7 @@ class Singleton(object):
 
     The unlock() method can handle gracefully the situation, when the lock is not locked.
     """
+
     _instance = None
     _initialized = False
 

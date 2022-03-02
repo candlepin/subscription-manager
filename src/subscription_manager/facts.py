@@ -30,6 +30,7 @@ class Facts(CacheManager):
     Includes both those hard coded in the app itself, as well as custom
     facts to be loaded from /etc/rhsm/facts/.
     """
+
     CACHE_FILE = "/var/lib/rhsm/facts/facts.json"
 
     def __init__(self):

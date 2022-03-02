@@ -420,7 +420,9 @@ Content:
 \tExpires:%(space)s
 \tRequired Tags: TAG1, TAG2
 \tArches:%(space)s
-""" % ({'space': ' '})
+""" % (
+    {'space': ' '}
+)
 
 ENTITLEMENT_CERT_V3_0_OUTPUT = """
 +-------------------------------------------+
@@ -526,7 +528,9 @@ Content:
 \tExpires: 600
 \tRequired Tags:%(space)s
 \tArches:%(space)s
-""" % ({'space': ' '})
+""" % (
+    {'space': ' '}
+)
 
 
 ENTITLEMENT_CERT_V3_0_NO_CONTENT_OUTPUT = """
@@ -581,7 +585,9 @@ Order:
 \tWarning Period: 0
 \tProvides Management: False
 
-""" % ({'space': ' '})
+""" % (
+    {'space': ' '}
+)
 
 PRODUCT_CERT_V1_0_OUTPUT = """
 +-------------------------------------------+
@@ -612,7 +618,9 @@ Product:
 \tBrand Type:%(space)s
 \tBrand Name:%(space)s
 
-""" % ({'space': ' '})
+""" % (
+    {'space': ' '}
+)
 
 
 PRODUCT_CERT_WITH_OS_NAME_V1_0_OUTPUT = """
@@ -644,7 +652,9 @@ Product:
 \tBrand Type:%(space)s
 \tBrand Name:%(space)s
 
-""" % ({'space': ' '})
+""" % (
+    {'space': ' '}
+)
 
 IDENTITY_CERT_OUTPUT = """
 +-------------------------------------------+
@@ -667,24 +677,23 @@ Issuer:
 \tCN: wpoteat-desktop.usersys.redhat.com
 \tL: Raleigh
 
-""" % ({'space': ' '})
+""" % (
+    {'space': ' '}
+)
 
-PRODUCT_CERT_V1_0_STAT_OUTPUT = \
-"""Type: Product Certificate
+PRODUCT_CERT_V1_0_STAT_OUTPUT = """Type: Product Certificate
 Version: 1.0
 DER size: 892b
 Subject Key ID size: 20b
 """
 
-PRODUCT_CERT_WITH_OS_NAME_V1_0_STAT_OUTPUT = \
-"""Type: Product Certificate
+PRODUCT_CERT_WITH_OS_NAME_V1_0_STAT_OUTPUT = """Type: Product Certificate
 Version: 1.0
 DER size: 894b
 Subject Key ID size: 20b
 """
 
-ENTITLEMENT_CERT_V3_0_STAT_OUTPUT = \
-"""Type: Entitlement Certificate
+ENTITLEMENT_CERT_V3_0_STAT_OUTPUT = """Type: Entitlement Certificate
 Version: 3.0
 DER size: 915b
 Subject Key ID size: 20b

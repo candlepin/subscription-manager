@@ -21,20 +21,35 @@ import time
 from mock import Mock, patch, mock_open
 
 # used to get a user readable cfg class for test cases
-from .stubs import StubProduct, StubProductCertificate, StubCertificateDirectory, \
-    StubEntitlementCertificate, StubPool, StubEntitlementDirectory, StubUEP
+from .stubs import (
+    StubProduct,
+    StubProductCertificate,
+    StubCertificateDirectory,
+    StubEntitlementCertificate,
+    StubPool,
+    StubEntitlementDirectory,
+    StubUEP,
+)
 from .fixture import SubManFixture
 
 from rhsm import ourjson as json
-from subscription_manager.cache import ProfileManager, InstalledProductsManager,\
-    EntitlementStatusCache, PoolTypeCache, ReleaseStatusCache, ContentAccessCache, \
-    PoolStatusCache, SupportedResourcesCache, AvailableEntitlementsCache, CurrentOwnerCache, \
-    ContentAccessModeCache
+from subscription_manager.cache import (
+    ProfileManager,
+    InstalledProductsManager,
+    EntitlementStatusCache,
+    PoolTypeCache,
+    ReleaseStatusCache,
+    ContentAccessCache,
+    PoolStatusCache,
+    SupportedResourcesCache,
+    AvailableEntitlementsCache,
+    CurrentOwnerCache,
+    ContentAccessModeCache,
+)
 
 from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfile
 
-from rhsm.connection import RestlibException, UnauthorizedException, \
-    RateLimitExceededException
+from rhsm.connection import RestlibException, UnauthorizedException, RateLimitExceededException
 
 from subscription_manager import injection as inj
 
@@ -90,7 +105,7 @@ ENABLED_MODULES = [
         "profiles": ["default"],
         "installed_profiles": [],
         "status": "enabled",
-        "active": True
+        "active": True,
     },
     {
         "name": "flipper",
@@ -101,8 +116,8 @@ ENABLED_MODULES = [
         "profiles": ["default", "server"],
         "installed_profiles": ["server"],
         "status": "unknown",
-        "active": True
-    }
+        "active": True,
+    },
 ]
 
 
@@ -128,7 +143,7 @@ class TestCurrentOwnerCache(unittest.TestCase):
             "contentAccessMode": "entitlement",
             "contentAccessModeList": "entitlement",
             "lastRefreshed": None,
-            "href": "/owners/admin"
+            "href": "/owners/admin",
         }
     }
 
@@ -196,7 +211,7 @@ class TestProfileManager(unittest.TestCase):
     def setUp(self):
         current_pkgs = [
             Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-            Package(name="package2", version="2.0.0", release=2, arch="x86_64")
+            Package(name="package2", version="2.0.0", release=2, arch="x86_64"),
         ]
         temp_repo_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, temp_repo_dir)
@@ -248,8 +263,7 @@ class TestProfileManager(unittest.TestCase):
 
         self.profile_mgr.update_check(uep, uuid, True)
 
-        uep.updatePackageProfile.assert_called_with(uuid,
-                                                    FACT_MATCHER)
+        uep.updatePackageProfile.assert_called_with(uuid, FACT_MATCHER)
         self.assertEqual(1, self.profile_mgr.write_cache.call_count)
 
     @patch('subscription_manager.cache.get_supported_resources')
@@ -264,8 +278,7 @@ class TestProfileManager(unittest.TestCase):
 
         self.profile_mgr.update_check(uep, uuid, True)
 
-        uep.updateCombinedProfile.assert_called_with(uuid,
-                                                     FACT_MATCHER)
+        uep.updateCombinedProfile.assert_called_with(uuid, FACT_MATCHER)
         self.assertEqual(1, self.profile_mgr.write_cache.call_count)
 
     @patch('subscription_manager.cache.get_supported_resources')
@@ -301,37 +314,39 @@ class TestProfileManager(unittest.TestCase):
         self.assertEqual(0, self.profile_mgr.write_cache.call_count)
 
     def test_report_package_profile_environment_variable(self):
-        with patch.dict('os.environ', {'SUBMAN_DISABLE_PROFILE_REPORTING': '1'}), \
-            patch.object(cache, 'conf') as conf:
-                # report_package_profile is set to 1 and SUBMAN_DISABLE_PROFILE_REPORTING is set to 1, the
-                # package profile should not be reported.
-                conf.__getitem__.return_value.get_int.return_value = 1
-                self.assertFalse(self.profile_mgr.profile_reporting_enabled())
-                # report_package_profile in rhsm.conf is set to 0 and SUBMAN_DISABLE_PROFILE_REPORTING is set
-                # to 1, the package profile should not be reported.
-                conf.__getitem__.return_value.get_int.return_value = 0
-                self.assertFalse(self.profile_mgr.profile_reporting_enabled())
+        with patch.dict('os.environ', {'SUBMAN_DISABLE_PROFILE_REPORTING': '1'}), patch.object(
+            cache, 'conf'
+        ) as conf:
+            # report_package_profile is set to 1 and SUBMAN_DISABLE_PROFILE_REPORTING is set to 1, the
+            # package profile should not be reported.
+            conf.__getitem__.return_value.get_int.return_value = 1
+            self.assertFalse(self.profile_mgr.profile_reporting_enabled())
+            # report_package_profile in rhsm.conf is set to 0 and SUBMAN_DISABLE_PROFILE_REPORTING is set
+            # to 1, the package profile should not be reported.
+            conf.__getitem__.return_value.get_int.return_value = 0
+            self.assertFalse(self.profile_mgr.profile_reporting_enabled())
 
-        with patch.dict('os.environ', {'SUBMAN_DISABLE_PROFILE_REPORTING': '0'}), \
-            patch.object(cache, 'conf') as conf:
-                # report_package_profile in rhsm.conf is set to 1 and SUBMAN_DISABLE_PROFILE_REPORTING is set
-                # to 0, the package profile should be reported.
-                conf.__getitem__.return_value.get_int.return_value = 1
-                self.assertTrue(self.profile_mgr.profile_reporting_enabled())
-                # report_package_profile in rhsm.conf is set to 0 and SUBMAN_DISABLE_PROFILE_REPORTING is set
-                # to 0, the package profile should not be reported.
-                conf.__getitem__.return_value.get_int.return_value = 0
-                self.assertFalse(self.profile_mgr.profile_reporting_enabled())
+        with patch.dict('os.environ', {'SUBMAN_DISABLE_PROFILE_REPORTING': '0'}), patch.object(
+            cache, 'conf'
+        ) as conf:
+            # report_package_profile in rhsm.conf is set to 1 and SUBMAN_DISABLE_PROFILE_REPORTING is set
+            # to 0, the package profile should be reported.
+            conf.__getitem__.return_value.get_int.return_value = 1
+            self.assertTrue(self.profile_mgr.profile_reporting_enabled())
+            # report_package_profile in rhsm.conf is set to 0 and SUBMAN_DISABLE_PROFILE_REPORTING is set
+            # to 0, the package profile should not be reported.
+            conf.__getitem__.return_value.get_int.return_value = 0
+            self.assertFalse(self.profile_mgr.profile_reporting_enabled())
 
         with patch.dict('os.environ', {}), patch.object(cache, 'conf') as conf:
-                # report_package_profile in rhsm.conf is set to 1 and SUBMAN_DISABLE_PROFILE_REPORTING is not
-                # set, the package profile should be reported.
-                conf.__getitem__.return_value.get_int.return_value = 1
-                self.assertTrue(self.profile_mgr.profile_reporting_enabled())
-                # report_package_profile in rhsm.conf is set to 0 and SUBMAN_DISABLE_PROFILE_REPORTING is not
-                # set, the package profile should not be reported.
-                conf.__getitem__.return_value.get_int.return_value = 0
-                self.assertFalse(self.profile_mgr.profile_reporting_enabled())
+            # report_package_profile in rhsm.conf is set to 1 and SUBMAN_DISABLE_PROFILE_REPORTING is not
+            # set, the package profile should be reported.
+            conf.__getitem__.return_value.get_int.return_value = 1
+            self.assertTrue(self.profile_mgr.profile_reporting_enabled())
+            # report_package_profile in rhsm.conf is set to 0 and SUBMAN_DISABLE_PROFILE_REPORTING is not
+            # set, the package profile should not be reported.
+            conf.__getitem__.return_value.get_int.return_value = 0
+            self.assertFalse(self.profile_mgr.profile_reporting_enabled())
 
     @patch('subscription_manager.cache.get_supported_resources')
     def test_update_check_error_uploading(self, mock_get_supported_resources):
@@ -346,8 +361,7 @@ class TestProfileManager(unittest.TestCase):
         uep.updatePackageProfile = Mock(side_effect=Exception('BOOM!'))
 
         self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid, True)
-        uep.updatePackageProfile.assert_called_with(uuid,
-                                                    FACT_MATCHER)
+        uep.updatePackageProfile.assert_called_with(uuid, FACT_MATCHER)
         self.assertEqual(0, self.profile_mgr.write_cache.call_count)
 
     @patch('subscription_manager.cache.get_supported_resources')
@@ -363,8 +377,7 @@ class TestProfileManager(unittest.TestCase):
         uep.updateCombinedProfile = Mock(side_effect=Exception('BOOM!'))
 
         self.assertRaises(Exception, self.profile_mgr.update_check, uep, uuid, True)
-        uep.updateCombinedProfile.assert_called_with(uuid,
-                                                     FACT_MATCHER)
+        uep.updateCombinedProfile.assert_called_with(uuid, FACT_MATCHER)
         self.assertEqual(0, self.profile_mgr.write_cache.call_count)
 
     def test_has_changed_no_cache(self):
@@ -374,7 +387,7 @@ class TestProfileManager(unittest.TestCase):
     def test_has_changed_no_changes(self):
         cached_pkgs = [
             Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-            Package(name="package2", version="2.0.0", release=2, arch="x86_64")
+            Package(name="package2", version="2.0.0", release=2, arch="x86_64"),
         ]
         temp_repo_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, temp_repo_dir)
@@ -392,7 +405,7 @@ class TestProfileManager(unittest.TestCase):
     def test_has_changed(self):
         cached_pkgs = [
             Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
-            Package(name="package3", version="3.0.0", release=3, arch="x86_64")
+            Package(name="package3", version="3.0.0", release=3, arch="x86_64"),
         ]
         cached_profile = self._mock_pkg_profile(cached_pkgs, "/non/existing/path/to/repo/file", [])
 
@@ -449,7 +462,7 @@ class TestProfileManager(unittest.TestCase):
                 "profiles": ["default"],
                 "installed_profiles": [],
                 "status": "enabled",
-                "active": True
+                "active": True,
             },
             {
                 "name": "duck",
@@ -460,9 +473,8 @@ class TestProfileManager(unittest.TestCase):
                 "profiles": ["default", "server"],
                 "installed_profiles": ["server"],
                 "status": "unknown",
-                "active": True
-            }
-
+                "active": True,
+            },
         ]
 
         self.assertEqual(modules_input, ModulesProfile._uniquify(modules_input))
@@ -480,7 +492,7 @@ class TestProfileManager(unittest.TestCase):
                 "profiles": ["default"],
                 "installed_profiles": [],
                 "status": "enabled",
-                "active": False
+                "active": False,
             },
             {
                 "name": "duck",
@@ -491,8 +503,8 @@ class TestProfileManager(unittest.TestCase):
                 "profiles": ["default"],
                 "installed_profiles": [],
                 "status": "enabled",
-                "active": True
-            }
+                "active": True,
+            },
         ]
 
         expected_output = [
@@ -505,7 +517,7 @@ class TestProfileManager(unittest.TestCase):
                 "profiles": ["default"],
                 "installed_profiles": [],
                 "status": "enabled",
-                "active": True
+                "active": True,
             }
         ]
 
@@ -534,7 +546,7 @@ class TestProfileManager(unittest.TestCase):
         mock_profile = {
             "rpm": mock_rpm_profile,
             "enabled_repos": mock_enabled_repos_profile,
-            "modulemd": mock_module_profile
+            "modulemd": mock_module_profile,
         }
         return mock_profile
 
@@ -542,11 +554,17 @@ class TestProfileManager(unittest.TestCase):
 class TestInstalledProductsCache(SubManFixture):
     def setUp(self):
         super(TestInstalledProductsCache, self).setUp()
-        self.prod_dir = StubCertificateDirectory([
-            StubProductCertificate(StubProduct('a-product', name="Product A", provided_tags="product,product-a")),
-            StubProductCertificate(StubProduct('b-product', name="Product B", provided_tags="product,product-b")),
-            StubProductCertificate(StubProduct('c-product', name="Product C", provided_tags="product-c")),
-        ])
+        self.prod_dir = StubCertificateDirectory(
+            [
+                StubProductCertificate(
+                    StubProduct('a-product', name="Product A", provided_tags="product,product-a")
+                ),
+                StubProductCertificate(
+                    StubProduct('b-product', name="Product B", provided_tags="product,product-b")
+                ),
+                StubProductCertificate(StubProduct('c-product', name="Product C", provided_tags="product-c")),
+            ]
+        )
 
         inj.provide(inj.PROD_DIR, self.prod_dir)
         self.mgr = InstalledProductsManager()
@@ -560,13 +578,7 @@ class TestInstalledProductsCache(SubManFixture):
         self.assertEqual(set(["product", "product-a", "product-b", "product-c"]), set(self.mgr.tags))
 
     def test_load_data(self):
-        cached = {
-            'products': {
-                'prod1': 'Product 1',
-                'prod2': 'Product 2'
-            },
-            'tags': ['p1', 'p2']
-        }
+        cached = {'products': {'prod1': 'Product 1', 'prod2': 'Product 2'}, 'tags': ['p1', 'p2']}
         mock_file = Mock()
         mock_file.read = Mock(return_value=json.dumps(cached))
 
@@ -574,13 +586,7 @@ class TestInstalledProductsCache(SubManFixture):
         self.assertEqual(data, cached)
 
     def test_has_changed(self):
-        cached = {
-            'products': {
-                'prod1': 'Product 1',
-                'prod2': 'Product 2'
-            },
-            'tags': ['p1', 'p2']
-        }
+        cached = {'products': {'prod1': 'Product 1', 'prod2': 'Product 2'}, 'tags': ['p1', 'p2']}
 
         self.mgr._read_cache = Mock(return_value=cached)
         self.mgr._cache_exists = Mock(return_value=True)
@@ -590,11 +596,26 @@ class TestInstalledProductsCache(SubManFixture):
     def test_has_changed_with_tags_only(self):
         cached = {
             'products': {
-                'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
-                'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
-                'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
+                'a-product': {
+                    'productName': 'Product A',
+                    'productId': 'a-product',
+                    'version': '1.0',
+                    'arch': 'x86_64',
+                },
+                'b-product': {
+                    'productName': 'Product B',
+                    'productId': 'b-product',
+                    'version': '1.0',
+                    'arch': 'x86_64',
+                },
+                'c-product': {
+                    'productName': 'Product C',
+                    'productId': 'c-product',
+                    'version': '1.0',
+                    'arch': 'x86_64',
+                },
             },
-            'tags': ['different']
+            'tags': ['different'],
         }
 
         self.mgr._read_cache = Mock(return_value=cached)
@@ -604,9 +625,24 @@ class TestInstalledProductsCache(SubManFixture):
 
     def test_old_format_seen_as_invalid(self):
         cached = {
-            'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
-            'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
-            'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
+            'a-product': {
+                'productName': 'Product A',
+                'productId': 'a-product',
+                'version': '1.0',
+                'arch': 'x86_64',
+            },
+            'b-product': {
+                'productName': 'Product B',
+                'productId': 'b-product',
+                'version': '1.0',
+                'arch': 'x86_64',
+            },
+            'c-product': {
+                'productName': 'Product C',
+                'productId': 'c-product',
+                'version': '1.0',
+                'arch': 'x86_64',
+            },
         }
 
         self.mgr._read_cache = Mock(return_value=cached)
@@ -617,11 +653,26 @@ class TestInstalledProductsCache(SubManFixture):
     def test_has_not_changed(self):
         cached = {
             'products': {
-                'a-product': {'productName': 'Product A', 'productId': 'a-product', 'version': '1.0', 'arch': 'x86_64'},
-                'b-product': {'productName': 'Product B', 'productId': 'b-product', 'version': '1.0', 'arch': 'x86_64'},
-                'c-product': {'productName': 'Product C', 'productId': 'c-product', 'version': '1.0', 'arch': 'x86_64'}
+                'a-product': {
+                    'productName': 'Product A',
+                    'productId': 'a-product',
+                    'version': '1.0',
+                    'arch': 'x86_64',
+                },
+                'b-product': {
+                    'productName': 'Product B',
+                    'productId': 'b-product',
+                    'version': '1.0',
+                    'arch': 'x86_64',
+                },
+                'c-product': {
+                    'productName': 'Product C',
+                    'productId': 'c-product',
+                    'version': '1.0',
+                    'arch': 'x86_64',
+                },
             },
-            'tags': ['product-a', 'product-b', 'product-c', 'product']
+            'tags': ['product-a', 'product-b', 'product-c', 'product'],
         }
 
         self.mgr._read_cache = Mock(return_value=cached)
@@ -651,9 +702,9 @@ class TestInstalledProductsCache(SubManFixture):
         self.mgr.update_check(uep, uuid, True)
 
         expected = ["product", "product-a", "product-b", "product-c"]
-        uep.updateConsumer.assert_called_with(uuid,
-                                              content_tags=set(expected),
-                                              installed_products=self.mgr.format_for_server())
+        uep.updateConsumer.assert_called_with(
+            uuid, content_tags=set(expected), installed_products=self.mgr.format_for_server()
+        )
         self.assertEqual(1, self.mgr.write_cache.call_count)
 
     def test_update_check_error_uploading(self):
@@ -667,9 +718,9 @@ class TestInstalledProductsCache(SubManFixture):
 
         self.assertRaises(Exception, self.mgr.update_check, uep, uuid, True)
         expected = ["product", "product-a", "product-b", "product-c"]
-        uep.updateConsumer.assert_called_with(uuid,
-                                              content_tags=set(expected),
-                                              installed_products=self.mgr.format_for_server())
+        uep.updateConsumer.assert_called_with(
+            uuid, content_tags=set(expected), installed_products=self.mgr.format_for_server()
+        )
         self.assertEqual(0, self.mgr.write_cache.call_count)
 
 
@@ -846,7 +897,7 @@ class TestEntitlementStatusCache(SubManFixture):
             except Exception as e:
                 log.exception(e)
                 tries += 1
-                time.sleep(.1)
+                time.sleep(0.1)
                 continue
 
         shutil.rmtree(cache_dir)
@@ -869,13 +920,7 @@ class TestPoolStatusCache(SubManFixture):
         self.pool_status_cache.write_cache = Mock()
 
     def test_load_data(self):
-        cached = {
-            'pools': {
-                'pool1': 'Pool 1',
-                'pool2': 'Pool 2'
-            },
-            'tags': ['p1', 'p2']
-        }
+        cached = {'pools': {'pool1': 'Pool 1', 'pool2': 'Pool 2'}, 'tags': ['p1', 'p2']}
         mock_file = Mock()
         mock_file.read = Mock(return_value=json.dumps(cached))
 
@@ -884,13 +929,7 @@ class TestPoolStatusCache(SubManFixture):
 
     def test_load_from_server(self):
         uep = Mock()
-        dummy_pools = {
-            'pools': {
-                'pool1': 'Pool 1',
-                'pool2': 'Pool 2'
-            },
-            'tags': ['p1', 'p2']
-        }
+        dummy_pools = {'pools': {'pool1': 'Pool 1', 'pool2': 'Pool 2'}, 'tags': ['p1', 'p2']}
         uep.getEntitlementList = Mock(return_value=dummy_pools)
 
         self.pool_status_cache.read_status(uep, "THISISAUUID")
@@ -942,7 +981,8 @@ class TestPoolTypeCache(SubManFixture):
         pooltype_cache.ent_dir = self.ent_dir
         self.cp.getEntitlementList.return_value = [
             self._build_ent_json('poolid', 'some type'),
-            self._build_ent_json('poolid2', 'some other type')]
+            self._build_ent_json('poolid2', 'some other type'),
+        ]
 
         # requires_update should be true, and should allow this method
         # to generate a correct mapping
@@ -1000,13 +1040,10 @@ class TestPoolTypeCache(SubManFixture):
 class TestContentAccessCache(SubManFixture):
     MOCK_CONTENT = {
         "lastUpdate": "2016-12-01T21:56:35+0000",
-        "contentListing": {"42": ["cert-part1", "cert-part2"]}
+        "contentListing": {"42": ["cert-part1", "cert-part2"]},
     }
 
-    MOCK_CONTENT_EMPTY_CONTENT_LISTING = {
-        "lastUpdate": "2016-12-01T21:56:35+0000",
-        "contentListing": None
-    }
+    MOCK_CONTENT_EMPTY_CONTENT_LISTING = {"lastUpdate": "2016-12-01T21:56:35+0000", "contentListing": None}
 
     MOCK_CERT = """
 before
@@ -1091,7 +1128,9 @@ after
         with patch('os.path.exists', mock_exists):
             self.cache.check_for_update()
             date = isodate.parse_date("2016-12-01T21:56:35+0000")
-            self.mock_uep.getAccessibleContent.assert_called_once_with(self.cache.identity.uuid, if_modified_since=date)
+            self.mock_uep.getAccessibleContent.assert_called_once_with(
+                self.cache.identity.uuid, if_modified_since=date
+            )
 
     @patch('os.path.exists', Mock(return_value=True))
     def test_cache_remove_deletes_file(self):
@@ -1235,7 +1274,9 @@ class TestAvailableEntitlementsCache(SubManFixture):
         data = self.cache.read_cache_only()
         self.assertTrue("b1002709-6d67-443e-808b-a7afcbe5b47e" in data)
         self.assertEqual(data["b1002709-6d67-443e-808b-a7afcbe5b47e"]["timeout"], 1579613054.079684)
-        self.assertEqual(data["b1002709-6d67-443e-808b-a7afcbe5b47e"]["filter_options"]["matches"], "*fakeos*")
+        self.assertEqual(
+            data["b1002709-6d67-443e-808b-a7afcbe5b47e"]["filter_options"]["matches"], "*fakeos*"
+        )
         self.assertEqual(len(data["b1002709-6d67-443e-808b-a7afcbe5b47e"]["pools"]), 1)
 
     def test_timeout(self):

@@ -31,7 +31,8 @@ import dnf
 
 from configparser import ConfigParser
 
-expired_warning = _("""
+expired_warning = _(
+    """
 *** WARNING ***
 The subscription for following product(s) has expired:
 %s
@@ -40,14 +41,18 @@ subscription in order to resume access to security and other critical updates. I
 subscriptions, you can renew the expired subscription.  """
 )
 
-not_registered_warning = _("""
+not_registered_warning = _(
+    """
 This system is not registered with an entitlement server. You can use subscription-manager to register.
-""")
+"""
+)
 
-no_subs_warning = _("""
+no_subs_warning = _(
+    """
 This system is registered with an entitlement server, but is not receiving updates. You can use \
 subscription-manager to assign subscriptions.
-""")
+"""
+)
 
 log = logging.getLogger('rhsm-app.' + __name__)
 
@@ -62,7 +67,7 @@ class SubscriptionManager(dnf.Plugin):
         self._config()
 
     def _config(self):
-        """ update """
+        """update"""
         logutil.init_logger_for_yum()
 
         init_dep_injection()
@@ -105,8 +110,11 @@ class SubscriptionManager(dnf.Plugin):
                             repo.disable()
                             disable_count += 1
                     logger.info(
-                        _('subscription-manager plugin disabled %d system repositories with respect of configuration '
-                          'in /etc/dnf/plugins/subscription-manager.conf') % disable_count
+                        _(
+                            'subscription-manager plugin disabled %d system repositories with respect of configuration '
+                            'in /etc/dnf/plugins/subscription-manager.conf'
+                        )
+                        % disable_count
                     )
         else:
             logger.debug('Configuration file %s does not exist.' % default_config_file)

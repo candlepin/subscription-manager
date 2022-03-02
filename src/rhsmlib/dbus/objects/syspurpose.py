@@ -38,6 +38,7 @@ class ThreeWayMergeConflict(dbus.DBusException):
     """
     Raise this exception, when client application tries to
     """
+
     _dbus_error_name = "%s.Error" % constants.SYSPURPOSE_INTERFACE
     include_traceback = False
     severity = "warn"
@@ -60,17 +61,19 @@ class ThreeWayMergeConflict(dbus.DBusException):
             conflicts.append(
                 '{conflict_attr} of "{existing_value}"'.format(
                     conflict_attr=key,
-                    existing_value=value
+                    existing_value=value,
                 )
             )
         conflict_msg = ", ".join(conflicts)
-        return ungettext('Warning: The following field was recently set '
-                         'for this system by the entitlement server '
-                         'administrator: {conflict_msg}',
-                         'Warning: The following fields were recently set '
-                         'for this system by the entitlement server '
-                         'administrator: {conflict_msg}',
-                         len(conflicts)).format(conflict_msg=conflict_msg)
+        return ungettext(
+            'Warning: The following field was recently set '
+            'for this system by the entitlement server '
+            'administrator: {conflict_msg}',
+            'Warning: The following fields were recently set '
+            'for this system by the entitlement server '
+            'administrator: {conflict_msg}',
+            len(conflicts),
+        ).format(conflict_msg=conflict_msg)
 
 
 class SyspurposeDBusObject(base_object.BaseObject):
@@ -78,6 +81,7 @@ class SyspurposeDBusObject(base_object.BaseObject):
     A D-Bus object interacting with subscription-manager to get
     information about current system purpose.
     """
+
     default_dbus_path = constants.SYSPURPOSE_DBUS_PATH
     interface_name = constants.SYSPURPOSE_INTERFACE
 
@@ -87,7 +91,8 @@ class SyspurposeDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
         in_signature='s',
-        out_signature='s')
+        out_signature='s',
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetSyspurpose(self, locale, sender=None):
@@ -114,7 +119,7 @@ class SyspurposeDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
         in_signature='s',
-        out_signature='s'
+        out_signature='s',
     )
     @util.dbus_handle_exceptions
     def GetSyspurposeStatus(self, locale, sender=None):
@@ -134,7 +139,7 @@ class SyspurposeDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
         in_signature='s',
-        out_signature='s'
+        out_signature='s',
     )
     @util.dbus_handle_exceptions
     def GetValidFields(self, locale, sender=None):
@@ -165,7 +170,7 @@ class SyspurposeDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
         in_signature='a{sv}s',
-        out_signature='s'
+        out_signature='s',
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
@@ -197,7 +202,7 @@ class SyspurposeDBusObject(base_object.BaseObject):
 
     @util.dbus_service_signal(
         constants.SYSPURPOSE_INTERFACE,
-        signature=''
+        signature='',
     )
     @util.dbus_handle_exceptions
     def SyspurposeChanged(self):

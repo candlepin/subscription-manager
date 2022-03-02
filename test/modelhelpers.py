@@ -29,9 +29,17 @@ def md5sum(buf):
     return md.hexdigest()
 
 
-def create_pool(product_id, product_name, quantity=10, consumed=0, provided_products=None,
-                attributes=None, productAttributes=None, calculatedAttributes=None,
-                start_end_range=None):
+def create_pool(
+    product_id,
+    product_name,
+    quantity=10,
+    consumed=0,
+    provided_products=None,
+    attributes=None,
+    productAttributes=None,
+    calculatedAttributes=None,
+    start_end_range=None,
+):
     """
     Returns a hash representing a pool. Used to simulate the JSON returned
     from Candlepin.
@@ -47,10 +55,12 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
 
     provided = []
     for pid in provided_products:
-        provided.append({
-            'productId': pid,
-            'productName': pid,
-        })
+        provided.append(
+            {
+                'productId': pid,
+                'productName': pid,
+            }
+        )
 
     pool_id = md5sum(product_id)
 
@@ -70,9 +80,7 @@ def create_pool(product_id, product_name, quantity=10, consumed=0, provided_prod
         'sourceEntitlement': None,
         'href': '/pools/%s' % pool_id,
         'restrictedToUsername': None,
-        'owner': {
-            'href': '/owners/admin',
-            'id': '402881062bc9a379012bc9a393fe0005'},
+        'owner': {'href': '/owners/admin', 'id': '402881062bc9a379012bc9a393fe0005'},
         'attributes': attributes,
         'productAttributes': productAttributes,
     }

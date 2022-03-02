@@ -49,7 +49,9 @@ class TestStatusCommand(SubManFixture):
     def test_purpose_status_mismatch(self):
         self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
-        self.cc.cp.setSyspurposeCompliance({'status': 'mismatched', 'reasons': ['unsatisfied usage: Production']})
+        self.cc.cp.setSyspurposeCompliance(
+            {'status': 'mismatched', 'reasons': ['unsatisfied usage: Production']}
+        )
         self.cc.cp._capabilities = ["syspurpose"]
         self.cc.options = Mock()
         self.cc.options.on_date = None

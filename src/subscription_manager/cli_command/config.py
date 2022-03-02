@@ -24,22 +24,26 @@ from subscription_manager.i18n import ugettext as _
 
 
 class ConfigCommand(CliCommand):
-
     def __init__(self):
         shortdesc = _("List, set, or remove the configuration parameters in use by this system")
         super(ConfigCommand, self).__init__("config", shortdesc, False)
 
-        self.parser.add_argument("--list", action="store_true",
-                                 help=_("list the configuration for this system"))
-        self.parser.add_argument("--remove", dest="remove", action="append",
-                                 help=_("remove configuration entry by section.name"))
+        self.parser.add_argument(
+            "--list", action="store_true", help=_("list the configuration for this system")
+        )
+        self.parser.add_argument(
+            "--remove", dest="remove", action="append", help=_("remove configuration entry by section.name")
+        )
         for s in list(conf.keys()):
             section = conf[s]
             for name, _value in list(section.items()):
                 # Allow adding CLI options only for sections and names listed in defaults
                 if s in rhsm.config.DEFAULTS and name in rhsm.config.DEFAULTS[s]:
-                    self.parser.add_argument("--" + s + "." + name, dest=(s + "." + name),
-                                             help=_("Section: {s}, Name: {name}").format(s=s, name=name))
+                    self.parser.add_argument(
+                        "--" + s + "." + name,
+                        dest=(s + "." + name),
+                        help=_("Section: {s}, Name: {name}").format(s=s, name=name),
+                    )
 
     def _validate_options(self):
         if self.options.list:
@@ -58,8 +62,12 @@ class ConfigCommand(CliCommand):
                         else:
                             pass
             if too_many:
-                system_exit(os.EX_USAGE, _(
-                    "Error: --list should not be used with any other options for setting or removing configurations."))
+                system_exit(
+                    os.EX_USAGE,
+                    _(
+                        "Error: --list should not be used with any other options for setting or removing configurations."
+                    ),
+                )
 
         if not (self.options.list or self.options.remove):
             has = False
@@ -78,8 +86,12 @@ class ConfigCommand(CliCommand):
         if self.options.remove:
             for r in self.options.remove:
                 if "." not in r:
-                    system_exit(os.EX_USAGE, _(
-                        "Error: configuration entry designation for removal must be of format [section.name]"))
+                    system_exit(
+                        os.EX_USAGE,
+                        _(
+                            "Error: configuration entry designation for removal must be of format [section.name]"
+                        ),
+                    )
 
                 section = r.split('.')[0]
                 name = r.split('.')[1]
@@ -89,7 +101,12 @@ class ConfigCommand(CliCommand):
                         if name == key:
                             found = True
                 if not found:
-                    system_exit(os.EX_CONFIG, _("Error: Section {section} and name {name} does not exist.").format(section=section, name=name))
+                    system_exit(
+                        os.EX_CONFIG,
+                        _("Error: Section {section} and name {name} does not exist.").format(
+                            section=section, name=name
+                        ),
+                    )
 
     def _do_command(self):
         self._validate_options()
@@ -105,12 +122,11 @@ class ConfigCommand(CliCommand):
                     if value == section.get_default(name):
                         indicator1 = '['
                         indicator2 = ']'
-                    print("   {name} = {indicator1}{value}{indicator2}".format(
-                        name=name,
-                        indicator1=indicator1,
-                        value=value,
-                        indicator2=indicator2
-                    ))
+                    print(
+                        "   {name} = {indicator1}{value}{indicator2}".format(
+                            name=name, indicator1=indicator1, value=value, indicator2=indicator2
+                        )
+                    )
                 print()
             print(_("[] - Default value in use"))
             print("\n")
@@ -121,13 +137,25 @@ class ConfigCommand(CliCommand):
                 try:
                     if not conf[section].has_default(name):
                         conf[section][name] = ''
-                        print(_("You have removed the value for section {section} and name {name}.").format(section=section, name=name))
+                        print(
+                            _("You have removed the value for section {section} and name {name}.").format(
+                                section=section, name=name
+                            )
+                        )
                     else:
                         conf[section][name] = conf[section].get_default(name)
-                        print(_("You have removed the value for section {section} and name {name}.").format(section=section, name=name))
+                        print(
+                            _("You have removed the value for section {section} and name {name}.").format(
+                                section=section, name=name
+                            )
+                        )
                         print(_("The default value for {name} will now be used.").format(name=name))
                 except Exception:
-                    print(_("Section {section} and name {name} cannot be removed.").format(section=section, name=name))
+                    print(
+                        _("Section {section} and name {name} cannot be removed.").format(
+                            section=section, name=name
+                        )
+                    )
             conf.persist()
         else:
             for s in list(conf.keys()):

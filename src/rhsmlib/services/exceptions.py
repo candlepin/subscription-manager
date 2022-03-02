@@ -14,9 +14,11 @@
 
 class ServiceError(Exception):
     """Top level exception for errors occuring in the service"""
+
     pass
 
 
 class ValidationError(ServiceError):
     """Thrown when options sent to the service are determined to be invalid"""
+
     pass

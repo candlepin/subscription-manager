@@ -79,7 +79,9 @@ class ZipExtractAll(ZipFile):
                     raise KeyError
                 result = self._get_inner_zip()._read_file(file_path, True)
             except KeyError:
-                raise Exception(_('Unable to find file "{file_path}" in manifest.').format(file_path=file_path))
+                raise Exception(
+                    _('Unable to find file "{file_path}" in manifest.').format(file_path=file_path)
+                )
         return result
 
     def _get_entitlements(self):
@@ -121,7 +123,7 @@ class ZipExtractAll(ZipFile):
                 os.makedirs(directory)
             new_location = os.path.join(directory, filename)
             self._is_secure(location, new_location)
-            if (os.path.exists(new_location) and overwrite):
+            if os.path.exists(new_location) and overwrite:
                 os.remove(new_location)
             self._write_file(new_location, path_name)
 
@@ -131,8 +133,7 @@ class RCTManifestCommand(RCTCliCommand):
     INNER_FILE = "consumer_export.zip"
 
     def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
-        RCTCliCommand.__init__(self, name=name, aliases=aliases,
-                               shortdesc=shortdesc, primary=primary)
+        RCTCliCommand.__init__(self, name=name, aliases=aliases, shortdesc=shortdesc, primary=primary)
 
     def _get_usage(self):
         return _("%(prog)s {name} [OPTIONS] MANIFEST_FILE").format(name=self.name)
@@ -164,14 +165,20 @@ class RCTManifestCommand(RCTCliCommand):
 
 
 class CatManifestCommand(RCTManifestCommand):
-
     def __init__(self):
-        RCTManifestCommand.__init__(self, name="cat-manifest", aliases=['cm'],
-                                    shortdesc=_("Print manifest information"),
-                                    primary=True)
-        self.parser.add_argument("--no-content", action="store_true",
-                                 default=False,
-                                 help=_("skip printing Content Sets"))
+        RCTManifestCommand.__init__(
+            self,
+            name="cat-manifest",
+            aliases=['cm'],
+            shortdesc=_("Print manifest information"),
+            primary=True,
+        )
+        self.parser.add_argument(
+            "--no-content",
+            action="store_true",
+            default=False,
+            help=_("skip printing Content Sets"),
+        )
 
     def _print_section(self, title, items, indent=1, whitespace=True):
         # Allow a bit of customization of the tabbing
@@ -265,7 +272,9 @@ class CatManifestCommand(RCTManifestCommand):
             except certificate.CertificateException as ce:
                 raise certificate.CertificateException(
                     _("Unable to read certificate file '{certificate_file}': {exception}").format(
-                        certificate_file=cert_file, exception=ce))
+                        certificate_file=cert_file, exception=ce
+                    )
+                )
             to_print.append((_("Certificate Version"), cert.version))
 
             self._print_section(_("Subscription:"), to_print, 1, False)
@@ -277,7 +286,10 @@ class CatManifestCommand(RCTManifestCommand):
 
             # Get the derived provided Products (if available)
             if "derivedProvidedProducts" in data["pool"]:
-                to_print = [(int(pp["productId"]), pp["productName"]) for pp in data["pool"]["derivedProvidedProducts"]]
+                to_print = [
+                    (int(pp["productId"]), pp["productName"])
+                    for pp in data["pool"]["derivedProvidedProducts"]
+                ]
                 self._print_section(_("Derived Products:"), sorted(to_print), 2, False)
 
             # Get the Content Sets
@@ -303,17 +315,28 @@ class CatManifestCommand(RCTManifestCommand):
 
 
 class DumpManifestCommand(RCTManifestCommand):
-
     def __init__(self):
-        RCTManifestCommand.__init__(self, name="dump-manifest", aliases=['dm'],
-                                    shortdesc=_("Dump the contents of a manifest"),
-                                    primary=True)
+        RCTManifestCommand.__init__(
+            self,
+            name="dump-manifest",
+            aliases=['dm'],
+            shortdesc=_("Dump the contents of a manifest"),
+            primary=True,
+        )
 
-        self.parser.add_argument("--destination", dest="destination",
-                                 help=_("directory to extract the manifest to"))
-        self.parser.add_argument("-f", "--force", action="store_true",
-                                 dest="overwrite_files", default=False,
-                                 help=_("overwrite files which may exist"))
+        self.parser.add_argument(
+            "--destination",
+            dest="destination",
+            help=_("directory to extract the manifest to"),
+        )
+        self.parser.add_argument(
+            "-f",
+            "--force",
+            action="store_true",
+            dest="overwrite_files",
+            default=False,
+            help=_("overwrite files which may exist"),
+        )
 
     def _extract(self, destination, overwrite):
         try:
@@ -322,7 +345,11 @@ class DumpManifestCommand(RCTManifestCommand):
             # IOError/OSError base class
             if e.errno == errno.EEXIST:
                 # useful error for file already exists
-                print(_('File "{filename}" exists. Use -f to force overwriting the file.').format(filename=e.filename))
+                print(
+                    _('File "{filename}" exists. Use -f to force overwriting the file.').format(
+                        filename=e.filename
+                    )
+                )
             else:
                 # generic error for everything else
                 print(_("Manifest could not be written:"))
@@ -338,8 +365,11 @@ class DumpManifestCommand(RCTManifestCommand):
         """
         if self.options.destination:
             if self._extract(self.options.destination, self.options.overwrite_files):
-                print(_("The manifest has been dumped to the {destination} directory").format(
-                    destination=self.options.destination))
+                print(
+                    _("The manifest has been dumped to the {destination} directory").format(
+                        destination=self.options.destination
+                    )
+                )
         else:
             if self._extract(os.getcwd(), self.options.overwrite_files):
                 print(_("The manifest has been dumped to the current directory"))

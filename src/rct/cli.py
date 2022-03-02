@@ -17,7 +17,6 @@ from rct.manifest_commands import CatManifestCommand, DumpManifestCommand
 
 
 class RctCLI(CLI):
-
     def __init__(self):
         commands = [CatCertCommand, CatManifestCommand, StatCertCommand, DumpManifestCommand]
         CLI.__init__(self, commands)

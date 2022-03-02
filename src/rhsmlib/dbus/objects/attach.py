@@ -35,6 +35,7 @@ class AttachDBusObject(base_object.BaseObject):
     We don't return the JSON in an actual dictionary because deeply nested structures
     are a nightmare in DBus land.  See https://stackoverflow.com/questions/31658423/
     """
+
     default_dbus_path = constants.ATTACH_DBUS_PATH
     interface_name = constants.ATTACH_INTERFACE
 
@@ -44,7 +45,8 @@ class AttachDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.ATTACH_INTERFACE,
         in_signature='sa{sv}s',
-        out_signature='s')
+        out_signature='s',
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def AutoAttach(self, service_level, proxy_options, locale, sender=None):
@@ -60,9 +62,11 @@ class AttachDBusObject(base_object.BaseObject):
         # raise dbus.DBusException('Auto-attaching is not allowed in simple content access mode')
         # in the next minor release of subscription-manager
         if is_simple_content_access(uep=cp) is True:
-            log.info('Calling D-Bus method AutoAttach() is deprecated, when Simple Content Access mode '
-                     'is used and it will be not be supported in the next minor release of '
-                     'subscription-manager')
+            log.info(
+                'Calling D-Bus method AutoAttach() is deprecated, when Simple Content Access mode '
+                'is used and it will be not be supported in the next minor release of '
+                'subscription-manager'
+            )
 
         attach_service = AttachService(cp)
 
@@ -79,7 +83,8 @@ class AttachDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.ATTACH_INTERFACE,
         in_signature='asia{sv}s',
-        out_signature='as')
+        out_signature='as',
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def PoolAttach(self, pools, quantity, proxy_options, locale, sender=None):
@@ -100,9 +105,11 @@ class AttachDBusObject(base_object.BaseObject):
         # raise dbus.DBusException('Attaching of pool(s) is not allowed in simple content access mode')
         # in the next minor release of subscription-manager
         if is_simple_content_access(uep=cp) is True:
-            log.info('Calling D-Bus method PoolAttach() is deprecated, when Simple Content Access mode '
-                     'is used and it will be not be supported in the next minor release of '
-                     'subscription-manager')
+            log.info(
+                'Calling D-Bus method PoolAttach() is deprecated, when Simple Content Access mode '
+                'is used and it will be not be supported in the next minor release of '
+                'subscription-manager'
+            )
 
         attach_service = AttachService(cp)
 

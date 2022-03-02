@@ -74,8 +74,11 @@ class FactsCollection(object):
         self.collection_datetime = datetime.now()
 
     def __repr__(self):
-        buf = "%s(facts_dict=%s, collection_datetime=%s)" % \
-            (self.__class__.__name__, self.data, self.collection_datetime)
+        buf = "%s(facts_dict=%s, collection_datetime=%s)" % (
+            self.__class__.__name__,
+            self.data,
+            self.collection_datetime,
+        )
         return buf
 
     @classmethod

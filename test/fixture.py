@@ -8,6 +8,7 @@ import unittest
 
 # just log py.warnings (and pygtk warnings in particular)
 import logging
+
 try:
     # 2.7+
     logging.captureWarnings(True)
@@ -147,6 +148,7 @@ class SubManFixture(unittest.TestCase):
     sure nothing on the actual system is read/touched, and appropriate
     mocks/stubs are in place.
     """
+
     def setUp(self):
         # No matter what, stop all patching (even if we have a failure in setUp itself)
         self.addCleanup(patch.stopall)

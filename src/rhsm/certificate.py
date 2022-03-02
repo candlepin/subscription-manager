@@ -50,11 +50,13 @@ VALUE_PATTERN = re.compile(r'.*prim:\s(\w*)\s*:*(.*)')
 # should be moved here.
 def create_from_file(path):
     from rhsm.certificate2 import _CertFactory  # prevent circular deps
+
     return _CertFactory().create_from_file(path)
 
 
 def create_from_pem(pem):
     from rhsm.certificate2 import _CertFactory  # prevent circular deps
+
     return _CertFactory().create_from_pem(pem)
 
 
@@ -92,10 +94,11 @@ def deprecated(func):
     A decorator that marks a function as deprecated. This will cause a
     warning to be emitted any time that function is used by a caller.
     """
+
     def new_func(*args, **kwargs):
-        warnings.warn("Call to deprecated function: %s" % func.__name__,
-                      category=DeprecationWarning)
+        warnings.warn("Call to deprecated function: %s" % func.__name__, category=DeprecationWarning)
         return func(*args, **kwargs)
+
     new_func.__name__ = func.__name__
     new_func.__doc__ = func.__doc__
     new_func.__dict__.update(func.__dict__)
@@ -172,8 +175,10 @@ class Certificate(object):
         :return: The valid date range.
         :rtype: :class:`DateRange`
         """
-        return DateRange(get_datetime_from_x509(self.x509.get_not_before()),
-                         get_datetime_from_x509(self.x509.get_not_after()))
+        return DateRange(
+            get_datetime_from_x509(self.x509.get_not_before()),
+            get_datetime_from_x509(self.x509.get_not_after()),
+        )
 
     def valid(self, on_date=None):
         """
@@ -400,6 +405,7 @@ class EntitlementCertificate(ProductCertificate):
     """
     Represents an entitlement certificate.
     """
+
     def _update(self, content):
         ProductCertificate._update(self, content)
 
@@ -444,8 +450,7 @@ class EntitlementCertificate(ProductCertificate):
         :return: A list of entitlement object.
         :rtype: List of :class:`Entitlement`
         """
-        return self.getContentEntitlements() \
-            + self.getRoleEntitlements()
+        return self.getContentEntitlements() + self.getRoleEntitlements()
 
     # TODO: Not a great name, this is just getting content, self is
     # the entitlement.
@@ -636,7 +641,7 @@ class DateRange(object):
         :return: True if valid.
         :rtype: boolean
         """
-        return (date >= self.begin() and date <= self.end())
+        return date >= self.begin() and date <= self.end()
 
     @deprecated
     def hasDate(self, date):
@@ -889,11 +894,11 @@ class OID(object):
         # Matching the end
         if not oid[0]:
             oid = oid[1:]
-            parts = self.part[-len(oid):]
+            parts = self.part[-len(oid) :]
         # Matching the beginning
         elif not oid[-1]:
             oid = oid[:-1]
-            parts = self.part[:len(oid)]
+            parts = self.part[: len(oid)]
         # Full on match
         else:
             parts = self.part
@@ -904,7 +909,7 @@ class OID(object):
 
         for x in parts:
             val = oid[i]
-            if (x == val or val == self.WILDCARD):
+            if x == val or val == self.WILDCARD:
                 i += 1
             else:
                 return False
@@ -930,7 +935,7 @@ class OID(object):
         return self._hash
 
     def __eq__(self, other):
-        return (str(self) == str(other))
+        return str(self) == str(other)
 
     def __lt__(self, other):
         return str(self) < str(other)
@@ -943,7 +948,6 @@ class OID(object):
 
 
 class Order(object):
-
     @deprecated
     def __init__(self, ext):
         self.ext = ext
@@ -1034,7 +1038,6 @@ class Order(object):
 
 
 class Product(object):
-
     @deprecated
     def __init__(self, p_hash, ext):
         self.hash = p_hash
@@ -1068,7 +1071,7 @@ class Product(object):
         return self.brand_name
 
     def __eq__(self, rhs):
-        return (self.getHash() == rhs.getHash())
+        return self.getHash() == rhs.getHash()
 
     def __str__(self):
         s = []
@@ -1088,13 +1091,11 @@ class Product(object):
 
 
 class Entitlement(object):
-
     def __init__(self, ext):
         self.ext = ext
 
 
 class Content(Entitlement):
-
     def __init__(self, ext):
         Entitlement.__init__(self, ext)
         self.name = self.ext.get('1')
@@ -1165,7 +1166,6 @@ class Content(Entitlement):
 
 
 class Role(Entitlement):
-
     def getName(self):
         return self.ext.get('1')
 
@@ -1173,7 +1173,7 @@ class Role(Entitlement):
         return self.ext.get('2')
 
     def __eq__(self, rhs):
-        return (self.getName() == rhs.getName())
+        return self.getName() == rhs.getName()
 
     def __str__(self):
         s = []

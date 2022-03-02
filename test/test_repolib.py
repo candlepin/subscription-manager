@@ -25,6 +25,7 @@ import os
 from iniparse import ConfigParser
 
 from subscription_manager import repofile
+
 # repofile must be patched and reloaded to import AptRepofile, otherwise
 # the class is not defined in the first place
 deb_mock = MagicMock()
@@ -34,12 +35,22 @@ with patch.dict("subscription_manager.repofile.sys.modules", {"debian.deb822": d
     from subscription_manager.repofile import AptRepoFile
 reload(repofile)
 
-from .stubs import StubProductCertificate, \
-    StubProduct, StubEntitlementCertificate, StubContent, \
-    StubProductDirectory, StubConsumerIdentity, StubEntitlementDirectory, \
-    StubDeb822
-from subscription_manager.repolib import RepoActionInvoker, \
-    RepoUpdateActionCommand, YumReleaseverSource, YumPluginManager
+from .stubs import (
+    StubProductCertificate,
+    StubProduct,
+    StubEntitlementCertificate,
+    StubContent,
+    StubProductDirectory,
+    StubConsumerIdentity,
+    StubEntitlementDirectory,
+    StubDeb822,
+)
+from subscription_manager.repolib import (
+    RepoActionInvoker,
+    RepoUpdateActionCommand,
+    YumReleaseverSource,
+    YumPluginManager,
+)
 from subscription_manager.repofile import Repo, TidyWriter, YumRepoFile
 from subscription_manager import injection as inj
 from rhsm.config import RhsmConfigParser
@@ -68,22 +79,20 @@ class RhsmConfigParserFromString(RhsmConfigParser):
 
 class TestRepoActionInvoker(fixture.SubManFixture):
     def _stub_content(self, include_content_access=False):
-        stub_prod = StubProduct('stub_product',
-                                provided_tags="stub-product")
+        stub_prod = StubProduct('stub_product', provided_tags="stub-product")
 
-        stub_content = StubContent("a_test_repo",
-                                   required_tags="stub-product")
+        stub_content = StubContent("a_test_repo", required_tags="stub-product")
 
         stub_content2 = StubContent("test_repo_2", required_tags="stub-product")
 
-        stub_ent_cert = StubEntitlementCertificate(stub_prod,
-                                                   content=[stub_content])
+        stub_ent_cert = StubEntitlementCertificate(stub_prod, content=[stub_content])
         stub_prod_cert = StubProductCertificate(stub_prod)
 
         certs = [stub_ent_cert]
         if include_content_access:
-            self.stub_content_access_cert = StubEntitlementCertificate(stub_prod, content=[stub_content, stub_content2],
-                                                                       entitlement_type=CONTENT_ACCESS_CERT_TYPE)
+            self.stub_content_access_cert = StubEntitlementCertificate(
+                stub_prod, content=[stub_content, stub_content2], entitlement_type=CONTENT_ACCESS_CERT_TYPE
+            )
             # content access cert is first and last, so naively wrong implementations will prioritize it.
             certs = [self.stub_content_access_cert, stub_ent_cert, self.stub_content_access_cert]
         stub_ent_dir = StubEntitlementDirectory(certs)
@@ -265,15 +274,19 @@ class RepoActionReportTests(fixture.SubManFixture):
         res = str(report)
         # needs tests run in eng locale, coupled to report format since
         # I managed to typo them
-        report_label_regexes = ['^Repo updates$', '^Total repo updates:',
-                                '^Updated$', r'^Added \(new\)$', '^Deleted$']
+        report_label_regexes = [
+            '^Repo updates$',
+            '^Total repo updates:',
+            '^Updated$',
+            r'^Added \(new\)$',
+            '^Deleted$',
+        ]
         for report_label_regex in report_label_regexes:
             if not re.search(report_label_regex, res, re.MULTILINE):
                 self.fail("Expected to match the report label regex  %s but did not" % report_label_regex)
 
 
 class RepoUpdateActionTests(fixture.SubManFixture):
-
     def setUp(self):
         super(RepoUpdateActionTests, self).setUp()
         stub_prod = StubProduct("fauxprod", provided_tags="TAG1,TAG2")
@@ -285,11 +298,10 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         inj.provide(inj.PROD_DIR, prod_dir)
 
         stub_content = [
-            StubContent("c1", required_tags="", gpg=None),   # no required tags
+            StubContent("c1", required_tags="", gpg=None),  # no required tags
             StubContent("c2", required_tags="TAG1", gpg=""),
             StubContent("c3", required_tags="TAG1,TAG2,TAG3"),  # should get skipped
-            StubContent("c4", required_tags="TAG1,TAG2,TAG4,TAG5,TAG6",
-                        gpg="/gpg.key", url="/$some/$path"),
+            StubContent("c4", required_tags="TAG1,TAG2,TAG4,TAG5,TAG6", gpg="/gpg.key", url="/$some/$path"),
             StubContent("c5", content_type="file", required_tags="", gpg=None),
             StubContent("c6", content_type="file", required_tags="", gpg=None),
         ]
@@ -425,8 +437,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_no_gpg_key(self):
 
         update_action = RepoUpdateActionCommand()
-        content = update_action.get_all_content(baseurl="http://example.com",
-                                                ca_cert=None)
+        content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
         c1 = self._find_content(content, 'c1')
         self.assertEqual('', c1['gpgkey'])
         self.assertEqual('0', c1['gpgcheck'])
@@ -438,16 +449,14 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_gpg_key(self):
 
         update_action = RepoUpdateActionCommand()
-        content = update_action.get_all_content(baseurl="http://example.com",
-                                                ca_cert=None)
+        content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
         c4 = self._find_content(content, 'c4')
         self.assertEqual('http://example.com/gpg.key', c4['gpgkey'])
         self.assertEqual('1', c4['gpgcheck'])
 
     def test_ui_repoid_vars(self):
         update_action = RepoUpdateActionCommand()
-        content = update_action.get_all_content(baseurl="http://example.com",
-                                                ca_cert=None)
+        content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
         c4 = self._find_content(content, 'c4')
         self.assertEqual('some path', c4['ui_repoid_vars'])
         c2 = self._find_content(content, 'c2')
@@ -460,8 +469,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
 
     def test_only_allow_content_of_type_yum(self):
         update_action = RepoUpdateActionCommand()
-        content = update_action.get_all_content(baseurl="http://example.com",
-                                                ca_cert=None)
+        content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
         self.assertTrue(self._find_content(content, "c1") is not None)
         self.assertTrue(self._find_content(content, "c5") is None)
         self.assertTrue(self._find_content(content, "c6") is None)
@@ -682,7 +690,6 @@ class RepoUpdateActionTests(fixture.SubManFixture):
 
 
 class TidyWriterTests(unittest.TestCase):
-
     def test_just_newlines_compressed_to_one(self):
         output = io.StringIO()
         tidy_writer = TidyWriter(output)
@@ -857,7 +864,6 @@ class YumReleaseverSourceIsSetTest(fixture.SubManFixture):
 
 
 class AptRepoFileTest(unittest.TestCase):
-
     def _helper_stub_repo(self, *args, **kwargs):
         with patch("subscription_manager.repofile.HAS_DEB822", True):
             repo = Repo(*args, **kwargs)
@@ -876,8 +882,9 @@ class AptRepoFileTest(unittest.TestCase):
         mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
         ar = self._helper_stub_repofile()
         yr = YumRepoFile()
-        mock_repo = self._helper_stub_repo('mock', existing_values=[('baseurl', 'https://example.org.org/'),
-                                                                    ('sslclientcert', 'mypem.pem')])
+        mock_repo = self._helper_stub_repo(
+            'mock', existing_values=[('baseurl', 'https://example.org.org/'), ('sslclientcert', 'mypem.pem')]
+        )
         # Modify data using different backends (Apt,Yum)
         ar_fixed_content = ar.fix_content(mock_repo)
         yr_fixed_content = yr.fix_content(mock_repo)
@@ -977,11 +984,13 @@ class AptRepoFileTest(unittest.TestCase):
             'Suites': 'default',
             'Components': 'all',
             'Trusted': 'yes',
-            'sslclientcert': 'mypem.pem'
+            'sslclientcert': 'mypem.pem',
         }
         ar = self._helper_stub_repofile()
-        repo_mock = self._helper_stub_repo('mock', existing_values=[('baseurl', exp_params['URIs']),
-                                                                    ('sslclientcert', exp_params['sslclientcert'])])
+        repo_mock = self._helper_stub_repo(
+            'mock',
+            existing_values=[('baseurl', exp_params['URIs']), ('sslclientcert', exp_params['sslclientcert'])],
+        )
         # Modify data
         act_content = ar.fix_content(repo_mock)
         # Test modification by comparing with expected values
@@ -994,15 +1003,16 @@ class AptRepoFileTest(unittest.TestCase):
         # Setup mock and expected values
         assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
         mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
-        exp_params = {
-            'arches': 'none',
-            'URIs': 'https://example.site.org/',
-            'sslclientcert': 'mypem.pem'
-        }
+        exp_params = {'arches': 'none', 'URIs': 'https://example.site.org/', 'sslclientcert': 'mypem.pem'}
         ar = self._helper_stub_repofile()
-        repo_mock = self._helper_stub_repo('mock', existing_values=[('baseurl', exp_params['URIs']),
-                                                                    ('sslclientcert', exp_params['sslclientcert']),
-                                                                    ('arches', ['ALL'])])
+        repo_mock = self._helper_stub_repo(
+            'mock',
+            existing_values=[
+                ('baseurl', exp_params['URIs']),
+                ('sslclientcert', exp_params['sslclientcert']),
+                ('arches', ['ALL']),
+            ],
+        )
         # Modify data
         act_content = ar.fix_content(repo_mock)
         # Test modification by comparing with expected values
@@ -1019,12 +1029,17 @@ class AptRepoFileTest(unittest.TestCase):
             'arches': 'amd64 i386',
             'Architectures': 'amd64 i386',
             'URIs': 'https://example.site.org/',
-            'sslclientcert': 'mypem.pem'
+            'sslclientcert': 'mypem.pem',
         }
         ar = self._helper_stub_repofile()
-        repo_mock = self._helper_stub_repo('mock', existing_values=[('baseurl', exp_params['URIs']),
-                                                                    ('sslclientcert', exp_params['sslclientcert']),
-                                                                    ('arches', ['amd64', 'i386'])])
+        repo_mock = self._helper_stub_repo(
+            'mock',
+            existing_values=[
+                ('baseurl', exp_params['URIs']),
+                ('sslclientcert', exp_params['sslclientcert']),
+                ('arches', ['amd64', 'i386']),
+            ],
+        )
         # Modify data
         act_content = ar.fix_content(repo_mock)
         # Test modification by comparing with expected values
@@ -1034,7 +1049,6 @@ class AptRepoFileTest(unittest.TestCase):
 
 
 class YumRepoFileTest(unittest.TestCase):
-
     @patch("subscription_manager.repofile.YumRepoFile.create")
     @patch("subscription_manager.repofile.TidyWriter")
     def test_configparsers_equal(self, tidy_writer, stub_create):
@@ -1241,7 +1255,7 @@ class TestYumPluginManager(unittest.TestCase):
         YumPluginManager.DNF_PLUGIN_DIR = dnf_tmp_dir
         YumPluginManager.PLUGINS = [
             plug_file_name_01.replace(dnf_tmp_dir, '').replace('.conf', ''),
-            plug_file_name_02.replace(dnf_tmp_dir, '').replace('.conf', '')
+            plug_file_name_02.replace(dnf_tmp_dir, '').replace('.conf', ''),
         ]
 
     def restore_dnf_plugin_conf_files(self):
@@ -1264,7 +1278,9 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 2)
         for plugin_conf_file_name in YumPluginManager.PLUGINS:
             dnf_plugin_config = ConfigParser()
-            result = dnf_plugin_config.read(YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            result = dnf_plugin_config.read(
+                YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf'
+            )
             self.assertGreater(len(result), 0)
             is_plugin_enabled = dnf_plugin_config.getint('main', 'enabled')
             self.assertEqual(is_plugin_enabled, 1)
@@ -1280,7 +1296,9 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 0)
         for plugin_conf_file_name in YumPluginManager.PLUGINS:
             yum_plugin_config = ConfigParser()
-            result = yum_plugin_config.read(YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            result = yum_plugin_config.read(
+                YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf'
+            )
             self.assertGreater(len(result), 0)
             is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
             self.assertEqual(is_plugin_enabled, 1)
@@ -1296,7 +1314,9 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 0)
         for plugin_conf_file_name in YumPluginManager.PLUGINS:
             yum_plugin_config = ConfigParser()
-            result = yum_plugin_config.read(YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            result = yum_plugin_config.read(
+                YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf'
+            )
             self.assertGreater(len(result), 0)
             # The file was not modified. We have to read value with with getboolean()
             is_plugin_enabled = yum_plugin_config.getboolean('main', 'enabled')
@@ -1313,7 +1333,9 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 2)
         for plugin_conf_file_name in YumPluginManager.PLUGINS:
             yum_plugin_config = ConfigParser()
-            result = yum_plugin_config.read(YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            result = yum_plugin_config.read(
+                YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf'
+            )
             self.assertGreater(len(result), 0)
             is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
             self.assertEqual(is_plugin_enabled, 1)
@@ -1329,7 +1351,9 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 2)
         for plugin_conf_file_name in YumPluginManager.PLUGINS:
             yum_plugin_config = ConfigParser()
-            result = yum_plugin_config.read(YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf')
+            result = yum_plugin_config.read(
+                YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf'
+            )
             self.assertGreater(len(result), 0)
             is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
             self.assertEqual(is_plugin_enabled, 1)

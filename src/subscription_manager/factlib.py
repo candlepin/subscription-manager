@@ -29,6 +29,7 @@ class FactsActionInvoker(object):
 
     Makes use of the facts module as well.
     """
+
     def __init__(self):
         self.locker = Locker()
 
@@ -72,6 +73,7 @@ class FactsActionCommand(object):
 
     Returns a FactsActionReport.
     """
+
     def __init__(self):
         cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = cp_provider.get_consumer_auth_cp()

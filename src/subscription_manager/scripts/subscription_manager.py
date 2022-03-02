@@ -32,7 +32,7 @@ def system_exit(code, msgs=None):
 
     if msgs:
         if type(msgs) not in [type([]), type(())]:
-            msgs = (msgs, )
+            msgs = (msgs,)
         for msg in msgs:
             sys.stderr.write(str(msg) + '\n')
     sys.exit(code)
@@ -46,6 +46,7 @@ if os.getuid() != 0:
 try:
     # this has to be done first thing due to module level translated vars.
     from subscription_manager.i18n import configure_i18n
+
     configure_i18n()
 
     from rhsm import logutil
@@ -53,6 +54,7 @@ try:
     logutil.init_logger()
 
     from subscription_manager.injectioninit import init_dep_injection
+
     init_dep_injection()
 
     from subscription_manager import managercli
@@ -62,8 +64,7 @@ try:
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")
 except ImportError as err:
-    system_exit(2, "Unable to find Subscription Manager module.\n"
-                   "Error: %s" % err)
+    system_exit(2, "Unable to find Subscription Manager module.\n" "Error: %s" % err)
 
 
 def main():

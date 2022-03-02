@@ -15,11 +15,23 @@
 import subscription_manager.injection as inj
 
 
-from subscription_manager.cache import ProductStatusCache, EntitlementStatusCache, \
-    OverrideStatusCache, ProfileManager, InstalledProductsManager, PoolTypeCache, \
-    ReleaseStatusCache, ContentAccessCache, PoolStatusCache, \
-    SyspurposeComplianceStatusCache, SupportedResourcesCache, AvailableEntitlementsCache, \
-    CurrentOwnerCache, SyspurposeValidFieldsCache, ContentAccessModeCache
+from subscription_manager.cache import (
+    ProductStatusCache,
+    EntitlementStatusCache,
+    OverrideStatusCache,
+    ProfileManager,
+    InstalledProductsManager,
+    PoolTypeCache,
+    ReleaseStatusCache,
+    ContentAccessCache,
+    PoolStatusCache,
+    SyspurposeComplianceStatusCache,
+    SupportedResourcesCache,
+    AvailableEntitlementsCache,
+    CurrentOwnerCache,
+    SyspurposeValidFieldsCache,
+    ContentAccessModeCache,
+)
 
 from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
@@ -43,8 +55,7 @@ def init_dep_injection():
     # updated.
     inj.provide(inj.IDENTITY, Identity, singleton=True)
 
-    inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR,
-                ValidProductDateRangeCalculator)
+    inj.provide(inj.PRODUCT_DATE_RANGE_CALCULATOR, ValidProductDateRangeCalculator)
 
     inj.provide(inj.ENT_DIR, EntitlementDirectory, singleton=True)
     inj.provide(inj.PROD_DIR, ProductDirectory, singleton=True)
@@ -61,8 +72,7 @@ def init_dep_injection():
     inj.provide(inj.AVAILABLE_ENTITLEMENT_CACHE, AvailableEntitlementsCache, singleton=True)
     inj.provide(inj.PROD_STATUS_CACHE, ProductStatusCache, singleton=True)
     inj.provide(inj.OVERRIDE_STATUS_CACHE, OverrideStatusCache, singleton=True)
-    inj.provide(inj.RELEASE_STATUS_CACHE, ReleaseStatusCache,
-                singleton=False)
+    inj.provide(inj.RELEASE_STATUS_CACHE, ReleaseStatusCache, singleton=False)
     inj.provide(inj.CONTENT_ACCESS_CACHE, ContentAccessCache, singleton=True)
 
     inj.provide(inj.PROFILE_MANAGER, ProfileManager, singleton=True)

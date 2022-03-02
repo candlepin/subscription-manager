@@ -11,6 +11,7 @@ class ScriptBuilder(Builder):
     This Builder looks for lines ending in '.tar.gz' in the output of the script, and treats
     those as artifacts of the script.
     """
+
     def __init__(self, config=None, *args, **kwargs):
         super(ScriptBuilder, self).__init__(config=config, *args, **kwargs)
         if not config.has_option('buildconfig', 'script_builder_script'):
@@ -59,4 +60,7 @@ class ScriptBuilder(Builder):
             for i, tarball_from_script in enumerate(self.tarballs_from_script):
                 num = i + 1
                 basename = os.path.basename(tarball_from_script)
-                subprocess.call('sed -i "s#Source%s: .*#Source%s: %s#" %s' % (num, num, basename, self.spec_file), shell=True)
+                subprocess.call(
+                    'sed -i "s#Source%s: .*#Source%s: %s#" %s' % (num, num, basename, self.spec_file),
+                    shell=True,
+                )

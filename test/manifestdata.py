@@ -38,7 +38,9 @@ Subscription:
 \tProvided Products:
 \tContent Sets:
 
-""" % ({'space': ' '})
+""" % (
+    {'space': ' '}
+)
 
 consumer_json = """
 {
@@ -131,15 +133,24 @@ SdHfu5F7EFQ+KERyvi4v31HQkdT99+4D7PZq43DzfosKCseaGT12GxWxlVJP5MZR
 PNe6469nI+tuqa+9+Vbe6eUsvAePcb7Mbc3JCzzzHJLvJsMEcJgo
 -----END RSA PRIVATE KEY-----"""
 
-entitlement_json = """
+entitlement_json = (
+    """
 {
     "accountNumber": "5206743",
     "certificates": [
         {
-            "cert":""" + ' "' + ent_cert.replace("\n", "") + '",' + """
+            "cert":"""
+    + ' "'
+    + ent_cert.replace("\n", "")
+    + '",'
+    + """
             "created": "2013-02-21T15:31:14.000+0000",
             "id": "8a99f9833cf86efc013cfd613f2266cc",
-            "key":""" + ' "' + ent_cert_private.replace("\n", "") + '",' + """
+            "key":"""
+    + ' "'
+    + ent_cert_private.replace("\n", "")
+    + '",'
+    + """
             "serial": {
                 "collected": false,
                 "created": "2013-02-21T15:31:14.000+0000",
@@ -278,3 +289,4 @@ entitlement_json = """
     "updated": "2013-02-21T15:31:13.000+0000"
 }
 """
+)

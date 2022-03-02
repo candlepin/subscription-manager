@@ -38,32 +38,48 @@ log = logging.getLogger(__name__)
 
 
 class AttachCommand(CliCommand):
-
     def __init__(self):
-        super(AttachCommand, self).__init__(
-            self._command_name(),
-            self._short_description(),
-            self._primary())
+        super(AttachCommand, self).__init__(self._command_name(), self._short_description(), self._primary())
 
         self.product = None
         self.substoken = None
         self.auto_attach = True
-        self.parser.add_argument("--pool", dest="pool", action='append',
-                                 help=_("The ID of the pool to attach (can be specified more than once)"))
-        self.parser.add_argument("--quantity", dest="quantity", type=int,
-                                 help=_("Number of subscriptions to attach. May not be used with an auto-attach."))
-        self.parser.add_argument("--auto", action='store_true',
-                                 help=_(
-                                     "Automatically attach the best-matched compatible subscriptions to this system. "
-                                     "This is the default action."))
-        self.parser.add_argument("--servicelevel", dest="service_level",
-                                 help=_(
-                                     "Automatically attach only subscriptions matching the specified service level; "
-                                     "only used with --auto"))
-        self.parser.add_argument("--file", dest="file",
-                                 help=_(
-                                     "A file from which to read pool IDs. If a hyphen is provided, pool IDs will be "
-                                     "read from stdin."))
+        self.parser.add_argument(
+            "--pool",
+            dest="pool",
+            action='append',
+            help=_("The ID of the pool to attach (can be specified more than once)"),
+        )
+        self.parser.add_argument(
+            "--quantity",
+            dest="quantity",
+            type=int,
+            help=_("Number of subscriptions to attach. May not be used with an auto-attach."),
+        )
+        self.parser.add_argument(
+            "--auto",
+            action='store_true',
+            help=_(
+                "Automatically attach the best-matched compatible subscriptions to this system. "
+                "This is the default action."
+            ),
+        )
+        self.parser.add_argument(
+            "--servicelevel",
+            dest="service_level",
+            help=_(
+                "Automatically attach only subscriptions matching the specified service level; "
+                "only used with --auto"
+            ),
+        )
+        self.parser.add_argument(
+            "--file",
+            dest="file",
+            help=_(
+                "A file from which to read pool IDs. If a hyphen is provided, pool IDs will be "
+                "read from stdin."
+            ),
+        )
 
         # re bz #864207
         _("All installed products are covered by valid entitlements.")
@@ -94,7 +110,9 @@ class AttachCommand(CliCommand):
             if self.options.auto:
                 system_exit(os.EX_USAGE, _("Error: --auto may not be used when specifying pools."))
             if self.options.service_level:
-                system_exit(os.EX_USAGE, _("Error: The --servicelevel option cannot be used when specifying pools."))
+                system_exit(
+                    os.EX_USAGE, _("Error: The --servicelevel option cannot be used when specifying pools.")
+                )
 
         # Quantity must be positive
         if self.options.quantity is not None:
@@ -113,11 +131,19 @@ class AttachCommand(CliCommand):
                     if self.options.file == '-':
                         system_exit(os.EX_DATAERR, _("Error: Received data does not contain any pool IDs."))
                     else:
-                        system_exit(os.EX_DATAERR,
-                                    _("Error: The file \"{file}\" does not contain any pool IDs.").format(file=self.options.file))
+                        system_exit(
+                            os.EX_DATAERR,
+                            _("Error: The file \"{file}\" does not contain any pool IDs.").format(
+                                file=self.options.file
+                            ),
+                        )
             else:
-                system_exit(os.EX_DATAERR,
-                            _("Error: The file \"{file}\" does not exist or cannot be read.").format(file=self.options.file))
+                system_exit(
+                    os.EX_DATAERR,
+                    _("Error: The file \"{file}\" does not exist or cannot be read.").format(
+                        file=self.options.file
+                    ),
+                )
 
     def _print_ignore_attach_message(self):
         """
@@ -178,8 +204,14 @@ class AttachCommand(CliCommand):
                         # Usually just one, but may as well be safe:
                         for ent in ents:
                             pool_json = ent['pool']
-                            print(_("Successfully attached a subscription for: {name}").format(name=pool_json['productName']))
-                            log.debug("Attached a subscription for {name}".format(name=pool_json['productName']))
+                            print(
+                                _("Successfully attached a subscription for: {name}").format(
+                                    name=pool_json['productName']
+                                )
+                            )
+                            log.debug(
+                                "Attached a subscription for {name}".format(name=pool_json['productName'])
+                            )
                             subscribed = True
                     except connection.RestlibException as re:
                         log.exception(re)
@@ -203,11 +235,14 @@ class AttachCommand(CliCommand):
 
                 if self.sorter.is_valid():
                     if not installed_products_num:
-                        print(_("No Installed products on system. "
-                                "No need to attach subscriptions."))
+                        print(_("No Installed products on system. " "No need to attach subscriptions."))
                     else:
-                        print(_("All installed products are covered by valid entitlements. "
-                                "No need to update subscriptions at this time."))
+                        print(
+                            _(
+                                "All installed products are covered by valid entitlements. "
+                                "No need to update subscriptions at this time."
+                            )
+                        )
                     cert_update = False
                 else:
                     # If service level specified, make an additional request to
@@ -215,9 +250,14 @@ class AttachCommand(CliCommand):
                     if self.options.service_level:
                         consumer = self.cp.getConsumer(self.identity.uuid)
                         if 'serviceLevel' not in consumer:
-                            system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not "
-                                                             "supported by the server. Did not "
-                                                             "complete your request."))
+                            system_exit(
+                                os.EX_UNAVAILABLE,
+                                _(
+                                    "Error: The --servicelevel option is not "
+                                    "supported by the server. Did not "
+                                    "complete your request."
+                                ),
+                            )
 
                     attach_service.attach_auto(self.options.service_level)
                     if self.options.service_level is not None:
@@ -225,9 +265,7 @@ class AttachCommand(CliCommand):
                         #  specified. The uep and consumer_uuid are None, because service_level was sent
                         # to candlepin server using attach_service.attach_auto()
                         save_sla_to_syspurpose_metadata(
-                            uep=None,
-                            consumer_uuid=None,
-                            service_level=self.options.service_level
+                            uep=None, consumer_uuid=None, service_level=self.options.service_level
                         )
                         print(_("Service level set to: {}").format(self.options.service_level))
 
@@ -251,7 +289,7 @@ class AttachCommand(CliCommand):
                     status_cache.load_status(
                         self.sorter.cp_provider.get_consumer_auth_cp(),
                         self.sorter.identity.uuid,
-                        self.sorter.on_date
+                        self.sorter.on_date,
                     )
                     self.sorter.load()
                     # run this after entcertlib update, so we have the new entitlements

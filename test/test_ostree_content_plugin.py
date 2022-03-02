@@ -14,8 +14,7 @@ import configparser
 import mock
 from . import fixture
 
-from subscription_manager.model import EntitlementSource, Entitlement, \
-    find_content
+from subscription_manager.model import EntitlementSource, Entitlement, find_content
 from subscription_manager.model.ent_cert import EntitlementCertContent
 from subscription_manager.plugin.ostree import config
 from subscription_manager.plugin.ostree import model
@@ -63,9 +62,7 @@ class TestOstreeRemoteNameFromSection(fixture.SubManFixture):
         self.assert_name_error(sn)
 
     def assert_name_error(self, sn):
-        self.assertRaises(model.RemoteSectionNameParseError,
-                          model.OstreeRemote.name_from_section,
-                          sn)
+        self.assertRaises(model.RemoteSectionNameParseError, model.OstreeRemote.name_from_section, sn)
 
 
 class TestOstreeRemote(fixture.SubManFixture):
@@ -76,26 +73,23 @@ class TestOstreeRemote(fixture.SubManFixture):
         self.assertTrue(isinstance(remote, model.OstreeRemote))
 
     def test(self):
-        items = {'url': self.example_url,
-                 'gpg-verify': 'true'}
-        ostree_remote = \
-            model.OstreeRemote.from_config_section(self.section_name,
-                                                   items)
+        items = {'url': self.example_url, 'gpg-verify': 'true'}
+        ostree_remote = model.OstreeRemote.from_config_section(self.section_name, items)
         self.assert_remote(ostree_remote)
         self.assertEqual('true', ostree_remote.gpg_verify)
         self.assertEqual(self.example_url, ostree_remote.url)
 
     def test_other_items(self):
-        items = {'url': self.example_url,
-                 'a_new_key': 'a_new_value',
-                 'tls-client-cert-path': '/etc/some/path',
-                 'tls-client-key-path': '/etc/some/path-key',
-                 'tls-ca-path': '/etc/rhsm/ca/redhat-uep.pem',
-                 'gpg-verify': 'true',
-                 'blip': 'baz'}
-        ostree_remote = \
-            model.OstreeRemote.from_config_section(self.section_name,
-                                                   items)
+        items = {
+            'url': self.example_url,
+            'a_new_key': 'a_new_value',
+            'tls-client-cert-path': '/etc/some/path',
+            'tls-client-key-path': '/etc/some/path-key',
+            'tls-ca-path': '/etc/rhsm/ca/redhat-uep.pem',
+            'gpg-verify': 'true',
+            'blip': 'baz',
+        }
+        ostree_remote = model.OstreeRemote.from_config_section(self.section_name, items)
         self.assert_remote(ostree_remote)
         # .url and data['url'] work
         self.assertEqual(self.example_url, ostree_remote.url)
@@ -115,13 +109,8 @@ class TestOstreeRemote(fixture.SubManFixture):
 
     def test_repr(self):
         # we use the dict repr now though
-        items = {'url': self.example_url,
-                 'a_new_key': 'a_new_value',
-                 'gpg-verify': 'true',
-                 'blip': 'baz'}
-        ostree_remote = \
-            model.OstreeRemote.from_config_section(self.section_name,
-                                                   items)
+        items = {'url': self.example_url, 'a_new_key': 'a_new_value', 'gpg-verify': 'true', 'blip': 'baz'}
+        ostree_remote = model.OstreeRemote.from_config_section(self.section_name, items)
         repr_str = repr(ostree_remote)
         self.assertTrue(isinstance(repr_str, str))
         self.assertTrue('name' in repr_str)
@@ -149,12 +138,14 @@ class TestOstreeRemote(fixture.SubManFixture):
 
 class TestOstreeRemoteFromEntCertContent(fixture.SubManFixture):
     def _content(self):
-        content = certificate2.Content(content_type="ostree",
-                                       name="content-name",
-                                       label="content-test-label",
-                                       vendor="Test Vendor",
-                                       url="/test.url/test",
-                                       gpg="file:///file/gpg/key")
+        content = certificate2.Content(
+            content_type="ostree",
+            name="content-name",
+            label="content-test-label",
+            vendor="Test Vendor",
+            url="/test.url/test",
+            gpg="file:///file/gpg/key",
+        )
         return content
 
     def _cert(self):
@@ -186,8 +177,7 @@ class TestOstreeRemoteFromEntCertContent(fixture.SubManFixture):
     def test_gpg_no_attr(self):
         content = self._content()
         cert = self._cert()
-        ent_cert_content = EntitlementCertContent.from_cert_content(
-            content, cert)
+        ent_cert_content = EntitlementCertContent.from_cert_content(content, cert)
         del ent_cert_content.gpg
         remote = model.OstreeRemote.from_ent_cert_content(ent_cert_content)
         self.assertTrue(remote.gpg_verify)
@@ -196,8 +186,7 @@ class TestOstreeRemoteFromEntCertContent(fixture.SubManFixture):
         content = self._content()
         content.gpg = gpg
         cert = self._cert()
-        ent_cert_content = EntitlementCertContent.from_cert_content(
-            content, cert)
+        ent_cert_content = EntitlementCertContent.from_cert_content(content, cert)
         remote = model.OstreeRemote.from_ent_cert_content(ent_cert_content)
         return remote
 
@@ -242,8 +231,7 @@ url = https://blip.example.com
         super(TestOstreeRepoConfig, self).setUp()
 
         self.repo_cfg_path = self.write_tempfile(self.repo_cfg)
-        self.repo_config = model.OstreeRepoConfig(
-            repo_file_path=self.repo_cfg_path.name)
+        self.repo_config = model.OstreeRepoConfig(repo_file_path=self.repo_cfg_path.name)
 
     def test_save(self):
         self.repo_config.load()
@@ -263,8 +251,7 @@ url = https://blip.example.com
         super(TestOstreeConfigRepoFileWriter, self).setUp()
 
         self.repo_cfg_path = self.write_tempfile(self.repo_cfg)
-        self.repo_config = model.OstreeRepoConfig(
-            repo_file_path=self.repo_cfg_path.name)
+        self.repo_config = model.OstreeRepoConfig(repo_file_path=self.repo_cfg_path.name)
         self.repo_config.load()
 
     def test_save(self):
@@ -435,7 +422,7 @@ gpg-verify = true
 
     def test_for_no_rhsm_defaults(self):
         """Verify that the rhsm defaults didn't sneak into the config, which is easy
-           since we are subclass the rhsm config parser.
+        since we are subclass the rhsm config parser.
         """
         rf_cfg = self._rf_cfg()
         sections = rf_cfg.sections()
@@ -449,8 +436,7 @@ gpg-verify = true
 
     def test_remote(self):
         rf_cfg = self._rf_cfg()
-        self.assertEqual('true', rf_cfg.get('remote "awesome-ostree-controller"',
-                                            'gpg-verify'))
+        self.assertEqual('true', rf_cfg.get('remote "awesome-ostree-controller"', 'gpg-verify'))
 
 
 class TestOstreeRepofileConfigParserNotAValidFile(BaseOstreeRepoFileTest):
@@ -499,8 +485,7 @@ tls-client-key-path = /etc/pki/entitlement/12345-key.pem
         self.assertFalse(rf.section_is_remote('rhsm'))
         self.assertFalse(rf.section_is_remote('core'))
         # string from config file is "false", not boolean False yet
-        self.assertEqual('false',
-                         rf.config_parser.get('remote "awesome-ostree-controller"', 'gpg-verify'))
+        self.assertEqual('false', rf.config_parser.get('remote "awesome-ostree-controller"', 'gpg-verify'))
 
     @mock.patch('subscription_manager.plugin.ostree.config.RepoFile._get_config_parser')
     def test_section_set_remote(self, mock_get_config_parser):
@@ -695,9 +680,8 @@ gpg-verify = true
 
 
 class TestOsTreeContents(fixture.SubManFixture):
-
     def create_content(self, content_type, name):
-        """ Create dummy entitled content object. """
+        """Create dummy entitled content object."""
         content = certificate2.Content(
             content_type=content_type,
             name="mock_content_%s" % name,
@@ -705,7 +689,8 @@ class TestOsTreeContents(fixture.SubManFixture):
             enabled=True,
             required_tags=[],
             gpg="path/to/gpg",
-            url="http://mock.example.com/%s/" % name)
+            url="http://mock.example.com/%s/" % name,
+        )
         return EntitlementCertContent.from_cert_content(content)
 
     def test_ent_source(self):
@@ -718,13 +703,11 @@ class TestOsTreeContents(fixture.SubManFixture):
         ent_src = EntitlementSource()
         ent_src._entitlements = [ent1, ent2]
 
-        contents = find_content(ent_src,
-                                content_type=action_invoker.OSTREE_CONTENT_TYPE)
+        contents = find_content(ent_src, content_type=action_invoker.OSTREE_CONTENT_TYPE)
         self.assertEqual(len(contents), 1)
 
         for content in contents:
-            self.assertEqual(content.content_type,
-                             action_invoker.OSTREE_CONTENT_TYPE)
+            self.assertEqual(content.content_type, action_invoker.OSTREE_CONTENT_TYPE)
 
     def test_ent_source_product_tags(self):
         yc = self.create_content("yum", "yum_content")
@@ -739,13 +722,11 @@ class TestOsTreeContents(fixture.SubManFixture):
         # faux product_tags to hit find_content, but no content tags
         ent_src.product_tags = ['awesomeos-ostree-1', 'awesomeos-ostree-super']
 
-        contents = find_content(ent_src,
-                                content_type=action_invoker.OSTREE_CONTENT_TYPE)
+        contents = find_content(ent_src, content_type=action_invoker.OSTREE_CONTENT_TYPE)
         self.assertEqual(len(contents), 1)
 
         for content in contents:
-            self.assertEqual(content.content_type,
-                             action_invoker.OSTREE_CONTENT_TYPE)
+            self.assertEqual(content.content_type, action_invoker.OSTREE_CONTENT_TYPE)
 
     def test_ent_source_product_tags_and_content_tags(self):
         oc = self.create_content("ostree", "ostree_content")
@@ -759,14 +740,12 @@ class TestOsTreeContents(fixture.SubManFixture):
         # faux product_tags to hit find_content, but no content tags
         ent_src.product_tags = ['awesomeos-ostree-1', 'awesomeos-ostree-super']
 
-        contents = find_content(ent_src,
-                                content_type=action_invoker.OSTREE_CONTENT_TYPE)
+        contents = find_content(ent_src, content_type=action_invoker.OSTREE_CONTENT_TYPE)
         print("contents", contents)
         self.assertEqual(len(contents), 1)
 
         for content in contents:
-            self.assertEqual(content.content_type,
-                             action_invoker.OSTREE_CONTENT_TYPE)
+            self.assertEqual(content.content_type, action_invoker.OSTREE_CONTENT_TYPE)
 
 
 class TestContentUpdateActionReport(fixture.SubManFixture):
@@ -825,7 +804,6 @@ gpg-verify=true
         mock_file_store.load.return_value = mock_repo_file
 
         ent_src = EntitlementSource()
-        action = action_invoker.OstreeContentUpdateActionCommand(
-            ent_source=ent_src)
+        action = action_invoker.OstreeContentUpdateActionCommand(ent_source=ent_src)
         action.update_origin_file = mock.Mock()
         action.perform()

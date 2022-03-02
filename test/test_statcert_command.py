@@ -21,7 +21,6 @@ from .fixture import Capture, SubManFixture
 
 
 class StatCertCommandStub(StatCertCommand):
-
     def __init__(self, cert_pem):
         super(StatCertCommandStub, self).__init__()
         self._pem = cert_pem
@@ -39,7 +38,6 @@ class StatCertCommandStub(StatCertCommand):
 
 
 class StatCertCommandTests(SubManFixture):
-
     def setUp(self):
         super(StatCertCommandTests, self).setUp()
 

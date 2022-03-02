@@ -31,7 +31,6 @@ class OldStyleClass:
 
 
 class TestExceptionMapper(unittest.TestCase):
-
     def test_single_mapped_exception(self):
         expected_message = "Single Exception Message"
         mapper = ExceptionMapper()

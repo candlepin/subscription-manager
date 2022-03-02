@@ -27,6 +27,7 @@ class Child(Singleton):
     """
     Class used for testing of Singleton subclass
     """
+
     @no_reinitialization
     def __init__(self, foo=None, bar=None):
         self._foo = foo
@@ -59,6 +60,7 @@ class GrandSon(Child):
     In this subclass is re-initialization of Singleton forbidden
     using decorator @no_reinitialization
     """
+
     @no_reinitialization
     def __init__(self, foo=None, bar=None):
         super(GrandSon, self).__init__(foo=foo, bar=bar)
@@ -70,6 +72,7 @@ class GrandDaughter(Child):
     Note that Child uses no_reinitialization and this
     class doesn't.
     """
+
     def __init__(self, foo=None, bar=None):
         super(GrandDaughter, self).__init__(foo=foo, bar=bar)
 
@@ -81,6 +84,7 @@ class Kid(Singleton):
     of singleton. Note that Child uses no_reinitialization and this
     class doesn't
     """
+
     def __init__(self, foo=None, bar=None):
         self.foo = foo
         self.bar = bar
@@ -98,7 +102,6 @@ class SpoiledChild(Singleton):
 
 
 class SingletonTestCase(unittest.TestCase):
-
     @staticmethod
     def _reset_singleton(clazz):
         """

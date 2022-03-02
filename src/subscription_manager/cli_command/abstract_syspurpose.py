@@ -32,8 +32,10 @@ from syspurpose.files import SyncedStore, post_process_received_data
 
 log = logging.getLogger(__name__)
 
-SP_CONFLICT_MESSAGE = _("Warning: A {attr} of \"{download_value}\" was recently set for this system "
-                        "by the entitlement server administrator.\n{advice}")
+SP_CONFLICT_MESSAGE = _(
+    "Warning: A {attr} of \"{download_value}\" was recently set for this system "
+    "by the entitlement server administrator.\n{advice}"
+)
 SP_ADVICE = _("If you'd like to overwrite the server side change please run: {command}")
 
 # TRANSLATORS: this refers to a deprecated command
@@ -45,7 +47,15 @@ class AbstractSyspurposeCommand(CliCommand):
     Abstract command for manipulating an attribute of system purpose.
     """
 
-    def __init__(self, name, subparser, shortdesc=None, primary=False, attr=None, commands=('set', 'unset', 'show', 'list')):
+    def __init__(
+        self,
+        name,
+        subparser,
+        shortdesc=None,
+        primary=False,
+        attr=None,
+        commands=('set', 'unset', 'show', 'list'),
+    ):
         # set 'subparser' before calling the parent constructor, as it will
         # (indirectly) call _create_argparser(), which our reimplementation uses
         self.subparser = subparser
@@ -63,14 +73,14 @@ class AbstractSyspurposeCommand(CliCommand):
             self.parser.add_argument(
                 "--set",
                 dest="set",
-                help=_("set {attr} of system purpose").format(attr=attr)
+                help=_("set {attr} of system purpose").format(attr=attr),
             )
         if 'unset' in commands:
             self.parser.add_argument(
                 "--unset",
                 dest="unset",
                 action="store_true",
-                help=_("unset {attr} of system purpose").format(attr=attr)
+                help=_("unset {attr} of system purpose").format(attr=attr),
             )
         if 'add' in commands:
             self.parser.add_argument(
@@ -78,7 +88,7 @@ class AbstractSyspurposeCommand(CliCommand):
                 dest="to_add",
                 action="append",
                 default=[],
-                help=_("add an item to the list ({attr}).").format(attr=attr)
+                help=_("add an item to the list ({attr}).").format(attr=attr),
             )
         if 'remove' in commands:
             self.parser.add_argument(
@@ -86,21 +96,21 @@ class AbstractSyspurposeCommand(CliCommand):
                 dest="to_remove",
                 action="append",
                 default=[],
-                help=_("remove an item from the list ({attr}).").format(attr=attr)
+                help=_("remove an item from the list ({attr}).").format(attr=attr),
             )
         if 'show' in commands:
             self.parser.add_argument(
                 "--show",
                 dest="show",
                 action='store_true',
-                help=_("show this system's current {attr}").format(attr=attr)
+                help=_("show this system's current {attr}").format(attr=attr),
             )
         if 'list' in commands:
             self.parser.add_argument(
                 "--list",
                 dest="list",
                 action='store_true',
-                help=_("list all {attr} available").format(attr=attr)
+                help=_("list all {attr} available").format(attr=attr),
             )
 
     def __getattr__(self, name):
@@ -128,8 +138,7 @@ class AbstractSyspurposeCommand(CliCommand):
         if to_add:
             self.options.to_add = [x.strip() for x in self.options.to_add if isinstance(x, str)]
         if to_remove:
-            self.options.to_remove = [x.strip() for x in self.options.to_remove
-                                      if isinstance(x, str)]
+            self.options.to_remove = [x.strip() for x in self.options.to_remove if isinstance(x, str)]
         if (to_set or to_add or to_remove) and to_unset:
             system_exit(os.EX_USAGE, _("--unset cannot be used with --set, --add, or --remove"))
         if to_add and to_remove:
@@ -140,16 +149,13 @@ class AbstractSyspurposeCommand(CliCommand):
                 if self.options.token and not self.options.username:
                     pass
                 elif self.options.token and self.options.username:
-                    system_exit(
-                        os.EX_USAGE,
-                        _("Error: you can specify --username or --token not both")
-                    )
+                    system_exit(os.EX_USAGE, _("Error: you can specify --username or --token not both"))
                 elif not self.options.username or not self.options.password:
                     system_exit(
                         os.EX_USAGE,
-                        _("Error: you must register or specify --username and --password to list {attr}").format(
-                            attr=self.attr
-                        )
+                        _(
+                            "Error: you must register or specify --username and --password to list {attr}"
+                        ).format(attr=self.attr),
                     )
             elif to_unset or to_set or to_add or to_remove or to_show:
                 pass
@@ -157,15 +163,18 @@ class AbstractSyspurposeCommand(CliCommand):
                 system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 
         if self.is_registered() and (
-            getattr(self.options, "username", None) or
-            getattr(self.options, "password", None) or
-            getattr(self.options, "token", None) or
-            getattr(self.options, "org", None)
+            getattr(self.options, "username", None)
+            or getattr(self.options, "password", None)
+            or getattr(self.options, "token", None)
+            or getattr(self.options, "org", None)
         ):
-            system_exit(os.EX_USAGE, _(
-                "Error: --username, --password, --token and --org "
-                "can be used only on unregistered systems"
-            ))
+            system_exit(
+                os.EX_USAGE,
+                _(
+                    "Error: --username, --password, --token and --org "
+                    "can be used only on unregistered systems"
+                ),
+            )
 
     def _get_valid_fields(self):
         """
@@ -187,7 +196,9 @@ class AbstractSyspurposeCommand(CliCommand):
                 org_key = self.org
                 server_response = self.cp.getOwnerSyspurposeValidFields(org_key)
             except connection.RestlibException as rest_err:
-                log.warning("Unable to get list of valid fields using REST API: {rest_err}".format(rest_err=rest_err))
+                log.warning(
+                    "Unable to get list of valid fields using REST API: {rest_err}".format(rest_err=rest_err)
+                )
                 mapped_message: str = ExceptionMapper().get_message(rest_err)
                 system_exit(os.EX_SOFTWARE, mapped_message)
             except ProxyException:
@@ -232,26 +243,31 @@ class AbstractSyspurposeCommand(CliCommand):
         # When the system is not registered and no username & password was provided, then
         # these values will be set silently.
         if invalid_values_len > 0:
-            if self.is_registered() or \
-                    (self.options.username and self.options.password) or \
-                    self.options.token:
+            if (
+                self.is_registered()
+                or (self.options.username and self.options.password)
+                or self.options.token
+            ):
                 if len(valid_fields.get(self.attr, [])) > 0:
                     # TRANSLATORS: this is used to quote a string
-                    quoted_values = [_("\"{value}\"").format(value=value)
-                                     for value in invalid_values]
+                    quoted_values = [_("\"{value}\"").format(value=value) for value in invalid_values]
                     printable_values = friendly_join(quoted_values)
-                    print(ungettext('Warning: Provided value {vals} is not included in the list of valid values',
-                                    'Warning: Provided values {vals} are not included in the list of valid values',
-                                    invalid_values_len).format(
-                        vals=printable_values
-                    ))
+                    print(
+                        ungettext(
+                            'Warning: Provided value {vals} is not included in the list of valid values',
+                            'Warning: Provided values {vals} are not included in the list of valid values',
+                            invalid_values_len,
+                        ).format(vals=printable_values)
+                    )
                     self._print_valid_values(valid_fields)
                 else:
-                    print(_('Warning: This organization does not have any subscriptions that provide a '
+                    print(
+                        _(
+                            'Warning: This organization does not have any subscriptions that provide a '
                             'system purpose "{attr}".  This setting will not influence auto-attaching '
-                            'subscriptions.').format(
-                        attr=self.attr
-                    ))
+                            'subscriptions.'
+                        ).format(attr=self.attr)
+                    )
 
         return invalid_values
 
@@ -266,10 +282,9 @@ class AbstractSyspurposeCommand(CliCommand):
             expectation=lambda res: res.get(self.attr) == self.options.set,
             success_msg=success_msg,
             command='subscription-manager syspurpose {name} --set "{val}"'.format(
-                name=self.name,
-                val=self.options.set
+                name=self.name, val=self.options.set
             ),
-            attr=self.attr
+            attr=self.attr,
         )
 
     def _set(self, to_set):
@@ -285,7 +300,7 @@ class AbstractSyspurposeCommand(CliCommand):
             expectation=lambda res: res.get(self.attr) in ["", None, []],
             success_msg=success_msg,
             command='subscription-manager syspurpose {name} --unset'.format(name=self.name),
-            attr=self.attr
+            attr=self.attr,
         )
 
     def _unset(self):
@@ -307,7 +322,7 @@ class AbstractSyspurposeCommand(CliCommand):
             expectation=lambda res: all(x in res.get('addons', []) for x in self.options.to_add),
             success_msg=success_msg,
             command=command,
-            attr=self.attr
+            attr=self.attr,
         )
 
     def _add(self, to_add):
@@ -332,7 +347,7 @@ class AbstractSyspurposeCommand(CliCommand):
             expectation=lambda res: all(x not in res.get('addons', []) for x in self.options.to_remove),
             success_msg=success_msg,
             command=command,
-            attr=self.attr
+            attr=self.attr,
         )
 
     def _remove(self, to_remove):
@@ -353,8 +368,7 @@ class AbstractSyspurposeCommand(CliCommand):
         if syspurpose is not None and self.attr in syspurpose and syspurpose[self.attr]:
             val = syspurpose[self.attr]
             values = val if not isinstance(val, list) else ", ".join(val)
-            print(_("Current {name}: {val}").format(name=self.name.capitalize(),
-                                                    val=values))
+            print(_("Current {name}: {val}").format(name=self.name.capitalize(), val=values))
         else:
             print(_("{name} not set.").format(name=self.name.capitalize()))
 
@@ -384,15 +398,24 @@ class AbstractSyspurposeCommand(CliCommand):
                 # Print values
                 self._print_valid_values(valid_fields)
             else:
-                print(_('There are no available values for the system purpose "{syspurpose_attr}" '
+                print(
+                    _(
+                        'There are no available values for the system purpose "{syspurpose_attr}" '
                         'from the available subscriptions in this '
-                        'organization.').format(syspurpose_attr=self.attr))
+                        'organization.'
+                    ).format(syspurpose_attr=self.attr)
+                )
         else:
-            print(_('Unable to get the list of valid values for the system purpose '
-                    '"{syspurpose_attr}".').format(syspurpose_attr=self.attr))
+            print(
+                _(
+                    'Unable to get the list of valid values for the system purpose ' '"{syspurpose_attr}".'
+                ).format(syspurpose_attr=self.attr)
+            )
 
     def sync(self):
-        return syspurposelib.SyspurposeSyncActionCommand().perform(include_result=True, passthrough_gone=True)[1]
+        return syspurposelib.SyspurposeSyncActionCommand().perform(
+            include_result=True, passthrough_gone=True
+        )[1]
 
     def _do_command(self):
         self._validate_options()
@@ -406,7 +429,11 @@ class AbstractSyspurposeCommand(CliCommand):
                 try:
                     self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
                 except Exception as err:
-                    log.error("unable to connect to candlepin server using token: \"{token}\", err: {err}".format(token=self.options.token, err=err))
+                    log.error(
+                        "unable to connect to candlepin server using token: \"{token}\", err: {err}".format(
+                            token=self.options.token, err=err
+                        )
+                    )
                     print(_("Unable to connect to server using token"))
             elif self.options.username and self.options.password:
                 self.cp_provider.set_user_pass(self.options.username, self.options.password)
@@ -418,11 +445,15 @@ class AbstractSyspurposeCommand(CliCommand):
         except connection.RestlibException as err:
             log.exception(err)
             if getattr(self.options, 'list', None):
-                log.error("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
+                log.error(
+                    "Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err)
+                )
                 mapped_message: str = ExceptionMapper().get_message(err)
                 system_exit(os.EX_SOFTWARE, mapped_message)
             else:
-                log.debug("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
+                log.debug(
+                    "Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err)
+                )
         except Exception as err:
             log.debug("Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err))
 
@@ -453,13 +484,19 @@ class AbstractSyspurposeCommand(CliCommand):
         # ArgumentParser is a subparser (so there is a parent parser already
         # printing the subcommand).
         usage = _("%(prog)s [OPTIONS]")
-        return self.subparser.add_parser(self.name, description=self.shortdesc,
-                                         usage=usage, help=self.shortdesc)
+        return self.subparser.add_parser(
+            self.name, description=self.shortdesc, usage=usage, help=self.shortdesc
+        )
 
     def check_syspurpose_support(self, attr):
         if self.is_registered() and not self.cp.has_capability('syspurpose'):
-            print(_("Note: The currently configured entitlement server does not support System Purpose {attr}.".format(
-                attr=attr)))
+            print(
+                _(
+                    "Note: The currently configured entitlement server does not support System Purpose {attr}.".format(
+                        attr=attr
+                    )
+                )
+            )
 
     def _check_result(self, expectation, success_msg, command, attr):
         if self.store:

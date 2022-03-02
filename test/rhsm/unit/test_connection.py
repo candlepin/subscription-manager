@@ -19,10 +19,25 @@ import ssl
 from tempfile import mkdtemp
 
 from rhsm import connection
-from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
-    BadCertificateException, RestlibException, GoneException, NetworkException, \
-    RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
-    ForbiddenException, AuthenticationException, RateLimitExceededException, ContentConnection, NoValidEntitlement
+from rhsm.connection import (
+    UEPConnection,
+    Restlib,
+    ConnectionException,
+    ConnectionSetupException,
+    BadCertificateException,
+    RestlibException,
+    GoneException,
+    NetworkException,
+    RemoteServerException,
+    drift_check,
+    ExpiredIdentityCertException,
+    UnauthorizedException,
+    ForbiddenException,
+    AuthenticationException,
+    RateLimitExceededException,
+    ContentConnection,
+    NoValidEntitlement,
+)
 
 from subscription_manager.cache import ContentAccessCache
 import subscription_manager.injection as inj
@@ -46,22 +61,20 @@ class ConnectionTests(unittest.TestCase):
         # NOTE: this won't actually work, idea for this suite of unit tests
         # is to mock the actual server responses and just test logic in the
         # UEPConnection:
-        self.cp = UEPConnection(username="dummy", password="dummy",
-                                handler="/Test/", insecure=True)
+        self.cp = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
         self.temp_ent_dir = mkdtemp()
 
     def tearDown(self):
         shutil.rmtree(self.temp_ent_dir)
 
     def test_accepts_a_timeout(self):
-        self.cp = UEPConnection(username="dummy", password="dummy",
-                                handler="/Test/", insecure=True, timeout=3)
+        self.cp = UEPConnection(
+            username="dummy", password="dummy", handler="/Test/", insecure=True, timeout=3
+        )
 
     def test_load_manager_capabilities(self):
         expected_capabilities = ['hypervisors_async', 'cores']
-        proper_status = {'version': '1',
-                         'result': True,
-                         'managerCapabilities': expected_capabilities}
+        proper_status = {'version': '1', 'result': True, 'managerCapabilities': expected_capabilities}
         improper_status = dict.copy(proper_status)
         # Remove the managerCapabilities key from the dict
         del improper_status['managerCapabilities']
@@ -69,11 +82,9 @@ class ConnectionTests(unittest.TestCase):
         # The first call will return the proper_status, the second, the improper
         # status
         original_getStatus = self.cp.getStatus
-        self.cp.getStatus = Mock(side_effect=[proper_status,
-                                              improper_status])
+        self.cp.getStatus = Mock(side_effect=[proper_status, improper_status])
         actual_capabilities = self.cp._load_manager_capabilities()
-        self.assertEqual(sorted(actual_capabilities),
-                         sorted(expected_capabilities))
+        self.assertEqual(sorted(actual_capabilities), sorted(expected_capabilities))
         self.assertEqual([], self.cp._load_manager_capabilities())
         self.cp.getStatus = original_getStatus
 
@@ -115,14 +126,14 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.request_get = Mock(return_value=[])
         self.cp.getEnvironment(owner_key="myorg", name="env name__++=*&")
         self.cp.conn.request_get.assert_called_with(
-            "/owners/myorg/environments?name=env+name__%2B%2B%3D%2A%26")
+            "/owners/myorg/environments?name=env+name__%2B%2B%3D%2A%26"
+        )
 
     def test_entitle_date(self):
         self.cp.conn = Mock()
         self.cp.conn.request_post = Mock(return_value=[])
         self.cp.bind("abcd", date(2011, 9, 2))
-        self.cp.conn.request_post.assert_called_with(
-            "/consumers/abcd/entitlements?entitle_date=2011-09-02")
+        self.cp.conn.request_post.assert_called_with("/consumers/abcd/entitlements?entitle_date=2011-09-02")
 
     def test_no_entitle_date(self):
         self.cp.conn = Mock()
@@ -158,8 +169,7 @@ class ConnectionTests(unittest.TestCase):
     def test_https_proxy_info_allcaps(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444'}):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
-                uep = UEPConnection(username="dummy", password="dummy",
-                                    handler="/Test/", insecure=True)
+                uep = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
                 self.assertEqual("host", uep.proxy_hostname)
@@ -167,11 +177,11 @@ class ConnectionTests(unittest.TestCase):
 
     def test_order(self):
         # should follow the order: HTTPS, https, HTTP, http
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444',
-                                       'http_proxy': 'http://notme:orme@host:2222'}):
+        with patch.dict(
+            'os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444', 'http_proxy': 'http://notme:orme@host:2222'}
+        ):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
-                uep = UEPConnection(username="dummy", password="dummy",
-                                    handler="/Test/", insecure=True)
+                uep = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
                 self.assertEqual("host", uep.proxy_hostname)
@@ -180,8 +190,7 @@ class ConnectionTests(unittest.TestCase):
     def test_no_port(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host'}):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
-                uep = UEPConnection(username="dummy", password="dummy",
-                                    handler="/Test/", insecure=True)
+                uep = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
                 self.assertEqual("host", uep.proxy_hostname)
@@ -190,8 +199,7 @@ class ConnectionTests(unittest.TestCase):
     def test_no_user_or_password(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://host:1111'}):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
-                uep = UEPConnection(username="dummy", password="dummy",
-                                    handler="/Test/", insecure=True)
+                uep = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
                 self.assertEqual(None, uep.proxy_user)
                 self.assertEqual(None, uep.proxy_password)
                 self.assertEqual("host", uep.proxy_hostname)
@@ -220,13 +228,18 @@ class ConnectionTests(unittest.TestCase):
                 return 'proxypassword'
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
-                                       'NO_PROXY': 'foo.example.com'}):
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
             with patch.object(connection.config, 'get', mock_config):
-                uep = UEPConnection(username='dummy', password='dummy',
-                                    handler='/test', insecure=True,
-                                    proxy_hostname='proxy.example.org', proxy_port='3030',
-                                    proxy_user='foo_user', proxy_password='secret')
+                uep = UEPConnection(
+                    username='dummy',
+                    password='dummy',
+                    handler='/test',
+                    insecure=True,
+                    proxy_hostname='proxy.example.org',
+                    proxy_port='3030',
+                    proxy_user='foo_user',
+                    proxy_password='secret',
+                )
                 self.assertEqual(uep.proxy_hostname, 'proxy.example.org')
                 self.assertEqual(uep.proxy_port, '3030')
                 self.assertEqual(uep.proxy_user, 'foo_user')
@@ -255,13 +268,18 @@ class ConnectionTests(unittest.TestCase):
                 return 'proxypassword'
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
-                                       'NO_PROXY': 'foo.example.com'}):
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
             with patch.object(connection.config, 'get', mock_config):
-                uep = UEPConnection(username='dummy', password='dummy',
-                                    handler='/test', insecure=True,
-                                    proxy_hostname='', proxy_port='',
-                                    proxy_user='', proxy_password='')
+                uep = UEPConnection(
+                    username='dummy',
+                    password='dummy',
+                    handler='/test',
+                    insecure=True,
+                    proxy_hostname='',
+                    proxy_port='',
+                    proxy_user='',
+                    proxy_password='',
+                )
                 self.assertEqual(uep.proxy_hostname, '')
                 self.assertEqual(uep.proxy_port, '')
                 self.assertEqual(uep.proxy_user, '')
@@ -281,11 +299,11 @@ class ConnectionTests(unittest.TestCase):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
-                                       'NO_PROXY': 'foo.example.com'}):
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
             with patch.object(connection.config, 'get', mock_config):
-                uep = UEPConnection(username='dummy', password='dummy',
-                                    handler='/test', insecure=True, no_proxy=host)
+                uep = UEPConnection(
+                    username='dummy', password='dummy', handler='/test', insecure=True, no_proxy=host
+                )
                 self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_with_one_asterisk_via_api(self):
@@ -302,11 +320,11 @@ class ConnectionTests(unittest.TestCase):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
-                                       'NO_PROXY': '*'}):
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': '*'}):
             with patch.object(connection.config, 'get', mock_config):
-                uep = UEPConnection(username='dummy', password='dummy',
-                                    handler='/test', insecure=True, no_proxy=host)
+                uep = UEPConnection(
+                    username='dummy', password='dummy', handler='/test', insecure=True, no_proxy=host
+                )
                 self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_with_asterisk_via_api(self):
@@ -323,53 +341,44 @@ class ConnectionTests(unittest.TestCase):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
-                                       'NO_PROXY': '*.example.com'}):
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': '*.example.com'}):
             with patch.object(connection.config, 'get', mock_config):
-                uep = UEPConnection(username='dummy', password='dummy',
-                                    handler='/test', insecure=True, no_proxy=host)
+                uep = UEPConnection(
+                    username='dummy', password='dummy', handler='/test', insecure=True, no_proxy=host
+                )
                 self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_via_environment_variable(self):
         """Test that env var no_proxy works."""
         host = self.cp.host
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': host}):
-            uep = UEPConnection(username='dummy', password='dummy',
-                                handler='/test', insecure=True)
+            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
     def test_NO_PROXY_with_one_asterisk_via_environment_variable(self):
         """Test that env var NO_PROXY with only one asterisk works."""
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
-                                       'NO_PROXY': '*'}):
-            uep = UEPConnection(username='dummy', password='dummy',
-                                handler='/test', insecure=True)
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': '*'}):
+            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_with_one_asterisk_via_environment_variable(self):
         """Test that env var no_proxy with only one asterisk works."""
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
-                                       'no_proxy': '*'}):
-            uep = UEPConnection(username='dummy', password='dummy',
-                                handler='/test', insecure=True)
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'no_proxy': '*'}):
+            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
     def test_NO_PROXY_with_asterisk_via_environment_variable(self):
         """Test that env var NO_PROXY with asterisk works."""
         host = '*' + self.cp.host
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
-                                       'NO_PROXY': host}):
-            uep = UEPConnection(username='dummy', password='dummy',
-                                handler='/test', insecure=True)
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': host}):
+            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_with_asterisk_via_environment_variable(self):
         """Test that env var no_proxy with asterisk works."""
         host = '*' + self.cp.host
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
-                                       'no_proxy': host}):
-            uep = UEPConnection(username='dummy', password='dummy',
-                                handler='/test', insecure=True)
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'no_proxy': host}):
+            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_via_config(self):
@@ -386,11 +395,9 @@ class ConnectionTests(unittest.TestCase):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
-                                       'NO_PROXY': 'foo.example.com'}):
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
             with patch.object(connection.config, 'get', mock_config):
-                uep = UEPConnection(username='dummy', password='dummy',
-                                    handler='/test', insecure=True)
+                uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
                 self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_with_asterisk_via_config(self):
@@ -407,17 +414,24 @@ class ConnectionTests(unittest.TestCase):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host',
-                                       'NO_PROXY': '*.example.com'}):
+        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': '*.example.com'}):
             with patch.object(connection.config, 'get', mock_config):
-                uep = UEPConnection(username='dummy', password='dummy',
-                                    handler='/test', insecure=True)
+                uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
                 self.assertEqual(None, uep.proxy_hostname)
 
     def test_uep_connection_honors_no_proxy_setting(self):
         with patch.dict('os.environ', {'no_proxy': 'foobar'}):
-            uep = UEPConnection(host="foobar", username="dummy", password="dummy", handler="/Test/", insecure=True,
-                                proxy_hostname="proxyfoo", proxy_password="proxypass", proxy_port=42, proxy_user="foo")
+            uep = UEPConnection(
+                host="foobar",
+                username="dummy",
+                password="dummy",
+                handler="/Test/",
+                insecure=True,
+                proxy_hostname="proxyfoo",
+                proxy_password="proxypass",
+                proxy_port=42,
+                proxy_user="foo",
+            )
             self.assertIs(None, uep.proxy_user)
             self.assertIs(None, uep.proxy_password)
             self.assertIs(None, uep.proxy_hostname)
@@ -425,9 +439,16 @@ class ConnectionTests(unittest.TestCase):
 
     def test_content_connection_honors_no_proxy_setting(self):
         with patch.dict('os.environ', {'no_proxy': 'foobar'}):
-            cont_conn = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True,
-                                          proxy_hostname="proxyfoo", proxy_password="proxypass", proxy_port=42,
-                                          proxy_user="foo")
+            cont_conn = ContentConnection(
+                host="foobar",
+                username="dummy",
+                password="dummy",
+                insecure=True,
+                proxy_hostname="proxyfoo",
+                proxy_password="proxypass",
+                proxy_port=42,
+                proxy_user="foo",
+            )
             self.assertIs(None, cont_conn.proxy_user)
             self.assertIs(None, cont_conn.proxy_password)
             self.assertIs(None, cont_conn.proxy_hostname)
@@ -469,7 +490,9 @@ class ConnectionTests(unittest.TestCase):
         with open(os.path.join(self.temp_ent_dir, "foo-key.pem"), 'w+') as key:
             key.write('xxxxxx\n')
         with self.assertRaises(NoValidEntitlement):
-            cont_conn = ContentConnection(host="foobar", username="dummy", password="dummy", insecure=True, cert_dir=self.temp_ent_dir)
+            cont_conn = ContentConnection(
+                host="foobar", username="dummy", password="dummy", insecure=True, cert_dir=self.temp_ent_dir
+            )
             cont_conn.get_versions('/')
         restlib = Restlib("somehost", "123", "somehandler")
         restlib.ca_dir = self.temp_ent_dir
@@ -482,8 +505,7 @@ class ConnectionTests(unittest.TestCase):
         Options = namedtuple('Options', 'reporter_id')
         options = Options('tester')
         self.cp.hypervisorHeartbeat("owner", options=options)
-        self.cp.conn.request_put.assert_called_with(
-            "/hypervisors/owner/heartbeat?reporter_id=tester")
+        self.cp.conn.request_put.assert_called_with("/hypervisors/owner/heartbeat?reporter_id=tester")
 
     def test_hypervisor_check_in_no_capability(self):
         self.cp.conn = Mock()
@@ -524,8 +546,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
         self.handler = "https://server/path"
 
     def vr(self, status, content, headers=None):
-        response = {'status': status,
-                    'content': content}
+        response = {'status': status, 'content': content}
         if headers:
             response['headers'] = headers
         self.restlib.validateResponse(response, self.request_type, self.handler)
@@ -571,10 +592,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
         #        addition to RestlibException and RemoteServerException
         #        I think maybe a 400 ("Bad Request") should be a
         #        RemoteServerException
-        self.assertRaises(NetworkException,
-                          self.vr,
-                          "400",
-                          "")
+        self.assertRaises(NetworkException, self.vr, "400", "")
 
     def test_401_empty(self):
         try:
@@ -582,8 +600,10 @@ class RestlibValidateResponseTests(unittest.TestCase):
         except UnauthorizedException as e:
             self.assertEqual(self.request_type, e.request_type)
             self.assertEqual("401", e.code)
-            expected_str = "Server error attempting a GET to https://server/path returned status 401\n" \
-                           "Unauthorized: Invalid credentials for request."
+            expected_str = (
+                "Server error attempting a GET to https://server/path returned status 401\n"
+                "Unauthorized: Invalid credentials for request."
+            )
             self.assertEqual(expected_str, str(e))
         else:
             self.fail("Should have raised UnauthorizedException")
@@ -595,8 +615,10 @@ class RestlibValidateResponseTests(unittest.TestCase):
         except UnauthorizedException as e:
             self.assertEqual(self.request_type, e.request_type)
             self.assertEqual("401", e.code)
-            expected_str = "Server error attempting a GET to https://server/path returned status 401\n" \
-                           "Unauthorized: Invalid credentials for request."
+            expected_str = (
+                "Server error attempting a GET to https://server/path returned status 401\n"
+                "Unauthorized: Invalid credentials for request."
+            )
             self.assertEqual(expected_str, str(e))
         else:
             self.fail("Should have raised UnauthorizedException")
@@ -610,8 +632,10 @@ class RestlibValidateResponseTests(unittest.TestCase):
         except UnauthorizedException as e:
             self.assertEqual(self.request_type, e.request_type)
             self.assertEqual("401", e.code)
-            expected_str = "Server error attempting a GET to https://server/path returned status 401\n" \
-                           "Unauthorized: Invalid credentials for request."
+            expected_str = (
+                "Server error attempting a GET to https://server/path returned status 401\n"
+                "Unauthorized: Invalid credentials for request."
+            )
             self.assertEqual(expected_str, str(e))
         else:
             self.fail("Should have raised UnauthorizedException")
@@ -632,8 +656,10 @@ class RestlibValidateResponseTests(unittest.TestCase):
         except ForbiddenException as e:
             self.assertEqual(self.request_type, e.request_type)
             self.assertEqual("403", e.code)
-            expected_str = "Server error attempting a GET to https://server/path returned status 403\n" \
-                           "Forbidden: Invalid credentials for request."
+            expected_str = (
+                "Server error attempting a GET to https://server/path returned status 403\n"
+                "Forbidden: Invalid credentials for request."
+            )
             self.assertEqual(expected_str, str(e))
         else:
             self.fail("Should have raised ForbiddenException")
@@ -654,7 +680,9 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.assertEqual(self.request_type, e.request_type)
             self.assertEqual(self.handler, e.handler)
             self.assertEqual("404", e.code)
-            self.assertEqual("Server error attempting a GET to https://server/path returned status 404", str(e))
+            self.assertEqual(
+                "Server error attempting a GET to https://server/path returned status 404", str(e)
+            )
         else:
             self.fails("Should have raise RemoteServerException")
 
@@ -747,7 +775,6 @@ class RestlibValidateResponseTests(unittest.TestCase):
 
 
 class RestlibTests(unittest.TestCase):
-
     def test_json_uft8_encoding(self):
         # A unicode string containing JSON
         test_json = """
@@ -872,7 +899,6 @@ class ForbiddenExceptionTest(RemoteServerExceptionTest):
 
 
 class DriftTest(unittest.TestCase):
-
     def test_big_drift(self):
         # let's move this back to just a few hours before the
         # end of time, so this test doesn't fail on 32bit machines
@@ -918,7 +944,7 @@ class ExpiredIdentityCertTest(ExceptionTest):
 class DatetimeFormattingTests(unittest.TestCase):
     MOCK_CONTENT = {
         "lastUpdate": "2016-12-01T21:56:35+0000",
-        "contentListing": {"42": ["cert-part1", "cert-part2"]}
+        "contentListing": {"42": ["cert-part1", "cert-part2"]},
     }
 
     MOCK_OPEN_CACHE = mock_open(read_data=json.dumps(MOCK_CONTENT))
@@ -927,8 +953,7 @@ class DatetimeFormattingTests(unittest.TestCase):
         # NOTE: this won't actually work, idea for this suite of unit tests
         # is to mock the actual server responses and just test logic in the
         # UEPConnection:
-        self.cp = UEPConnection(username="dummy", password="dummy",
-                                handler="/Test/", insecure=True)
+        self.cp = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
 
     def tearDown(self):
         locale.resetlocale()
@@ -947,9 +972,9 @@ class DatetimeFormattingTests(unittest.TestCase):
         mock_exists = Mock(return_value=True)
         self.cp.conn = Mock()
         self.cp.conn.request_get = Mock(return_value=self.MOCK_CONTENT)
-        expected_headers = {
-            'If-Modified-Since': 'Thu, 01 Dec 2016 21:56:35 GMT'
-        }
+        expected_headers = {'If-Modified-Since': 'Thu, 01 Dec 2016 21:56:35 GMT'}
         with patch('os.path.exists', mock_exists):
             cache.check_for_update()
-        self.cp.conn.request_get.assert_called_with('/consumers/bob/accessible_content', headers=expected_headers)
+        self.cp.conn.request_get.assert_called_with(
+            '/consumers/bob/accessible_content', headers=expected_headers
+        )

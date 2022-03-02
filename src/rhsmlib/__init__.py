@@ -27,7 +27,7 @@ except ImportError:
     import imp
 
     def import_class(name):
-        """Load a class from a string.  Thanks http://stackoverflow.com/a/547867/61248 """
+        """Load a class from a string.  Thanks http://stackoverflow.com/a/547867/61248"""
         components = name.split('.')
         current_level = components[0]
         module_tuple = imp.find_module(current_level)

@@ -22,7 +22,6 @@ from rhsm.certificate import create_from_pem
 
 
 class PrintingTests(unittest.TestCase):
-
     def test_xstr(self):
         self.assertEqual("", xstr(None))
         self.assertEqual("1", xstr(1))
@@ -34,6 +33,7 @@ class CatCertCommandStub(CatCertCommand):
     A testing CatCertCommand that allows bypassing
     the loading of a certificate file.
     """
+
     def __init__(self, cert_pem):
         CatCertCommand.__init__(self)
         self.cert = create_from_pem(cert_pem)
@@ -47,7 +47,6 @@ class CatCertCommandStub(CatCertCommand):
 
 
 class CatCertCommandTests(SubManFixture):
-
     def setUp(self):
         super(CatCertCommandTests, self).setUp()
 
@@ -56,16 +55,14 @@ class CatCertCommandTests(SubManFixture):
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
             command.main(["not_used.pem", "--no-content"])
         cert_output = cap.out
-        self.assertTrue(cert_output.find("Content:\n") == -1,
-                        "Content was not excluded from the output.")
+        self.assertTrue(cert_output.find("Content:\n") == -1, "Content was not excluded from the output.")
 
     def test_omit_product_list(self):
         with Capture() as cap:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
             command.main(["not_used.pem", "--no-products"])
         cert_output = cap.out
-        self.assertTrue(cert_output.find("Product:\n") == -1,
-                        "Products were not excluded from the output.")
+        self.assertTrue(cert_output.find("Product:\n") == -1, "Products were not excluded from the output.")
 
     def test_cert_v1_cat(self):
         with Capture() as cap:

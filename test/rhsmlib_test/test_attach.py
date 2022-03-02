@@ -29,75 +29,74 @@ from rhsmlib.services import attach
 
 from test import subman_marker_dbus
 
-CONTENT_JSON = [{
-    "id": "19ec0d4f93ae47e18233b2590b3e71f3",
-    "consumer": {
-        "id": "8a8d01865d2cb201015d331b0078006a",
-        "uuid": "47680d96-cfa4-4326-b545-5a6e02a4e95a",
-        "name": "orgBConsumer-tZTbHviW",
-        "href": "/consumers/47680d96-cfa4-4326-b545-5a6e02a4e95a"
-    },
-    "pool": {
-        "id": "8a8d01865d2cb201015d331b01b6006f",
-        "type": "NORMAL",
-        "owner": {
-            "id": "8a8d01865d2cb201015d331afec50059",
-            "key": "orgB-txDmAJWq",
-            "displayName": "orgB-txDmAJWq",
-            "href": "/owners/orgB-txDmAJWq"
+CONTENT_JSON = [
+    {
+        "id": "19ec0d4f93ae47e18233b2590b3e71f3",
+        "consumer": {
+            "id": "8a8d01865d2cb201015d331b0078006a",
+            "uuid": "47680d96-cfa4-4326-b545-5a6e02a4e95a",
+            "name": "orgBConsumer-tZTbHviW",
+            "href": "/consumers/47680d96-cfa4-4326-b545-5a6e02a4e95a",
         },
-        "activeSubscription": True,
+        "pool": {
+            "id": "8a8d01865d2cb201015d331b01b6006f",
+            "type": "NORMAL",
+            "owner": {
+                "id": "8a8d01865d2cb201015d331afec50059",
+                "key": "orgB-txDmAJWq",
+                "displayName": "orgB-txDmAJWq",
+                "href": "/owners/orgB-txDmAJWq",
+            },
+            "activeSubscription": True,
+            "quantity": 1,
+            "startDate": "2017-07-11T19:23:14+0000",
+            "endDate": "2018-07-11T19:23:14+0000",
+            "attributes": [],
+            "consumed": 1,
+            "exported": 0,
+            "shared": 0,
+            "branding": [],
+            "calculatedAttributes": {"compliance_type": "Standard"},
+            "productId": "prod-25G4r19T",
+            "productAttributes": [{"name": "type", "value": "SVC"}],
+            "derivedProductAttributes": [],
+            "productName": "prod-Fz0IBfN6",
+            "stacked": False,
+            "developmentPool": False,
+            "href": "/pools/8a8d01865d2cb201015d331b01b6006f",
+            "created": "2017-07-11T19:23:14+0000",
+            "updated": "2017-07-11T19:23:14+0000",
+            "providedProducts": [],
+            "derivedProvidedProducts": [],
+            "subscriptionId": "source_sub_-LO4l9YKv",
+            "subscriptionSubKey": "master",
+        },
+        "certificates": [
+            {
+                "key": "FAKE KEY",
+                "cert": "FAKE_CERT",
+                "serial": {
+                    "id": 7020569423934353740,
+                    "revoked": False,
+                    "collected": False,
+                    "expiration": "2018-07-11T19:23:14+0000",
+                    "serial": 7020569423934353740,
+                    "created": "2017-07-11T19:23:14+0000",
+                    "updated": "2017-07-11T19:23:14+0000",
+                },
+                "id": "8a8d01865d2cb201015d331b02870072",
+                "created": "2017-07-11T19:23:14+0000",
+                "updated": "2017-07-11T19:23:14+0000",
+            }
+        ],
         "quantity": 1,
         "startDate": "2017-07-11T19:23:14+0000",
         "endDate": "2018-07-11T19:23:14+0000",
-        "attributes": [],
-        "consumed": 1,
-        "exported": 0,
-        "shared": 0,
-        "branding": [],
-        "calculatedAttributes": {
-            "compliance_type": "Standard"
-        },
-        "productId": "prod-25G4r19T",
-        "productAttributes": [{
-            "name": "type",
-            "value": "SVC"
-        }],
-        "derivedProductAttributes": [],
-        "productName": "prod-Fz0IBfN6",
-        "stacked": False,
-        "developmentPool": False,
-        "href": "/pools/8a8d01865d2cb201015d331b01b6006f",
+        "href": "/entitlements/19ec0d4f93ae47e18233b2590b3e71f3",
         "created": "2017-07-11T19:23:14+0000",
         "updated": "2017-07-11T19:23:14+0000",
-        "providedProducts": [],
-        "derivedProvidedProducts": [],
-        "subscriptionId": "source_sub_-LO4l9YKv",
-        "subscriptionSubKey": "master"
-    },
-    "certificates": [{
-        "key": "FAKE KEY",
-        "cert": "FAKE_CERT",
-        "serial": {
-            "id": 7020569423934353740,
-            "revoked": False,
-            "collected": False,
-            "expiration": "2018-07-11T19:23:14+0000",
-            "serial": 7020569423934353740,
-            "created": "2017-07-11T19:23:14+0000",
-            "updated": "2017-07-11T19:23:14+0000"
-        },
-        "id": "8a8d01865d2cb201015d331b02870072",
-        "created": "2017-07-11T19:23:14+0000",
-        "updated": "2017-07-11T19:23:14+0000"
-    }],
-    "quantity": 1,
-    "startDate": "2017-07-11T19:23:14+0000",
-    "endDate": "2018-07-11T19:23:14+0000",
-    "href": "/entitlements/19ec0d4f93ae47e18233b2590b3e71f3",
-    "created": "2017-07-11T19:23:14+0000",
-    "updated": "2017-07-11T19:23:14+0000"
-}]
+    }
+]
 
 
 class TestAttachService(InjectionMockingTest):
@@ -132,7 +131,7 @@ class TestAttachService(InjectionMockingTest):
 
         expected_plugin_calls = [
             mock.call('pre_subscribe', consumer_uuid='id', pool_id='x', quantity=1),
-            mock.call('post_subscribe', consumer_uuid='id', entitlement_data=CONTENT_JSON)
+            mock.call('post_subscribe', consumer_uuid='id', entitlement_data=CONTENT_JSON),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
@@ -145,9 +144,7 @@ class TestAttachService(InjectionMockingTest):
         result = attach.AttachService(self.mock_cp).attach_auto('service_level')
         self.assertEqual(CONTENT_JSON, result)
 
-        expected_update_calls = [
-            mock.call('id', service_level='service_level')
-        ]
+        expected_update_calls = [mock.call('id', service_level='service_level')]
         self.assertEqual(expected_update_calls, self.mock_cp.updateConsumer.call_args_list)
 
         expected_bind_calls = [
@@ -157,7 +154,7 @@ class TestAttachService(InjectionMockingTest):
 
         expected_plugin_calls = [
             mock.call('pre_auto_attach', consumer_uuid='id'),
-            mock.call('post_auto_attach', consumer_uuid='id', entitlement_data=CONTENT_JSON)
+            mock.call('post_auto_attach', consumer_uuid='id', entitlement_data=CONTENT_JSON),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
@@ -224,9 +221,9 @@ class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
                 'proxy_hostname': 'proxy.company.com',
                 'proxy_port': '3128',
                 'proxy_user': 'user',
-                'proxy_password': 'secret'
+                'proxy_password': 'secret',
             },
-            ''
+            '',
         ]
         self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
 

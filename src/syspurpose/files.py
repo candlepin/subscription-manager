@@ -39,12 +39,7 @@ SERVICE_LEVEL = 'service_level_agreement'
 USAGE = 'usage'
 
 # Remote values keyed on the local ones
-LOCAL_TO_REMOTE = {
-    ROLE: 'role',
-    ADDONS: 'addOns',
-    SERVICE_LEVEL: 'serviceLevel',
-    USAGE: 'usage'
-}
+LOCAL_TO_REMOTE = {ROLE: 'role', ADDONS: 'addOns', SERVICE_LEVEL: 'serviceLevel', USAGE: 'usage'}
 
 # All known syspurpose attributes
 ATTRIBUTES = [ROLE, ADDONS, SERVICE_LEVEL, USAGE]
@@ -70,7 +65,9 @@ def post_process_received_data(data):
             data['systemPurposeAttributes']['role'] = data['systemPurposeAttributes']['roles']
             del data['systemPurposeAttributes']['roles']
         if 'support_level' in data['systemPurposeAttributes']:
-            data['systemPurposeAttributes']['service_level_agreement'] = data['systemPurposeAttributes']['support_level']
+            data['systemPurposeAttributes']['service_level_agreement'] = data['systemPurposeAttributes'][
+                'support_level'
+            ]
             del data['systemPurposeAttributes']['support_level']
     return data
 
@@ -115,9 +112,11 @@ class SyspurposeStore(object):
         Create the files necessary for this store
         :return: True if changes were made, false otherwise
         """
-        return create_dir(os.path.dirname(self.path)) or \
-            self.read_file() or \
-            create_file(self.path, self.contents)
+        return (
+            create_dir(os.path.dirname(self.path))
+            or self.read_file()
+            or create_file(self.path, self.contents)
+        )
 
     def add(self, key, value):
         """
@@ -240,6 +239,7 @@ class SyncedStore(object):
     Stores values in a local file backed by a cache which is then synced with another source
     of the same values.
     """
+
     PATH = USER_SYSPURPOSE
     CACHE_PATH = CACHED_SYSPURPOSE
 
@@ -292,20 +292,14 @@ class SyncedStore(object):
                 log.debug('Server does not support syspurpose, syncing only locally.')
                 return self._sync_local_only()
         except Exception as err:
-            log.debug(
-                'Failed to detect whether the server has syspurpose capability: {err}'.format(
-                    err=err
-                )
-            )
+            log.debug('Failed to detect whether the server has syspurpose capability: {err}'.format(err=err))
             return self._sync_local_only()
 
         remote_contents = self.get_remote_contents()
         local_contents = self.get_local_contents()
         cached_contents = self.get_cached_contents()
 
-        result = self.merge(local=local_contents,
-                            remote=remote_contents,
-                            base=cached_contents)
+        result = self.merge(local=local_contents, remote=remote_contents, base=cached_contents)
 
         local_result = {key: result[key] for key in result if result[key]}
 
@@ -335,12 +329,7 @@ class SyncedStore(object):
         :param base:
         :return:
         """
-        result = three_way_merge(
-            local=local,
-            base=base,
-            remote=remote,
-            on_change=self.on_changed
-        )
+        result = three_way_merge(local=local, base=base, remote=remote, on_change=self.on_changed)
         return result
 
     def get_local_contents(self):
@@ -362,8 +351,10 @@ class SyncedStore(object):
         :return: dictionary with system purpose values
         """
         if self.uep is None or self.consumer_uuid is None:
-            log.debug('Failed to read remote syspurpose from server: no available connection, '
-                      'or the consumer is not registered.')
+            log.debug(
+                'Failed to read remote syspurpose from server: no available connection, '
+                'or the consumer is not registered.'
+            )
             return {}
         if not self.uep.has_capability('syspurpose'):
             log.debug('Server does not support syspurpose, not syncing.')
@@ -423,8 +414,10 @@ class SyncedStore(object):
 
     def update_remote(self, data):
         if self.uep is None or self.consumer_uuid is None:
-            log.debug('Failed to update remote syspurpose on the server: no available connection, '
-                      'or the consumer is not registered.')
+            log.debug(
+                'Failed to update remote syspurpose on the server: no available connection, '
+                'or the consumer is not registered.'
+            )
             return False
 
         addons = data.get(ADDONS)
@@ -433,7 +426,7 @@ class SyncedStore(object):
             role=data.get(ROLE) or "",
             addons=addons if addons is not None else [],
             service_level=data.get(SERVICE_LEVEL) or "",
-            usage=data.get(USAGE) or ""
+            usage=data.get(USAGE) or "",
         )
         log.debug('Successfully updated remote syspurpose on the server.')
         return True
@@ -450,16 +443,20 @@ class SyncedStore(object):
             if key in self.valid_fields:
                 if value not in self.valid_fields[key]:
                     print(
-                        _('Warning: Provided value "{val}" is not included in the list '
-                          'of valid values for attribute {attr}:').format(val=value, attr=key)
+                        _(
+                            'Warning: Provided value "{val}" is not included in the list '
+                            'of valid values for attribute {attr}:'
+                        ).format(val=value, attr=key)
                     )
                     for valid_value in self.valid_fields[key]:
                         if len(valid_value) > 0:
                             print(" - %s" % valid_value)
             else:
-                print(_('Warning: Provided key "{key}" is not included in the list of valid keys:').format(
-                    key=key
-                ))
+                print(
+                    _('Warning: Provided key "{key}" is not included in the list of valid keys:').format(
+                        key=key
+                    )
+                )
                 for valid_key in self.valid_fields.keys():
                     print(" - %s" % valid_key)
 
@@ -514,7 +511,11 @@ class SyncedStore(object):
         """
         try:
             current_values = self.local_contents[key]
-            if current_values is not None and not isinstance(current_values, list) and current_values == value:
+            if (
+                current_values is not None
+                and not isinstance(current_values, list)
+                and current_values == value
+            ):
                 return self.unset(key)
 
             if value in current_values:
@@ -660,7 +661,7 @@ class SyncedStore(object):
 # during three_way_merge
 DiffChange = collections.namedtuple(
     'DiffChange',
-    ['key', 'previous_value', 'new_value', 'source', 'in_base', 'in_result']
+    ['key', 'previous_value', 'new_value', 'source', 'in_base', 'in_result'],
 )
 
 
@@ -704,7 +705,9 @@ def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
 
         if local_changed == remote_changed:
             if local_changed is True:
-                log.debug('Three way merge conflict: both local and remote values changed for key \'%s\'.' % key)
+                log.debug(
+                    'Three way merge conflict: both local and remote values changed for key \'%s\'.' % key
+                )
             source = on_conflict
             if key in winner:
                 result[key] = winner[key]
@@ -722,9 +725,14 @@ def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
 
         if changed:
             original = base.get(key)
-            diff = DiffChange(key=key, source=source, previous_value=original,
-                              new_value=result.get(key), in_base=key in base,
-                              in_result=key in result)
+            diff = DiffChange(
+                key=key,
+                source=source,
+                previous_value=original,
+                new_value=result.get(key),
+                in_base=key in base,
+                in_result=key in result,
+            )
             on_change(diff)
 
     return result

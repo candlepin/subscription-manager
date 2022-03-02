@@ -155,10 +155,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         Test for the case, when the machine is host (not virtual machine)
         """
         # We will mock facts using simple dictionary
-        facts = {
-            'virt.is_guest': False,
-            'dmi.bios.version': 'cool hardware company'
-        }
+        facts = {'virt.is_guest': False, 'dmi.bios.version': 'cool hardware company'}
         aws_detector = aws.AWSCloudProvider(facts)
         is_vm = aws_detector.is_vm()
         self.assertFalse(is_vm)
@@ -168,11 +165,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         Test for the case, when the vm is running on AWS Xen
         """
         # We will mock facts using simple dictionary
-        facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'xen',
-            'dmi.bios.version': 'amazon'
-        }
+        facts = {'virt.is_guest': True, 'virt.host_type': 'xen', 'dmi.bios.version': 'amazon'}
         aws_detector = aws.AWSCloudProvider(facts)
         is_vm = aws_detector.is_vm()
         self.assertTrue(is_vm)
@@ -188,7 +181,7 @@ class TestAWSCloudProvider(unittest.TestCase):
             'virt.is_guest': True,
             'virt.host_type': 'kvm',
             'dmi.bios.version': '1.0',
-            'dmi.bios.vendor': 'Amazon EC2'
+            'dmi.bios.vendor': 'Amazon EC2',
         }
         aws_detector = aws.AWSCloudProvider(facts)
         is_vm = aws_detector.is_vm()
@@ -205,7 +198,7 @@ class TestAWSCloudProvider(unittest.TestCase):
             'virt.is_guest': True,
             'virt.host_type': 'kvm',
             'dmi.bios.version': '1.0',
-            'dmi.bios.vendor': 'Foo'
+            'dmi.bios.vendor': 'Foo',
         }
         aws_detector = aws.AWSCloudProvider(facts)
         is_vm = aws_detector.is_vm()
@@ -231,10 +224,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/identify_ec2_instances.html
         """
         # We will mock facts using simple dictionary
-        facts = {
-            'virt.is_guest': True,
-            'dmi.system.uuid': 'EC2263F8-15F3-4A34-B186-FAD8AB963431'
-        }
+        facts = {'virt.is_guest': True, 'dmi.system.uuid': 'EC2263F8-15F3-4A34-B186-FAD8AB963431'}
         aws_detector = aws.AWSCloudProvider(facts)
         is_vm = aws_detector.is_vm()
         self.assertTrue(is_vm)
@@ -376,11 +366,19 @@ class TestAWSCloudProvider(unittest.TestCase):
         c_time = str(time.time())
         ttl = str(aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL)
         token = 'ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=='
-        valid_token = '{\
-  "ctime": "' + c_time + '",\
-  "ttl": "' + ttl + '",\
-  "token": "' + token + '"\
+        valid_token = (
+            '{\
+  "ctime": "'
+            + c_time
+            + '",\
+  "ttl": "'
+            + ttl
+            + '",\
+  "token": "'
+            + token
+            + '"\
 }'
+        )
         aws_collector = aws.AWSCloudProvider({})
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
@@ -400,11 +398,19 @@ class TestAWSCloudProvider(unittest.TestCase):
         c_time = str(time.time())
         ttl = str(aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL)
         token = 'ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=='
-        valid_token = '{[\
-  "ctime": "' + c_time + '",\
-  "ttl": "' + ttl + '",\
-  "token": "' + token + '"\
+        valid_token = (
+            '{[\
+  "ctime": "'
+            + c_time
+            + '",\
+  "ttl": "'
+            + ttl
+            + '",\
+  "token": "'
+            + token
+            + '"\
 }]'
+        )
         aws_collector = aws.AWSCloudProvider({})
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
@@ -424,11 +430,17 @@ class TestAWSCloudProvider(unittest.TestCase):
         ttl = str(aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL)
         token = 'ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=='
         # ctime has to be float (unix epoch)
-        valid_token = '{[\
+        valid_token = (
+            '{[\
   "ctime": "Wed Dec 16 16:31:36 CET 2020",\
-  "ttl": "' + ttl + '",\
-  "token": "' + token + '"\
+  "ttl": "'
+            + ttl
+            + '",\
+  "token": "'
+            + token
+            + '"\
 }]'
+        )
         aws_collector = aws.AWSCloudProvider({})
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
@@ -466,11 +478,17 @@ class TestAWSCloudProvider(unittest.TestCase):
         """
         c_time = str(time.time() - aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL - 10)
         ttl = str(aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL)
-        valid_token = '{\
-  "ctime": "' + c_time + '",\
-  "ttl": "' + ttl + '",\
+        valid_token = (
+            '{\
+  "ctime": "'
+            + c_time
+            + '",\
+  "ttl": "'
+            + ttl
+            + '",\
   "token": "ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=="\
 }'
+        )
         aws_collector = aws.AWSCloudProvider({})
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
@@ -617,10 +635,7 @@ class TestAzureCloudProvider(unittest.TestCase):
         Test for the case, when the machine is host (not virtual machine)
         """
         # We will mock facts using simple dictionary
-        facts = {
-            'virt.is_guest': False,
-            'dmi.bios.version': 'cool hardware company'
-        }
+        facts = {'virt.is_guest': False, 'dmi.bios.version': 'cool hardware company'}
         azure_detector = azure.AzureCloudProvider(facts)
         is_vm = azure_detector.is_vm()
         self.assertFalse(is_vm)
@@ -634,7 +649,7 @@ class TestAzureCloudProvider(unittest.TestCase):
             'virt.is_guest': True,
             'virt.host_type': 'hyperv',
             'dmi.bios.version': '090008',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77'
+            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
         }
         azure_detector = azure.AzureCloudProvider(facts)
         is_vm = azure_detector.is_vm()
@@ -651,7 +666,7 @@ class TestAzureCloudProvider(unittest.TestCase):
             'virt.is_guest': True,
             'virt.host_type': 'hyperv',
             'dmi.bios.version': '090008',
-            'dmi.bios.vendor': 'Foo'
+            'dmi.bios.vendor': 'Foo',
         }
         azure_detector = azure.AzureCloudProvider(facts)
         is_vm = azure_detector.is_vm()
@@ -689,10 +704,7 @@ class TestAzureCloudProvider(unittest.TestCase):
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
             url=f"http://169.254.169.254/metadata/instance?api-version={azure.AzureCloudProvider.API_VERSION}",
-            headers={
-                'User-Agent': 'cloud-what/1.0',
-                "Metadata": "true"
-            }
+            headers={'User-Agent': 'cloud-what/1.0', "Metadata": "true"},
         )
         mock_session.send.assert_called_once()
         self.assertEqual(metadata, AZURE_METADATA)
@@ -715,10 +727,7 @@ class TestAzureCloudProvider(unittest.TestCase):
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
             url="http://169.254.169.254/metadata/versions",
-            headers={
-                'User-Agent': 'cloud-what/1.0',
-                "Metadata": "true"
-            }
+            headers={'User-Agent': 'cloud-what/1.0', "Metadata": "true"},
         )
         mock_session.send.assert_called_once()
         self.assertEqual(api_versions, SUPPORTED_AZURE_VERSIONS)
@@ -741,10 +750,7 @@ class TestAzureCloudProvider(unittest.TestCase):
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
             url=f"http://169.254.169.254/metadata/attested/document?api-version={azure.AzureCloudProvider.API_VERSION}",
-            headers={
-                'User-Agent': 'cloud-what/1.0',
-                "Metadata": "true"
-            }
+            headers={'User-Agent': 'cloud-what/1.0', "Metadata": "true"},
         )
         mock_session.send.assert_called_once()
         self.assertEqual(signature, AZURE_SIGNATURE)
@@ -762,7 +768,9 @@ class TestAzureCloudProvider(unittest.TestCase):
         mock_result = Mock()
         if supported_api_version is False:
             mock_result.status_code = 400
-            mock_result.text = '{ "error": "Bad request. api-version is invalid or was not specified in the request." }'
+            mock_result.text = (
+                '{ "error": "Bad request. api-version is invalid or was not specified in the request." }'
+            )
         else:
             mock_result.status_code = 200
             if '/metadata/instance' in request.url:
@@ -779,6 +787,7 @@ class TestAzureCloudProvider(unittest.TestCase):
         """
         Test getting metadata from server using outdated API version that is not supported
         """
+
         def _mock_prepare_request(mock_request, *args, **kwargs):
             mock_prepared_request = Mock(spec=["method", "url", "headers"])
             mock_prepared_request.method = mock_request.method
@@ -802,13 +811,13 @@ class TestAzureCloudProvider(unittest.TestCase):
             call(
                 method='GET',
                 headers={'User-Agent': 'cloud-what/1.0', 'Metadata': 'true'},
-                url=f'http://169.254.169.254/metadata/instance?api-version={azure.AzureCloudProvider.API_VERSION}'
+                url=f'http://169.254.169.254/metadata/instance?api-version={azure.AzureCloudProvider.API_VERSION}',
             ),
             call(
                 method='GET',
                 headers={'User-Agent': 'cloud-what/1.0', 'Metadata': 'true'},
-                url=f'http://169.254.169.254/metadata/instance?api-version={SUPPORTED_AZURE_VERSIONS[-1]}'
-            )
+                url=f'http://169.254.169.254/metadata/instance?api-version={SUPPORTED_AZURE_VERSIONS[-1]}',
+            ),
         ]
         self.requests_mock.Request.assert_has_calls(calls=request_calls)
         self.assertEqual(mock_session.send.call_count, 2)
@@ -854,10 +863,7 @@ class TestGCPCloudProvider(unittest.TestCase):
         Test for the case, when the machine is host (not virtual machine)
         """
         # We will mock facts using simple dictionary
-        facts = {
-            'virt.is_guest': False,
-            'dmi.bios.version': 'cool hardware company'
-        }
+        facts = {'virt.is_guest': False, 'dmi.bios.version': 'cool hardware company'}
         gcp_detector = gcp.GCPCloudProvider(facts)
         is_vm = gcp_detector.is_vm()
         self.assertFalse(is_vm)
@@ -871,7 +877,7 @@ class TestGCPCloudProvider(unittest.TestCase):
             'virt.is_guest': True,
             'virt.host_type': 'kvm',
             'dmi.bios.version': 'Google',
-            'dmi.bios.vendor': 'Google'
+            'dmi.bios.vendor': 'Google',
         }
         gcp_detector = gcp.GCPCloudProvider(facts)
         is_vm = gcp_detector.is_vm()
@@ -888,7 +894,7 @@ class TestGCPCloudProvider(unittest.TestCase):
             'virt.is_guest': True,
             'virt.host_type': 'kvm',
             'dmi.bios.version': '1.0',
-            'dmi.bios.vendor': 'Foo'
+            'dmi.bios.vendor': 'Foo',
         }
         gcp_detector = gcp.GCPCloudProvider(facts)
         is_vm = gcp_detector.is_vm()
@@ -917,11 +923,8 @@ class TestGCPCloudProvider(unittest.TestCase):
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
             url='http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?'
-                'audience=https://subscription.rhsm.redhat.com:443/subscription&format=full',
-            headers={
-                'User-Agent': 'cloud-what/1.0',
-                'Metadata-Flavor': 'Google'
-            }
+            'audience=https://subscription.rhsm.redhat.com:443/subscription&format=full',
+            headers={'User-Agent': 'cloud-what/1.0', 'Metadata-Flavor': 'Google'},
         )
         self.assertEqual(token, GCP_JWT_TOKEN)
 
@@ -945,11 +948,8 @@ class TestGCPCloudProvider(unittest.TestCase):
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
             url='http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?'
-                'audience=https://example.com:8443/rhsm&format=full',
-            headers={
-                'User-Agent': 'cloud-what/1.0',
-                'Metadata-Flavor': 'Google'
-            }
+            'audience=https://example.com:8443/rhsm&format=full',
+            headers={'User-Agent': 'cloud-what/1.0', 'Metadata-Flavor': 'Google'},
         )
         mock_session.send.assert_called_once()
         self.assertEqual(token, GCP_JWT_TOKEN)
@@ -959,7 +959,9 @@ class TestGCPCloudProvider(unittest.TestCase):
         Test decoding of JWT token
         """
 
-        gcp_collector = gcp.GCPCloudProvider({}, audience_url="https://subscription.rhsm.redhat.com:443/subscription")
+        gcp_collector = gcp.GCPCloudProvider(
+            {}, audience_url="https://subscription.rhsm.redhat.com:443/subscription"
+        )
         jose_header_str, metadata_str, encoded_signature = gcp_collector.decode_jwt(GCP_JWT_TOKEN)
 
         self.assertIsNotNone(jose_header_str)
@@ -1011,6 +1013,7 @@ class TestCloudProvider(unittest.TestCase):
     """
     Class for testing cloud_what.utils module
     """
+
     def setUp(self):
         """
         Set up two mocks that are used in all tests
@@ -1053,11 +1056,7 @@ class TestCloudProvider(unittest.TestCase):
         """
         Test the case, when detecting of aws works as expected
         """
-        host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.vendor': 'Amazon EC2'
-        }
+        host_facts = {'virt.is_guest': True, 'virt.host_type': 'kvm', 'dmi.bios.vendor': 'Amazon EC2'}
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
         self.assertEqual(detected_clouds, ['aws'])
@@ -1072,7 +1071,7 @@ class TestCloudProvider(unittest.TestCase):
             'virt.host_type': 'kvm',
             'dmi.bios.vendor': 'AWS',
             'dmi.bios.version': '1.0',
-            'dmi.system.manufacturer': 'Amazon'
+            'dmi.system.manufacturer': 'Amazon',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider(methods=DetectionMethod.STRONG)
@@ -1086,7 +1085,7 @@ class TestCloudProvider(unittest.TestCase):
         host_facts = {
             'virt.is_guest': True,
             'virt.host_type': 'kvm',
-            'dmi.bios.vendor': 'Amazon EC2'
+            'dmi.bios.vendor': 'Amazon EC2',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         # Following custom facts should override host_facts
@@ -1094,7 +1093,7 @@ class TestCloudProvider(unittest.TestCase):
             'virt.is_guest': True,
             'virt.host_type': 'hyperv',
             'dmi.bios.vendor': 'Microsoft',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77'
+            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
         }
         self.custom_facts_collector_instance.get_all.return_value = custom_facts
         detected_clouds = detect_cloud_provider()
@@ -1110,7 +1109,7 @@ class TestCloudProvider(unittest.TestCase):
             'virt.host_type': 'kvm',
             'dmi.bios.vendor': 'AWS',
             'dmi.bios.version': '1.0',
-            'dmi.system.manufacturer': 'Amazon'
+            'dmi.system.manufacturer': 'Amazon',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
@@ -1124,7 +1123,7 @@ class TestCloudProvider(unittest.TestCase):
             'virt.is_guest': True,
             'virt.host_type': 'kvm',
             'dmi.bios.vendor': 'Google',
-            'dmi.bios.version': 'Google'
+            'dmi.bios.version': 'Google',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
@@ -1155,7 +1154,7 @@ class TestCloudProvider(unittest.TestCase):
             'virt.host_type': 'hyperv',
             'dmi.bios.vendor': 'Microsoft',
             'dmi.bios.version': '1.0',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77'
+            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
@@ -1171,7 +1170,7 @@ class TestCloudProvider(unittest.TestCase):
             'virt.host_type': 'hyperv',
             'dmi.bios.vendor': 'Microsoft',
             'dmi.bios.version': '1.0',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77'
+            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
@@ -1202,7 +1201,7 @@ class TestCloudProvider(unittest.TestCase):
             'dmi.bios.vendor': 'Microsoft',
             'dmi.bios.version': '1.0',
             'dmi.system.manufacturer': 'Google',
-            'dmi.chassis.manufacturer': 'Amazon'
+            'dmi.chassis.manufacturer': 'Amazon',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
@@ -1220,7 +1219,7 @@ class TestCloudProvider(unittest.TestCase):
             'dmi.bios.vendor': 'Microsoft',
             'dmi.bios.version': '1.0',
             'dmi.system.manufacturer': 'Google',
-            'dmi.chassis.manufacturer': 'Amazon'
+            'dmi.chassis.manufacturer': 'Amazon',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
@@ -1241,7 +1240,7 @@ class TestCloudProvider(unittest.TestCase):
             'dmi.bios.vendor': 'Google',
             'dmi.bios.version': 'Amazon EC2',
             'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
-            'dmi.chassis.manufacturer': 'Microsoft'
+            'dmi.chassis.manufacturer': 'Microsoft',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
@@ -1263,7 +1262,7 @@ class TestCloudProvider(unittest.TestCase):
             'dmi.bios.vendor': 'Google',
             'dmi.bios.version': 'Amazon EC2',
             'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
-            'dmi.chassis.manufacturer': 'Microsoft'
+            'dmi.chassis.manufacturer': 'Microsoft',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
@@ -1307,7 +1306,7 @@ class TestCloudProvider(unittest.TestCase):
             'virt.host_type': 'hyperv',
             'dmi.bios.vendor': 'Microsoft',
             'dmi.bios.version': '1.0',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77'
+            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         cloud_provider = get_cloud_provider()

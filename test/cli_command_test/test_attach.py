@@ -16,16 +16,18 @@ class TestAttachCommand(TestCliProxyCommand):
     @classmethod
     def setUpClass(cls):
         # Create temp file(s) for processing pool IDs
-        cls.tempfiles = [
-            tempfile.mkstemp(),
-            tempfile.mkstemp(),
-            tempfile.mkstemp()
-        ]
+        cls.tempfiles = [tempfile.mkstemp(), tempfile.mkstemp(), tempfile.mkstemp()]
 
-        os.write(cls.tempfiles[0][0], "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode('utf-8'))
+        os.write(
+            cls.tempfiles[0][0],
+            "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode('utf-8'),
+        )
         os.close(cls.tempfiles[0][0])
 
-        os.write(cls.tempfiles[1][0], "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode('utf-8'))
+        os.write(
+            cls.tempfiles[1][0],
+            "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode('utf-8'),
+        )
         os.close(cls.tempfiles[1][0])
 
         # The third temp file syspurposeionally left empty for testing empty sets of data.
@@ -146,7 +148,9 @@ class TestAttachCommand(TestCliProxyCommand):
 
     def test_pool_stdin_processing(self):
         with self.mock_stdin(open(self.tempfiles[1][1])):
-            self._test_pool_file_processing('-', ["pool1", "pool2", "pool3", "pool4", "pool5", "pool6", "pool7", "pool8"])
+            self._test_pool_file_processing(
+                '-', ["pool1", "pool2", "pool3", "pool4", "pool5", "pool6", "pool7", "pool8"]
+            )
 
     def test_pool_stdin_empty(self):
         try:
@@ -160,7 +164,9 @@ class TestAttachCommand(TestCliProxyCommand):
             self.fail("No Exception Raised")
 
     def test_pool_file_processing(self):
-        self._test_pool_file_processing(self.tempfiles[0][1], ["pool1", "pool2", "pool3", "pool4", "pool5", "pool6", "pool7", "pool8"])
+        self._test_pool_file_processing(
+            self.tempfiles[0][1], ["pool1", "pool2", "pool3", "pool4", "pool5", "pool6", "pool7", "pool8"]
+        )
 
     def test_pool_file_empty(self):
         try:

@@ -60,6 +60,7 @@ dealing with all of the remote sections.
 
 class RefspecFormatException(Exception):
     """A ostree refspec value was not in the expected format."""
+
     pass
 
 
@@ -111,8 +112,7 @@ class KeyFileConfigParser(RhsmConfigParser):
         # create /ostree/repo/config if /ostree/repo exists
         dir_name = os.path.dirname(self.config_file)
         if not os.path.exists(dir_name):
-            log.warn("%s does not exist, so unable to save %s",
-                     dir_name, self.config_file)
+            log.warn("%s does not exist, so unable to save %s", dir_name, self.config_file)
             return
 
         super(KeyFileConfigParser, self).save()
@@ -138,6 +138,7 @@ class RepoFile(BaseOstreeConfigFile):
     Knows how to get the list of 'remote' sections, and how to determine
     if a config parser section is a remote.
     """
+
     config_parser_class = KeyFileConfigParser
 
     def remote_sections(self):

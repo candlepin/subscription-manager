@@ -32,7 +32,7 @@ log = logging.getLogger(__name__)
 # Instance from one region will be redirected to another region's CDS for content
 REDIRECT_MAP = {
     'us-gov-west-1': 'us-west-2',
-    'us-gov-east-1': 'us-east-2'
+    'us-gov-east-1': 'us-east-2',
 }
 
 
@@ -58,7 +58,7 @@ class AWSCloudProvider(BaseCloudProvider):
     TOKEN_CACHE_FILE = "/var/cache/cloud-what/aws_token.json"
 
     HTTP_HEADERS = {
-        'User-Agent': 'cloud-what/1.0'
+        'User-Agent': 'cloud-what/1.0',
     }
 
     def __init__(self, hw_info):
@@ -149,9 +149,7 @@ class AWSCloudProvider(BaseCloudProvider):
             region = REDIRECT_MAP[region]
 
         if repo.baseurl:
-            repo.baseurl = tuple(
-                url.replace('REGION', region, 1) for url in repo.baseurl
-            )
+            repo.baseurl = tuple(url.replace('REGION', region, 1) for url in repo.baseurl)
         elif repo.mirrorlist:
             repo.mirrorlist = repo.mirrorlist.replace('REGION', region, 1)
         else:
@@ -192,7 +190,7 @@ class AWSCloudProvider(BaseCloudProvider):
 
         headers = {
             'X-aws-ec2-metadata-token-ttl-seconds': str(self.CLOUD_PROVIDER_TOKEN_TTL),
-            **self.HTTP_HEADERS
+            **self.HTTP_HEADERS,
         }
 
         http_req = requests.Request(method='PUT', url=self.CLOUD_PROVIDER_TOKEN_URL, headers=headers)
@@ -249,7 +247,7 @@ class AWSCloudProvider(BaseCloudProvider):
 
         self._cached_metadata = self._get_data_from_server(
             data_type='metadata',
-            url=self.CLOUD_PROVIDER_METADATA_URL
+            url=self.CLOUD_PROVIDER_METADATA_URL,
         )
         if self._cached_metadata is not None:
             self._cached_metadata_ctime = time.time()
@@ -268,13 +266,13 @@ class AWSCloudProvider(BaseCloudProvider):
 
         headers = {
             'X-aws-ec2-metadata-token': token,
-            **self.HTTP_HEADERS
+            **self.HTTP_HEADERS,
         }
 
         self._cached_metadata = self._get_data_from_server(
             data_type='metadata',
             url=self.CLOUD_PROVIDER_METADATA_URL,
-            headers=headers
+            headers=headers,
         )
 
         if self._cached_metadata is not None:
@@ -317,10 +315,7 @@ class AWSCloudProvider(BaseCloudProvider):
         """
         log.debug(f'Trying to get AWS signature from {self.CLOUD_PROVIDER_SIGNATURE_URL} using IMDSv1')
 
-        return self._get_data_from_server(
-            data_type='signature',
-            url=self.CLOUD_PROVIDER_SIGNATURE_URL
-        )
+        return self._get_data_from_server(data_type='signature', url=self.CLOUD_PROVIDER_SIGNATURE_URL)
 
     def _get_signature_from_server_imds_v2(self) -> Union[str, None]:
         """
@@ -333,15 +328,10 @@ class AWSCloudProvider(BaseCloudProvider):
         if token is None:
             return None
 
-        headers = {
-            'X-aws-ec2-metadata-token': token,
-            **self.HTTP_HEADERS
-        }
+        headers = {'X-aws-ec2-metadata-token': token, **self.HTTP_HEADERS}
 
         return self._get_data_from_server(
-            data_type='signature',
-            url=self.CLOUD_PROVIDER_SIGNATURE_URL,
-            headers=headers
+            data_type='signature', url=self.CLOUD_PROVIDER_SIGNATURE_URL, headers=headers
         )
 
     def _get_signature_from_server(self) -> Union[str, None]:

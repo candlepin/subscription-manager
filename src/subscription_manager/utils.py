@@ -41,8 +41,14 @@ from rhsm.connection import ProxyException
 
 import subscription_manager.version
 from rhsm.connection import RestlibException, GoneException
-from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
-    DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
+from rhsm.config import (
+    DEFAULT_PORT,
+    DEFAULT_PREFIX,
+    DEFAULT_HOSTNAME,
+    DEFAULT_CDN_HOSTNAME,
+    DEFAULT_CDN_PORT,
+    DEFAULT_CDN_PREFIX,
+)
 
 from subscription_manager.i18n import ugettext as _
 
@@ -71,17 +77,21 @@ def parse_server_info(local_server_entry, config=None):
         hostname = config["server"]["hostname"]
         port = config["server"]["port"]
         prefix = config["server"]["prefix"]
-    return parse_url(local_server_entry,
-                     hostname or DEFAULT_HOSTNAME,
-                     port or DEFAULT_PORT,
-                     prefix or DEFAULT_PREFIX)[2:]
+    return parse_url(
+        local_server_entry,
+        hostname or DEFAULT_HOSTNAME,
+        port or DEFAULT_PORT,
+        prefix or DEFAULT_PREFIX,
+    )[2:]
 
 
 def parse_baseurl_info(local_server_entry):
-    return parse_url(local_server_entry,
-                     DEFAULT_CDN_HOSTNAME,
-                     DEFAULT_CDN_PORT,
-                     DEFAULT_CDN_PREFIX)[2:]
+    return parse_url(
+        local_server_entry,
+        DEFAULT_CDN_HOSTNAME,
+        DEFAULT_CDN_PORT,
+        DEFAULT_CDN_PREFIX,
+    )[2:]
 
 
 def format_baseurl(hostname, port, prefix):
@@ -97,12 +107,9 @@ def format_baseurl(hostname, port, prefix):
     # just so we match how we format this by
     # default
     if port == DEFAULT_CDN_PORT:
-        return "https://%s%s" % (hostname,
-                                 prefix)
+        return "https://%s%s" % (hostname, prefix)
 
-    return "https://%s:%s%s" % (hostname,
-                                port,
-                                prefix)
+    return "https://%s:%s%s" % (hostname, port, prefix)
 
 
 def url_base_join(base, url):
@@ -118,9 +125,9 @@ def url_base_join(base, url):
     elif '://' in url:
         return url
     else:
-        if (base and (not base.endswith('/'))):
+        if base and (not base.endswith('/')):
             base = base + '/'
-        if (url and (url.startswith('/'))):
+        if url and (url.startswith('/')):
             url = url.lstrip('/')
         return urllib.parse.urljoin(base, url)
 
@@ -277,8 +284,9 @@ def get_server_versions(cp, exception_on_timeout=False):
             supported_resources = get_supported_resources()
             if "status" in supported_resources:
                 status = cp.getStatus()
-                cp_version = '-'.join([status.get('version', _("Unknown")),
-                                       status.get('release', _("Unknown"))])
+                cp_version = '-'.join(
+                    [status.get('version', _("Unknown")), status.get('release', _("Unknown"))]
+                )
                 rules_version = status.get('rulesVersion', _("Unknown"))
         except socket.timeout as e:
             log.error("Timeout error while checking server version")
@@ -300,9 +308,7 @@ def get_server_versions(cp, exception_on_timeout=False):
             log.exception(e)
             cp_version = _("Unknown")
 
-    return {"candlepin": cp_version,
-            "server-type": server_type,
-            "rules-version": rules_version}
+    return {"candlepin": cp_version, "server-type": server_type, "rules-version": rules_version}
 
 
 def restart_virt_who():
@@ -466,7 +472,9 @@ class ProductCertificateFilter(CertificateFilter):
         if self._fs_regex is not None:
             # Perhaps we should be validating our input object here...?
             for product in cert.products:
-                if (product.name and self._fs_regex.match(product.name) is not None) or (product.id and self._fs_regex.match(product.id) is not None):
+                if (product.name and self._fs_regex.match(product.name) is not None) or (
+                    product.id and self._fs_regex.match(product.id) is not None
+                ):
                     return True
 
         return False
@@ -517,16 +525,15 @@ class EntitlementCertificateFilter(ProductCertificateFilter):
         cert_service_level = ""  # No service level should match "".
         if cert.order and cert.order.service_level:
             cert_service_level = cert.order.service_level
-        sl_check = self._sl_filter is None or \
-            cert_service_level.lower() == self._sl_filter.lower()
+        sl_check = self._sl_filter is None or cert_service_level.lower() == self._sl_filter.lower()
 
         # Check filter string (contains-text)
         fs_check = self._fs_regex is None or (
-            super(EntitlementCertificateFilter, self).match(cert) or
-            (cert.order.name and self._fs_regex.match(cert.order.name) is not None) or
-            (cert.order.sku and self._fs_regex.match(cert.order.sku) is not None) or
-            (cert.order.service_level and self._fs_regex.match(cert.order.service_level) is not None) or
-            (cert.order.contract and self._fs_regex.match(cert.order.contract) is not None)
+            super(EntitlementCertificateFilter, self).match(cert)
+            or (cert.order.name and self._fs_regex.match(cert.order.name) is not None)
+            or (cert.order.sku and self._fs_regex.match(cert.order.sku) is not None)
+            or (cert.order.service_level and self._fs_regex.match(cert.order.service_level) is not None)
+            or (cert.order.contract and self._fs_regex.match(cert.order.contract) is not None)
         )
 
         return sl_check and fs_check and (self._sl_filter is not None or self._fs_regex is not None)
@@ -582,12 +589,16 @@ def get_process_names():
                 # Sometimes when processes are killed after we have listed the
                 # /proc dir content we can end up trying to open a file which no
                 # longer exists.
-                log.debug("A process has likely ended before it's status could be read for"
-                          " {subdir} : {ex}".format(subdir=subdir, ex=e))
+                log.debug(
+                    "A process has likely ended before it's status could be read for"
+                    " {subdir} : {ex}".format(subdir=subdir, ex=e)
+                )
                 continue
             except Exception as e:
-                log.debug("Unexpected exception while trying to read process names from /proc for"
-                          " {subdir} : {ex}".format(subdir=subdir, ex=e))
+                log.debug(
+                    "Unexpected exception while trying to read process names from /proc for"
+                    " {subdir} : {ex}".format(subdir=subdir, ex=e)
+                )
                 continue
             finally:
                 if status_file is not None:
