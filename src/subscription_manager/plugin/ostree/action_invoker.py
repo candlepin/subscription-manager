@@ -134,7 +134,7 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
         s = []
         for remote in remotes:
             s.append(remote.report())
-        return '\n'.join(s)
+        return "\n".join(s)
 
     def __str__(self):
         s = ["Ostree repo updates\n"]
@@ -144,4 +144,4 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
         s.append(self._format_remotes(self.remote_added))
         s.append(_("Deleted:"))
         s.append(self._format_remotes(self.remote_deleted))
-        return '\n'.join(s)
+        return "\n".join(s)

@@ -17,8 +17,8 @@ import zlib
 
 from rhsm.bitstream import GhettoBitStream
 
-DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'entitlement_data.bin')
-entitlement_data = open(DATA, 'rb').read()
+DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "entitlement_data.bin")
+entitlement_data = open(DATA, "rb").read()
 decompresser = zlib.decompressobj()
 decompresser.decompress(entitlement_data)
 tree_data = decompresser.unused_data
@@ -57,15 +57,15 @@ class TestGhettoBitStream(unittest.TestCase):
 
     def test_byte_to_bits(self):
         # just spot-checking
-        self.assertEqual(self.bs._byte_to_bits(0), '00000000')
-        self.assertEqual(self.bs._byte_to_bits(6), '00000110')
-        self.assertEqual(self.bs._byte_to_bits(213), '11010101')
+        self.assertEqual(self.bs._byte_to_bits(0), "00000000")
+        self.assertEqual(self.bs._byte_to_bits(6), "00000110")
+        self.assertEqual(self.bs._byte_to_bits(213), "11010101")
 
     def test_bin_backport(self):
         # just spot-checking
-        self.assertEqual(self.bs._bin_backport(0), '00000000')
-        self.assertEqual(self.bs._bin_backport(6), '00000110')
-        self.assertEqual(self.bs._bin_backport(213), '11010101')
+        self.assertEqual(self.bs._bin_backport(0), "00000000")
+        self.assertEqual(self.bs._bin_backport(6), "00000110")
+        self.assertEqual(self.bs._bin_backport(213), "11010101")
 
     def test_combine_bytes(self):
         # just spot-checking

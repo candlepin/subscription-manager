@@ -19,51 +19,51 @@ from rhsmlib.facts import virt, firmware_info
 
 
 class VirtCollectorTest(test.fixture.SubManFixture):
-    @patch('subprocess.Popen')
+    @patch("subprocess.Popen")
     def test_virt_bare_metal(self, MockPopen):
         mock_process = MagicMock()
-        mock_process.communicate.return_value = [b'', None]
+        mock_process.communicate.return_value = [b"", None]
         mock_process.poll.return_value = 0
         mock_process.__enter__.return_value = mock_process
         MockPopen.return_value = mock_process
         hw = virt.VirtCollector()
-        expected = {'virt.is_guest': False, 'virt.host_type': 'Not Applicable'}
+        expected = {"virt.is_guest": False, "virt.host_type": "Not Applicable"}
         self.assertEqual(expected, hw.get_all())
 
-    @patch('subprocess.Popen')
+    @patch("subprocess.Popen")
     def test_virt_error(self, MockPopen):
         mock_process = MagicMock()
-        mock_process.communicate.return_value = [b'', None]
+        mock_process.communicate.return_value = [b"", None]
         mock_process.poll.return_value = 255
         mock_process.__enter__.return_value = mock_process
         MockPopen.return_value = mock_process
 
         hw = virt.VirtWhatCollector()
-        expected = {'virt.is_guest': 'Unknown'}
+        expected = {"virt.is_guest": "Unknown"}
         self.assertEqual(expected, hw.get_virt_info())
 
-    @patch('subprocess.Popen')
+    @patch("subprocess.Popen")
     def test_command_valid(self, MockPopen):
         mock_process = MagicMock()
-        mock_process.communicate.return_value = [b'this is valid', None]
+        mock_process.communicate.return_value = [b"this is valid", None]
         mock_process.poll.return_value = 0
         mock_process.__enter__.return_value = mock_process
         MockPopen.return_value = mock_process
 
         # Pick up the mocked class
-        hw = virt.VirtCollector(testing='testing')
-        self.assertEqual('this is valid', hw.get_all()['virt.host_type'])
+        hw = virt.VirtCollector(testing="testing")
+        self.assertEqual("this is valid", hw.get_all()["virt.host_type"])
 
-    @patch('subprocess.Popen')
+    @patch("subprocess.Popen")
     def test_virt_guest(self, MockPopen):
         mock_process = MagicMock()
-        mock_process.communicate.return_value = [b'kvm', None]
+        mock_process.communicate.return_value = [b"kvm", None]
         mock_process.poll.return_value = 0
         mock_process.__enter__.return_value = mock_process
         MockPopen.return_value = mock_process
 
         hw = virt.VirtCollector()
-        expected = {'virt.is_guest': True, 'virt.host_type': 'kvm'}
+        expected = {"virt.is_guest": True, "virt.host_type": "kvm"}
         self.assertEqual(expected, hw.get_all())
 
     @patch("rhsmlib.facts.collector.get_arch")
@@ -76,44 +76,44 @@ class VirtUuidCollectorTest(unittest.TestCase):
     @patch("os.path.isfile")
     def test_strips_null_byte_on_uuid_vm_uuid(self, mock_isfile):
         def is_uuid_file(path):
-            return path.endswith('/vm,uuid')
+            return path.endswith("/vm,uuid")
 
         mock_isfile.side_effect = is_uuid_file
         with test.fixture.open_mock(content="123\0"):
-            collector = virt.VirtUuidCollector(arch='ppc64')
+            collector = virt.VirtUuidCollector(arch="ppc64")
             uuid = collector._get_devicetree_uuid()
-            self.assertEqual('123', uuid)
+            self.assertEqual("123", uuid)
 
     @patch("os.path.isfile")
     def test_strips_null_byte_on_uuid_ibm_partition_uuid(self, mock_isfile):
         def is_uuid_file(path):
-            return path.endswith('/ibm,partition-uuid')
+            return path.endswith("/ibm,partition-uuid")
 
         mock_isfile.side_effect = is_uuid_file
         with test.fixture.open_mock(content="123\0"):
-            collector = virt.VirtUuidCollector(arch='ppc64')
+            collector = virt.VirtUuidCollector(arch="ppc64")
             uuid = collector._get_devicetree_uuid()
-            self.assertEqual('123', uuid)
+            self.assertEqual("123", uuid)
 
     def test_default_virt_uuid_physical(self):
         """Check that physical systems dont set an 'Unknown' virt.uuid."""
-        collected = {'virt.host_type': 'Not Applicable', 'virt.is_guest': False}
+        collected = {"virt.host_type": "Not Applicable", "virt.is_guest": False}
         result = virt.VirtUuidCollector(collected_hw_info=collected).get_all()
-        self.assertFalse('virt.uuid' in result)
+        self.assertFalse("virt.uuid" in result)
 
     def test_default_virt_uuid_guest_no_uuid(self):
         """Check that virt guest systems dont set an 'Unknown' virt.uuid if not found."""
-        collected = {'virt.host_type': 'kvm', 'virt.is_guest': True}
+        collected = {"virt.host_type": "kvm", "virt.is_guest": True}
         result = virt.VirtUuidCollector(collected_hw_info=collected).get_all()
-        self.assertFalse('virt.uuid' in result)
+        self.assertFalse("virt.uuid" in result)
 
     def test_default_virt_uuid_guest_with_uuid(self):
         """Check that virt guest systems don't set an 'Unknown' virt.uuid if virt.uuid is found."""
         collected = {
-            'dmi.system.uuid': 'this-is-a-weird-uuid',
-            'virt.host_type': 'kvm',
-            'virt.is_guest': True,
+            "dmi.system.uuid": "this-is-a-weird-uuid",
+            "virt.host_type": "kvm",
+            "virt.is_guest": True,
         }
         result = virt.VirtUuidCollector(collected_hw_info=collected).get_all()
-        self.assertTrue('virt.uuid' in result)
-        self.assertEqual(collected['dmi.system.uuid'], result['virt.uuid'])
+        self.assertTrue("virt.uuid" in result)
+        self.assertEqual(collected["dmi.system.uuid"], result["virt.uuid"])

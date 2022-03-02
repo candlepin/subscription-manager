@@ -36,7 +36,7 @@ class MiniHostCollector(object):
     Minimalistic collector of host facts
     """
 
-    VIRT_WHAT_PATH = '/usr/sbin/virt-what'
+    VIRT_WHAT_PATH = "/usr/sbin/virt-what"
 
     def get_virt_what(self) -> dict:
         """
@@ -45,41 +45,41 @@ class MiniHostCollector(object):
         """
 
         if os.path.isfile(self.VIRT_WHAT_PATH) is False:
-            log.error(f'The {self.VIRT_WHAT_PATH} does not exists')
+            log.error(f"The {self.VIRT_WHAT_PATH} does not exists")
             return {}
 
         try:
             output = subprocess.check_output(self.VIRT_WHAT_PATH)
         except Exception as err:
-            log.error(f'Failed to call {self.VIRT_WHAT_PATH}: {err}')
+            log.error(f"Failed to call {self.VIRT_WHAT_PATH}: {err}")
             return {}
 
         if isinstance(output, bytes):
-            output = output.decode('utf-8')
+            output = output.decode("utf-8")
 
         virt_dict = {}
 
         host_type = ", ".join(output.splitlines())
 
         # If this is blank, then system is not a guest
-        virt_dict['virt.is_guest'] = bool(host_type)
+        virt_dict["virt.is_guest"] = bool(host_type)
 
-        if virt_dict['virt.is_guest'] is True:
-            virt_dict['virt.host_type'] = host_type
+        if virt_dict["virt.is_guest"] is True:
+            virt_dict["virt.host_type"] = host_type
         else:
-            virt_dict['virt.host_type'] = "Not Applicable"
+            virt_dict["virt.host_type"] = "Not Applicable"
 
         return virt_dict
 
     def _get_dmi_data(self, func_output, tag, dmi_info):
         for key, value in func_output.items():
-            for key1, value1 in list(value['data'].items()):
+            for key1, value1 in list(value["data"].items()):
                 # Skip everything that isn't string
                 if not isinstance(value1, str) and not isinstance(value1, bytes):
                     continue
 
-                nkey = ''.join([tag, key1.lower()]).replace(" ", "_")
-                dmi_info[nkey] = str(value1, 'utf-8')
+                nkey = "".join([tag, key1.lower()]).replace(" ", "_")
+                dmi_info[nkey] = str(value1, "utf-8")
 
         return dmi_info
 
@@ -89,7 +89,7 @@ class MiniHostCollector(object):
         :return: Dictionary with facts
         """
         if dmidecode is None:
-            log.error('The dmidecode module is not installed. Unable to detect public cloud providers.')
+            log.error("The dmidecode module is not installed. Unable to detect public cloud providers.")
             return {}
 
         dmi_data = {
@@ -108,7 +108,7 @@ class MiniHostCollector(object):
             try:
                 func_output = func()
             except Exception as err:
-                log.error(f'Unable to read system DMI information {func}: {err}')
+                log.error(f"Unable to read system DMI information {func}: {err}")
             else:
                 dmi_info = self._get_dmi_data(func_output, key, dmi_info)
         return dmi_info
@@ -128,7 +128,7 @@ class MiniCustomFactsCollector(object):
 
 # Some temporary smoke testing code. You can test this module using:
 # sudo PYTHONPATH=./src python3 -m cloud_what.fact_collector
-if __name__ == '__main__':
+if __name__ == "__main__":
     import sys
 
     root = logging.getLogger()
@@ -136,10 +136,10 @@ if __name__ == '__main__':
 
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     handler.setFormatter(formatter)
     root.addHandler(handler)
 
     collector = MiniHostCollector()
     facts = collector.get_all()
-    print(f'>>> debug <<<< {facts}')
+    print(f">>> debug <<<< {facts}")

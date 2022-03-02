@@ -16,7 +16,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
     command_class = managercli.ServiceLevelCommand
 
     def setUp(self):
-        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        syspurpose_patch = patch("syspurpose.files.SyncedStore")
         sp_patch = syspurpose_patch.start()
         self.addCleanup(sp_patch.stop)
         TestCliProxyCommand.setUp(self)
@@ -28,7 +28,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         self.syspurposelib = syspurposelib
         self.syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
 
-        syspurpose_patch = patch('subscription_manager.cli_command.abstract_syspurpose.SyncedStore')
+        syspurpose_patch = patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)
@@ -67,19 +67,19 @@ class TestServiceLevelCommand(TestCliProxyCommand):
 
     def test_list_with_one_org_no_prompt(self):
         owner_list = self.cc.cp.getOwnerList
-        self.cc.cp.getOwnerList = Mock(return_value='test_org')
+        self.cc.cp.getOwnerList = Mock(return_value="test_org")
         self.cc.main(["--list"])
         self.cc.cp.getOwnerList = owner_list
 
     def test_service_level_supported(self):
-        self.cc.cp.setConsumer({'serviceLevel': 'Jarjar'})
-        self.cc._set('JRJAR')
+        self.cc.cp.setConsumer({"serviceLevel": "Jarjar"})
+        self.cc._set("JRJAR")
 
     @patch("subscription_manager.cli_command.service_level.SyncedStore")
     def test_service_level_set_creates_syspurpose_dir_and_file(self, mock_syspurpose):
         # create a mock /etc/rhsm/ directory, and set the value of a mock USER_SYSPURPOSE under that
         old_capabilities = self.cc.cp._capabilities
-        self.cc.cp._capabilities = ['syspurpose']
+        self.cc.cp._capabilities = ["syspurpose"]
         self.cc.store = self.mock_sp_store()
         self.cc.store.get_cached_contents = Mock(return_value={})
 
@@ -94,7 +94,7 @@ class TestServiceLevelCommand(TestCliProxyCommand):
 
         self.cc.store = self.mock_sp_store()
         self.cc.options = Mock()
-        self.cc.options.set = 'JRJAR'
+        self.cc.options.set = "JRJAR"
         self.cc.set()
 
         self.cc.store.set.assert_has_calls([call("service_level_agreement", "JRJAR")])
@@ -106,13 +106,13 @@ class TestServiceLevelCommand(TestCliProxyCommand):
 
     def test_old_service_level(self):
         self.cc.options = Mock()
-        self.cc.cp.getConsumer = Mock(return_value={'serviceLevel': 'foo'})
-        self.cc.options.set = 'JRJAR'
+        self.cc.cp.getConsumer = Mock(return_value={"serviceLevel": "foo"})
+        self.cc.options.set = "JRJAR"
         self.cc.cp.updateConsumer = Mock()
         # 'syspurpose' is not in capabilities of server
         self.cc.set()
         self.cc.cp.updateConsumer.assert_has_calls(
-            [call('fixture_identity_mock_uuid', service_level='JRJAR')]
+            [call("fixture_identity_mock_uuid", service_level="JRJAR")]
         )
 
     def test_username_on_registered_system(self):

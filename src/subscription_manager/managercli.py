@@ -88,7 +88,7 @@ class ManagerCLI(CLI):
         # Try to enable all yum plugins (subscription-manager and plugin-id)
         enabled_yum_plugins = YumPluginManager.enable_pkg_plugins()
         if len(enabled_yum_plugins) > 0:
-            print('\n' + _('WARNING') + '\n\n' + YumPluginManager.warning_message(enabled_yum_plugins) + '\n')
+            print("\n" + _("WARNING") + "\n\n" + YumPluginManager.warning_message(enabled_yum_plugins) + "\n")
         # Try to flush all outputs, see BZ: 1350402
         try:
             sys.stdout.flush()

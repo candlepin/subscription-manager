@@ -47,8 +47,8 @@ def request_injection(func):
 from .repos import disable_yum_repositories, enable_yum_repositories  # noqa: E402
 
 __all__ = [
-    'request_injection',
-    'disable_yum_repositories',
-    'enable_yum_repositories',
-    'version',
+    "request_injection",
+    "disable_yum_repositories",
+    "enable_yum_repositories",
+    "version",
 ]

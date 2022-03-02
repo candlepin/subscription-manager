@@ -17,10 +17,10 @@ class TestEnvironmentsCommand(TestCliProxyCommand):
     def test_library_no_longer_filtered(self):
         self.cc.cp = StubUEP()
         environments = []
-        environments.append({'name': 'JarJar'})
-        environments.append({'name': 'Library'})
-        environments.append({'name': 'library'})
-        environments.append({'name': 'Binks'})
+        environments.append({"name": "JarJar"})
+        environments.append({"name": "Library"})
+        environments.append({"name": "library"})
+        environments.append({"name": "Binks"})
         self.cc.cp.setEnvironmentList(environments)
         results = self.cc._get_environments("Anikan")
         self.assertTrue(len(results) == 4)

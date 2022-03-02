@@ -38,15 +38,15 @@ PARTIALLY_SUBSCRIBED = "partially_subscribed"
 # Warning: Do not change following strings, because these strings
 # are in D-Bus API. The API is used by other applications (Anaconda,
 # Cockpit, GNOME, ...)
-VALID = 'valid'
-INVALID = 'invalid'
-PARTIAL = 'partial'
-DISABLED = 'disabled'
+VALID = "valid"
+INVALID = "invalid"
+PARTIAL = "partial"
+DISABLED = "disabled"
 UNKNOWN = "unknown"
 
 
-SOCKET_FACT = 'cpu.cpu_socket(s)'
-RAM_FACT = 'memory.memtotal'
+SOCKET_FACT = "cpu.cpu_socket(s)"
+RAM_FACT = "memory.memtotal"
 
 RHSM_VALID = 0
 RHSM_EXPIRED = 1
@@ -149,20 +149,20 @@ class ComplianceManager(object):
         # TODO: we're now mapping product IDs to entitlement cert JSON,
         # previously we mapped to actual entitlement cert objects. However,
         # nothing seems to actually use these, so it may not matter for now.
-        self.valid_products = status['compliantProducts']
+        self.valid_products = status["compliantProducts"]
 
-        self.partially_valid_products = status['partiallyCompliantProducts']
+        self.partially_valid_products = status["partiallyCompliantProducts"]
 
-        self.partial_stacks = status['partialStacks']
+        self.partial_stacks = status["partialStacks"]
 
-        if 'reasons' in status:
+        if "reasons" in status:
             self.supports_reasons = True
-            self.reasons = Reasons(status['reasons'], self)
+            self.reasons = Reasons(status["reasons"], self)
 
-        if 'status' in status and len(status['status']):
-            self.system_status = status['status']
+        if "status" in status and len(status["status"]):
+            self.system_status = status["status"]
         # Some old candlepin versions do not return 'status' with information
-        elif status['nonCompliantProducts']:
+        elif status["nonCompliantProducts"]:
             self.system_status = INVALID
         elif self.partially_valid_products or self.partial_stacks or self.reasons.reasons:
             self.system_status = PARTIAL
@@ -176,12 +176,12 @@ class ComplianceManager(object):
         # invalid from midnight to midnight.
         self.compliant_until = None
 
-        if status['compliantUntil'] is not None:
-            self.compliant_until = parse_date(status['compliantUntil'])
+        if status["compliantUntil"] is not None:
+            self.compliant_until = parse_date(status["compliantUntil"])
 
         # Lookup product certs for each unentitled product returned by
         # the server:
-        unentitled_pids = status['nonCompliantProducts']
+        unentitled_pids = status["nonCompliantProducts"]
         # Add in any installed products not in the server response. This
         # could happen if something changes before the certd runs. Log
         # a warning if it does, and treat it like an unentitled product.
@@ -276,11 +276,11 @@ class ComplianceManager(object):
         # when function is called (not during start of application) due to
         # rhsm.service which can run for very long time
         status_map = {
-            VALID: _('Current'),
-            PARTIAL: _('Insufficient'),
-            INVALID: _('Invalid'),
-            DISABLED: _('Disabled'),
-            UNKNOWN: _('Unknown'),
+            VALID: _("Current"),
+            PARTIAL: _("Insufficient"),
+            INVALID: _("Invalid"),
+            DISABLED: _("Disabled"),
+            UNKNOWN: _("Unknown"),
         }
         return status_map
 
@@ -330,9 +330,9 @@ class ComplianceManager(object):
 
     # Assumes classic and identity validity have been tested
     def get_status_for_icon(self):
-        if self.system_status == 'invalid':
+        if self.system_status == "invalid":
             return RHSM_EXPIRED
-        if self.system_status == 'partial':
+        if self.system_status == "partial":
             return RHSM_PARTIALLY_VALID
         if self.in_warning_period():
             return RHSM_WARNING
@@ -471,7 +471,7 @@ class StackingGroupSorter(object):
 
 
 class EntitlementGroup(object):
-    def __init__(self, entitlement, name=''):
+    def __init__(self, entitlement, name=""):
         self.name = name
         self.entitlements = []
         self.add_entitlement_cert(entitlement)

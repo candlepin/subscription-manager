@@ -39,7 +39,7 @@ Subscription:
 \tContent Sets:
 
 """ % (
-    {'space': ' '}
+    {"space": " "}
 )
 
 consumer_json = """

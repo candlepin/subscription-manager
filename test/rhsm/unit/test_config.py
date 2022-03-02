@@ -174,7 +174,7 @@ repo_ca_cert = %(ca_cert_dir)snon_default.pem
 def write_temp_file(data):
     # create a temp file for use as a config file. This should get cleaned
     # up magically at the end of the run.
-    fid = NamedTemporaryFile(mode='w+', suffix='.tmp')
+    fid = NamedTemporaryFile(mode="w+", suffix=".tmp")
     fid.write(data)
     fid.seek(0)
     return fid
@@ -187,64 +187,64 @@ class BaseConfigTests(unittest.TestCase):
 
 
 class HostConfigTests(unittest.TestCase):
-    @patch('os.path.exists')
+    @patch("os.path.exists")
     def test_normal_case(self, exists_mock):
         # Mock that /etc/pki/entitlement-host exists:
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEqual('/etc/rhsm-host/ca', config.get('rhsm', 'ca_cert_dir'))
-        self.assertEqual('/etc/rhsm-host/redhat-uep-non-default.pem', config.get('rhsm', 'repo_ca_cert'))
-        self.assertEqual('/etc/pki/entitlement-host', config.get('rhsm', 'entitlementCertDir'))
+        self.assertEqual("/etc/rhsm-host/ca", config.get("rhsm", "ca_cert_dir"))
+        self.assertEqual("/etc/rhsm-host/redhat-uep-non-default.pem", config.get("rhsm", "repo_ca_cert"))
+        self.assertEqual("/etc/pki/entitlement-host", config.get("rhsm", "entitlementCertDir"))
 
-    @patch('os.path.exists')
+    @patch("os.path.exists")
     def test_host_config_regular_entcertdir(self, exists_mock):
         # Mock that /etc/pki/entitlement-host does not exist,
         # our setting should be left alone.
         exists_mock.return_value = False
         temp_file = write_temp_file(HOST_CONFIG)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEqual('/etc/rhsm-host/ca', config.get('rhsm', 'ca_cert_dir'))
-        self.assertEqual('/etc/rhsm-host/redhat-uep-non-default.pem', config.get('rhsm', 'repo_ca_cert'))
-        self.assertEqual('/etc/pki/entitlement', config.get('rhsm', 'entitlementCertDir'))
+        self.assertEqual("/etc/rhsm-host/ca", config.get("rhsm", "ca_cert_dir"))
+        self.assertEqual("/etc/rhsm-host/redhat-uep-non-default.pem", config.get("rhsm", "repo_ca_cert"))
+        self.assertEqual("/etc/pki/entitlement", config.get("rhsm", "entitlementCertDir"))
 
-    @patch('os.path.exists')
+    @patch("os.path.exists")
     def test_repo_ca_cert_macro(self, exists_mock):
         # Mock that /etc/pki/entitlement-host exists:
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG_MACRO)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEqual('/etc/rhsm-host/ca/', config.get('rhsm', 'ca_cert_dir'))
-        self.assertEqual('/etc/rhsm-host/ca/redhat-uep.pem', config.get('rhsm', 'repo_ca_cert'))
+        self.assertEqual("/etc/rhsm-host/ca/", config.get("rhsm", "ca_cert_dir"))
+        self.assertEqual("/etc/rhsm-host/ca/redhat-uep.pem", config.get("rhsm", "repo_ca_cert"))
 
-    @patch('os.path.exists')
+    @patch("os.path.exists")
     def test_no_replacements(self, exists_mock):
         # Mock that /etc/pki/entitlement-host exists:
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG_NOREPLACE)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEqual('/etc/rhsm-other/ca', config.get('rhsm', 'ca_cert_dir'))
-        self.assertEqual('/etc/pki/ca/redhat-uep.pem', config.get('rhsm', 'repo_ca_cert'))
-        self.assertEqual('/etc/pki/entitlement-other', config.get('rhsm', 'entitlementCertDir'))
+        self.assertEqual("/etc/rhsm-other/ca", config.get("rhsm", "ca_cert_dir"))
+        self.assertEqual("/etc/pki/ca/redhat-uep.pem", config.get("rhsm", "repo_ca_cert"))
+        self.assertEqual("/etc/pki/entitlement-other", config.get("rhsm", "entitlementCertDir"))
 
-    @patch('os.path.exists')
+    @patch("os.path.exists")
     def test_ent_dir_trailing_slash(self, exists_mock):
         # Mock that /etc/pki/entitlement-host exists:
         exists_mock.return_value = True
         temp_file = write_temp_file(HOST_CONFIG_ENTDIR_TRAILING_SLASH)
         config = RhsmHostConfigParser(temp_file.name)
-        self.assertEqual('/etc/pki/entitlement-host', config.get('rhsm', 'entitlementCertDir'))
+        self.assertEqual("/etc/pki/entitlement-host", config.get("rhsm", "entitlementCertDir"))
 
 
 class ConfigTests(BaseConfigTests):
     cfgfile_data = TEST_CONFIG
 
     def testRead(self):
-        self.assertEqual(self.cfgParser.get('server', 'hostname'), 'server.example.conf')
+        self.assertEqual(self.cfgParser.get("server", "hostname"), "server.example.conf")
 
     def testSet(self):
-        self.cfgParser.set('rhsm', 'baseurl', 'cod')
-        self.assertEqual(self.cfgParser.get('rhsm', 'baseurl'), 'cod')
+        self.cfgParser.set("rhsm", "baseurl", "cod")
+        self.assertEqual(self.cfgParser.get("rhsm", "baseurl"), "cod")
 
     def test_get(self):
         value = self.cfgParser.get("rhsm", "baseurl")
@@ -263,28 +263,28 @@ class ConfigTests(BaseConfigTests):
         self.assertEqual("/etc/rhsm/ca-test/redhat-uep-non-default.pem", value)
 
     def test_has_default_true(self):
-        value = self.cfgParser.has_default('server', 'hostname')
+        value = self.cfgParser.has_default("server", "hostname")
         self.assertTrue(value)
 
     def test_has_default_false(self):
-        value = self.cfgParser.has_default('foo', 'port')
+        value = self.cfgParser.has_default("foo", "port")
         self.assertFalse(value)
 
     def test_is_default_true(self):
-        value = self.cfgParser.is_default('server', 'hostname', 'subscription.rhsm.redhat.com')
+        value = self.cfgParser.is_default("server", "hostname", "subscription.rhsm.redhat.com")
         self.assertTrue(value)
 
     def test_is_default_false(self):
-        value = self.cfgParser.is_default('server', 'hostname', 'localhost')
+        value = self.cfgParser.is_default("server", "hostname", "localhost")
         self.assertFalse(value)
 
     def test_get_default_camel_case(self):
-        value = self.cfgParser.get_default('rhsmcertd', 'certCheckInterval')
-        self.assertEqual('240', value)
+        value = self.cfgParser.get_default("rhsmcertd", "certCheckInterval")
+        self.assertEqual("240", value)
 
     def test_get_default(self):
-        value = self.cfgParser.get_default('rhsmcertd', 'certcheckinterval')
-        self.assertEqual('240', value)
+        value = self.cfgParser.get_default("rhsmcertd", "certcheckinterval")
+        self.assertEqual("240", value)
 
     def test_get_int(self):
         value = self.cfgParser.get_int("server", "port")

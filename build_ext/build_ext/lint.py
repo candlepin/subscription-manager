@@ -47,7 +47,7 @@ class Lint(BaseCommand):
 
     def has_spec_file(self):
         try:
-            next(Utils.find_files_of_type('.', '*.spec'))
+            next(Utils.find_files_of_type(".", "*.spec"))
             return True
         except StopIteration:
             return False
@@ -58,8 +58,8 @@ class Lint(BaseCommand):
 
     # Defined at the end since it references unbound methods
     sub_commands = [
-        ('lint_rpm', has_spec_file),
-        ('flake8', has_pure_modules),
+        ("lint_rpm", has_spec_file),
+        ("flake8", has_pure_modules),
     ]
 
 
@@ -67,11 +67,11 @@ class RpmLint(BaseCommand):
     description = "run rpmlint on spec files"
 
     def run(self):
-        files = subprocess.run(['git', 'ls-files', '--full-name'], capture_output=True).stdout
+        files = subprocess.run(["git", "ls-files", "--full-name"], capture_output=True).stdout
         files = files.decode().splitlines()
         files = [x for x in files if x.endswith(".spec")]
         for f in files:
-            spawn(['rpmlint', '--file=rpmlint.config', os.path.realpath(f)])
+            spawn(["rpmlint", "--file=rpmlint.config", os.path.realpath(f)])
 
 
 class AstVisitor(object):
@@ -87,7 +87,7 @@ class AstVisitor(object):
         self.results = []
 
     def visit(self, node):
-        method = 'visit_' + node.__class__.__name__
+        method = "visit_" + node.__class__.__name__
         visitor = getattr(self, method, self.generic_visit)
         r = visitor(node)
         if r is not None:
@@ -107,8 +107,8 @@ class AstVisitor(object):
 class DebugImportVisitor(AstVisitor):
     """Look for imports of various debug modules"""
 
-    DEBUG_MODULES = ['pdb', 'pudb', 'ipdb', 'pydevd']
-    codes = ['X200']
+    DEBUG_MODULES = ["pdb", "pudb", "ipdb", "pydevd"]
+    codes = ["X200"]
 
     def visit_Import(self, node):
         # Likely not necessary but prudent
@@ -136,7 +136,7 @@ class GettextVisitor(AstVisitor):
     Also look for _(a) usages
     """
 
-    codes = ['X300', 'X301', 'X302']
+    codes = ["X300", "X301", "X302"]
 
     def visit_Call(self, node):
         # Descend first
@@ -146,7 +146,7 @@ class GettextVisitor(AstVisitor):
         if not isinstance(func, ast.Name):
             return
 
-        if func.id != '_':
+        if func.id != "_":
             return
 
         for arg in node.args:
@@ -223,10 +223,10 @@ class PluginLoadingFlake8(Flake8):
     """
 
     def __init__(self, *args, **kwargs):
-        ext_dir = pkg_resources.normalize_path('build_ext')
+        ext_dir = pkg_resources.normalize_path("build_ext")
         dist = pkg_resources.Distribution(
             ext_dir,
-            project_name='build_ext',
+            project_name="build_ext",
             metadata=pkg_resources.PathMetadata(ext_dir, ext_dir),
         )
         pkg_resources.working_set.add(dist)
@@ -235,7 +235,7 @@ class PluginLoadingFlake8(Flake8):
     def distribution_files(self):
         # By default Flake8 only runs on packages registered with
         # setuptools.  We want it to look at tests and other things as well
-        for d in ['src', 'test', 'build_ext', 'example-plugins', 'setup.py']:
+        for d in ["src", "test", "build_ext", "example-plugins", "setup.py"]:
             yield d
 
     def run(self):

@@ -104,7 +104,7 @@ class ContentActionClient(base_action_client.BaseActionClient):
         ent_dir_ent_source = EntitlementDirEntitlementSource()
 
         for runner in plugin_manager.runiter(
-            'update_content',
+            "update_content",
             reports=content_plugins_reports,
             ent_source=ent_dir_ent_source,
         ):

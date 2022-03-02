@@ -40,11 +40,11 @@ class ContainerContentPlugin(base_plugin.SubManPlugin):
             conduit: An UpdateContentConduit
         """
         conduit.log.debug("Updating container content.")
-        registry_hostnames = conduit.conf_string('main', 'registry_hostnames')
+        registry_hostnames = conduit.conf_string("main", "registry_hostnames")
         conduit.log.debug("registry hostnames = %s" % registry_hostnames)
         cmd = ContainerContentUpdateActionCommand(
             ent_source=conduit.ent_source,
-            registry_hostnames=registry_hostnames.split(','),
+            registry_hostnames=registry_hostnames.split(","),
             host_cert_dir=self.HOSTNAME_CERT_DIR,
         )
         report = cmd.perform()
@@ -59,7 +59,7 @@ def main():
     from subscription_manager.content_action_client import ContentPluginActionReport
 
     plugin_manager = PluginManager()
-    plugin_class = plugin_manager.get_plugins()['container_content.ContainerContentPlugin']
+    plugin_class = plugin_manager.get_plugins()["container_content.ContainerContentPlugin"]
     plugin = plugin_class()
     injectioninit.init_dep_injection()
     ent_source = EntitlementDirEntitlementSource()

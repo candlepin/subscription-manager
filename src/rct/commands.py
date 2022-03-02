@@ -38,5 +38,5 @@ class RCTCliCommand(AbstractCLICommand):
 
     def _get_file_from_args(self):
         if not len(self.args) > self.FILE_ARG_IDX:
-            return ''
+            return ""
         return self.args[self.FILE_ARG_IDX]

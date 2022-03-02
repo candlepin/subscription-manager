@@ -33,7 +33,7 @@ class TestHealingActionInvoker(fixture.SubManFixture):
 
     def test_autoheal_on(self):
         mock_uep = mock.Mock()
-        consumer = {'autoheal': True}
+        consumer = {"autoheal": True}
         mock_uep.getConsumer = mock.Mock(return_value=consumer)
         self.set_consumer_auth_cp(mock_uep)
 
@@ -65,7 +65,7 @@ class TestHealingUpdateAction(fixture.SubManFixture):
 
     def test_autoheal_on(self):
         mock_uep = mock.Mock()
-        consumer = {'autoheal': True}
+        consumer = {"autoheal": True}
         mock_uep.getConsumer = mock.Mock(return_value=consumer)
         self.set_consumer_auth_cp(mock_uep)
 

@@ -45,7 +45,7 @@ class RCTCertCommandTests(unittest.TestCase):
 
         command._do_command = lambda: command._create_cert()
         try:
-            command.main(['dummy-file.pem'])
+            command.main(["dummy-file.pem"])
             self.fail("Expected InvalidCLIOptionError since bad x509 file.")
         except InvalidCLIOptionError as e:
             self.assertEqual("Unable to read certificate file 'dummy-file.pem': error!", str(e))

@@ -60,9 +60,9 @@ class StatusCommand(CliCommand):
         print("+-------------------------------------------+")
 
         service_status = entitlement.EntitlementService(None).get_status(on_date)
-        reasons = service_status['reasons']
+        reasons = service_status["reasons"]
 
-        if service_status['valid']:
+        if service_status["valid"]:
             result = 0
         else:
             result = 1
@@ -82,16 +82,16 @@ class StatusCommand(CliCommand):
 
         print(
             _("Overall Status: {status}\n{message}").format(
-                status=service_status['status'], message=ca_message
+                status=service_status["status"], message=ca_message
             )
         )
 
         columns = get_terminal_width()
         for name in reasons:
-            print(format_name(name + ':', 0, columns))
+            print(format_name(name + ":", 0, columns))
             for message in reasons[name]:
                 print("- {name}".format(name=format_name(message, 2, columns)))
-            print('')
+            print("")
 
         try:
             store = syspurposelib.get_sys_purpose_store()
@@ -105,11 +105,11 @@ class StatusCommand(CliCommand):
         print(_("System Purpose Status: {status}").format(status=syspurpose_cache.get_overall_status()))
 
         syspurpose_status_code = syspurpose_cache.get_overall_status_code()
-        if syspurpose_status_code != 'matched':
+        if syspurpose_status_code != "matched":
             reasons = syspurpose_cache.get_status_reasons()
             if reasons is not None:
                 for reason in reasons:
                     print("- {reason}".format(reason=reason))
-        print('')
+        print("")
 
         return result

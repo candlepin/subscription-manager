@@ -36,7 +36,7 @@ log = logging.getLogger(__name__)
 
 class DatabaseDirectory(Directory):
 
-    PATH = 'var/lib/rhsm'
+    PATH = "var/lib/rhsm"
 
     def __init__(self):
         super(DatabaseDirectory, self).__init__(self.PATH)
@@ -94,7 +94,7 @@ class ProductDatabase(object):
                 self.content[productid] = repo_data
 
     def write(self):
-        f = open(self.__fn(), 'w')
+        f = open(self.__fn(), "w")
         try:
             json.dump(self.content, f, indent=2, default=json.encode)
         except Exception:
@@ -102,7 +102,7 @@ class ProductDatabase(object):
         f.close()
 
     def __fn(self):
-        return self.dir.abspath('productid.js')
+        return self.dir.abspath("productid.js")
 
 
 class ComparableMixin(object):
@@ -141,7 +141,7 @@ class RpmVersion(object):
     """
 
     # Ordered list of suffixes
-    suffixes = ['alpha', 'beta']
+    suffixes = ["alpha", "beta"]
 
     def __init__(self, epoch="0", version="0", release="1"):
         self.epoch = epoch
@@ -157,7 +157,7 @@ class RpmVersion(object):
         def no_suff(s):
             for suff in self.suffixes:
                 if s and s.lower().endswith(suff):
-                    return s[: -len(suff)].strip('- ')
+                    return s[: -len(suff)].strip("- ")
             return s
 
         return (self.epoch, no_suff(self.version), self.release)
@@ -310,7 +310,7 @@ class ProductManager(object):
         product_db: A ProductDatabase class (optional)
     """
 
-    PRODUCTID = 'productid'
+    PRODUCTID = "productid"
 
     def __init__(self, product_dir=None, product_db=None):
 
@@ -336,7 +336,7 @@ class ProductManager(object):
         for section in repo_file.sections():
             repo = repo_file.section(section)
 
-            if not utils.is_true_value(repo.get('enabled', '0')):
+            if not utils.is_true_value(repo.get("enabled", "0")):
                 disabled_in_redhat_repo.append(repo.id)
 
         return disabled_in_redhat_repo
@@ -354,7 +354,7 @@ class ProductManager(object):
         for section in repo_file.sections():
             repo = repo_file.section(section)
 
-            if utils.is_true_value(repo.get('enabled', '0')):
+            if utils.is_true_value(repo.get("enabled", "0")):
                 enabled_in_redhat_repo.append(repo.id)
 
         temp_disabled = []
@@ -390,7 +390,7 @@ class ProductManager(object):
         if (
             product_cert.name == "Red Hat Enterprise Linux Workstation"
             and "rhel-5-client-workstation" in product_cert.provided_tags
-            and product_cert.version[0] == '5'
+            and product_cert.version[0] == "5"
         ):
             return True
         return False
@@ -399,7 +399,7 @@ class ProductManager(object):
         if (
             product_cert.name == "Red Hat Enterprise Linux Desktop"
             and "rhel-5-client" in product_cert.provided_tags
-            and product_cert.version[0] == '5'
+            and product_cert.version[0] == "5"
         ):
             return True
         return False
@@ -565,7 +565,7 @@ class ProductManager(object):
         # collect info, then do the needful later, so we can hook
         # up a plugin in between and let it munge these lists, so a plugin
         # could block a product cert for example.
-        self.plugin_manager.run('pre_product_id_install', product_list=product_certs)
+        self.plugin_manager.run("pre_product_id_install", product_list=product_certs)
         # ProductCertDb.install()
         #  -> for each ProductCert:
         #         ProductCert.install()
@@ -576,25 +576,25 @@ class ProductManager(object):
 
         # FIXME: we should include productid db with the conduit here
         log.debug("about to run post_product_id_install")
-        self.plugin_manager.run('post_product_id_install', product_list=products_installed)
+        self.plugin_manager.run("post_product_id_install", product_list=products_installed)
 
         return products_installed
 
     def update_product_certs(self, product_certs):
-        self.plugin_manager.run('pre_product_id_update', product_list=product_certs)
+        self.plugin_manager.run("pre_product_id_update", product_list=product_certs)
 
         products_updated = self.write_product_certs(product_certs)
 
         # FIXME: we should include productid db with the conduit here
         log.debug("about to run post_product_id_update")
-        self.plugin_manager.run('post_product_id_update', product_list=products_updated)
+        self.plugin_manager.run("post_product_id_update", product_list=products_updated)
 
         return products_updated
 
     def write_product_certs(self, product_certs):
         products_installed = []
         for (product, cert) in product_certs:
-            fn = '%s.pem' % product.id
+            fn = "%s.pem" % product.id
             path = self.pdir.abspath(fn)
             cert.write(path)
             self.pdir.refresh()
@@ -658,7 +658,7 @@ class ProductManager(object):
 
         log.debug("Checking for product certs to remove. Active include: %s", active)
 
-        log.debug('Temporary disabled repos: %s' % temp_disabled_repos)
+        log.debug("Temporary disabled repos: %s" % temp_disabled_repos)
 
         disabled_repos = self.find_disabled_repos()
 
@@ -669,7 +669,7 @@ class ProductManager(object):
             # Protect all product certificates in /etc/pki/product-default
             # See: BZ: 1526622
             if cert.path.startswith(DEFAULT_PRODUCT_CERT_DIR):
-                log.debug('Skipping prod. cert.: %s in protected directory' % cert.path)
+                log.debug("Skipping prod. cert.: %s in protected directory" % cert.path)
                 continue
 
             # FIXME: or if the productid.hs wasn't updated to reflect a new repo
@@ -682,7 +682,7 @@ class ProductManager(object):
                 # FIXME: this can also mean we need to update the product cert
                 #        for prod_hash, since it is installed, but no longer maps to a repo
                 # no repos to check, go to next cert
-                log.debug('Skipping prod. cert.: %s without repos' % cert.path)
+                log.debug("Skipping prod. cert.: %s without repos" % cert.path)
                 continue
 
             delete_product_cert = True
@@ -741,14 +741,14 @@ class ProductManager(object):
             self.db.write()
 
     def _get_cert(self, filename):
-        if filename.endswith('.gz'):
+        if filename.endswith(".gz"):
             f = GzipFile(filename)
         else:
             f = open(filename)
         try:
             pem = f.read()
             if type(pem) == bytes:
-                pem = pem.decode('utf-8')
+                pem = pem.decode("utf-8")
             cert = create_from_pem(pem)
             cert.pem = pem
             return cert
@@ -756,13 +756,13 @@ class ProductManager(object):
             f.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from subscription_manager.injectioninit import init_dep_injection
 
     init_dep_injection()
 
-    logging.basicConfig(filename='/var/log/rhsm/rhsm.log', level=logging.DEBUG)
-    log.debug('productid smoke testing')
+    logging.basicConfig(filename="/var/log/rhsm/rhsm.log", level=logging.DEBUG)
+    log.debug("productid smoke testing")
 
     pm = ProductManager()
     pm.update_removed(active=set([]))

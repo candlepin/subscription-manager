@@ -57,7 +57,7 @@ class CatCertCommand(RCTCertCommand):
         RCTCliCommand.__init__(
             self,
             name="cat-cert",
-            aliases=['cc'],
+            aliases=["cc"],
             shortdesc=_("Print certificate information"),
             primary=True,
         )
@@ -88,7 +88,7 @@ class StatCertCommand(RCTCertCommand):
         RCTCliCommand.__init__(
             self,
             name="stat-cert",
-            aliases=['sc'],
+            aliases=["sc"],
             shortdesc=_("Print certificate statistics and sizes"),
             primary=True,
         )
@@ -113,7 +113,7 @@ class StatCertCommand(RCTCertCommand):
             print(_("Content sets: {content_length}").format(content_length=content_len))
 
     def _get_pem(self, filename):
-        return open(filename, 'r').read()
+        return open(filename, "r").read()
 
     def _get_der_size(self, pem):
         parts = pem.split("-----BEGIN CERTIFICATE-----\n")

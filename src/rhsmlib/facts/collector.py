@@ -36,8 +36,8 @@ def get_arch(prefix=None):
 
     Returns a string containing the arch."""
 
-    DEFAULT_PREFIX = '/'
-    ARCH_FILE_NAME = 'arch'
+    DEFAULT_PREFIX = "/"
+    ARCH_FILE_NAME = "arch"
     prefix = prefix or DEFAULT_PREFIX
 
     if prefix == DEFAULT_PREFIX:
@@ -45,7 +45,7 @@ def get_arch(prefix=None):
 
     arch_file = os.path.join(prefix, ARCH_FILE_NAME)
     try:
-        with open(arch_file, 'r') as arch_fd:
+        with open(arch_file, "r") as arch_fd:
             return arch_fd.read().strip()
     except IOError as e:
         # If we specify a prefix, and there is no 'arch' file,
@@ -68,7 +68,7 @@ class FactsCollector(object):
         self._collected_hw_info isn't meant to be altered as a side effect, but
         no promises."""
         self.allhw = {}
-        self.prefix = prefix or ''
+        self.prefix = prefix or ""
         self.testing = testing or False
 
         self._collected_hw_info = collected_hw_info

@@ -38,7 +38,7 @@ def find_custom_branding():
     if len(mods) == 0:
         return None
     # we don't support multiple brandings
-    branding_module = os.path.basename(mods[0]).split('.')[0]
+    branding_module = os.path.basename(mods[0]).split(".")[0]
     __import__(__name__ + "." + branding_module)
     mod = sys.modules[__name__ + "." + branding_module]
     return mod.Branding()

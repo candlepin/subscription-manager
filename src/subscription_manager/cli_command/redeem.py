@@ -32,13 +32,13 @@ class RedeemCommand(CliCommand):
         self.parser.add_argument(
             "--email",
             dest="email",
-            action='store',
+            action="store",
             help=_("email address to notify when " "subscription redemption is complete"),
         )
         self.parser.add_argument(
             "--locale",
             dest="locale",
-            action='store',
+            action="store",
             help=_(
                 "optional language to use for email "
                 "notification when subscription redemption is "
@@ -70,8 +70,8 @@ class RedeemCommand(CliCommand):
 
             # BZ 1248833 Ensure we print out the display message if we get any back
             response = self.cp.activateMachine(self.identity.uuid, self.options.email, self.options.locale)
-            if response and response.get('displayMessage'):
-                system_exit(0, response.get('displayMessage'))
+            if response and response.get("displayMessage"):
+                system_exit(0, response.get("displayMessage"))
         except connection.GoneException as ge:
             raise ge
         except connection.RestlibException as e:

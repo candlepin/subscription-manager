@@ -13,11 +13,11 @@ class SyspurposeLibTests(SubManFixture):
     def setUp(self):
         super(SyspurposeLibTests, self).setUp()
 
-        patch1 = mock.patch('subscription_manager.syspurposelib.json', wraps=json)
+        patch1 = mock.patch("subscription_manager.syspurposelib.json", wraps=json)
         self.mock_json = patch1.start()
         self.addCleanup(patch1.stop)
 
-        patch2 = mock.patch.object(syspurposelib, 'USER_SYSPURPOSE', new="/test/value")
+        patch2 = mock.patch.object(syspurposelib, "USER_SYSPURPOSE", new="/test/value")
         self.mock_sp_path = patch2.start()
         self.addCleanup(patch2.stop)
 
@@ -34,7 +34,7 @@ class SyspurposeLibTests(SubManFixture):
         }
 
         # First mock out the SyspurposeStore
-        with mock.patch.object(syspurposelib, 'SyncedStore') as sp_store:
+        with mock.patch.object(syspurposelib, "SyncedStore") as sp_store:
             result = syspurposelib.write_syspurpose(test_values)
 
             sp_store.assert_called_with(None)
@@ -54,7 +54,7 @@ class SyspurposeLibTests(SubManFixture):
             "usage": "Dev",
         }
 
-        with mock.patch.object(syspurposelib, 'SyncedStore', new=None):
+        with mock.patch.object(syspurposelib, "SyncedStore", new=None):
             with open_mock() as mock_open:
                 result = syspurposelib.write_syspurpose(test_values)
                 self.mock_json.dump.assert_called_with(test_values, mock_open, ensure_ascii=True, indent=2)
@@ -75,7 +75,7 @@ class SyspurposeLibTests(SubManFixture):
 
         self.mock_json.dump.side_effect = OSError
 
-        with mock.patch.object(syspurposelib, 'SyncedStore', new=None):
+        with mock.patch.object(syspurposelib, "SyncedStore", new=None):
             with open_mock() as mock_open:
                 result = syspurposelib.write_syspurpose(test_values)
                 self.mock_json.dump.assert_called_with(test_values, mock_open, ensure_ascii=True, indent=2)
@@ -115,7 +115,7 @@ class SyspurposeSyncActionCommandTests(SubManFixture):
         Super simple test to show that the perform method is running sync.
         :return:
         """
-        with mock.patch('subscription_manager.syspurposelib.SyncedStore') as store:
+        with mock.patch("subscription_manager.syspurposelib.SyncedStore") as store:
             result = self.command.perform()
             store.return_value.sync.assert_called_once()
             self.assertTrue(isinstance(result, SyspurposeSyncActionReport))

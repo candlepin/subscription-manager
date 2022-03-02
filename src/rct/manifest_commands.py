@@ -65,7 +65,7 @@ class ZipExtractAll(ZipFile):
     def _get_inner_zip(self):
         if self.inner_zip is None:
             output = BytesIO(self.read(RCTManifestCommand.INNER_FILE))
-            self.inner_zip = ZipExtractAll(output, 'r')
+            self.inner_zip = ZipExtractAll(output, "r")
         return self.inner_zip
 
     def _read_file(self, file_path, is_inner=False):
@@ -94,7 +94,7 @@ class ZipExtractAll(ZipFile):
         return results
 
     def _open_excl(self, path):
-        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), 'wb')
+        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), "wb")
 
     def _write_file(self, output_path, archive_path):
         outfile = self._open_excl(output_path)
@@ -105,13 +105,13 @@ class ZipExtractAll(ZipFile):
         base_path = os.path.abspath(base)
         new_path = os.path.abspath(new_file)
         if not new_path.startswith(base_path):
-            raise Exception(_('Manifest zip attempted to extract outside of the base directory.'))
+            raise Exception(_("Manifest zip attempted to extract outside of the base directory."))
         # traces symlink to source, and checks that it is valid
         real_new_path = os.path.realpath(new_path)
         if real_new_path != new_path:
             self._is_secure(base, real_new_path)
         elif os.path.islink(new_path):
-            raise Exception(_('Unable to trace symbolic link.  Possibly circular linkage.'))
+            raise Exception(_("Unable to trace symbolic link.  Possibly circular linkage."))
 
     def extractall(self, location, overwrite=False):
         self._is_secure(location, location)
@@ -148,7 +148,7 @@ class RCTManifestCommand(RCTCliCommand):
 
     def _extract_manifest(self, location, overwrite=False):
         # Extract the outer file
-        archive = ZipExtractAll(self._get_file_from_args(), 'r')
+        archive = ZipExtractAll(self._get_file_from_args(), "r")
         archive.extractall(location, overwrite)
 
         # now extract the inner file
@@ -157,7 +157,7 @@ class RCTManifestCommand(RCTCliCommand):
         else:
             inner_file = self.INNER_FILE
 
-        archive = ZipExtractAll(inner_file, 'r')
+        archive = ZipExtractAll(inner_file, "r")
         archive.extractall(location, overwrite)
 
         # Delete the intermediate file
@@ -169,7 +169,7 @@ class CatManifestCommand(RCTManifestCommand):
         RCTManifestCommand.__init__(
             self,
             name="cat-manifest",
-            aliases=['cm'],
+            aliases=["cm"],
             shortdesc=_("Print manifest information"),
             primary=True,
         )
@@ -212,9 +212,9 @@ class CatManifestCommand(RCTManifestCommand):
         to_print.append((_("Name"), get_value(data, "name")))
         to_print.append((_("UUID"), get_value(data, "uuid")))
         # contentAccessMode is entitlement if null, blank or non-present
-        contentAccessMode = 'entitlement'
-        if "contentAccessMode" in data and data["contentAccessMode"] == 'org_environment':
-            contentAccessMode = 'Simple Content Access'
+        contentAccessMode = "entitlement"
+        if "contentAccessMode" in data and data["contentAccessMode"] == "org_environment":
+            contentAccessMode = "Simple Content Access"
         to_print.append((_("Content Access Mode"), contentAccessMode))
         to_print.append((_("Type"), get_value(data, "type.label")))
         to_print.append((_("API URL"), get_value(data, "urlApi")))
@@ -268,7 +268,7 @@ class CatManifestCommand(RCTManifestCommand):
             to_print.append((_("Certificate File"), cert_file))
 
             try:
-                cert = certificate.create_from_pem(zip_archive._read_file(cert_file).decode('utf-8'))
+                cert = certificate.create_from_pem(zip_archive._read_file(cert_file).decode("utf-8"))
             except certificate.CertificateException as ce:
                 raise certificate.CertificateException(
                     _("Unable to read certificate file '{certificate_file}': {exception}").format(
@@ -303,7 +303,7 @@ class CatManifestCommand(RCTManifestCommand):
         """
         Does the work that this command intends.
         """
-        temp = ZipExtractAll(self._get_file_from_args(), 'r')
+        temp = ZipExtractAll(self._get_file_from_args(), "r")
         # Print out the header
         print("\n+-------------------------------------------+")
         print(_("\tManifest"))
@@ -319,7 +319,7 @@ class DumpManifestCommand(RCTManifestCommand):
         RCTManifestCommand.__init__(
             self,
             name="dump-manifest",
-            aliases=['dm'],
+            aliases=["dm"],
             shortdesc=_("Dump the contents of a manifest"),
             primary=True,
         )

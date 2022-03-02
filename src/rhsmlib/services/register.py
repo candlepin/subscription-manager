@@ -62,48 +62,48 @@ class RegisterService(object):
 
         # First set new syspurpose values, if there is any
         if role is not None:
-            syspurpose['role'] = role
+            syspurpose["role"] = role
             save_syspurpose = True
         if addons is not None:
-            syspurpose['addons'] = addons
+            syspurpose["addons"] = addons
             save_syspurpose = True
         if service_level is not None:
-            syspurpose['service_level_agreement'] = service_level
+            syspurpose["service_level_agreement"] = service_level
             save_syspurpose = True
         if usage is not None:
-            syspurpose['usage'] = usage
+            syspurpose["usage"] = usage
             save_syspurpose = True
 
         # Then try to get all syspurpose values
-        role = syspurpose.get('role', '')
-        addons = syspurpose.get('addons', [])
-        usage = syspurpose.get('usage', '')
-        service_level = syspurpose.get('service_level_agreement', '')
+        role = syspurpose.get("role", "")
+        addons = syspurpose.get("addons", [])
+        usage = syspurpose.get("usage", "")
+        service_level = syspurpose.get("service_level_agreement", "")
 
         type = type or "system"
 
         options = {
-            'activation_keys': activation_keys,
-            'environments': environments,
-            'force': force,
-            'name': name,
-            'consumerid': consumerid,
-            'type': type,
-            'jwt_token': jwt_token,
+            "activation_keys": activation_keys,
+            "environments": environments,
+            "force": force,
+            "name": name,
+            "consumerid": consumerid,
+            "type": type,
+            "jwt_token": jwt_token,
         }
         self.validate_options(options)
 
-        environments = options['environments']
+        environments = options["environments"]
         facts_dict = self.facts.get_facts()
 
         # Default to the hostname if no name is given
-        consumer_name = options['name'] or socket.gethostname()
+        consumer_name = options["name"] or socket.gethostname()
 
         self.plugin_manager.run("pre_register_consumer", name=consumer_name, facts=facts_dict)
 
         if consumerid:
             consumer = self.cp.getConsumer(consumerid)
-            if consumer.get('type', {}).get('manifest', {}):
+            if consumer.get("type", {}).get("manifest", {}):
                 raise exceptions.ServiceError(
                     "Registration attempted with a consumer ID that is not of type 'system'"
                 )
@@ -113,7 +113,7 @@ class RegisterService(object):
                 facts=facts_dict,
                 owner=org,
                 environments=environments,
-                keys=options.get('activation_keys'),
+                keys=options.get("activation_keys"),
                 installed_products=self.installed_mgr.format_for_server(),
                 content_tags=self.installed_mgr.tags,
                 type=type,
@@ -135,12 +135,12 @@ class RegisterService(object):
             syspurposelib.write_syspurpose(syspurpose)
 
         syspurpose_dict = {
-            'service_level_agreement': consumer['serviceLevel']
-            if 'serviceLevel' in list(consumer.keys())
-            else '',
-            'role': consumer['role'] if 'role' in list(consumer.keys()) else '',
-            'usage': consumer['usage'] if 'usage' in list(consumer.keys()) else '',
-            'addons': consumer['addOns'] if 'addOns' in list(consumer.keys()) else [],
+            "service_level_agreement": consumer["serviceLevel"]
+            if "serviceLevel" in list(consumer.keys())
+            else "",
+            "role": consumer["role"] if "role" in list(consumer.keys()) else "",
+            "usage": consumer["usage"] if "usage" in list(consumer.keys()) else "",
+            "addons": consumer["addOns"] if "addOns" in list(consumer.keys()) else [],
         }
 
         # Try to do three-way merge and then save result to syspurpose.json file
@@ -153,33 +153,33 @@ class RegisterService(object):
         content_access_mode_cache = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
 
         # Is information about content access mode included in consumer
-        if 'owner' not in consumer:
-            log.warning('Consumer does not contain any information about owner.')
-        elif 'contentAccessMode' in consumer['owner']:
-            log.debug('Saving content access mode from consumer object to cache file.')
+        if "owner" not in consumer:
+            log.warning("Consumer does not contain any information about owner.")
+        elif "contentAccessMode" in consumer["owner"]:
+            log.debug("Saving content access mode from consumer object to cache file.")
             # When we know content access mode from consumer, then write it to cache file
-            content_access_mode = consumer['owner']['contentAccessMode']
+            content_access_mode = consumer["owner"]["contentAccessMode"]
             content_access_mode_cache.set_data(content_access_mode, self.identity)
             content_access_mode_cache.write_cache()
         else:
             # If not, then we have to do another REST API call to get this information
             # It will not be included in cache file. When cache file is empty, then
             # it will trigger accessing REST API and saving result in cache file.
-            log.debug('Information about content access mode is not included in consumer')
+            log.debug("Information about content access mode is not included in consumer")
             content_access_mode = content_access_mode_cache.read_data()
             # Add information about content access mode to consumer
-            consumer['owner']['contentAccessMode'] = content_access_mode
+            consumer["owner"]["contentAccessMode"] = content_access_mode
 
         return consumer
 
     def validate_options(self, options):
-        if self.identity.is_valid() and options['force'] is not True:
+        if self.identity.is_valid() and options["force"] is not True:
             raise exceptions.ValidationError(
                 _("This system is already registered. Add force to options to " "override.")
             )
-        elif options.get('name') == '':
+        elif options.get("name") == "":
             raise exceptions.ValidationError(_("Error: system name can not be empty."))
-        elif options['consumerid'] and options['force'] is True:
+        elif options["consumerid"] and options["force"] is True:
             raise exceptions.ValidationError(
                 _(
                     "Error: Can not force registration while attempting to "
@@ -189,25 +189,25 @@ class RegisterService(object):
             )
 
         # If 'activation_keys' already exists in the dictionary, leave it.  Otherwise, set to None.
-        if options['activation_keys']:
+        if options["activation_keys"]:
             # 746259: Don't allow the user to pass in an empty string as an activation key
-            if '' == options['activation_keys']:
+            if "" == options["activation_keys"]:
                 raise exceptions.ValidationError(_("Error: Must specify an activation key"))
-            elif getattr(self.cp, 'username', None) or getattr(self.cp, 'password', None):
+            elif getattr(self.cp, "username", None) or getattr(self.cp, "password", None):
                 raise exceptions.ValidationError(_("Error: Activation keys do not require user credentials."))
-            elif options['consumerid']:
+            elif options["consumerid"]:
                 raise exceptions.ValidationError(
                     _("Error: Activation keys can not be used with previously" " registered IDs.")
                 )
-            elif options['environments']:
+            elif options["environments"]:
                 raise exceptions.ValidationError(
                     _("Error: Activation keys do not allow environments to be" " specified.")
                 )
-        elif options.get('jwt_token') is not None:
+        elif options.get("jwt_token") is not None:
             # TODO: add more checks here
             pass
-        elif not getattr(self.cp, 'username', None) or not getattr(self.cp, 'password', None):
-            if not getattr(self.cp, 'token', None):
+        elif not getattr(self.cp, "username", None) or not getattr(self.cp, "password", None):
+            if not getattr(self.cp, "token", None):
                 raise exceptions.ValidationError(_("Error: Missing username or password."))
 
     def determine_owner_key(self, username, get_owner_cb, no_owner_cb):
@@ -229,7 +229,7 @@ class RegisterService(object):
 
         # When there is only one owner, then return key of the owner
         if len(owners) == 1:
-            return owners[0]['key']
+            return owners[0]["key"]
 
         # When there is more owner, then call callback method for this case
         owner_key = get_owner_cb(owners)

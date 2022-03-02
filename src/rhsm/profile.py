@@ -35,7 +35,7 @@ except ImportError:
     yum = None
 
 try:
-    imp.find_module('zypp_plugin')
+    imp.find_module("zypp_plugin")
     use_zypper = True
 except ImportError:
     use_zypper = False
@@ -108,11 +108,11 @@ class ModulesProfile(object):
             log.warning("AWS provided corrupted json metadata document. Skipping fixing of RHUI repos.")
             return
 
-        if 'region' not in metadata:
+        if "region" not in metadata:
             log.debug("Region is not specified in AWS metadata. Skipping fixing of RHUI repos.")
             return
 
-        region = metadata['region']
+        region = metadata["region"]
         log.debug(f"Trying to fix URLs of RHUI repos using region: {region}")
         for repo in cloud_provider.rhui_repos(base):
             log.debug(f"Trying to fix repository: {repo.id}")
@@ -241,8 +241,8 @@ class EnabledRepos(object):
             return self._cut_question_mark(repo_url)
         else:
             mappings = self._obtain_mappings()
-            return repo_url.replace('$releasever', mappings['releasever']).replace(
-                '$basearch', mappings['basearch']
+            return repo_url.replace("$releasever", mappings["releasever"]).replace(
+                "$basearch", mappings["basearch"]
             )
 
     def _cut_question_mark(self, repo_url):
@@ -252,7 +252,7 @@ class EnabledRepos(object):
         :param repo_url: a repo URL that you want to modify
         :type path: str
         """
-        return repo_url[: repo_url.find('?')]
+        return repo_url[: repo_url.find("?")]
 
     @suppress_output
     def _obtain_mappings(self):
@@ -265,17 +265,17 @@ class EnabledRepos(object):
         elif yum is not None:
             return self._obtain_mappings_yum()
         else:
-            log.error('Unable to load module for any supported package manager (dnf, yum).')
+            log.error("Unable to load module for any supported package manager (dnf, yum).")
             raise ImportError
 
     def _obtain_mappings_dnf(self):
         return {
-            'releasever': self.db.conf.substitutions['releasever'],
-            'basearch': self.db.conf.substitutions['basearch'],
+            "releasever": self.db.conf.substitutions["releasever"],
+            "basearch": self.db.conf.substitutions["basearch"],
         }
 
     def _obtain_mappings_yum(self):
-        return {'releasever': self.yb.conf.yumvar['releasever'], 'basearch': self.yb.conf.yumvar['basearch']}
+        return {"releasever": self.yb.conf.yumvar["releasever"], "basearch": self.yb.conf.yumvar["basearch"]}
 
 
 class EnabledReposProfile(object):
@@ -313,12 +313,12 @@ class Package(object):
     def to_dict(self):
         """Returns a dict representation of this packages info."""
         return {
-            'name': self._normalize_string(self.name),
-            'version': self._normalize_string(self.version),
-            'release': self._normalize_string(self.release),
-            'arch': self._normalize_string(self.arch),
-            'epoch': self._normalize_string(self.epoch),
-            'vendor': self._normalize_string(self.vendor),  # bz1519512 handle vendors that aren't utf-8
+            "name": self._normalize_string(self.name),
+            "version": self._normalize_string(self.version),
+            "release": self._normalize_string(self.release),
+            "arch": self._normalize_string(self.arch),
+            "epoch": self._normalize_string(self.epoch),
+            "vendor": self._normalize_string(self.vendor),  # bz1519512 handle vendors that aren't utf-8
         }
 
     def __eq__(self, other):
@@ -347,7 +347,7 @@ class Package(object):
     @staticmethod
     def _normalize_string(value):
         if type(value) is bytes:
-            return value.decode('utf-8', 'replace')
+            return value.decode("utf-8", "replace")
         return value
 
 
@@ -366,12 +366,12 @@ class RPMProfile(object):
             for pkg_dict in pkg_dicts:
                 self.packages.append(
                     Package(
-                        name=pkg_dict['name'],
-                        version=pkg_dict['version'],
-                        release=pkg_dict['release'],
-                        arch=pkg_dict['arch'],
-                        epoch=pkg_dict['epoch'],
-                        vendor=pkg_dict['vendor'],
+                        name=pkg_dict["name"],
+                        version=pkg_dict["version"],
+                        release=pkg_dict["release"],
+                        arch=pkg_dict["arch"],
+                        epoch=pkg_dict["epoch"],
+                        vendor=pkg_dict["vendor"],
                     )
                 )
         else:
@@ -393,19 +393,19 @@ class RPMProfile(object):
 
         pkg_list = []
         for h in rpm_header_list:
-            if h['name'] == "gpg-pubkey":
+            if h["name"] == "gpg-pubkey":
                 # dbMatch includes imported gpg keys as well
                 # skip these for now as there isn't compelling
                 # reason for server to know this info
                 continue
             pkg_list.append(
                 Package(
-                    name=h['name'],
-                    version=h['version'],
-                    release=h['release'],
-                    arch=h['arch'],
-                    epoch=h['epoch'] or 0,
-                    vendor=h['vendor'] or None,
+                    name=h["name"],
+                    version=h["version"],
+                    release=h["release"],
+                    arch=h["arch"],
+                    epoch=h["epoch"] or 0,
+                    vendor=h["vendor"] or None,
                 )
             )
         return pkg_list
@@ -451,7 +451,7 @@ def get_profile(profile_type):
     Returns an instance of a Profile object
     """
     if profile_type not in PROFILE_MAP:
-        raise InvalidProfileType('Could not find profile for type [%s]', profile_type)
+        raise InvalidProfileType("Could not find profile for type [%s]", profile_type)
     profile = PROFILE_MAP[profile_type]()
     return profile
 

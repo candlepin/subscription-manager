@@ -122,10 +122,10 @@ class CliCommand(AbstractCLICommand):
         # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
         # was not consistent with rest of subscription-manager
         # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
-        owner_id = owner['key']
+        owner_id = owner["key"]
         print(
             _(
-                'Ignoring request to auto-attach. '
+                "Ignoring request to auto-attach. "
                 'It is disabled for org "{owner_id}" because of the content access mode setting.'
             ).format(owner_id=owner_id)
         )
@@ -178,8 +178,8 @@ class CliCommand(AbstractCLICommand):
             help=_("password for HTTP proxy with basic authentication"),
         )
         self.parser.add_argument(
-            '--noproxy',
-            dest='no_proxy',
+            "--noproxy",
+            dest="no_proxy",
             default=None,
             help=_("host suffixes that should bypass HTTP proxy"),
         )
@@ -304,14 +304,14 @@ class CliCommand(AbstractCLICommand):
 
         # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
-            parts = remove_scheme(self.options.proxy_url).split(':')
+            parts = remove_scheme(self.options.proxy_url).split(":")
             self.proxy_hostname = parts[0]
             # no ':'
             if len(parts) > 1:
                 self.proxy_port = int(parts[1])
             else:
                 # if no port specified, use the one from the config, or fallback to the default
-                self.proxy_port = conf['server'].get_int('proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
+                self.proxy_port = conf["server"].get_int("proxy_port") or rhsm.config.DEFAULT_PROXY_PORT
             config_changed = True
 
         if hasattr(self.options, "proxy_user") and self.options.proxy_user:
@@ -325,21 +325,21 @@ class CliCommand(AbstractCLICommand):
         # the sorter gets it
         connection_info = {}
         if self.proxy_hostname:
-            connection_info['proxy_hostname_arg'] = self.proxy_hostname
+            connection_info["proxy_hostname_arg"] = self.proxy_hostname
         if self.proxy_port:
-            connection_info['proxy_port_arg'] = self.proxy_port
+            connection_info["proxy_port_arg"] = self.proxy_port
         if self.proxy_user:
-            connection_info['proxy_user_arg'] = self.proxy_user
+            connection_info["proxy_user_arg"] = self.proxy_user
         if self.proxy_password:
-            connection_info['proxy_password_arg'] = self.proxy_password
+            connection_info["proxy_password_arg"] = self.proxy_password
         if self.server_hostname:
-            connection_info['host'] = self.server_hostname
+            connection_info["host"] = self.server_hostname
         if self.server_port:
-            connection_info['ssl_port'] = self.server_port
+            connection_info["ssl_port"] = self.server_port
         if self.server_prefix:
-            connection_info['handler'] = self.server_prefix
+            connection_info["handler"] = self.server_prefix
         if self.no_proxy:
-            connection_info['no_proxy_arg'] = self.no_proxy
+            connection_info["no_proxy_arg"] = self.no_proxy
 
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.cp_provider.set_connection_info(**connection_info)
@@ -398,18 +398,18 @@ class CliCommand(AbstractCLICommand):
                 return return_code
         except (CertificateException, ssl.SSLError) as e:
             log.error(e)
-            system_exit(os.EX_SOFTWARE, _('System certificates corrupted. Please reregister.'))
+            system_exit(os.EX_SOFTWARE, _("System certificates corrupted. Please reregister."))
         except connection.GoneException as ge:
             if ge.deleted_id == self.identity.uuid:
                 log.critical(
-                    "Consumer profile \"{uuid}\" has been deleted from the server.".format(
+                    'Consumer profile "{uuid}" has been deleted from the server.'.format(
                         uuid=self.identity.uuid
                     )
                 )
                 system_exit(
                     os.EX_UNAVAILABLE,
                     _(
-                        "Consumer profile \"{uuid}\" has been deleted from the server. You can use command clean or unregister to remove local profile."
+                        'Consumer profile "{uuid}" has been deleted from the server. You can use command clean or unregister to remove local profile.'
                     ).format(uuid=self.identity.uuid),
                 )
             else:

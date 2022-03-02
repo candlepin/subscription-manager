@@ -53,9 +53,9 @@ class ConnectionTests(unittest.TestCase):
     def setUp(self):
         # Try to remove all environment variables to not influence unit test
         try:
-            os.environ.pop('no_proxy')
-            os.environ.pop('NO_PROXY')
-            os.environ.pop('HTTPS_PROXY')
+            os.environ.pop("no_proxy")
+            os.environ.pop("NO_PROXY")
+            os.environ.pop("HTTPS_PROXY")
         except KeyError:
             pass
         # NOTE: this won't actually work, idea for this suite of unit tests
@@ -73,11 +73,11 @@ class ConnectionTests(unittest.TestCase):
         )
 
     def test_load_manager_capabilities(self):
-        expected_capabilities = ['hypervisors_async', 'cores']
-        proper_status = {'version': '1', 'result': True, 'managerCapabilities': expected_capabilities}
+        expected_capabilities = ["hypervisors_async", "cores"]
+        proper_status = {"version": "1", "result": True, "managerCapabilities": expected_capabilities}
         improper_status = dict.copy(proper_status)
         # Remove the managerCapabilities key from the dict
-        del improper_status['managerCapabilities']
+        del improper_status["managerCapabilities"]
         self.cp.conn = Mock()
         # The first call will return the proper_status, the second, the improper
         # status
@@ -100,26 +100,26 @@ class ConnectionTests(unittest.TestCase):
     def test_get_environment_by_name_requires_owner(self):
         self.assertRaises(Exception, self.cp.getEnvironment, None, {"name": "env name"})
 
-    @mock.patch('locale.getlocale')
+    @mock.patch("locale.getlocale")
     def test_has_proper_language_header_utf8(self, mock_locale):
         # First test it with Japanese
-        mock_locale.return_value = ('ja_JP', 'UTF-8')
+        mock_locale.return_value = ("ja_JP", "UTF-8")
         self.cp.conn.headers = {}
         self.cp.conn._set_accept_language_in_header()
-        self.assertEqual(self.cp.conn.headers['Accept-Language'], 'ja-jp')
+        self.assertEqual(self.cp.conn.headers["Accept-Language"], "ja-jp")
 
         # Test that another rest api call would be called with different locale
-        mock_locale.return_value = ('es_ES', 'UTF-8')
+        mock_locale.return_value = ("es_ES", "UTF-8")
         self.cp.conn.headers = {}
         self.cp.conn._set_accept_language_in_header()
-        self.assertEqual(self.cp.conn.headers['Accept-Language'], 'es-es')
+        self.assertEqual(self.cp.conn.headers["Accept-Language"], "es-es")
 
-    @mock.patch('locale.getlocale')
+    @mock.patch("locale.getlocale")
     def test_has_proper_language_header_not_utf8(self, mock_locale):
-        mock_locale.return_value = ('ja_JP', '')
+        mock_locale.return_value = ("ja_JP", "")
         self.cp.conn.headers = {}
         self.cp.conn._set_accept_language_in_header()
-        self.assertEqual(self.cp.conn.headers['Accept-Language'], 'ja-jp')
+        self.assertEqual(self.cp.conn.headers["Accept-Language"], "ja-jp")
 
     def test_get_environment_urlencoding(self):
         self.cp.conn = Mock()
@@ -154,21 +154,21 @@ class ConnectionTests(unittest.TestCase):
         :param name: name of ini option
         :return: value for given section and option
         """
-        if (section, name) == ('server', 'no_proxy'):
-            return ''
-        if (section, name) == ('server', 'proxy_hostname'):
-            return ''
-        if (section, name) == ('server', 'proxy_port'):
-            return ''
-        if (section, name) == ('server', 'proxy_user'):
-            return ''
-        if (section, name) == ('server', 'proxy_password'):
-            return ''
+        if (section, name) == ("server", "no_proxy"):
+            return ""
+        if (section, name) == ("server", "proxy_hostname"):
+            return ""
+        if (section, name) == ("server", "proxy_port"):
+            return ""
+        if (section, name) == ("server", "proxy_user"):
+            return ""
+        if (section, name) == ("server", "proxy_password"):
+            return ""
         return None
 
     def test_https_proxy_info_allcaps(self):
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444'}):
-            with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host:4444"}):
+            with patch.object(connection.config, "get", self.mock_config_without_proxy_settings):
                 uep = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
@@ -178,9 +178,9 @@ class ConnectionTests(unittest.TestCase):
     def test_order(self):
         # should follow the order: HTTPS, https, HTTP, http
         with patch.dict(
-            'os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444', 'http_proxy': 'http://notme:orme@host:2222'}
+            "os.environ", {"HTTPS_PROXY": "http://u:p@host:4444", "http_proxy": "http://notme:orme@host:2222"}
         ):
-            with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
+            with patch.object(connection.config, "get", self.mock_config_without_proxy_settings):
                 uep = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
@@ -188,8 +188,8 @@ class ConnectionTests(unittest.TestCase):
                 self.assertEqual(int("4444"), uep.proxy_port)
 
     def test_no_port(self):
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host'}):
-            with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host"}):
+            with patch.object(connection.config, "get", self.mock_config_without_proxy_settings):
                 uep = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
@@ -197,8 +197,8 @@ class ConnectionTests(unittest.TestCase):
                 self.assertEqual(3128, uep.proxy_port)
 
     def test_no_user_or_password(self):
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://host:1111'}):
-            with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://host:1111"}):
+            with patch.object(connection.config, "get", self.mock_config_without_proxy_settings):
                 uep = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
                 self.assertEqual(None, uep.proxy_user)
                 self.assertEqual(None, uep.proxy_password)
@@ -214,36 +214,36 @@ class ConnectionTests(unittest.TestCase):
 
         # Mock some proxy values in configuration file
         def mock_config(section, name):
-            if (section, name) == ('server', 'hostname'):
+            if (section, name) == ("server", "hostname"):
                 return host
-            if (section, name) == ('server', 'port'):
+            if (section, name) == ("server", "port"):
                 return port
-            if (section, name) == ('server', 'proxy_hostname'):
-                return 'foo.example.com'
-            if (section, name) == ('server', 'proxy_port'):
-                return '3311'
-            if (section, name) == ('server', 'proxy_user'):
-                return 'proxyuser'
-            if (section, name) == ('server', 'proxy_password'):
-                return 'proxypassword'
+            if (section, name) == ("server", "proxy_hostname"):
+                return "foo.example.com"
+            if (section, name) == ("server", "proxy_port"):
+                return "3311"
+            if (section, name) == ("server", "proxy_user"):
+                return "proxyuser"
+            if (section, name) == ("server", "proxy_password"):
+                return "proxypassword"
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
-            with patch.object(connection.config, 'get', mock_config):
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "NO_PROXY": "foo.example.com"}):
+            with patch.object(connection.config, "get", mock_config):
                 uep = UEPConnection(
-                    username='dummy',
-                    password='dummy',
-                    handler='/test',
+                    username="dummy",
+                    password="dummy",
+                    handler="/test",
                     insecure=True,
-                    proxy_hostname='proxy.example.org',
-                    proxy_port='3030',
-                    proxy_user='foo_user',
-                    proxy_password='secret',
+                    proxy_hostname="proxy.example.org",
+                    proxy_port="3030",
+                    proxy_user="foo_user",
+                    proxy_password="secret",
                 )
-                self.assertEqual(uep.proxy_hostname, 'proxy.example.org')
-                self.assertEqual(uep.proxy_port, '3030')
-                self.assertEqual(uep.proxy_user, 'foo_user')
-                self.assertEqual(uep.proxy_password, 'secret')
+                self.assertEqual(uep.proxy_hostname, "proxy.example.org")
+                self.assertEqual(uep.proxy_port, "3030")
+                self.assertEqual(uep.proxy_user, "foo_user")
+                self.assertEqual(uep.proxy_password, "secret")
 
     def test_empty_proxy_via_api(self):
         """
@@ -254,36 +254,36 @@ class ConnectionTests(unittest.TestCase):
 
         # Mock some proxy values in configuration file
         def mock_config(section, name):
-            if (section, name) == ('server', 'hostname'):
+            if (section, name) == ("server", "hostname"):
                 return host
-            if (section, name) == ('server', 'port'):
+            if (section, name) == ("server", "port"):
                 return port
-            if (section, name) == ('server', 'proxy_hostname'):
-                return 'foo.example.com'
-            if (section, name) == ('server', 'proxy_port'):
-                return '3311'
-            if (section, name) == ('server', 'proxy_user'):
-                return 'proxyuser'
-            if (section, name) == ('server', 'proxy_password'):
-                return 'proxypassword'
+            if (section, name) == ("server", "proxy_hostname"):
+                return "foo.example.com"
+            if (section, name) == ("server", "proxy_port"):
+                return "3311"
+            if (section, name) == ("server", "proxy_user"):
+                return "proxyuser"
+            if (section, name) == ("server", "proxy_password"):
+                return "proxypassword"
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
-            with patch.object(connection.config, 'get', mock_config):
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "NO_PROXY": "foo.example.com"}):
+            with patch.object(connection.config, "get", mock_config):
                 uep = UEPConnection(
-                    username='dummy',
-                    password='dummy',
-                    handler='/test',
+                    username="dummy",
+                    password="dummy",
+                    handler="/test",
                     insecure=True,
-                    proxy_hostname='',
-                    proxy_port='',
-                    proxy_user='',
-                    proxy_password='',
+                    proxy_hostname="",
+                    proxy_port="",
+                    proxy_user="",
+                    proxy_password="",
                 )
-                self.assertEqual(uep.proxy_hostname, '')
-                self.assertEqual(uep.proxy_port, '')
-                self.assertEqual(uep.proxy_user, '')
-                self.assertEqual(uep.proxy_password, '')
+                self.assertEqual(uep.proxy_hostname, "")
+                self.assertEqual(uep.proxy_port, "")
+                self.assertEqual(uep.proxy_user, "")
+                self.assertEqual(uep.proxy_password, "")
 
     def test_no_proxy_via_api(self):
         """Test that API trumps env var and config."""
@@ -291,18 +291,18 @@ class ConnectionTests(unittest.TestCase):
         port = self.cp.ssl_port
 
         def mock_config(section, name):
-            if (section, name) == ('server', 'no_proxy'):
-                return 'foo.example.com'
-            if (section, name) == ('server', 'hostname'):
+            if (section, name) == ("server", "no_proxy"):
+                return "foo.example.com"
+            if (section, name) == ("server", "hostname"):
                 return host
-            if (section, name) == ('server', 'port'):
+            if (section, name) == ("server", "port"):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
-            with patch.object(connection.config, 'get', mock_config):
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "NO_PROXY": "foo.example.com"}):
+            with patch.object(connection.config, "get", mock_config):
                 uep = UEPConnection(
-                    username='dummy', password='dummy', handler='/test', insecure=True, no_proxy=host
+                    username="dummy", password="dummy", handler="/test", insecure=True, no_proxy=host
                 )
                 self.assertEqual(None, uep.proxy_hostname)
 
@@ -312,18 +312,18 @@ class ConnectionTests(unittest.TestCase):
         port = self.cp.ssl_port
 
         def mock_config(section, name):
-            if (section, name) == ('server', 'no_proxy'):
-                return 'foo.example.com'
-            if (section, name) == ('server', 'hostname'):
+            if (section, name) == ("server", "no_proxy"):
+                return "foo.example.com"
+            if (section, name) == ("server", "hostname"):
                 return host
-            if (section, name) == ('server', 'port'):
+            if (section, name) == ("server", "port"):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': '*'}):
-            with patch.object(connection.config, 'get', mock_config):
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "NO_PROXY": "*"}):
+            with patch.object(connection.config, "get", mock_config):
                 uep = UEPConnection(
-                    username='dummy', password='dummy', handler='/test', insecure=True, no_proxy=host
+                    username="dummy", password="dummy", handler="/test", insecure=True, no_proxy=host
                 )
                 self.assertEqual(None, uep.proxy_hostname)
 
@@ -333,52 +333,52 @@ class ConnectionTests(unittest.TestCase):
         port = self.cp.ssl_port
 
         def mock_config(section, name):
-            if (section, name) == ('server', 'no_proxy'):
-                return 'foo.example.com'
-            if (section, name) == ('server', 'hostname'):
+            if (section, name) == ("server", "no_proxy"):
+                return "foo.example.com"
+            if (section, name) == ("server", "hostname"):
                 return host
-            if (section, name) == ('server', 'port'):
+            if (section, name) == ("server", "port"):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': '*.example.com'}):
-            with patch.object(connection.config, 'get', mock_config):
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "NO_PROXY": "*.example.com"}):
+            with patch.object(connection.config, "get", mock_config):
                 uep = UEPConnection(
-                    username='dummy', password='dummy', handler='/test', insecure=True, no_proxy=host
+                    username="dummy", password="dummy", handler="/test", insecure=True, no_proxy=host
                 )
                 self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_via_environment_variable(self):
         """Test that env var no_proxy works."""
         host = self.cp.host
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': host}):
-            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "NO_PROXY": host}):
+            uep = UEPConnection(username="dummy", password="dummy", handler="/test", insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
     def test_NO_PROXY_with_one_asterisk_via_environment_variable(self):
         """Test that env var NO_PROXY with only one asterisk works."""
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': '*'}):
-            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "NO_PROXY": "*"}):
+            uep = UEPConnection(username="dummy", password="dummy", handler="/test", insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_with_one_asterisk_via_environment_variable(self):
         """Test that env var no_proxy with only one asterisk works."""
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'no_proxy': '*'}):
-            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "no_proxy": "*"}):
+            uep = UEPConnection(username="dummy", password="dummy", handler="/test", insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
     def test_NO_PROXY_with_asterisk_via_environment_variable(self):
         """Test that env var NO_PROXY with asterisk works."""
-        host = '*' + self.cp.host
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': host}):
-            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
+        host = "*" + self.cp.host
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "NO_PROXY": host}):
+            uep = UEPConnection(username="dummy", password="dummy", handler="/test", insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_with_asterisk_via_environment_variable(self):
         """Test that env var no_proxy with asterisk works."""
-        host = '*' + self.cp.host
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'no_proxy': host}):
-            uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
+        host = "*" + self.cp.host
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "no_proxy": host}):
+            uep = UEPConnection(username="dummy", password="dummy", handler="/test", insecure=True)
             self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_via_config(self):
@@ -387,17 +387,17 @@ class ConnectionTests(unittest.TestCase):
         port = self.cp.ssl_port
 
         def mock_config(section, name):
-            if (section, name) == ('server', 'no_proxy'):
+            if (section, name) == ("server", "no_proxy"):
                 return host
-            if (section, name) == ('server', 'hostname'):
+            if (section, name) == ("server", "hostname"):
                 return host
-            if (section, name) == ('server', 'port'):
+            if (section, name) == ("server", "port"):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': 'foo.example.com'}):
-            with patch.object(connection.config, 'get', mock_config):
-                uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "NO_PROXY": "foo.example.com"}):
+            with patch.object(connection.config, "get", mock_config):
+                uep = UEPConnection(username="dummy", password="dummy", handler="/test", insecure=True)
                 self.assertEqual(None, uep.proxy_hostname)
 
     def test_no_proxy_with_asterisk_via_config(self):
@@ -406,21 +406,21 @@ class ConnectionTests(unittest.TestCase):
         port = self.cp.ssl_port
 
         def mock_config(section, name):
-            if (section, name) == ('server', 'no_proxy'):
+            if (section, name) == ("server", "no_proxy"):
                 return host
-            if (section, name) == ('server', 'hostname'):
+            if (section, name) == ("server", "hostname"):
                 return host
-            if (section, name) == ('server', 'port'):
+            if (section, name) == ("server", "port"):
                 return port
             return None
 
-        with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host', 'NO_PROXY': '*.example.com'}):
-            with patch.object(connection.config, 'get', mock_config):
-                uep = UEPConnection(username='dummy', password='dummy', handler='/test', insecure=True)
+        with patch.dict("os.environ", {"HTTPS_PROXY": "http://u:p@host", "NO_PROXY": "*.example.com"}):
+            with patch.object(connection.config, "get", mock_config):
+                uep = UEPConnection(username="dummy", password="dummy", handler="/test", insecure=True)
                 self.assertEqual(None, uep.proxy_hostname)
 
     def test_uep_connection_honors_no_proxy_setting(self):
-        with patch.dict('os.environ', {'no_proxy': 'foobar'}):
+        with patch.dict("os.environ", {"no_proxy": "foobar"}):
             uep = UEPConnection(
                 host="foobar",
                 username="dummy",
@@ -438,7 +438,7 @@ class ConnectionTests(unittest.TestCase):
             self.assertIs(None, uep.proxy_port)
 
     def test_content_connection_honors_no_proxy_setting(self):
-        with patch.dict('os.environ', {'no_proxy': 'foobar'}):
+        with patch.dict("os.environ", {"no_proxy": "foobar"}):
             cont_conn = ContentConnection(
                 host="foobar",
                 username="dummy",
@@ -456,44 +456,44 @@ class ConnectionTests(unittest.TestCase):
 
     def test_sanitizeGuestIds_supports_strs(self):
         self.cp.supports_resource = Mock(return_value=True)
-        guestIds = ['test' + str(i) for i in range(3)]
+        guestIds = ["test" + str(i) for i in range(3)]
         resultGuestIds = self.cp.sanitizeGuestIds(guestIds)
         # When strings are given, they should always be unchanged
         self.assertEqual(guestIds, resultGuestIds)
 
     def test_sanitizeGuestIds_no_support_strs(self):
         self.cp.supports_resource = Mock(return_value=False)
-        guestIds = ['test' + str(i) for i in range(3)]
+        guestIds = ["test" + str(i) for i in range(3)]
         resultGuestIds = self.cp.sanitizeGuestIds(guestIds)
         # When strings are given, they should always be unchanged
         self.assertEqual(guestIds, resultGuestIds)
 
     def test_sanitizeGuestIds_supports_data(self):
         self.cp.supports_resource = Mock(return_value=True)
-        guestIds = [{'guestId': 'test' + str(i)} for i in range(3)]
+        guestIds = [{"guestId": "test" + str(i)} for i in range(3)]
         resultGuestIds = self.cp.sanitizeGuestIds(guestIds)
         # The dictionary should be unchanged because the server supports guestIds
         self.assertEqual(guestIds, resultGuestIds)
 
     def test_sanitizeGuestIds_doesnt_support_data(self):
         self.cp.supports_resource = Mock(return_value=False)
-        guestIds = [{'guestId': 'test' + str(i)} for i in range(3)]
+        guestIds = [{"guestId": "test" + str(i)} for i in range(3)]
         resultGuestIds = self.cp.sanitizeGuestIds(guestIds)
         # The result list should only be string ids because the server
         # doesn't support additional data
-        expected_guestIds = [guestId['guestId'] for guestId in guestIds]
+        expected_guestIds = [guestId["guestId"] for guestId in guestIds]
         self.assertEqual(expected_guestIds, resultGuestIds)
 
     def test_bad_ca_cert(self):
-        with open(os.path.join(self.temp_ent_dir, "foo.pem"), 'w+') as cert:
-            cert.write('xxxxxx\n')
-        with open(os.path.join(self.temp_ent_dir, "foo-key.pem"), 'w+') as key:
-            key.write('xxxxxx\n')
+        with open(os.path.join(self.temp_ent_dir, "foo.pem"), "w+") as cert:
+            cert.write("xxxxxx\n")
+        with open(os.path.join(self.temp_ent_dir, "foo-key.pem"), "w+") as key:
+            key.write("xxxxxx\n")
         with self.assertRaises(NoValidEntitlement):
             cont_conn = ContentConnection(
                 host="foobar", username="dummy", password="dummy", insecure=True, cert_dir=self.temp_ent_dir
             )
-            cont_conn.get_versions('/')
+            cont_conn.get_versions("/")
         restlib = Restlib("somehost", "123", "somehandler")
         restlib.ca_dir = self.temp_ent_dir
         with self.assertRaises(BadCertificateException):
@@ -502,24 +502,24 @@ class ConnectionTests(unittest.TestCase):
     def test_hypervisor_check_in_capability_and_reporter(self):
         self.cp.conn = Mock()
         self.cp.has_capability = Mock(return_value=True)
-        Options = namedtuple('Options', 'reporter_id')
-        options = Options('tester')
+        Options = namedtuple("Options", "reporter_id")
+        options = Options("tester")
         self.cp.hypervisorHeartbeat("owner", options=options)
         self.cp.conn.request_put.assert_called_with("/hypervisors/owner/heartbeat?reporter_id=tester")
 
     def test_hypervisor_check_in_no_capability(self):
         self.cp.conn = Mock()
         self.cp.has_capability = Mock(return_value=False)
-        Options = namedtuple('Options', 'reporter_id')
-        options = Options('tester')
+        Options = namedtuple("Options", "reporter_id")
+        options = Options("tester")
         self.cp.hypervisorHeartbeat("owner", options=options)
         self.cp.conn.request_put.assert_not_called()
 
     def test_hypervisor_check_in_no_reporter(self):
         self.cp.conn = Mock()
         self.cp.has_capability = Mock(return_value=True)
-        Options = namedtuple('Options', 'reporter_id')
-        options = Options('')
+        Options = namedtuple("Options", "reporter_id")
+        options = Options("")
         self.cp.hypervisorHeartbeat("owner", options=options)
         self.cp.conn.request_put.assert_not_called()
 
@@ -529,8 +529,8 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.request_get = Mock(return_value=[None])
         self.assertEqual([], self.cp.getOwnerList(username="test"))
         # return value when list has None and actual value
-        self.cp.conn.request_get = Mock(return_value=[None, 'Fred'])
-        self.assertEqual(['Fred'], self.cp.getOwnerList(username="test"))
+        self.cp.conn.request_get = Mock(return_value=[None, "Fred"])
+        self.assertEqual(["Fred"], self.cp.getOwnerList(username="test"))
         # return value of None
         self.cp.conn.request_get = Mock(return_value=None)
         self.assertEqual([], self.cp.getOwnerList(username="test"))
@@ -546,9 +546,9 @@ class RestlibValidateResponseTests(unittest.TestCase):
         self.handler = "https://server/path"
 
     def vr(self, status, content, headers=None):
-        response = {'status': status, 'content': content}
+        response = {"status": status, "content": content}
         if headers:
-            response['headers'] = headers
+            response["headers"] = headers
         self.restlib.validateResponse(response, self.request_type, self.handler)
 
     # All empty responses that aren't 200/204 raise a NetworkException
@@ -751,7 +751,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
 
     def test_429_body(self):
         content = '{"errors": ["TooFast"]}'
-        headers = {'retry-after': 20}
+        headers = {"retry-after": 20}
         try:
             self.vr("429", content, headers)
         except RateLimitExceededException as e:
@@ -852,7 +852,7 @@ class BadCertificateExceptionTest(ExceptionTest):
     parent_exception = ConnectionException
 
     def _create_exception(self, *args, **kwargs):
-        kwargs['cert_path'] = "/etc/sdfsd"
+        kwargs["cert_path"] = "/etc/sdfsd"
         return self.exception(*args, **kwargs)
 
 
@@ -861,8 +861,8 @@ class RestlibExceptionTest(ExceptionTest):
     parent_exception = ConnectionException
 
     def _create_exception(self, *args, **kwargs):
-        kwargs['msg'] = "foo"
-        kwargs['code'] = 404
+        kwargs["msg"] = "foo"
+        kwargs["code"] = 404
         return self.exception(*args, **kwargs)
 
 
@@ -874,9 +874,9 @@ class RemoteServerExceptionTest(ExceptionTest):
     handler = "htttps://server/path"
 
     def _create_exception(self, *args, **kwargs):
-        kwargs['code'] = self.code
-        kwargs['request_type'] = self.request_type
-        kwargs['handler'] = self.handler
+        kwargs["code"] = self.code
+        kwargs["request_type"] = self.request_type
+        kwargs["handler"] = self.handler
         return self.exception(*args, **kwargs)
 
 
@@ -918,9 +918,9 @@ class GoneExceptionTest(ExceptionTest):
         self.deleted_id = 12345
 
     def _create_exception(self, *args, **kwargs):
-        kwargs['msg'] = "foo is gone"
-        kwargs['code'] = self.code
-        kwargs['deleted_id'] = self.deleted_id
+        kwargs["msg"] = "foo is gone"
+        kwargs["code"] = self.code
+        kwargs["deleted_id"] = self.deleted_id
         return self.exception(*args, **kwargs)
 
     # hmm, maybe these should fail?
@@ -958,12 +958,12 @@ class DatetimeFormattingTests(unittest.TestCase):
     def tearDown(self):
         locale.resetlocale()
 
-    @patch('subscription_manager.cache.open', MOCK_OPEN_CACHE)
+    @patch("subscription_manager.cache.open", MOCK_OPEN_CACHE)
     def test_date_formatted_properly_with_japanese_locale(self):
-        locale.setlocale(locale.LC_ALL, 'ja_JP.UTF8')
+        locale.setlocale(locale.LC_ALL, "ja_JP.UTF8")
         cp_provider = Mock()
         cp_provider.get_consumer_auth_cp = Mock(return_value=self.cp)
-        identity = Mock(uuid='bob')
+        identity = Mock(uuid="bob")
         inj.provide(inj.IDENTITY, identity, singleton=True)
         inj.provide(inj.CP_PROVIDER, cp_provider)
         cache = ContentAccessCache()
@@ -972,9 +972,9 @@ class DatetimeFormattingTests(unittest.TestCase):
         mock_exists = Mock(return_value=True)
         self.cp.conn = Mock()
         self.cp.conn.request_get = Mock(return_value=self.MOCK_CONTENT)
-        expected_headers = {'If-Modified-Since': 'Thu, 01 Dec 2016 21:56:35 GMT'}
-        with patch('os.path.exists', mock_exists):
+        expected_headers = {"If-Modified-Since": "Thu, 01 Dec 2016 21:56:35 GMT"}
+        with patch("os.path.exists", mock_exists):
             cache.check_for_update()
         self.cp.conn.request_get.assert_called_with(
-            '/consumers/bob/accessible_content', headers=expected_headers
+            "/consumers/bob/accessible_content", headers=expected_headers
         )

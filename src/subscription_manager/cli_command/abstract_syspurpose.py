@@ -33,7 +33,7 @@ from syspurpose.files import SyncedStore, post_process_received_data
 log = logging.getLogger(__name__)
 
 SP_CONFLICT_MESSAGE = _(
-    "Warning: A {attr} of \"{download_value}\" was recently set for this system "
+    'Warning: A {attr} of "{download_value}" was recently set for this system '
     "by the entitlement server administrator.\n{advice}"
 )
 SP_ADVICE = _("If you'd like to overwrite the server side change please run: {command}")
@@ -54,7 +54,7 @@ class AbstractSyspurposeCommand(CliCommand):
         shortdesc=None,
         primary=False,
         attr=None,
-        commands=('set', 'unset', 'show', 'list'),
+        commands=("set", "unset", "show", "list"),
     ):
         # set 'subparser' before calling the parent constructor, as it will
         # (indirectly) call _create_argparser(), which our reimplementation uses
@@ -69,20 +69,20 @@ class AbstractSyspurposeCommand(CliCommand):
 
         self.store = None
 
-        if 'set' in commands:
+        if "set" in commands:
             self.parser.add_argument(
                 "--set",
                 dest="set",
                 help=_("set {attr} of system purpose").format(attr=attr),
             )
-        if 'unset' in commands:
+        if "unset" in commands:
             self.parser.add_argument(
                 "--unset",
                 dest="unset",
                 action="store_true",
                 help=_("unset {attr} of system purpose").format(attr=attr),
             )
-        if 'add' in commands:
+        if "add" in commands:
             self.parser.add_argument(
                 "--add",
                 dest="to_add",
@@ -90,7 +90,7 @@ class AbstractSyspurposeCommand(CliCommand):
                 default=[],
                 help=_("add an item to the list ({attr}).").format(attr=attr),
             )
-        if 'remove' in commands:
+        if "remove" in commands:
             self.parser.add_argument(
                 "--remove",
                 dest="to_remove",
@@ -98,18 +98,18 @@ class AbstractSyspurposeCommand(CliCommand):
                 default=[],
                 help=_("remove an item from the list ({attr}).").format(attr=attr),
             )
-        if 'show' in commands:
+        if "show" in commands:
             self.parser.add_argument(
                 "--show",
                 dest="show",
-                action='store_true',
+                action="store_true",
                 help=_("show this system's current {attr}").format(attr=attr),
             )
-        if 'list' in commands:
+        if "list" in commands:
             self.parser.add_argument(
                 "--list",
                 dest="list",
-                action='store_true',
+                action="store_true",
                 help=_("list all {attr} available").format(attr=attr),
             )
 
@@ -121,17 +121,17 @@ class AbstractSyspurposeCommand(CliCommand):
         SyspurposeCommand._do_command() will set a reference to itself as
         'syspurpose_command' attribute.
         """
-        syspurpose_command = self.__dict__.get('syspurpose_command', None)
+        syspurpose_command = self.__dict__.get("syspurpose_command", None)
         if syspurpose_command is not None:
             return getattr(syspurpose_command, name)
         raise AttributeError
 
     def _validate_options(self):
-        to_set = getattr(self.options, 'set', None)
-        to_unset = getattr(self.options, 'unset', None)
-        to_add = getattr(self.options, 'to_add', None)
-        to_remove = getattr(self.options, 'to_remove', None)
-        to_show = getattr(self.options, 'show', None)
+        to_set = getattr(self.options, "set", None)
+        to_unset = getattr(self.options, "unset", None)
+        to_add = getattr(self.options, "to_add", None)
+        to_remove = getattr(self.options, "to_remove", None)
+        to_show = getattr(self.options, "show", None)
 
         if to_set:
             self.options.set = self.options.set.strip()
@@ -204,9 +204,9 @@ class AbstractSyspurposeCommand(CliCommand):
             except ProxyException:
                 system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
             else:
-                if 'systemPurposeAttributes' in server_response:
+                if "systemPurposeAttributes" in server_response:
                     server_response = post_process_received_data(server_response)
-                    valid_fields = server_response['systemPurposeAttributes']
+                    valid_fields = server_response["systemPurposeAttributes"]
         return valid_fields
 
     def _is_provided_value_valid(self, value):
@@ -250,12 +250,12 @@ class AbstractSyspurposeCommand(CliCommand):
             ):
                 if len(valid_fields.get(self.attr, [])) > 0:
                     # TRANSLATORS: this is used to quote a string
-                    quoted_values = [_("\"{value}\"").format(value=value) for value in invalid_values]
+                    quoted_values = [_('"{value}"').format(value=value) for value in invalid_values]
                     printable_values = friendly_join(quoted_values)
                     print(
                         ungettext(
-                            'Warning: Provided value {vals} is not included in the list of valid values',
-                            'Warning: Provided values {vals} are not included in the list of valid values',
+                            "Warning: Provided value {vals} is not included in the list of valid values",
+                            "Warning: Provided values {vals} are not included in the list of valid values",
                             invalid_values_len,
                         ).format(vals=printable_values)
                     )
@@ -263,9 +263,9 @@ class AbstractSyspurposeCommand(CliCommand):
                 else:
                     print(
                         _(
-                            'Warning: This organization does not have any subscriptions that provide a '
+                            "Warning: This organization does not have any subscriptions that provide a "
                             'system purpose "{attr}".  This setting will not influence auto-attaching '
-                            'subscriptions.'
+                            "subscriptions."
                         ).format(attr=self.attr)
                     )
 
@@ -299,7 +299,7 @@ class AbstractSyspurposeCommand(CliCommand):
         self._check_result(
             expectation=lambda res: res.get(self.attr) in ["", None, []],
             success_msg=success_msg,
-            command='subscription-manager syspurpose {name} --unset'.format(name=self.name),
+            command="subscription-manager syspurpose {name} --unset".format(name=self.name),
             attr=self.attr,
         )
 
@@ -307,7 +307,7 @@ class AbstractSyspurposeCommand(CliCommand):
         if self.store:
             self.store.unset(self.attr)
         else:
-            log.debug('Not unsetting syspurpose attribute {attr} (store not set)'.format(attr=self.attr))
+            log.debug("Not unsetting syspurpose attribute {attr} (store not set)".format(attr=self.attr))
 
     def add(self):
         self._add(self.options.to_add)
@@ -319,7 +319,7 @@ class AbstractSyspurposeCommand(CliCommand):
         to_add = "--add " + " --add ".join(options)
         command = "subscription-manager syspurpose {name} ".format(name=self.name) + to_add
         self._check_result(
-            expectation=lambda res: all(x in res.get('addons', []) for x in self.options.to_add),
+            expectation=lambda res: all(x in res.get("addons", []) for x in self.options.to_add),
             success_msg=success_msg,
             command=command,
             attr=self.attr,
@@ -344,7 +344,7 @@ class AbstractSyspurposeCommand(CliCommand):
         to_remove = "--remove " + " --remove ".join(options)
         command = "subscription-manager syspurpose {name} ".format(name=self.name) + to_remove
         self._check_result(
-            expectation=lambda res: all(x not in res.get('addons', []) for x in self.options.to_remove),
+            expectation=lambda res: all(x not in res.get("addons", []) for x in self.options.to_remove),
             success_msg=success_msg,
             command=command,
             attr=self.attr,
@@ -386,14 +386,14 @@ class AbstractSyspurposeCommand(CliCommand):
         valid_fields = self._get_valid_fields()
         if self.attr in valid_fields:
             if len(valid_fields[self.attr]) > 0:
-                line = '+-------------------------------------------+'
+                line = "+-------------------------------------------+"
                 print(line)
-                translated_string = _('Available {syspurpose_attr}').format(syspurpose_attr=self.attr)
+                translated_string = _("Available {syspurpose_attr}").format(syspurpose_attr=self.attr)
                 # Print translated string (the length could be different) in the center of the line
                 line_len = len(line)
                 trans_str_len = len(translated_string)
                 empty_space_len = int((line_len - trans_str_len) / 2)
-                print(empty_space_len * ' ' + translated_string)
+                print(empty_space_len * " " + translated_string)
                 print(line)
                 # Print values
                 self._print_valid_values(valid_fields)
@@ -401,14 +401,14 @@ class AbstractSyspurposeCommand(CliCommand):
                 print(
                     _(
                         'There are no available values for the system purpose "{syspurpose_attr}" '
-                        'from the available subscriptions in this '
-                        'organization.'
+                        "from the available subscriptions in this "
+                        "organization."
                     ).format(syspurpose_attr=self.attr)
                 )
         else:
             print(
                 _(
-                    'Unable to get the list of valid values for the system purpose ' '"{syspurpose_attr}".'
+                    "Unable to get the list of valid values for the system purpose " '"{syspurpose_attr}".'
                 ).format(syspurpose_attr=self.attr)
             )
 
@@ -430,7 +430,7 @@ class AbstractSyspurposeCommand(CliCommand):
                     self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
                 except Exception as err:
                     log.error(
-                        "unable to connect to candlepin server using token: \"{token}\", err: {err}".format(
+                        'unable to connect to candlepin server using token: "{token}", err: {err}'.format(
                             token=self.options.token, err=err
                         )
                     )
@@ -444,7 +444,7 @@ class AbstractSyspurposeCommand(CliCommand):
                     self.cp = self.cp_provider.get_consumer_auth_cp()
         except connection.RestlibException as err:
             log.exception(err)
-            if getattr(self.options, 'list', None):
+            if getattr(self.options, "list", None):
                 log.error(
                     "Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err)
                 )
@@ -459,17 +459,17 @@ class AbstractSyspurposeCommand(CliCommand):
 
         self.store = SyncedStore(uep=self.cp, consumer_uuid=self.identity.uuid)
 
-        if getattr(self.options, 'unset', None):
+        if getattr(self.options, "unset", None):
             self.unset()
-        elif getattr(self.options, 'set', None):
+        elif getattr(self.options, "set", None):
             self.set()
-        elif hasattr(self.options, 'to_add') and len(self.options.to_add) > 0:
+        elif hasattr(self.options, "to_add") and len(self.options.to_add) > 0:
             self.add()
-        elif hasattr(self.options, 'to_remove') and len(self.options.to_remove) > 0:
+        elif hasattr(self.options, "to_remove") and len(self.options.to_remove) > 0:
             self.remove()
-        elif getattr(self.options, 'list', None):
+        elif getattr(self.options, "list", None):
             self.list()
-        elif getattr(self.options, 'show', None):
+        elif getattr(self.options, "show", None):
             self.show()
         else:
             self.show()
@@ -489,7 +489,7 @@ class AbstractSyspurposeCommand(CliCommand):
         )
 
     def check_syspurpose_support(self, attr):
-        if self.is_registered() and not self.cp.has_capability('syspurpose'):
+        if self.is_registered() and not self.cp.has_capability("syspurpose"):
             print(
                 _(
                     "Note: The currently configured entitlement server does not support System Purpose {attr}.".format(

@@ -74,7 +74,7 @@ class HealingUpdateAction(object):
         uuid = identity.uuid
         consumer = self.uep.getConsumer(uuid)
 
-        if 'autoheal' not in consumer or not consumer['autoheal']:
+        if "autoheal" not in consumer or not consumer["autoheal"]:
             log.warning("Auto-heal disabled on server, skipping.")
             return 0
 

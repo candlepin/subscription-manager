@@ -421,7 +421,7 @@ Content:
 \tRequired Tags: TAG1, TAG2
 \tArches:%(space)s
 """ % (
-    {'space': ' '}
+    {"space": " "}
 )
 
 ENTITLEMENT_CERT_V3_0_OUTPUT = """
@@ -529,7 +529,7 @@ Content:
 \tRequired Tags:%(space)s
 \tArches:%(space)s
 """ % (
-    {'space': ' '}
+    {"space": " "}
 )
 
 
@@ -586,7 +586,7 @@ Order:
 \tProvides Management: False
 
 """ % (
-    {'space': ' '}
+    {"space": " "}
 )
 
 PRODUCT_CERT_V1_0_OUTPUT = """
@@ -619,7 +619,7 @@ Product:
 \tBrand Name:%(space)s
 
 """ % (
-    {'space': ' '}
+    {"space": " "}
 )
 
 
@@ -653,7 +653,7 @@ Product:
 \tBrand Name:%(space)s
 
 """ % (
-    {'space': ' '}
+    {"space": " "}
 )
 
 IDENTITY_CERT_OUTPUT = """
@@ -678,7 +678,7 @@ Issuer:
 \tL: Raleigh
 
 """ % (
-    {'space': ' '}
+    {"space": " "}
 )
 
 PRODUCT_CERT_V1_0_STAT_OUTPUT = """Type: Product Certificate

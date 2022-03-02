@@ -47,7 +47,7 @@ class InsightsCollector(collector.FactsCollector):
             "/etc/insights-client/machine-id",  # should be the current known location
             "/etc/redhat-access-insights/machine-id",  # location prior to 3.0.13 of insights-client
         ]
-        if insights_constants is not None and hasattr(insights_constants, 'machine_id_file'):
+        if insights_constants is not None and hasattr(insights_constants, "machine_id_file"):
             paths_to_check.insert(0, insights_constants.machine_id_file)
 
         for filepath in paths_to_check:

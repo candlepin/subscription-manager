@@ -29,7 +29,7 @@ class RegisterConsumerPlugin(SubManPlugin):
             conduit: A RegistrationConduit()
         """
         conduit.log.debug("post consumer register called")
-        conduit.log.debug("consumer uuid: %s" % conduit.consumer['uuid'])
+        conduit.log.debug("consumer uuid: %s" % conduit.consumer["uuid"])
 
     def pre_register_consumer_hook(self, conduit):
         """`pre_register_consumer` hook

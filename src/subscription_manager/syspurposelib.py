@@ -44,7 +44,7 @@ def save_sla_to_syspurpose_metadata(uep, consumer_uuid, service_level):
     :type service_level: str
     """
 
-    if 'SyncedStore' in globals() and SyncedStore is not None:
+    if "SyncedStore" in globals() and SyncedStore is not None:
         synced_store = SyncedStore(uep=uep, consumer_uuid=consumer_uuid)
 
         # if empty, set it to null
@@ -111,7 +111,7 @@ def write_syspurpose(values):
         try:
             json.dump(values, open(USER_SYSPURPOSE), ensure_ascii=True, indent=2)
         except OSError:
-            log.warning('Could not write syspurpose to %s' % USER_SYSPURPOSE)
+            log.warning("Could not write syspurpose to %s" % USER_SYSPURPOSE)
             return False
     return True
 
@@ -123,9 +123,9 @@ def write_syspurpose_cache(values):
     :return:
     """
     try:
-        json.dump(values, open(CACHED_SYSPURPOSE, 'w'), ensure_ascii=True, indent=2)
+        json.dump(values, open(CACHED_SYSPURPOSE, "w"), ensure_ascii=True, indent=2)
     except OSError:
-        log.warning('Could not write to syspurpose cache %s' % CACHED_SYSPURPOSE)
+        log.warning("Could not write to syspurpose cache %s" % CACHED_SYSPURPOSE)
         return False
     return True
 
@@ -140,8 +140,8 @@ def get_syspurpose_valid_fields(uep=None, identity=None):
     valid_fields = {}
     cache = inj.require(inj.SYSPURPOSE_VALID_FIELDS_CACHE)
     syspurpose_valid_fields = cache.read_data(uep, identity)
-    if 'systemPurposeAttributes' in syspurpose_valid_fields:
-        valid_fields = syspurpose_valid_fields['systemPurposeAttributes']
+    if "systemPurposeAttributes" in syspurpose_valid_fields:
+        valid_fields = syspurpose_valid_fields["systemPurposeAttributes"]
     return valid_fields
 
 
@@ -171,7 +171,7 @@ def merge_syspurpose_values(local=None, remote=None, base=None, uep=None, consum
 
     result = synced_store.merge(local=local, remote=remote, base=base)
     local_result = {key: result[key] for key in result if result[key]}
-    log.debug('local result: %s ' % local_result)
+    log.debug("local result: %s " % local_result)
     return local_result
 
 
@@ -194,12 +194,12 @@ class SyspurposeSyncActionReport(certlib.ActionReport):
         :param change: A util.DiffChange object containing the recorded changes.
         :return: None
         """
-        if change.source == 'remote':
-            source = 'Entitlement Server'
-        elif change.source == 'local':
+        if change.source == "remote":
+            source = "Entitlement Server"
+        elif change.source == "local":
             source = USER_SYSPURPOSE
         else:
-            source = 'cached system purpose values'
+            source = "cached system purpose values"
         msg = None
         if change.in_base and not change.in_result:
             msg = "'{key}' removed by change from {source}".format(key=change.key, source=source)
@@ -221,10 +221,10 @@ class SyspurposeSyncActionReport(certlib.ActionReport):
     """
 
     def format_exceptions(self):
-        buf = ''
+        buf = ""
         for e in self._exceptions:
             buf += str(e).strip()
-            buf += '\n'
+            buf += "\n"
         return buf
 
 
@@ -260,8 +260,8 @@ class SyspurposeSyncActionCommand(object):
             # its own way rather than checking SyspurposeSyncActionReport.
             if isinstance(e, GoneException) and passthrough_gone:
                 raise
-            self.report._exceptions.append('Unable to sync syspurpose with server: %s' % str(e))
-            self.report._status = 'Failed to sync system purpose'
+            self.report._exceptions.append("Unable to sync syspurpose with server: %s" % str(e))
+            self.report._status = "Failed to sync system purpose"
         self.report._updates = "\n\t\t ".join(self.report._updates)
         log.debug("Syspurpose updated: %s" % self.report)
         if not include_result:

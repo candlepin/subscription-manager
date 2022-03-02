@@ -65,7 +65,7 @@ class PluginImportException(PluginException):
         self.msg = msg
 
     def __str__(self):
-        repr_msg = "Plugin \"%s\" can't be imported from file %s" % (self.module_name, self.module_file)
+        repr_msg = 'Plugin "%s" can\'t be imported from file %s' % (self.module_name, self.module_file)
         return self._add_message(repr_msg)
 
 
@@ -96,7 +96,7 @@ class PluginModuleImportApiVersionException(PluginImportException):
         self.msg = msg
 
     def __str__(self):
-        repr_msg = "Plugin \"%s\" requires API version %s. Supported API is %s" % (
+        repr_msg = 'Plugin "%s" requires API version %s. Supported API is %s' % (
             self.module_name,
             self.module_ver,
             self.api_ver,
@@ -112,7 +112,7 @@ class PluginConfigException(PluginException):
         self.msg = msg
 
     def __str__(self):
-        repr_msg = "Cannot load configuration for plugin \"%s\"" % (self.plugin_name)
+        repr_msg = 'Cannot load configuration for plugin "%s"' % (self.plugin_name)
         return self._add_message(repr_msg)
 
 
@@ -265,7 +265,7 @@ class BaseConduit(object):
 class RegistrationConduit(BaseConduit):
     """Conduit for uses with registration."""
 
-    slots = ['pre_register_consumer']
+    slots = ["pre_register_consumer"]
 
     def __init__(self, clazz, name, facts):
         """init for RegistrationConduit
@@ -282,7 +282,7 @@ class RegistrationConduit(BaseConduit):
 class PostRegistrationConduit(BaseConduit):
     """Conduit for use with post registration."""
 
-    slots = ['post_register_consumer']
+    slots = ["post_register_consumer"]
 
     def __init__(self, clazz, consumer, facts):
         """init for PostRegistrationConduit
@@ -300,7 +300,7 @@ class PostRegistrationConduit(BaseConduit):
 class ProductConduit(BaseConduit):
     """Conduit for use with plugins that handle product id functions."""
 
-    slots = ['pre_product_id_install', 'post_product_id_install']
+    slots = ["pre_product_id_install", "post_product_id_install"]
 
     def __init__(self, clazz, product_list):
         """init for ProductConduit
@@ -315,7 +315,7 @@ class ProductConduit(BaseConduit):
 class ProductUpdateConduit(BaseConduit):
     """Conduit for use with plugins that handle product id update functions."""
 
-    slots = ['pre_product_id_update', 'post_product_id_update']
+    slots = ["pre_product_id_update", "post_product_id_update"]
 
     def __init__(self, clazz, product_list):
         """init for ProductUpdateConduit
@@ -330,7 +330,7 @@ class ProductUpdateConduit(BaseConduit):
 class FactsConduit(BaseConduit):
     """Conduit for collecting facts."""
 
-    slots = ['post_facts_collection']
+    slots = ["post_facts_collection"]
 
     def __init__(self, clazz, facts):
         """init for FactsConduit
@@ -345,7 +345,7 @@ class FactsConduit(BaseConduit):
 class UpdateContentConduit(BaseConduit):
     """Conduit for updating content."""
 
-    slots = ['update_content']
+    slots = ["update_content"]
 
     def __init__(self, clazz, reports, ent_source):
         """init for UpdateContentConduit.
@@ -362,7 +362,7 @@ class UpdateContentConduit(BaseConduit):
 class SubscriptionConduit(BaseConduit):
     """Conduit for subscription info."""
 
-    slots = ['pre_subscribe']
+    slots = ["pre_subscribe"]
 
     def __init__(self, clazz, consumer_uuid, pool_id, quantity):
         """init for SubscriptionConduit
@@ -380,7 +380,7 @@ class SubscriptionConduit(BaseConduit):
 
 
 class PostSubscriptionConduit(BaseConduit):
-    slots = ['post_subscribe']
+    slots = ["post_subscribe"]
 
     def __init__(self, clazz, consumer_uuid, entitlement_data):
         """init for PostSubscriptionConduit
@@ -395,7 +395,7 @@ class PostSubscriptionConduit(BaseConduit):
 
 
 class AutoAttachConduit(BaseConduit):
-    slots = ['pre_auto_attach']
+    slots = ["pre_auto_attach"]
 
     def __init__(self, clazz, consumer_uuid):
         """
@@ -409,7 +409,7 @@ class AutoAttachConduit(BaseConduit):
 
 
 class PostAutoAttachConduit(PostSubscriptionConduit):
-    slots = ['post_auto_attach']
+    slots = ["post_auto_attach"]
 
     def __init__(self, clazz, consumer_uuid, entitlement_data):
         """init for PostAutoAttachConduit
@@ -467,12 +467,12 @@ class PluginConfig(object):
     def is_plugin_enabled(self):
         """returns True if the plugin is enabled in it's config."""
         try:
-            enabled = self.parser.getboolean('main', 'enabled')
+            enabled = self.parser.getboolean("main", "enabled")
         except Exception as e:
             raise PluginConfigException(self.plugin_key, e)
 
         if not enabled:
-            log.debug("Not loading \"%s\" plugin as it is disabled" % self.plugin_key)
+            log.debug('Not loading "%s" plugin as it is disabled' % self.plugin_key)
             return False
         return True
 
@@ -706,7 +706,7 @@ class BasePluginManager(object):
         else:
             # This shouldn't ever happen
             raise PluginException(
-                "Two or more plugins with the name \"%s\" exist "
+                'Two or more plugins with the name "%s" exist '
                 "in the plugin search path" % plugin_clazz.__name__
             )
 
@@ -778,12 +778,12 @@ class BasePluginManager(object):
 
         for func in self._slot_to_funcs[slot_name]:
             module = inspect.getmodule(func)
-            func_module_name = getattr(func, '__module__')
+            func_module_name = getattr(func, "__module__")
             if not func_module_name:
                 if module:
                     func_module_name = module.__name__
                 else:
-                    func_module_name = 'unknown_module'
+                    func_module_name = "unknown_module"
             func_class_name = func.__self__.__class__.__name__
             plugin_key = ".".join([func_module_name, func_class_name])
             log.debug("Running %s in %s" % (func.__name__, plugin_key))
@@ -980,7 +980,7 @@ class PluginManager(BasePluginManager):
 
 def parse_version(api_version):
     """parse an API version string into major and minor version strings."""
-    maj_ver, min_ver = api_version.split('.')
+    maj_ver, min_ver = api_version.split(".")
     return int(maj_ver), int(min_ver)
 
 

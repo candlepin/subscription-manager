@@ -51,7 +51,7 @@ class OverrideCommand(CliCommand):
         self.parser.add_argument(
             "--add",
             dest="additions",
-            action='append',
+            action="append",
             metavar="NAME:VALUE",
             help=_(
                 "name and value of the option to override separated by a colon (can be specified more than once); used with --repo option."
@@ -71,14 +71,14 @@ class OverrideCommand(CliCommand):
     def _additions_colon_split(self):
         additions = {}
         for value in self.options.additions or {}:
-            if value.strip() == '':
+            if value.strip() == "":
                 system_exit(
-                    os.EX_USAGE, _("You must specify an override in the form of \"name:value\" with --add.")
+                    os.EX_USAGE, _('You must specify an override in the form of "name:value" with --add.')
                 )
 
-            k, _colon, v = value.partition(':')
+            k, _colon, v = value.partition(":")
             if not v or not k:
-                system_exit(os.EX_USAGE, _("--add arguments should be in the form of \"name:value\""))
+                system_exit(os.EX_USAGE, _('--add arguments should be in the form of "name:value"'))
 
             additions[k] = v
         self.options.additions = additions
@@ -103,7 +103,7 @@ class OverrideCommand(CliCommand):
             )
         if self.options.removals:
             stripped_removals = [removal.strip() for removal in self.options.removals]
-            if '' in stripped_removals:
+            if "" in stripped_removals:
                 system_exit(os.EX_USAGE, _("Error: You must specify an override name with --remove."))
         # If no relevant options were given, just show a list
         if not (
@@ -121,7 +121,7 @@ class OverrideCommand(CliCommand):
         self.assert_should_be_registered()
 
         supported_resources = get_supported_resources()
-        if 'content_overrides' not in supported_resources:
+        if "content_overrides" not in supported_resources:
             system_exit(
                 os.EX_UNAVAILABLE, _("Error: The 'repo-override' command is not supported by the server.")
             )

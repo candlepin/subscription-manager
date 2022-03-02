@@ -19,9 +19,9 @@ from threading import local
 import os
 
 # Localization domain:
-APP = 'rhsm'
+APP = "rhsm"
 # Directory where translations are deployed:
-DIR = '/usr/share/locale/'
+DIR = "/usr/share/locale/"
 
 TRANSLATION = gettext.translation(APP, fallback=True)
 
@@ -41,24 +41,24 @@ def configure_i18n():
     import locale
 
     try:
-        locale.setlocale(category=locale.LC_ALL, locale='')
+        locale.setlocale(category=locale.LC_ALL, locale="")
     except locale.Error:
         # Following message could be little bit confusing. Why? When environment variable
         # LANG is set to e.g. es_ES.UTF-8, then we can show localized message for this language,
         # but this language could not be fully supported by the system. It means that en_ES is not
         # listed in the list of 'locale -a'
         _locale = None
-        if 'LANG' in os.environ:
-            _locale = os.environ['LANG']
-        elif 'LC_ALL' in os.environ:
-            _locale = os.environ['LC_ALL']
+        if "LANG" in os.environ:
+            _locale = os.environ["LANG"]
+        elif "LC_ALL" in os.environ:
+            _locale = os.environ["LC_ALL"]
         if _locale is not None and Locale.is_locale_supported(_locale):
             print(
                 'You are attempting to use a locale: "%s" that is not fully supported by this system.'
                 % _locale
             )
-        os.environ['LC_ALL'] = 'C.UTF-8'
-        locale.setlocale(locale.LC_ALL, 'C.UTF-8')
+        os.environ["LC_ALL"] = "C.UTF-8"
+        locale.setlocale(locale.LC_ALL, "C.UTF-8")
 
     configure_gettext()
     # RHBZ 1642271  Don't set a None lang
@@ -76,18 +76,18 @@ def configure_gettext():
     """
     gettext.bindtextdomain(APP, DIR)
     gettext.textdomain(APP)
-    locale.bind_textdomain_codeset(APP, 'UTF-8')
+    locale.bind_textdomain_codeset(APP, "UTF-8")
 
 
 def ugettext(*args, **kwargs):
-    if hasattr(LOCALE, 'lang') and LOCALE.lang is not None:
+    if hasattr(LOCALE, "lang") and LOCALE.lang is not None:
         return LOCALE.lang.gettext(*args, **kwargs)
     else:
         return TRANSLATION.gettext(*args, **kwargs)
 
 
 def ungettext(*args, **kwargs):
-    if hasattr(LOCALE, 'lang') and LOCALE.lang is not None:
+    if hasattr(LOCALE, "lang") and LOCALE.lang is not None:
         return LOCALE.lang.ngettext(*args, **kwargs)
     else:
         return TRANSLATION.ngettext(*args, **kwargs)
@@ -127,19 +127,19 @@ class Locale(object):
         lang = None
         new_language = None
         # For similar case: 'de'
-        if '_' not in language:
-            new_language = language + '_' + language.upper()
+        if "_" not in language:
+            new_language = language + "_" + language.upper()
         # For similar cases: 'de_AT' (Austria), 'de_LU' (Luxembourg)
         elif language[0:2] != language[3:5]:
-            new_language = language[0:2] + '_' + language[0:2].upper() + language[5:]
+            new_language = language[0:2] + "_" + language[0:2].upper() + language[5:]
         if new_language is not None:
             try:
                 lang = gettext.translation(APP, DIR, languages=[new_language])
             except IOError as err:
-                log.info('Could not import locale either for %s: %s' % (new_language, err))
+                log.info("Could not import locale either for %s: %s" % (new_language, err))
                 new_language = None
             else:
-                log.debug('Using new locale for language: %s' % new_language)
+                log.debug("Using new locale for language: %s" % new_language)
                 cls.translations[language] = lang
         return lang, new_language
 
@@ -156,22 +156,22 @@ class Locale(object):
         global LOCALE
         lang = None
 
-        if language != '':
+        if language != "":
             if language in cls.translations.keys():
-                log.debug('Reusing locale for language: %s' % language)
+                log.debug("Reusing locale for language: %s" % language)
                 lang = cls.translations[language]
             else:
                 # Try to find given language
                 try:
-                    log.debug('Trying to use locale: %s' % language)
+                    log.debug("Trying to use locale: %s" % language)
                     lang = gettext.translation(APP, DIR, languages=[language])
                 except IOError as err:
-                    log.info('Could not import locale for %s: %s' % (language, err))
+                    log.info("Could not import locale for %s: %s" % (language, err))
                     # When original language was not found, then we will try another
                     # alternatives.
                     lang, language = cls._find_lang_alternative(language)
                 else:
-                    log.debug('Using new locale for language: %s' % language)
+                    log.debug("Using new locale for language: %s" % language)
                     cls.translations[language] = lang
 
         LOCALE.language = language

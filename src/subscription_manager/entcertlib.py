@@ -118,7 +118,7 @@ class EntCertUpdateAction(object):
             expected = self._get_expected_serials()
         except socket.error as ex:
             log.exception(ex)
-            log.error('Cannot modify subscriptions while disconnected')
+            log.error("Cannot modify subscriptions while disconnected")
             raise Disconnected()
 
         cert_changed = False
@@ -128,7 +128,7 @@ class EntCertUpdateAction(object):
         self.delete(rogue_serials)
         self.install(missing_serials)
 
-        log.info('certs updated:\n%s', self.report)
+        log.info("certs updated:\n%s", self.report)
         self.syslog_results()
 
         # We call EntCertlibActionInvoker.update() solo from
@@ -149,7 +149,7 @@ class EntCertUpdateAction(object):
                     if cont_access_cert.serial not in expected:
                         obsolete_certs.append(cont_access_cert)
                 if len(obsolete_certs) > 0:
-                    log.info('Deleting obsolete content access certificate')
+                    log.info("Deleting obsolete content access certificate")
                     self.delete(obsolete_certs)
             update_data = self.content_access_hook()
             if update_data is not None:
@@ -272,7 +272,7 @@ class EntCertUpdateAction(object):
 
         reply = self.uep.getCertificateSerials(identity.uuid)
         for d in reply:
-            sn = d['serial']
+            sn = d["serial"]
             results.append(sn)
         return results
 
@@ -396,8 +396,8 @@ class EntitlementCertBundleInstaller(object):
     # should probably be in python-rhsm/certificate
     def build_cert(self, bundle):
         """Split a cert bundle into a EntitlementCertificate and a Key."""
-        keypem = bundle['key']
-        crtpem = bundle['cert']
+        keypem = bundle["key"]
+        crtpem = bundle["cert"]
 
         key = Key(keypem)
         cert = create_from_pem(crtpem)
@@ -407,7 +407,7 @@ class EntitlementCertBundleInstaller(object):
     def install_exception(self, bundle, exception):
         """Log exceptions and add them to the EntCertUpdateReport."""
         log.exception(exception)
-        log.error('Bundle not loaded:\n%s\n%s', bundle, exception)
+        log.error("Bundle not loaded:\n%s\n%s", bundle, exception)
 
         self.report._exceptions.append(exception)
 
@@ -443,24 +443,24 @@ class EntCertUpdateReport(certlib.ActionReport):
 
     def write(self, s, title, certificates):
         """Generate a report stanza for a list of certs."""
-        indent = '  '
+        indent = "  "
         s.append(title)
         if certificates:
             for c in certificates:
                 products = c.products
                 if not products:
-                    s.append('%s[sn:%d (%s) @ %s]' % (indent, c.serial, c.order.name, c.path))
+                    s.append("%s[sn:%d (%s) @ %s]" % (indent, c.serial, c.order.name, c.path))
                 for product in products:
-                    s.append('%s[sn:%d (%s,) @ %s]' % (indent, c.serial, product.name, c.path))
+                    s.append("%s[sn:%d (%s,) @ %s]" % (indent, c.serial, product.name, c.path))
         else:
-            s.append('%s<NONE>' % indent)
+            s.append("%s<NONE>" % indent)
 
     def __str__(self):
         """__str__ of report. Used in rhsm and rhsmcertd logging."""
         s = []
-        s.append(_('Total updates: %d') % self.updates())
-        s.append(_('Found (local) serial# %s') % self.valid)
-        s.append(_('Expected (UEP) serial# %s') % self.expected)
-        self.write(s, _('Added (new)'), self.added)
-        self.write(s, _('Deleted (rogue):'), self.rogue)
-        return '\n'.join(s)
+        s.append(_("Total updates: %d") % self.updates())
+        s.append(_("Found (local) serial# %s") % self.valid)
+        s.append(_("Expected (UEP) serial# %s") % self.expected)
+        self.write(s, _("Added (new)"), self.added)
+        self.write(s, _("Deleted (rogue):"), self.rogue)
+        return "\n".join(s)

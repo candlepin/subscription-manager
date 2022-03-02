@@ -54,14 +54,14 @@ class UuidFirmwareInfoCollector(collector.FactsCollector):
     def get_all(self):
         uuidinfo = {}
         try:
-            with open(ARCH_UUID_LOCATION[self.arch], 'r') as uuid_file:
+            with open(ARCH_UUID_LOCATION[self.arch], "r") as uuid_file:
                 uuid = uuid_file.read().strip()
             if uuid:
                 UUID(uuid)
-                uuidinfo['dmi.system.uuid'] = uuid
+                uuidinfo["dmi.system.uuid"] = uuid
         except ValueError as err:
             log.error(
-                'Wrong UUID value: %s read from: %s, error: %s' % (uuid, ARCH_UUID_LOCATION[self.arch], err)
+                "Wrong UUID value: %s read from: %s, error: %s" % (uuid, ARCH_UUID_LOCATION[self.arch], err)
             )
         except Exception as e:
             log.warning("Error reading system uuid information: %s", e, exc_info=True)

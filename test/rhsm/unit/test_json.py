@@ -19,7 +19,7 @@ from datetime import datetime
 
 class JsonTests(unittest.TestCase):
     def test_custom_set_encoding(self):
-        s = set(['a', 'b', 'c', 'c'])
+        s = set(["a", "b", "c", "c"])
         result = json.dumps(s, default=json.encode)
         # Python prints lists with single quotes, JSON with double quotes
         # so we need to convert to do a string comparison.

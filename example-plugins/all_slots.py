@@ -30,7 +30,7 @@ class AllSlotsPlugin(SubManPlugin):
         super(AllSlotsPlugin, self).__init__(conf)
 
     def __getattr__(self, attrname):
-        if attrname.endswith('_hook'):
+        if attrname.endswith("_hook"):
             # if we get asked for a hook method, create one based on
             # "handler", set a slot_name attribute on it, and bind it
             # to our class with correct attribute name
@@ -40,7 +40,7 @@ class AllSlotsPlugin(SubManPlugin):
                 )
 
             # add a slot_name attr to the handler method obj itself
-            setattr(handler, 'slot_name', attrname[:-5])
+            setattr(handler, "slot_name", attrname[:-5])
 
             # create a new instance of it, and bind it to self
             new_hook = types.MethodType(handler, self, AllSlotsPlugin)

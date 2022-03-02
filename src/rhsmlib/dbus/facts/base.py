@@ -35,7 +35,7 @@ class BaseFacts(base_object.BaseObject):
 
     @util.dbus_service_method(
         dbus_interface=constants.FACTS_DBUS_INTERFACE,
-        out_signature='a{ss}',
+        out_signature="a{ss}",
     )
     @util.dbus_handle_exceptions
     def GetFacts(self, sender=None):
@@ -54,8 +54,8 @@ def class_factory(name, facts_collector=None):
     return type(name, (BaseFacts,), {"__init__": __init__})
 
 
-AllFacts = class_factory('AllFacts', all.AllFactsCollector())
-HostFacts = class_factory('HostFacts', host_collector.HostCollector())
-HardwareFacts = class_factory('HardwareFacts', hwprobe.HardwareCollector())
-CustomFacts = class_factory('CustomFacts', custom.CustomFactsCollector())
-StaticFacts = class_factory('StaticFacts', collector.StaticFactsCollector())
+AllFacts = class_factory("AllFacts", all.AllFactsCollector())
+HostFacts = class_factory("HostFacts", host_collector.HostCollector())
+HardwareFacts = class_factory("HardwareFacts", hwprobe.HardwareCollector())
+CustomFacts = class_factory("CustomFacts", custom.CustomFactsCollector())
+StaticFacts = class_factory("StaticFacts", collector.StaticFactsCollector())

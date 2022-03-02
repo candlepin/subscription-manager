@@ -252,11 +252,11 @@ class StubProductCertificate(ProductCertificate):
 
     def __str__(self):
         s = []
-        s.append('StubProductCertificate:')
-        s.append('===================================')
+        s.append("StubProductCertificate:")
+        s.append("===================================")
         for p in self.products:
             s.append(str(p))
-        return '\n'.join(s)
+        return "\n".join(s)
 
 
 class StubEntitlementCertificate(EntitlementCertificate):
@@ -340,9 +340,9 @@ class StubEntitlementCertificate(EntitlementCertificate):
             version=version,
         )
         if ent_id:
-            self.subject = {'CN': ent_id}
+            self.subject = {"CN": ent_id}
 
-        self._entitlement_type = entitlement_type or 'Basic'
+        self._entitlement_type = entitlement_type or "Basic"
 
     @property
     def entitlement_type(self):
@@ -488,7 +488,7 @@ class StubUEP(object):
         key_file=None,
         restlib_class=None,
     ):
-        self.registered_consumer_info = {"uuid": 'dummy-consumer-uuid'}
+        self.registered_consumer_info = {"uuid": "dummy-consumer-uuid"}
         self.environment_list = []
         self.called_unregister_uuid = None
         self.called_unbind_uuid = None
@@ -523,10 +523,10 @@ class StubUEP(object):
         self.called_unregister_uuid = uuid
 
     def getOwnerList(self, username):
-        return [{'key': 'dummyowner'}]
+        return [{"key": "dummyowner"}]
 
     def getOwner(self, consumer_uuid):
-        return {'key': 'dummyowner'}
+        return {"key": "dummyowner"}
 
     def updatePackageProfile(self, uuid, pkg_dicts):
         pass
@@ -535,10 +535,10 @@ class StubUEP(object):
         return {}
 
     def getRelease(self, consumerId):
-        return {'releaseVer': ''}
+        return {"releaseVer": ""}
 
     def getServiceLevelList(self, owner):
-        return ['Pro', 'Super Pro', 'ProSumer']
+        return ["Pro", "Super Pro", "ProSumer"]
 
     def updateConsumer(
         self,
@@ -567,7 +567,7 @@ class StubUEP(object):
         self.consumer = consumer
 
     def getConsumer(self, consumerId, username=None, password=None):
-        if hasattr(self, 'consumer') and self.consumer:
+        if hasattr(self, "consumer") and self.consumer:
             return self.consumer
         if callable(self.registered_consumer_info):
             return self.registered_consumer_info()
@@ -595,13 +595,13 @@ class StubUEP(object):
         self.syspurpose_compliance_status = status
 
     def getEntitlementList(self, uuid):
-        return [{'id': 'ent1'}, {'id': 'ent2'}]
+        return [{"id": "ent1"}, {"id": "ent2"}]
 
     def getPoolsList(self, uuid, listAll, active_on, owner):
-        return [{'id': 'pool1'}, {'id': 'pool2'}]
+        return [{"id": "pool1"}, {"id": "pool2"}]
 
     def getSubscriptionList(self, owner):
-        return [{'id': 'sub1'}, {'id': 'sub2'}]
+        return [{"id": "sub1"}, {"id": "sub2"}]
 
     def getContentOverrides(self, uuid):
         return []

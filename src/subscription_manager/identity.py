@@ -34,9 +34,9 @@ class ConsumerIdentity(object):
     Includes helpers for reading/writing consumer identity certificates
     from disk."""
 
-    PATH = conf['rhsm']['consumerCertDir']
-    KEY = 'key.pem'
-    CERT = 'cert.pem'
+    PATH = conf["rhsm"]["consumerCertDir"]
+    KEY = "key.pem"
+    CERT = "cert.pem"
 
     @staticmethod
     def keypath():
@@ -65,7 +65,7 @@ class ConsumerIdentity(object):
                 cls.read()
                 return True
             except Exception as e:
-                log.warn('possible certificate corruption')
+                log.warn("possible certificate corruption")
                 log.error(e)
         return False
 
@@ -78,7 +78,7 @@ class ConsumerIdentity(object):
 
     def getConsumerId(self):
         subject = self.x509.subject
-        return subject.get('CN')
+        return subject.get("CN")
 
     def getConsumerName(self):
         altName = self.x509.alt_name
@@ -94,10 +94,10 @@ class ConsumerIdentity(object):
         from subscription_manager import managerlib
 
         self.__mkdir()
-        with open(self.keypath(), 'w') as key_file:
+        with open(self.keypath(), "w") as key_file:
             key_file.write(self.key)
         os.chmod(self.keypath(), managerlib.ID_CERT_PERMS)
-        with open(self.certpath(), 'w') as cert_file:
+        with open(self.certpath(), "w") as cert_file:
             cert_file.write(self.cert)
         os.chmod(self.certpath(), managerlib.ID_CERT_PERMS)
 
@@ -126,7 +126,7 @@ class Identity(object):
         self._lock = threading.Lock()
         self._name = None
         self._uuid = None
-        self._cert_dir_path = conf['rhsm']['consumerCertDir']
+        self._cert_dir_path = conf["rhsm"]["consumerCertDir"]
         self.reload()
 
     def reload(self):
@@ -158,7 +158,7 @@ class Identity(object):
             else:
                 self._name = None
                 self._uuid = None
-                self._cert_dir_path = conf['rhsm']['consumerCertDir']
+                self._cert_dir_path = conf["rhsm"]["consumerCertDir"]
 
     def _get_consumer_identity(self):
         return ConsumerIdentity.read()

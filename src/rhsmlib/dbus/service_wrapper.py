@@ -59,7 +59,7 @@ def main(argv=sys.argv, object_classes=None, default_bus_name=None):
     options, args = parse_argv(argv, default_bus_name)
 
     if options.verbose:
-        logger = logging.getLogger('')
+        logger = logging.getLogger("")
         logger.setLevel(logging.DEBUG)
 
     if not object_classes:
@@ -70,7 +70,7 @@ def main(argv=sys.argv, object_classes=None, default_bus_name=None):
             object_classes.append(rhsmlib.import_class(clazz))
 
     try:
-        log.debug('Starting DBus service with name %s' % options.bus_name)
+        log.debug("Starting DBus service with name %s" % options.bus_name)
         server.Server(bus_class=options.bus, bus_name=options.bus_name, object_classes=object_classes).run()
     except dbus.exceptions.DBusException as e:
         if e._dbus_error_name == "org.freedesktop.DBus.Error.AccessDenied":

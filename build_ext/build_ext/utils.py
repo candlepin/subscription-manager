@@ -26,12 +26,12 @@ class clean(_clean):
         _clean.initialize_options(self)
 
     def finalize_options(self):
-        self.set_undefined_options('egg_info', ('egg_base', 'egg_base'))
+        self.set_undefined_options("egg_info", ("egg_base", "egg_base"))
         _clean.finalize_options(self)
 
     def run(self):
         if self.all:
-            for f in glob(os.path.join(self.egg_base, '*.egg-info')):
+            for f in glob(os.path.join(self.egg_base, "*.egg-info")):
                 remove_tree(f, dry_run=self.dry_run)
         _clean.run(self)
 

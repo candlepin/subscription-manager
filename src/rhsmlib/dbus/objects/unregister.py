@@ -46,8 +46,8 @@ class UnregisterDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.UNREGISTER_INTERFACE,
-        in_signature='a{sv}s',
-        out_signature='',
+        in_signature="a{sv}s",
+        out_signature="",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions

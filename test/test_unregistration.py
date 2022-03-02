@@ -21,7 +21,7 @@ from mock import patch, Mock
 
 
 class CliUnRegistrationTests(SubManFixture):
-    @patch('subscription_manager.managerlib.clean_all_data')
+    @patch("subscription_manager.managerlib.clean_all_data")
     def test_unregister_removes_consumer_cert(self, clean_data_mock):
         mock_injected_identity = self._inject_mock_valid_consumer()
 
@@ -33,9 +33,9 @@ class CliUnRegistrationTests(SubManFixture):
         cmd.main([])
         self.assertEqual(mock_injected_identity.uuid, cmd.cp.called_unregister_uuid)
 
-    @patch('subscription_manager.managerlib.clean_all_data')
+    @patch("subscription_manager.managerlib.clean_all_data")
     def test_unregister_removes_consumer_cert_with_gone_correct_id(self, clean_data_mock):
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             mock_uep.unregisterConsumer = Mock(side_effect=connection.GoneException("", "", 112233))
             self.stub_cp_provider.consumer_auth_cp = mock_uep
             self._inject_mock_valid_consumer(uuid=112233)

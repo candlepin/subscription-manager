@@ -38,7 +38,7 @@ except ImportError as err:
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
-    sys.stderr.write('Error: this command requires root access to execute\n')
+    sys.stderr.write("Error: this command requires root access to execute\n")
     sys.exit(8)
 
 
@@ -46,7 +46,7 @@ def main():
     return RhsmDebugCLI().main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         sys.exit(abs(main() or 0))
     except SystemExit as sys_err:

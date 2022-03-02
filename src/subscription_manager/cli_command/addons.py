@@ -27,6 +27,6 @@ class AddonsCommand(AbstractSyspurposeCommand, OrgCommand):
             subparser,
             shortdesc=shortdesc,
             primary=False,
-            attr='addons',
-            commands=['unset', 'add', 'remove', 'show', 'list'],
+            attr="addons",
+            commands=["unset", "add", "remove", "show", "list"],
         )

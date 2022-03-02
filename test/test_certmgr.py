@@ -36,11 +36,11 @@ from .fixture import SubManFixture, set_up_mock_sp_store
 
 
 CONSUMER_DATA = {
-    'releaseVer': {'id': 1, 'releaseVer': '123123'},
-    'serviceLevel': "Pro Turbo HD Plus Ultra",
-    'owner': {'key': 'admin'},
-    'autoheal': 1,
-    'idCert': {'serial': {'serial': 3787455826750723380}},
+    "releaseVer": {"id": 1, "releaseVer": "123123"},
+    "serviceLevel": "Pro Turbo HD Plus Ultra",
+    "owner": {"key": "admin"},
+    "autoheal": 1,
+    "idCert": {"serial": {"serial": 3787455826750723380}},
 }
 
 
@@ -71,14 +71,14 @@ class ActionClientTestBase(SubManFixture):
         # self.patcher2 = mock.patch.object(entcertlib.EntCertUpdateAction, '_get_consumer_id')
         # self.entcertlib_updateaction_getconsumerid = self.patcher2.start()
 
-        self.patcher3 = mock.patch.object(repolib.RepoUpdateActionCommand, 'perform')
+        self.patcher3 = mock.patch.object(repolib.RepoUpdateActionCommand, "perform")
         self.repolib_updateaction_perform = self.patcher3.start()
 
-        self.patcher6 = mock.patch('subscription_manager.managerlib.persist_consumer_cert')
+        self.patcher6 = mock.patch("subscription_manager.managerlib.persist_consumer_cert")
         self.managerlib_persist_consumer_cert = self.patcher6.start()
 
         # mock out all hardware fetching... we may need to fake socket counts
-        self.hwprobe_getall_patcher = mock.patch.object(hwprobe.HardwareCollector, 'get_all')
+        self.hwprobe_getall_patcher = mock.patch.object(hwprobe.HardwareCollector, "get_all")
         self.hwprobe_getall_mock = self.hwprobe_getall_patcher.start()
         self.hwprobe_getall_mock.return_value = {}
 
@@ -86,12 +86,12 @@ class ActionClientTestBase(SubManFixture):
         self.entcertlib_writer = self.patcher_entcertlib_writer.start()
 
         self.patcher_entcertlib_action_syslogreport = mock.patch.object(
-            entcertlib.EntCertUpdateAction, 'syslog_results'
+            entcertlib.EntCertUpdateAction, "syslog_results"
         )
         self.update_action_syslog_mock = self.patcher_entcertlib_action_syslogreport.start()
 
         # some stub certs
-        stub_product = stubs.StubProduct('stub_product')
+        stub_product = stubs.StubProduct("stub_product")
         self.stub_ent1 = stubs.StubEntitlementCertificate(stub_product)
         self.stub_ent2 = stubs.StubEntitlementCertificate(stub_product)
         self.stub_ent_expires_tomorrow = stubs.StubEntitlementCertificate(
@@ -111,12 +111,12 @@ class ActionClientTestBase(SubManFixture):
 
         self.mock_uep = mock.Mock()
         self.mock_uep.getCertificateSerials = mock.Mock(
-            return_value=[{'serial': self.stub_ent1.serial}, {'serial': self.stub_ent2.serial}]
+            return_value=[{"serial": self.stub_ent1.serial}, {"serial": self.stub_ent2.serial}]
         )
         self.mock_uep.getConsumer = mock.Mock(return_value=CONSUMER_DATA)
         self.set_consumer_auth_cp(self.mock_uep)
 
-        stub_release = {'releaseVer': '6.4'}
+        stub_release = {"releaseVer": "6.4"}
         self.mock_uep.getRelease = mock.Mock(return_value=stub_release)
 
         # we need to mock the consumers uuid with the mocked GoneExceptions
@@ -134,7 +134,7 @@ class ActionClientTestBase(SubManFixture):
 
         injection.provide(injection.CERT_SORTER, self.mock_cert_sorter)
 
-        syspurpose_patch = mock.patch('subscription_manager.syspurposelib.SyncedStore')
+        syspurpose_patch = mock.patch("subscription_manager.syspurposelib.SyncedStore")
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)
@@ -161,14 +161,14 @@ class TestActionClient(ActionClientTestBase):
         actionclient.update()
 
     # see bz #852706
-    @mock.patch.object(entcertlib.EntCertActionInvoker, 'update')
+    @mock.patch.object(entcertlib.EntCertActionInvoker, "update")
     def test_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
         actionclient = action_client.ActionClient()
         self.assertRaises(GoneException, actionclient.update)
 
     # see bz #852706, except this time for idcertlib
-    @mock.patch.object(identitycertlib.IdentityCertActionInvoker, 'update')
+    @mock.patch.object(identitycertlib.IdentityCertActionInvoker, "update")
     def test_idcertlib_gone_exception(self, mock_update):
         mock_update.side_effect = GoneException(410, "bye bye", " 234234")
         actionclient = action_client.ActionClient()
@@ -178,27 +178,27 @@ class TestActionClient(ActionClientTestBase):
         report = actionclient.entcertlib.report
         self.assertTrue(self.stub_ent1.serial in report.valid)
 
-    @mock.patch.object(entcertlib.EntCertActionInvoker, 'update')
-    @mock.patch('subscription_manager.base_action_client.log')
+    @mock.patch.object(entcertlib.EntCertActionInvoker, "update")
+    @mock.patch("subscription_manager.base_action_client.log")
     def test_entcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
         actionclient = action_client.ActionClient()
         actionclient.update()
 
         for call in mock_log.method_calls:
-            if call[0] == 'exception' and isinstance(call[1][0], ExceptionalException):
+            if call[0] == "exception" and isinstance(call[1][0], ExceptionalException):
                 return
         self.fail("Did not ExceptionException in the logged exceptions")
 
-    @mock.patch.object(identitycertlib.IdentityCertActionInvoker, 'update')
-    @mock.patch('subscription_manager.base_action_client.log')
+    @mock.patch.object(identitycertlib.IdentityCertActionInvoker, "update")
+    @mock.patch("subscription_manager.base_action_client.log")
     def test_idcertlib_update_exception(self, mock_log, mock_update):
         mock_update.side_effect = ExceptionalException()
         actionclient = action_client.ActionClient()
         actionclient.update()
 
         for call in mock_log.method_calls:
-            if call[0] == 'exception' and isinstance(call[1][0], ExceptionalException):
+            if call[0] == "exception" and isinstance(call[1][0], ExceptionalException):
                 return
         self.fail("Did not ExceptionException in the logged exceptions")
 
@@ -219,7 +219,7 @@ class TestActionClient(ActionClientTestBase):
         self.mock_uep.getCertificates.return_value = stub_certificate_list
 
     # we need to simulate the client missing some ent certs
-    @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, 'build_cert')
+    @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, "build_cert")
     def test_missing(self, cert_build_mock):
         # mock no certs client side
         self._stub_certificate_calls()
@@ -244,7 +244,7 @@ class TestActionClient(ActionClientTestBase):
         self.assertTrue(self.local_ent_certs[0] in report.rogue)
         self.assertTrue(self.local_ent_certs[1] in report.rogue)
 
-    @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, 'build_cert')
+    @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, "build_cert")
     def test_expired(self, cert_build_mock):
         cert_build_mock.return_value = (mock.Mock(), self.stub_ent1)
 
@@ -264,8 +264,8 @@ class TestActionClient(ActionClientTestBase):
         # report = self.update_action_syslog_mock.call_args[0][0]
         self.assertTrue(self.stub_ent1 in report.rogue)
 
-    @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, 'build_cert')
-    @mock.patch('subscription_manager.entcertlib.log')
+    @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, "build_cert")
+    @mock.patch("subscription_manager.entcertlib.log")
     def test_exception_on_cert_write(self, mock_log, mock_cert_build):
         # this is basically the same as test_missing, expect we throw
         # an exception attempting to write the certs out
@@ -278,7 +278,7 @@ class TestActionClient(ActionClientTestBase):
         actionclient.update()
 
         for call in mock_log.method_calls:
-            if call[0] == 'exception' and isinstance(call[1][0], ExceptionalException):
+            if call[0] == "exception" and isinstance(call[1][0], ExceptionalException):
                 return
         self.fail("Did not ExceptionException in the logged exceptions")
 
@@ -299,7 +299,7 @@ class TestHealingActionClient(TestActionClient):
         actionclient.update(autoheal=True)
         self.assertTrue(self.mock_uep.bind.called)
 
-    @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, 'build_cert')
+    @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, "build_cert")
     def test_healing_needs_heal_tomorrow(self, cert_build_mock):
         # Valid today, but not valid 24h from now:
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
@@ -313,7 +313,7 @@ class TestHealingActionClient(TestActionClient):
         self.assertTrue(self.mock_uep.bind.called)
 
     # TODO: use Mock(wraps=) instead of hiding all logging
-    @mock.patch('subscription_manager.healinglib.log')
+    @mock.patch("subscription_manager.healinglib.log")
     def test_healing_trigger_exception(self, mock_log):
         # Forcing is_valid to throw the type error we used to expect from
         # cert sorter using the product dir. Just making sure an unexpected
@@ -322,6 +322,6 @@ class TestHealingActionClient(TestActionClient):
         actionclient = action_client.HealingActionClient()
         actionclient.update(autoheal=True)
         for call in mock_log.method_calls:
-            if call[0] == 'exception' and isinstance(call[1][0], TypeError):
+            if call[0] == "exception" and isinstance(call[1][0], TypeError):
                 return
         self.fail("Did not see TypeError in the logged exceptions")

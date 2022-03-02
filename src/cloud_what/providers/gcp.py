@@ -62,8 +62,8 @@ class GCPCloudProvider(BaseCloudProvider):
     CLOUD_PROVIDER_SIGNATURE_TYPE = None
 
     HTTP_HEADERS = {
-        'User-Agent': 'cloud-what/1.0',
-        'Metadata-Flavor': 'Google',
+        "User-Agent": "cloud-what/1.0",
+        "Metadata-Flavor": "Google",
     }
 
     # Metadata are provided in JWT token and this token is valid for one hour.
@@ -101,7 +101,7 @@ class GCPCloudProvider(BaseCloudProvider):
         if self.is_vm() is False:
             return False
         # This is valid for virtual machines running on Google Cloud Platform
-        if 'dmi.bios.vendor' in self.hw_info and 'google' in self.hw_info['dmi.bios.vendor'].lower():
+        if "dmi.bios.vendor" in self.hw_info and "google" in self.hw_info["dmi.bios.vendor"].lower():
             return True
         # In other cases return False
         return False
@@ -120,7 +120,7 @@ class GCPCloudProvider(BaseCloudProvider):
             return 0.0
 
         # We know that GCP uses only KVM at the end of 2020
-        if 'virt.host_type' in self.hw_info and 'kvm' in self.hw_info['virt.host_type']:
+        if "virt.host_type" in self.hw_info and "kvm" in self.hw_info["virt.host_type"]:
             probability += 0.3
 
         # Try to find "Google" or "gcp" keywords in output of dmidecode
@@ -129,9 +129,9 @@ class GCPCloudProvider(BaseCloudProvider):
         for hw_item in self.hw_info.values():
             if type(hw_item) != str:
                 continue
-            if 'google' in hw_item.lower():
+            if "google" in hw_item.lower():
                 found_google = True
-            elif 'gcp' in hw_item.lower():
+            elif "gcp" in hw_item.lower():
                 found_gcp = True
         if found_google is True:
             probability += 0.3
@@ -211,29 +211,29 @@ class GCPCloudProvider(BaseCloudProvider):
         :return: tuple with: string representing header, string representing metadata and base64 encoded signature
         """
         # Get the actual payload part: [0] is JOSE header, [1] is metadata and [2] is signature
-        parts = jwt_token.split('.')
+        parts = jwt_token.split(".")
         if len(parts) >= 3:
             encoded_jose_header = parts[0]
             encoded_metadata = parts[1]
             encoded_signature = parts[2]
             # Add some extra padding, JWT tokens have padding trimmed - see https://stackoverflow.com/a/49459036
-            encoded_jose_header += '==='
-            encoded_metadata += '==='
-            encoded_signature += '==='
+            encoded_jose_header += "==="
+            encoded_metadata += "==="
+            encoded_signature += "==="
             # Decode only header and metadata, not signature
             try:
-                jose_header = base64.b64decode(encoded_jose_header).decode('utf-8')
+                jose_header = base64.b64decode(encoded_jose_header).decode("utf-8")
             except UnicodeDecodeError as err:
-                log.error(f'Unable to decode JWT JOSE header: {err}')
+                log.error(f"Unable to decode JWT JOSE header: {err}")
                 jose_header = None
             try:
-                metadata = base64.b64decode(encoded_metadata).decode('utf-8')
+                metadata = base64.b64decode(encoded_metadata).decode("utf-8")
             except UnicodeDecodeError as err:
-                log.error(f'Unable to decode JWT metadata: {err}')
+                log.error(f"Unable to decode JWT metadata: {err}")
                 metadata = None
             return jose_header, metadata, encoded_signature
         else:
-            log.warning('JWT token with wrong format')
+            log.warning("JWT token with wrong format")
             return None, None, None
 
 
@@ -285,7 +285,7 @@ def _smoke_test():
 
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     handler.setFormatter(formatter)
     root.addHandler(handler)
 
@@ -294,18 +294,18 @@ def _smoke_test():
     gcp_cloud_provider = GCPCloudProvider(facts)
     result = gcp_cloud_provider.is_running_on_cloud()
     probability = gcp_cloud_provider.is_likely_running_on_cloud()
-    print('>>> debug <<< result: %s, %6.3f' % (result, probability))
+    print(">>> debug <<< result: %s, %6.3f" % (result, probability))
     if result is True:
         # 1. using default audience
         token = gcp_cloud_provider.get_metadata()
-        print(f'>>> debug <<< 1. token: {token}')
+        print(f">>> debug <<< 1. token: {token}")
         # 2. using some custom audience
         gcp_cloud_provider = GCPCloudProvider(facts, audience_url="https://localhost:8443/candlepin")
         token = gcp_cloud_provider.get_metadata()
-        print(f'>>> debug <<< 2. token: {token}')
+        print(f">>> debug <<< 2. token: {token}")
 
 
 # Some temporary smoke testing code. You can test this module using:
 # sudo PYTHONPATH=./src python3 -m cloud_what.providers.gcp
-if __name__ == '__main__':
+if __name__ == "__main__":
     _smoke_test()

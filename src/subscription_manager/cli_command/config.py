@@ -77,8 +77,8 @@ class ConfigCommand(CliCommand):
                     if hasattr(self.options, s + "." + name):
                         test = "{value}".format(value=getattr(self.options, s + "." + name))
                     else:
-                        test = 'None'
-                    has = has or (test != 'None')
+                        test = "None"
+                    has = has or (test != "None")
             if not has:
                 # if no options are given, default to --list
                 self.options.list = True
@@ -93,8 +93,8 @@ class ConfigCommand(CliCommand):
                         ),
                     )
 
-                section = r.split('.')[0]
-                name = r.split('.')[1]
+                section = r.split(".")[0]
+                name = r.split(".")[1]
                 found = False
                 if section in list(conf.keys()):
                     for key, _value in list(conf[section].items()):
@@ -117,11 +117,11 @@ class ConfigCommand(CliCommand):
                 print("[{s}]".format(s=s))
                 source_list = sorted(section.items())
                 for (name, value) in source_list:
-                    indicator1 = ''
-                    indicator2 = ''
+                    indicator1 = ""
+                    indicator2 = ""
                     if value == section.get_default(name):
-                        indicator1 = '['
-                        indicator2 = ']'
+                        indicator1 = "["
+                        indicator2 = "]"
                     print(
                         "   {name} = {indicator1}{value}{indicator2}".format(
                             name=name, indicator1=indicator1, value=value, indicator2=indicator2
@@ -132,11 +132,11 @@ class ConfigCommand(CliCommand):
             print("\n")
         elif self.options.remove:
             for r in self.options.remove:
-                section = r.split('.')[0]
-                name = r.split('.')[1]
+                section = r.split(".")[0]
+                name = r.split(".")[1]
                 try:
                     if not conf[section].has_default(name):
-                        conf[section][name] = ''
+                        conf[section][name] = ""
                         print(
                             _("You have removed the value for section {section} and name {name}.").format(
                                 section=section, name=name
@@ -163,7 +163,7 @@ class ConfigCommand(CliCommand):
                 for name, value in list(section.items()):
                     if hasattr(self.options, s + "." + name):
                         value = "{name}".format(name=getattr(self.options, s + "." + name))
-                        if not value == 'None':
+                        if not value == "None":
                             section[name] = value
             conf.persist()
 

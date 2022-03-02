@@ -126,16 +126,16 @@ class CLI(object):
                 items_other.append(("  " + name, cmd.shortdesc))
 
         all_items = (
-            [(_("Primary Modules:"), '\n')]
+            [(_("Primary Modules:"), "\n")]
             + items_primary
-            + [('\n' + _("Other Modules:"), '\n')]
+            + [("\n" + _("Other Modules:"), "\n")]
             + items_other
         )
         self._do_columnize(all_items)
 
     def _do_columnize(self, items_list):
         modules, descriptions = list(zip(*items_list))
-        print(columnize(modules, echo_columnize_callback, *descriptions) + '\n')
+        print(columnize(modules, echo_columnize_callback, *descriptions) + "\n")
 
     def _find_best_match(self, args):
         """

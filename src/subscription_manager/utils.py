@@ -56,7 +56,7 @@ from subscription_manager.i18n import ugettext as _
 log = logging.getLogger(__name__)
 
 
-VIRT_WHO_PID_FILES = ['/var/run/virt-who.pid', '/run/virt-who.pid']
+VIRT_WHO_PID_FILES = ["/var/run/virt-who.pid", "/run/virt-who.pid"]
 
 
 class DefaultDict(collections.defaultdict):
@@ -70,9 +70,9 @@ class DefaultDict(collections.defaultdict):
 
 
 def parse_server_info(local_server_entry, config=None):
-    hostname = ''
-    port = ''
-    prefix = ''
+    hostname = ""
+    port = ""
+    prefix = ""
     if config is not None:
         hostname = config["server"]["hostname"]
         port = config["server"]["port"]
@@ -96,7 +96,7 @@ def parse_baseurl_info(local_server_entry):
 
 def format_baseurl(hostname, port, prefix):
     # just to avoid double slashs. cosmetic
-    if prefix and prefix[0] != '/':
+    if prefix and prefix[0] != "/":
         prefix = "/%s" % prefix
 
     # remove trailing slash, just so same
@@ -122,13 +122,13 @@ def url_base_join(base, url):
     # potentially non-empty and "" return ""? -akl
     if len(url) == 0:
         return url
-    elif '://' in url:
+    elif "://" in url:
         return url
     else:
-        if base and (not base.endswith('/')):
-            base = base + '/'
-        if url and (url.startswith('/')):
-            url = url.lstrip('/')
+        if base and (not base.endswith("/")):
+            base = base + "/"
+        if url and (url.startswith("/")):
+            url = url.lstrip("/")
         return urllib.parse.urljoin(base, url)
 
 
@@ -284,10 +284,10 @@ def get_server_versions(cp, exception_on_timeout=False):
             supported_resources = get_supported_resources()
             if "status" in supported_resources:
                 status = cp.getStatus()
-                cp_version = '-'.join(
-                    [status.get('version', _("Unknown")), status.get('release', _("Unknown"))]
+                cp_version = "-".join(
+                    [status.get("version", _("Unknown")), status.get("release", _("Unknown"))]
                 )
-                rules_version = status.get('rulesVersion', _("Unknown"))
+                rules_version = status.get("rulesVersion", _("Unknown"))
         except socket.timeout as e:
             log.error("Timeout error while checking server version")
             log.exception(e)
@@ -327,7 +327,7 @@ def restart_virt_who():
         return
 
     try:
-        with open(virt_who_pid_file_name, 'r') as pid_file:
+        with open(virt_who_pid_file_name, "r") as pid_file:
             pid = int(pid_file.read())
         log.debug("Restarted virt-who")
     except IOError:
@@ -361,7 +361,7 @@ def friendly_join(items):
     first_string = ", ".join(first)
 
     if len(items) > 2:
-        first_string = first_string + ','
+        first_string = first_string + ","
 
     # FIXME: This is wrong in most non english locales.
     return first_string + " %s " % _("and") + last
@@ -417,8 +417,8 @@ class ProductCertificateFilter(CertificateFilter):
         output = False
 
         wildcard_map = {
-            '*': '.*',
-            '?': '.',
+            "*": ".*",
+            "?": ".",
         }
 
         expression = """
@@ -451,7 +451,7 @@ class ProductCertificateFilter(CertificateFilter):
                     if len(wildcards):
                         translated.append(wildcard_map.get(wildcards.pop(0)))
 
-                self._fs_regex = re.compile("^%s$" % ''.join(translated), re.IGNORECASE)
+                self._fs_regex = re.compile("^%s$" % "".join(translated), re.IGNORECASE)
                 output = True
             except TypeError:
                 # Invalid filter string type. Rethrow with a proper message and backtrace?
@@ -501,7 +501,7 @@ class EntitlementCertificateFilter(ProductCertificateFilter):
 
         if service_level is not None:
             try:
-                self._sl_filter = '' + service_level.lower()
+                self._sl_filter = "" + service_level.lower()
                 output = True
             except (TypeError, AttributeError):
                 # Likely not a string or otherwise bad input.
@@ -566,7 +566,7 @@ def unique_list_items(items, hash_function=lambda x: x):
 
 
 def generate_correlation_id():
-    return str(uuid.uuid4()).replace('-', '')  # FIXME cp should accept -
+    return str(uuid.uuid4()).replace("-", "")  # FIXME cp should accept -
 
 
 def get_process_names():
@@ -576,9 +576,9 @@ def get_process_names():
     It will only work on unix-like systems.
     """
     proc_name_expr = r"[Nn][Aa][Mm][Ee]:?[\s]*(?P<proc_name>.*)"
-    for subdir in os.listdir('/proc'):
-        if re.match('[0-9]+', subdir):
-            process_status_file_path = os.path.join(os.path.sep, 'proc', subdir, 'status')
+    for subdir in os.listdir("/proc"):
+        if re.match("[0-9]+", subdir):
+            process_status_file_path = os.path.join(os.path.sep, "proc", subdir, "status")
             status_file = None
             lines = ""
             try:
@@ -607,7 +607,7 @@ def get_process_names():
             # Find first value of something that looks like "Name: THING"
             match = re.search(proc_name_expr, lines)
             if match:
-                proc_name = match.groupdict().get('proc_name')
+                proc_name = match.groupdict().get("proc_name")
                 if proc_name:
                     yield proc_name
 

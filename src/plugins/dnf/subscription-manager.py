@@ -54,11 +54,11 @@ subscription-manager to assign subscriptions.
 """
 )
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger("rhsm-app." + __name__)
 
 
 class SubscriptionManager(dnf.Plugin):
-    name = 'subscription-manager'
+    name = "subscription-manager"
 
     def __init__(self, base, cli):
         super(SubscriptionManager, self).__init__(base, cli)
@@ -75,14 +75,14 @@ class SubscriptionManager(dnf.Plugin):
         chroot(self.base.conf.installroot)
 
         cfg = config.get_config_parser()
-        cache_only = not bool(cfg.get_int('rhsm', 'full_refresh_on_yum'))
+        cache_only = not bool(cfg.get_int("rhsm", "full_refresh_on_yum"))
 
         try:
             if os.getuid() == 0:
                 # Try to update entitlement certificates and redhat.repo file
                 self._update(cache_only)
             else:
-                logger.info(_('Not root, Subscription Management repositories not updated'))
+                logger.info(_("Not root, Subscription Management repositories not updated"))
             self._warn_or_give_usage_message()
             self._warn_expired()
         except Exception as e:
@@ -101,23 +101,23 @@ class SubscriptionManager(dnf.Plugin):
             plugin_config = ConfigParser()
             plugin_config.read(default_config_file)
 
-            if plugin_config.has_option('main', 'disable_system_repos'):
-                disable_system_repos = plugin_config.get('main', 'disable_system_repos')
-                if disable_system_repos == '1':
+            if plugin_config.has_option("main", "disable_system_repos"):
+                disable_system_repos = plugin_config.get("main", "disable_system_repos")
+                if disable_system_repos == "1":
                     disable_count = 0
                     for repo in self.base.repos.iter_enabled():
-                        if os.path.basename(repo.repofile) != 'redhat.repo':
+                        if os.path.basename(repo.repofile) != "redhat.repo":
                             repo.disable()
                             disable_count += 1
                     logger.info(
                         _(
-                            'subscription-manager plugin disabled %d system repositories with respect of configuration '
-                            'in /etc/dnf/plugins/subscription-manager.conf'
+                            "subscription-manager plugin disabled %d system repositories with respect of configuration "
+                            "in /etc/dnf/plugins/subscription-manager.conf"
                         )
                         % disable_count
                     )
         else:
-            logger.debug('Configuration file %s does not exist.' % default_config_file)
+            logger.debug("Configuration file %s does not exist." % default_config_file)
 
     @staticmethod
     def _update(cache_only):
@@ -126,7 +126,7 @@ class SubscriptionManager(dnf.Plugin):
         :param cache_only: is True, when rhsm.full_refresh_on_yum is set to 0 in rhsm.conf
         """
 
-        logger.info(_('Updating Subscription Management repositories.'))
+        logger.info(_("Updating Subscription Management repositories."))
 
         identity = inj.require(inj.IDENTITY)
 
@@ -137,16 +137,16 @@ class SubscriptionManager(dnf.Plugin):
             logger.info(_("Subscription Manager is operating in container mode."))
 
         if cache_only is True:
-            log.debug('DNF subscription-manager operates in cache-only mode')
+            log.debug("DNF subscription-manager operates in cache-only mode")
 
         if not cache_only and not config.in_container():
-            log.debug('Trying to update entitlement certificates and redhat.repo')
+            log.debug("Trying to update entitlement certificates and redhat.repo")
             cert_action_invoker = EntCertActionInvoker()
             cert_action_invoker.update()
         else:
-            log.debug('Skipping updating of entitlement certificates')
+            log.debug("Skipping updating of entitlement certificates")
 
-        log.debug('Generating redhat.repo')
+        log.debug("Generating redhat.repo")
         repo_action_invoker = RepoActionInvoker(cache_only=cache_only)
         repo_action_invoker.update()
 
@@ -159,10 +159,10 @@ class SubscriptionManager(dnf.Plugin):
         products = set()
         for cert in ent_dir.list_expired():
             for p in cert.products:
-                m = '  - %s' % p.name
+                m = "  - %s" % p.name
                 products.add(m)
         if products:
-            msg = expired_warning % '\n'.join(sorted(products))
+            msg = expired_warning % "\n".join(sorted(products))
             logger.info(msg)
 
     @staticmethod
@@ -190,9 +190,9 @@ class SubscriptionManager(dnf.Plugin):
         Call Package Profile
         """
         cfg = config.get_config_parser()
-        if '1' == cfg.get('rhsm', 'package_profile_on_trans'):
-            log.debug('Uploading package profile')
+        if "1" == cfg.get("rhsm", "package_profile_on_trans"):
+            log.debug("Uploading package profile")
             package_profile_client = ProfileActionClient()
             package_profile_client.update()
         else:
-            log.debug('Uploading package profile disabled in configuration file')
+            log.debug("Uploading package profile disabled in configuration file")

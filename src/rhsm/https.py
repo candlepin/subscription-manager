@@ -24,19 +24,19 @@ import http.client as _httplib
 log = logging.getLogger(__name__)
 
 _SSL_REQUIRED_FEATURES = [
-    'SSLContext',
-    'CERT_NONE',
-    'CERT_REQUIRED',
-    'PROTOCOL_SSLv23',
-    'OP_ALL',
-    'OP_NO_SSLv2',
-    'OP_NO_SSLv3',
+    "SSLContext",
+    "CERT_NONE",
+    "CERT_REQUIRED",
+    "PROTOCOL_SSLv23",
+    "OP_ALL",
+    "OP_NO_SSLv2",
+    "OP_NO_SSLv3",
 ]
 
 _SSL_CONTEXT_REQUIRED_FEATURES = [
-    'check_hostname',
-    'options',
-    'verify_mode',
+    "check_hostname",
+    "options",
+    "verify_mode",
 ]
 
 using_stdlibs = True
@@ -51,9 +51,9 @@ if using_stdlibs:
             using_stdlibs = False
 
 if not using_stdlibs:
-    log.critical('Missing features in the standard ssl library, exiting')
-    sys.exit('Missing features in the standard ssl library, exiting')
+    log.critical("Missing features in the standard ssl library, exiting")
+    sys.exit("Missing features in the standard ssl library, exiting")
 
-log.debug('Using standard libs to provide httplib and ssl')
+log.debug("Using standard libs to provide httplib and ssl")
 ssl = _ssl
 httplib = _httplib

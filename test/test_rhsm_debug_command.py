@@ -210,9 +210,9 @@ class TestCompileCommand(TestCliCommand):
         self.cc._copy_directory = self._orig_copy_directory
 
         try:
-            open(path_join(path1, "12346.pem"), 'a').close()
-            open(path_join(path1, "7890.pem"), 'a').close()
-            open(path_join(path1, "22222-key.pem"), 'a').close()
+            open(path_join(path1, "12346.pem"), "a").close()
+            open(path_join(path1, "7890.pem"), "a").close()
+            open(path_join(path1, "22222-key.pem"), "a").close()
             self.cc._copy_cert_directory(path1, path2)
 
             self.assertTrue(os.path.exists(path_join(path2, path_join(path1, "12346.pem"))))

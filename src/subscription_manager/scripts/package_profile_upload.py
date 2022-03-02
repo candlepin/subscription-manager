@@ -39,7 +39,7 @@ def main():
         print(report)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         sys.exit(abs(main() or 0))
     except SystemExit as sys_err:

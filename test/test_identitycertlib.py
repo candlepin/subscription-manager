@@ -19,10 +19,10 @@ from subscription_manager import identitycertlib
 from subscription_manager import injection as inj
 
 CONSUMER_DATA = {
-    'releaseVer': {'id': 1, 'releaseVer': '123123'},
-    'serviceLevel': "Pro Turbo HD Plus Ultra",
-    'owner': {'key': 'admin'},
-    'idCert': {'serial': {'serial': 3787455826750723380}},
+    "releaseVer": {"id": 1, "releaseVer": "123123"},
+    "serviceLevel": "Pro Turbo HD Plus Ultra",
+    "owner": {"key": "admin"},
+    "idCert": {"serial": {"serial": 3787455826750723380}},
 }
 
 

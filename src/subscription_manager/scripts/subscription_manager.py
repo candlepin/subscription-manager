@@ -23,8 +23,8 @@ import sys
 import os
 
 # work around for https://bugzilla.redhat.com/show_bug.cgi?id=1402009
-if 'TERM' in os.environ:
-    del os.environ['TERM']
+if "TERM" in os.environ:
+    del os.environ["TERM"]
 
 
 def system_exit(code, msgs=None):
@@ -34,13 +34,13 @@ def system_exit(code, msgs=None):
         if type(msgs) not in [type([]), type(())]:
             msgs = (msgs,)
         for msg in msgs:
-            sys.stderr.write(str(msg) + '\n')
+            sys.stderr.write(str(msg) + "\n")
     sys.exit(code)
 
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
-    sys.stderr.write('Error: this command requires root access to execute\n')
+    sys.stderr.write("Error: this command requires root access to execute\n")
     sys.exit(8)
 
 try:
@@ -77,7 +77,7 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         sys.exit(abs(main() or 0))
     except SystemExit as err:

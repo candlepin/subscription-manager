@@ -17,7 +17,7 @@ try:
 
     def import_class(name):
         """Load a class from the string"""
-        comps = name.split('.')
+        comps = name.split(".")
         module = importlib.import_module(".".join(comps[0:-1]))
         return getattr(module, comps[-1])
 
@@ -28,7 +28,7 @@ except ImportError:
 
     def import_class(name):
         """Load a class from a string.  Thanks http://stackoverflow.com/a/547867/61248"""
-        components = name.split('.')
+        components = name.split(".")
         current_level = components[0]
         module_tuple = imp.find_module(current_level)
         module = imp.load_module(current_level, *module_tuple)

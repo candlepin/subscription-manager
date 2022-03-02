@@ -40,7 +40,7 @@ from rhsmlib.services import register, exceptions
 
 from test import subman_marker_dbus
 
-CONSUMER_CONTENT_JSON = '''{"hypervisorId": null,
+CONSUMER_CONTENT_JSON = """{"hypervisorId": null,
         "serviceLevel": "",
         "autoheal": true,
         "idCert": {
@@ -77,10 +77,10 @@ CONSUMER_CONTENT_JSON = '''{"hypervisorId": null,
         "lastCheckin": null, "entitlementCount": 0, "releaseVer":
         {"releaseVer": null}, "entitlementStatus": "valid", "name":
         "test.example.com", "created": "2016-06-02T15:16:51+0000",
-        "contentTags": null, "dev": false}'''
+        "contentTags": null, "dev": false}"""
 
 # Following consumer do not contain information about content access mode
-OLD_CONSUMER_CONTENT_JSON = '''{"hypervisorId": null,
+OLD_CONSUMER_CONTENT_JSON = """{"hypervisorId": null,
         "serviceLevel": "",
         "autoheal": true,
         "idCert": {
@@ -116,9 +116,9 @@ OLD_CONSUMER_CONTENT_JSON = '''{"hypervisorId": null,
         "lastCheckin": null, "entitlementCount": 0, "releaseVer":
         {"releaseVer": null}, "entitlementStatus": "valid", "name":
         "test.example.com", "created": "2016-06-02T15:16:51+0000",
-        "contentTags": null, "dev": false}'''
+        "contentTags": null, "dev": false}"""
 
-OWNERS_CONTENT_JSON = '''[
+OWNERS_CONTENT_JSON = """[
     {
         "autobindDisabled": false,
         "autobindHypervisorDisabled": false,
@@ -174,7 +174,7 @@ OWNERS_CONTENT_JSON = '''[
         "upstreamConsumer": null
     }
 ]
-'''
+"""
 
 
 class RegisterServiceTest(InjectionMockingTest):
@@ -194,7 +194,7 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_content_access_mode_cache = mock.Mock(
             spec=ContentAccessModeCache, name="ContentAccessModeCache"
         )
-        self.mock_content_access_mode_cache.read_data = mock.Mock(return_value='entitlement')
+        self.mock_content_access_mode_cache.read_data = mock.Mock(return_value="entitlement")
 
         # For the tests in which it's used, the consumer_auth cp and basic_auth cp can be the same
         self.mock_cp_provider.get_consumer_auth_cp.return_value = self.mock_cp
@@ -207,7 +207,7 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_facts = mock.Mock(spec=Facts, name="Facts")
         self.mock_facts.get_facts.return_value = {}
 
-        syspurpose_patch = mock.patch('subscription_manager.syspurposelib.SyncedStore')
+        syspurpose_patch = mock.patch("subscription_manager.syspurposelib.SyncedStore")
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)
@@ -262,8 +262,8 @@ class RegisterServiceTest(InjectionMockingTest):
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
-            mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
+            mock.call("pre_register_consumer", name="name", facts={}),
+            mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
@@ -303,13 +303,13 @@ class RegisterServiceTest(InjectionMockingTest):
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
-            mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
+            mock.call("pre_register_consumer", name="name", facts={}),
+            mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
-        assert 'owner' in consumer
-        assert 'contentAccessMode' in consumer['owner']
-        assert 'entitlement' == consumer['owner']['contentAccessMode']
+        assert "owner" in consumer
+        assert "contentAccessMode" in consumer["owner"]
+        assert "entitlement" == consumer["owner"]["contentAccessMode"]
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
@@ -321,7 +321,7 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
         expected_consumer = json.loads(OLD_CONSUMER_CONTENT_JSON)
-        del expected_consumer['owner']
+        del expected_consumer["owner"]
         self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
@@ -347,11 +347,11 @@ class RegisterServiceTest(InjectionMockingTest):
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
-            mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
+            mock.call("pre_register_consumer", name="name", facts={}),
+            mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
-        assert 'owner' not in consumer
+        assert "owner" not in consumer
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
@@ -423,8 +423,8 @@ class RegisterServiceTest(InjectionMockingTest):
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
-            mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
+            mock.call("pre_register_consumer", name="name", facts={}),
+            mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
@@ -463,8 +463,8 @@ class RegisterServiceTest(InjectionMockingTest):
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
-            mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
+            mock.call("pre_register_consumer", name="name", facts={}),
+            mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
@@ -487,24 +487,24 @@ class RegisterServiceTest(InjectionMockingTest):
         mock_persist_consumer.assert_called_once_with(expected_consumer)
         mock_write_cache.assert_called_once()
         expected_plugin_calls = [
-            mock.call('pre_register_consumer', name='name', facts={}),
-            mock.call('post_register_consumer', consumer=expected_consumer, facts={}),
+            mock.call("pre_register_consumer", name="name", facts={}),
+            mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
     def _build_options(self, activation_keys=None, environments=None, force=None, name=None, consumerid=None):
         return {
-            'activation_keys': activation_keys,
-            'environments': environments,
-            'force': force,
-            'name': name,
-            'consumerid': consumerid,
+            "activation_keys": activation_keys,
+            "environments": environments,
+            "force": force,
+            "name": name,
+            "consumerid": consumerid,
         }
 
     def test_fails_when_previously_registered(self):
         self.mock_identity.is_valid.return_value = True
 
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*system is already registered.*'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*system is already registered.*"):
             register.RegisterService(self.mock_cp).validate_options(self._build_options())
 
     def test_allows_force(self):
@@ -557,7 +557,7 @@ class RegisterServiceTest(InjectionMockingTest):
     def test_does_not_allow_basic_auth_with_activation_keys(self):
         self.mock_identity.is_valid.return_value = False
         options = self._build_options(activation_keys=[1])
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*do not require user credentials.*'):
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*do not require user credentials.*"):
             register.RegisterService(self.mock_cp).validate_options(options)
 
     def test_does_not_allow_environment_with_activation_keys(self):
@@ -565,8 +565,8 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.password = None
 
         self.mock_identity.is_valid.return_value = False
-        options = self._build_options(activation_keys=[1], environments='environment')
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*do not allow environments.*'):
+        options = self._build_options(activation_keys=[1], environments="environment")
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*do not allow environments.*"):
             register.RegisterService(self.mock_cp).validate_options(options)
 
     def test_does_not_allow_environment_with_consumerid(self):
@@ -574,8 +574,8 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.password = None
 
         self.mock_identity.is_valid.return_value = False
-        options = self._build_options(activation_keys=[1], consumerid='consumerid')
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*previously registered.*'):
+        options = self._build_options(activation_keys=[1], consumerid="consumerid")
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*previously registered.*"):
             register.RegisterService(self.mock_cp).validate_options(options)
 
     def test_requires_basic_auth_for_normal_registration(self):
@@ -583,8 +583,8 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.password = None
 
         self.mock_identity.is_valid.return_value = False
-        options = self._build_options(consumerid='consumerid')
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*Missing username.*'):
+        options = self._build_options(consumerid="consumerid")
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*Missing username.*"):
             register.RegisterService(self.mock_cp).validate_options(options)
 
 
@@ -615,11 +615,11 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         self.mock_cp_provider.get_consumer_auth_cp.return_value = self.mock_cp
         self.mock_cp_provider.get_basic_auth_cp.return_value = self.mock_cp
 
-        register_patcher = mock.patch('rhsmlib.dbus.objects.register.RegisterService', autospec=True)
+        register_patcher = mock.patch("rhsmlib.dbus.objects.register.RegisterService", autospec=True)
         self.mock_register = register_patcher.start().return_value
         self.addCleanup(register_patcher.stop)
 
-        cert_invoker_patcher = mock.patch('rhsmlib.dbus.objects.register.EntCertActionInvoker', autospec=True)
+        cert_invoker_patcher = mock.patch("rhsmlib.dbus.objects.register.EntCertActionInvoker", autospec=True)
         self.mock_cert_invoker = cert_invoker_patcher.start().return_value
         self.addCleanup(cert_invoker_patcher.stop)
 
@@ -632,22 +632,22 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
             return None
 
     def test_open_domain_socket(self):
-        dbus_method_args = ['']
+        dbus_method_args = [""]
 
         def assertions(*args):
             result = args[0]
-            self.assertRegex(result, r'/run/dbus.*')
+            self.assertRegex(result, r"/run/dbus.*")
 
         self.dbus_request(assertions, self.interface.Start, dbus_method_args)
 
     def test_same_socket_on_subsequent_opens(self):
-        dbus_method_args = ['']
+        dbus_method_args = [""]
 
         def assertions(*args):
             # Assign the result as an attribute to this function.
             # See http://stackoverflow.com/a/27910553/6124862
             assertions.result = args[0]
-            self.assertRegex(assertions.result, r'/run/dbus.*')
+            self.assertRegex(assertions.result, r"/run/dbus.*")
 
         self.dbus_request(assertions, self.interface.Start, dbus_method_args)
 
@@ -662,17 +662,17 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         self.dbus_request(assertions2, self.interface.Start, dbus_method_args)
 
     def test_cannot_close_what_is_not_opened(self):
-        dbus_method_args = ['']
+        dbus_method_args = [""]
         with self.assertRaises(dbus.exceptions.DBusException):
             self.dbus_request(None, self.interface.Stop, dbus_method_args)
 
     def test_closes_domain_socket(self):
-        dbus_method_args = ['']
+        dbus_method_args = [""]
 
         def get_address(*args):
             address = args[0]
-            _prefix, _equal, address = address.partition('=')
-            get_address.address, _equal, _suffix = address.partition(',')
+            _prefix, _equal, address = address.partition("=")
+            get_address.address, _equal, _suffix = address.partition(",")
 
         self.dbus_request(get_address, self.interface.Start, dbus_method_args)
         self.handler_complete_event.clear()
@@ -682,7 +682,7 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
             # The socket returned for connection is an abstract socket so we have
             # to begin the name with a NUL byte to get into that namespace.  See
             # http://blog.eduardofleury.com/archives/2007/09/13
-            sock.connect('\0' + get_address.address)
+            sock.connect("\0" + get_address.address)
         finally:
             sock.close()
 
@@ -692,13 +692,13 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         with self.assertRaises(socket.error) as serr:
             sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
             try:
-                sock.connect('\0' + get_address.address)
+                sock.connect("\0" + get_address.address)
             finally:
                 sock.close()
             self.assertEqual(serr.errno, errno.ECONNREFUSED)
 
     def _build_interface(self):
-        dbus_method_args = ['']
+        dbus_method_args = [""]
 
         def get_address(*args):
             get_address.address = args[0]
@@ -717,11 +717,11 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
             self.assertEqual(json.loads(args[0]), expected_consumer)
 
         self.mock_identity.is_valid.return_value = False
-        self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
+        self.mock_identity.uuid = "INVALIDCONSUMERUUID"
 
         self.mock_register.register.return_value = expected_consumer
 
-        dbus_method_args = ['admin', 'admin', 'admin', {}, {}, '']
+        dbus_method_args = ["admin", "admin", "admin", {}, {}, ""]
         self.dbus_request(assertions, self._build_interface().Register, dbus_method_args)
 
     def test_can_get_orgs_over_domain_socket(self):
@@ -733,11 +733,11 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
             self.assertEqual(json.loads(args[0]), expected_owners)
 
         self.mock_identity.is_valid.return_value = False
-        self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
+        self.mock_identity.uuid = "INVALIDCONSUMERUUID"
 
         self.mock_register.register.return_value = expected_consumer
 
-        dbus_method_args = ['admin', 'admin', {}, '']
+        dbus_method_args = ["admin", "admin", {}, ""]
         self.dbus_request(assertions, self._build_interface().GetOrgs, dbus_method_args)
 
     def test_can_register_over_domain_socket_with_activation_keys(self):
@@ -748,16 +748,16 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
             self.assertEqual(json.loads(args[0]), expected_consumer)
 
         self.mock_identity.is_valid.return_value = False
-        self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
+        self.mock_identity.uuid = "INVALIDCONSUMERUUID"
 
         self.mock_register.register.return_value = expected_consumer
 
         dbus_method_args = [
-            'admin',
-            ['key1', 'key2'],
+            "admin",
+            ["key1", "key2"],
             {},
-            {'host': 'localhost', 'port': '8443', 'handler': '/candlepin'},
-            '',
+            {"host": "localhost", "port": "8443", "handler": "/candlepin"},
+            "",
         ]
 
         self.dbus_request(assertions, self._build_interface().RegisterWithActivationKeys, dbus_method_args)

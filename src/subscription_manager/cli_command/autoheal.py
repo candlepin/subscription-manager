@@ -31,19 +31,19 @@ class AutohealCommand(CliCommand):
         self.parser.add_argument(
             "--enable",
             dest="enable",
-            action='store_true',
+            action="store_true",
             help=_("try to attach subscriptions for uncovered products each check-in"),
         )
         self.parser.add_argument(
             "--disable",
             dest="disable",
-            action='store_true',
+            action="store_true",
             help=_("do not try to automatically attach subscriptions each check-in"),
         )
         self.parser.add_argument(
             "--show",
             dest="show",
-            action='store_true',
+            action="store_true",
             help=_("show the current auto-attach preference"),
         )
 
@@ -65,6 +65,6 @@ class AutohealCommand(CliCommand):
         self._validate_options()
 
         if not self.options.enable and not self.options.disable:
-            self._show(self.cp.getConsumer(self.uuid)['autoheal'])
+            self._show(self.cp.getConsumer(self.uuid)["autoheal"])
         else:
             self._toggle(self.options.enable or False)

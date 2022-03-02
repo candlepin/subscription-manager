@@ -40,22 +40,22 @@ class TestingUpdateAction(entcertlib.EntCertUpdateAction):
 class TestEntCertUpdateReport(fixture.SubManFixture):
     def test(self):
         r = entcertlib.EntCertUpdateReport()
-        r.expected = '12312'
-        r.valid = ['2342∰']
+        r.expected = "12312"
+        r.valid = ["2342∰"]
         r.added.append(self._stub_cert())
         r.rogue.append(self._stub_cert())
 
         # an UnicodeError will fail the tests
         report_str = str(r)
-        '%s' % report_str
+        "%s" % report_str
 
-        with fixture.locale_context('de_DE.utf8'):
+        with fixture.locale_context("de_DE.utf8"):
             report_str = str(r)
-            '%s' % r
+            "%s" % r
 
     def _stub_cert(self):
         stub_ent_cert = StubEntitlementCertificate(StubProduct("ஒரு அற்புதமான இயங்கு"))
-        stub_ent_cert.order.name = '一些秩序'
+        stub_ent_cert.order.name = "一些秩序"
         return stub_ent_cert
 
 
@@ -72,11 +72,11 @@ class UpdateActionTests(fixture.SubManFixture):
 
         cp_certificates = [valid_ent, expired_ent]
         # get certificates actually returns cert bundles
-        cp_bundles = [{'key': Mock(), 'cert': x} for x in cp_certificates]
+        cp_bundles = [{"key": Mock(), "cert": x} for x in cp_certificates]
 
         # so we dont try to build actual x509 objects from stub certs
         def mock_build_cert(bundle):
-            return (bundle['key'], bundle['cert'])
+            return (bundle["key"], bundle["cert"])
 
         build_cert_mock.side_effect = mock_build_cert
 

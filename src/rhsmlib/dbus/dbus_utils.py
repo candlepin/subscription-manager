@@ -30,9 +30,9 @@ def command_of_pid(pid):
     """Get command for pid from /proc"""
     try:
         with open("/proc/%d/cmdline" % pid, "r") as f:
-            cmd = f.readlines()[0].replace('\0', " ").strip()
+            cmd = f.readlines()[0].replace("\0", " ").strip()
     except Exception as err:
-        log.warning('Unable to get cmdline of PID: %s, error: %s' % (pid, err))
+        log.warning("Unable to get cmdline of PID: %s, error: %s" % (pid, err))
         return None
     return cmd
 
@@ -41,8 +41,8 @@ def pid_of_sender(bus, sender):
     """Get pid from sender string using
     org.freedesktop.DBus.GetConnectionUnixProcessID"""
 
-    dbus_obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
-    dbus_iface = dbus.Interface(dbus_obj, 'org.freedesktop.DBus')
+    dbus_obj = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
+    dbus_iface = dbus.Interface(dbus_obj, "org.freedesktop.DBus")
 
     try:
         pid = int(dbus_iface.GetConnectionUnixProcessID(sender))
@@ -55,8 +55,8 @@ def uid_of_sender(bus, sender):
     """Get user id from sender string using
     org.freedesktop.DBus.GetConnectionUnixUser"""
 
-    dbus_obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
-    dbus_iface = dbus.Interface(dbus_obj, 'org.freedesktop.DBus')
+    dbus_obj = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
+    dbus_iface = dbus.Interface(dbus_obj, "org.freedesktop.DBus")
 
     try:
         uid = int(dbus_iface.GetConnectionUnixUser(sender))
@@ -79,8 +79,8 @@ def context_of_sender(bus, sender):
     """Get SELinux context from sender string using
     org.freedesktop.DBus.GetConnectionSELinuxSecurityContext"""
 
-    dbus_obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
-    dbus_iface = dbus.Interface(dbus_obj, 'org.freedesktop.DBus')
+    dbus_obj = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
+    dbus_iface = dbus.Interface(dbus_obj, "org.freedesktop.DBus")
 
     try:
         context = dbus_iface.GetConnectionSELinuxSecurityContext(sender)
@@ -202,17 +202,17 @@ def add_properties(xml, interface, props):
 
         for c in root:
             # print c.attrib['name']
-            if c.attrib['name'] == interface:
+            if c.attrib["name"] == interface:
                 for p in props:
                     temp = '<property type="%s" name="%s" access="%s"/>\n' % (
-                        p['p_t'],
-                        p['p_name'],
-                        p['p_access'],
+                        p["p_t"],
+                        p["p_name"],
+                        p["p_access"],
                     )
                     log.debug("intro xml temp buf=%s", temp)
                     c.append(Et.fromstring(temp))
 
-        return Et.tostring(root, encoding='utf8')
+        return Et.tostring(root, encoding="utf8")
     return xml
 
 

@@ -49,17 +49,17 @@ class ValidProductDateRangeCalculator(object):
             return None
 
         for prod in self.prod_status:
-            if product_hash != prod['productId']:
+            if product_hash != prod["productId"]:
                 continue
 
             # Found the product ID requested:
-            if 'startDate' in prod and 'endDate' in prod:
+            if "startDate" in prod and "endDate" in prod:
 
                 # Unentitled product:
-                if prod['startDate'] is None or prod['endDate'] is None:
+                if prod["startDate"] is None or prod["endDate"] is None:
                     return None
 
-                return DateRange(parse_date(prod['startDate']), parse_date(prod['endDate']))
+                return DateRange(parse_date(prod["startDate"]), parse_date(prod["endDate"]))
             else:
                 # If startDate / endDate not supported
                 log.warning("Server does not support product date ranges.")

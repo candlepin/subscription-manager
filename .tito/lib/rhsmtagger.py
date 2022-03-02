@@ -7,8 +7,8 @@ from tito.common import debug, replace_version, run_command
 class MultiPythonPackageVersionTagger(VersionTagger):
     def __init__(self, config=None, *args, **kwargs):
         super(MultiPythonPackageVersionTagger, self).__init__(config=config, *args, **kwargs)
-        if config.has_option('tagconfig', 'python_subpackages'):
-            self.subpackages = config.get('tagconfig', 'python_subpackages').split(',')
+        if config.has_option("tagconfig", "python_subpackages"):
+            self.subpackages = config.get("tagconfig", "python_subpackages").split(",")
         else:
             self.subpackages = []
 
@@ -31,16 +31,16 @@ class MultiPythonPackageVersionTagger(VersionTagger):
 
         # We probably don't want version-release in setup.py as release is
         # an rpm concept. Hopefully this assumption on
-        py_new_version = new_version.split('-')[0]
+        py_new_version = new_version.split("-")[0]
 
-        f = open(setup_file, 'r')
+        f = open(setup_file, "r")
         buf = io.StringIO()
         for line in f.readlines():
             buf.write(replace_version(line, py_new_version))
         f.close()
 
         # Write out the new setup.py file contents:
-        f = open(setup_file, 'w')
+        f = open(setup_file, "w")
         f.write(buf.getvalue())
         f.close()
         buf.close()

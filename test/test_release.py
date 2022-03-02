@@ -67,10 +67,10 @@ class TestApiReleaseVersionProvider(fixture.SubManFixture):
 class TestCdnReleaseVerionProvider(fixture.SubManFixture):
     def setUp(self):
         fixture.SubManFixture.setUp(self)
-        stub_content = stubs.StubContent("c1", required_tags='rhel-6', gpg=None, enabled="1")
+        stub_content = stubs.StubContent("c1", required_tags="rhel-6", gpg=None, enabled="1")
 
         # this content should be ignored since it's not enabled
-        stub_content_2 = stubs.StubContent("c2", required_tags='rhel-6', gpg=None, enabled="0")
+        stub_content_2 = stubs.StubContent("c2", required_tags="rhel-6", gpg=None, enabled="0")
 
         # this should be ignored because of required_tag isn't what we
         # are looking for
@@ -192,7 +192,7 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         cdn_rv_provider = self._get_cdn_rv_provider()
 
         # mock content_connection so we can verify it's calls
-        with mock.patch.object(cdn_rv_provider, 'content_connection') as mock_cc:
+        with mock.patch.object(cdn_rv_provider, "content_connection") as mock_cc:
             mock_cc.get_versions.side_effect = http.client.BadStatusLine("some bogus status")
             releases = cdn_rv_provider.get_releases()
             self.assertEqual([], releases)

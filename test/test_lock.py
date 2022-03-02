@@ -42,7 +42,7 @@ class TestLock(unittest.TestCase):
             [sys.executable, __file__, lockfile_path],
             close_fds=True,
             stdin=subprocess.PIPE,
-            env={'PYTHONPATH': sys_path},
+            env={"PYTHONPATH": sys_path},
         )
 
         # make sure other process has had time to create the lock file
@@ -68,7 +68,7 @@ class TestLock(unittest.TestCase):
 
     def close_lock_holder(self):
         try:
-            self.other_process.communicate("whatever".encode('utf-8'))
+            self.other_process.communicate("whatever".encode("utf-8"))
         except Exception as e:
             print(e)
             # whatever, we closed it in the other thread
@@ -118,7 +118,7 @@ class TestLock(unittest.TestCase):
         b = lock.Lock(lock_path)
         res = b.acquire(blocking=False)
         self.assertFalse(b.acquired())
-        self.other_process.communicate("whatever".encode('utf-8'))
+        self.other_process.communicate("whatever".encode("utf-8"))
         self.assertFalse(res)
 
     def test_lock(self):
@@ -159,8 +159,8 @@ class TestLock(unittest.TestCase):
     def _stale_lock(self):
         lock_path = self._lock_path()
         fakepid = 123456789
-        f = open(lock_path, 'w')
-        f.write('%s\n' % fakepid)
+        f = open(lock_path, "w")
+        f.write("%s\n" % fakepid)
         f.close()
         return lock_path
 

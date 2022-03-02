@@ -38,20 +38,20 @@ CA_NAME = os.path.basename(RH_CDN_CA)
 
 class CdnRegexTests(fixture.SubManFixture):
     def test_cdn_match(self):
-        self.assertTrue(RH_CDN_REGEX.match('cdn.redhat.com'))
+        self.assertTrue(RH_CDN_REGEX.match("cdn.redhat.com"))
 
     def test_stage_cdn_match(self):
-        self.assertTrue(RH_CDN_REGEX.match('cdn.stage.redhat.com'))
+        self.assertTrue(RH_CDN_REGEX.match("cdn.stage.redhat.com"))
 
     def test_anchors(self):
-        self.assertFalse(RH_CDN_REGEX.match('something.cdn.redhat.com.org'))
-        self.assertFalse(RH_CDN_REGEX.match('cdn.redhat.com.org'))
-        self.assertFalse(RH_CDN_REGEX.match('something.cdn.redhat.com'))
+        self.assertFalse(RH_CDN_REGEX.match("something.cdn.redhat.com.org"))
+        self.assertFalse(RH_CDN_REGEX.match("cdn.redhat.com.org"))
+        self.assertFalse(RH_CDN_REGEX.match("something.cdn.redhat.com"))
 
 
 class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
     def setUp(self):
-        self.temp_dir = tempfile.mkdtemp(prefix='subman-container-plugin-tests')
+        self.temp_dir = tempfile.mkdtemp(prefix="subman-container-plugin-tests")
         self.src_certs_dir = join(self.temp_dir, "etc/pki/entitlement")
         os.makedirs(self.src_certs_dir)
 
@@ -72,20 +72,20 @@ class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
         return cert
 
     def test_unique_paths_with_dupes(self):
-        cert1 = self._mock_cert('5001')
-        cert2 = self._mock_cert('5002')
-        cert3 = self._mock_cert('5003')
+        cert1 = self._mock_cert("5001")
+        cert2 = self._mock_cert("5002")
+        cert3 = self._mock_cert("5003")
 
-        content1 = self._create_content('content1', cert1)
-        content2 = self._create_content('content2', cert1)
-        content3 = self._create_content('content3', cert2)
+        content1 = self._create_content("content1", cert1)
+        content2 = self._create_content("content2", cert1)
+        content3 = self._create_content("content3", cert2)
 
         # This content is provided by two other certs:
-        content1_dupe = self._create_content('content1', cert2)
-        content1_dupe2 = self._create_content('content1', cert3)
+        content1_dupe = self._create_content("content1", cert2)
+        content1_dupe2 = self._create_content("content1", cert3)
 
         contents = [content1, content2, content3, content1_dupe, content1_dupe2]
-        cmd = ContainerContentUpdateActionCommand(None, ['cdn.example.org'], self.host_cert_dir)
+        cmd = ContainerContentUpdateActionCommand(None, ["cdn.example.org"], self.host_cert_dir)
         cert_paths = cmd._get_unique_paths(contents)
         self.assertEqual(3, len(cert_paths))
         self.assertTrue(KeyPair(cert1.path, cert1.key_path()) in cert_paths)
@@ -93,9 +93,9 @@ class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
         self.assertTrue(KeyPair(cert3.path, cert3.key_path()) in cert_paths)
 
     def test_multi_directory(self):
-        host1 = 'hostname.example.org'
-        host2 = 'hostname2.example.org'
-        host3 = 'hostname3.example.org'
+        host1 = "hostname.example.org"
+        host2 = "hostname2.example.org"
+        host3 = "hostname3.example.org"
 
         self.assertFalse(exists(join(self.host_cert_dir, host1)))
         self.assertFalse(exists(join(self.host_cert_dir, host2)))
@@ -110,26 +110,26 @@ class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
         self.assertTrue(exists(join(self.host_cert_dir, host3)))
 
     def test_post_install_main(self):
-        plugin_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src', 'content_plugins'))
-        fp, pathname, description = imp.find_module('container_content', [plugin_path])
+        plugin_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src", "content_plugins"))
+        fp, pathname, description = imp.find_module("container_content", [plugin_path])
         try:
-            container_content = imp.load_module('container_content', fp, pathname, description)
+            container_content = imp.load_module("container_content", fp, pathname, description)
         finally:
             fp.close()
         plugin_manager = PluginManager(search_path=plugin_path, plugin_conf_path=plugin_path)
-        plugin_class = plugin_manager.get_plugins()['container_content.ContainerContentPlugin']
-        with mock.patch.object(plugin_class, 'HOSTNAME_CERT_DIR', self.host_cert_dir):
+        plugin_class = plugin_manager.get_plugins()["container_content.ContainerContentPlugin"]
+        with mock.patch.object(plugin_class, "HOSTNAME_CERT_DIR", self.host_cert_dir):
             with mock.patch(
-                'subscription_manager.model.ent_cert.EntitlementDirEntitlementSource', autospec=True
+                "subscription_manager.model.ent_cert.EntitlementDirEntitlementSource", autospec=True
             ):
-                with mock.patch('subscription_manager.plugins.PluginManager') as mock_plugin_manager:
+                with mock.patch("subscription_manager.plugins.PluginManager") as mock_plugin_manager:
                     mock_plugin_manager.side_effect = lambda: plugin_manager
 
                     registry_hostnames = [
-                        'registry.access.redhat.com',
-                        'cdn.redhat.com',
-                        'access.redhat.com',
-                        'registry.redhat.io',
+                        "registry.access.redhat.com",
+                        "cdn.redhat.com",
+                        "access.redhat.com",
+                        "registry.redhat.io",
                     ]
 
                     for hostname in registry_hostnames:
@@ -181,7 +181,7 @@ class TestKeyPair(fixture.SubManFixture):
 
 class TestContainerCertDir(fixture.SubManFixture):
     def setUp(self):
-        self.temp_dir = tempfile.mkdtemp(prefix='subman-container-plugin-tests')
+        self.temp_dir = tempfile.mkdtemp(prefix="subman-container-plugin-tests")
         self.src_certs_dir = join(self.temp_dir, "etc/pki/entitlement")
         os.makedirs(self.src_certs_dir)
 
@@ -190,9 +190,9 @@ class TestContainerCertDir(fixture.SubManFixture):
         os.makedirs(container_dir)
 
         # Where we expect our certs to actually land:
-        self.dest_dir = join(container_dir, 'cdn.redhat.com')
+        self.dest_dir = join(container_dir, "cdn.redhat.com")
         self.report = ContainerUpdateReport()
-        self.container_dir = ContainerCertDir(self.report, 'cdn.redhat.com', host_cert_dir=container_dir)
+        self.container_dir = ContainerCertDir(self.report, "cdn.redhat.com", host_cert_dir=container_dir)
         self.container_dir._rh_cdn_ca_exists = mock.Mock(return_value=True)
 
     def tearDown(self):
@@ -204,43 +204,43 @@ class TestContainerCertDir(fixture.SubManFixture):
         """
         if not exists(dir_path):
             os.makedirs(dir_path)
-        open(join(dir_path, filename), 'a').close()
+        open(join(dir_path, filename), "a").close()
 
     def test_first_install(self):
-        cert1 = '1234.pem'
-        key1 = '1234-key.pem'
+        cert1 = "1234.pem"
+        key1 = "1234-key.pem"
         self._touch(self.src_certs_dir, cert1)
         self._touch(self.src_certs_dir, key1)
         kp = KeyPair(join(self.src_certs_dir, cert1), join(self.src_certs_dir, key1))
         self.container_dir.sync([kp])
-        self.assertTrue(exists(join(self.dest_dir, '1234.cert')))
-        self.assertTrue(exists(join(self.dest_dir, '1234.key')))
+        self.assertTrue(exists(join(self.dest_dir, "1234.cert")))
+        self.assertTrue(exists(join(self.dest_dir, "1234.key")))
         self.assertEqual(2, len(self.report.added))
 
     def test_old_certs_cleaned_out(self):
-        cert1 = '1234.cert'
-        key1 = '1234.key'
-        ca = 'myca.crt'  # This file extension should be left alone:
+        cert1 = "1234.cert"
+        key1 = "1234.key"
+        ca = "myca.crt"  # This file extension should be left alone:
         self._touch(self.dest_dir, cert1)
         self._touch(self.dest_dir, key1)
         self._touch(self.dest_dir, ca)
-        self.assertTrue(exists(join(self.dest_dir, '1234.cert')))
-        self.assertTrue(exists(join(self.dest_dir, '1234.key')))
+        self.assertTrue(exists(join(self.dest_dir, "1234.cert")))
+        self.assertTrue(exists(join(self.dest_dir, "1234.key")))
         self.assertTrue(exists(join(self.dest_dir, ca)))
         self.container_dir.sync([])
-        self.assertFalse(exists(join(self.dest_dir, '1234.cert')))
-        self.assertFalse(exists(join(self.dest_dir, '1234.key')))
+        self.assertFalse(exists(join(self.dest_dir, "1234.cert")))
+        self.assertFalse(exists(join(self.dest_dir, "1234.key")))
         self.assertTrue(exists(join(self.dest_dir, ca)))
         self.assertEqual(2, len(self.report.removed))
 
     def test_all_together_now(self):
-        cert1 = '1234.pem'
-        key1 = '1234-key.pem'
-        cert2 = '12345.pem'
-        key2 = '12345-key.pem'
-        old_cert = '444.cert'
-        old_key = '444.key'
-        old_key2 = 'another.key'
+        cert1 = "1234.pem"
+        key1 = "1234-key.pem"
+        cert2 = "12345.pem"
+        key2 = "12345-key.pem"
+        old_cert = "444.cert"
+        old_key = "444.key"
+        old_key2 = "another.key"
         self._touch(self.src_certs_dir, cert1)
         self._touch(self.src_certs_dir, key1)
         self._touch(self.src_certs_dir, cert2)
@@ -251,20 +251,20 @@ class TestContainerCertDir(fixture.SubManFixture):
         kp = KeyPair(join(self.src_certs_dir, cert1), join(self.src_certs_dir, key1))
         kp2 = KeyPair(join(self.src_certs_dir, cert2), join(self.src_certs_dir, key2))
         self.container_dir.sync([kp, kp2])
-        self.assertTrue(exists(join(self.dest_dir, '1234.cert')))
-        self.assertTrue(exists(join(self.dest_dir, '1234.key')))
-        self.assertTrue(exists(join(self.dest_dir, '12345.cert')))
-        self.assertTrue(exists(join(self.dest_dir, '12345.key')))
+        self.assertTrue(exists(join(self.dest_dir, "1234.cert")))
+        self.assertTrue(exists(join(self.dest_dir, "1234.key")))
+        self.assertTrue(exists(join(self.dest_dir, "12345.cert")))
+        self.assertTrue(exists(join(self.dest_dir, "12345.key")))
 
-        self.assertFalse(exists(join(self.dest_dir, '444.cert')))
-        self.assertFalse(exists(join(self.dest_dir, '444.key')))
+        self.assertFalse(exists(join(self.dest_dir, "444.cert")))
+        self.assertFalse(exists(join(self.dest_dir, "444.key")))
         self.assertEqual(4, len(self.report.added))
         self.assertEqual(3, len(self.report.removed))
 
     @mock.patch("os.symlink")
     def test_cdn_ca_symlink(self, mock_link):
-        cert1 = '1234.pem'
-        key1 = '1234-key.pem'
+        cert1 = "1234.pem"
+        key1 = "1234-key.pem"
         self._touch(self.src_certs_dir, cert1)
         self._touch(self.src_certs_dir, key1)
         kp = KeyPair(join(self.src_certs_dir, cert1), join(self.src_certs_dir, key1))
@@ -274,8 +274,8 @@ class TestContainerCertDir(fixture.SubManFixture):
         mock_link.assert_called_once_with(RH_CDN_CA, expected_symlink)
 
     def test_cdn_ca_doesnt_exist_no_symlink(self):
-        cert1 = '1234.pem'
-        key1 = '1234-key.pem'
+        cert1 = "1234.pem"
+        key1 = "1234-key.pem"
         self._touch(self.src_certs_dir, cert1)
         self._touch(self.src_certs_dir, key1)
         kp = KeyPair(join(self.src_certs_dir, cert1), join(self.src_certs_dir, key1))
@@ -287,8 +287,8 @@ class TestContainerCertDir(fixture.SubManFixture):
         self.assertFalse(exists(expected_symlink))
 
     def test_cdn_ca_symlink_already_exists(self):
-        cert1 = '1234.pem'
-        key1 = '1234-key.pem'
+        cert1 = "1234.pem"
+        key1 = "1234-key.pem"
         self._touch(self.src_certs_dir, cert1)
         self._touch(self.src_certs_dir, key1)
         kp = KeyPair(join(self.src_certs_dir, cert1), join(self.src_certs_dir, key1))

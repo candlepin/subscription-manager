@@ -79,7 +79,7 @@ class RhsmConfigParserFromString(RhsmConfigParser):
 
 class TestRepoActionInvoker(fixture.SubManFixture):
     def _stub_content(self, include_content_access=False):
-        stub_prod = StubProduct('stub_product', provided_tags="stub-product")
+        stub_prod = StubProduct("stub_product", provided_tags="stub-product")
 
         stub_content = StubContent("a_test_repo", required_tags="stub-product")
 
@@ -104,7 +104,7 @@ class TestRepoActionInvoker(fixture.SubManFixture):
     def test_is_managed(self):
         self._stub_content()
         repo_action_invoker = RepoActionInvoker()
-        repo_label = 'a_test_repo'
+        repo_label = "a_test_repo"
 
         im_result = repo_action_invoker.is_managed(repo_label)
 
@@ -126,11 +126,11 @@ class TestRepoActionInvoker(fixture.SubManFixture):
         self._stub_content(include_content_access=True)
         repo_action_invoker = RepoActionInvoker()
         repos = repo_action_invoker.get_repos()
-        self.assertEqual(2, len(repos), 'Should produce two repos')
-        matching_repos = [repo for repo in repos if repo.id == 'a_test_repo']
+        self.assertEqual(2, len(repos), "Should produce two repos")
+        matching_repos = [repo for repo in repos if repo.id == "a_test_repo"]
         self.assertEqual(1, len(matching_repos), 'Should only produce one repo for "a_test_repo"')
         repo = matching_repos[0]
-        certpath = repo.get('sslclientcert')
+        certpath = repo.get("sslclientcert")
         self.assertNotEqual(certpath, self.stub_content_access_cert.path)
 
 
@@ -175,111 +175,111 @@ class RepoTests(unittest.TestCase):
     """
 
     def test_valid_label_for_id(self):
-        repo_id = 'valid-label'
+        repo_id = "valid-label"
         repo = Repo(repo_id)
         self.assertEqual(repo_id, repo.id)
 
     def test_valid_unicode_just_ascii_label_for_id(self):
-        repo_id = 'valid-label'
+        repo_id = "valid-label"
         repo = Repo(repo_id)
         self.assertEqual(repo_id, repo.id)
 
     def test_invalid_unicode_label_for_id(self):
-        repo_id = 'valid-不明-label'
+        repo_id = "valid-不明-label"
         repo = Repo(repo_id)
-        expected = 'valid----label'
+        expected = "valid----label"
         self.assertEqual(expected, repo.id)
 
     def test_invalid_label_with_spaces(self):
-        repo_id = 'label with spaces'
+        repo_id = "label with spaces"
         repo = Repo(repo_id)
-        self.assertEqual('label-with-spaces', repo.id)
+        self.assertEqual("label-with-spaces", repo.id)
 
     def test_existing_order_is_preserved(self):
-        config = (('key 1', 'value 1'), ('key b', 'value b'), ('key 3', 'value 3'))
-        repo = Repo('testrepo', config)
+        config = (("key 1", "value 1"), ("key b", "value b"), ("key 3", "value 3"))
+        repo = Repo("testrepo", config)
         self.assertEqual(config, tuple(repo.items())[:3])
 
     def test_empty_strings_not_set_in_file(self):
-        r = Repo('testrepo', (('proxy', ""),))
-        r['proxy'] = ""
+        r = Repo("testrepo", (("proxy", ""),))
+        r["proxy"] = ""
         self.assertFalse(("proxy", "") in list(r.items()))
 
     def test_unknown_property_is_preserved(self):
-        existing_repo = Repo('testrepo')
-        existing_repo['fake_prop'] = 'fake'
-        self.assertTrue(('fake_prop', 'fake') in list(existing_repo.items()))
+        existing_repo = Repo("testrepo")
+        existing_repo["fake_prop"] = "fake"
+        self.assertTrue(("fake_prop", "fake") in list(existing_repo.items()))
 
-    @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_NO_PROTOCOL))
+    @patch.object(repofile, "conf", ConfigFromString(config_string=PROXY_NO_PROTOCOL))
     def test_http_by_default(self):
-        repo = Repo('testrepo')
+        repo = Repo("testrepo")
         r = Repo._set_proxy_info(repo)
-        self.assertEqual(r['proxy'], "http://fake.server.com:3129")
+        self.assertEqual(r["proxy"], "http://fake.server.com:3129")
 
-    @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_EMPTY_PROTOCOL))
+    @patch.object(repofile, "conf", ConfigFromString(config_string=PROXY_EMPTY_PROTOCOL))
     def test_http_by_empty(self):
-        repo = Repo('testrepo')
+        repo = Repo("testrepo")
         r = Repo._set_proxy_info(repo)
-        self.assertEqual(r['proxy'], "http://fake.server.com:3129")
+        self.assertEqual(r["proxy"], "http://fake.server.com:3129")
 
-    @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_HTTP_PROTOCOL))
+    @patch.object(repofile, "conf", ConfigFromString(config_string=PROXY_HTTP_PROTOCOL))
     def test_http(self):
-        repo = Repo('testrepo')
+        repo = Repo("testrepo")
         r = Repo._set_proxy_info(repo)
-        self.assertEqual(r['proxy'], "http://fake.server.com:3129")
+        self.assertEqual(r["proxy"], "http://fake.server.com:3129")
 
-    @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_HTTPS_PROTOCOL))
+    @patch.object(repofile, "conf", ConfigFromString(config_string=PROXY_HTTPS_PROTOCOL))
     def test_https(self):
-        repo = Repo('testrepo')
+        repo = Repo("testrepo")
         r = Repo._set_proxy_info(repo)
-        self.assertEqual(r['proxy'], "https://fake.server.com:3129")
+        self.assertEqual(r["proxy"], "https://fake.server.com:3129")
 
-    @patch.object(repofile, 'conf', ConfigFromString(config_string=PROXY_EXTRA_SCHEME))
+    @patch.object(repofile, "conf", ConfigFromString(config_string=PROXY_EXTRA_SCHEME))
     def test_extra_chars_in_scheme(self):
-        repo = Repo('testrepo')
+        repo = Repo("testrepo")
         r = Repo._set_proxy_info(repo)
-        self.assertEqual(r['proxy'], "https://fake.server.com:3129")
+        self.assertEqual(r["proxy"], "https://fake.server.com:3129")
 
 
 class RepoActionReportTests(fixture.SubManFixture):
     def test(self):
         report = repolib.RepoActionReport()
-        repo = self._repo('a-unicode-content-label', 'A unicode repo name')
+        repo = self._repo("a-unicode-content-label", "A unicode repo name")
         report.repo_updates.append(repo)
         report.repo_added.append(repo)
-        deleted_section = 'einige-repo-name'
-        deleted_section_2 = '一些回購名稱'
+        deleted_section = "einige-repo-name"
+        deleted_section_2 = "一些回購名稱"
         report.repo_deleted = [deleted_section, deleted_section_2]
 
         str(report)
 
-        with fixture.locale_context('de_DE.utf8'):
+        with fixture.locale_context("de_DE.utf8"):
             str(report)
 
     def _repo(self, id, name):
         repo = repolib.Repo(repo_id=id)
-        repo['name'] = name
+        repo["name"] = name
         return repo
 
     def test_empty(self):
         report = repolib.RepoActionReport()
         self.assertEqual(report.updates(), 0)
-        '%s' % report
+        "%s" % report
         str(report)
 
     def test_format(self):
         report = repolib.RepoActionReport()
-        repo = self._repo('a-repo-label', 'A Repo Name')
+        repo = self._repo("a-repo-label", "A Repo Name")
         report.repo_updates.append(repo)
         res = str(report)
         # needs tests run in eng locale, coupled to report format since
         # I managed to typo them
         report_label_regexes = [
-            '^Repo updates$',
-            '^Total repo updates:',
-            '^Updated$',
-            r'^Added \(new\)$',
-            '^Deleted$',
+            "^Repo updates$",
+            "^Total repo updates:",
+            "^Updated$",
+            r"^Added \(new\)$",
+            "^Deleted$",
         ]
         for report_label_regex in report_label_regexes:
             if not re.search(report_label_regex, res, re.MULTILINE):
@@ -316,7 +316,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         Scan list of content for one with name.
         """
         for content in content_list:
-            if content['name'] == name:
+            if content["name"] == name:
                 return content
         return None
 
@@ -329,7 +329,7 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         mock_uep.get_supported_resources = Mock(return_value=[])
         mock_uep.getCertificates = Mock(return_value=[])
         mock_uep.getCertificateSerials = Mock(return_value=[])
-        mock_uep.getRelease = Mock(return_value={'releaseVer': "dummyrelease"})
+        mock_uep.getRelease = Mock(return_value={"releaseVer": "dummyrelease"})
 
         self.set_consumer_auth_cp(mock_uep)
 
@@ -341,24 +341,24 @@ class RepoUpdateActionTests(fixture.SubManFixture):
 
     def test_overrides_trump_ent_cert(self):
         update_action = RepoUpdateActionCommand()
-        update_action.overrides = {'x': {'gpgcheck': 'blah'}}
-        r = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
-        self.assertEqual('original', r['gpgcheck'])
+        update_action.overrides = {"x": {"gpgcheck": "blah"}}
+        r = Repo("x", [("gpgcheck", "original"), ("gpgkey", "some_key")])
+        self.assertEqual("original", r["gpgcheck"])
         update_action._set_override_info(r)
-        self.assertEqual('blah', r['gpgcheck'])
-        self.assertEqual('some_key', r['gpgkey'])
+        self.assertEqual("blah", r["gpgcheck"])
+        self.assertEqual("some_key", r["gpgkey"])
 
     def test_overrides_trump_existing(self):
         update_action = RepoUpdateActionCommand()
-        update_action.overrides = {'x': {'gpgcheck': 'blah'}}
-        values = [('gpgcheck', 'original'), ('gpgkey', 'some_key')]
-        old_repo = Repo('x', values)
+        update_action.overrides = {"x": {"gpgcheck": "blah"}}
+        values = [("gpgcheck", "original"), ("gpgkey", "some_key")]
+        old_repo = Repo("x", values)
         new_repo = Repo(old_repo.id, values)
         update_action._set_override_info(new_repo)
-        self.assertEqual('original', old_repo['gpgcheck'])
+        self.assertEqual("original", old_repo["gpgcheck"])
         update_action.update_repo(old_repo, new_repo)
-        self.assertEqual('blah', old_repo['gpgcheck'])
-        self.assertEqual('some_key', old_repo['gpgkey'])
+        self.assertEqual("blah", old_repo["gpgcheck"])
+        self.assertEqual("some_key", old_repo["gpgkey"])
 
     @patch("subscription_manager.repolib.get_repo_file_classes")
     def test_update_when_new_repo(self, mock_get_repo_file_classes):
@@ -370,21 +370,21 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         mock_get_repo_file_classes.return_value = [(mock_class, mock_class)]
 
         def stub_content():
-            return [Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])]
+            return [Repo("x", [("gpgcheck", "original"), ("gpgkey", "some_key")])]
 
         update_action = RepoUpdateActionCommand()
         update_action.get_unique_content = stub_content
         update_report = update_action.perform()
         written_repo = mock_file.add.call_args[0][0]
-        self.assertEqual('original', written_repo['gpgcheck'])
-        self.assertEqual('some_key', written_repo['gpgkey'])
+        self.assertEqual("original", written_repo["gpgcheck"])
+        self.assertEqual("some_key", written_repo["gpgkey"])
         self.assertEqual(1, update_report.updates())
 
     @patch("subscription_manager.repolib.get_repo_file_classes")
     def test_update_when_repo_not_modified_on_mutable(self, mock_get_repo_file_classes):
         self._inject_mock_invalid_consumer()
-        modified_repo = Repo('x', [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
-        server_repo = Repo('x', [('gpgcheck', 'original')])
+        modified_repo = Repo("x", [("gpgcheck", "original"), ("gpgkey", "some_key")])
+        server_repo = Repo("x", [("gpgcheck", "original")])
         mock_file = MagicMock()
         mock_file.CONTENT_TYPES = [None]
         mock_file.fix_content = lambda x: x
@@ -393,25 +393,25 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         mock_get_repo_file_classes.return_value = [(mock_class, mock_class)]
 
         def stub_content():
-            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key'), ('name', 'test')])]
+            return [Repo("x", [("gpgcheck", "new"), ("gpgkey", "new_key"), ("name", "test")])]
 
         update_action = RepoUpdateActionCommand()
         update_action.get_unique_content = stub_content
         current = update_action.perform()
         # confirming that the assessed value does change when repo file
         # is the same as the server value file.
-        self.assertEqual('new', current.repo_updates[0]['gpgcheck'])
+        self.assertEqual("new", current.repo_updates[0]["gpgcheck"])
 
         # this is the ending server value file.
         written_repo = mock_file.update.call_args[0][0]
-        self.assertEqual('new', written_repo['gpgcheck'])
-        self.assertEqual(None, written_repo['gpgkey'])
+        self.assertEqual("new", written_repo["gpgcheck"])
+        self.assertEqual(None, written_repo["gpgkey"])
 
     @patch("subscription_manager.repolib.get_repo_file_classes")
     def test_update_when_repo_modified_on_mutable(self, mock_get_repo_file_classes):
         self._inject_mock_invalid_consumer()
-        modified_repo = Repo('x', [('gpgcheck', 'unoriginal'), ('gpgkey', 'some_key')])
-        server_repo = Repo('x', [('gpgcheck', 'original')])
+        modified_repo = Repo("x", [("gpgcheck", "unoriginal"), ("gpgkey", "some_key")])
+        server_repo = Repo("x", [("gpgcheck", "original")])
         mock_file = MagicMock()
         mock_file.CONTENT_TYPES = [None]
         mock_file.fix_content = lambda x: x
@@ -420,47 +420,47 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         mock_get_repo_file_classes.return_value = [(mock_class, mock_class)]
 
         def stub_content():
-            return [Repo('x', [('gpgcheck', 'new'), ('gpgkey', 'new_key'), ('name', 'test')])]
+            return [Repo("x", [("gpgcheck", "new"), ("gpgkey", "new_key"), ("name", "test")])]
 
         update_action = RepoUpdateActionCommand()
         update_action.get_unique_content = stub_content
         current = update_action.perform()
         # confirming that the assessed value does not change when repo file
         # is different from the server value file.
-        self.assertEqual('unoriginal', current.repo_updates[0]['gpgcheck'])
+        self.assertEqual("unoriginal", current.repo_updates[0]["gpgcheck"])
 
         # this is the ending server value file
         written_repo = mock_file.update.call_args[0][0]
-        self.assertEqual('new', written_repo['gpgcheck'])
-        self.assertEqual(None, written_repo['gpgkey'])
+        self.assertEqual("new", written_repo["gpgcheck"])
+        self.assertEqual(None, written_repo["gpgkey"])
 
     def test_no_gpg_key(self):
 
         update_action = RepoUpdateActionCommand()
         content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
-        c1 = self._find_content(content, 'c1')
-        self.assertEqual('', c1['gpgkey'])
-        self.assertEqual('0', c1['gpgcheck'])
+        c1 = self._find_content(content, "c1")
+        self.assertEqual("", c1["gpgkey"])
+        self.assertEqual("0", c1["gpgcheck"])
 
-        c2 = self._find_content(content, 'c2')
-        self.assertEqual('', c2['gpgkey'])
-        self.assertEqual('0', c2['gpgcheck'])
+        c2 = self._find_content(content, "c2")
+        self.assertEqual("", c2["gpgkey"])
+        self.assertEqual("0", c2["gpgcheck"])
 
     def test_gpg_key(self):
 
         update_action = RepoUpdateActionCommand()
         content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
-        c4 = self._find_content(content, 'c4')
-        self.assertEqual('http://example.com/gpg.key', c4['gpgkey'])
-        self.assertEqual('1', c4['gpgcheck'])
+        c4 = self._find_content(content, "c4")
+        self.assertEqual("http://example.com/gpg.key", c4["gpgkey"])
+        self.assertEqual("1", c4["gpgcheck"])
 
     def test_ui_repoid_vars(self):
         update_action = RepoUpdateActionCommand()
         content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
-        c4 = self._find_content(content, 'c4')
-        self.assertEqual('some path', c4['ui_repoid_vars'])
-        c2 = self._find_content(content, 'c2')
-        self.assertEqual(None, c2['ui_repoid_vars'])
+        c4 = self._find_content(content, "c4")
+        self.assertEqual("some path", c4["ui_repoid_vars"])
+        c2 = self._find_content(content, "c2")
+        self.assertEqual(None, c2["ui_repoid_vars"])
 
     def test_tags_found(self):
         update_action = RepoUpdateActionCommand()
@@ -477,49 +477,49 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_mutable_property(self):
         update_action = RepoUpdateActionCommand()
         self._inject_mock_invalid_consumer()
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = 1000
-        incoming_repo = {'metadata_expire': 2000}
+        existing_repo = Repo("testrepo")
+        existing_repo["metadata_expire"] = 1000
+        incoming_repo = {"metadata_expire": 2000}
         update_action.update_repo(existing_repo, incoming_repo)
-        self.assertEqual(1000, existing_repo['metadata_expire'])
+        self.assertEqual(1000, existing_repo["metadata_expire"])
 
     def test_mutable_property_is_server(self):
         update_action = RepoUpdateActionCommand()
         self._inject_mock_invalid_consumer()
-        existing_repo = Repo('testrepo')
-        server_val_repo = Repo('servertestrepo')
-        existing_repo['metadata_expire'] = 1000
-        server_val_repo['metadata_expire'] = 1000
-        incoming_repo = {'metadata_expire': 2000}
+        existing_repo = Repo("testrepo")
+        server_val_repo = Repo("servertestrepo")
+        existing_repo["metadata_expire"] = 1000
+        server_val_repo["metadata_expire"] = 1000
+        incoming_repo = {"metadata_expire": 2000}
         update_action.update_repo(existing_repo, incoming_repo, server_val_repo)
-        self.assertEqual(2000, existing_repo['metadata_expire'])
+        self.assertEqual(2000, existing_repo["metadata_expire"])
 
     def test_gpgcheck_is_mutable(self):
         update_action = RepoUpdateActionCommand()
         self._inject_mock_invalid_consumer()
-        existing_repo = Repo('testrepo')
-        existing_repo['gpgcheck'] = "0"
-        incoming_repo = {'gpgcheck': "1"}
+        existing_repo = Repo("testrepo")
+        existing_repo["gpgcheck"] = "0"
+        incoming_repo = {"gpgcheck": "1"}
         update_action.update_repo(existing_repo, incoming_repo)
-        self.assertEqual("0", existing_repo['gpgcheck'])
+        self.assertEqual("0", existing_repo["gpgcheck"])
 
     def test_mutable_property_in_repo_but_not_in_cert(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = 1000
+        existing_repo = Repo("testrepo")
+        existing_repo["metadata_expire"] = 1000
         incoming_repo = {}
         update_action.update_repo(existing_repo, incoming_repo)
-        self.assertEqual(1000, existing_repo['metadata_expire'])
+        self.assertEqual(1000, existing_repo["metadata_expire"])
 
     def test_immutable_property(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        existing_repo['name'] = "meow"
-        incoming_repo = {'name': "woof"}
+        existing_repo = Repo("testrepo")
+        existing_repo["name"] = "meow"
+        incoming_repo = {"name": "woof"}
         update_action.update_repo(existing_repo, incoming_repo)
-        self.assertEqual("woof", existing_repo['name'])
+        self.assertEqual("woof", existing_repo["name"])
 
     # If the user removed a mutable property completely, or the property
     # is new in a new version of the entitlement certificate, the new value
@@ -527,26 +527,26 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_unset_mutable_property(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        incoming_repo = {'metadata_expire': 2000}
+        existing_repo = Repo("testrepo")
+        incoming_repo = {"metadata_expire": 2000}
         update_action.update_repo(existing_repo, incoming_repo)
-        self.assertEqual(2000, existing_repo['metadata_expire'])
+        self.assertEqual(2000, existing_repo["metadata_expire"])
 
     def test_unset_immutable_property(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        incoming_repo = {'name': "woof"}
+        existing_repo = Repo("testrepo")
+        incoming_repo = {"name": "woof"}
         update_action.update_repo(existing_repo, incoming_repo)
-        self.assertEqual("woof", existing_repo['name'])
+        self.assertEqual("woof", existing_repo["name"])
 
     # Test repo on disk has an immutable property set which has since been
     # unset in the new repo definition. This property should be removed.
     def test_set_immutable_property_now_empty(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
+        existing_repo = Repo("testrepo")
+        existing_repo["proxy_username"] = "blah"
         incoming_repo = {}
         update_action.update_repo(existing_repo, incoming_repo)
         self.assertFalse("proxy_username" in list(existing_repo.keys()))
@@ -554,9 +554,9 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_set_mutable_property_now_empty_value(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = "blah"
-        incoming_repo = {'metadata_expire': ''}
+        existing_repo = Repo("testrepo")
+        existing_repo["metadata_expire"] = "blah"
+        incoming_repo = {"metadata_expire": ""}
         update_action.update_repo(existing_repo, incoming_repo)
         # re comments in repolib
         # Mutable properties should be added if not currently defined,
@@ -566,21 +566,21 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_set_custom_property_removed(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        existing_repo['exclude'] = "1"
+        existing_repo = Repo("testrepo")
+        existing_repo["exclude"] = "1"
         # 'exclude' is not in the updated repo listing.
         # this is how an override delete is passed into
         # the update method
-        incoming_repo = Repo('testrepo')
+        incoming_repo = Repo("testrepo")
         update_action.update_repo(existing_repo, incoming_repo, existing_repo)
-        self.assertFalse('exclude' in list(existing_repo.keys()))
+        self.assertFalse("exclude" in list(existing_repo.keys()))
 
     def test_set_immutable_property_now_empty_value(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {'proxy_username': ''}
+        existing_repo = Repo("testrepo")
+        existing_repo["proxy_username"] = "blah"
+        incoming_repo = {"proxy_username": ""}
         update_action.update_repo(existing_repo, incoming_repo)
         # Immutable properties should be always be added/updated,
         # and removed if undefined in the new repo definition.
@@ -589,9 +589,9 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_set_mutable_property_now_none(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = "blah"
-        incoming_repo = {'metadata_expire': None}
+        existing_repo = Repo("testrepo")
+        existing_repo["metadata_expire"] = "blah"
+        incoming_repo = {"metadata_expire": None}
         update_action.update_repo(existing_repo, incoming_repo)
         # re comments in repolib
         # Mutable properties should be added if not currently defined,
@@ -601,8 +601,8 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_set_mutable_property_now_not_in_cert(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        existing_repo['metadata_expire'] = "blah"
+        existing_repo = Repo("testrepo")
+        existing_repo["metadata_expire"] = "blah"
         incoming_repo = {}
         update_action.update_repo(existing_repo, incoming_repo)
         # re comments in repolib
@@ -613,9 +613,9 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_set_immutable_property_now_none(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
-        incoming_repo = {'proxy_username': None}
+        existing_repo = Repo("testrepo")
+        existing_repo["proxy_username"] = "blah"
+        incoming_repo = {"proxy_username": None}
         update_action.update_repo(existing_repo, incoming_repo)
         # Immutable properties should be always be added/updated,
         # and removed if undefined in the new repo definition.
@@ -624,8 +624,8 @@ class RepoUpdateActionTests(fixture.SubManFixture):
     def test_set_immutable_property_now_not_in_cert(self):
         self._inject_mock_invalid_consumer()
         update_action = RepoUpdateActionCommand()
-        existing_repo = Repo('testrepo')
-        existing_repo['proxy_username'] = "blah"
+        existing_repo = Repo("testrepo")
+        existing_repo["proxy_username"] = "blah"
         incoming_repo = {}
         update_action.update_repo(existing_repo, incoming_repo)
         # Immutable properties should be always be added/updated,
@@ -634,59 +634,59 @@ class RepoUpdateActionTests(fixture.SubManFixture):
 
     def test_overrides_removed_revert_to_default(self):
         update_action = RepoUpdateActionCommand()
-        update_action.written_overrides.overrides = {'x': {'gpgcheck': 'blah'}}
+        update_action.written_overrides.overrides = {"x": {"gpgcheck": "blah"}}
         update_action.overrides = {}
-        old_repo = Repo('x', [('gpgcheck', 'blah'), ('gpgkey', 'some_key')])
-        new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
+        old_repo = Repo("x", [("gpgcheck", "blah"), ("gpgkey", "some_key")])
+        new_repo = Repo(old_repo.id, [("gpgcheck", "original"), ("gpgkey", "some_key")])
         update_action._set_override_info(new_repo)
         # The value from the current repo file (with the old override) should exist pre-update
-        self.assertEqual('blah', old_repo['gpgcheck'])
+        self.assertEqual("blah", old_repo["gpgcheck"])
         update_action.update_repo(old_repo, new_repo)
         # Because the override has been removed, the value is reset to the default
-        self.assertEqual('original', old_repo['gpgcheck'])
-        self.assertEqual('some_key', old_repo['gpgkey'])
+        self.assertEqual("original", old_repo["gpgcheck"])
+        self.assertEqual("some_key", old_repo["gpgkey"])
 
     def test_overrides_removed_and_edited(self):
         update_action = RepoUpdateActionCommand()
-        update_action.written_overrides.overrides = {'x': {'gpgcheck': 'override_value'}}
+        update_action.written_overrides.overrides = {"x": {"gpgcheck": "override_value"}}
         update_action.overrides = {}
-        old_repo = Repo('x', [('gpgcheck', 'hand_edit'), ('gpgkey', 'some_key')])
-        new_repo = Repo(old_repo.id, [('gpgcheck', 'original'), ('gpgkey', 'some_key')])
+        old_repo = Repo("x", [("gpgcheck", "hand_edit"), ("gpgkey", "some_key")])
+        new_repo = Repo(old_repo.id, [("gpgcheck", "original"), ("gpgkey", "some_key")])
         update_action._set_override_info(new_repo)
         # The value from the current repo file (with the old hand edit) should exist pre-update
-        self.assertEqual('hand_edit', old_repo['gpgcheck'])
+        self.assertEqual("hand_edit", old_repo["gpgcheck"])
         update_action.update_repo(old_repo, new_repo)
         # Because the current value doesn't match the override, we don't modify it
-        self.assertEqual('hand_edit', old_repo['gpgcheck'])
-        self.assertEqual('some_key', old_repo['gpgkey'])
+        self.assertEqual("hand_edit", old_repo["gpgcheck"])
+        self.assertEqual("some_key", old_repo["gpgkey"])
 
     def test_non_default_overrides_added_to_existing(self):
-        '''
+        """
         Test that overrides for values that aren't found in Repo.PROPERTIES are written
         to existing repos
-        '''
+        """
         update_action = RepoUpdateActionCommand()
         update_action.written_overrides.overrides = {}
-        update_action.overrides = {'x': {'somekey': 'someval'}}
-        old_repo = Repo('x', [])
+        update_action.overrides = {"x": {"somekey": "someval"}}
+        old_repo = Repo("x", [])
         new_repo = Repo(old_repo.id, [])
         update_action._set_override_info(new_repo)
         update_action.update_repo(old_repo, new_repo)
-        self.assertEqual('someval', old_repo['somekey'])
+        self.assertEqual("someval", old_repo["somekey"])
 
     def test_non_default_override_removed_deleted(self):
-        '''
+        """
         Test that overrides for values that aren't found in Repo.PROPERTIES are
         removed from redhat.repo once the override is removed
-        '''
+        """
         update_action = RepoUpdateActionCommand()
-        update_action.written_overrides.overrides = {'x': {'somekey': 'someval'}}
+        update_action.written_overrides.overrides = {"x": {"somekey": "someval"}}
         update_action.overrides = {}
-        old_repo = Repo('x', [('somekey', 'someval')])
+        old_repo = Repo("x", [("somekey", "someval")])
         new_repo = Repo(old_repo.id, [])
         update_action._set_override_info(new_repo)
         update_action.update_repo(old_repo, new_repo)
-        self.assertFalse('somekey' in old_repo)
+        self.assertFalse("somekey" in old_repo)
 
 
 class TidyWriterTests(unittest.TestCase):
@@ -779,7 +779,7 @@ class YumReleaseverSourceTest(fixture.SubManFixture):
         release_mock = inj.require(inj.RELEASE_STATUS_CACHE)
 
         release = "MockServer"
-        mock_release = {'releaseVer': release}
+        mock_release = {"releaseVer": release}
         release_mock.read_status = Mock(return_value=mock_release)
         release_source = YumReleaseverSource()
 
@@ -795,7 +795,7 @@ class YumReleaseverSourceTest(fixture.SubManFixture):
         release_mock = inj.require(inj.RELEASE_STATUS_CACHE)
 
         release = "MockServer"
-        mock_release = {'releaseVer': release}
+        mock_release = {"releaseVer": release}
         release_mock.read_status = Mock(return_value=mock_release)
         release_source = YumReleaseverSource()
 
@@ -810,7 +810,7 @@ class YumReleaseverSourceTest(fixture.SubManFixture):
         release_mock = inj.require(inj.RELEASE_STATUS_CACHE)
 
         release = ""
-        mock_release = {'releaseVer': release}
+        mock_release = {"releaseVer": release}
         release_mock.read_status = Mock(return_value=mock_release)
         release_source = YumReleaseverSource()
 
@@ -844,23 +844,23 @@ class YumReleaseverSourceIsSetTest(fixture.SubManFixture):
         self.assertFalse(YumReleaseverSource.is_set(None))
 
     def test_key_error(self):
-        self.assertFalse(YumReleaseverSource.is_set({'not_release_ver': 'blippy'}))
+        self.assertFalse(YumReleaseverSource.is_set({"not_release_ver": "blippy"}))
 
     def test_not_a_dict(self):
-        self.assertFalse(YumReleaseverSource.is_set(['some string']))
+        self.assertFalse(YumReleaseverSource.is_set(["some string"]))
 
     def test_releasever_zero(self):
-        self.assertFalse(YumReleaseverSource.is_set({'releaseVer': 0}))
+        self.assertFalse(YumReleaseverSource.is_set({"releaseVer": 0}))
 
     def test_releasever_none(self):
-        self.assertFalse(YumReleaseverSource.is_set({'releaseVer': None}))
+        self.assertFalse(YumReleaseverSource.is_set({"releaseVer": None}))
 
     def test_releasever_7server(self):
-        self.assertTrue(YumReleaseverSource.is_set({'releaseVer': '7Server'}))
+        self.assertTrue(YumReleaseverSource.is_set({"releaseVer": "7Server"}))
 
     def test_releasever_the_string_none(self):
         # you laugh, but someone thinks that would be an awesome product name.
-        self.assertTrue(YumReleaseverSource.is_set({'releaseVer': 'None'}))
+        self.assertTrue(YumReleaseverSource.is_set({"releaseVer": "None"}))
 
 
 class AptRepoFileTest(unittest.TestCase):
@@ -883,7 +883,7 @@ class AptRepoFileTest(unittest.TestCase):
         ar = self._helper_stub_repofile()
         yr = YumRepoFile()
         mock_repo = self._helper_stub_repo(
-            'mock', existing_values=[('baseurl', 'https://example.org.org/'), ('sslclientcert', 'mypem.pem')]
+            "mock", existing_values=[("baseurl", "https://example.org.org/"), ("sslclientcert", "mypem.pem")]
         )
         # Modify data using different backends (Apt,Yum)
         ar_fixed_content = ar.fix_content(mock_repo)
@@ -898,9 +898,9 @@ class AptRepoFileTest(unittest.TestCase):
         assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
         mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
         # Setup expected results
-        exp_path = 'etc/apt/sources.list.d'
-        exp_name = 'rhsm.sources'
-        exp_content_types = ['deb']
+        exp_path = "etc/apt/sources.list.d"
+        exp_name = "rhsm.sources"
+        exp_content_types = ["deb"]
         exp_repofile_header = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
@@ -927,7 +927,7 @@ class AptRepoFileTest(unittest.TestCase):
         assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
         mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
         ar = self._helper_stub_repofile()
-        mock_repo = self._helper_stub_repo('mock')
+        mock_repo = self._helper_stub_repo("mock")
         mock_dict = dict([(str(k), str(v)) for (k, v) in mock_repo.items()])
         mock_deb822 = StubDeb822(mock_dict)
         # Modify data
@@ -944,9 +944,9 @@ class AptRepoFileTest(unittest.TestCase):
         assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
         mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
         ar = self._helper_stub_repofile()
-        mock_repo_a = self._helper_stub_repo('a')
-        mock_repo_b = self._helper_stub_repo('b')
-        mock_repo_c = self._helper_stub_repo('c')
+        mock_repo_a = self._helper_stub_repo("a")
+        mock_repo_b = self._helper_stub_repo("b")
+        mock_repo_c = self._helper_stub_repo("c")
         ar.add(mock_repo_a)
         ar.add(mock_repo_b)
         ar.add(mock_repo_c)
@@ -954,8 +954,8 @@ class AptRepoFileTest(unittest.TestCase):
         ar.delete(mock_repo_b.id)
         # Test modification
         self.assertEqual(len(ar.repos822), 2)
-        self.assertEqual(ar.repos822[0]['id'], 'a')
-        self.assertEqual(ar.repos822[1]['id'], 'c')
+        self.assertEqual(ar.repos822[0]["id"], "a")
+        self.assertEqual(ar.repos822[1]["id"], "c")
 
     @patch("builtins.open", new_callable=mock_open, read_data="data")
     def test_update_repo(self, mock_file):
@@ -963,14 +963,14 @@ class AptRepoFileTest(unittest.TestCase):
         assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
         mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
         ar = self._helper_stub_repofile()
-        mock_repo_a = self._helper_stub_repo('a', existing_values=[('baseurl', 'url')])
+        mock_repo_a = self._helper_stub_repo("a", existing_values=[("baseurl", "url")])
         ar.add(mock_repo_a)
         # Modify data
-        mock_repo_a['baseurl'] = 'new url'
+        mock_repo_a["baseurl"] = "new url"
         ar.update(mock_repo_a)
         # Test modification
-        self.assertEqual(ar.repos822[0]['id'], 'a')
-        self.assertEqual(ar.repos822[0]['baseurl'], 'new url')
+        self.assertEqual(ar.repos822[0]["id"], "a")
+        self.assertEqual(ar.repos822[0]["baseurl"], "new url")
 
     @patch("builtins.open", new_callable=mock_open, read_data="data")
     def test_fix_content_default(self, mock_file):
@@ -978,18 +978,18 @@ class AptRepoFileTest(unittest.TestCase):
         assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
         mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
         exp_params = {
-            'arches': 'none',
-            'Types': 'deb',
-            'URIs': 'https://example.site.org/',
-            'Suites': 'default',
-            'Components': 'all',
-            'Trusted': 'yes',
-            'sslclientcert': 'mypem.pem',
+            "arches": "none",
+            "Types": "deb",
+            "URIs": "https://example.site.org/",
+            "Suites": "default",
+            "Components": "all",
+            "Trusted": "yes",
+            "sslclientcert": "mypem.pem",
         }
         ar = self._helper_stub_repofile()
         repo_mock = self._helper_stub_repo(
-            'mock',
-            existing_values=[('baseurl', exp_params['URIs']), ('sslclientcert', exp_params['sslclientcert'])],
+            "mock",
+            existing_values=[("baseurl", exp_params["URIs"]), ("sslclientcert", exp_params["sslclientcert"])],
         )
         # Modify data
         act_content = ar.fix_content(repo_mock)
@@ -1003,14 +1003,14 @@ class AptRepoFileTest(unittest.TestCase):
         # Setup mock and expected values
         assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
         mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
-        exp_params = {'arches': 'none', 'URIs': 'https://example.site.org/', 'sslclientcert': 'mypem.pem'}
+        exp_params = {"arches": "none", "URIs": "https://example.site.org/", "sslclientcert": "mypem.pem"}
         ar = self._helper_stub_repofile()
         repo_mock = self._helper_stub_repo(
-            'mock',
+            "mock",
             existing_values=[
-                ('baseurl', exp_params['URIs']),
-                ('sslclientcert', exp_params['sslclientcert']),
-                ('arches', ['ALL']),
+                ("baseurl", exp_params["URIs"]),
+                ("sslclientcert", exp_params["sslclientcert"]),
+                ("arches", ["ALL"]),
             ],
         )
         # Modify data
@@ -1026,18 +1026,18 @@ class AptRepoFileTest(unittest.TestCase):
         assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
         mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
         exp_params = {
-            'arches': 'amd64 i386',
-            'Architectures': 'amd64 i386',
-            'URIs': 'https://example.site.org/',
-            'sslclientcert': 'mypem.pem',
+            "arches": "amd64 i386",
+            "Architectures": "amd64 i386",
+            "URIs": "https://example.site.org/",
+            "sslclientcert": "mypem.pem",
         }
         ar = self._helper_stub_repofile()
         repo_mock = self._helper_stub_repo(
-            'mock',
+            "mock",
             existing_values=[
-                ('baseurl', exp_params['URIs']),
-                ('sslclientcert', exp_params['sslclientcert']),
-                ('arches', ['amd64', 'i386']),
+                ("baseurl", exp_params["URIs"]),
+                ("sslclientcert", exp_params["sslclientcert"]),
+                ("arches", ["amd64", "i386"]),
             ],
         )
         # Modify data
@@ -1055,19 +1055,19 @@ class YumRepoFileTest(unittest.TestCase):
         rf = YumRepoFile()
         other = RawConfigParser()
         for parser in [rf, other]:
-            parser.add_section('test')
-            parser.set('test', 'key', 'val')
+            parser.add_section("test")
+            parser.set("test", "key", "val")
         self.assertTrue(rf._configparsers_equal(other))
 
     @patch("subscription_manager.repofile.YumRepoFile.create")
     @patch("subscription_manager.repofile.TidyWriter")
     def test_configparsers_diff_sections(self, tidy_writer, stub_create):
         rf = YumRepoFile()
-        rf.add_section('new_section')
+        rf.add_section("new_section")
         other = RawConfigParser()
         for parser in [rf, other]:
-            parser.add_section('test')
-            parser.set('test', 'key', 'val')
+            parser.add_section("test")
+            parser.set("test", "key", "val")
         self.assertFalse(rf._configparsers_equal(other))
 
     @patch("subscription_manager.repofile.YumRepoFile.create")
@@ -1076,9 +1076,9 @@ class YumRepoFileTest(unittest.TestCase):
         rf = YumRepoFile()
         other = RawConfigParser()
         for parser in [rf, other]:
-            parser.add_section('test')
-            parser.set('test', 'key', 'val')
-        rf.set('test', 'key', 'val2')
+            parser.add_section("test")
+            parser.set("test", "key", "val")
+        rf.set("test", "key", "val2")
         self.assertFalse(rf._configparsers_equal(other))
 
     @patch("subscription_manager.repofile.YumRepoFile.create")
@@ -1087,9 +1087,9 @@ class YumRepoFileTest(unittest.TestCase):
         rf = YumRepoFile()
         other = RawConfigParser()
         for parser in [rf, other]:
-            parser.add_section('test')
-            parser.set('test', 'key', 'val')
-        rf.set('test', 'somekey', 'val')
+            parser.add_section("test")
+            parser.set("test", "key", "val")
+        rf.set("test", "somekey", "val")
         self.assertFalse(rf._configparsers_equal(other))
 
     @patch("subscription_manager.repofile.YumRepoFile.create")
@@ -1098,10 +1098,10 @@ class YumRepoFileTest(unittest.TestCase):
         rf = YumRepoFile()
         other = RawConfigParser()
         for parser in [rf, other]:
-            parser.add_section('test')
-            parser.set('test', 'key', 'val')
-        rf.set('test', 'k', 1)
-        other.set('test', 'k', '1')
+            parser.add_section("test")
+            parser.set("test", "key", "val")
+        rf.set("test", "k", 1)
+        other.set("test", "k", "1")
         self.assertTrue(rf._configparsers_equal(other))
 
 
@@ -1139,35 +1139,35 @@ manage_repos = 37
 
 
 class TestManageReposEnabled(fixture.SubManFixture):
-    @patch.object(repofile, 'conf', ConfigFromString(config_string=unset_config))
+    @patch.object(repofile, "conf", ConfigFromString(config_string=unset_config))
     def test(self):
         # default stub config, no manage_repo defined, uses default
         manage_repos_enabled = repofile.manage_repos_enabled()
         self.assertEqual(manage_repos_enabled, True)
 
-    @patch.object(repofile, 'conf', ConfigFromString(config_string=unset_manage_repos_cfg_buf))
+    @patch.object(repofile, "conf", ConfigFromString(config_string=unset_manage_repos_cfg_buf))
     def test_empty_manage_repos(self):
         manage_repos_enabled = repofile.manage_repos_enabled()
         self.assertEqual(manage_repos_enabled, True)
 
-    @patch.object(repofile, 'conf', ConfigFromString(config_string=manage_repos_zero_config))
+    @patch.object(repofile, "conf", ConfigFromString(config_string=manage_repos_zero_config))
     def test_empty_manage_repos_zero(self):
         manage_repos_enabled = repofile.manage_repos_enabled()
         self.assertEqual(manage_repos_enabled, False)
 
-    @patch.object(repofile, 'config', ConfigFromString(config_string=manage_repos_bool_config))
+    @patch.object(repofile, "config", ConfigFromString(config_string=manage_repos_bool_config))
     def test_empty_manage_repos_bool(self):
         manage_repos_enabled = repofile.manage_repos_enabled()
         # Should fail, and return default of 1
         self.assertEqual(manage_repos_enabled, True)
 
-    @patch.object(repofile, 'config', ConfigFromString(config_string=manage_repos_not_an_int))
+    @patch.object(repofile, "config", ConfigFromString(config_string=manage_repos_not_an_int))
     def test_empty_manage_repos_not_an_int(self):
         manage_repos_enabled = repofile.manage_repos_enabled()
         # Should fail, and return default of 1
         self.assertEqual(manage_repos_enabled, True)
 
-    @patch.object(repofile, 'conf', ConfigFromString(config_string=manage_repos_int_37))
+    @patch.object(repofile, "conf", ConfigFromString(config_string=manage_repos_int_37))
     def test_empty_manage_repos_int_37(self):
         manage_repos_enabled = repofile.manage_repos_enabled()
         # Should fail, and return default of 1
@@ -1243,8 +1243,8 @@ class TestYumPluginManager(unittest.TestCase):
         Mock configuration files of plugins
         """
         dnf_tmp_dir = tempfile.mkdtemp()
-        f, plug_file_name_01 = tempfile.mkstemp(prefix='', suffix='.conf', dir=dnf_tmp_dir, text=True)
-        f, plug_file_name_02 = tempfile.mkstemp(prefix='', suffix='.conf', dir=dnf_tmp_dir, text=True)
+        f, plug_file_name_01 = tempfile.mkstemp(prefix="", suffix=".conf", dir=dnf_tmp_dir, text=True)
+        f, plug_file_name_02 = tempfile.mkstemp(prefix="", suffix=".conf", dir=dnf_tmp_dir, text=True)
         with open(plug_file_name_01, "w") as plug_file_01:
             plug_file_01.write(conf_string)
         with open(plug_file_name_02, "w") as plug_file_02:
@@ -1254,8 +1254,8 @@ class TestYumPluginManager(unittest.TestCase):
         self.tmp_dir = dnf_tmp_dir
         YumPluginManager.DNF_PLUGIN_DIR = dnf_tmp_dir
         YumPluginManager.PLUGINS = [
-            plug_file_name_01.replace(dnf_tmp_dir, '').replace('.conf', ''),
-            plug_file_name_02.replace(dnf_tmp_dir, '').replace('.conf', ''),
+            plug_file_name_01.replace(dnf_tmp_dir, "").replace(".conf", ""),
+            plug_file_name_02.replace(dnf_tmp_dir, "").replace(".conf", ""),
         ]
 
     def restore_dnf_plugin_conf_files(self):
@@ -1268,7 +1268,7 @@ class TestYumPluginManager(unittest.TestCase):
         os.unlink(self.plug_file_name_02)
         os.rmdir(self.tmp_dir)
 
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
+    @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     def test_enabling_disabled_dnf_plugin(self):
         """
         Test automatic enabling of configuration files of disabled plugins
@@ -1279,14 +1279,14 @@ class TestYumPluginManager(unittest.TestCase):
         for plugin_conf_file_name in YumPluginManager.PLUGINS:
             dnf_plugin_config = ConfigParser()
             result = dnf_plugin_config.read(
-                YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf'
+                YumPluginManager.DNF_PLUGIN_DIR + "/" + plugin_conf_file_name + ".conf"
             )
             self.assertGreater(len(result), 0)
-            is_plugin_enabled = dnf_plugin_config.getint('main', 'enabled')
+            is_plugin_enabled = dnf_plugin_config.getint("main", "enabled")
             self.assertEqual(is_plugin_enabled, 1)
         self.restore_dnf_plugin_conf_files()
 
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
+    @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     def test_enabling_enabled_dnf_plugin_int(self):
         """
         Test automatic enabling of configuration files of already enabled plugins
@@ -1297,14 +1297,14 @@ class TestYumPluginManager(unittest.TestCase):
         for plugin_conf_file_name in YumPluginManager.PLUGINS:
             yum_plugin_config = ConfigParser()
             result = yum_plugin_config.read(
-                YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf'
+                YumPluginManager.DNF_PLUGIN_DIR + "/" + plugin_conf_file_name + ".conf"
             )
             self.assertGreater(len(result), 0)
-            is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
+            is_plugin_enabled = yum_plugin_config.getint("main", "enabled")
             self.assertEqual(is_plugin_enabled, 1)
         self.restore_dnf_plugin_conf_files()
 
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
+    @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     def test_enabling_enabled_dnf_plugin_bool(self):
         """
         Test automatic enabling of configuration files of already enabled plugins
@@ -1315,15 +1315,15 @@ class TestYumPluginManager(unittest.TestCase):
         for plugin_conf_file_name in YumPluginManager.PLUGINS:
             yum_plugin_config = ConfigParser()
             result = yum_plugin_config.read(
-                YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf'
+                YumPluginManager.DNF_PLUGIN_DIR + "/" + plugin_conf_file_name + ".conf"
             )
             self.assertGreater(len(result), 0)
             # The file was not modified. We have to read value with with getboolean()
-            is_plugin_enabled = yum_plugin_config.getboolean('main', 'enabled')
+            is_plugin_enabled = yum_plugin_config.getboolean("main", "enabled")
             self.assertEqual(is_plugin_enabled, True)
         self.restore_dnf_plugin_conf_files()
 
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
+    @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     def test_enabling_dnf_plugin_with_invalid_values(self):
         """
         Test automatic enabling of configuration files of already enabled plugins
@@ -1334,14 +1334,14 @@ class TestYumPluginManager(unittest.TestCase):
         for plugin_conf_file_name in YumPluginManager.PLUGINS:
             yum_plugin_config = ConfigParser()
             result = yum_plugin_config.read(
-                YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf'
+                YumPluginManager.DNF_PLUGIN_DIR + "/" + plugin_conf_file_name + ".conf"
             )
             self.assertGreater(len(result), 0)
-            is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
+            is_plugin_enabled = yum_plugin_config.getint("main", "enabled")
             self.assertEqual(is_plugin_enabled, 1)
         self.restore_dnf_plugin_conf_files()
 
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
+    @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     def test_enabling_dnf_plugin_with_wrong_conf(self):
         """
         Test automatic enabling of configuration files of already plugins with wrong values in conf file.
@@ -1352,14 +1352,14 @@ class TestYumPluginManager(unittest.TestCase):
         for plugin_conf_file_name in YumPluginManager.PLUGINS:
             yum_plugin_config = ConfigParser()
             result = yum_plugin_config.read(
-                YumPluginManager.DNF_PLUGIN_DIR + '/' + plugin_conf_file_name + '.conf'
+                YumPluginManager.DNF_PLUGIN_DIR + "/" + plugin_conf_file_name + ".conf"
             )
             self.assertGreater(len(result), 0)
-            is_plugin_enabled = yum_plugin_config.getint('main', 'enabled')
+            is_plugin_enabled = yum_plugin_config.getint("main", "enabled")
             self.assertEqual(is_plugin_enabled, 1)
         self.restore_dnf_plugin_conf_files()
 
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
+    @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     def test_enabling_dnf_plugin_with_corrupted_conf_file(self):
         """
         This test only test YumPluginManager.enable_yum_plugins() can survive reading of corrupted
@@ -1369,7 +1369,7 @@ class TestYumPluginManager(unittest.TestCase):
         plugin_list = YumPluginManager.enable_pkg_plugins()
         self.assertEqual(len(plugin_list), 0)
 
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
+    @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     def test_enabling_dnf_plugin_with_missing_main_section(self):
         """
         This test only test YumPluginManager.enable_yum_plugins() can survive reading of corrupted
@@ -1379,7 +1379,7 @@ class TestYumPluginManager(unittest.TestCase):
         plugin_list = YumPluginManager.enable_pkg_plugins()
         self.assertEqual(len(plugin_list), 2)
 
-    @patch.object(repolib, 'conf', ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
+    @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     def test_enabling_dnf_plugin_with_missing_enabled_option(self):
         """
         This test only test YumPluginManager.enable_yum_plugins() can survive reading of corrupted

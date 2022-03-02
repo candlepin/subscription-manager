@@ -24,10 +24,10 @@ from subscription_manager.entcertlib import Disconnected
 from subscription_manager.i18n import ugettext as _
 
 SOCKET_MESSAGE = _(
-    'Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'
+    "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information."
 )
 NETWORK_MESSAGE = _(
-    'Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information.'
+    "Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."
 )
 PROXY_MESSAGE = _("Proxy error, unable to connect to proxy server.")
 UNAUTHORIZED_MESSAGE = _("Unauthorized: Invalid credentials for request.")
@@ -38,7 +38,7 @@ REMOTE_SERVER_MESSAGE = _(
 )
 BAD_CA_CERT_MESSAGE = _("Bad CA certificate: %s")
 EXPIRED_ID_CERT_MESSAGE = _("Your identity certificate has expired")
-SSL_MESSAGE = _('Unable to verify server\'s identity: %s')
+SSL_MESSAGE = _("Unable to verify server's identity: %s")
 PERROR_EMPTY_MESSAGE = _("Server URL can not be empty")
 PERROR_JUST_SCHEME_MESSAGE = _("Server URL is just a schema. Should include hostname, and/or port and path")
 PERROR_NONE_MESSAGE = _("Server URL can not be None")

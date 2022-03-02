@@ -46,69 +46,69 @@ class RepoApiTest(SubManFixture):
 
     def test_disable_repo(self):
         repo_settings = {
-            'enabled': '1',
+            "enabled": "1",
         }
         self.invoker.return_value.get_repos.return_value = [
-            Repo('hello', list(repo_settings.items())),
+            Repo("hello", list(repo_settings.items())),
         ]
         self.repo_file.items.return_value = list(repo_settings.items())
-        result = api.disable_yum_repositories('hello')
+        result = api.disable_yum_repositories("hello")
 
         self.repo_file.return_value.write.assert_called_with()
         self.assertEqual(1, result)
 
     def test_enable_repo(self):
         repo_settings = {
-            'enabled': '0',
+            "enabled": "0",
         }
         self.invoker.return_value.get_repos.return_value = [
-            Repo('hello', list(repo_settings.items())),
+            Repo("hello", list(repo_settings.items())),
         ]
         self.repo_file.items.return_value = list(repo_settings.items())
-        result = api.enable_yum_repositories('hello')
+        result = api.enable_yum_repositories("hello")
 
         self.repo_file.return_value.write.assert_called_with()
         self.assertEqual(1, result)
 
     def test_enable_repo_wildcard(self):
         repo_settings = {
-            'enabled': '0',
+            "enabled": "0",
         }
 
         self.invoker.return_value.get_repos.return_value = [
-            Repo('hello', list(repo_settings.copy().items())),
-            Repo('helium', list(repo_settings.copy().items())),
+            Repo("hello", list(repo_settings.copy().items())),
+            Repo("helium", list(repo_settings.copy().items())),
         ]
         self.repo_file.items.return_value = list(repo_settings.copy().items())
 
-        result = api.enable_yum_repositories('he*')
+        result = api.enable_yum_repositories("he*")
         self.repo_file.return_value.write.assert_called_with()
         self.assertEqual(2, result)
 
     def test_does_not_enable_nonmatching_repos(self):
         repo_settings = {
-            'enabled': '0',
+            "enabled": "0",
         }
         self.invoker.return_value.get_repos.return_value = [
-            Repo('x', list(repo_settings.items())),
+            Repo("x", list(repo_settings.items())),
         ]
         self.repo_file.items.return_value = list(repo_settings.items())
-        result = api.enable_yum_repositories('hello')
+        result = api.enable_yum_repositories("hello")
 
         self.assertEqual(0, len(self.repo_file.return_value.write.mock_calls))
         self.assertEqual(0, result)
 
     def test_update_overrides_cache(self):
-        with patch('rhsm.connection.UEPConnection') as mock_uep:
+        with patch("rhsm.connection.UEPConnection") as mock_uep:
             self.stub_cp_provider.consumer_auth_cp = mock_uep
             mock_uep.supports_resource = Mock(return_value=True)
             mock_uep.setContentOverrides = Mock()
 
             repo_settings = {
-                'enabled': '0',
+                "enabled": "0",
             }
             self.invoker.return_value.get_repos.return_value = [
-                Repo('hello', list(repo_settings.items())),
+                Repo("hello", list(repo_settings.items())),
             ]
             self.repo_file.items.return_value = list(repo_settings.items())
 
@@ -116,16 +116,16 @@ class RepoApiTest(SubManFixture):
 
             # The API methods try to bootstrap injection themselves so we want
             # to avoid that here.
-            with patch('subscription_manager.api.injected') as injected:
+            with patch("subscription_manager.api.injected") as injected:
                 injected.return_value = True
 
-                result = api.enable_yum_repositories('hello')
+                result = api.enable_yum_repositories("hello")
 
                 expected_overrides = [
                     {
-                        'contentLabel': 'hello',
-                        'name': 'enabled',
-                        'value': '1',
+                        "contentLabel": "hello",
+                        "name": "enabled",
+                        "value": "1",
                     }
                 ]
                 self.assertTrue(call("123", expected_overrides) in mock_uep.setContentOverrides.mock_calls)

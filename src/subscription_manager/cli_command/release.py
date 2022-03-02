@@ -54,16 +54,16 @@ class ReleaseCommand(CliCommand):
         self.parser.add_argument(
             "--unset",
             dest="unset",
-            action='store_true',
+            action="store_true",
             help=_("unset the release for this system"),
         )
 
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
         consumer = self.cp.getConsumer(self.identity.uuid)
-        if 'releaseVer' not in consumer:
+        if "releaseVer" not in consumer:
             system_exit(os.EX_UNAVAILABLE, err_msg)
-        return consumer['releaseVer']['releaseVer']
+        return consumer["releaseVer"]["releaseVer"]
 
     def show_current_release(self):
         release = self._get_consumer_release()
@@ -73,7 +73,7 @@ class ReleaseCommand(CliCommand):
             print(_("Release not set"))
 
     def _do_command(self):
-        cdn_url = conf['rhsm']['baseurl']
+        cdn_url = conf["rhsm"]["baseurl"]
         # note: parse_baseurl_info will populate with defaults if not found
         (cdn_hostname, cdn_port, _cdn_prefix) = parse_baseurl_info(cdn_url)
 
@@ -119,7 +119,7 @@ class ReleaseCommand(CliCommand):
                 system_exit(os.EX_CONFIG, _("No release versions available, please check subscriptions."))
 
             print("+-------------------------------------------+")
-            print("          {label}       ".format(label=_('Available Releases')))
+            print("          {label}       ".format(label=_("Available Releases")))
             print("+-------------------------------------------+")
             for release in releases:
                 print(release)

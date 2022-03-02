@@ -68,7 +68,7 @@ class UtilsTests(unittest.TestCase):
         self.assertTrue(res)
         self.assertTrue(os.path.exists(to_create))
 
-        with io.open(to_create, 'r', encoding='utf-8') as fp:
+        with io.open(to_create, "r", encoding="utf-8") as fp:
             actual_contents = json.load(fp)
 
         self.assertDictEqual(actual_contents, test_data)
@@ -76,7 +76,7 @@ class UtilsTests(unittest.TestCase):
         to_create = os.path.join(temp_dir.name, "my_super_chill_file.json")
 
         # And now when the file appears to exist
-        with mock.patch('syspurpose.utils.io.open') as mock_open:
+        with mock.patch("syspurpose.utils.io.open") as mock_open:
             error_to_raise = OSError()
             error_to_raise.errno = errno.EEXIST
             mock_open.side_effect = error_to_raise
@@ -87,7 +87,7 @@ class UtilsTests(unittest.TestCase):
         to_create = os.path.join(temp_dir.name, "my_other_cool_file.json")
 
         # And now with an unexpected OSError
-        with mock.patch('syspurpose.utils.io.open') as mock_open:
+        with mock.patch("syspurpose.utils.io.open") as mock_open:
             error_to_raise = OSError()
             error_to_raise.errno = errno.E2BIG  # Anything aside from the ones expected
             mock_open.side_effect = error_to_raise

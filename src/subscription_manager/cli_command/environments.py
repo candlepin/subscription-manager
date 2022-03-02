@@ -87,7 +87,7 @@ class EnvironmentsCommand(OrgCommand):
     def _do_command(self):
         self._validate_options()
         supported_resources = get_supported_resources()
-        if 'environments' not in supported_resources:
+        if "environments" not in supported_resources:
             system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
         try:
             if self.options.token:
@@ -122,7 +122,7 @@ class EnvironmentsCommand(OrgCommand):
             self.cp.updateConsumer(
                 self.identity.uuid,
                 environments=self._process_environments(
-                    self.cp, self.cp.getOwner(self.identity.uuid)['key'], self.options
+                    self.cp, self.cp.getOwner(self.identity.uuid)["key"], self.options
                 ),
             )
             print(_("Environments updated."))
@@ -138,30 +138,30 @@ class EnvironmentsCommand(OrgCommand):
             system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support multi-environment operations."))
         environments = []
         if self.options.enabled:
-            environments = self.cp.getConsumer(self.identity.uuid)['environments'] or []
+            environments = self.cp.getConsumer(self.identity.uuid)["environments"] or []
         else:
             org_environments = self._get_environments(self.org)
             if self.options.disabled:
                 consumer_id_list = []
-                for env in self.cp.getConsumer(self.identity.uuid)['environments']:
-                    consumer_id_list.append(env['id'])
+                for env in self.cp.getConsumer(self.identity.uuid)["environments"]:
+                    consumer_id_list.append(env["id"])
                 for env in org_environments:
-                    if env['id'] not in consumer_id_list:
+                    if env["id"] not in consumer_id_list:
                         environments.append(env)
             else:
                 environments = org_environments
 
         if len(environments):
             print("+-------------------------------------------+")
-            print("          {env}".format(env=_('Environments')))
+            print("          {env}".format(env=_("Environments")))
             print("+-------------------------------------------+")
             for env in environments:
                 print(
                     columnize(
                         ENVIRONMENT_LIST,
                         echo_columnize_callback,
-                        env['name'],
-                        env['description'] or "",
+                        env["name"],
+                        env["description"] or "",
                     )
                     + "\n"
                 )
@@ -184,7 +184,7 @@ class EnvironmentsCommand(OrgCommand):
         """
         self.identity = require(IDENTITY)
         if self.identity.is_valid():
-            self._org = self.cp.getOwner(self.identity.uuid)['key']
+            self._org = self.cp.getOwner(self.identity.uuid)["key"]
             return self._org
         elif self.options.org:
             self._org = self.options.org
@@ -200,16 +200,16 @@ def check_set_environment_names(all_env_list, name_string):
     Checks the environment name(s) input for duplicates and
     inclusion in the full list
     """
-    names = [name.strip() for name in name_string.split(',')]
+    names = [name.strip() for name in name_string.split(",")]
     if len(names) > len(set(names)):
         system_exit(os.EX_DATAERR, _("Error: The same environment may not be listed more than once. "))
 
-    all_names_ids = dict((environment['name'], environment['id']) for environment in all_env_list)
+    all_names_ids = dict((environment["name"], environment["id"]) for environment in all_env_list)
     missing_names = [name for name in names if name not in all_names_ids.keys()]
     if len(missing_names) > 0:
         msg = ungettext(
             "No such environment: {names}", "No such environments: {names}", len(missing_names)
-        ).format(names=', '.join(missing_names))
+        ).format(names=", ".join(missing_names))
         system_exit(os.EX_DATAERR, msg)
 
-    return ','.join([all_names_ids[name] for name in names])
+    return ",".join([all_names_ids[name] for name in names])

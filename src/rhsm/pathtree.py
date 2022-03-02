@@ -19,8 +19,8 @@ from rhsm.huffman import HuffmanNode
 
 # this is the "sentinel" value used for the path node that indicates the end
 # of a path
-PATH_END = 'PATH END'
-LISTING = 'listing'
+PATH_END = "PATH END"
+LISTING = "listing"
 
 
 class PathTree(object):
@@ -74,9 +74,9 @@ class PathTree(object):
         :return:        True iff there is a match, else False
         :rtype:         bool
         """
-        if not path.startswith('/'):
+        if not path.startswith("/"):
             raise ValueError('path must start with "/"')
-        return self._traverse_tree(self.path_tree, path.strip('/').split('/'))
+        return self._traverse_tree(self.path_tree, path.strip("/").split("/"))
 
     def __str__(self):
         paths = []
@@ -137,7 +137,7 @@ class PathTree(object):
             # we allow any word to match against entitlement variables
             # such as "$releasever".
             for word in list(tree.keys()):
-                if word.startswith('$'):
+                if word.startswith("$"):
                     words_to_try.append(word)
 
             for word in words_to_try:
@@ -163,8 +163,8 @@ class PathTree(object):
         decompress = zlib.decompressobj()
         decompressed_data = decompress.decompress(data)
         # ordered list of words that will be composed into a huffman tree
-        words = decompressed_data.split(b'\0')
-        words = [word.decode('utf-8') for word in words]
+        words = decompressed_data.split(b"\0")
+        words = [word.decode("utf-8") for word in words]
 
         # enumerate() would be better here, but lacks a 'start' arg in 2.4
         weighted_words = list(zip(itertools.count(1), words))
@@ -239,7 +239,7 @@ class PathTree(object):
         :type  bitstream:   rhsm.bitstream.GhettoBitStream
         :return:            value from the dict
         """
-        code = ''
+        code = ""
         for bit in bitstream:
             code += bit
             if code in code_dict:

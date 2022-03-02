@@ -21,7 +21,7 @@ class TestLogutil(fixture.SubManFixture):
     def setUp(self):
         super(TestLogutil, self).setUp()
         self.rhsm_config = stubs.StubConfig()
-        rhsm_patcher = mock.patch('rhsm.config')
+        rhsm_patcher = mock.patch("rhsm.config")
         self.rhsm_config_mock = rhsm_patcher.start()
         self.rhsm_config_mock.get_config_parser.return_value = self.rhsm_config
         self.addCleanup(rhsm_patcher.stop)
@@ -90,13 +90,13 @@ class TestLogutil(fixture.SubManFixture):
 
     def test_set_valid_logger_level(self):
         logging_conf = [
-            ('subscription_manager.managercli', "ERROR"),
-            ('rhsm', "WARNING"),
-            ('rhsm-app', "CRITICAL"),
+            ("subscription_manager.managercli", "ERROR"),
+            ("rhsm", "WARNING"),
+            ("rhsm-app", "CRITICAL"),
         ]
 
         for logger_name, log_level in logging_conf:
-            self.rhsm_config.set('logging', logger_name, log_level)
+            self.rhsm_config.set("logging", logger_name, log_level)
 
         logutil.init_logger()
 
@@ -105,12 +105,12 @@ class TestLogutil(fixture.SubManFixture):
             self.assertTrue(logging.getLevelName(log_level) == real_log_level or log_level == real_log_level)
 
     def test_set_invalid_logger_level(self):
-        test_logger_name = 'foobar'
+        test_logger_name = "foobar"
         initial_level = logging.ERROR
         test_logger = logging.getLogger(test_logger_name)
         test_logger.setLevel(initial_level)
         config_level = logging.DEBUG
-        self.rhsm_config.set('logging', test_logger_name, config_level)
+        self.rhsm_config.set("logging", test_logger_name, config_level)
 
         logutil.init_logger()
 

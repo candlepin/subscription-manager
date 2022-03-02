@@ -35,10 +35,10 @@ class LockFile(object):
 
     def open(self):
         if self.notcreated():
-            self.fp = open(self.path, 'w')
+            self.fp = open(self.path, "w")
             self.setpid()
             self.close()
-        self.fp = open(self.path, 'r+')
+        self.fp = open(self.path, "r+")
         fd = self.fp.fileno()
         fcntl.flock(fd, fcntl.LOCK_EX)
 
@@ -214,7 +214,7 @@ class Lock(object):
 
 class ActionLock(Lock):
 
-    PATH = '/run/rhsm/cert.pid'
+    PATH = "/run/rhsm/cert.pid"
 
     def __init__(self):
         super(ActionLock, self).__init__(self.PATH)

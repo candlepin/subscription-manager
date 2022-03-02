@@ -47,7 +47,7 @@ def _build_valid_manifest():
     )
     consumer_export_object.writestr(
         "export/entitlement_certificates/2414805806930829936.pem",
-        manifestdata.ent_cert + '\n' + manifestdata.ent_cert_private,
+        manifestdata.ent_cert + "\n" + manifestdata.ent_cert_private,
     )
     consumer_export_object.close()
     manifest_object.writestr("consumer_export.zip", consumer_export_zip.getvalue())

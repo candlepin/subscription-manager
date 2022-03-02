@@ -52,26 +52,26 @@ HAS_YUM = "yum" in sys.modules
 class Repo(dict):
     # (name, mutable, default) - The mutability information is only used in disconnected cases
     PROPERTIES = {
-        'name': (0, None),
-        'baseurl': (0, None),
-        'enabled': (1, '1'),
-        'gpgcheck': (1, '1'),
-        'gpgkey': (0, None),
-        'sslverify': (1, '1'),
-        'sslcacert': (0, None),
-        'sslclientkey': (0, None),
-        'sslclientcert': (0, None),
-        'metadata_expire': (1, None),
-        'enabled_metadata': (1, '0'),
-        'proxy': (0, None),
-        'proxy_username': (0, None),
-        'proxy_password': (0, None),
-        'ui_repoid_vars': (0, None),
+        "name": (0, None),
+        "baseurl": (0, None),
+        "enabled": (1, "1"),
+        "gpgcheck": (1, "1"),
+        "gpgkey": (0, None),
+        "sslverify": (1, "1"),
+        "sslcacert": (0, None),
+        "sslclientkey": (0, None),
+        "sslclientcert": (0, None),
+        "metadata_expire": (1, None),
+        "enabled_metadata": (1, "0"),
+        "proxy": (0, None),
+        "proxy_username": (0, None),
+        "proxy_password": (0, None),
+        "ui_repoid_vars": (0, None),
     }
 
     def __init__(self, repo_id, existing_values=None):
         if HAS_DEB822 is True:
-            self.PROPERTIES['arches'] = (1, None)
+            self.PROPERTIES["arches"] = (1, None)
 
         # existing_values is a list of 2-tuples
         existing_values = existing_values or []
@@ -113,47 +113,47 @@ class Repo(dict):
 
         repo.content_type = content.content_type
 
-        repo['name'] = content.name
+        repo["name"] = content.name
 
         if content.enabled:
-            repo['enabled'] = "1"
-            repo['enabled_metadata'] = "1"
+            repo["enabled"] = "1"
+            repo["enabled_metadata"] = "1"
         else:
-            repo['enabled'] = "0"
-            repo['enabled_metadata'] = "0"
+            repo["enabled"] = "0"
+            repo["enabled_metadata"] = "0"
 
         expanded_url_path = Repo._expand_releasever(release_source, content.url)
-        repo['baseurl'] = utils.url_base_join(baseurl, expanded_url_path)
+        repo["baseurl"] = utils.url_base_join(baseurl, expanded_url_path)
 
         # Extract the variables from the url
-        repo_parts = repo['baseurl'].split("/")
+        repo_parts = repo["baseurl"].split("/")
         repoid_vars = [part[1:] for part in repo_parts if part.startswith("$")]
         if HAS_YUM and repoid_vars:
-            repo['ui_repoid_vars'] = " ".join(repoid_vars)
+            repo["ui_repoid_vars"] = " ".join(repoid_vars)
 
         # If no GPG key URL is specified, turn gpgcheck off:
         gpg_url = content.gpg
         if not gpg_url:
-            gpg_url = ''
-            repo['gpgcheck'] = '0'
+            gpg_url = ""
+            repo["gpgcheck"] = "0"
         else:
             gpg_url = utils.url_base_join(baseurl, gpg_url)
             # Leave gpgcheck as the default of 1
-        repomd_gpg_url = conf['rhsm']['repomd_gpg_url']
+        repomd_gpg_url = conf["rhsm"]["repomd_gpg_url"]
         if repomd_gpg_url:
             repomd_gpg_url = utils.url_base_join(baseurl, repomd_gpg_url)
-            if not gpg_url or gpg_url in ['https://', 'http://']:
+            if not gpg_url or gpg_url in ["https://", "http://"]:
                 gpg_url = repomd_gpg_url
             elif repomd_gpg_url not in gpg_url:
-                gpg_url += ',' + repomd_gpg_url
-        repo['gpgkey'] = gpg_url
+                gpg_url += "," + repomd_gpg_url
+        repo["gpgkey"] = gpg_url
 
-        repo['sslclientkey'] = content.cert.key_path()
-        repo['sslclientcert'] = content.cert.path
-        repo['sslcacert'] = ca_cert
-        repo['metadata_expire'] = content.metadata_expire
-        if 'arches' in repo and len(content.arches) > 0:
-            repo['arches'] = content.arches
+        repo["sslclientkey"] = content.cert.key_path()
+        repo["sslclientcert"] = content.cert.path
+        repo["sslcacert"] = ca_cert
+        repo["metadata_expire"] = content.metadata_expire
+        if "arches" in repo and len(content.arches) > 0:
+            repo["arches"] = content.arches
 
         repo = Repo._set_proxy_info(repo)
 
@@ -163,7 +163,7 @@ class Repo(dict):
     def _set_proxy_info(repo):
         proxy = ""
 
-        proxy_scheme = conf['server']['proxy_scheme']
+        proxy_scheme = conf["server"]["proxy_scheme"]
 
         if proxy_scheme.endswith("://"):
             proxy_scheme = proxy_scheme[:-3]
@@ -171,14 +171,14 @@ class Repo(dict):
         # Proxy scheme can be empty: 1704662
         if proxy_scheme == "":
             defaults = conf.defaults()
-            proxy_scheme = defaults.get('proxy_scheme', 'http')
+            proxy_scheme = defaults.get("proxy_scheme", "http")
 
         # Worth passing in proxy config info to from_ent_cert_content()?
         # That would decouple Repo some
-        proxy_host = conf['server']['proxy_hostname']
+        proxy_host = conf["server"]["proxy_hostname"]
 
         # proxy_port as string is fine here
-        proxy_port = conf['server']['proxy_port']
+        proxy_port = conf["server"]["proxy_port"]
 
         if proxy_host != "":
             if proxy_port:
@@ -187,9 +187,9 @@ class Repo(dict):
 
         # These could be empty string, in which case they will not be
         # set in the yum repo file:
-        repo['proxy'] = proxy
-        repo['proxy_username'] = conf['server']['proxy_user']
-        repo['proxy_password'] = conf['server']['proxy_password']
+        repo["proxy"] = proxy
+        repo["proxy_username"] = conf["server"]["proxy_user"]
+        repo["proxy_password"] = conf["server"]["proxy_password"]
 
         return repo
 
@@ -218,7 +218,7 @@ class Repo(dict):
         valid_chars = string.ascii_letters + string.digits + "-_.:"
         for byte in repo_id:
             if byte not in valid_chars:
-                new_id += '-'
+                new_id += "-"
             else:
                 new_id += byte
 
@@ -244,14 +244,14 @@ class Repo(dict):
 
     def __str__(self):
         s = []
-        s.append('[%s]' % self.id)
+        s.append("[%s]" % self.id)
         for k in self.PROPERTIES:
             v = self.get(k)
             if v is None:
                 continue
-            s.append('%s=%s' % (k, v))
+            s.append("%s=%s" % (k, v))
 
-        return '\n'.join(s)
+        return "\n".join(s)
 
     def __eq__(self, other):
         return self.id == other.id
@@ -263,7 +263,7 @@ class Repo(dict):
 def manage_repos_enabled():
 
     try:
-        manage_repos = conf['rhsm'].get_int('manage_repos')
+        manage_repos = conf["rhsm"].get_int("manage_repos")
     except ValueError as e:
         log.exception(e)
         return True
@@ -356,13 +356,13 @@ class RepoFileBase(object):
         :return: None
         """
         if not self.path_exists(self.repos_dir):
-            log.debug('The directory %s does not exist. Trying to create it' % self.PATH)
+            log.debug("The directory %s does not exist. Trying to create it" % self.PATH)
             try:
                 os.makedirs(name=self.repos_dir, mode=0o755)
             except Exception as err:
-                log.warning('Unable to create directory: %s, error: %s' % (self.repos_dir, err))
+                log.warning("Unable to create directory: %s, error: %s" % (self.repos_dir, err))
         else:
-            log.debug('The directory %s already exists' % self.repos_dir)
+            log.debug("The directory %s already exists" % self.repos_dir)
 
     def create(self):
         """
@@ -372,7 +372,7 @@ class RepoFileBase(object):
         self.create_dir_path()
         if self.path_exists(self.path) or not self.manage_repos:
             return
-        with open(self.path, 'w') as f:
+        with open(self.path, "w") as f:
             f.write(self.REPOFILE_HEADER)
 
     def fix_content(self, content):
@@ -384,16 +384,16 @@ class RepoFileBase(object):
 
     @classmethod
     def server_value_repo_file(cls):
-        return cls('var/lib/rhsm/repo_server_val/')
+        return cls("var/lib/rhsm/repo_server_val/")
 
 
 if HAS_DEB822:
 
     class AptRepoFile(RepoFileBase):
 
-        PATH = 'etc/apt/sources.list.d'
-        NAME = 'rhsm.sources'
-        CONTENT_TYPES = ['deb']
+        PATH = "etc/apt/sources.list.d"
+        NAME = "rhsm.sources"
+        CONTENT_TYPES = ["deb"]
         REPOFILE_HEADER = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
@@ -416,7 +416,7 @@ if HAS_DEB822:
             if not self.manage_repos:
                 log.debug("Skipping read due to manage_repos setting: %s" % self.path)
                 return
-            with open(self.path, 'r') as f:
+            with open(self.path, "r") as f:
                 for repo822 in Deb822.iter_paragraphs(f, shared_storage=False):
                     self.repos822.append(repo822)
 
@@ -424,69 +424,69 @@ if HAS_DEB822:
             if not self.manage_repos:
                 log.debug("Skipping write due to manage_repos setting: %s" % self.path)
                 return
-            with open(self.path, 'w') as f:
+            with open(self.path, "w") as f:
                 f.write(self.REPOFILE_HEADER)
                 for repo822 in self.repos822:
-                    f.write('\n')
+                    f.write("\n")
                     repo822.dump(f, text_mode=True)
 
         def add(self, repo):
             repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
-            repo_dict['id'] = repo.id
+            repo_dict["id"] = repo.id
             self.repos822.append(Deb822(repo_dict))
 
         def delete(self, repo_id):
-            self.repos822[:] = [repo822 for repo822 in self.repos822 if repo822['id'] != repo_id]
+            self.repos822[:] = [repo822 for repo822 in self.repos822 if repo822["id"] != repo_id]
 
         def update(self, repo):
             repo_dict = dict([(str(k), str(v)) for (k, v) in repo.items()])
-            repo_dict['id'] = repo.id
+            repo_dict["id"] = repo.id
             self.repos822[:] = [
-                repo822 if repo822['id'] != repo.id else Deb822(repo_dict) for repo822 in self.repos822
+                repo822 if repo822["id"] != repo.id else Deb822(repo_dict) for repo822 in self.repos822
             ]
 
         def section(self, repo_id):
-            result = [repo822 for repo822 in self.repos822 if repo822['id'] == repo_id]
+            result = [repo822 for repo822 in self.repos822 if repo822["id"] == repo_id]
             if len(result) > 0:
-                return Repo(result[0]['id'], result[0].items())
+                return Repo(result[0]["id"], result[0].items())
             else:
                 return None
 
         def sections(self):
-            return [repo822['id'] for repo822 in self.repos822]
+            return [repo822["id"] for repo822 in self.repos822]
 
         def fix_content(self, content):
             # Luckily apt ignores all Fields it does not recognize
-            baseurl = content['baseurl']
+            baseurl = content["baseurl"]
             url_res = re.match(r"^https?://(?P<location>.*)$", baseurl)
-            ent_res = re.match(r"^/etc/pki/entitlement/(?P<entitlement>.*).pem$", content['sslclientcert'])
+            ent_res = re.match(r"^/etc/pki/entitlement/(?P<entitlement>.*).pem$", content["sslclientcert"])
             if url_res and ent_res:
-                location = url_res.group('location')
-                entitlement = ent_res.group('entitlement')
-                baseurl = 'katello://{}@{}'.format(entitlement, location)
+                location = url_res.group("location")
+                entitlement = ent_res.group("entitlement")
+                baseurl = "katello://{}@{}".format(entitlement, location)
 
             apt_cont = content.copy()
-            apt_cont['Types'] = 'deb'
-            apt_cont['URIs'] = baseurl
-            apt_cont['Suites'] = 'default'
-            apt_cont['Components'] = 'all'
-            apt_cont['Trusted'] = 'yes'
+            apt_cont["Types"] = "deb"
+            apt_cont["URIs"] = baseurl
+            apt_cont["Suites"] = "default"
+            apt_cont["Components"] = "all"
+            apt_cont["Trusted"] = "yes"
 
-            if apt_cont['arches'] is None or apt_cont['arches'] == ['ALL']:
-                apt_cont['arches'] = 'none'
+            if apt_cont["arches"] is None or apt_cont["arches"] == ["ALL"]:
+                apt_cont["arches"] = "none"
             else:
-                arches_str = " ".join(apt_cont['arches'])
-                apt_cont['arches'] = arches_str
-                apt_cont['Architectures'] = arches_str
+                arches_str = " ".join(apt_cont["arches"])
+                apt_cont["arches"] = arches_str
+                apt_cont["Architectures"] = arches_str
 
             return apt_cont
 
 
 class YumRepoFile(RepoFileBase, ConfigParser):
 
-    PATH = 'etc/yum.repos.d/'
-    NAME = 'redhat.repo'
-    CONTENT_TYPES = ['yum']
+    PATH = "etc/yum.repos.d/"
+    NAME = "redhat.repo"
+    CONTENT_TYPES = ["yum"]
     REPOFILE_HEADER = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
@@ -530,7 +530,7 @@ class YumRepoFile(RepoFileBase, ConfigParser):
             log.debug("Skipping write due to manage_repos setting: %s" % self.path)
             return
         if self._has_changed():
-            with open(self.path, 'w') as f:
+            with open(self.path, "w") as f:
                 tidy_writer = TidyWriter(f)
                 ConfigParser.write(self, tidy_writer)
                 tidy_writer.close()
@@ -563,9 +563,9 @@ class ZypperRepoFile(YumRepoFile):
     Class for manipulation of repo file on systems using Zypper (SuSE, OpenSuse).
     """
 
-    ZYPP_RHSM_PLUGIN_CONFIG_FILE = '/etc/rhsm/zypper.conf'
-    PATH = 'etc/rhsm/zypper.repos.d'
-    NAME = 'redhat.repo'
+    ZYPP_RHSM_PLUGIN_CONFIG_FILE = "/etc/rhsm/zypper.conf"
+    PATH = "etc/rhsm/zypper.repos.d"
+    NAME = "redhat.repo"
     REPOFILE_HEADER = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
@@ -596,96 +596,96 @@ class ZypperRepoFile(YumRepoFile):
         """
         zypp_cfg = configparser.ConfigParser()
         zypp_cfg.read(self.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
-        if zypp_cfg.has_option('rhsm-plugin', 'gpgcheck'):
-            self.gpgcheck = zypp_cfg.getboolean('rhsm-plugin', 'gpgcheck')
-        if zypp_cfg.has_option('rhsm-plugin', 'repo_gpgcheck'):
-            self.repo_gpgcheck = zypp_cfg.getboolean('rhsm-plugin', 'repo_gpgcheck')
-        if zypp_cfg.has_option('rhsm-plugin', 'autorefresh'):
-            self.autorefresh = zypp_cfg.getboolean('rhsm-plugin', 'autorefresh')
-        if zypp_cfg.has_option('rhsm-plugin', 'gpgkey-ssl-verify'):
-            self.gpgkey_ssl_verify = zypp_cfg.get('rhsm-plugin', 'gpgkey-ssl-verify')
-        if zypp_cfg.has_option('rhsm-plugin', 'repo-ssl-verify'):
-            self.repo_ssl_verify = zypp_cfg.get('rhsm-plugin', 'repo-ssl-verify')
+        if zypp_cfg.has_option("rhsm-plugin", "gpgcheck"):
+            self.gpgcheck = zypp_cfg.getboolean("rhsm-plugin", "gpgcheck")
+        if zypp_cfg.has_option("rhsm-plugin", "repo_gpgcheck"):
+            self.repo_gpgcheck = zypp_cfg.getboolean("rhsm-plugin", "repo_gpgcheck")
+        if zypp_cfg.has_option("rhsm-plugin", "autorefresh"):
+            self.autorefresh = zypp_cfg.getboolean("rhsm-plugin", "autorefresh")
+        if zypp_cfg.has_option("rhsm-plugin", "gpgkey-ssl-verify"):
+            self.gpgkey_ssl_verify = zypp_cfg.get("rhsm-plugin", "gpgkey-ssl-verify")
+        if zypp_cfg.has_option("rhsm-plugin", "repo-ssl-verify"):
+            self.repo_ssl_verify = zypp_cfg.get("rhsm-plugin", "repo-ssl-verify")
 
     def fix_content(self, content):
         self.read_zypp_conf()
         zypper_cont = content.copy()
-        sslverify = zypper_cont['sslverify']
-        sslcacert = zypper_cont['sslcacert']
-        sslclientkey = zypper_cont['sslclientkey']
-        sslclientcert = zypper_cont['sslclientcert']
-        proxy = zypper_cont['proxy']
-        proxy_username = zypper_cont['proxy_username']
-        proxy_password = zypper_cont['proxy_password']
+        sslverify = zypper_cont["sslverify"]
+        sslcacert = zypper_cont["sslcacert"]
+        sslclientkey = zypper_cont["sslclientkey"]
+        sslclientcert = zypper_cont["sslclientcert"]
+        proxy = zypper_cont["proxy"]
+        proxy_username = zypper_cont["proxy_username"]
+        proxy_password = zypper_cont["proxy_password"]
 
-        del zypper_cont['sslverify']
-        del zypper_cont['sslcacert']
-        del zypper_cont['sslclientkey']
-        del zypper_cont['sslclientcert']
-        del zypper_cont['proxy']
-        del zypper_cont['proxy_username']
-        del zypper_cont['proxy_password']
+        del zypper_cont["sslverify"]
+        del zypper_cont["sslcacert"]
+        del zypper_cont["sslclientkey"]
+        del zypper_cont["sslclientcert"]
+        del zypper_cont["proxy"]
+        del zypper_cont["proxy_username"]
+        del zypper_cont["proxy_password"]
         # NOTE looks like metadata_expire and ui_repoid_vars are ignored by zypper
 
         # clean up data for zypper
-        if zypper_cont['gpgkey'] in ['https://', 'http://']:
-            del zypper_cont['gpgkey']
+        if zypper_cont["gpgkey"] in ["https://", "http://"]:
+            del zypper_cont["gpgkey"]
 
         # make sure gpg key download doesn't fail because of private certs
-        if zypper_cont['gpgkey'] and self.gpgkey_ssl_verify:
-            zypper_cont['gpgkey'] += "?ssl_verify=%s" % self.gpgkey_ssl_verify
+        if zypper_cont["gpgkey"] and self.gpgkey_ssl_verify:
+            zypper_cont["gpgkey"] += "?ssl_verify=%s" % self.gpgkey_ssl_verify
 
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1764265
         if self.gpgcheck is False:
-            zypper_cont['gpgcheck'] = '0'
+            zypper_cont["gpgcheck"] = "0"
 
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1858231
         if self.repo_gpgcheck is True:
-            zypper_cont['repo_gpgcheck'] = '1'
+            zypper_cont["repo_gpgcheck"] = "1"
         else:
-            zypper_cont['repo_gpgcheck'] = '0'
+            zypper_cont["repo_gpgcheck"] = "0"
 
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1797386
         if self.autorefresh is True:
-            zypper_cont['autorefresh'] = '1'
+            zypper_cont["autorefresh"] = "1"
         else:
-            zypper_cont['autorefresh'] = '0'
+            zypper_cont["autorefresh"] = "0"
 
-        baseurl = zypper_cont['baseurl']
+        baseurl = zypper_cont["baseurl"]
         parsed = urlparse(baseurl)
         zypper_query_args = parse_qs(parsed.query)
 
-        if sslverify and sslverify in ['1']:
+        if sslverify and sslverify in ["1"]:
             if self.repo_ssl_verify:
-                zypper_query_args['ssl_verify'] = self.repo_ssl_verify
+                zypper_query_args["ssl_verify"] = self.repo_ssl_verify
             else:
-                zypper_query_args['ssl_verify'] = 'host'
+                zypper_query_args["ssl_verify"] = "host"
 
         if sslcacert:
-            zypper_query_args['ssl_capath'] = os.path.dirname(sslcacert)
+            zypper_query_args["ssl_capath"] = os.path.dirname(sslcacert)
         if sslclientkey:
-            zypper_query_args['ssl_clientkey'] = sslclientkey
+            zypper_query_args["ssl_clientkey"] = sslclientkey
         if sslclientcert:
-            zypper_query_args['ssl_clientcert'] = sslclientcert
+            zypper_query_args["ssl_clientcert"] = sslclientcert
         if proxy:
-            zypper_query_args['proxy'] = proxy
+            zypper_query_args["proxy"] = proxy
         if proxy_username:
-            zypper_query_args['proxyuser'] = proxy_username
+            zypper_query_args["proxyuser"] = proxy_username
         if proxy_password:
-            zypper_query_args['proxypass'] = proxy_password
+            zypper_query_args["proxypass"] = proxy_password
         zypper_query = urlencode(zypper_query_args)
 
         new_url = urlunparse(
             (parsed.scheme, parsed.netloc, parsed.path, parsed.params, zypper_query, parsed.fragment)
         )
-        zypper_cont['baseurl'] = new_url
+        zypper_cont["baseurl"] = new_url
 
         return zypper_cont
 
     # We need to overwrite this, to avoid name clashes with yum's server_val_repo_file
     @classmethod
     def server_value_repo_file(cls):
-        return cls('var/lib/rhsm/repo_server_val/', 'zypper_{}'.format(cls.NAME))
+        return cls("var/lib/rhsm/repo_server_val/", "zypper_{}".format(cls.NAME))
 
 
 def init_repo_file_classes():

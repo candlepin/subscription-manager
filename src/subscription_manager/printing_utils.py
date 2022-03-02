@@ -22,13 +22,13 @@ from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
-FONT_BOLD = '\033[1m'
-FONT_RED = '\033[31m'
-FONT_NORMAL = '\033[0m'
+FONT_BOLD = "\033[1m"
+FONT_RED = "\033[31m"
+FONT_NORMAL = "\033[0m"
 
 
 def ljust_wide(in_str, padding):
-    return in_str + ' ' * (padding - utf8_width(in_str))
+    return in_str + " " * (padding - utf8_width(in_str))
 
 
 def columnize(caption_list, callback, *args, **kwargs):
@@ -43,7 +43,7 @@ def columnize(caption_list, callback, *args, **kwargs):
     The callback gives us the ability to do things like replacing None values
     with the string "None" (see none_wrap_columnize_callback()).
     """
-    indent = kwargs.get('indent', 0)
+    indent = kwargs.get("indent", 0)
     caption_list = [" " * indent + caption for caption in caption_list]
     columns = get_terminal_width()
     padding = sorted(map(utf8_width, caption_list))[-1] + 1
@@ -51,15 +51,15 @@ def columnize(caption_list, callback, *args, **kwargs):
         padding = min(padding, int(columns / 2))
     padded_list = []
     for caption in caption_list:
-        lines = format_name(caption, indent, padding - 1).split('\n')
-        lines[-1] = ljust_wide(lines[-1], padding) + '%s'
-        fixed_caption = '\n'.join(lines)
+        lines = format_name(caption, indent, padding - 1).split("\n")
+        lines[-1] = ljust_wide(lines[-1], padding) + "%s"
+        fixed_caption = "\n".join(lines)
         padded_list.append(fixed_caption)
 
     lines = list(zip(padded_list, args))
     output = []
     for (caption, value) in lines:
-        kwargs['caption'] = caption
+        kwargs["caption"] = caption
         if isinstance(value, dict):
             value = [val for val in value.values()]
         if isinstance(value, list):
@@ -77,7 +77,7 @@ def columnize(caption_list, callback, *args, **kwargs):
         else:
             formatted_arg = format_name(value, padding, columns)
             output.append(callback(caption, formatted_arg, **kwargs))
-    return '\n'.join(output)
+    return "\n".join(output)
 
 
 def format_name(name, indent, max_length):
@@ -106,7 +106,7 @@ def format_name(name, indent, max_length):
         current = 0
 
     def add_line():
-        lines.append(' '.join(line))
+        lines.append(" ".join(line))
 
     line = []
     # Split here and build it back up by word, this way we get word wrapping
@@ -127,11 +127,11 @@ def format_name(name, indent, max_length):
                 word = word[:split_index]
             line = [word]
             if indent and lines:
-                line.insert(0, ' ' * (indent - 1))
+                line.insert(0, " " * (indent - 1))
             current = indent + utf8_width(word) + 1
 
     add_line()
-    return '\n'.join(lines)
+    return "\n".join(lines)
 
 
 def highlight_by_filter_string_columnize_cb(template_str, *args, **kwargs):
@@ -141,13 +141,13 @@ def highlight_by_filter_string_columnize_cb(template_str, *args, **kwargs):
     only when the row caption exists in the match columns.  Mainly this
     is a callback meant to be used by columnize().
     """
-    filter_string = kwargs.get('filter_string')
-    match_columns = kwargs.get('match_columns')
-    is_atty = kwargs.get('is_atty')
-    caption = kwargs.get('caption').split(':')[0] + ':'
+    filter_string = kwargs.get("filter_string")
+    match_columns = kwargs.get("match_columns")
+    is_atty = kwargs.get("is_atty")
+    caption = kwargs.get("caption").split(":")[0] + ":"
     p = None
     # wildcard only disrupts the markup
-    if filter_string and filter_string.replace('*', ' ').replace('?', ' ').strip() == '':
+    if filter_string and filter_string.replace("*", " ").replace("?", " ").strip() == "":
         filter_string = None
 
     if is_atty and filter_string and caption in match_columns:

@@ -74,8 +74,8 @@ class IdentityUpdateAction(object):
         # FIXME: this would be a good place to have a Consumer/ConsumerCert
         # model.
         # FIXME: and this would be a ConsumerCert model '!='
-        if idcert.getSerialNumber() != consumer['idCert']['serial']['serial']:
-            log.debug('identity certificate changed, writing new one')
+        if idcert.getSerialNumber() != consumer["idCert"]["serial"]["serial"]:
+            log.debug("identity certificate changed, writing new one")
 
             # FIXME: should be in this module? managerlib is an odd place
             managerlib.persist_consumer_cert(consumer)

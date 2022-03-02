@@ -77,9 +77,9 @@ class HuffmanNode(object):
         if self.parent is None:
             raise AttributeError
         if self.parent.left is self:
-            return '0'
+            return "0"
         else:
-            return '1'
+            return "1"
 
     @property
     def code(self):
@@ -88,14 +88,14 @@ class HuffmanNode(object):
         :rtype:     str
         """
         if not self.is_leaf:
-            raise AttributeError('node is not a leaf')
+            raise AttributeError("node is not a leaf")
         turns = []
         next_node = self
         while next_node is not None:
             if next_node.parent is not None:
                 turns.insert(0, next_node.direction_from_parent)
             next_node = next_node.parent
-        return ''.join(turns)
+        return "".join(turns)
 
     @classmethod
     def build_tree(cls, nodes):
@@ -134,12 +134,12 @@ class HuffmanNode(object):
         return self.weight >= other.weight
 
     def __eq__(self, other):
-        if not hasattr(other, 'weight'):
+        if not hasattr(other, "weight"):
             return False
         return self.weight == other.weight
 
     def __ne__(self, other):
-        if not hasattr(other, 'weight'):
+        if not hasattr(other, "weight"):
             return True
         return self.weight != other.weight
 

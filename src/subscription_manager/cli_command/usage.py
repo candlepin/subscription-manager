@@ -27,6 +27,6 @@ class UsageCommand(AbstractSyspurposeCommand, OrgCommand):
             subparser,
             shortdesc,
             False,
-            attr='usage',
-            commands=('set', 'unset', 'show', 'list'),
+            attr="usage",
+            commands=("set", "unset", "show", "list"),
         )

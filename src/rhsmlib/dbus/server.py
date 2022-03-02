@@ -84,8 +84,8 @@ class Server(object):
             raise
         self.identity = inj.require(inj.IDENTITY)  # gives us consumer path
         config_cert_dir_path = "/etc/rhsm/rhsm.conf"
-        products_cert_dir_path = conf['rhsm']['productCertDir']
-        entitlement_cert_dir_path = conf['rhsm']['entitlementCertDir']
+        products_cert_dir_path = conf["rhsm"]["productCertDir"]
+        entitlement_cert_dir_path = conf["rhsm"]["entitlementCertDir"]
         syspurpose_cert_dir_path = "/etc/rhsm/syspurpose/syspurpose.json"
 
         self.connection_name = dbus.service.BusName(self.bus_name, self.bus)
@@ -142,7 +142,7 @@ class Server(object):
         )
         self._thread = threading.Thread(
             target=self.filesystem_watcher.loop,
-            name='Thread-FileSystemWatcher',
+            name="Thread-FileSystemWatcher",
         )
         self._thread.start()
 
@@ -198,7 +198,7 @@ class Server(object):
         for obj in self.objects:
             obj.remove_from_connection()
 
-        log.debug(f'Releasing Bus name: {self.bus_name}')
+        log.debug(f"Releasing Bus name: {self.bus_name}")
         self.bus.release_name(self.bus_name)
 
     @classmethod
@@ -218,7 +218,7 @@ class Server(object):
             # included in the set
             if watcher_set is not None and dir_watcher_id not in watcher_set:
                 continue
-            log.debug(f'Disabling directory watcher: {dir_watcher_id}')
+            log.debug(f"Disabling directory watcher: {dir_watcher_id}")
             dir_watcher.temporary_disable()
 
     @classmethod
@@ -234,7 +234,7 @@ class Server(object):
         for dir_watcher_id, dir_watcher in server_instance.filesystem_watcher.dir_watches.items():
             if watcher_set is not None and dir_watcher_id not in watcher_set:
                 continue
-            log.debug(f'Enabling directory watcher: {dir_watcher_id}')
+            log.debug(f"Enabling directory watcher: {dir_watcher_id}")
             dir_watcher.enable()
 
 
@@ -252,7 +252,7 @@ class DomainSocketServer(object):
             sender=domain_socket_server.sender,
             cmd_line=domain_socket_server.cmd_line,
         )
-        log.debug('Instance: %s of %s created' % (obj, service_class))
+        log.debug("Instance: %s of %s created" % (obj, service_class))
         object_list.append(obj)
         with domain_socket_server.lock:
             domain_socket_server.connection_count += 1
@@ -264,12 +264,12 @@ class DomainSocketServer(object):
         with domain_socket_server.lock:
             domain_socket_server.connection_count -= 1
             if domain_socket_server.connection_count == 0:
-                log.debug('No connections remain')
+                log.debug("No connections remain")
             else:
                 if domain_socket_server.connection_count == 1:
-                    log.debug('Server still has one connection')
+                    log.debug("Server still has one connection")
                 else:
-                    log.debug('Server still has %d connections' % domain_socket_server.connection_count)
+                    log.debug("Server still has %d connections" % domain_socket_server.connection_count)
 
     @property
     def address(self):

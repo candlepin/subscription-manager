@@ -66,12 +66,12 @@ class ThreeWayMergeConflict(dbus.DBusException):
             )
         conflict_msg = ", ".join(conflicts)
         return ungettext(
-            'Warning: The following field was recently set '
-            'for this system by the entitlement server '
-            'administrator: {conflict_msg}',
-            'Warning: The following fields were recently set '
-            'for this system by the entitlement server '
-            'administrator: {conflict_msg}',
+            "Warning: The following field was recently set "
+            "for this system by the entitlement server "
+            "administrator: {conflict_msg}",
+            "Warning: The following fields were recently set "
+            "for this system by the entitlement server "
+            "administrator: {conflict_msg}",
             len(conflicts),
         ).format(conflict_msg=conflict_msg)
 
@@ -90,8 +90,8 @@ class SyspurposeDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
-        in_signature='s',
-        out_signature='s',
+        in_signature="s",
+        out_signature="s",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
@@ -102,7 +102,7 @@ class SyspurposeDBusObject(base_object.BaseObject):
         :param sender:
         :return: json representation of system purpose contents
         """
-        syspurpose_path = '/etc/rhsm/syspurpose/syspurpose.json'
+        syspurpose_path = "/etc/rhsm/syspurpose/syspurpose.json"
 
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
@@ -118,8 +118,8 @@ class SyspurposeDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
-        in_signature='s',
-        out_signature='s',
+        in_signature="s",
+        out_signature="s",
     )
     @util.dbus_handle_exceptions
     def GetSyspurposeStatus(self, locale, sender=None):
@@ -133,13 +133,13 @@ class SyspurposeDBusObject(base_object.BaseObject):
         Locale.set(locale)
         cp = self.build_uep({})
         system_purpose = syspurpose.Syspurpose(cp)
-        syspurpose_status = system_purpose.get_syspurpose_status()['status']
+        syspurpose_status = system_purpose.get_syspurpose_status()["status"]
         return system_purpose.get_overall_status(syspurpose_status)
 
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
-        in_signature='s',
-        out_signature='s',
+        in_signature="s",
+        out_signature="s",
     )
     @util.dbus_handle_exceptions
     def GetValidFields(self, locale, sender=None):
@@ -169,8 +169,8 @@ class SyspurposeDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
-        in_signature='a{sv}s',
-        out_signature='s',
+        in_signature="a{sv}s",
+        out_signature="s",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
@@ -202,7 +202,7 @@ class SyspurposeDBusObject(base_object.BaseObject):
 
     @util.dbus_service_signal(
         constants.SYSPURPOSE_INTERFACE,
-        signature='',
+        signature="",
     )
     @util.dbus_handle_exceptions
     def SyspurposeChanged(self):

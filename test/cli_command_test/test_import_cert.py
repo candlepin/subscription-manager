@@ -12,7 +12,7 @@ class TestImportCertCommand(TestCliCommand):
 
     def setUp(self):
         super(TestImportCertCommand, self).setUp()
-        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'import'])
+        argv_patcher = patch.object(sys, "argv", ["subscription-manager", "import"])
         argv_patcher.start()
         self.addCleanup(argv_patcher.stop)
 

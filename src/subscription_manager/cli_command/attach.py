@@ -47,7 +47,7 @@ class AttachCommand(CliCommand):
         self.parser.add_argument(
             "--pool",
             dest="pool",
-            action='append',
+            action="append",
             help=_("The ID of the pool to attach (can be specified more than once)"),
         )
         self.parser.add_argument(
@@ -58,7 +58,7 @@ class AttachCommand(CliCommand):
         )
         self.parser.add_argument(
             "--auto",
-            action='store_true',
+            action="store_true",
             help=_(
                 "Automatically attach the best-matched compatible subscriptions to this system. "
                 "This is the default action."
@@ -124,23 +124,23 @@ class AttachCommand(CliCommand):
         # If a pools file was specified, process its contents and append it to options.pool
         if self.options.file:
             self.options.file = os.path.expanduser(self.options.file)
-            if self.options.file == '-' or os.path.isfile(self.options.file):
+            if self.options.file == "-" or os.path.isfile(self.options.file):
                 self._read_pool_ids(self.options.file)
 
                 if len(self.options.pool) < 1:
-                    if self.options.file == '-':
+                    if self.options.file == "-":
                         system_exit(os.EX_DATAERR, _("Error: Received data does not contain any pool IDs."))
                     else:
                         system_exit(
                             os.EX_DATAERR,
-                            _("Error: The file \"{file}\" does not contain any pool IDs.").format(
+                            _('Error: The file "{file}" does not contain any pool IDs.').format(
                                 file=self.options.file
                             ),
                         )
             else:
                 system_exit(
                     os.EX_DATAERR,
-                    _("Error: The file \"{file}\" does not exist or cannot be read.").format(
+                    _('Error: The file "{file}" does not exist or cannot be read.').format(
                         file=self.options.file
                     ),
                 )
@@ -151,10 +151,10 @@ class AttachCommand(CliCommand):
         :return: None
         """
         owner = get_current_owner(self.cp, self.identity)
-        owner_id = owner['key']
+        owner_id = owner["key"]
         print(
             _(
-                'Ignoring request to attach. '
+                "Ignoring request to attach. "
                 'It is disabled for org "{owner_id}" because of the content access mode setting.'
             ).format(owner_id=owner_id)
         )
@@ -203,14 +203,14 @@ class AttachCommand(CliCommand):
                         ents = attach_service.attach_pool(pool, self.options.quantity)
                         # Usually just one, but may as well be safe:
                         for ent in ents:
-                            pool_json = ent['pool']
+                            pool_json = ent["pool"]
                             print(
                                 _("Successfully attached a subscription for: {name}").format(
-                                    name=pool_json['productName']
+                                    name=pool_json["productName"]
                                 )
                             )
                             log.debug(
-                                "Attached a subscription for {name}".format(name=pool_json['productName'])
+                                "Attached a subscription for {name}".format(name=pool_json["productName"])
                             )
                             subscribed = True
                     except connection.RestlibException as re:
@@ -249,7 +249,7 @@ class AttachCommand(CliCommand):
                     # verify service levels are supported on the server:
                     if self.options.service_level:
                         consumer = self.cp.getConsumer(self.identity.uuid)
-                        if 'serviceLevel' not in consumer:
+                        if "serviceLevel" not in consumer:
                             system_exit(
                                 os.EX_UNAVAILABLE,
                                 _(
@@ -276,9 +276,9 @@ class AttachCommand(CliCommand):
             profile_action_client.update()
 
             if report and report.exceptions():
-                print(_('Entitlement Certificate(s) update failed due to the following reasons:'))
+                print(_("Entitlement Certificate(s) update failed due to the following reasons:"))
                 for e in report.exceptions():
-                    print('\t-', str(e))
+                    print("\t-", str(e))
             elif self.auto_attach:
                 if not installed_products_num:
                     return_code = 1

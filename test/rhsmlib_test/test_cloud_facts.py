@@ -168,11 +168,11 @@ class TestCloudCollector(unittest.TestCase):
         self.mock_facts = mock.Mock()
         inj.provide(inj.FACTS, self.mock_facts)
         # Azure and GCP
-        self.requests_patcher = patch('cloud_what._base_provider.requests')
+        self.requests_patcher = patch("cloud_what._base_provider.requests")
         self.requests_mock = self.requests_patcher.start()
         self.addCleanup(self.requests_patcher.stop)
 
-    @patch('cloud_what.providers.aws.requests.Session', name='test_get_aws_facts.mock_session_class')
+    @patch("cloud_what.providers.aws.requests.Session", name="test_get_aws_facts.mock_session_class")
     def test_get_aws_facts(self, mock_session_class):
         """
         Test getting AWS facts (instance ID, accountID and billingProducts)
@@ -183,7 +183,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_session = Mock(name="_test_get_aws_facts.mock_session")
         mock_session.send = Mock(return_value=mock_result, name="_test_get_aws_facts.mock_session.send")
         mock_session.prepare_request = mock_prepare_request
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
 
         # We need to patch only Session in this case
@@ -204,7 +204,7 @@ class TestCloudCollector(unittest.TestCase):
         self.assertIn("aws_marketplace_product_codes", facts)
         self.assertEqual(facts["aws_marketplace_product_codes"], None)
 
-    @patch('cloud_what.providers.aws.requests.Session', name='mock_session_class')
+    @patch("cloud_what.providers.aws.requests.Session", name="mock_session_class")
     def test_get_aws_facts_with_null_billing_products(self, mock_session_class):
         """
         Billing products could be null in some cases (not RHEL)
@@ -233,7 +233,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_session = Mock(name="mock_session")
         mock_session.send = Mock(return_value=mock_result, name="mock_session.send")
         mock_session.prepare_request = mock_prepare_request
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
 
         # We need to patch only Session in this case
@@ -264,7 +264,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_session = Mock(name="mock_session")
         mock_session.send = Mock(return_value=mock_result, name="mock_send")
         mock_session.prepare_request = Mock(name="mock_prepare_request")
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         self.requests_mock.Session = Mock(return_value=mock_session, name="mock_Session")
 
         self.collector = cloud_facts.CloudFactsCollector(
@@ -284,8 +284,8 @@ class TestCloudCollector(unittest.TestCase):
         self.assertIn("azure_offer", facts)
         self.assertEqual(facts["azure_offer"], AZURE_OFFER)
 
-    @patch('cloud_what.providers.gcp.GCPCloudProvider._write_token_to_cache_file')
-    @patch('cloud_what.providers.gcp.GCPCloudProvider._get_metadata_from_cache')
+    @patch("cloud_what.providers.gcp.GCPCloudProvider._write_token_to_cache_file")
+    @patch("cloud_what.providers.gcp.GCPCloudProvider._get_metadata_from_cache")
     def test_get_gcp_facts(self, mock_get_metadata_from_cache, mock_write_token_to_cache_file):
         """
         Test getting GCP instance ID from metadata provided by GCP cloud provider
@@ -297,7 +297,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_session = Mock(name="mock_session")
         mock_session.send = Mock(return_value=mock_result, name="mock_send")
         mock_session.prepare_request = Mock(name="mock_prepare_request")
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         self.requests_mock.Session = Mock(return_value=mock_session, name="mock_Session")
 
         mock_get_metadata_from_cache.return_value = None
@@ -311,7 +311,7 @@ class TestCloudCollector(unittest.TestCase):
         self.assertIn("gcp_instance_id", facts)
         self.assertEqual(facts["gcp_instance_id"], "2589221140676718026")
 
-    @patch('cloud_what.providers.aws.requests.Session', name='mock_session_class')
+    @patch("cloud_what.providers.aws.requests.Session", name="mock_session_class")
     def test_get_not_aws_instance(self, mock_session_class):
         """
         Test that AWS instance ID is not included in facts, when VM is not running on the AWS public cloud
@@ -322,7 +322,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_session = Mock(name="mock_session")
         mock_session.send = Mock(return_value=mock_result, name="mock_session.send")
         mock_session.prepare_request = mock_prepare_request
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
         # We need to patch only Session in this case
         self.requests_patcher.stop()
@@ -334,7 +334,7 @@ class TestCloudCollector(unittest.TestCase):
 
         self.assertNotIn("aws_instance_id", facts)
 
-    @patch('cloud_what.providers.aws.requests.Session', name='mock_session_class')
+    @patch("cloud_what.providers.aws.requests.Session", name="mock_session_class")
     def test_get_bad_json(self, mock_session_class):
         """
         Test parsing some string that is not Json document
@@ -345,7 +345,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_session = Mock(name="mock_session")
         mock_session.send = Mock(return_value=mock_result, name="mock_session.send")
         mock_session.prepare_request = mock_prepare_request
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
         # We need to patch only Session in this case
         self.requests_patcher.stop()
@@ -357,7 +357,7 @@ class TestCloudCollector(unittest.TestCase):
 
         self.assertNotIn("aws_instance_id", facts)
 
-    @patch('cloud_what.providers.aws.requests.Session', name='mock_session_class')
+    @patch("cloud_what.providers.aws.requests.Session", name="mock_session_class")
     def test_get_timeout(self, mock_session_class):
         """
         Test ensures that exception is captured and does not impede
@@ -369,7 +369,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_session.send = Mock(return_value=mock_result, name="mock_session.send")
         mock_session.send.side_effect = socket.timeout
         mock_session.prepare_request = mock_prepare_request
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
         # We need to patch only Session in this case
         self.requests_patcher.stop()
@@ -381,7 +381,7 @@ class TestCloudCollector(unittest.TestCase):
 
         self.assertNotIn("aws_instance_id", facts)
 
-    @patch('cloud_what.providers.aws.requests.Session', name='mock_session_class')
+    @patch("cloud_what.providers.aws.requests.Session", name="mock_session_class")
     def test_get_http_error(self, mock_session_class):
         """
         test ensures that exception is captured and does not impede
@@ -393,7 +393,7 @@ class TestCloudCollector(unittest.TestCase):
         mock_session.send = Mock(return_value=mock_result, name="mock_session.send")
         mock_session.side_effect = requests.exceptions.HTTPError()
         mock_session.prepare_request = mock_prepare_request
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
         # We need to patch only Session in this case
         self.requests_patcher.stop()

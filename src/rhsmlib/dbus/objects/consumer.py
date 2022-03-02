@@ -47,8 +47,8 @@ class ConsumerDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.CONSUMER_INTERFACE,
-        in_signature='s',
-        out_signature='s',
+        in_signature="s",
+        out_signature="s",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
@@ -73,8 +73,8 @@ class ConsumerDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.CONSUMER_INTERFACE,
-        in_signature='s',
-        out_signature='s',
+        in_signature="s",
+        out_signature="s",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
@@ -94,7 +94,7 @@ class ConsumerDBusObject(base_object.BaseObject):
 
     @util.dbus_service_signal(
         constants.CONSUMER_INTERFACE,
-        signature='',
+        signature="",
     )
     @util.dbus_handle_exceptions
     def ConsumerChanged(self):

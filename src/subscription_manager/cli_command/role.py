@@ -27,6 +27,6 @@ class RoleCommand(AbstractSyspurposeCommand, OrgCommand):
             subparser,
             shortdesc,
             primary=False,
-            attr='role',
-            commands=['set', 'unset', 'show', 'list'],
+            attr="role",
+            commands=["set", "unset", "show", "list"],
         )

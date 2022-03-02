@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 class FactsDict(collections.abc.MutableMapping):
     """A dict for facts that ignores items in 'graylist' on compares."""
 
-    graylist = set(['cpu.cpu_mhz', 'lscpu.cpu_mhz'])
+    graylist = set(["cpu.cpu_mhz", "lscpu.cpu_mhz"])
 
     def __init__(self, *args, **kwargs):
         super(FactsDict, self).__init__(*args, **kwargs)
@@ -59,7 +59,7 @@ class FactsDict(collections.abc.MutableMapping):
         return len(self) < len(other)
 
     def __repr__(self):
-        return '%s(%r)' % (self.__class__.__name__, list(self.items()))
+        return "%s(%r)" % (self.__class__.__name__, list(self.items()))
 
 
 def compare_with_graylist(dict_a, dict_b, graylist):

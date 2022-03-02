@@ -30,7 +30,7 @@ def _parse_date_dateutil(date):
         # switch the tzinfo object of UTC dates to datetime.timezone.utc:
         # this is done because classes in the standard Python library
         # explicitly check for that object for UTC checks
-        if dt.tzinfo.tzname(dt) == 'UTC':
+        if dt.tzinfo.tzname(dt) == "UTC":
             dt = dt.replace(tzinfo=datetime.timezone.utc)
     except ValueError:
         log.warning("Date overflow: %s, using 9999-09-06 instead." % date)
@@ -40,4 +40,4 @@ def _parse_date_dateutil(date):
 
 
 parse_date = _parse_date_dateutil
-parse_date_impl_name = 'dateutil'
+parse_date_impl_name = "dateutil"

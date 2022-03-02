@@ -51,12 +51,12 @@ class OwnersCommand(UserPassCommand):
             log.debug("Successfully retrieved org list from server.")
             if len(owners):
                 print("+-------------------------------------------+")
-                print("          {name} {label}".format(name=self.username, label=_('Organizations')))
+                print("          {name} {label}".format(name=self.username, label=_("Organizations")))
                 print("+-------------------------------------------+")
                 print("")
                 for owner in owners:
                     print(
-                        columnize(ORG_LIST, echo_columnize_callback, owner['displayName'], owner['key'])
+                        columnize(ORG_LIST, echo_columnize_callback, owner["displayName"], owner["key"])
                         + "\n"
                     )
             else:

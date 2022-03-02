@@ -171,7 +171,7 @@ class CdnReleaseVersionProvider(object):
         return releases_set
 
     def _build_listing_path(self, content_url):
-        listing_parts = content_url.split('$releasever', 1)
+        listing_parts = content_url.split("$releasever", 1)
         listing_base = listing_parts[0]
         # FIXME: cleanup paths ("//"'s, etc)
         # FIXME(khowell): ensure that my changes here don't break earlier fix
@@ -187,11 +187,11 @@ class CdnReleaseVersionProvider(object):
         for product_tag in product_tags:
             # we are comparing the lists to see if they
             # have a matching rhel-#
-            product_split = product_tag.split('-', 2)
+            product_split = product_tag.split("-", 2)
             if product_split[0] == "rhel":
                 # look for match in content tags
                 for content_tag in content_tags:
-                    content_split = content_tag.split('-', 2)
+                    content_split = content_tag.split("-", 2)
 
                     # ignore non rhel content tags
                     if content_split[0] != "rhel":
@@ -208,6 +208,6 @@ class CdnReleaseVersionProvider(object):
 
         log.debug(
             "Ignoring content with tags [%s] because it does not match installed product tags [%s]"
-            % (','.join(content_tags), ','.join(product_tags))
+            % (",".join(content_tags), ",".join(product_tags))
         )
         return False

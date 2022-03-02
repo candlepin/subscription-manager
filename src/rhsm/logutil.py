@@ -26,20 +26,20 @@ USER_LOGFILE_DIR = os.path.join(
 USER_LOGFILE_PATH = os.path.join(USER_LOGFILE_DIR, "rhsm.log")
 
 LOG_FORMAT = (
-    '%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d:'
-    '%(threadName)s @%(filename)s:%(lineno)d - %(message)s'
+    "%(asctime)s [%(levelname)s] %(cmd_name)s:%(process)d:"
+    "%(threadName)s @%(filename)s:%(lineno)d - %(message)s"
 )
 
 _rhsm_log_handler = None
 _subman_debug_handler = None
 log = None
 ROOT_NAMESPACES = [
-    'subscription_manager',
-    'rhsm',
-    'rhsm-app',
-    'rhsmlib',
-    'syspurpose',
-    'cloud_what',
+    "subscription_manager",
+    "rhsm",
+    "rhsm-app",
+    "rhsmlib",
+    "syspurpose",
+    "cloud_what",
 ]
 
 
@@ -48,7 +48,7 @@ class ContextLoggingFilter(object):
     """Find the name of the process as 'cmd_name'"""
 
     current_cmd = os.path.basename(sys.argv[0])
-    cmd_line = ' '.join(sys.argv)
+    cmd_line = " ".join(sys.argv)
 
     def __init__(self, name):
         self.name = name
@@ -68,7 +68,7 @@ class SubmanDebugLoggingFilter(object):
 
     def __init__(self, name):
         self.name = name
-        self.on = 'SUBMAN_DEBUG' in os.environ
+        self.on = "SUBMAN_DEBUG" in os.environ
 
     def filter(self, record):
         return self.on
@@ -128,7 +128,7 @@ class PyWarningsLoggingFilter(object):
         self.name = name
 
     def filter(self, record):
-        record.msg = '%s %s' % (self.label, record.msg)
+        record.msg = "%s %s" % (self.label, record.msg)
         return True
 
 
@@ -179,12 +179,12 @@ def init_logger(config=None):
     # subscription-manager does (--logging.default_log_level)
     default_log_level = None
     for arg in sys.argv:
-        if arg.startswith('--logging.default_log_level'):
+        if arg.startswith("--logging.default_log_level"):
             # It is possible to use --logging.default_log_level=VALUE and
             # --logging.default_log_level VALUE
             option_value = arg.split()
             if len(option_value) == 1:
-                option_value = arg.split('=')
+                option_value = arg.split("=")
 
             if len(option_value) == 2:
                 default_log_level = option_value[1]
@@ -195,10 +195,10 @@ def init_logger(config=None):
                     default_log_level = None
 
     if default_log_level is None:
-        default_log_level = config.get('logging', 'default_log_level')
+        default_log_level = config.get("logging", "default_log_level")
         if not config.is_log_level_valid(default_log_level):
             # This is not a valid logging level, set to INFO
-            default_log_level = 'INFO'
+            default_log_level = "INFO"
 
     pending_error_messages = []
 
@@ -211,9 +211,9 @@ def init_logger(config=None):
         logger.addHandler(_get_default_subman_debug_handler())
         logger.setLevel(getattr(logging, default_log_level.strip()))
 
-    for logger_name, logging_level in config.items('logging'):
+    for logger_name, logging_level in config.items("logging"):
         logger_name = logger_name.strip()
-        if logger_name.split('.')[0] not in ROOT_NAMESPACES:
+        if logger_name.split(".")[0] not in ROOT_NAMESPACES:
             # Don't allow our logging configuration to mess with loggers
             # outside the namespaces we claim as ours
             # Also ignore other more general configuration options like

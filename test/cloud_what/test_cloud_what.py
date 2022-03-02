@@ -38,20 +38,20 @@ def send_only_imds_v2_is_supported(request, *args, **kwargs):
     """
     mock_result = Mock()
 
-    if request.method == 'PUT':
+    if request.method == "PUT":
         if request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_URL:
-            if 'X-aws-ec2-metadata-token-ttl-seconds' in request.headers:
+            if "X-aws-ec2-metadata-token-ttl-seconds" in request.headers:
                 mock_result.status_code = 200
                 mock_result.text = AWS_TOKEN
             else:
                 mock_result.status_code = 400
-                mock_result.text = 'Error: TTL for token not specified'
+                mock_result.text = "Error: TTL for token not specified"
         else:
             mock_result.status_code = 400
-            mock_result.text = 'Error: Invalid URL'
-    elif request.method == 'GET':
-        if 'X-aws-ec2-metadata-token' in request.headers.keys():
-            if request.headers['X-aws-ec2-metadata-token'] == AWS_TOKEN:
+            mock_result.text = "Error: Invalid URL"
+    elif request.method == "GET":
+        if "X-aws-ec2-metadata-token" in request.headers.keys():
+            if request.headers["X-aws-ec2-metadata-token"] == AWS_TOKEN:
                 if request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_METADATA_URL:
                     mock_result.status_code = 200
                     mock_result.text = AWS_METADATA
@@ -60,16 +60,16 @@ def send_only_imds_v2_is_supported(request, *args, **kwargs):
                     mock_result.text = AWS_SIGNATURE
                 else:
                     mock_result.status_code = 400
-                    mock_result.text = 'Error: Invalid URL'
+                    mock_result.text = "Error: Invalid URL"
             else:
                 mock_result.status_code = 400
-                mock_result.text = 'Error: Invalid metadata token provided'
+                mock_result.text = "Error: Invalid metadata token provided"
         else:
             mock_result.status_code = 400
-            mock_result.text = 'Error: IMDSv1 is not supported on this instance'
+            mock_result.text = "Error: IMDSv1 is not supported on this instance"
     else:
         mock_result.status_code = 400
-        mock_result.text = 'Error: not supported request method'
+        mock_result.text = "Error: not supported request method"
 
     return mock_result
 
@@ -155,7 +155,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         Test for the case, when the machine is host (not virtual machine)
         """
         # We will mock facts using simple dictionary
-        facts = {'virt.is_guest': False, 'dmi.bios.version': 'cool hardware company'}
+        facts = {"virt.is_guest": False, "dmi.bios.version": "cool hardware company"}
         aws_detector = aws.AWSCloudProvider(facts)
         is_vm = aws_detector.is_vm()
         self.assertFalse(is_vm)
@@ -165,7 +165,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         Test for the case, when the vm is running on AWS Xen
         """
         # We will mock facts using simple dictionary
-        facts = {'virt.is_guest': True, 'virt.host_type': 'xen', 'dmi.bios.version': 'amazon'}
+        facts = {"virt.is_guest": True, "virt.host_type": "xen", "dmi.bios.version": "amazon"}
         aws_detector = aws.AWSCloudProvider(facts)
         is_vm = aws_detector.is_vm()
         self.assertTrue(is_vm)
@@ -178,10 +178,10 @@ class TestAWSCloudProvider(unittest.TestCase):
         """
         # We will mock facts using simple dictionary
         facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.version': '1.0',
-            'dmi.bios.vendor': 'Amazon EC2',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.bios.version": "1.0",
+            "dmi.bios.vendor": "Amazon EC2",
         }
         aws_detector = aws.AWSCloudProvider(facts)
         is_vm = aws_detector.is_vm()
@@ -195,10 +195,10 @@ class TestAWSCloudProvider(unittest.TestCase):
         """
         # We will mock facts using simple dictionary
         facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.version': '1.0',
-            'dmi.bios.vendor': 'Foo',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.bios.version": "1.0",
+            "dmi.bios.vendor": "Foo",
         }
         aws_detector = aws.AWSCloudProvider(facts)
         is_vm = aws_detector.is_vm()
@@ -224,14 +224,14 @@ class TestAWSCloudProvider(unittest.TestCase):
         https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/identify_ec2_instances.html
         """
         # We will mock facts using simple dictionary
-        facts = {'virt.is_guest': True, 'dmi.system.uuid': 'EC2263F8-15F3-4A34-B186-FAD8AB963431'}
+        facts = {"virt.is_guest": True, "dmi.system.uuid": "EC2263F8-15F3-4A34-B186-FAD8AB963431"}
         aws_detector = aws.AWSCloudProvider(facts)
         is_vm = aws_detector.is_vm()
         self.assertTrue(is_vm)
         probability = aws_detector.is_likely_running_on_cloud()
         self.assertEqual(probability, 0.1)
 
-    @patch('cloud_what._base_provider.requests.Session')
+    @patch("cloud_what._base_provider.requests.Session")
     def test_get_metadata_from_server_imds_v1(self, mock_session_class):
         """
         Test the case, when metadata are obtained from server using IMDSv1
@@ -242,7 +242,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = Mock(return_value=mock_result)
         mock_session.prepare_request = Mock()
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
         aws_collector = aws.AWSCloudProvider({})
         # Mock that no metadata cache exists
@@ -250,7 +250,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         metadata = aws_collector.get_metadata()
         self.assertEqual(metadata, AWS_METADATA)
 
-    @patch('cloud_what._base_provider.requests.Session')
+    @patch("cloud_what._base_provider.requests.Session")
     def test_get_signature_from_server_imds_v1(self, mock_session_class):
         """
         Test the case, when metadata are obtained from server using IMDSv1
@@ -261,17 +261,17 @@ class TestAWSCloudProvider(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = Mock(return_value=mock_result)
         mock_session.prepare_request = Mock()
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
 
         aws_collector = aws.AWSCloudProvider({})
         # Mock that no metadata cache exists
         aws_collector._get_signature_from_cache = Mock(return_value=None)
         test_signature = aws_collector.get_signature()
-        signature = '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
+        signature = "-----BEGIN PKCS7-----\n" + AWS_SIGNATURE + "\n-----END PKCS7-----"
         self.assertEqual(signature, test_signature)
 
-    @patch('cloud_what._base_provider.requests.Session')
+    @patch("cloud_what._base_provider.requests.Session")
     def test_get_metadata_from_server_imds_v2(self, mock_session_class):
         """
         Test the case, when metadata are obtained from server using IMDSv2
@@ -279,7 +279,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = send_only_imds_v2_is_supported
         mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
 
         aws_provider = aws.AWSCloudProvider({})
@@ -295,7 +295,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         metadata = aws_provider.get_metadata()
         self.assertEqual(metadata, AWS_METADATA)
 
-    @patch('cloud_what._base_provider.requests.Session')
+    @patch("cloud_what._base_provider.requests.Session")
     def test_get_signature_from_server_imds_v2(self, mock_session_class):
         """
         Test the case, when signature is obtained from server using IMDSv2
@@ -303,7 +303,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = send_only_imds_v2_is_supported
         mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
 
         aws_collector = aws.AWSCloudProvider({})
@@ -315,10 +315,10 @@ class TestAWSCloudProvider(unittest.TestCase):
         aws_collector._write_token_to_cache_file = Mock()
 
         test_signature = aws_collector.get_signature()
-        signature = '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
+        signature = "-----BEGIN PKCS7-----\n" + AWS_SIGNATURE + "\n-----END PKCS7-----"
         self.assertEqual(signature, test_signature)
 
-    @patch('cloud_what._base_provider.requests.Session')
+    @patch("cloud_what._base_provider.requests.Session")
     def test_metadata_in_memory_cache(self, mock_session_class):
         """
         Test that metadata is read from in-memory cache
@@ -327,7 +327,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = Mock(side_effect=send_only_imds_v2_is_supported)
         mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
 
         aws_provider = aws.AWSCloudProvider({})
@@ -365,7 +365,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         """
         c_time = str(time.time())
         ttl = str(aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL)
-        token = 'ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=='
+        token = "ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=="
         valid_token = (
             '{\
   "ctime": "'
@@ -383,7 +383,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
             # Create valid token file
-            tmp_token_file.write(bytes(valid_token, encoding='utf-8'))
+            tmp_token_file.write(bytes(valid_token, encoding="utf-8"))
             tmp_token_file.flush()
             old_token_cache_file = aws_collector.TOKEN_CACHE_FILE
             aws_collector.TOKEN_CACHE_FILE = tmp_token_file.name
@@ -397,7 +397,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         """
         c_time = str(time.time())
         ttl = str(aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL)
-        token = 'ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=='
+        token = "ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=="
         valid_token = (
             '{[\
   "ctime": "'
@@ -415,7 +415,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
             # Create valid token file
-            tmp_token_file.write(bytes(valid_token, encoding='utf-8'))
+            tmp_token_file.write(bytes(valid_token, encoding="utf-8"))
             tmp_token_file.flush()
             old_token_cache_file = aws_collector.TOKEN_CACHE_FILE
             aws_collector.TOKEN_CACHE_FILE = tmp_token_file.name
@@ -428,7 +428,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         Test reading of cached token from file with invalid time format
         """
         ttl = str(aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL)
-        token = 'ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=='
+        token = "ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=="
         # ctime has to be float (unix epoch)
         valid_token = (
             '{[\
@@ -445,7 +445,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
             # Create valid token file
-            tmp_token_file.write(bytes(valid_token, encoding='utf-8'))
+            tmp_token_file.write(bytes(valid_token, encoding="utf-8"))
             tmp_token_file.flush()
             old_token_cache_file = aws_collector.TOKEN_CACHE_FILE
             aws_collector.TOKEN_CACHE_FILE = tmp_token_file.name
@@ -464,7 +464,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
             # Create valid token file
-            tmp_token_file.write(bytes(valid_token, encoding='utf-8'))
+            tmp_token_file.write(bytes(valid_token, encoding="utf-8"))
             tmp_token_file.flush()
             old_token_cache_file = aws_collector.TOKEN_CACHE_FILE
             aws_collector.TOKEN_CACHE_FILE = tmp_token_file.name
@@ -493,7 +493,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
             # Create valid token file
-            tmp_token_file.write(bytes(valid_token, encoding='utf-8'))
+            tmp_token_file.write(bytes(valid_token, encoding="utf-8"))
             tmp_token_file.flush()
             old_token_cache_file = aws_collector.TOKEN_CACHE_FILE
             aws_collector.TOKEN_CACHE_FILE = tmp_token_file.name
@@ -618,7 +618,7 @@ class TestAzureCloudProvider(unittest.TestCase):
         """
         azure.AzureCloudProvider._instance = None
         azure.AzureCloudProvider._initialized = False
-        requests_patcher = patch('cloud_what._base_provider.requests')
+        requests_patcher = patch("cloud_what._base_provider.requests")
         self.requests_mock = requests_patcher.start()
         self.addCleanup(requests_patcher.stop)
 
@@ -635,7 +635,7 @@ class TestAzureCloudProvider(unittest.TestCase):
         Test for the case, when the machine is host (not virtual machine)
         """
         # We will mock facts using simple dictionary
-        facts = {'virt.is_guest': False, 'dmi.bios.version': 'cool hardware company'}
+        facts = {"virt.is_guest": False, "dmi.bios.version": "cool hardware company"}
         azure_detector = azure.AzureCloudProvider(facts)
         is_vm = azure_detector.is_vm()
         self.assertFalse(is_vm)
@@ -646,10 +646,10 @@ class TestAzureCloudProvider(unittest.TestCase):
         """
         # We will mock facts using simple dictionary
         facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'hyperv',
-            'dmi.bios.version': '090008',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
+            "virt.is_guest": True,
+            "virt.host_type": "hyperv",
+            "dmi.bios.version": "090008",
+            "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77",
         }
         azure_detector = azure.AzureCloudProvider(facts)
         is_vm = azure_detector.is_vm()
@@ -663,10 +663,10 @@ class TestAzureCloudProvider(unittest.TestCase):
         """
         # We will mock facts using simple dictionary
         facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'hyperv',
-            'dmi.bios.version': '090008',
-            'dmi.bios.vendor': 'Foo',
+            "virt.is_guest": True,
+            "virt.host_type": "hyperv",
+            "dmi.bios.version": "090008",
+            "dmi.bios.vendor": "Foo",
         }
         azure_detector = azure.AzureCloudProvider(facts)
         is_vm = azure_detector.is_vm()
@@ -697,14 +697,14 @@ class TestAzureCloudProvider(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = Mock(return_value=mock_result)
         mock_session.prepare_request = Mock()
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         self.requests_mock.Session = Mock(return_value=mock_session)
         azure_collector = azure.AzureCloudProvider({})
         metadata = azure_collector.get_metadata()
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
             url=f"http://169.254.169.254/metadata/instance?api-version={azure.AzureCloudProvider.API_VERSION}",
-            headers={'User-Agent': 'cloud-what/1.0', "Metadata": "true"},
+            headers={"User-Agent": "cloud-what/1.0", "Metadata": "true"},
         )
         mock_session.send.assert_called_once()
         self.assertEqual(metadata, AZURE_METADATA)
@@ -720,14 +720,14 @@ class TestAzureCloudProvider(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = Mock(return_value=mock_result)
         mock_session.prepare_request = Mock()
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         self.requests_mock.Session = Mock(return_value=mock_session)
         azure_provider = azure.AzureCloudProvider({})
         api_versions = azure_provider.get_api_versions()
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
             url="http://169.254.169.254/metadata/versions",
-            headers={'User-Agent': 'cloud-what/1.0', "Metadata": "true"},
+            headers={"User-Agent": "cloud-what/1.0", "Metadata": "true"},
         )
         mock_session.send.assert_called_once()
         self.assertEqual(api_versions, SUPPORTED_AZURE_VERSIONS)
@@ -743,14 +743,14 @@ class TestAzureCloudProvider(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = Mock(return_value=mock_result)
         mock_session.prepare_request = Mock()
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         self.requests_mock.Session = Mock(return_value=mock_session)
         azure_collector = azure.AzureCloudProvider({})
         signature = azure_collector.get_signature()
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
             url=f"http://169.254.169.254/metadata/attested/document?api-version={azure.AzureCloudProvider.API_VERSION}",
-            headers={'User-Agent': 'cloud-what/1.0', "Metadata": "true"},
+            headers={"User-Agent": "cloud-what/1.0", "Metadata": "true"},
         )
         mock_session.send.assert_called_once()
         self.assertEqual(signature, AZURE_SIGNATURE)
@@ -773,16 +773,16 @@ class TestAzureCloudProvider(unittest.TestCase):
             )
         else:
             mock_result.status_code = 200
-            if '/metadata/instance' in request.url:
+            if "/metadata/instance" in request.url:
                 mock_result.text = AZURE_SIGNATURE
-            elif '/metadata/attested/document' in request.url:
+            elif "/metadata/attested/document" in request.url:
                 mock_result.text = AZURE_SIGNATURE
             else:
-                mock_result.text = ''
+                mock_result.text = ""
 
         return mock_result
 
-    @patch('cloud_what.providers.azure.AzureCloudProvider.get_api_versions')
+    @patch("cloud_what.providers.azure.AzureCloudProvider.get_api_versions")
     def test_get_metadata_from_server_outdated_api_version(self, mock_get_api_versions):
         """
         Test getting metadata from server using outdated API version that is not supported
@@ -801,7 +801,7 @@ class TestAzureCloudProvider(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = Mock(side_effect=self.mock_send_azure_IMDS)
         mock_session.prepare_request = _mock_prepare_request
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         self.requests_mock.Session = Mock(return_value=mock_session)
 
         azure_collector = azure.AzureCloudProvider({})
@@ -809,14 +809,14 @@ class TestAzureCloudProvider(unittest.TestCase):
 
         request_calls = [
             call(
-                method='GET',
-                headers={'User-Agent': 'cloud-what/1.0', 'Metadata': 'true'},
-                url=f'http://169.254.169.254/metadata/instance?api-version={azure.AzureCloudProvider.API_VERSION}',
+                method="GET",
+                headers={"User-Agent": "cloud-what/1.0", "Metadata": "true"},
+                url=f"http://169.254.169.254/metadata/instance?api-version={azure.AzureCloudProvider.API_VERSION}",
             ),
             call(
-                method='GET',
-                headers={'User-Agent': 'cloud-what/1.0', 'Metadata': 'true'},
-                url=f'http://169.254.169.254/metadata/instance?api-version={SUPPORTED_AZURE_VERSIONS[-1]}',
+                method="GET",
+                headers={"User-Agent": "cloud-what/1.0", "Metadata": "true"},
+                url=f"http://169.254.169.254/metadata/instance?api-version={SUPPORTED_AZURE_VERSIONS[-1]}",
             ),
         ]
         self.requests_mock.Request.assert_has_calls(calls=request_calls)
@@ -846,7 +846,7 @@ class TestGCPCloudProvider(unittest.TestCase):
         """
         gcp.GCPCloudProvider._instance = None
         gcp.GCPCloudProvider._initialized = False
-        requests_patcher = patch('cloud_what._base_provider.requests')
+        requests_patcher = patch("cloud_what._base_provider.requests")
         self.requests_mock = requests_patcher.start()
         self.addCleanup(requests_patcher.stop)
 
@@ -863,7 +863,7 @@ class TestGCPCloudProvider(unittest.TestCase):
         Test for the case, when the machine is host (not virtual machine)
         """
         # We will mock facts using simple dictionary
-        facts = {'virt.is_guest': False, 'dmi.bios.version': 'cool hardware company'}
+        facts = {"virt.is_guest": False, "dmi.bios.version": "cool hardware company"}
         gcp_detector = gcp.GCPCloudProvider(facts)
         is_vm = gcp_detector.is_vm()
         self.assertFalse(is_vm)
@@ -874,10 +874,10 @@ class TestGCPCloudProvider(unittest.TestCase):
         """
         # We will mock facts using simple dictionary
         facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.version': 'Google',
-            'dmi.bios.vendor': 'Google',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.bios.version": "Google",
+            "dmi.bios.vendor": "Google",
         }
         gcp_detector = gcp.GCPCloudProvider(facts)
         is_vm = gcp_detector.is_vm()
@@ -891,10 +891,10 @@ class TestGCPCloudProvider(unittest.TestCase):
         """
         # We will mock facts using simple dictionary
         facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.version': '1.0',
-            'dmi.bios.vendor': 'Foo',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.bios.version": "1.0",
+            "dmi.bios.vendor": "Foo",
         }
         gcp_detector = gcp.GCPCloudProvider(facts)
         is_vm = gcp_detector.is_vm()
@@ -913,7 +913,7 @@ class TestGCPCloudProvider(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = Mock(return_value=mock_result)
         mock_session.prepare_request = Mock()
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         self.requests_mock.Session = Mock(return_value=mock_session)
 
         gcp_collector = gcp.GCPCloudProvider({})
@@ -922,9 +922,9 @@ class TestGCPCloudProvider(unittest.TestCase):
         token = gcp_collector.get_metadata()
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
-            url='http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?'
-            'audience=https://subscription.rhsm.redhat.com:443/subscription&format=full',
-            headers={'User-Agent': 'cloud-what/1.0', 'Metadata-Flavor': 'Google'},
+            url="http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?"
+            "audience=https://subscription.rhsm.redhat.com:443/subscription&format=full",
+            headers={"User-Agent": "cloud-what/1.0", "Metadata-Flavor": "Google"},
         )
         self.assertEqual(token, GCP_JWT_TOKEN)
 
@@ -939,7 +939,7 @@ class TestGCPCloudProvider(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = Mock(return_value=mock_result)
         mock_session.prepare_request = Mock()
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         self.requests_mock.Session = Mock(return_value=mock_session)
         gcp_collector = gcp.GCPCloudProvider({}, audience_url="https://example.com:8443/rhsm")
         gcp_collector._get_token_from_cache_file = Mock(return_value=None)
@@ -947,9 +947,9 @@ class TestGCPCloudProvider(unittest.TestCase):
         token = gcp_collector.get_metadata()
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
-            url='http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?'
-            'audience=https://example.com:8443/rhsm&format=full',
-            headers={'User-Agent': 'cloud-what/1.0', 'Metadata-Flavor': 'Google'},
+            url="http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?"
+            "audience=https://example.com:8443/rhsm&format=full",
+            headers={"User-Agent": "cloud-what/1.0", "Metadata-Flavor": "Google"},
         )
         mock_session.send.assert_called_once()
         self.assertEqual(token, GCP_JWT_TOKEN)
@@ -987,7 +987,7 @@ class TestGCPCloudProvider(unittest.TestCase):
         Test decoding of JWT token with wrong UTF-encoding
         """
 
-        jwt_token = 'foobar.foobar.foobar'
+        jwt_token = "foobar.foobar.foobar"
         gcp_collector = gcp.GCPCloudProvider({})
 
         jose_header_str, metadata_str, encoded_signature = gcp_collector.decode_jwt(jwt_token)
@@ -1000,7 +1000,7 @@ class TestGCPCloudProvider(unittest.TestCase):
         Test decoding of JWT token with wrong number of sections
         """
         # There are only two sections
-        jwt_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjJ9'
+        jwt_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjJ9"
         gcp_collector = gcp.GCPCloudProvider({})
 
         jose_header_str, metadata_str, encoded_signature = gcp_collector.decode_jwt(jwt_token)
@@ -1025,14 +1025,14 @@ class TestCloudProvider(unittest.TestCase):
         gcp.GCPCloudProvider._instance = None
         gcp.GCPCloudProvider._initialized = False
 
-        custom_facts_collector_patcher = patch('cloud_what.provider.CustomFactsCollector')
+        custom_facts_collector_patcher = patch("cloud_what.provider.CustomFactsCollector")
         self.custom_facts_collector_mock = custom_facts_collector_patcher.start()
         self.custom_facts_collector_instance = Mock()
         self.custom_facts_collector_instance.get_all = Mock(return_value={})
         self.custom_facts_collector_mock.return_value = self.custom_facts_collector_instance
         self.addCleanup(custom_facts_collector_patcher.stop)
 
-        host_collector_patcher = patch('cloud_what.provider.HostCollector')
+        host_collector_patcher = patch("cloud_what.provider.HostCollector")
         self.host_collector_mock = host_collector_patcher.start()
         self.host_fact_collector_instance = Mock()
         self.host_collector_mock.return_value = self.host_fact_collector_instance
@@ -1044,11 +1044,11 @@ class TestCloudProvider(unittest.TestCase):
         # self.hardware_collector_mock.return_value = self.hw_fact_collector_instance
         # self.addCleanup(hardware_collector_patcher.stop)
 
-        write_cache_patcher = patch('cloud_what.providers.aws.AWSCloudProvider._write_token_to_cache_file')
+        write_cache_patcher = patch("cloud_what.providers.aws.AWSCloudProvider._write_token_to_cache_file")
         self.write_cache_mock = write_cache_patcher.start()
         self.addCleanup(write_cache_patcher.stop)
 
-        self.requests_patcher = patch('cloud_what._base_provider.requests')
+        self.requests_patcher = patch("cloud_what._base_provider.requests")
         self.azure_requests_mock = self.requests_patcher.start()
         self.addCleanup(self.requests_patcher.stop)
 
@@ -1056,10 +1056,10 @@ class TestCloudProvider(unittest.TestCase):
         """
         Test the case, when detecting of aws works as expected
         """
-        host_facts = {'virt.is_guest': True, 'virt.host_type': 'kvm', 'dmi.bios.vendor': 'Amazon EC2'}
+        host_facts = {"virt.is_guest": True, "virt.host_type": "kvm", "dmi.bios.vendor": "Amazon EC2"}
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['aws'])
+        self.assertEqual(detected_clouds, ["aws"])
 
     def test_detect_cloud_provider_only_strong_signs(self):
         """
@@ -1067,11 +1067,11 @@ class TestCloudProvider(unittest.TestCase):
         using only strong signs is requested
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.vendor': 'AWS',
-            'dmi.bios.version': '1.0',
-            'dmi.system.manufacturer': 'Amazon',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.bios.vendor": "AWS",
+            "dmi.bios.version": "1.0",
+            "dmi.system.manufacturer": "Amazon",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider(methods=DetectionMethod.STRONG)
@@ -1083,21 +1083,21 @@ class TestCloudProvider(unittest.TestCase):
         should be influenced by custom facts
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.vendor': 'Amazon EC2',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.bios.vendor": "Amazon EC2",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         # Following custom facts should override host_facts
         custom_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'hyperv',
-            'dmi.bios.vendor': 'Microsoft',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
+            "virt.is_guest": True,
+            "virt.host_type": "hyperv",
+            "dmi.bios.vendor": "Microsoft",
+            "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77",
         }
         self.custom_facts_collector_instance.get_all.return_value = custom_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['azure'])
+        self.assertEqual(detected_clouds, ["azure"])
 
     def test_detect_cloud_provider_aws_heuristics(self):
         """
@@ -1105,29 +1105,29 @@ class TestCloudProvider(unittest.TestCase):
         to use heuristics method
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.vendor': 'AWS',
-            'dmi.bios.version': '1.0',
-            'dmi.system.manufacturer': 'Amazon',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.bios.vendor": "AWS",
+            "dmi.bios.version": "1.0",
+            "dmi.system.manufacturer": "Amazon",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['aws'])
+        self.assertEqual(detected_clouds, ["aws"])
 
     def test_detect_cloud_provider_gcp(self):
         """
         Test the case, when detecting of gcp works as expected
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.vendor': 'Google',
-            'dmi.bios.version': 'Google',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.bios.vendor": "Google",
+            "dmi.bios.version": "Google",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['gcp'])
+        self.assertEqual(detected_clouds, ["gcp"])
 
     def test_detect_cloud_provider_gcp_heuristics(self):
         """
@@ -1135,97 +1135,97 @@ class TestCloudProvider(unittest.TestCase):
         to use heuristics method
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.vendor': 'Foo Company',
-            'dmi.bios.version': '1.0',
-            'dmi.chassis.asset_tag': 'Google Cloud',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.bios.vendor": "Foo Company",
+            "dmi.bios.version": "1.0",
+            "dmi.chassis.asset_tag": "Google Cloud",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['gcp'])
+        self.assertEqual(detected_clouds, ["gcp"])
 
     def test_detect_cloud_provider_azure(self):
         """
         Test the case, when detecting of azure works as expected
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'hyperv',
-            'dmi.bios.vendor': 'Microsoft',
-            'dmi.bios.version': '1.0',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
+            "virt.is_guest": True,
+            "virt.host_type": "hyperv",
+            "dmi.bios.vendor": "Microsoft",
+            "dmi.bios.version": "1.0",
+            "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['azure'])
+        self.assertEqual(detected_clouds, ["azure"])
 
-    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=True))
+    @patch("cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent", Mock(return_value=True))
     def test_detect_cloud_provider_azure_with_dmidecode(self):
         """
         Test the case, when detecting of azure with dmidecode and azure linux agent works as expected
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'hyperv',
-            'dmi.bios.vendor': 'Microsoft',
-            'dmi.bios.version': '1.0',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
+            "virt.is_guest": True,
+            "virt.host_type": "hyperv",
+            "dmi.bios.vendor": "Microsoft",
+            "dmi.bios.version": "1.0",
+            "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['azure'])
+        self.assertEqual(detected_clouds, ["azure"])
 
-    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=True))
+    @patch("cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent", Mock(return_value=True))
     def test_detect_cloud_provider_azure_without_dmidecode(self):
         """
         Test the case, when detecting of azure without dmidecode but with azure linux agent works as expected
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'hyperv',
+            "virt.is_guest": True,
+            "virt.host_type": "hyperv",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['azure'])
+        self.assertEqual(detected_clouds, ["azure"])
 
-    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=True))
+    @patch("cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent", Mock(return_value=True))
     def test_detect_cloud_provider_azure_heuristics_with_azure_linux_agent(self):
         """
         Test the case, when detecting of azure does not work using strong signs, but it is necessary
         to use heuristics method. Azure linux agent exists.
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'hyperv',
-            'dmi.bios.vendor': 'Microsoft',
-            'dmi.bios.version': '1.0',
-            'dmi.system.manufacturer': 'Google',
-            'dmi.chassis.manufacturer': 'Amazon',
+            "virt.is_guest": True,
+            "virt.host_type": "hyperv",
+            "dmi.bios.vendor": "Microsoft",
+            "dmi.bios.version": "1.0",
+            "dmi.system.manufacturer": "Google",
+            "dmi.chassis.manufacturer": "Amazon",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['azure'])
+        self.assertEqual(detected_clouds, ["azure"])
 
-    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=False))
+    @patch("cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent", Mock(return_value=False))
     def test_detect_cloud_provider_azure_heuristics_without_azure_linux_agent(self):
         """
         Test the case, when detecting of azure does not work using strong signs and without azure linux agent
         to use heuristics method
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'hyperv',
-            'dmi.bios.vendor': 'Microsoft',
-            'dmi.bios.version': '1.0',
-            'dmi.system.manufacturer': 'Google',
-            'dmi.chassis.manufacturer': 'Amazon',
+            "virt.is_guest": True,
+            "virt.host_type": "hyperv",
+            "dmi.bios.vendor": "Microsoft",
+            "dmi.bios.version": "1.0",
+            "dmi.system.manufacturer": "Google",
+            "dmi.chassis.manufacturer": "Amazon",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
-        self.assertEqual(detected_clouds, ['azure'])
+        self.assertEqual(detected_clouds, ["azure"])
 
-    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=True))
+    @patch("cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent", Mock(return_value=True))
     def test_conclict_in_strong_signs_with_azure_linux_agent(self):
         """
         Test the case, when cloud providers change strong signs and there is conflict (two providers
@@ -1235,19 +1235,19 @@ class TestCloudProvider(unittest.TestCase):
         Azure Linux Agent exists.
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.vendor': 'Google',
-            'dmi.bios.version': 'Amazon EC2',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
-            'dmi.chassis.manufacturer': 'Microsoft',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.bios.vendor": "Google",
+            "dmi.bios.version": "Amazon EC2",
+            "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77",
+            "dmi.chassis.manufacturer": "Microsoft",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
         detected_clouds.sort()
-        self.assertEqual(detected_clouds, ['aws', 'azure', 'gcp'])
+        self.assertEqual(detected_clouds, ["aws", "azure", "gcp"])
 
-    @patch('cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent', Mock(return_value=False))
+    @patch("cloud_what.providers.azure.AzureCloudProvider._has_azure_linux_agent", Mock(return_value=False))
     def test_conclict_in_strong_signs_without_azure_linux_agent(self):
         """
         Test the case, when cloud providers change strong signs and there is conflict (two providers
@@ -1257,17 +1257,17 @@ class TestCloudProvider(unittest.TestCase):
         Azure Linux Agent does not exist.
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.bios.vendor': 'Google',
-            'dmi.bios.version': 'Amazon EC2',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
-            'dmi.chassis.manufacturer': 'Microsoft',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.bios.vendor": "Google",
+            "dmi.bios.version": "Amazon EC2",
+            "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77",
+            "dmi.chassis.manufacturer": "Microsoft",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
         detected_clouds.sort()
-        self.assertEqual(detected_clouds, ['aws', 'azure', 'gcp'])
+        self.assertEqual(detected_clouds, ["aws", "azure", "gcp"])
 
     def test_conclict_in_heuristics_detection(self):
         """
@@ -1275,10 +1275,10 @@ class TestCloudProvider(unittest.TestCase):
         detected using heuristics with same probability.
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'kvm',
-            'dmi.system.manufacturer': 'Google',
-            'dmi.chassis.manufacturer': 'Amazon EC2',
+            "virt.is_guest": True,
+            "virt.host_type": "kvm",
+            "dmi.system.manufacturer": "Google",
+            "dmi.chassis.manufacturer": "Amazon EC2",
         }
 
         aws_cloud_provider = aws.AWSCloudProvider(host_facts)
@@ -1295,18 +1295,18 @@ class TestCloudProvider(unittest.TestCase):
         self.host_fact_collector_instance.get_all.return_value = host_facts
         detected_clouds = detect_cloud_provider()
         detected_clouds.sort()
-        self.assertEqual(detected_clouds, ['aws', 'gcp'])
+        self.assertEqual(detected_clouds, ["aws", "gcp"])
 
     def test_get_cloud_provider(self):
         """
         Test getting instance of cloud provider
         """
         host_facts = {
-            'virt.is_guest': True,
-            'virt.host_type': 'hyperv',
-            'dmi.bios.vendor': 'Microsoft',
-            'dmi.bios.version': '1.0',
-            'dmi.chassis.asset_tag': '7783-7084-3265-9085-8269-3286-77',
+            "virt.is_guest": True,
+            "virt.host_type": "hyperv",
+            "dmi.bios.vendor": "Microsoft",
+            "dmi.bios.version": "1.0",
+            "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77",
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
         cloud_provider = get_cloud_provider()

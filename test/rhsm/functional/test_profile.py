@@ -31,13 +31,13 @@ class ProfileTests(unittest.TestCase):
         self.assertTrue(len(pkg_dicts) > 10)
 
         for pkg in pkg_dicts:
-            self.assertTrue('name' in pkg)
-            self.assertTrue('version' in pkg)
-            self.assertTrue('version' in pkg)
-            self.assertTrue('release' in pkg)
-            self.assertTrue('epoch' in pkg)
-            self.assertTrue('arch' in pkg)
-            self.assertTrue('vendor' in pkg)
+            self.assertTrue("name" in pkg)
+            self.assertTrue("version" in pkg)
+            self.assertTrue("version" in pkg)
+            self.assertTrue("release" in pkg)
+            self.assertTrue("epoch" in pkg)
+            self.assertTrue("arch" in pkg)
+            self.assertTrue("vendor" in pkg)
 
     def test_package_objects(self):
         profile = get_profile("rpm")

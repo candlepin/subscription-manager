@@ -24,7 +24,7 @@ import hashlib
 
 def md5sum(buf):
     if isinstance(buf, str):
-        buf = buf.encode('utf-8')
+        buf = buf.encode("utf-8")
     md = hashlib.md5(buf)
     return md.hexdigest()
 
@@ -57,36 +57,36 @@ def create_pool(
     for pid in provided_products:
         provided.append(
             {
-                'productId': pid,
-                'productName': pid,
+                "productId": pid,
+                "productName": pid,
             }
         )
 
     pool_id = md5sum(product_id)
 
     to_return = {
-        'productName': product_name,
-        'productId': product_id,
-        'quantity': quantity,
-        'consumed': consumed,
-        'id': pool_id,
-        'subscriptionId': '402881062bc9a379012bc9a3d7380050',
-        'startDate': start_date.isoformat(),
-        'endDate': end_date.isoformat(),
-        'updated': start_date.isoformat(),
-        'created': start_date.isoformat(),
-        'activeSubscription': True,
-        'providedProducts': provided,
-        'sourceEntitlement': None,
-        'href': '/pools/%s' % pool_id,
-        'restrictedToUsername': None,
-        'owner': {'href': '/owners/admin', 'id': '402881062bc9a379012bc9a393fe0005'},
-        'attributes': attributes,
-        'productAttributes': productAttributes,
+        "productName": product_name,
+        "productId": product_id,
+        "quantity": quantity,
+        "consumed": consumed,
+        "id": pool_id,
+        "subscriptionId": "402881062bc9a379012bc9a3d7380050",
+        "startDate": start_date.isoformat(),
+        "endDate": end_date.isoformat(),
+        "updated": start_date.isoformat(),
+        "created": start_date.isoformat(),
+        "activeSubscription": True,
+        "providedProducts": provided,
+        "sourceEntitlement": None,
+        "href": "/pools/%s" % pool_id,
+        "restrictedToUsername": None,
+        "owner": {"href": "/owners/admin", "id": "402881062bc9a379012bc9a393fe0005"},
+        "attributes": attributes,
+        "productAttributes": productAttributes,
     }
 
     if calculatedAttributes is not None:
-        to_return['calculatedAttributes'] = calculatedAttributes
+        to_return["calculatedAttributes"] = calculatedAttributes
 
     return to_return
 
@@ -95,8 +95,8 @@ def create_attribute_list(attribute_map):
     attribute_list = []
     for name, value in attribute_map.items():
         attribute_props = {}
-        attribute_props['name'] = name
-        attribute_props['value'] = value
+        attribute_props["name"] = name
+        attribute_props["value"] = value
         # Add others if required
         attribute_list.append(attribute_props)
     return attribute_list

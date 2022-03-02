@@ -43,9 +43,9 @@ class UploadProfileCommand(dnf.cli.Command):
     @staticmethod
     def set_argparser(parser):
         parser.add_argument(
-            '--force-upload',
-            action='store_true',
-            help=_('Force package profile upload'),
+            "--force-upload",
+            action="store_true",
+            help=_("Force package profile upload"),
         )
 
     def configure(self):

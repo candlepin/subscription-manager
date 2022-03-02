@@ -95,7 +95,7 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
 
     def _get_dmi_data(self, func, tag, ddict):
         for key, value in list(func.items()):
-            for key1, value1 in list(value['data'].items()):
+            for key1, value1 in list(value["data"].items()):
                 # FIXME: this loses useful data...
                 if not isinstance(value1, str) and not isinstance(value1, bytes):
                     # we are skipping things like int and bool values, as
@@ -104,16 +104,16 @@ class DmiFirmwareInfoCollector(collector.FactsCollector):
 
                 # keep track of any cpu socket info we find, we have to do
                 # it here, since we flatten it and lose the info creating nkey
-                if tag == 'dmi.processor.' and key1 == 'Socket Designation':
+                if tag == "dmi.processor." and key1 == "Socket Designation":
                     self._socket_designation.append(value1)
 
-                nkey = ''.join([tag, key1.lower()]).replace(" ", "_")
-                ddict[nkey] = str(value1, 'utf-8')
+                nkey = "".join([tag, key1.lower()]).replace(" ", "_")
+                ddict[nkey] = str(value1, "utf-8")
 
         # Populate how many socket descriptions we saw in a faux-fact, so we can
         # use it to munge lscpu info later if needed.
         if self._socket_designation:
-            ddict['dmi.meta.cpu_socket_count'] = str(len(self._socket_designation))
+            ddict["dmi.meta.cpu_socket_count"] = str(len(self._socket_designation))
 
         return ddict
 

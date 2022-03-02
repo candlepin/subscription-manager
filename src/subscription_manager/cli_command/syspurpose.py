@@ -54,7 +54,7 @@ class SyspurposeCommand(CliCommand):
         super(SyspurposeCommand, self).__init__("syspurpose", short_desc, primary=False)
         self.parser.add_argument(
             "--show",
-            dest='syspurpose_show',
+            dest="syspurpose_show",
             action="store_true",
             help=_("show current system purpose"),
         )
@@ -74,10 +74,10 @@ class SyspurposeCommand(CliCommand):
             # the ArgumentParser (self.parser), which contains the '[OPTIONS]'
             # help text (see AbstractCLICommand._get_usage())
             prog=_("{prog} {name}").format(prog=prog, name=self.name),
-            dest='subparser_name',
-            title=_('Syspurpose submodules'),
-            help='',  # trick argparse a bit to not show the {cmd1, cmd2, ..}
-            metavar='',  # trick argparse a bit to not show the {cmd1, cmd2, ..}
+            dest="subparser_name",
+            title=_("Syspurpose submodules"),
+            help="",  # trick argparse a bit to not show the {cmd1, cmd2, ..}
+            metavar="",  # trick argparse a bit to not show the {cmd1, cmd2, ..}
         )
         self.cli_commands = {}
         for clazz in syspurpose_command_classes:

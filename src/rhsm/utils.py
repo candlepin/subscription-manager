@@ -75,8 +75,8 @@ def has_bad_scheme(url):
     :returns: True if the url schme is "bad"
     :rtype: boolean
     """
-    match_bad = r'(https?[:/])|(:/)|(\S+://)'
-    match_good = r'https?://'
+    match_bad = r"(https?[:/])|(:/)|(\S+://)"
+    match_good = r"https?://"
     # Testing good first allows us to exclude some regex for bad
     if re.match(match_good, url):
         return False
@@ -183,7 +183,7 @@ def parse_url(
     # path can be None?
     prefix = default_prefix
     if result[2] is not None:
-        if result[2] != '':
+        if result[2] != "":
             prefix = result[2]
 
     hostname = default_hostname
@@ -204,10 +204,10 @@ def parse_url(
 
 def get_env_proxy_info():
     the_proxy = {
-        'proxy_username': '',
-        'proxy_hostname': '',
-        'proxy_port': '',
-        'proxy_password': '',
+        "proxy_username": "",
+        "proxy_hostname": "",
+        "proxy_port": "",
+        "proxy_password": "",
     }
 
     # get the proxy information from the environment variable
@@ -227,13 +227,13 @@ def get_env_proxy_info():
             break
 
     if info:
-        the_proxy['proxy_username'] = info[0]
-        the_proxy['proxy_password'] = info[1]
-        the_proxy['proxy_hostname'] = info[2]
+        the_proxy["proxy_username"] = info[0]
+        the_proxy["proxy_password"] = info[1]
+        the_proxy["proxy_hostname"] = info[2]
         if info[3] is None or info[3] == "":
-            the_proxy['proxy_port'] = None
+            the_proxy["proxy_port"] = None
         else:
-            the_proxy['proxy_port'] = int(info[3])
+            the_proxy["proxy_port"] = int(info[3])
     return the_proxy
 
 
@@ -256,21 +256,21 @@ def fix_no_proxy():
     # This fixes BZ: 1443164, because proxy_bypass_environment() from urllib does
     # not support no_proxy with items containing asterisk (e.g.: *.redhat.com)
 
-    no_proxy = os.environ.get('no_proxy') or os.environ.get('NO_PROXY')
+    no_proxy = os.environ.get("no_proxy") or os.environ.get("NO_PROXY")
     if no_proxy is not None:
-        if no_proxy != '*':
+        if no_proxy != "*":
             # Remove all leading white spaces and asterisks from items of no_proxy
             # except item containing only "*" (urllib supports alone asterisk).
-            no_proxy = ','.join([item.lstrip(' *') for item in no_proxy.split(',')])
+            no_proxy = ",".join([item.lstrip(" *") for item in no_proxy.split(",")])
             # Save no_proxy back to 'no_proxy' and 'NO_PROXY'
-            os.environ['no_proxy'] = no_proxy
-            os.environ['NO_PROXY'] = no_proxy
+            os.environ["no_proxy"] = no_proxy
+            os.environ["NO_PROXY"] = no_proxy
 
 
 def suppress_output(func):
     def wrapper(*args, **kwargs):
         try:
-            devnull = open(os.devnull, 'w')
+            devnull = open(os.devnull, "w")
             stdout = sys.stdout
             stderr = sys.stderr
             sys.stdout = devnull

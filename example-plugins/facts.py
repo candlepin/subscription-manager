@@ -53,13 +53,11 @@ class FactsPlugin(SubManPlugin):
             return_code = process.returncode
         except EnvironmentError as e:
             conduit.log.error(e)
-            conduit.log.error("Could not run command:  \"%s\"" % " ".join(facter_cli))
+            conduit.log.error('Could not run command:  "%s"' % " ".join(facter_cli))
             return
 
         if return_code != 0:
-            conduit.log.error(
-                "\"%s\" exit status indicated an error: %s" % (" ".join(facter_cli), facter_err)
-            )
+            conduit.log.error('"%s" exit status indicated an error: %s' % (" ".join(facter_cli), facter_err))
             return
 
         if facter_out is None:
@@ -72,6 +70,6 @@ class FactsPlugin(SubManPlugin):
         # len(str(x[1])) is terrible if x[1] is say, a float with long string repr, then
         # again, we don't support that, so...
         new_facter_facts = dict(
-            [('facter.' + x[0], x[1]) for x in list(facter_dict.items()) if len(str(x[1])) < 256]
+            [("facter." + x[0], x[1]) for x in list(facter_dict.items()) if len(str(x[1])) < 256]
         )
         facts.update(new_facter_facts)

@@ -13,17 +13,17 @@ from subscription_manager import injection as inj
 class TestEntitlement(fixture.SubManFixture):
     def test_empty_init(self):
         e = model.Entitlement()
-        self.assertTrue(hasattr(e, 'contents'))
+        self.assertTrue(hasattr(e, "contents"))
 
     def test_init_empty_contents(self):
         e = model.Entitlement(contents=[])
-        self.assertTrue(hasattr(e, 'contents'))
+        self.assertTrue(hasattr(e, "contents"))
         self.assertEqual(e.contents, [])
 
     def test_contents(self):
         contents = [mock.Mock(), mock.Mock()]
         e = model.Entitlement(contents=contents)
-        self.assertTrue(hasattr(e, 'contents'))
+        self.assertTrue(hasattr(e, "contents"))
         self.assertEqual(len(e.contents), 2)
 
         for a_content in e.contents:
@@ -104,18 +104,18 @@ class TestEntitlementDirEntitlementSource(test_model.TestEntitlementSource):
     def _inj_mock_dirs(self, stub_product=None):
 
         stub_product = stub_product or DefaultStubInstalledProduct()
-        mock_prod_dir = mock.NonCallableMock(name='MockProductDir')
+        mock_prod_dir = mock.NonCallableMock(name="MockProductDir")
         mock_prod_dir.get_installed_products.return_value = [stub_product.id]
         mock_prod_dir.get_provided_tags.return_value = stub_product.provided_tags
 
-        mock_content = create_mock_content(tags=['awesomeos-ostree-1'])
+        mock_content = create_mock_content(tags=["awesomeos-ostree-1"])
         mock_cert_contents = [mock_content]
 
-        mock_ent_cert = mock.Mock(name='MockEntCert')
+        mock_ent_cert = mock.Mock(name="MockEntCert")
         mock_ent_cert.products = [stub_product]
         mock_ent_cert.content = mock_cert_contents
 
-        mock_ent_dir = mock.NonCallableMock(name='MockEntDir')
+        mock_ent_dir = mock.NonCallableMock(name="MockEntDir")
         mock_ent_dir.list_valid.return_value = [mock_ent_cert]
         mock_ent_dir.list_valid_with_content_access.return_value = [mock_ent_cert]
 

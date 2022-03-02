@@ -74,7 +74,7 @@ class GhettoBitStream:
         :rtype:         str
         """
         try:
-            return '{0:08b}'.format(byte)
+            return "{0:08b}".format(byte)
         except AttributeError:
             # python < 2.6, so we must do this ourselves
             return cls._bin_backport(byte)
@@ -94,11 +94,11 @@ class GhettoBitStream:
         for n in range(7, -1, -1):
             y = x - 2 ** n
             if y >= 0:
-                chars.append('1')
+                chars.append("1")
                 x = y
             else:
-                chars.append('0')
-        return ''.join(chars)
+                chars.append("0")
+        return "".join(chars)
 
     @staticmethod
     def combine_bytes(data):

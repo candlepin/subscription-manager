@@ -184,14 +184,14 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
         :param event: pyinotify Event object, has path and mask of flags representing file modification
         """
         log.debug(
-            'Thread %s: Some event occurred: %s (%s)'
+            "Thread %s: Some event occurred: %s (%s)"
             % (threading.current_thread().name, event.path, event.pathname)
         )
 
         for dir_watch in self.dir_watches.values():
             # When watcher is temporary disabled, ten
             if dir_watch.temporary_disabled is True:
-                log.debug('Directory watcher: %s temporary disabled. Ignoring event.' % dir_watch.path)
+                log.debug("Directory watcher: %s temporary disabled. Ignoring event." % dir_watch.path)
                 continue
             # The event has to happen on file/directory we are interested in and the type of event
             # has to match the set of events we are interested in too
@@ -204,7 +204,7 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
         Add watches to the watch manager
         """
         for dir_watch in self.dir_watches.values():
-            log.debug('Adding i-notifier watcher for: %s with mask: %s' % (dir_watch.path, dir_watch.mask))
+            log.debug("Adding i-notifier watcher for: %s with mask: %s" % (dir_watch.path, dir_watch.mask))
             if dir_watch.is_file:
                 # watch for any changes in the directory, but only be notified of the specific path
                 dir_name = os.path.abspath(os.path.dirname(dir_watch.path))
@@ -228,7 +228,7 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
         Remove all watches from the watch manager
         """
         for dir_watch in self.dir_watches.values():
-            log.debug(f'Removing i-notifier watcher for: {dir_watch.path}')
+            log.debug(f"Removing i-notifier watcher for: {dir_watch.path}")
             self.watch_manager.rm_watch(dir_watch.path, rec=True)
 
 
@@ -306,7 +306,7 @@ class DirectoryWatch(object):
         """
         Temporary disable watcher
         """
-        log.debug('Temporary disabled watcher: %s for %d seconds' % (self.path, self.DISABLEMENT_TIMEOUT))
+        log.debug("Temporary disabled watcher: %s for %d seconds" % (self.path, self.DISABLEMENT_TIMEOUT))
         self.temporary_disabled = True
         self._time_tmp_dis = time.time()
 
@@ -323,7 +323,7 @@ class DirectoryWatch(object):
         cur_time = time.time()
         time_diff = cur_time - self._time_tmp_dis
         if time_diff > self.DISABLEMENT_TIMEOUT:
-            log.debug('Enabling watcher: %s again' % self.path)
+            log.debug("Enabling watcher: %s again" % self.path)
             self.temporary_disabled = False
             self._time_tmp_dis = 0.0
 
@@ -383,7 +383,7 @@ def is_inotify_config():
     :return: It returns True, when inotify is enabled. Otherwise it returns False.
     """
     try:
-        use_inotify = conf['rhsm'].get_int('inotify')
+        use_inotify = conf["rhsm"].get_int("inotify")
     except ValueError as e:
         log.exception(e)
         return True

@@ -50,10 +50,10 @@ class OstreeRemote(object):
     """
 
     items_to_data = {
-        'gpg-verify': 'gpg_verify',
-        'tls-client-cert-path': 'tls_client_cert_path',
-        'tls-client-key-path': 'tls_client_key_path',
-        'tls-ca-path': 'tls_ca_path',
+        "gpg-verify": "gpg_verify",
+        "tls-client-cert-path": "tls_client_cert_path",
+        "tls-client-key-path": "tls_client_key_path",
+        "tls-ca-path": "tls_ca_path",
     }
 
     report_template = OSTREE_REPORT_TEMPLATE
@@ -67,59 +67,59 @@ class OstreeRemote(object):
 
     @property
     def url(self):
-        return self.data.get('url')
+        return self.data.get("url")
 
     @url.setter
     def url(self, value):
-        self.data['url'] = value
+        self.data["url"] = value
 
     @property
     def gpg_verify(self):
-        return self.data.get('gpg_verify', True)
+        return self.data.get("gpg_verify", True)
 
     @gpg_verify.setter
     def gpg_verify(self, value):
-        self.data['gpg_verify'] = value
+        self.data["gpg_verify"] = value
 
     @property
     def name(self):
-        return self.data.get('name')
+        return self.data.get("name")
 
     @name.setter
     def name(self, value):
-        self.data['name'] = value
+        self.data["name"] = value
 
     @property
     def tls_client_cert_path(self):
-        return self.data.get('tls_client_cert_path')
+        return self.data.get("tls_client_cert_path")
 
     @tls_client_cert_path.setter
     def tls_client_cert_path(self, value):
-        self.data['tls_client_cert_path'] = value
+        self.data["tls_client_cert_path"] = value
 
     @property
     def tls_client_key_path(self):
-        return self.data.get('tls_client_key_path')
+        return self.data.get("tls_client_key_path")
 
     @tls_client_key_path.setter
     def tls_client_key_path(self, value):
-        self.data['tls_client_key_path'] = value
+        self.data["tls_client_key_path"] = value
 
     @property
     def tls_ca_path(self):
-        return self.data.get('tls_ca_path')
+        return self.data.get("tls_ca_path")
 
     @tls_ca_path.setter
     def tls_ca_path(self, value):
-        self.data['tls_ca_path'] = value
+        self.data["tls_ca_path"] = value
 
     @property
     def proxy(self):
-        return self.data.get('proxy')
+        return self.data.get("proxy")
 
     @proxy.setter
     def proxy(self, value):
-        self.data['proxy'] = value
+        self.data["proxy"] = value
 
     @classmethod
     def from_config_section(cls, section, items):
@@ -156,7 +156,7 @@ class OstreeRemote(object):
         matcher = re.compile(REMOTE_SECTION_MATCH)
         result = matcher.match(section)
         if result:
-            return result.groupdict()['remote_name']
+            return result.groupdict()["remote_name"]
 
         raise RemoteSectionNameParseError("Unable to find a name in section %s" % section, section=section)
 
@@ -206,7 +206,7 @@ class OstreeRemote(object):
         # No content.gpg means gpg-verify=true as well.
         # This reinforces "no explicit Content.gpg"
         # means to default to gpg_verify=True
-        if not hasattr(content, 'gpg'):
+        if not hasattr(content, "gpg"):
             return gpg_verify
 
         if content.gpg == "http://":
@@ -437,7 +437,7 @@ class OstreeConfig(object):
         s.append("<%s repo_file_path=%s>" % (r, self.repo_file_path))
         s.append("Core: %s" % self.core)
         s.append("Remotes: %s" % self.remotes)
-        return '\n'.join(s)
+        return "\n".join(s)
 
 
 class OstreeCoreConfig(OstreeConfig):

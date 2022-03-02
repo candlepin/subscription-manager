@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 
 CONTAINER_CONTENT_TYPE = "containerimage"
 
-RH_CDN_REGEX = re.compile(r'^cdn\.(?:.*\.)?redhat\.com$')
+RH_CDN_REGEX = re.compile(r"^cdn\.(?:.*\.)?redhat\.com$")
 RH_CDN_CA = "/etc/rhsm/ca/redhat-entitlement-authority.pem"
 
 
@@ -223,7 +223,7 @@ class ContainerUpdateReport(certlib.ActionReport):
         s = []
         for filename in file_list:
             s.append(file_list)
-        return '\n'.join(s)
+        return "\n".join(s)
 
     def __str__(self):
         s = ["Container content cert updates\n"]
@@ -231,4 +231,4 @@ class ContainerUpdateReport(certlib.ActionReport):
         s.append(self._format_file_list(self.added))
         s.append(_("Removed:"))
         s.append(self._format_file_list(self.removed))
-        return '\n'.join(s)
+        return "\n".join(s)

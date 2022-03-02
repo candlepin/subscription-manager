@@ -96,7 +96,7 @@ class Directory(object):
 
 class CertificateDirectory(Directory):
 
-    KEY = 'key.pem'
+    KEY = "key.pem"
 
     def __init__(self, path):
         super(CertificateDirectory, self).__init__(path)
@@ -112,7 +112,7 @@ class CertificateDirectory(Directory):
             return self._listing
         listing = []
         for _p, fn in Directory.list(self):
-            if not fn.endswith('.pem') or fn.endswith(self.KEY):
+            if not fn.endswith(".pem") or fn.endswith(self.KEY):
                 continue
             path = self.abspath(fn)
             listing.append(create_from_file(path))
@@ -215,7 +215,7 @@ class ProductCertificateDirectory(CertificateDirectory):
 
 class ProductDirectory(ProductCertificateDirectory):
     def __init__(self, path=None, default_path=None):
-        installed_prod_path = path or conf['rhsm']['productCertDir']
+        installed_prod_path = path or conf["rhsm"]["productCertDir"]
         default_prod_path = default_path or DEFAULT_PRODUCT_CERT_DIR
         self.installed_prod_dir = ProductCertificateDirectory(path=installed_prod_path)
         self.default_prod_dir = ProductCertificateDirectory(path=default_prod_path)
@@ -248,8 +248,8 @@ class ProductDirectory(ProductCertificateDirectory):
 
 class EntitlementDirectory(CertificateDirectory):
 
-    PATH = conf['rhsm']['entitlementCertDir']
-    PRODUCT = 'product'
+    PATH = conf["rhsm"]["entitlementCertDir"]
+    PRODUCT = "product"
 
     @classmethod
     def productpath(cls):
@@ -349,7 +349,7 @@ class Path(object):
 
     # Used during Anaconda install by the yum pidplugin to ensure we operate
     # beneath /mnt/sysimage/ instead of /.
-    ROOT = '/'
+    ROOT = "/"
 
     @classmethod
     def join(cls, a, b):
@@ -377,10 +377,10 @@ class Writer(object):
         serial = cert.serial
         ent_dir_path = self.ent_dir.productpath()
 
-        key_filename = '%s-key.pem' % str(serial)
+        key_filename = "%s-key.pem" % str(serial)
         key_path = Path.join(ent_dir_path, key_filename)
         key.write(key_path)
 
-        cert_filename = '%s.pem' % str(serial)
+        cert_filename = "%s.pem" % str(serial)
         cert_path = Path.join(ent_dir_path, cert_filename)
         cert.write(cert_path)

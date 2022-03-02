@@ -44,8 +44,8 @@ class AttachDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.ATTACH_INTERFACE,
-        in_signature='sa{sv}s',
-        out_signature='s',
+        in_signature="sa{sv}s",
+        out_signature="s",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
@@ -63,9 +63,9 @@ class AttachDBusObject(base_object.BaseObject):
         # in the next minor release of subscription-manager
         if is_simple_content_access(uep=cp) is True:
             log.info(
-                'Calling D-Bus method AutoAttach() is deprecated, when Simple Content Access mode '
-                'is used and it will be not be supported in the next minor release of '
-                'subscription-manager'
+                "Calling D-Bus method AutoAttach() is deprecated, when Simple Content Access mode "
+                "is used and it will be not be supported in the next minor release of "
+                "subscription-manager"
             )
 
         attach_service = AttachService(cp)
@@ -82,8 +82,8 @@ class AttachDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.ATTACH_INTERFACE,
-        in_signature='asia{sv}s',
-        out_signature='as',
+        in_signature="asia{sv}s",
+        out_signature="as",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
@@ -106,9 +106,9 @@ class AttachDBusObject(base_object.BaseObject):
         # in the next minor release of subscription-manager
         if is_simple_content_access(uep=cp) is True:
             log.info(
-                'Calling D-Bus method PoolAttach() is deprecated, when Simple Content Access mode '
-                'is used and it will be not be supported in the next minor release of '
-                'subscription-manager'
+                "Calling D-Bus method PoolAttach() is deprecated, when Simple Content Access mode "
+                "is used and it will be not be supported in the next minor release of "
+                "subscription-manager"
             )
 
         attach_service = AttachService(cp)

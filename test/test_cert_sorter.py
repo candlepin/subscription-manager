@@ -49,8 +49,8 @@ ENT_ID_2 = "ff8080813e468fd8013e4694a4921179"
 INST_PID_3 = "801"  # non-entitled ram limiting product
 INST_PID_4 = "900"  # multiattr stack
 ENT_ID_4 = "ff8080813e468fd8013e4690f041031b"
-STACK_1 = 'multiattr-stack-test'  # multiattr
-STACK_2 = '1'  # awesomeos 64
+STACK_1 = "multiattr-stack-test"  # multiattr
+STACK_2 = "1"  # awesomeos 64
 
 PARTIAL_STACK_ID = STACK_1
 PROD_4 = StubProduct(INST_PID_4, name="Multi-Attribute Stackable")
@@ -63,7 +63,7 @@ def stub_prod_cert(pid):
 
 
 class CertSorterTests(SubManFixture):
-    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
     def setUp(self, mock_update):
         SubManFixture.setUp(self)
         # Setup mock product and entitlement certs:
@@ -75,7 +75,7 @@ class CertSorterTests(SubManFixture):
                 StubEntitlementCertificate(product=PROD_4, stacking_id=STACK_1, ent_id=ENT_ID_4),
                 # entitled, but not installed
                 StubEntitlementCertificate(
-                    StubProduct('not_installed_product', name="Some Product"), ent_id="SomeSubId"
+                    StubProduct("not_installed_product", name="Some Product"), ent_id="SomeSubId"
                 ),
             ]
         )
@@ -91,7 +91,7 @@ class CertSorterTests(SubManFixture):
         self.sorter = CertSorter()
         self.sorter.is_registered = Mock(return_value=True)
 
-    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
     def test_unregistered_status(self, mock_update):
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=False)
@@ -99,7 +99,7 @@ class CertSorterTests(SubManFixture):
 
     # Server doesn't support compliance API, or server is unreachable and
     # we cannot use the cache for some reason.
-    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
     def test_no_usable_status(self, mock_update):
         self.status_mgr.load_status = Mock(return_value=None)
         self.status_mgr.server_status = None
@@ -108,7 +108,7 @@ class CertSorterTests(SubManFixture):
         self.assertEqual(UNKNOWN, sorter.get_status(INST_PID_1))
 
     # Consumer has been deleted, overall status should be unknown
-    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
     def test_deleted_consumer_status(self, mock_update):
         self.status_mgr.load_status = Mock(return_value=None)
         self.status_mgr.server_status = None
@@ -118,7 +118,7 @@ class CertSorterTests(SubManFixture):
         expected = status_map[subscription_manager.cert_sorter.UNKNOWN]
         self.assertEqual(expected, sorter.get_system_status())
 
-    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
     def test_unregistered_system_status(self, mock_update):
         self.status_mgr.load_status = Mock(return_value=None)
         self.status_mgr.server_status = None
@@ -154,11 +154,11 @@ class CertSorterTests(SubManFixture):
 
     def test_reasons(self):
         self.assertEqual(5, len(self.sorter.reasons.reasons))
-        expected_keys = ['NOTCOVERED', 'CORES', 'SOCKETS', 'RAM', 'ARCH']
-        result_keys = [reason['key'] for reason in self.sorter.reasons.reasons]
+        expected_keys = ["NOTCOVERED", "CORES", "SOCKETS", "RAM", "ARCH"]
+        result_keys = [reason["key"] for reason in self.sorter.reasons.reasons]
         self.assertEqual(sorted(expected_keys), sorted(result_keys))
 
-    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
     def test_installed_mismatch_unentitled(self, mock_update):
         # Use a different product directory with something not present
         # in the response from the server as an unentitled product:
@@ -170,20 +170,20 @@ class CertSorterTests(SubManFixture):
         # server reported it here:
         self.assertFalse(INST_PID_3 in sorter.unentitled_products)
 
-    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
     def test_missing_installed_product(self, mock_update):
         # Add a new installed product server doesn't know about:
         prod_dir = StubProductDirectory(pids=[INST_PID_1, INST_PID_2, INST_PID_3, "product4"])
         inj.provide(inj.PROD_DIR, prod_dir)
         sorter = CertSorter()
-        self.assertTrue('product4' in sorter.unentitled_products)
+        self.assertTrue("product4" in sorter.unentitled_products)
 
-    @patch('subscription_manager.cache.InstalledProductsManager.update_check')
+    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
     def test_no_compliant_until(self, mock_update):
         # don't want to munge the module scope version of this because
         # setup will load it for later tests
         no_compliance_until = copy.deepcopy(SAMPLE_COMPLIANCE_JSON)
-        no_compliance_until['compliantUntil'] = None
+        no_compliance_until["compliantUntil"] = None
 
         # build and inject a status cache with new values
         status_mgr = EntitlementStatusCache()
@@ -239,11 +239,11 @@ class CertSorterTests(SubManFixture):
         self.assertEqual(3, len(sorter.valid_entitlement_certs))
 
     def test_get_system_status(self):
-        self.assertEqual('Invalid', self.sorter.get_system_status())
-        self.sorter.system_status = 'valid'
-        self.assertEqual('Current', self.sorter.get_system_status())
-        self.sorter.system_status = 'partial'
-        self.assertEqual('Insufficient', self.sorter.get_system_status())
+        self.assertEqual("Invalid", self.sorter.get_system_status())
+        self.sorter.system_status = "valid"
+        self.assertEqual("Current", self.sorter.get_system_status())
+        self.sorter.system_status = "partial"
+        self.assertEqual("Insufficient", self.sorter.get_system_status())
 
 
 SAMPLE_COMPLIANCE_JSON = json.loads(

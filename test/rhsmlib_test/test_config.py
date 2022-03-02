@@ -62,7 +62,7 @@ default_log_level = DEBUG
 
 
 class BaseConfigTest(unittest.TestCase, TestUtilsMixin):
-    expected_sections = ['foo', 'server', 'rhsm', 'rhsmcertd', 'logging']
+    expected_sections = ["foo", "server", "rhsm", "rhsmcertd", "logging"]
 
     def setUp(self):
         super(BaseConfigTest, self).setUp()
@@ -74,8 +74,8 @@ class BaseConfigTest(unittest.TestCase, TestUtilsMixin):
 
 class TestConfig(BaseConfigTest):
     def test_config_contains(self):
-        self.assertTrue('server' in self.config)
-        self.assertFalse('not_here' in self.config)
+        self.assertTrue("server" in self.config)
+        self.assertFalse("not_here" in self.config)
 
     def test_config_len(self):
         self.assertEqual(len(self.expected_sections), len(self.config))
@@ -89,43 +89,43 @@ class TestConfig(BaseConfigTest):
             self.assertIsInstance(v, ConfigSection)
 
     def test_set_new_section(self):
-        self.config['new_section'] = {'hello': 'world'}
-        self.assertEqual(['hello'], self.config._parser.options('new_section'))
-        self.assertEqual('world', self.config._parser.get('new_section', 'hello'))
+        self.config["new_section"] = {"hello": "world"}
+        self.assertEqual(["hello"], self.config._parser.options("new_section"))
+        self.assertEqual("world", self.config._parser.get("new_section", "hello"))
 
     def test_set_old_section(self):
-        self.config['foo'] = {'hello': 'world'}
-        self.assertEqual(['hello'], self.config._parser.options('foo'))
-        self.assertEqual('world', self.config._parser.get('foo', 'hello'))
-        self.assertRaises(NoOptionError, self.config._parser.get, 'foo', 'quux')
+        self.config["foo"] = {"hello": "world"}
+        self.assertEqual(["hello"], self.config._parser.options("foo"))
+        self.assertEqual("world", self.config._parser.get("foo", "hello"))
+        self.assertRaises(NoOptionError, self.config._parser.get, "foo", "quux")
 
     def test_get_item(self):
-        self.assertIsInstance(self.config['server'], ConfigSection)
+        self.assertIsInstance(self.config["server"], ConfigSection)
 
     def test_persist(self):
-        self.config['foo'] = {'hello': 'world'}
+        self.config["foo"] = {"hello": "world"}
         self.config.persist()
         reparsed = RhsmConfigParser(self.fid.name)
-        self.assertEqual('world', reparsed.get('foo', 'hello'))
-        self.assertRaises(NoOptionError, reparsed.get, 'foo', 'quux')
+        self.assertEqual("world", reparsed.get("foo", "hello"))
+        self.assertRaises(NoOptionError, reparsed.get, "foo", "quux")
 
     def test_auto_persists(self):
         config = Config(self.parser, auto_persist=True)
-        config['foo'] = {'hello': 'world'}
+        config["foo"] = {"hello": "world"}
         reparsed = RhsmConfigParser(self.fid.name)
-        self.assertEqual('world', reparsed.get('foo', 'hello'))
-        self.assertRaises(NoOptionError, reparsed.get, 'foo', 'quux')
+        self.assertEqual("world", reparsed.get("foo", "hello"))
+        self.assertRaises(NoOptionError, reparsed.get, "foo", "quux")
 
     def test_does_not_auto_persist_by_default(self):
         config = Config(self.parser, auto_persist=False)
-        config['foo'] = {'hello': 'world'}
+        config["foo"] = {"hello": "world"}
         reparsed = RhsmConfigParser(self.fid.name)
-        self.assertEqual('baz', reparsed.get('foo', 'quux'))
-        self.assertRaises(NoOptionError, reparsed.get, 'foo', 'hello')
+        self.assertEqual("baz", reparsed.get("foo", "quux"))
+        self.assertRaises(NoOptionError, reparsed.get, "foo", "hello")
 
     def test_del_item(self):
-        del self.config['foo']
-        self.assertFalse(self.config._parser.has_section('foo'))
+        del self.config["foo"]
+        self.assertFalse(self.config._parser.has_section("foo"))
 
     def test_iter(self):
         sections = [s for s in self.config]
@@ -134,49 +134,49 @@ class TestConfig(BaseConfigTest):
 
 class TestConfigSection(BaseConfigTest):
     def test_get_value(self):
-        self.assertEqual('1', self.config['server']['insecure'])
+        self.assertEqual("1", self.config["server"]["insecure"])
 
     def test_get_missing_value(self):
         with self.assertRaises(KeyError):
-            self.config['server']['missing']
+            self.config["server"]["missing"]
 
     def test_set_item(self):
-        self.assertEqual('baz', self.config['foo']['quux'])
-        self.config['foo']['quux'] = 'fizz'
-        self.assertEqual('fizz', self.config['foo']['quux'])
+        self.assertEqual("baz", self.config["foo"]["quux"])
+        self.config["foo"]["quux"] = "fizz"
+        self.assertEqual("fizz", self.config["foo"]["quux"])
 
     def test_auto_persist(self):
         config = Config(self.parser, auto_persist=True)
-        self.assertEqual('baz', config['foo']['quux'])
-        config['foo']['quux'] = 'fizz'
-        self.assertEqual('fizz', config['foo']['quux'])
+        self.assertEqual("baz", config["foo"]["quux"])
+        config["foo"]["quux"] = "fizz"
+        self.assertEqual("fizz", config["foo"]["quux"])
 
         reparsed = RhsmConfigParser(self.fid.name)
-        self.assertEqual('fizz', reparsed.get('foo', 'quux'))
+        self.assertEqual("fizz", reparsed.get("foo", "quux"))
 
     def test_persist_cascades(self):
         config = Config(self.parser, auto_persist=False)
-        self.assertEqual('baz', config['foo']['quux'])
-        config['foo']['quux'] = 'fizz'
+        self.assertEqual("baz", config["foo"]["quux"])
+        config["foo"]["quux"] = "fizz"
         config.persist()
-        self.assertEqual('fizz', config['foo']['quux'])
+        self.assertEqual("fizz", config["foo"]["quux"])
 
         reparsed = RhsmConfigParser(self.fid.name)
-        self.assertEqual('fizz', reparsed.get('foo', 'quux'))
+        self.assertEqual("fizz", reparsed.get("foo", "quux"))
 
     def test_del_item(self):
-        del self.config['foo']['quux']
-        self.assertNotIn('quux', self.config['foo'])
+        del self.config["foo"]["quux"]
+        self.assertNotIn("quux", self.config["foo"])
 
         with self.assertRaises(KeyError):
-            del self.config['foo']['missing_key']
+            del self.config["foo"]["missing_key"]
 
     def test_len(self):
-        self.assertEqual(4, len(self.config['foo']))
+        self.assertEqual(4, len(self.config["foo"]))
 
     def test_in(self):
-        self.assertIn("quux", self.config['foo'])
-        self.assertNotIn("missing", self.config['foo'])
+        self.assertIn("quux", self.config["foo"])
+        self.assertNotIn("missing", self.config["foo"])
 
 
 @subman_marker_dbus
@@ -190,41 +190,41 @@ class TestConfigDBusObject(DBusObjectTest, TestUtilsMixin):
         self.fid = self.write_temp_file(TEST_CONFIG)
         self.addCleanup(self.fid.close)
         self.parser = RhsmConfigParser(self.fid.name)
-        return [(ConfigDBusObject, {'parser': self.parser})]
+        return [(ConfigDBusObject, {"parser": self.parser})]
 
     def test_get_all(self):
         def assertions(*args):
             result = args[0]
             self.assertIn("server", result)
 
-        dbus_method_args = ['']
+        dbus_method_args = [""]
         self.dbus_request(assertions, self.interface.GetAll, dbus_method_args)
 
     def test_get_property(self):
         def assertions(*args):
             result = args[0]
-            self.assertIn('server.example.com', result)
+            self.assertIn("server.example.com", result)
 
-        dbus_method_args = ['server.hostname', '']
+        dbus_method_args = ["server.hostname", ""]
         self.dbus_request(assertions, self.interface.Get, dbus_method_args)
 
     def test_get_section(self):
         def assertions(*args):
             result = args[0]
-            self.assertIn('hostname', result)
+            self.assertIn("hostname", result)
 
-        dbus_method_args = ['server', '']
+        dbus_method_args = ["server", ""]
         self.dbus_request(assertions, self.interface.Get, dbus_method_args)
 
     def test_set(self):
         def assertions(*args):
-            self.assertEqual('new', self.parser.get('server', 'hostname'))
+            self.assertEqual("new", self.parser.get("server", "hostname"))
 
-        dbus_method_args = ['server.hostname', 'new', '']
+        dbus_method_args = ["server.hostname", "new", ""]
         self.dbus_request(assertions, self.interface.Set, dbus_method_args)
 
     def test_set_section_fails(self):
-        dbus_method_args = ['server', 'new', '']
+        dbus_method_args = ["server", "new", ""]
 
-        with self.assertRaisesRegex(dbus.DBusException, r'Setting an entire section is not.*'):
+        with self.assertRaisesRegex(dbus.DBusException, r"Setting an entire section is not.*"):
             self.dbus_request(None, self.interface.Set, dbus_method_args)

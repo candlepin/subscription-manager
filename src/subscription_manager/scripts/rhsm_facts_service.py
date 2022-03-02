@@ -19,7 +19,7 @@ import logging
 
 # Init logging very early so we can log any issues that occur at import time
 logging.basicConfig(level=logging.DEBUG, format="%(levelname)5s [%(name)s:%(lineno)s] %(message)s")
-log = logging.getLogger('')
+log = logging.getLogger("")
 log.setLevel(logging.INFO)
 
 

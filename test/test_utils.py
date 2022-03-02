@@ -230,7 +230,7 @@ class TestParseServerInfo(SubManFixture):
         (hostname, port, prefix) = parse_server_info(local_url)
         self.assertEqual("http", hostname)
         self.assertEqual(DEFAULT_PORT, port)
-        self.assertEqual('/prefix', prefix)
+        self.assertEqual("/prefix", prefix)
 
     def test_one_slash_port_prefix(self):
         local_url = "https/bogaddy:80/candlepin"
@@ -241,7 +241,7 @@ class TestParseServerInfo(SubManFixture):
         (hostname, port, prefix) = parse_server_info(local_url)
         self.assertEqual("https", hostname)
         self.assertEqual("8000", port)
-        self.assertEqual('/prefix', prefix)
+        self.assertEqual("/prefix", prefix)
 
     def test_host_name_non_numeric_port(self):
         local_url = "https://example.com:https/prefix"
@@ -323,7 +323,7 @@ class TestUrlBaseJoin(fixture.SubManFixture):
         self.assertEqual(self.base + "/baz", url_base_join(self.base, "/baz"))
 
     def test_base_slash(self):
-        base = self.base + '/'
+        base = self.base + "/"
         self.assertEqual(self.base + "/baz", url_base_join(base, "baz"))
         self.assertEqual(self.base + "/baz", url_base_join(base, "/baz"))
 
@@ -353,60 +353,60 @@ NOT_COLLECTED = "non-collected-package"
 
 class TestGetServerVersions(fixture.SubManFixture):
     def setUp(self):
-        get_supported_resources_patcher = patch('subscription_manager.utils.get_supported_resources')
+        get_supported_resources_patcher = patch("subscription_manager.utils.get_supported_resources")
         self.mock_get_resources = get_supported_resources_patcher.start()
-        self.mock_get_resources.return_value = ['status']
+        self.mock_get_resources.return_value = ["status"]
         self.addCleanup(self.mock_get_resources.stop)
 
-    @patch('subscription_manager.utils.ClassicCheck')
+    @patch("subscription_manager.utils.ClassicCheck")
     def test_get_server_versions_classic(self, MockClassicCheck):
         self._inject_mock_invalid_consumer()
         instance = MockClassicCheck.return_value
         instance.is_registered_with_classic.return_value = True
 
         sv = get_server_versions(None)
-        self.assertEqual(sv['server-type'], "RHN Classic")
-        self.assertEqual(sv['candlepin'], "Unknown")
+        self.assertEqual(sv["server-type"], "RHN Classic")
+        self.assertEqual(sv["candlepin"], "Unknown")
 
-    @patch('rhsm.connection.UEPConnection')
-    @patch('subscription_manager.utils.ClassicCheck')
+    @patch("rhsm.connection.UEPConnection")
+    @patch("subscription_manager.utils.ClassicCheck")
     def test_get_server_versions_cp_no_status(self, mock_classic, MockUep):
         instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = False
         sv = get_server_versions(MockUep)
-        self.assertEqual(sv['server-type'], 'Red Hat Subscription Management')
-        self.assertEqual(sv['candlepin'], "Unknown")
+        self.assertEqual(sv["server-type"], "Red Hat Subscription Management")
+        self.assertEqual(sv["candlepin"], "Unknown")
 
-    @patch('rhsm.connection.UEPConnection')
-    @patch('subscription_manager.utils.ClassicCheck')
+    @patch("rhsm.connection.UEPConnection")
+    @patch("subscription_manager.utils.ClassicCheck")
     def test_get_server_versions_cp_with_status(self, mock_classic, MockUep):
         instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
-        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c', 'rulesVersion': '6.1'}
+        MockUep.getStatus.return_value = {"version": "101", "release": "23423c", "rulesVersion": "6.1"}
         sv = get_server_versions(MockUep)
-        self.assertEqual(sv['server-type'], 'Red Hat Subscription Management')
-        self.assertEqual(sv['candlepin'], '101-23423c')
-        self.assertEqual(sv['rules-version'], '6.1')
+        self.assertEqual(sv["server-type"], "Red Hat Subscription Management")
+        self.assertEqual(sv["candlepin"], "101-23423c")
+        self.assertEqual(sv["rules-version"], "6.1")
 
-    @patch('rhsm.connection.UEPConnection')
-    @patch('subscription_manager.utils.ClassicCheck')
+    @patch("rhsm.connection.UEPConnection")
+    @patch("subscription_manager.utils.ClassicCheck")
     def test_get_server_versions_cp_with_status_no_rules_version(self, mock_classic, MockUep):
         instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
-        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
+        MockUep.getStatus.return_value = {"version": "101", "release": "23423c"}
         sv = get_server_versions(MockUep)
-        self.assertEqual(sv['server-type'], 'Red Hat Subscription Management')
-        self.assertEqual(sv['candlepin'], '101-23423c')
-        self.assertEqual(sv['rules-version'], 'Unknown')
+        self.assertEqual(sv["server-type"], "Red Hat Subscription Management")
+        self.assertEqual(sv["candlepin"], "101-23423c")
+        self.assertEqual(sv["rules-version"], "Unknown")
 
-    @patch('rhsm.connection.UEPConnection')
-    @patch('subscription_manager.utils.ClassicCheck')
+    @patch("rhsm.connection.UEPConnection")
+    @patch("subscription_manager.utils.ClassicCheck")
     def test_get_server_versions_cp_with_status_no_keys(self, mock_classic, MockUep):
         instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = False
@@ -414,12 +414,12 @@ class TestGetServerVersions(fixture.SubManFixture):
         MockUep.supports_resource.return_value = True
         MockUep.getStatus.return_value = {}
         sv = get_server_versions(MockUep)
-        self.assertEqual(sv['server-type'], 'Red Hat Subscription Management')
-        self.assertEqual(sv['candlepin'], 'Unknown-Unknown')
-        self.assertEqual(sv['rules-version'], 'Unknown')
+        self.assertEqual(sv["server-type"], "Red Hat Subscription Management")
+        self.assertEqual(sv["candlepin"], "Unknown-Unknown")
+        self.assertEqual(sv["rules-version"], "Unknown")
 
-    @patch('rhsm.connection.UEPConnection')
-    @patch('subscription_manager.utils.ClassicCheck')
+    @patch("rhsm.connection.UEPConnection")
+    @patch("subscription_manager.utils.ClassicCheck")
     def test_get_server_versions_cp_with_status_bad_data(self, mock_classic, MockUep):
         instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = False
@@ -427,38 +427,38 @@ class TestGetServerVersions(fixture.SubManFixture):
         MockUep.supports_resource.return_value = True
 
         dataset = [
-            {'version': None, 'release': '123'},
-            {'version': 123, 'release': '123'},
-            {'version': '123', 'release': None},
-            {'version': '123', 'release': 123},
-            {'version': None, 'release': None},
-            {'version': None, 'release': 123},
-            {'version': 123, 'release': None},
-            {'version': 123, 'release': 123},
+            {"version": None, "release": "123"},
+            {"version": 123, "release": "123"},
+            {"version": "123", "release": None},
+            {"version": "123", "release": 123},
+            {"version": None, "release": None},
+            {"version": None, "release": 123},
+            {"version": 123, "release": None},
+            {"version": 123, "release": 123},
         ]
 
         for value in dataset:
             MockUep.getStatus.return_value = value
             sv = get_server_versions(MockUep)
-            self.assertEqual(sv['server-type'], 'Red Hat Subscription Management')
-            self.assertEqual(sv['candlepin'], 'Unknown')
-            self.assertEqual(sv['rules-version'], 'Unknown')
+            self.assertEqual(sv["server-type"], "Red Hat Subscription Management")
+            self.assertEqual(sv["candlepin"], "Unknown")
+            self.assertEqual(sv["rules-version"], "Unknown")
 
-    @patch('rhsm.connection.UEPConnection')
-    @patch('subscription_manager.utils.ClassicCheck')
+    @patch("rhsm.connection.UEPConnection")
+    @patch("subscription_manager.utils.ClassicCheck")
     def test_get_server_versions_cp_with_status_and_classic(self, mock_classic, MockUep):
         instance = mock_classic.return_value
         instance.is_registered_with_classic.return_value = True
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
-        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c', 'rulesVersion': '6.1'}
+        MockUep.getStatus.return_value = {"version": "101", "release": "23423c", "rulesVersion": "6.1"}
         sv = get_server_versions(MockUep)
-        self.assertEqual(sv['server-type'], 'RHN Classic and Red Hat Subscription Management')
-        self.assertEqual(sv['candlepin'], '101-23423c')
-        self.assertEqual(sv['rules-version'], '6.1')
+        self.assertEqual(sv["server-type"], "RHN Classic and Red Hat Subscription Management")
+        self.assertEqual(sv["candlepin"], "101-23423c")
+        self.assertEqual(sv["rules-version"], "6.1")
 
-    @patch('rhsm.connection.UEPConnection')
-    @patch('subscription_manager.utils.ClassicCheck')
+    @patch("rhsm.connection.UEPConnection")
+    @patch("subscription_manager.utils.ClassicCheck")
     def test_get_server_versions_cp_exception(self, mock_classic, MockUep):
         def raise_exception(arg):
             raise Exception("boom")
@@ -467,14 +467,14 @@ class TestGetServerVersions(fixture.SubManFixture):
         instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         self.mock_get_resources.side_effect = raise_exception
-        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
+        MockUep.getStatus.return_value = {"version": "101", "release": "23423c"}
         sv = get_server_versions(MockUep)
         print(sv)
-        self.assertEqual(sv['server-type'], "Red Hat Subscription Management")
-        self.assertEqual(sv['candlepin'], "Unknown")
+        self.assertEqual(sv["server-type"], "Red Hat Subscription Management")
+        self.assertEqual(sv["candlepin"], "Unknown")
 
-    @patch('rhsm.connection.UEPConnection')
-    @patch('subscription_manager.utils.ClassicCheck')
+    @patch("rhsm.connection.UEPConnection")
+    @patch("subscription_manager.utils.ClassicCheck")
     def test_get_server_versions_cp_exception_and_classic(self, mock_classic, MockUep):
         def raise_exception(arg):
             raise Exception("boom")
@@ -483,25 +483,25 @@ class TestGetServerVersions(fixture.SubManFixture):
         instance.is_registered_with_classic.return_value = True
         self._inject_mock_invalid_consumer()
         self.mock_get_resources.side_effect = raise_exception
-        MockUep.getStatus.return_value = {'version': '101', 'release': '23423c'}
+        MockUep.getStatus.return_value = {"version": "101", "release": "23423c"}
         sv = get_server_versions(MockUep)
-        self.assertEqual(sv['server-type'], "RHN Classic")
-        self.assertEqual(sv['candlepin'], "Unknown")
+        self.assertEqual(sv["server-type"], "RHN Classic")
+        self.assertEqual(sv["candlepin"], "Unknown")
 
 
 class TestGetClientVersions(fixture.SubManFixture):
-    @patch('subscription_manager.utils.subscription_manager.version')
+    @patch("subscription_manager.utils.subscription_manager.version")
     def test_get_client_versions(self, mock_sub_version):
-        mock_sub_version.rpm_version = '9.8.7-6'
+        mock_sub_version.rpm_version = "9.8.7-6"
         cv = get_client_versions()
-        self.assertEqual(cv['subscription-manager'], "9.8.7-6")
-        self.assertTrue(isinstance(cv['subscription-manager'], str))
+        self.assertEqual(cv["subscription-manager"], "9.8.7-6")
+        self.assertTrue(isinstance(cv["subscription-manager"], str))
 
-    @patch('subscription_manager.utils.subscription_manager.version')
+    @patch("subscription_manager.utils.subscription_manager.version")
     def test_get_client_versions_strings(self, mock_sub_version):
-        mock_sub_version.rpm_version = 'ef-gh'
+        mock_sub_version.rpm_version = "ef-gh"
         cv = get_client_versions()
-        self.assertEqual(cv['subscription-manager'], "ef-gh")
+        self.assertEqual(cv["subscription-manager"], "ef-gh")
 
 
 class TestGetVersion(fixture.SubManFixture):
@@ -839,7 +839,7 @@ voluntary_ctxt_switches:	4002321
 nonvoluntary_ctxt_switches:	16572
 """
 
-PROCESS_STATUS_FILE_LINES = PROCESS_STATUS_FILE.split('\n')
+PROCESS_STATUS_FILE_LINES = PROCESS_STATUS_FILE.split("\n")
 
 original_open = open
 
@@ -852,7 +852,7 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
     def setUp(self):
         super(TestGetProcessNamesAndIsProcessRunning, self).setUp()
         self.root_dir = mkdtemp()
-        self.proc_root = os.path.join(self.root_dir, 'proc')
+        self.proc_root = os.path.join(self.root_dir, "proc")
         os.mkdir(self.proc_root)
         # self.addCleanup(rmtree, self.root_dir)
         self.fake_pids = set()
@@ -879,7 +879,7 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
                 location = 0
             process_status_contents.insert(location, "Name:\t{name}")
 
-        with open(os.path.join(pid_dir, 'status'), 'w') as status:
+        with open(os.path.join(pid_dir, "status"), "w") as status:
             process_status_contents = "\n".join(process_status_contents)
             status.write(process_status_contents.format(name=name))
 
@@ -915,7 +915,7 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         """
         mock_proc_dirs = os.listdir(self.proc_root)
         new_open = self.redirect_open(self.root_dir)
-        os_patch = patch('subscription_manager.utils.os.listdir')
+        os_patch = patch("subscription_manager.utils.os.listdir")
         m = os_patch.start()
         m.return_value = mock_proc_dirs
         open_patch = patch(fixture.OPEN_FUNCTION)
@@ -976,7 +976,7 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         self.create_fake_process_status(name=fake_process_name)
         ld = os.listdir(self.proc_root)
         new_open = self.redirect_open(self.root_dir)
-        os_patch = patch('subscription_manager.utils.os.listdir')
+        os_patch = patch("subscription_manager.utils.os.listdir")
         m = os_patch.start()
         m.return_value = ld
         open_patch = patch(fixture.OPEN_FUNCTION)
@@ -998,7 +998,7 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         errors = {"1337": IOError("Cannot access bad_path"), "8675309": Exception("AHHHH")}
         ld.extend(errors.keys())
         new_open = self.redirect_open(self.root_dir, path_to_error=errors)
-        os_patch = patch('subscription_manager.utils.os.listdir')
+        os_patch = patch("subscription_manager.utils.os.listdir")
         m = os_patch.start()
         m.return_value = ld
         open_patch = patch(fixture.OPEN_FUNCTION)

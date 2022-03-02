@@ -211,17 +211,17 @@ class ListCommand(CliCommand):
         self.consumed = None
         self.parser.add_argument(
             "--installed",
-            action='store_true',
+            action="store_true",
             help=_("list shows those products which are installed (default)"),
         )
         self.parser.add_argument(
             "--available",
-            action='store_true',
+            action="store_true",
             help=_("show those subscriptions which are available"),
         )
         self.parser.add_argument(
             "--all",
-            action='store_true',
+            action="store_true",
             help=_("used with --available to ensure all subscriptions are returned"),
         )
         self.parser.add_argument(
@@ -233,7 +233,7 @@ class ListCommand(CliCommand):
         )
         self.parser.add_argument(
             "--consumed",
-            action='store_true',
+            action="store_true",
             help=_("show the subscriptions being consumed by this system"),
         )
         self.parser.add_argument(
@@ -245,7 +245,7 @@ class ListCommand(CliCommand):
         )
         self.parser.add_argument(
             "--no-overlap",
-            action='store_true',
+            action="store_true",
             help=_(
                 "shows pools which provide products that are not already covered; only used with --available"
             ),
@@ -273,7 +273,7 @@ class ListCommand(CliCommand):
             ),
         )
         self.parser.add_argument(
-            '--afterdate',
+            "--afterdate",
             dest="after_date",
             help=_(
                 "show pools that are active on or after the given date; only used with --available (example: {example})"
@@ -313,7 +313,7 @@ class ListCommand(CliCommand):
         """
         try:
             # doing it this ugly way for pre python 2.5
-            return datetime.datetime(*(strptime(date, '%Y-%m-%d')[0:6]))
+            return datetime.datetime(*(strptime(date, "%Y-%m-%d")[0:6]))
         except Exception:
             # Translators: dateexample is current date in format like 2014-11-31
             msg = _(
@@ -381,7 +381,7 @@ class ListCommand(CliCommand):
             else:
                 if self.options.filter_string:
                     print(
-                        _("No installed products were found matching the expression \"{filter}\".").format(
+                        _('No installed products were found matching the expression "{filter}".').format(
                             filter=self.options.filter_string
                         )
                     )
@@ -410,7 +410,7 @@ class ListCommand(CliCommand):
             if len(epools):
                 if self.options.pid_only:
                     for data in epools:
-                        print(data['id'])
+                        print(data["id"])
                 else:
                     print("+-------------------------------------------+")
                     print("    " + _("Available Subscriptions"))
@@ -422,10 +422,10 @@ class ListCommand(CliCommand):
                         else:
                             entitlement_type = _("Physical")
 
-                        if 'management_enabled' in data and data['management_enabled']:
-                            data['management_enabled'] = _("Yes")
+                        if "management_enabled" in data and data["management_enabled"]:
+                            data["management_enabled"] = _("Yes")
                         else:
-                            data['management_enabled'] = _("No")
+                            data["management_enabled"] = _("No")
 
                         kwargs = {
                             "filter_string": self.options.filter_string,
@@ -436,22 +436,22 @@ class ListCommand(CliCommand):
                             columnize(
                                 AVAILABLE_SUBS_LIST,
                                 highlight_by_filter_string_columnize_cb,
-                                data['productName'],
-                                data['providedProducts'],
-                                data['productId'],
-                                data['contractNumber'] or "",
-                                data['id'],
-                                data['management_enabled'],
-                                data['quantity'],
-                                data['suggested'],
-                                data['service_type'] or "",
-                                self._split_mulit_value_field(data['roles']),
-                                data['service_level'] or "",
-                                data['usage'] or "",
-                                self._split_mulit_value_field(data['addons']),
-                                data['pool_type'],
-                                data['startDate'],
-                                data['endDate'],
+                                data["productName"],
+                                data["providedProducts"],
+                                data["productId"],
+                                data["contractNumber"] or "",
+                                data["id"],
+                                data["management_enabled"],
+                                data["quantity"],
+                                data["suggested"],
+                                data["service_type"] or "",
+                                self._split_mulit_value_field(data["roles"]),
+                                data["service_level"] or "",
+                                data["usage"] or "",
+                                self._split_mulit_value_field(data["addons"]),
+                                data["pool_type"],
+                                data["startDate"],
+                                data["endDate"],
                                 entitlement_type,
                                 **kwargs
                             )
@@ -461,19 +461,19 @@ class ListCommand(CliCommand):
                 if self.options.filter_string and self.options.service_level:
                     print(
                         _(
-                            "No available subscription pools were found matching the expression \"{filter}\" and the service level \"{level}\"."
+                            'No available subscription pools were found matching the expression "{filter}" and the service level "{level}".'
                         ).format(filter=self.options.filter_string, level=self.options.service_level)
                     )
                 elif self.options.filter_string:
                     print(
                         _(
-                            "No available subscription pools were found matching the expression \"{filter}\"."
+                            'No available subscription pools were found matching the expression "{filter}".'
                         ).format(filter=self.options.filter_string)
                     )
                 elif self.options.service_level:
                     print(
                         _(
-                            "No available subscription pools were found matching the service level \"{level}\"."
+                            'No available subscription pools were found matching the service level "{level}".'
                         ).format(level=self.options.service_level)
                     )
                 else:
@@ -508,7 +508,7 @@ class ListCommand(CliCommand):
                         "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
                         "is_atty": sys.stdout.isatty(),
                     }
-                    if hasattr(cert, 'roles') and hasattr(cert, 'usage') and hasattr(cert, 'addons'):
+                    if hasattr(cert, "roles") and hasattr(cert, "usage") and hasattr(cert, "addons"):
                         print(
                             columnize(CONSUMED_LIST, highlight_by_filter_string_columnize_cb, *cert, **kwargs)
                             + "\n"
@@ -524,19 +524,19 @@ class ListCommand(CliCommand):
             if filter_string and service_level:
                 print(
                     _(
-                        "No consumed subscription pools were found matching the expression \"{filter}\" and the service level \"{level}\"."
+                        'No consumed subscription pools were found matching the expression "{filter}" and the service level "{level}".'
                     ).format(filter=filter_string, level=service_level)
                 )
             elif filter_string:
                 print(
-                    _(
-                        "No consumed subscription pools were found matching the expression \"{filter}\"."
-                    ).format(filter=filter_string)
+                    _('No consumed subscription pools were found matching the expression "{filter}".').format(
+                        filter=filter_string
+                    )
                 )
             elif service_level:
                 print(
                     _(
-                        "No consumed subscription pools were found matching the service level \"{level}\"."
+                        'No consumed subscription pools were found matching the service level "{level}".'
                     ).format(level=service_level)
                 )
             else:

@@ -20,13 +20,13 @@ class TestAttachCommand(TestCliProxyCommand):
 
         os.write(
             cls.tempfiles[0][0],
-            "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode('utf-8'),
+            "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode("utf-8"),
         )
         os.close(cls.tempfiles[0][0])
 
         os.write(
             cls.tempfiles[1][0],
-            "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode('utf-8'),
+            "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode("utf-8"),
         )
         os.close(cls.tempfiles[1][0])
 
@@ -41,7 +41,7 @@ class TestAttachCommand(TestCliProxyCommand):
 
     def setUp(self):
         super(TestAttachCommand, self).setUp()
-        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'attach'])
+        argv_patcher = patch.object(sys, "argv", ["subscription-manager", "attach"])
         argv_patcher.start()
         self.addCleanup(argv_patcher.stop)
 
@@ -149,7 +149,7 @@ class TestAttachCommand(TestCliProxyCommand):
     def test_pool_stdin_processing(self):
         with self.mock_stdin(open(self.tempfiles[1][1])):
             self._test_pool_file_processing(
-                '-', ["pool1", "pool2", "pool3", "pool4", "pool5", "pool6", "pool7", "pool8"]
+                "-", ["pool1", "pool2", "pool3", "pool4", "pool5", "pool6", "pool7", "pool8"]
             )
 
     def test_pool_stdin_empty(self):
@@ -187,7 +187,7 @@ class TestAttachCommand(TestCliProxyCommand):
         else:
             self.fail("No Exception Raised")
 
-    @patch('subscription_manager.cli_command.attach.is_simple_content_access')
+    @patch("subscription_manager.cli_command.attach.is_simple_content_access")
     def test_auto_attach_sca_mode(self, mock_is_simple_content_access):
         """
         Test the case, when SCA mode is used. Auto-attach is not possible in this case
@@ -201,7 +201,7 @@ class TestAttachCommand(TestCliProxyCommand):
         else:
             self.fail("No Exception Raised")
 
-    @patch('subscription_manager.cli_command.attach.is_simple_content_access')
+    @patch("subscription_manager.cli_command.attach.is_simple_content_access")
     def test_attach_sca_mode(self, mock_is_simple_content_access):
         """
         Test the case, when SCA mode is used. Attaching of pool is not possible in this case

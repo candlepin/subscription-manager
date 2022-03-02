@@ -24,10 +24,10 @@ from rhsmlib.client_info import DBusSender
 log = logging.getLogger(__name__)
 
 __all__ = [
-    'dbus_handle_exceptions',
-    'dbus_handle_sender',
-    'dbus_service_method',
-    'dbus_service_signal',
+    "dbus_handle_exceptions",
+    "dbus_handle_sender",
+    "dbus_service_method",
+    "dbus_service_signal",
 ]
 
 
@@ -43,8 +43,8 @@ def dbus_handle_sender(func, *args, **kwargs):
 
     sender = None
     # Get sender from arguments
-    if 'sender' in kwargs:
-        sender = kwargs['sender']
+    if "sender" in kwargs:
+        sender = kwargs["sender"]
     elif len(args) > 0:
         sender = args[-1]
 
@@ -74,12 +74,12 @@ def dbus_handle_exceptions(func, *args, **kwargs):
 
         severity = "error"
         # Remove "HTTP error (...): " string from the messages:
-        pattern = '^HTTP error \x28.*\x29: '
-        err_msg = re.sub(pattern, '', str(err))
+        pattern = "^HTTP error \x28.*\x29: "
+        err_msg = re.sub(pattern, "", str(err))
         # Modify severity of some exception here
         if "Ignoring request to auto-attach. It is disabled for org" in err_msg:
             severity = "warning"
-        if hasattr(err, 'severity'):
+        if hasattr(err, "severity"):
             severity = err.severity
         # Raise exception string as JSON string. Thus it can be parsed and printed properly.
         error_msg = json.dumps(

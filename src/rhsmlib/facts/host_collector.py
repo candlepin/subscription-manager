@@ -61,7 +61,7 @@ class HostCollector(collector.FactsCollector):
         host_facts.update(firmware_info_dict)
 
         locale_info = {}
-        effective_locale = 'Unknown'
+        effective_locale = "Unknown"
         # When there is no locale set (system variable LANG is unset),
         # then this is value returned by locale.getdefaultlocale()
         # Tuple contains: (language[_territory], encoding identifier)
@@ -72,7 +72,7 @@ class HostCollector(collector.FactsCollector):
             log.warning("Unable to get default locale (bad environment variable?): %s" % err)
         if default_locale[0] is not None:
             effective_locale = ".".join([_f for _f in default_locale if _f])
-        locale_info['system.default_locale'] = effective_locale
+        locale_info["system.default_locale"] = effective_locale
         host_facts.update(locale_info)
 
         # Now, munging, kluges, special cases, etc

@@ -31,7 +31,7 @@ from rhsmlib.services import config
 
 from subscription_manager.i18n import ugettext as _
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger("rhsm-app." + __name__)
 
 conf = config.Config(get_config_parser())
 
@@ -40,10 +40,10 @@ ERR_NOT_REGISTERED_MSG = _(
 )
 ERR_NOT_REGISTERED_CODE = 1
 
-ASSEMBLE_DIR = '/var/spool/rhsm/debug'
+ASSEMBLE_DIR = "/var/spool/rhsm/debug"
 ROOT_READ_ONLY_DIR = 0o700
 ROOT_READ_ONLY_FILE = 0o600
-KEY_IGNORE_PATS = ['*key.pem']
+KEY_IGNORE_PATS = ["*key.pem"]
 
 
 class SystemCommand(CliCommand):
@@ -65,14 +65,14 @@ class SystemCommand(CliCommand):
         # just leaving the directory of debug info for sosreport to report
         self.parser.add_argument(
             "--no-archive",
-            action='store_false',
+            action="store_false",
             default=True,
             dest="archive",
             help=_("data will be in an uncompressed directory"),
         )
         self.parser.add_argument(
             "--sos",
-            action='store_true',
+            action="store_true",
             default=False,
             dest="sos",
             help=_("only data not already included in sos report will be collected"),
@@ -84,14 +84,14 @@ class SystemCommand(CliCommand):
         # before. See rhbz #1246680
         self.parser.add_argument(
             "--no-subscriptions",
-            action='store_true',
+            action="store_true",
             dest="placeholder_for_subscriptions_option",
             default=False,
             help=argparse.SUPPRESS,
         )
         self.parser.add_argument(
             "--subscriptions",
-            action='store_true',
+            action="store_true",
             dest="placeholder_for_subscriptions_option",
             default=False,
             help=argparse.SUPPRESS,
@@ -151,7 +151,7 @@ class SystemCommand(CliCommand):
                 content_path, "entitlements.json", self.cp.getEntitlementList(consumer.uuid)
             )
             self._write_flat_file(
-                content_path, "pools.json", self.cp.getPoolsList(consumer.uuid, True, None, owner['key'])
+                content_path, "pools.json", self.cp.getPoolsList(consumer.uuid, True, None, owner["key"])
             )
             self._write_flat_file(content_path, "version.json", self._get_version_info())
 
@@ -163,34 +163,34 @@ class SystemCommand(CliCommand):
             if not sos:
                 # copy rhsm.conf specifically
                 self._copy_cert_directory("/etc/rhsm", content_path)
-                self._copy_directory('/var/log/rhsm', content_path)
-                self._copy_directory('/var/lib/rhsm', content_path)
+                self._copy_directory("/var/log/rhsm", content_path)
+                self._copy_directory("/var/lib/rhsm", content_path)
 
             if not sos:
                 self._copy_cert_directory(DEFAULT_PRODUCT_CERT_DIR, content_path)
 
-            if defaults['productcertdir'] != conf['rhsm']['productCertDir'] or not sos:
-                self._copy_cert_directory(conf['rhsm']['productCertDir'], content_path)
+            if defaults["productcertdir"] != conf["rhsm"]["productCertDir"] or not sos:
+                self._copy_cert_directory(conf["rhsm"]["productCertDir"], content_path)
 
-            if defaults['entitlementcertdir'] != conf['rhsm']['entitlementCertDir'] or not sos:
-                self._copy_cert_directory(conf['rhsm']['entitlementCertDir'], content_path)
+            if defaults["entitlementcertdir"] != conf["rhsm"]["entitlementCertDir"] or not sos:
+                self._copy_cert_directory(conf["rhsm"]["entitlementCertDir"], content_path)
 
-            if defaults['consumercertdir'] != conf['rhsm']['consumerCertDir'] or not sos:
-                self._copy_cert_directory(conf['rhsm']['consumerCertDir'], content_path)
+            if defaults["consumercertdir"] != conf["rhsm"]["consumerCertDir"] or not sos:
+                self._copy_cert_directory(conf["rhsm"]["consumerCertDir"], content_path)
 
             # If ca_cert_dir and pluginconfdif are configured as subdirs of /etc/rhsm
             # (as is the default) we will have already copied there contents,
             # so ignore directory exists errors
             try:
-                if defaults['ca_cert_dir'] != conf['rhsm']['ca_cert_dir'] or not sos:
-                    self._copy_cert_directory(conf['rhsm']['ca_cert_dir'], content_path)
+                if defaults["ca_cert_dir"] != conf["rhsm"]["ca_cert_dir"] or not sos:
+                    self._copy_cert_directory(conf["rhsm"]["ca_cert_dir"], content_path)
             except EnvironmentError as e:
                 if e.errno != errno.EEXIST:
                     raise
 
             try:
-                if defaults['pluginconfdir'] != conf['rhsm']['pluginconfdir'] or not sos:
-                    self._copy_directory(conf['rhsm']['pluginconfdir'], content_path)
+                if defaults["pluginconfdir"] != conf["rhsm"]["pluginconfdir"] or not sos:
+                    self._copy_directory(conf["rhsm"]["pluginconfdir"], content_path)
             except EnvironmentError as e:
                 if e.errno != errno.EEXIST:
                     raise
@@ -285,7 +285,7 @@ class SaferFileMove(object):
 
         If dest is /tmp, or a specific name in /tmp, we want to
         create it excl if we can."""
-        with open(src, 'rb') as src_fo:
+        with open(src, "rb") as src_fo:
             # if dest doesn't exist, and we can open it excl, then open it,
             # keep the fd, create a file object for it, and write to it
             with self._open_excl(dest) as dest_fo:
@@ -295,7 +295,7 @@ class SaferFileMove(object):
 
     def _open_excl(self, path):
         """Return a file object that we know we created and nothing else owns."""
-        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL, self.default_perms), 'wb+')
+        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL, self.default_perms), "wb+")
 
     def _copyfileobj(self, src_fo, dest_fo):
         while True:

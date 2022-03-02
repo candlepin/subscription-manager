@@ -34,26 +34,26 @@ class TestKPatchCollector(unittest.TestCase):
         shutil.rmtree(self.DIRS_WITH_LOADED_MODULE[1])
         shutil.rmtree(self.DIR_WITH_INSTALLED_KPATCH_MODULES)
 
-    @patch('shutil.which')
+    @patch("shutil.which")
     def test_kpatch_is_not_installed(self, which):
         which.return_value = None
         collector = kpatch.KPatchCollector()
         kpatch_facts = collector.get_all()
         self.assertEqual(kpatch_facts, {})
 
-    @patch('shutil.which')
+    @patch("shutil.which")
     def test_get_kpatch_facts(self, which):
-        which.return_value = '/usr/sbin/kpatch'
+        which.return_value = "/usr/sbin/kpatch"
         collector = kpatch.KPatchCollector()
         collector.DIR_WITH_INSTALLED_KPATCH_MODULES = self.DIR_WITH_INSTALLED_KPATCH_MODULES
         collector.DIRS_WITH_LOADED_MODULE = self.DIRS_WITH_LOADED_MODULE
         kpatch_facts = collector.get_all()
-        self.assertIn('kpatch.loaded', kpatch_facts)
-        self.assertEqual(kpatch_facts['kpatch.loaded'], '3.10.0-1062.el7.x86_64')
-        self.assertIn('kpatch.installed', kpatch_facts)
-        installed_kpatches = sorted(kpatch_facts['kpatch.installed'].split())
+        self.assertIn("kpatch.loaded", kpatch_facts)
+        self.assertEqual(kpatch_facts["kpatch.loaded"], "3.10.0-1062.el7.x86_64")
+        self.assertIn("kpatch.installed", kpatch_facts)
+        installed_kpatches = sorted(kpatch_facts["kpatch.installed"].split())
         self.assertEqual(len(installed_kpatches), 3)
         self.assertEqual(
             installed_kpatches,
-            ['3.10.0-1062.1.1.el7.x86_64', '3.10.0-1062.1.2.el7.x86_64', '3.10.0-1062.el7.x86_64'],
+            ["3.10.0-1062.1.1.el7.x86_64", "3.10.0-1062.1.2.el7.x86_64", "3.10.0-1062.el7.x86_64"],
         )

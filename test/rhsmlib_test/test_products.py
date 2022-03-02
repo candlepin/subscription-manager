@@ -227,40 +227,40 @@ class TestProductService(InjectionMockingTest):
         self.mock_calculator.calculate.return_value.begin = mock.Mock()
         self.mock_calculator.calculate.return_value.begin.return_value.astimezone = mock.Mock()
         self.mock_calculator.calculate.return_value.begin.return_value.astimezone.return_value.strftime = (
-            mock.Mock(return_value='{d.day}.{d.month}.{d.year}'.format(d=START_DATE))
+            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=START_DATE))
         )
         self.mock_calculator.calculate.return_value.end = mock.Mock()
         self.mock_calculator.calculate.return_value.end.return_value.astimezone = mock.Mock()
         self.mock_calculator.calculate.return_value.end.return_value.astimezone.return_value.strftime = (
-            mock.Mock(return_value='{d.day}.{d.month}.{d.year}'.format(d=END_DATE))
+            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=END_DATE))
         )
 
         expected_result = [
             (
-                'Red Hat Enterprise Linux Server',
-                '69',
-                '7.4',
-                'x86_64',
-                'subscribed',
+                "Red Hat Enterprise Linux Server",
+                "69",
+                "7.4",
+                "x86_64",
+                "subscribed",
                 [],
-                '{d.day}.{d.month}.{d.year}'.format(d=START_DATE),
-                '{d.day}.{d.month}.{d.year}'.format(d=END_DATE),
+                "{d.day}.{d.month}.{d.year}".format(d=START_DATE),
+                "{d.day}.{d.month}.{d.year}".format(d=END_DATE),
             ),
             (
-                'Red Hat Enterprise Linux Server - Extended Update Support',
-                '70',
-                '7.2',
-                'x86_64',
-                'subscribed',
+                "Red Hat Enterprise Linux Server - Extended Update Support",
+                "70",
+                "7.2",
+                "x86_64",
+                "subscribed",
                 [],
-                '{d.day}.{d.month}.{d.year}'.format(d=START_DATE),
-                '{d.day}.{d.month}.{d.year}'.format(d=END_DATE),
+                "{d.day}.{d.month}.{d.year}".format(d=START_DATE),
+                "{d.day}.{d.month}.{d.year}".format(d=END_DATE),
             ),
         ]
 
         self.mock_cert_sorter.installed_products = {
-            '69': self._create_rhel74_cert(),
-            '70': self._create_rhel72_ues_cert(),
+            "69": self._create_rhel74_cert(),
+            "70": self._create_rhel72_ues_cert(),
         }
 
         result = products.InstalledProducts(self.mock_cp).list()
@@ -278,30 +278,30 @@ class TestProductService(InjectionMockingTest):
         self.mock_calculator.calculate.return_value.begin = mock.Mock()
         self.mock_calculator.calculate.return_value.begin.return_value.astimezone = mock.Mock()
         self.mock_calculator.calculate.return_value.begin.return_value.astimezone.return_value.strftime = (
-            mock.Mock(return_value='{d.day}.{d.month}.{d.year}'.format(d=START_DATE))
+            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=START_DATE))
         )
         self.mock_calculator.calculate.return_value.end = mock.Mock()
         self.mock_calculator.calculate.return_value.end.return_value.astimezone = mock.Mock()
         self.mock_calculator.calculate.return_value.end.return_value.astimezone.return_value.strftime = (
-            mock.Mock(return_value='{d.day}.{d.month}.{d.year}'.format(d=END_DATE))
+            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=END_DATE))
         )
 
         expected_result = [
             (
-                'Red Hat Enterprise Linux Server - Extended Update Support',
-                '70',
-                '7.2',
-                'x86_64',
-                'subscribed',
+                "Red Hat Enterprise Linux Server - Extended Update Support",
+                "70",
+                "7.2",
+                "x86_64",
+                "subscribed",
                 [],
-                '{d.day}.{d.month}.{d.year}'.format(d=START_DATE),
-                '{d.day}.{d.month}.{d.year}'.format(d=END_DATE),
+                "{d.day}.{d.month}.{d.year}".format(d=START_DATE),
+                "{d.day}.{d.month}.{d.year}".format(d=END_DATE),
             ),
         ]
 
         self.mock_cert_sorter.installed_products = {
-            '69': self._create_rhel74_cert(),
-            '70': self._create_rhel72_ues_cert(),
+            "69": self._create_rhel74_cert(),
+            "70": self._create_rhel72_ues_cert(),
         }
 
         result = products.InstalledProducts(self.mock_cp).list("*Extended*")
@@ -316,7 +316,7 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
         self.proxy = self.proxy_for(ProductsDBusObject.default_dbus_path)
         self.interface = dbus.Interface(self.proxy, constants.PRODUCTS_INTERFACE)
 
-        products_patcher = mock.patch('rhsmlib.dbus.objects.products.InstalledProducts')
+        products_patcher = mock.patch("rhsmlib.dbus.objects.products.InstalledProducts")
         self.mock_products = products_patcher.start().return_value
         self.addCleanup(products_patcher.stop)
         self.mock_identity.is_valid.return_value = True
@@ -338,21 +338,21 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
     def test_list_installed_products_without_filter(self):
         expected_result = [
             (
-                'Red Hat Enterprise Linux Server',
-                '69',
-                '7.4',
-                'x86_64',
-                'subscribed',
+                "Red Hat Enterprise Linux Server",
+                "69",
+                "7.4",
+                "x86_64",
+                "subscribed",
                 [],
                 START_DATE.strftime("%Y-%m-%d"),
                 END_DATE.strftime("%Y-%m-%d"),
             ),
             (
-                'Red Hat Enterprise Linux Server - Extended Update Support',
-                '70',
-                '7.2',
-                'x86_64',
-                'subscribed',
+                "Red Hat Enterprise Linux Server - Extended Update Support",
+                "70",
+                "7.2",
+                "x86_64",
+                "subscribed",
                 [],
                 START_DATE.strftime("%Y-%m-%d"),
                 END_DATE.strftime("%Y-%m-%d"),
@@ -365,5 +365,5 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
 
         self.mock_products.list.return_value = expected_result
 
-        dbus_method_args = ['', {}, '']
+        dbus_method_args = ["", {}, ""]
         self.dbus_request(assertions, self.interface.ListInstalledProducts, dbus_method_args)

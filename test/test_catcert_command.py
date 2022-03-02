@@ -67,35 +67,35 @@ class CatCertCommandTests(SubManFixture):
     def test_cert_v1_cat(self):
         with Capture() as cap:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V1_0)
-            command.main(['will_use_stub'])
+            command.main(["will_use_stub"])
         cert_output = cap.out
         self.assertEqual(certdata.ENTITLEMENT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_cert_v3_cat(self):
         with Capture() as cap:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
-            command.main(['will_use_stub'])
+            command.main(["will_use_stub"])
         cert_output = cap.out
         self.assertEqual(certdata.ENTITLEMENT_CERT_V3_0_OUTPUT, cert_output)
 
     def test_cert_v3_no_content_cat(self):
         with Capture() as cap:
             command = CatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0_NO_CONTENT)
-            command.main(['will_use_stub'])
+            command.main(["will_use_stub"])
         cert_output = cap.out
         self.assertEqual(certdata.ENTITLEMENT_CERT_V3_0_NO_CONTENT_OUTPUT, cert_output)
 
     def test_product_cert_output(self):
         with Capture() as cap:
             command = CatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
-            command.main(['will_use_stub'])
+            command.main(["will_use_stub"])
         cert_output = cap.out
         self.assertEqual(certdata.PRODUCT_CERT_V1_0_OUTPUT, cert_output)
 
     def test_product_cert_with_os_name_output(self):
         with Capture() as cap:
             command = CatCertCommandStub(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0)
-            command.main(['will_use_stub'])
+            command.main(["will_use_stub"])
 
         cert_output = cap.out
         self.assertEqual(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0_OUTPUT, cert_output)
@@ -103,6 +103,6 @@ class CatCertCommandTests(SubManFixture):
     def test_identity_cert_output(self):
         with Capture() as cap:
             command = CatCertCommandStub(certdata.IDENTITY_CERT)
-            command.main(['will_use_stub'])
+            command.main(["will_use_stub"])
         cert_output = cap.out
         self.assertEqual(certdata.IDENTITY_CERT_OUTPUT, cert_output)

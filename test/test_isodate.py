@@ -86,7 +86,7 @@ class TestParseDate(unittest.TestCase):
         parsed = isodate.parse_date("9999-09-06T00:00:00.000+0000")
         # depending on what sys modules are available, the different
         # parser handle overflow slightly differently
-        if isodate.parse_date_impl_name == 'dateutil':
+        if isodate.parse_date_impl_name == "dateutil":
             self._dateutil_overflow(parsed)
         else:
             self.fail(f"unsupported parse_date_impl_name: {isodate.parse_date_impl_name}")
@@ -96,7 +96,7 @@ class TestParseDate(unittest.TestCase):
         # 9999-9-6 after that since that's what datetime/dateutil do
         # on RHEL5
         parsed = isodate.parse_date("10000-09-06T00:00:00.000+0000")
-        if isodate.parse_date_impl_name == 'dateutil':
+        if isodate.parse_date_impl_name == "dateutil":
             self._dateutil_overflow(parsed)
         else:
             self.fail(f"unsupported parse_date_impl_name: {isodate.parse_date_impl_name}")

@@ -41,8 +41,8 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
-        in_signature='ss',
-        out_signature='s',
+        in_signature="ss",
+        out_signature="s",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
@@ -74,7 +74,7 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     @util.dbus_service_signal(
         constants.ENTITLEMENT_INTERFACE,
-        signature='',
+        signature="",
     )
     @util.dbus_handle_exceptions
     def EntitlementChanged(self):
@@ -88,8 +88,8 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
-        in_signature='a{sv}a{sv}s',
-        out_signature='s',
+        in_signature="a{sv}a{sv}s",
+        out_signature="s",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
@@ -108,9 +108,9 @@ class EntitlementDBusObject(base_object.BaseObject):
 
         Locale.set(locale)
 
-        on_date = options.setdefault('on_date', "")
+        on_date = options.setdefault("on_date", "")
         if on_date != "":
-            options['on_date'] = self._parse_date(on_date)
+            options["on_date"] = self._parse_date(on_date)
 
         after_date = options.setdefault("after_date", "")
         if after_date != "":
@@ -140,8 +140,8 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
-        in_signature='a{sv}s',
-        out_signature='s',
+        in_signature="a{sv}s",
+        out_signature="s",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
@@ -164,8 +164,8 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
-        in_signature='asa{sv}s',
-        out_signature='s',
+        in_signature="asa{sv}s",
+        out_signature="s",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
@@ -194,8 +194,8 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
-        in_signature='asa{sv}s',
-        out_signature='s',
+        in_signature="asa{sv}s",
+        out_signature="s",
     )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions

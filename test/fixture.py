@@ -26,7 +26,7 @@ from rhsmlib.services import config
 # use instead of the normal pid file based ActionLock
 from threading import RLock
 
-OPEN_FUNCTION = 'builtins.open'
+OPEN_FUNCTION = "builtins.open"
 
 
 @contextmanager
@@ -67,7 +67,7 @@ def open_mock_many(file_content_map=None, **kwargs):
         try:
             rv, file_contents, content_out = file_content_map[path]
         except KeyError:
-            raise OSError(2, 'No such file or directory')
+            raise OSError(2, "No such file or directory")
 
         rv = rv.return_value
         rv.write = lambda x: content_out.write(x)
@@ -169,16 +169,16 @@ class SubManFixture(unittest.TestCase):
         cli.conf = config.Config(self.mock_cfg_parser)
         self.addCleanup(unstub_conf)
 
-        facts_host_patcher = patch('rhsmlib.dbus.facts.FactsClient', auto_spec=True)
+        facts_host_patcher = patch("rhsmlib.dbus.facts.FactsClient", auto_spec=True)
         self.mock_facts_host = facts_host_patcher.start()
         self.mock_facts_host.return_value.GetFacts.return_value = self.set_facts()
 
         # By default mock that we are registered. Individual test cases
         # can override if they are testing disconnected scenario.
-        id_mock = NonCallableMock(name='FixtureIdentityMock')
+        id_mock = NonCallableMock(name="FixtureIdentityMock")
         id_mock.exists_and_valid = Mock(return_value=True)
-        id_mock.uuid = 'fixture_identity_mock_uuid'
-        id_mock.name = 'fixture_identity_mock_name'
+        id_mock.uuid = "fixture_identity_mock_uuid"
+        id_mock.name = "fixture_identity_mock_name"
         id_mock.cert_dir_path = "/not/a/real/path/to/pki/consumer/"
         id_mock.keypath.return_value = "/not/a/real/key/path"
         id_mock.certpath.return_value = "/not/a/real/cert/path"
@@ -188,7 +188,7 @@ class SubManFixture(unittest.TestCase):
         self.mock_calc.calculate.return_value = None
 
         # Avoid trying to read real /etc/yum.repos.d/redhat.repo
-        self.mock_repofile_path_exists_patcher = patch('subscription_manager.repolib.YumRepoFile.path_exists')
+        self.mock_repofile_path_exists_patcher = patch("subscription_manager.repolib.YumRepoFile.path_exists")
         mock_repofile_path_exists = self.mock_repofile_path_exists_patcher.start()
         mock_repofile_path_exists.return_value = True
 
@@ -225,7 +225,7 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
         # setup and mock the plugin_manager
-        plugin_manager_mock = MagicMock(name='FixturePluginManagerMock')
+        plugin_manager_mock = MagicMock(name="FixturePluginManagerMock")
         plugin_manager_mock.runiter.return_value = iter([])
         inj.provide(inj.PLUGIN_MANAGER, plugin_manager_mock)
 
@@ -237,10 +237,10 @@ class SubManFixture(unittest.TestCase):
         self.stub_facts = stubs.StubFacts()
         inj.provide(inj.FACTS, self.stub_facts)
 
-        content_access_cache_mock = MagicMock(name='ContentAccessCacheMock')
+        content_access_cache_mock = MagicMock(name="ContentAccessCacheMock")
         inj.provide(inj.CONTENT_ACCESS_CACHE, content_access_cache_mock)
 
-        self.dbus_patcher = patch('subscription_manager.cli_command.cli.CliCommand._request_validity_check')
+        self.dbus_patcher = patch("subscription_manager.cli_command.cli.CliCommand._request_validity_check")
         self.dbus_patcher.start()
 
         # No tests should be trying to connect to any configure or test server
@@ -250,7 +250,7 @@ class SubManFixture(unittest.TestCase):
         is_valid_server_mock = self.is_valid_server_patcher.start()
         is_valid_server_mock.return_value = True
 
-        self.syncedstore_patcher = patch('subscription_manager.syspurposelib.SyncedStore')
+        self.syncedstore_patcher = patch("subscription_manager.syspurposelib.SyncedStore")
         syncedstore_mock = self.syncedstore_patcher.start()
 
         set_up_mock_sp_store(syncedstore_mock)
@@ -258,7 +258,7 @@ class SubManFixture(unittest.TestCase):
         self.files_to_cleanup = []
 
     def tearDown(self):
-        if not hasattr(self, 'files_to_cleanup'):
+        if not hasattr(self, "files_to_cleanup"):
             return
         for f in self.files_to_cleanup:
             # Assuming these are tempfile.NamedTemporaryFile, created with
@@ -270,7 +270,7 @@ class SubManFixture(unittest.TestCase):
         Write out a tempfile and append it to the list of those to be
         cleaned up in tearDown.
         """
-        fid = tempfile.NamedTemporaryFile(mode='w+', suffix='.tmp')
+        fid = tempfile.NamedTemporaryFile(mode="w+", suffix=".tmp")
         fid.write(contents)
         fid.seek(0)
         self.files_to_cleanup.append(fid)
@@ -296,7 +296,7 @@ class SubManFixture(unittest.TestCase):
 
         Returns the injected identity if it need to be examined.
         """
-        identity = NonCallableMock(name='ValidIdentityMock')
+        identity = NonCallableMock(name="ValidIdentityMock")
         identity.uuid = uuid or "VALIDCONSUMERUUID"
         identity.is_valid = Mock(return_value=True)
         identity.cert_dir_path = "/not/a/real/path/to/pki/consumer/"
@@ -308,7 +308,7 @@ class SubManFixture(unittest.TestCase):
 
         Returns the injected identity if it need to be examined.
         """
-        invalid_identity = NonCallableMock(name='InvalidIdentityMock')
+        invalid_identity = NonCallableMock(name="InvalidIdentityMock")
         invalid_identity.is_valid = Mock(return_value=False)
         invalid_identity.uuid = uuid or "INVALIDCONSUMERUUID"
         invalid_identity.cert_dir_path = "/not/a/real/path/to/pki/consumer/"

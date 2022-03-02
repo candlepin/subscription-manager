@@ -175,11 +175,11 @@ class RepoFile(BaseOstreeConfigFile):
         return self.config_parser.set(section, key, value)
 
     def get_proxy(self):
-        proxy_host = conf['server']['proxy_hostname']
+        proxy_host = conf["server"]["proxy_hostname"]
         # proxy_port as string is fine here
-        proxy_port = conf['server']['proxy_port']
-        proxy_user = conf['server']['proxy_user']
-        proxy_password = conf['server']['proxy_password']
+        proxy_port = conf["server"]["proxy_port"]
+        proxy_user = conf["server"]["proxy_user"]
+        proxy_password = conf["server"]["proxy_password"]
 
         proxy_uri = None
         if proxy_host == "":
@@ -202,43 +202,43 @@ class RepoFile(BaseOstreeConfigFile):
     def set_remote(self, ostree_remote):
         """Add a remote section to config file based on a OstreeRemote."""
         # format section name
-        section_name = 'remote ' + '"%s"' % ostree_remote.name
+        section_name = "remote " + '"%s"' % ostree_remote.name
 
         # Assume all remotes will share the same cdn
         # This is really info about a particular CDN, we just happen
         # to only support one at the moment.
-        baseurl = conf['rhsm']['baseurl']
-        ca_cert = conf['rhsm']['repo_ca_cert']
+        baseurl = conf["rhsm"]["baseurl"]
+        ca_cert = conf["rhsm"]["repo_ca_cert"]
 
         full_url = utils.url_base_join(baseurl, ostree_remote.url)
 
-        self.set(section_name, 'url', full_url)
+        self.set(section_name, "url", full_url)
 
         # gpg_verify not set
-        gpg_verify_string = 'true' if ostree_remote.gpg_verify else 'false'
-        self.set(section_name, 'gpg-verify', gpg_verify_string)
+        gpg_verify_string = "true" if ostree_remote.gpg_verify else "false"
+        self.set(section_name, "gpg-verify", gpg_verify_string)
 
         if ostree_remote.tls_client_cert_path:
-            self.set(section_name, 'tls-client-cert-path', ostree_remote.tls_client_cert_path)
+            self.set(section_name, "tls-client-cert-path", ostree_remote.tls_client_cert_path)
         if ostree_remote.tls_client_key_path:
-            self.set(section_name, 'tls-client-key-path', ostree_remote.tls_client_key_path)
+            self.set(section_name, "tls-client-key-path", ostree_remote.tls_client_key_path)
 
         # Ideally, setting the tls-ca-path would be depending on the
         # baseurl and/or the CDN and if the content uses https. We always
         # use https though, and the content does not know the CDN it comes
         # from. Need a way to map a Content to a particular CDNInfo, and to
         # support multiple CDNInfos setup.
-        self.set(section_name, 'tls-ca-path', ca_cert)
+        self.set(section_name, "tls-ca-path", ca_cert)
 
         proxy_uri = self.get_proxy()
         if proxy_uri:
-            self.set(section_name, 'proxy', proxy_uri)
+            self.set(section_name, "proxy", proxy_uri)
 
     def set_core(self, ostree_core):
         # Assuming we don't need to check validy of any [core] values
         # update the core section with the current values
         for key in ostree_core:
-            self.set('core', key, ostree_core.get(key))
+            self.set("core", key, ostree_core.get(key))
 
     def get_core(self):
-        return self.config_parser.items('core')
+        return self.config_parser.items("core")

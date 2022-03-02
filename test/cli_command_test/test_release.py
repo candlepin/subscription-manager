@@ -13,7 +13,7 @@ class TestReleaseCommand(TestCliProxyCommand):
         proxy_port = "3128"
         proxy_url = "%s:%s" % (proxy_host, proxy_port)
 
-        with patch.object(managercli.ReleaseCommand, '_get_consumer_release'):
+        with patch.object(managercli.ReleaseCommand, "_get_consumer_release"):
             self.cc.main(["--proxy", proxy_url])
             self._orig_do_command()
 
@@ -27,19 +27,19 @@ class TestReleaseCommand(TestCliProxyCommand):
 
     def test_release_set_updates_repos(self):
         mock_repo_invoker = Mock()
-        with patch.object(release, 'RepoActionInvoker', Mock(return_value=mock_repo_invoker)):
-            with patch.object(release.ReleaseBackend, 'get_releases', Mock(return_value=['7.2'])):
-                with patch.object(managercli.ReleaseCommand, '_get_consumer_release'):
-                    self.cc.main(['--set=7.2'])
+        with patch.object(release, "RepoActionInvoker", Mock(return_value=mock_repo_invoker)):
+            with patch.object(release.ReleaseBackend, "get_releases", Mock(return_value=["7.2"])):
+                with patch.object(managercli.ReleaseCommand, "_get_consumer_release"):
+                    self.cc.main(["--set=7.2"])
                     self._orig_do_command()
 
                     mock_repo_invoker.update.assert_called_with()
 
     def test_release_unset_updates_repos(self):
         mock_repo_invoker = Mock()
-        with patch.object(release, 'RepoActionInvoker', Mock(return_value=mock_repo_invoker)):
-            with patch.object(managercli.ReleaseCommand, '_get_consumer_release'):
-                self.cc.main(['--unset'])
+        with patch.object(release, "RepoActionInvoker", Mock(return_value=mock_repo_invoker)):
+            with patch.object(managercli.ReleaseCommand, "_get_consumer_release"):
+                self.cc.main(["--unset"])
                 self._orig_do_command()
 
                 mock_repo_invoker.update.assert_called_with()

@@ -36,14 +36,14 @@ class RemoveCommand(CliCommand):
 
         self.parser.add_argument(
             "--serial",
-            action='append',
+            action="append",
             dest="serials",
             metavar="SERIAL",
             help=_("certificate serial number to remove (can be specified more than once)"),
         )
         self.parser.add_argument(
             "--pool",
-            action='append',
+            action="append",
             dest="pool_ids",
             metavar="POOL_ID",
             help=_("the ID of the pool to remove (can be specified more than once)"),
@@ -124,7 +124,7 @@ class RemoveCommand(CliCommand):
                     if total is None:
                         print(_("All subscriptions have been removed at the server."))
                     else:
-                        count = total['deletedRecords']
+                        count = total["deletedRecords"]
                         print(
                             ungettext(
                                 "%s subscription removed at the server.",
@@ -186,7 +186,7 @@ class RemoveCommand(CliCommand):
                         pool_ids = self.options.pool_ids or []
                         count = 0
                         for ent in self.entitlement_dir.list():
-                            ent_pool_id = str(getattr(ent.pool, 'id', None) or "")
+                            ent_pool_id = str(getattr(ent.pool, "id", None) or "")
                             if str(ent.serial) in serials or ent_pool_id in pool_ids:
                                 ent.delete()
                                 print(

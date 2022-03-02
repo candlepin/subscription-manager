@@ -41,7 +41,7 @@ from rhsm.certificate import create_from_pem, DateRange, GMT
 from mock import Mock, patch
 
 cfg = rhsm.config.get_config_parser()
-ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
+ENT_CONFIG_DIR = cfg.get("rhsm", "entitlementCertDir")
 
 # [-]*BEGIN [\w\ ]*[-]* - Find all begin lines
 # [-]*BEGIN[\w\ ]*[-]*|[-]*END[\w\ ]*[-]* - Find all BEGIN END lines
@@ -270,7 +270,7 @@ EXPECTED_CERT_V3 = create_from_pem(
 
 class MergePoolsTests(SubManFixture):
     def test_single_pool(self):
-        product = 'product1'
+        product = "product1"
         pools = [create_pool(product, product, quantity=10, consumed=5)]
         results = merge_pools(pools)
         self.assertEqual(1, len(list(results.values())))
@@ -278,8 +278,8 @@ class MergePoolsTests(SubManFixture):
         self.assertEqual(product, result.product_id)
 
     def test_multiple_pools(self):
-        product1 = 'product1'
-        product2 = 'product2'
+        product1 = "product1"
+        product2 = "product2"
         pools = [
             create_pool(product1, product1, quantity=10, consumed=5),
             create_pool(product1, product1, quantity=55, consumed=20),
@@ -305,8 +305,8 @@ class MergePoolsTests(SubManFixture):
 
 class PoolFilterTests(SubManFixture):
     def test_uninstalled_filter_direct_match(self):
-        product1 = 'product1'
-        product2 = 'product2'
+        product1 = "product1"
+        product2 = "product2"
 
         pd = StubCertificateDirectory([StubProductCertificate(StubProduct(product2))])
         pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
@@ -318,12 +318,12 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_out_uninstalled(pools)
         self.assertEqual(1, len(result))
-        self.assertEqual(product2, result[0]['productId'])
+        self.assertEqual(product2, result[0]["productId"])
 
     def test_uninstalled_filter_provided_match(self):
-        product1 = 'product1'
-        product2 = 'product2'
-        provided = 'providedProduct'
+        product1 = "product1"
+        product2 = "product2"
+        provided = "providedProduct"
         pd = StubCertificateDirectory([StubProductCertificate(StubProduct(provided))])
         pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
@@ -333,11 +333,11 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_out_uninstalled(pools)
         self.assertEqual(1, len(result))
-        self.assertEqual(product2, result[0]['productId'])
+        self.assertEqual(product2, result[0]["productId"])
 
     def test_installed_filter_direct_match(self):
-        product1 = 'product1'
-        product2 = 'product2'
+        product1 = "product1"
+        product2 = "product2"
         pd = StubCertificateDirectory([StubProductCertificate(StubProduct(product2))])
         pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
@@ -348,12 +348,12 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_out_installed(pools)
         self.assertEqual(1, len(result))
-        self.assertEqual(product1, result[0]['productId'])
+        self.assertEqual(product1, result[0]["productId"])
 
     def test_installed_filter_provided_match(self):
-        product1 = 'product1'
-        product2 = 'product2'
-        provided = 'providedProduct'
+        product1 = "product1"
+        product2 = "product2"
+        provided = "providedProduct"
         pd = StubCertificateDirectory([StubProductCertificate(StubProduct(provided))])
         pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
@@ -363,12 +363,12 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_out_installed(pools)
         self.assertEqual(1, len(result))
-        self.assertEqual(product1, result[0]['productId'])
+        self.assertEqual(product1, result[0]["productId"])
 
     def test_installed_filter_multi_match(self):
-        product1 = 'product1'
-        product2 = 'product2'
-        provided = 'providedProduct'
+        product1 = "product1"
+        product2 = "product2"
+        provided = "providedProduct"
         pd = StubCertificateDirectory(
             [StubProductCertificate(StubProduct(provided)), StubProductCertificate(StubProduct(product2))]
         )
@@ -380,11 +380,11 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_out_installed(pools)
         self.assertEqual(1, len(result))
-        self.assertEqual(product1, result[0]['productId'])
+        self.assertEqual(product1, result[0]["productId"])
 
     def test_filter_product_name(self):
-        product1 = 'Foo Product'
-        product2 = 'Bar Product'
+        product1 = "Foo Product"
+        product2 = "Bar Product"
         pd = StubCertificateDirectory([])
         pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
@@ -394,11 +394,11 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_product_name(pools, "Foo")
         self.assertEqual(1, len(result))
-        self.assertEqual(product1, result[0]['productId'])
+        self.assertEqual(product1, result[0]["productId"])
 
     def test_filter_product_name_matches_provided(self):
-        product1 = 'Foo Product'
-        product2 = 'Bar Product'
+        product1 = "Foo Product"
+        product2 = "Bar Product"
         pd = StubCertificateDirectory([])
         pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
@@ -407,7 +407,7 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_product_name(pools, "Bar")
         self.assertEqual(1, len(result))
-        self.assertEqual(product1, result[0]['productId'])
+        self.assertEqual(product1, result[0]["productId"])
 
     def test_filter_no_overlap(self):
         product1 = "Test Product 1"
@@ -638,7 +638,7 @@ class PoolFilterTests(SubManFixture):
         provided1 = "1"
         product2 = "0"  # different product id than that of product 1
         provided2 = "1"  # same provided product as product 1
-        product2_type = 'SVC'
+        product2_type = "SVC"
 
         cert_start = datetime.now() - timedelta(days=10)
         cert_end = datetime.now() + timedelta(days=365)
@@ -676,7 +676,7 @@ class PoolFilterTests(SubManFixture):
         # Assume default type attribute of 'MKT'
 
     def _create_pool(
-        self, product_id, product_name, provided_products, start_end_range, stacking_id=None, type='MKT'
+        self, product_id, product_name, provided_products, start_end_range, stacking_id=None, type="MKT"
     ):
         prod_attrs = []
         if stacking_id:
@@ -1009,45 +1009,45 @@ class MergedPoolsTests(unittest.TestCase):
         # Fake some pool JSON with the bare minimum of data:
         pools = [
             {
-                'id': 1,
-                'attributes': [],
-                'consumed': 0,
-                'quantity': 10,
-                'providedProducts': [],
+                "id": 1,
+                "attributes": [],
+                "consumed": 0,
+                "quantity": 10,
+                "providedProducts": [],
             },
             {
-                'id': 2,
-                'attributes': [{'name': 'virt_only', 'value': 'true'}],
-                'consumed': 0,
-                'quantity': 10,
-                'providedProducts': [],
+                "id": 2,
+                "attributes": [{"name": "virt_only", "value": "true"}],
+                "consumed": 0,
+                "quantity": 10,
+                "providedProducts": [],
             },
             {
-                'id': 3,
-                'attributes': [],
-                'consumed': 0,
-                'quantity': 10,
-                'providedProducts': [],
+                "id": 3,
+                "attributes": [],
+                "consumed": 0,
+                "quantity": 10,
+                "providedProducts": [],
             },
             {
-                'id': 4,
-                'attributes': [{'name': 'virt_only', 'value': 'true'}],
-                'consumed': 0,
-                'quantity': 10,
-                'providedProducts': [],
+                "id": 4,
+                "attributes": [{"name": "virt_only", "value": "true"}],
+                "consumed": 0,
+                "quantity": 10,
+                "providedProducts": [],
             },
         ]
 
-        merged_pools = MergedPools('product', 'A Product')
+        merged_pools = MergedPools("product", "A Product")
         for p in pools:
             merged_pools.add_pool(p)
 
         merged_pools.sort_virt_to_top()
         # If we sort, the virt pools should become the first two in the list:
-        self.assertEqual(merged_pools.pools[0]['attributes'][0]['value'], "true")
-        self.assertEqual(merged_pools.pools[1]['attributes'][0]['value'], "true")
-        self.assertFalse('virt_only' in merged_pools.pools[2]['attributes'])
-        self.assertFalse('virt_only' in merged_pools.pools[3]['attributes'])
+        self.assertEqual(merged_pools.pools[0]["attributes"][0]["value"], "true")
+        self.assertEqual(merged_pools.pools[1]["attributes"][0]["value"], "true")
+        self.assertFalse("virt_only" in merged_pools.pools[2]["attributes"])
+        self.assertFalse("virt_only" in merged_pools.pools[3]["attributes"])
 
 
 class PoolStashTest(SubManFixture):
@@ -1112,7 +1112,7 @@ class TestValidQuantity(unittest.TestCase):
 
 class TestGetAvailableEntitlements(SubManFixture):
     def setUp(self):
-        self.p1 = patch('subscription_manager.facts.Facts.write_cache')
+        self.p1 = patch("subscription_manager.facts.Facts.write_cache")
         self.p1.start()
         super(TestGetAvailableEntitlements, self).setUp()
 
@@ -1143,9 +1143,9 @@ class TestGetAvailableEntitlements(SubManFixture):
             items_per_page=0,
         ):
             if listAll:
-                return [self.build_pool_dict('1234'), self.build_pool_dict('4321')]
+                return [self.build_pool_dict("1234"), self.build_pool_dict("4321")]
             else:
-                return [self.build_pool_dict('1234')]
+                return [self.build_pool_dict("1234")]
 
         cp.getPoolsList = Mock(side_effect=get_pools_list)
 
@@ -1171,16 +1171,16 @@ class TestGetAvailableEntitlements(SubManFixture):
         ):
             if listAll:
                 return [
-                    self.build_pool_dict('1234', ['some_product']),
-                    self.build_pool_dict('4321'),
-                    self.build_pool_dict('12321', ['some_product']),
+                    self.build_pool_dict("1234", ["some_product"]),
+                    self.build_pool_dict("4321"),
+                    self.build_pool_dict("12321", ["some_product"]),
                 ]
             else:
-                return [self.build_pool_dict('1234', ['some_product'])]
+                return [self.build_pool_dict("1234", ["some_product"])]
 
         cp.getPoolsList = Mock(side_effect=get_pools_list)
 
-        product_directory = StubProductDirectory(pids=['some_product'])
+        product_directory = StubProductDirectory(pids=["some_product"])
         provide(PROD_DIR, product_directory)
 
         res = managerlib.get_available_entitlements(get_all=True, uninstalled=True)
@@ -1191,14 +1191,14 @@ class TestGetAvailableEntitlements(SubManFixture):
 
     def build_pool_dict(self, pool_id, provided_products=[]):
         return {
-            'id': str(pool_id),
+            "id": str(pool_id),
             # note things fail if any of these are not set, or
             # incorrect types
-            'quantity': 5,
-            'consumed': 1,
-            'productId': '',
-            'startDate': datetime.now(GMT()).isoformat(),
-            'endDate': datetime.now(GMT()).isoformat(),
-            'providedProducts': [{'productId': prod_id} for prod_id in provided_products],
-            'productAttributes': [{'name': 'foo', 'value': 'blip'}],
+            "quantity": 5,
+            "consumed": 1,
+            "productId": "",
+            "startDate": datetime.now(GMT()).isoformat(),
+            "endDate": datetime.now(GMT()).isoformat(),
+            "providedProducts": [{"productId": prod_id} for prod_id in provided_products],
+            "productAttributes": [{"name": "foo", "value": "blip"}],
         }

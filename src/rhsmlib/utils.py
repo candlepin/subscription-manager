@@ -37,7 +37,7 @@ def no_reinitialization(init_method):
             assert (
                 hasattr(self, "_initialized") is True
             ), "The {cls} does not include _initialized attribute".format(cls=self.__class__)
-            assert hasattr(self, '_lock') is True, "The {cls} does not include _lock attribute".format(
+            assert hasattr(self, "_lock") is True, "The {cls} does not include _lock attribute".format(
                 cls=self.__class__
             )
 

@@ -48,7 +48,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             shortdesc,
             False,
             attr="service_level_agreement",
-            commands=['set', 'unset', 'show', 'list'],
+            commands=["set", "unset", "show", "list"],
         )
         self._add_url_options()
 
@@ -161,7 +161,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             super(ServiceLevelCommand, self).set()
         else:
             self.update_service_level(self.options.set)
-            print(_("Service level set to: \"{val}\".").format(val=self.options.set))
+            print(_('Service level set to: "{val}".').format(val=self.options.set))
 
     def unset(self):
         if self.cp.has_capability("syspurpose"):
@@ -173,7 +173,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def update_service_level(self, service_level):
         consumer = self.cp.getConsumer(self.identity.uuid)
-        if 'serviceLevel' not in consumer:
+        if "serviceLevel" not in consumer:
             system_exit(
                 os.EX_UNAVAILABLE,
                 _("Error: The service-level command is not supported by the server."),
@@ -189,12 +189,12 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def show_service_level(self):
         consumer = self.cp.getConsumer(self.identity.uuid)
-        if 'serviceLevel' not in consumer:
+        if "serviceLevel" not in consumer:
             system_exit(
                 os.EX_UNAVAILABLE,
                 _("Error: The service-level command is not supported by the server."),
             )
-        service_level = consumer['serviceLevel'] or ""
+        service_level = consumer["serviceLevel"] or ""
         if service_level:
             print(_("Current service level: {level}").format(level=service_level))
         else:
@@ -202,7 +202,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def list_service_levels(self):
         if self.is_registered():
-            org_key = self.cp.getOwner(self.identity.uuid)['key']
+            org_key = self.cp.getOwner(self.identity.uuid)["key"]
         else:
             org_key = self.org
 
@@ -210,7 +210,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             slas = self.cp.getServiceLevelList(org_key)
             if len(slas):
                 print("+-------------------------------------------+")
-                print("           {label}".format(label=_('Available Service Levels')))
+                print("           {label}".format(label=_("Available Service Levels")))
                 print("+-------------------------------------------+")
                 for sla in slas:
                     print(sla)
@@ -218,8 +218,8 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                 print(
                     _(
                         'There are no available values for the system purpose "{syspurpose_attr}" '
-                        'from the available subscriptions in this '
-                        'organization.'
+                        "from the available subscriptions in this "
+                        "organization."
                     ).format(syspurpose_attr="service_level")
                 )
         except UnauthorizedException as e:
@@ -231,7 +231,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
         except connection.GoneException as ge:
             raise ge
         except connection.RestlibException as e:
-            if e.code == 404 and e.msg.find('/servicelevels') > 0:
+            if e.code == 404 and e.msg.find("/servicelevels") > 0:
                 system_exit(
                     os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server.")
                 )

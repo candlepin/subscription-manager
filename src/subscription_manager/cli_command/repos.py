@@ -62,19 +62,19 @@ class ReposCommand(CliCommand):
 
         self.parser.add_argument(
             "--list",
-            action='store_true',
+            action="store_true",
             dest="list",
             help=_("list all known repositories for this system"),
         )
         self.parser.add_argument(
             "--list-enabled",
-            action='store_true',
+            action="store_true",
             dest="list_enabled",
             help=_("list known, enabled repositories for this system"),
         )
         self.parser.add_argument(
             "--list-disabled",
-            action='store_true',
+            action="store_true",
             dest="list_disabled",
             help=_("list known, disabled repositories for this system"),
         )
@@ -132,7 +132,7 @@ class ReposCommand(CliCommand):
 
         if self.is_registered():
             supported_resources = get_supported_resources()
-            self.use_overrides = 'content_overrides' in supported_resources
+            self.use_overrides = "content_overrides" in supported_resources
         else:
             self.use_overrides = False
 
@@ -151,8 +151,8 @@ class ReposCommand(CliCommand):
             if len(repos):
                 # TODO: Perhaps this should be abstracted out as well...?
                 def filter_repos(repo):
-                    disabled_values = ['false', '0']
-                    repo_enabled = repo['enabled'].lower()
+                    disabled_values = ["false", "0"]
+                    repo_enabled = repo["enabled"].lower()
                     show_enabled = self.list_enabled and repo_enabled not in disabled_values
                     show_disabled = self.list_disabled and repo_enabled in disabled_values
 
@@ -208,7 +208,7 @@ class ReposCommand(CliCommand):
                 print(
                     _(
                         "Error: '{repoid}' does not match a valid repository ID. "
-                        "Use \"subscription-manager repos --list\" to see valid repositories."
+                        'Use "subscription-manager repos --list" to see valid repositories.'
                     ).format(repoid=repoid)
                 )
                 log.warning("'{repoid}' does not match a valid repository ID.".format(repoid=repoid))
@@ -225,11 +225,11 @@ class ReposCommand(CliCommand):
 
             if self.is_registered() and self.use_overrides:
                 overrides = [
-                    {'contentLabel': repo.id, 'name': 'enabled', 'value': repos_to_modify[repo]}
+                    {"contentLabel": repo.id, "name": "enabled", "value": repos_to_modify[repo]}
                     for repo in repos_to_modify
                 ]
                 metadata_overrides = [
-                    {'contentLabel': repo.id, 'name': 'enabled_metadata', 'value': repos_to_modify[repo]}
+                    {"contentLabel": repo.id, "name": "enabled_metadata", "value": repos_to_modify[repo]}
                     for repo in repos_to_modify
                 ]
                 overrides.extend(metadata_overrides)
@@ -248,10 +248,10 @@ class ReposCommand(CliCommand):
                 rl = RepoActionInvoker()
                 rl.update()
                 # In the disconnected case we must modify the repo file directly.
-                changed_repos = [repo for repo in matches if repo['enabled'] != status]
+                changed_repos = [repo for repo in matches if repo["enabled"] != status]
                 for repo in changed_repos:
-                    repo['enabled'] = status
-                    repo['enabled_metadata'] = status
+                    repo["enabled"] = status
+                    repo["enabled_metadata"] = status
                 if changed_repos:
                     repo_file = YumRepoFile()
                     repo_file.read()

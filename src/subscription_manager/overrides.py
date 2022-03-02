@@ -53,11 +53,11 @@ class Overrides(object):
         return [override.to_json() for override in overrides]
 
     def _remove(self, overrides):
-        return [{'contentLabel': override.repo_id, 'name': override.name} for override in overrides]
+        return [{"contentLabel": override.repo_id, "name": override.name} for override in overrides]
 
     def _remove_all(self, repos):
         if repos:
-            return [{'contentLabel': repo} for repo in repos]
+            return [{"contentLabel": repo} for repo in repos]
         else:
             return None
 
@@ -76,7 +76,7 @@ class Override(object):
 
     @classmethod
     def from_json(cls, json_obj):
-        return cls(json_obj['contentLabel'], json_obj['name'], json_obj['value'])
+        return cls(json_obj["contentLabel"], json_obj["name"], json_obj["value"])
 
     def to_json(self):
-        return {'contentLabel': self.repo_id, 'name': self.name, 'value': self.value}
+        return {"contentLabel": self.repo_id, "name": self.name, "value": self.value}

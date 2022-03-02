@@ -47,7 +47,7 @@ class TestUtilsMixin(object):
     def write_temp_file(data):
         # create a temp file for use as a config file. This should get cleaned
         # up magically when it is closed so make sure to close it!
-        fid = NamedTemporaryFile(mode='w+', suffix='.tmp')
+        fid = NamedTemporaryFile(mode="w+", suffix=".tmp")
         fid.write(data)
         fid.seek(0)
         return fid
@@ -103,12 +103,12 @@ class DBusObjectTest(unittest.TestCase):
         # kwarg to tell dbus.SessionBus/SystemBus not to cache, but that's deprecated.
         self.server_thread = ServerThread(
             kwargs={
-                'object_classes': self.dbus_objects(),
-                'bus_name': self.bus_name(),
-                'bus_class': dbus.bus.BusConnection,
-                'bus_kwargs': self.bus_kwargs,
-                'started_event': self.started_event,
-                'stopped_event': self.stopped_event,
+                "object_classes": self.dbus_objects(),
+                "bus_name": self.bus_name(),
+                "bus_class": dbus.bus.BusConnection,
+                "bus_kwargs": self.bus_kwargs,
+                "started_event": self.started_event,
+                "stopped_event": self.stopped_event,
             }
         )
         self.started_event.wait()
@@ -122,9 +122,9 @@ class DBusObjectTest(unittest.TestCase):
     @property
     def bus_kwargs(self):
         if os.geteuid() == 0:
-            return {'address_or_type': dbus.Bus.TYPE_SYSTEM}
+            return {"address_or_type": dbus.Bus.TYPE_SYSTEM}
         else:
-            return {'address_or_type': dbus.Bus.TYPE_SESSION}
+            return {"address_or_type": dbus.Bus.TYPE_SESSION}
 
     def proxy_for(self, path):
         return dbus.bus.BusConnection(**self.bus_kwargs).get_object(self.bus_name(), path)
@@ -139,12 +139,12 @@ class DBusObjectTest(unittest.TestCase):
 
         DBusRequestThread(
             kwargs={
-                'proxy': proxy,
-                'proxy_args': proxy_args,
-                'reply_handler': reply_handler,
-                'error_handler': error_handler,
-                'handler_complete_event': self.handler_complete_event,
-                'queue': self.result_queue,
+                "proxy": proxy,
+                "proxy_args": proxy_args,
+                "reply_handler": reply_handler,
+                "error_handler": error_handler,
+                "handler_complete_event": self.handler_complete_event,
+                "queue": self.result_queue,
             }
         )
         self.handler_complete_event.wait()
@@ -162,7 +162,7 @@ class DBusObjectTest(unittest.TestCase):
         In that list, you can also pass in a tuple composed of the object class and a dictionary of keyword
         arguments for the object's constructor
         """
-        raise NotImplementedError('Subclasses should define what DBus objects to test')
+        raise NotImplementedError("Subclasses should define what DBus objects to test")
 
     def bus_name(self):
         """
@@ -174,13 +174,13 @@ class DBusObjectTest(unittest.TestCase):
 class ServerThread(threading.Thread):
     def __init__(self, **kwds):
         super(ServerThread, self).__init__(name=self.__class__.__name__, **kwds)
-        kwargs = kwds['kwargs']
-        self.bus_class = kwargs.get('bus_class', dbus.bus.BusConnection(dbus.bus.BUS_SESSION))
-        self.bus_name = kwargs.get('bus_name', constants.BUS_NAME)
-        self.object_classes = kwargs.get('object_classes', [])
-        self.started_event = kwargs['started_event']
-        self.stopped_event = kwargs['stopped_event']
-        self.bus_kwargs = kwargs['bus_kwargs']
+        kwargs = kwds["kwargs"]
+        self.bus_class = kwargs.get("bus_class", dbus.bus.BusConnection(dbus.bus.BUS_SESSION))
+        self.bus_name = kwargs.get("bus_name", constants.BUS_NAME)
+        self.object_classes = kwargs.get("object_classes", [])
+        self.started_event = kwargs["started_event"]
+        self.stopped_event = kwargs["stopped_event"]
+        self.bus_kwargs = kwargs["bus_kwargs"]
         self.server = None
         self.start()
 
@@ -205,19 +205,19 @@ class ServerThread(threading.Thread):
 class DBusRequestThread(threading.Thread):
     def __init__(self, **kwds):
         super(DBusRequestThread, self).__init__(name=self.__class__.__name__, **kwds)
-        kwargs = kwds['kwargs']
-        self.queue = kwargs['queue']
-        self.proxy = kwargs['proxy']
-        self.proxy_args = kwargs['proxy_args']
+        kwargs = kwds["kwargs"]
+        self.queue = kwargs["queue"]
+        self.proxy = kwargs["proxy"]
+        self.proxy_args = kwargs["proxy_args"]
 
         if self.proxy_args is None:
             self.proxy_args = []
 
-        self.reply_handler = self.reply_wrap(kwargs['reply_handler'])
+        self.reply_handler = self.reply_wrap(kwargs["reply_handler"])
         # If no error_handler is given, error_wrap will just raise the DBus error
-        self.error_handler = self.error_wrap(kwargs.get('error_handler'))
+        self.error_handler = self.error_wrap(kwargs.get("error_handler"))
 
-        self.handler_complete_event = kwargs['handler_complete_event']
+        self.handler_complete_event = kwargs["handler_complete_event"]
         self.start()
 
     def reply_wrap(self, func):
