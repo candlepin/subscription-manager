@@ -185,6 +185,9 @@ password=foobar
         m.execute("systemctl start cockpit")
         m.spawn("/var/tmp/mock-insights", "mock-insights")
 
+        if m.image == "rhel-8-5":
+            self.allow_journal_messages("json_object_get_string_member: assertion 'node != NULL' failed")
+
     def wait_subscription(self, product, is_subscribed):
         if is_subscribed is True:
             self.browser.wait_text(
