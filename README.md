@@ -35,6 +35,14 @@ PYTHONPATH=./src python -m subscription_manager.scripts.rct
 
 (You can also just export `PYTHONPATH` instead of setting it in each command).
 
+To ignore bulk commits that only change the format of the code, not the code
+itself (e.g. `black`ing whole codebase), add `.git-blame-ignore-revs` to your
+git configuration:
+
+```bash
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
+
 Pipenv
 ------
 
