@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
 
-import functools
 import os
 import sys
 import unittest
@@ -27,6 +26,7 @@ sys.path.append(os.path.join(TEST_DIR, "common"))
 sys.path.append(os.path.join(os.path.dirname(TEST_DIR), "bots/machine"))
 from packagelib import *
 from testlib import *
+import testvm
 
 # candlepin on the services image has a lot of demo data preloaded
 # useful info/commands:
@@ -121,14 +121,7 @@ def skipUnlessDistroFamily(distro, reason):
     unless the distribution of the machine is part of the specified
     family [distro] (i.e. it starts as "distro-").
     """
-    def distro_wrapper(func):
-        @functools.wraps(func)
-        def wrapper(obj):
-            if not obj.machine.image.startswith(distro + '-'):
-                raise unittest.SkipTest(reason)
-            return func(obj)
-        return wrapper
-    return distro_wrapper
+    return unittest.skipUnless(testvm.DEFAULT_IMAGE.startswith(distro + '-'), reason)
 
 
 class SubscriptionsCase(MachineCase):
