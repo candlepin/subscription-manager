@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 18:42+0100\n"
 "PO-Revision-Date: 2022-02-21 06:52+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-1-28/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -229,7 +229,7 @@ msgstr[0] "$0 软件包和 $1 个其他软件包将被安装。"
 #: cockpit/src/insights.jsx:149
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
-msgstr[0] "$0 个软件包需要删除。"
+msgstr[0] "$0 软件包需要删除。"
 
 #: cockpit/src/insights.jsx:163
 msgid "Additional packages:"
@@ -329,32 +329,32 @@ msgstr "取消"
 
 #: cockpit/src/insights.jsx:485
 msgid "No rule hits"
-msgstr "无规则命中"
+msgstr "无规则匹配"
 
 #: cockpit/src/insights.jsx:493
 msgid "$0 critical hit"
 msgid_plural "$0 hits, including critical"
-msgstr[0] "$0 关键 hit"
+msgstr[0] "$0 关键匹配"
 
 #: cockpit/src/insights.jsx:498
 msgid "$0 important hit"
 msgid_plural "$0 hits, including important"
-msgstr[0] "$0 重要 hit"
+msgstr[0] "$0 重要匹配"
 
 #: cockpit/src/insights.jsx:503
 msgid "$0 moderate hit"
 msgid_plural "$0 hits, including moderate"
-msgstr[0] "$0 中度 hit"
+msgstr[0] "$0 中度匹配"
 
 #: cockpit/src/insights.jsx:508
 msgid "$0 low severity hit"
 msgid_plural "$0 low severity hits"
-msgstr[0] "$0 低度 hit"
+msgstr[0] "$0 低度匹配"
 
 #: cockpit/src/insights.jsx:514
 msgid "$0 hit"
 msgid_plural "$0 hits"
-msgstr[0] "$0 hit"
+msgstr[0] "$0 匹配"
 
 #: cockpit/src/insights.jsx:521
 msgid "View your Insights results"
@@ -865,7 +865,7 @@ msgstr "RHEL"
 #: src/subscription_manager/gui/data/glade/mainwindow.glade:154
 #: src/subscription_manager/gui/data/ui/mainwindow.ui:59
 msgid "Subscription Manager"
-msgstr "Subscription Manager"
+msgstr "订阅管理器"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/initial-setup/com_redhat_subscription_manager/gui/spokes/rhsm_gui.ui:90
@@ -2561,7 +2561,7 @@ msgstr "environment_treeview"
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:10
 #: src/subscription_manager/gui/data/ui/factsdialog.ui:9
 msgid "Subscription Manager - Facts"
-msgstr "Subscription Manager - Fact"
+msgstr "订阅管理器 - 事实"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:37
@@ -3633,7 +3633,7 @@ msgstr "system_name_grid"
 
 #: src/subscription_manager/gui/data/ui/done_box.ui:13
 msgid "Registration with Red Hat Subscription Management is Done!"
-msgstr "使用 Red Hat Subscription Management 注册已完成！"
+msgstr "注册红帽订阅管理已完成！"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/ui/register_dialog.ui:98
@@ -5874,7 +5874,7 @@ msgstr "根据 section.name 删除配置条目"
 #: src/subscription_manager/managercli.py:3127
 #, python-format
 msgid "Section: %s, Name: %s"
-msgstr "Section: %s, Name: %s"
+msgstr "部分: %s, 名称: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3146
@@ -6723,7 +6723,7 @@ msgstr "红帽订阅有效性程序（Red Hat Subscription Validity Applet）"
 #: tmp/subscription-manager-cockpit.desktop.in.h:1
 #: tmp/subscription-manager-gui.desktop.in.h:1
 msgid "Red Hat Subscription Manager"
-msgstr "Red Hat Subscription Manager"
+msgstr "红帽订阅管理器"
 
 #~ msgid "Attaching subscriptions ..."
 #~ msgstr "附加订阅..."
