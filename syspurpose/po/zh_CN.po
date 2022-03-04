@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-09 12:25-0500\n"
+"POT-Creation-Date: 2022-03-02 12:40+0100\n"
 "PO-Revision-Date: 2022-02-10 11:15+0000\n"
 "Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -226,7 +226,8 @@ msgid ""
 "release. Please use the 'subscription-manager syspurpose' command going "
 "forward."
 msgstr ""
-"'syspurpose' 命令已弃用，并将在以后的主发行版本中删除。请继续使用 'subscription-manager syspurpose' 命令。"
+"'syspurpose' 命令已弃用，并将在以后的主发行版本中删除。请继续使用 "
+"'subscription-manager syspurpose' 命令。"
 
 #: src/syspurpose/cli.py:165 src/syspurpose/cli.py:230
 msgid "The value(s) to add"
@@ -331,14 +332,14 @@ msgstr ""
 "无法读 syspurpose 文件 {}\n"
 "您是 root 用户吗？"
 
-#: src/syspurpose/files.py:430
+#: src/syspurpose/files.py:466
 #, python-brace-format
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
 msgstr "警告：提供的值 \"{val}\" 没有包括在属性{attr} 的有效值列表中："
 
-#: src/syspurpose/files.py:438
+#: src/syspurpose/files.py:473
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"

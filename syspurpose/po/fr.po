@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-09 12:25-0500\n"
+"POT-Creation-Date: 2022-03-02 12:40+0100\n"
 "PO-Revision-Date: 2022-02-23 12:16+0000\n"
 "Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
@@ -48,7 +48,8 @@ msgstr "ne peut pas fusionner les actions - deux groupes sont nommés %r"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr "Le terme \"requis\" n'est pas un argument valable pour les positionnels"
+msgstr ""
+"Le terme \"requis\" n'est pas un argument valable pour les positionnels"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
@@ -185,8 +186,8 @@ msgstr ""
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
-"Si vous souhaitez remplacer des données au niveau serveur, veuillez exécuter "
-": {command}"
+"Si vous souhaitez remplacer des données au niveau serveur, veuillez "
+"exécuter : {command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
@@ -344,7 +345,7 @@ msgstr ""
 "Impossible de lire le fichier syspurpose {}\n"
 "Possédez-vous un accès superutilisateur ?"
 
-#: src/syspurpose/files.py:430
+#: src/syspurpose/files.py:466
 #, python-brace-format
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
@@ -353,7 +354,7 @@ msgstr ""
 "Avertissement : La valeur fournie « {val} » ne figure pas dans la liste des "
 "valeurs valides de l’attribut {attr} :"
 
-#: src/syspurpose/files.py:438
+#: src/syspurpose/files.py:473
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
