@@ -1,13 +1,13 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
-# Pino Toscano <toscano.pino@tiscali.it>, 2021.
+# Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 18:42+0100\n"
-"PO-Revision-Date: 2021-11-11 22:31+0000\n"
+"PO-Revision-Date: 2022-02-19 16:16+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/it/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8.1\n"
+"X-Generator: Weblate 4.10.1\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -569,10 +569,8 @@ msgstr "Non sottoscritte"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-view.jsx:128
-#, fuzzy
-#| msgid "Unknown"
 msgid "Unknown status"
-msgstr "Sconosciuto"
+msgstr "Stato sconosciuto"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:183 src/rct/printing.py:50
@@ -4993,10 +4991,9 @@ msgid "Organization: "
 msgstr "Organizzazione: "
 
 #: src/subscription_manager/managercli.py:1093
-#, fuzzy, python-brace-format
-#| msgid "User %s is not member of any organization"
+#, python-brace-format
 msgid "Error: User {username} is not member of any organization."
-msgstr "L'utente %s non è parte di alcuna organizzazione"
+msgstr "Errore: l'utente {username} non è parte di alcuna organizzazione."
 
 #: src/subscription_manager/managercli.py:1105
 #, fuzzy, python-brace-format
@@ -5233,10 +5230,8 @@ msgstr "Errore: impossibile recuperare l'elenco degli ambienti dal server"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:1499
-#, fuzzy
-#| msgid "Environments"
 msgid "Environments updated."
-msgstr "Ambienti"
+msgstr "Ambienti aggiornati."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:1501
@@ -5537,10 +5532,8 @@ msgstr "Livello del servizio impostato su: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:2087
-#, fuzzy
-#| msgid "Environment: "
 msgid "Environments: "
-msgstr "Ambiente: "
+msgstr "Ambienti: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:2089
