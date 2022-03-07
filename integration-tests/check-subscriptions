@@ -182,8 +182,8 @@ class SubscriptionsCase(MachineCase):
             m.write("/etc/insights-client/insights-client.conf",
 f"""
 [insights-client]
-gpg=False
 auto_config=False
+auto_update=False
 base_url={hostname}:8888/r/insights
 cert_verify=/etc/cockpit/ws-certs.d/0-self-signed-ca.pem
 username=admin
@@ -388,9 +388,6 @@ class TestSubscriptions(SubscriptionsCase):
         b.click('footer button.apply')
         with b.wait_timeout(360):
             b.wait_not_present('.pf-c-modal-box')
-
-        # HACK - this should eventually not be necessary
-        m.execute("insights-client --check-results")
 
         b.wait_visible("#overview a[href='http://cloud.redhat.com/insights/inventory/123-nice-id']")
         b.wait_visible("#overview a:contains('3 hits, including important')")

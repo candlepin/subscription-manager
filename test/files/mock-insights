@@ -39,12 +39,6 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(b"lub-dup")
             return
 
-        m = self.match("/r/insights/v1/static/core/insights-core.egg")
-        if m:
-            self.send_response(304)
-            self.end_headers()
-            return
-
         m = self.match("/r/insights/v1/static/uploader.v2.json")
         if m:
             # This is not a valid response and will cause the client
