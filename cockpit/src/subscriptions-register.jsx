@@ -129,7 +129,7 @@ class SubscriptionRegisterDialog extends React.Component {
                                    placeholder="key_one,key_two" value={this.props.activation_keys}
                                    onChange={value => this.props.onChange('activation_keys', value)} />
                     </FormGroup>
-                    <FormGroup fieldId="subscription-register-org" label={_("Organization")}>
+                    <FormGroup fieldId="subscription-register-org" label={_("Organization ID")}>
                         <TextInput id="subscription-register-org"
                                    value={this.props.org}
                                    onChange={value => this.props.onChange('org', value)} />
