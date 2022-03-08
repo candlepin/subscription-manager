@@ -10,10 +10,10 @@
 #
 # You need these in your insights-client.conf:
 #
-# gpg=False
 # auto_config=False
-# base_url=127.0.0.1:8888/r/insights
-# insecure_connection=True
+# auto_update=False
+# base_url=127.0.0.1:8443/r/insights
+# cert_verify=/var/lib/insights/mock-certs/ca.crt
 # username=admin
 # password=foobar
 
@@ -22,6 +22,7 @@ import json
 import os
 import re
 import ssl
+import subprocess
 
 systems = {}
 
@@ -133,25 +134,22 @@ class handler(BaseHTTPRequestHandler):
 
 
 def insights_server(port):
+    # Let's put the certs into /var/lib/insights so that SELinux
+    # allows insights-client to actually read ca.crt when running as a
+    # systemd service.
+    certdir = "/var/lib/insights/mock-certs"
+    if not os.path.exists(certdir):
+        os.makedirs(certdir)
+        subprocess.check_call(["sscg"], cwd=certdir)
+
     httpd = HTTPServer(('', port), handler)
-    certfile = '/etc/cockpit/ws-certs.d/0-self-signed.cert'
-    keyfile = '/etc/cockpit/ws-certs.d/0-self-signed.key'
     ssl_args = {
-        'certfile': certfile,
+        'certfile': f'{certdir}/service.pem',
+        'keyfile': f'{certdir}/service-key.pem',
         'server_side': True,
     }
-    # take into account a behaviour change in the way cockpit generates its
-    # self-signed bits:
-    # - cockpit < 242: the .cert file contains both certificate *and* key
-    # - cockpit >= 242: separate .cert and .key files
-    # hence, if the separate .key file exists, use it as keyfile,
-    # otherwise use the .cert for that
-    if os.path.isfile(keyfile):
-        ssl_args['keyfile'] = keyfile
-    else:
-        ssl_args['keyfile'] = certfile
     httpd.socket = ssl.wrap_socket(httpd.socket, **ssl_args)
     httpd.serve_forever()
 
 
-insights_server(8888)
+insights_server(8443)

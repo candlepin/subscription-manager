@@ -184,15 +184,13 @@ f"""
 [insights-client]
 auto_config=False
 auto_update=False
-base_url={hostname}:8888/r/insights
-cert_verify=/etc/cockpit/ws-certs.d/0-self-signed-ca.pem
+base_url={hostname}:8443/r/insights
+cert_verify=/var/lib/insights/mock-certs/ca.crt
 username=admin
 password=foobar
 """)
 
         m.upload(["files/mock-insights"], "/var/tmp")
-        # this re-uses cockpit ws certificate, so ensure that it exists
-        m.execute("systemctl start cockpit")
         m.spawn("/var/tmp/mock-insights", "mock-insights")
 
     def wait_subscription(self, product, is_subscribed):
@@ -362,9 +360,6 @@ class TestSubscriptions(SubscriptionsCase):
         m = self.machine
         b = self.browser
 
-        if m.image.startswith('rhel-9-'):
-            self.skipTest("insights-client is currently broken in RHEL 9")
-
         self.login_and_go("/subscriptions")
 
         b.click("button:contains('Register')")
@@ -413,9 +408,6 @@ class TestSubscriptions(SubscriptionsCase):
     def testSubAndInAndFail(self):
         m = self.machine
         b = self.browser
-
-        if m.image.startswith('rhel-9-'):
-            self.skipTest("insights-client is currently broken in RHEL 9")
 
         self.login_and_go("/subscriptions")
 
