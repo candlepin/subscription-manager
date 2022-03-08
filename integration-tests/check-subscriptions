@@ -149,20 +149,20 @@ class SubscriptionsCase(MachineCase):
         # Wait for the web service to be accessible
         machine_python(self.machine, WAIT_SCRIPT, CANDLEPIN_URL)
 
+        hostname = m.execute("hostname").rstrip()
+
         m.write("/etc/insights-client/insights-client.conf",
-"""
+f"""
 [insights-client]
 auto_config=False
 auto_update=False
-base_url=localhost:8888/r/insights
-cert_verify=False
+base_url={hostname}:8443/r/insights
+cert_verify=/var/lib/insights/mock-certs/ca.crt
 username=admin
 password=foobar
 """)
 
         m.upload(["files/mock-insights"], "/var/tmp")
-        # this re-uses cockpit ws certificate, so ensure that it exists
-        m.execute("systemctl start cockpit")
         m.spawn("/var/tmp/mock-insights", "mock-insights")
 
         # HACK: older c-ws versions always log an assertion; https://github.com/cockpit-project/cockpit/pull/16765
