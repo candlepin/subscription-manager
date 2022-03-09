@@ -15,7 +15,7 @@
 import logging
 import json
 
-from cloud_what.provider import get_cloud_provider
+from cloud_what.provider import get_cloud_provider, DetectionMethod
 from rhsmlib.facts import collector
 
 
@@ -37,8 +37,11 @@ class CloudFactsCollector(collector.FactsCollector):
 
         self.hardware_methods = []
 
-        # Try to detect cloud provider
-        self.cloud_provider = get_cloud_provider(self._collected_hw_info)
+        # Try to detect cloud provider using only strong method
+        self.cloud_provider = get_cloud_provider(
+            facts=self._collected_hw_info,
+            methods=DetectionMethod.STRONG
+        )
 
         if self.cloud_provider is not None:
             # Create dispatcher for supported cloud providers
