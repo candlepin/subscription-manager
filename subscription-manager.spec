@@ -654,6 +654,10 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
     %dir %{_sysconfdir}/yum.repos.d
 %endif
 
+%attr(750,root,root) %dir %{_var}/cache/cloud-what
+%dir %{python_sitearch}/cloud_what
+%dir %{python_sitearch}/cloud_what/providers
+
 %dir %{python_sitearch}/rhsmlib/candlepin
 %dir %{python_sitearch}/rhsmlib/compat
 %dir %{python_sitearch}/rhsmlib/dbus
@@ -797,6 +801,10 @@ find %{buildroot} -name \*.py -exec touch -r %{SOURCE0} '{}' \;
     %{_prefix}/lib/yum-plugins/product-id.py*
     %{_prefix}/lib/yum-plugins/search-disabled-repos.py*
 %endif
+
+# cloud-what
+%{python_sitearch}/cloud_what/*.py*
+%{python_sitearch}/cloud_what/providers/*.py*
 
 # zypper plugins
 %if 0%{?suse_version}
