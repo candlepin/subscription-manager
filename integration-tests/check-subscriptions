@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Cockpit; If not, see <http://www.gnu.org/licenses/>.
 
-import functools
 import os
 import sys
 import unittest
@@ -27,6 +26,7 @@ sys.path.append(os.path.join(TEST_DIR, "common"))
 sys.path.append(os.path.join(os.path.dirname(TEST_DIR), "bots/machine"))
 from packagelib import *
 from testlib import *
+import testvm
 
 # candlepin on the services image has a lot of demo data preloaded
 # useful info/commands:
@@ -60,9 +60,12 @@ import sys
 import time
 import requests
 
-sys.stderr.write("Waiting 5 seconds for %s\\n" % sys.argv[1])
+# minimum waiting time for Candlepin to answer (in seconds)
+waiting_time = 10
+
+sys.stderr.write("Waiting %s seconds for %s\\n" % (waiting_time, sys.argv[1]))
 sys.stderr.flush()
-time.sleep(5)
+time.sleep(waiting_time)
 for i in range(1,200):
   try:
      sys.stderr.write("Waiting for %s\\n" % sys.argv[1])
@@ -118,14 +121,7 @@ def skipUnlessDistroFamily(distro, reason):
     unless the distribution of the machine is part of the specified
     family [distro] (i.e. it starts as "distro-").
     """
-    def distro_wrapper(func):
-        @functools.wraps(func)
-        def wrapper(obj):
-            if not obj.machine.image.startswith(distro + '-'):
-                raise unittest.SkipTest(reason)
-            return func(obj)
-        return wrapper
-    return distro_wrapper
+    return unittest.skipUnless(testvm.DEFAULT_IMAGE.startswith(distro + '-'), reason)
 
 
 class SubscriptionsCase(MachineCase):
@@ -167,12 +163,6 @@ class SubscriptionsCase(MachineCase):
         # make it available for subscription-manager too
         m.upload([candlepin_ca_tmpfile], f"/etc/rhsm/ca/{candlepin_ca_filename}")
 
-        # Apply some extra cleanups on rhel-atomic.  These cleanups
-        # are necessary because all changes to /etc after a "atomic
-        # host upgrade" and before the next boot are lost.
-        if m.image == "rhel-atomic":
-            m.execute("rm -f /etc/pki/consumer/* /etc/pki/entitlement/*")
-
         # Wait for the web service to be accessible
         machine_python(self.machine, WAIT_SCRIPT, CANDLEPIN_URL)
 
@@ -194,6 +184,9 @@ password=foobar
         # this re-uses cockpit ws certificate, so ensure that it exists
         m.execute("systemctl start cockpit")
         m.spawn("/var/tmp/mock-insights", "mock-insights")
+
+        if m.image == "rhel-8-5":
+            self.allow_journal_messages("json_object_get_string_member: assertion 'node != NULL' failed")
 
     def wait_subscription(self, product, is_subscribed):
         if is_subscribed is True:
