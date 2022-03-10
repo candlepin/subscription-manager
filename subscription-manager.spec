@@ -361,7 +361,7 @@ Requires:  %{py_package_prefix}-python-dateutil
 Requires: %{py_package_prefix}-dateutil
 %endif
 Requires: %{py_package_prefix}-iniparse
-Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
+Requires: subscription-manager-rhsm-certificates
 # Required by Fedora packaging guidelines
 %{?python_provide:%python_provide %{py_package_prefix}-rhsm}
 Requires: python3-cloud-what = %{version}-%{release}
