@@ -11,24 +11,27 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from .base import SyspurposeTestBase, write_to_file_utf8, Capture
+from ..fixture import Capture
 import io
 import json
 import os
 import mock
+import tempfile
+import unittest
 
 from syspurpose import files, utils
 from syspurpose.files import detect_changed, three_way_merge, UNSUPPORTED, SyncedStore, SyncResult
 
 
-class SyspurposeStoreTests(SyspurposeTestBase):
+class SyspurposeStoreTests(unittest.TestCase):
 
     def test_new_syspurpose_store(self):
         """
         A smoke test to ensure nothing bizarre happens on SyspurposeStore object creation
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         self.assertEqual(syspurpose_store.contents, {})
         self.assertEqual(syspurpose_store.path, temp_dir)
 
@@ -36,41 +39,44 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Can the SyspurposeStore.read_file method handle attempting to read a file which does not exist?
         """
-        temp_file = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_file = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         self.assertFalse(os.path.exists(temp_file))
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_file)
-        res = self.assertRaisesNothing(syspurpose_store.read_file)
+        syspurpose_store = files.SyspurposeStore(temp_file)
+        res = syspurpose_store.read_file()
         self.assertFalse(bool(res))
 
     def test_read_file_existent_file(self):
         """
         The SyspurposeStore.read_file method should return True if the file was successfully read.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
         self.assertTrue(os.path.exists(temp_dir))
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
-        res = self.assertRaisesNothing(syspurpose_store.read_file)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
+        res = syspurpose_store.read_file()
         self.assertTrue(bool(res))
 
     def test_read_file_with_unicode_content(self):
         """
         The SyspurposeStore.read_file method should return True if the file with unicode content was successfully read.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'key1': 'Νίκος', 'key2': ['value_with_ř']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
         self.assertTrue(os.path.exists(temp_dir))
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
-        res = self.assertRaisesNothing(syspurpose_store.read_file)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
+        res = syspurpose_store.read_file()
         self.assertTrue(bool(res))
 
     def _read_file(self, file_contents=None, expected_contents=None):
@@ -80,7 +86,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         :param expected_contents:
         :return: None
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             if file_contents and not isinstance(file_contents, str):
                 utils.write_to_file_utf8(f, file_contents)
@@ -90,8 +97,8 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertTrue(os.path.exists(temp_dir), "Unable to create test file in temp dir")
 
         # Actually do the test
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
-        self.assertRaisesNothing(syspurpose_store.read_file)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
+        syspurpose_store.read_file()
         self.assertEqual(syspurpose_store.contents, expected_contents)
 
     def test_read_file_empty_file(self):
@@ -112,10 +119,11 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the create method will create the directory (if needed), and that the resulting \
         file in the directory is writable by us.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
-        self.assertRaisesNothing(syspurpose_store.create)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
+        syspurpose_store.create()
         # We should have a new file in the temp_dir that we can access for writing
         self.assertTrue(os.path.exists(temp_dir))
         self.assertTrue(os.access(temp_dir, os.W_OK))
@@ -125,22 +133,23 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the add method of SyspurposeStore is able to add items to lists of items
         in the store, whether they existed prior or not.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Brand new unseen key is added
-        res = self.assertRaisesNothing(syspurpose_store.add, "new_key", "new_value")
+        res = syspurpose_store.add("new_key", "new_value")
         self.assertIn("new_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["new_key"], ["new_value"])
         self.assertTrue(res, "The add method should return true when the store has changed")
 
         # Add to an already seen existing key
-        res = self.assertRaisesNothing(syspurpose_store.add, "already_present_key", "new_value_2")
+        res = syspurpose_store.add("already_present_key", "new_value_2")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], ["preexisting_value", "new_value_2"])
         self.assertTrue(res, "The add method should return true when the store has changed")
@@ -150,16 +159,17 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the add method of SyspurposeStore is able to add item to key with
         null value
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": None}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Brand new unseen key is added
-        res = self.assertRaisesNothing(syspurpose_store.add, "already_present_key", "new_value")
+        res = syspurpose_store.add("already_present_key", "new_value")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], ["new_value"])
         self.assertTrue(res, "The add method should return true when the store has changed")
@@ -169,16 +179,17 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the add method of SyspurposeStore is able to add items to a property
         in the store, without overriding an existing scalar value the property might already contain.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": "preexisting_scalar_value"}
         with open(temp_dir, 'w') as f:
             json.dump(test_data, f)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Add to an already seen existing key, that contains a scalar value
-        res = self.assertRaisesNothing(syspurpose_store.add, "already_present_key", "new_value_2")
+        res = syspurpose_store.add("already_present_key", "new_value_2")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], ["preexisting_scalar_value", "new_value_2"])
         self.assertTrue(res, "The add method should return true when the store has changed")
@@ -188,16 +199,17 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the add method of SyspurposeStore is able to add unicode strings to lists of items
         in the store.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'ονόματα': ['Νίκος']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Add to an already seen existing key
-        res = self.assertRaisesNothing(syspurpose_store.add, 'ονόματα', 'Κώστας')
+        res = syspurpose_store.add('ονόματα', 'Κώστας')
         self.assertIn('ονόματα', syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents['ονόματα'], ['Νίκος', 'Κώστας'])
         self.assertTrue(res, "The add method should return true when the store has changed")
@@ -207,16 +219,17 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the add method of SyspurposeStore will not add an item to a list, if that list already contains
         the item we're trying to add.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
         with open(temp_dir, 'w') as f:
             json.dump(test_data, f)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Try to add a value that already exists to an already seen existing key
-        self.assertRaisesNothing(syspurpose_store.add, "already_present_key", "preexisting_value")
+        syspurpose_store.add("already_present_key", "preexisting_value")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(len(syspurpose_store.contents["already_present_key"]), 1)
         self.assertEqual(syspurpose_store.contents["already_present_key"], ["preexisting_value"])
@@ -225,22 +238,23 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the remove method can remove items from the store.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Remove an item from the store which we have previously seen
-        res = self.assertRaisesNothing(syspurpose_store.remove, "already_present_key", "preexisting_value")
+        res = syspurpose_store.remove("already_present_key", "preexisting_value")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], [])
         self.assertTrue(res, "The remove method should return true when the store has changed")
 
         # Try to remove an item that we've previously not seen
-        res = self.assertRaisesNothing(syspurpose_store.remove, "new_key", "any_value")
+        res = syspurpose_store.remove("new_key", "any_value")
         self.assertFalse(res, "The remove method should return false when the store has not changed")
 
     def test_remove_unsets_existing_scalar_value(self):
@@ -248,16 +262,17 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the remove_command, in case the value specified for removal is a scalar/non-list value,
         unsets this value.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": "preexisting_scalar_value"}
         with open(temp_dir, 'w') as f:
             json.dump(test_data, f)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Remove an item from the store which we have previously seen, whose value is scalar / not contained in a list
-        res = self.assertRaisesNothing(syspurpose_store.remove, "already_present_key", "preexisting_scalar_value")
+        res = syspurpose_store.remove("already_present_key", "preexisting_scalar_value")
         self.assertNotIn("already_present_key", syspurpose_store.contents)
         self.assertTrue(res, "The remove method should return true when the store has changed")
 
@@ -266,16 +281,17 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the remove method of SyspurposeStore is able to remove unicode strings from lists of items
         in the store.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'ονόματα': ['Νίκος', 'Κώστας']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Remove from an already seen existing key
-        res = self.assertRaisesNothing(syspurpose_store.remove, 'ονόματα', 'Κώστας')
+        res = syspurpose_store.remove('ονόματα', 'Κώστας')
         self.assertIn('ονόματα', syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents['ονόματα'], ['Νίκος'])
         self.assertTrue(res, "The add method should return true when the store has changed")
@@ -284,18 +300,19 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify the operation of the unset method of SyspurposeStore
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": ["preexisting_value"]}
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
-        res = self.assertRaisesNothing(syspurpose_store.unset, "already_present_key")
+        res = syspurpose_store.unset("already_present_key")
         # We expect a value of true from this method when the store was changed
         self.assertTrue(res, "The unset method should return true when the store has changed")
         self.assertNotIn("already_present_key", syspurpose_store.contents, msg="Expected the key to no longer be present")
 
-        res = self.assertRaisesNothing(syspurpose_store.unset, "unseen_key")
+        res = syspurpose_store.unset("unseen_key")
         # We expect falsey values when the store was not modified
         self.assertFalse(res, "The unset method should return false when the store has not changed")
         self.assertNotIn("unseen_key", syspurpose_store.contents, msg="The key passed to unset, has been added to the store")
@@ -305,20 +322,21 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         Verify that the unset method of SyspurposeStore is able to unset unicode strings from items
         in the store.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'ονόματα': ['Νίκος']}
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
-        res = self.assertRaisesNothing(syspurpose_store.unset, "ονόματα")
+        res = syspurpose_store.unset("ονόματα")
         # We expect a value of true from this method when the store was changed
         self.assertTrue(res, "The unset method should return true when the store has changed")
         self.assertNotIn('ονόματα', syspurpose_store.contents, msg="Expected the key to no longer be present")
 
-        res = self.assertRaisesNothing(syspurpose_store.unset, 'άκυρο_κλειδί')
+        res = syspurpose_store.unset('άκυρο_κλειδί')
         # We expect falsey values when the store was not modified
         self.assertFalse(res, "The unset method should return false when the store has not changed")
         self.assertNotIn('άκυρο_κλειδί', syspurpose_store.contents, msg="The key passed to unset, has been added to the store")
@@ -327,13 +345,14 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify the unset operation handles the special case for the SLA field
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"service_level_agreement": "preexisting_value"}
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
-        res = self.assertRaisesNothing(syspurpose_store.unset, "service_level_agreement")
+        res = syspurpose_store.unset("service_level_agreement")
         # We expect a value of true from this method when the store was changed
         self.assertTrue(res, "The unset method should return true when the store has changed")
         self.assertIn("service_level_agreement", syspurpose_store.contents, msg="Expected the key to still be in the contents, but reset to an empty string")
@@ -344,26 +363,27 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify the operation of the set method of SyspurposeStore
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"already_present_key": "old_value"}
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Check the behaviour of manipulating an existing key with an identical value (no update)
-        res = self.assertRaisesNothing(syspurpose_store.set, "already_present_key", "old_value")
+        res = syspurpose_store.set("already_present_key", "old_value")
         self.assertFalse(res, "When a value is not actually changed, set should return false")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], "old_value")
 
         # Modify existing item
-        res = self.assertRaisesNothing(syspurpose_store.set, "already_present_key", "new_value")
+        res = syspurpose_store.set("already_present_key", "new_value")
         self.assertTrue(res, "When an item is set to a new value, set should return true")
         self.assertIn("already_present_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["already_present_key"], "new_value")
 
         # Add new item set to a new value
-        res = self.assertRaisesNothing(syspurpose_store.set, "new_key", "new_value_2")
+        res = syspurpose_store.set("new_key", "new_value_2")
         self.assertTrue(res, "When an item is set to a new value, set should return true")
         self.assertIn("new_key", syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents["new_key"], "new_value_2")
@@ -372,26 +392,27 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify the operation of the set method of SyspurposeStore when using unicode strings
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'ονόματα': 'Νίκος'}
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
         # Check the behaviour of manipulating an existing key with an identical value (no update)
-        res = self.assertRaisesNothing(syspurpose_store.set, 'ονόματα', 'Νίκος')
+        res = syspurpose_store.set('ονόματα', 'Νίκος')
         self.assertFalse(res, "When a value is not actually changed, set should return false")
         self.assertIn('ονόματα', syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents['ονόματα'], 'Νίκος')
 
         # Modify existing item
-        res = self.assertRaisesNothing(syspurpose_store.set, 'ονόματα', 'Κώστας')
+        res = syspurpose_store.set('ονόματα', 'Κώστας')
         self.assertTrue(res, "When an item is set to a new value, set should return true")
         self.assertIn('ονόματα', syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents['ονόματα'], 'Κώστας')
 
         # Add new item set to a new value
-        res = self.assertRaisesNothing(syspurpose_store.set, 'καινούργιο', 'Άλεξανδρος')
+        res = syspurpose_store.set('καινούργιο', 'Άλεξανδρος')
         self.assertTrue(res, "When an item is set to a new value, set should return true")
         self.assertIn('καινούργιο', syspurpose_store.contents)
         self.assertEqual(syspurpose_store.contents['καινούργιο'], 'Άλεξανδρος')
@@ -400,15 +421,16 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the SyspurposeStore can write changes to the expected file.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"arbitrary_key": "arbitrary_value"}
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
-        self.assertRaisesNothing(syspurpose_store.write)
+        syspurpose_store.write()
 
         with io.open(temp_dir, 'r', encoding='utf-8') as f:
-            actual_contents = self.assertRaisesNothing(json.load, f)
+            actual_contents = json.load(f)
 
         self.assertDictEqual(actual_contents, test_data)
 
@@ -416,15 +438,16 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Verify that the SyspurposeStore can write changes that include unicode strings to the expected file.
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {'όνομα': 'Νίκος'}
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore, temp_dir)
+        syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
-        self.assertRaisesNothing(syspurpose_store.write)
+        syspurpose_store.write()
 
         with io.open(temp_dir, 'r', encoding='utf-8') as f:
-            actual_contents = self.assertRaisesNothing(json.load, f)
+            actual_contents = json.load(f)
 
         self.assertDictEqual(actual_contents, test_data)
 
@@ -432,17 +455,18 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         """
         Does read properly initialize a new SyspurposeStore?
         """
-        temp_dir = os.path.join(self._mktmp(), 'syspurpose_file.json')
+        base_temp_dir = tempfile.TemporaryDirectory()
+        temp_dir = os.path.join(base_temp_dir.name, 'syspurpose_file.json')
         test_data = {"arbitrary_key": "arbitrary_value"}
 
         with io.open(temp_dir, 'w', encoding='utf-8') as f:
             utils.write_to_file_utf8(f, test_data)
 
-        syspurpose_store = self.assertRaisesNothing(files.SyspurposeStore.read, temp_dir)
+        syspurpose_store = files.SyspurposeStore.read(temp_dir)
         self.assertDictEqual(syspurpose_store.contents, test_data)
 
 
-class TestSyncedStore(SyspurposeTestBase):
+class TestSyncedStore(unittest.TestCase):
     """
     Tests to show the proper overall syncing functionality of the SyncedStore class.
     This class (at the time of writing) is responsible for maintaining the local syspurpose file,
@@ -459,20 +483,20 @@ class TestSyncedStore(SyspurposeTestBase):
     }
 
     def setUp(self):
-        self.temp_dir = self._mktmp()
-        self.temp_cache_dir = self._mktmp()
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.temp_cache_dir = tempfile.TemporaryDirectory()
         # For these tests we want to make sure that the paths that are used are our mock files
 
-        user_syspurpose_dir_patch = mock.patch('syspurpose.files.USER_SYSPURPOSE_DIR', self.temp_dir)
+        user_syspurpose_dir_patch = mock.patch('syspurpose.files.USER_SYSPURPOSE_DIR', self.temp_dir.name)
         user_syspurpose_dir_patch.start()
         self.addCleanup(user_syspurpose_dir_patch.stop)
 
-        cache_dir_patch = mock.patch('syspurpose.files.CACHE_DIR', self.temp_cache_dir)
+        cache_dir_patch = mock.patch('syspurpose.files.CACHE_DIR', self.temp_cache_dir.name)
         cache_dir_patch.start()
         self.addCleanup(cache_dir_patch.stop)
 
-        self.local_syspurpose_file = os.path.join(self.temp_dir, 'syspurpose.json')
-        self.cache_syspurpose_file = os.path.join(self.temp_cache_dir, 'cache.json')
+        self.local_syspurpose_file = os.path.join(self.temp_dir.name, 'syspurpose.json')
+        self.cache_syspurpose_file = os.path.join(self.temp_cache_dir.name, 'cache.json')
 
         # For these tests we want to make sure that the paths that are used are our mock files
         synced_store_local_patch = mock.patch('syspurpose.files.SyncedStore.PATH',
@@ -568,7 +592,7 @@ class TestSyncedStore(SyspurposeTestBase):
         Test that synced store is automatically synced, when unset method is used
         in block of with statement
         """
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             self.assertFalse(synced_store.changed)
             synced_store.unset('foo')
@@ -638,7 +662,7 @@ class TestSyncedStore(SyspurposeTestBase):
         Test that synced store is automatically synced, when remove method is used
         in block of with statement
         """
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar'], 'cool': 'shark'})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar'], 'cool': 'shark'})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             self.assertFalse(synced_store.changed)
             synced_store.remove('foo', 'bar')
@@ -657,7 +681,7 @@ class TestSyncedStore(SyspurposeTestBase):
         Test that synced store is automatically synced, when remove method is used
         in block of with statement. Test the case, when value is not list.
         """
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             self.assertFalse(synced_store.changed)
             synced_store.remove('foo', 'bar')
@@ -669,7 +693,7 @@ class TestSyncedStore(SyspurposeTestBase):
         """
         Test that removing non-existent value will not mark synced store as changed
         """
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar']})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar']})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             self.assertFalse(synced_store.changed)
             synced_store.remove('foo', 'boooo')
@@ -681,7 +705,7 @@ class TestSyncedStore(SyspurposeTestBase):
         """
         Test that removing non-existent key will not mark synced store as changed
         """
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar']})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': ['bar']})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             self.assertFalse(synced_store.changed)
             synced_store.remove('non-existent', 'foo_bar')
@@ -717,7 +741,7 @@ class TestSyncedStore(SyspurposeTestBase):
         Test that local syncing does not overwrite existing values
         """
         self.uep.has_capability = mock.Mock(side_effect=lambda x: False)
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'foo': 'bar'})
         with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             synced_store.set('cool', 'dear')
         local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
@@ -757,11 +781,11 @@ class TestSyncedStore(SyspurposeTestBase):
     def _assert_falsey_values_removed_from_local(self, remote_contents, local_contents, cache_contents):
         self.uep.getConsumer.return_value = remote_contents
 
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
         local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
@@ -777,11 +801,11 @@ class TestSyncedStore(SyspurposeTestBase):
         self.uep.getConsumer.return_value = {'addOns': addons}
 
         # Write an out of order list to both the local and cache
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'addons': addons[::-1]})
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {'addons': addons[::-1]})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'addons': addons[::-1]})
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {'addons': addons[::-1]})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -799,11 +823,11 @@ class TestSyncedStore(SyspurposeTestBase):
         self.uep.getConsumer.return_value = remote_contents
 
         # Write an out of order list to both the local and cache
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), initial_syspurpose)
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), initial_syspurpose)
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), initial_syspurpose)
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), initial_syspurpose)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -837,11 +861,11 @@ class TestSyncedStore(SyspurposeTestBase):
         self.uep.getConsumer.return_value = remote_contents
 
         # Write an out of order list to both the local and cache
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -860,8 +884,8 @@ class TestSyncedStore(SyspurposeTestBase):
             'service_level_agreement': ''
         }
 
-        self.assert_equal_dict(expected_local, local_result)
-        self.assert_equal_dict(expected_cache, cache_result)
+        self.assertEqual(expected_local, local_result)
+        self.assertEqual(expected_cache, cache_result)
 
     def test_same_values_not_synced_with_server(self):
         cache_contents = {
@@ -881,11 +905,11 @@ class TestSyncedStore(SyspurposeTestBase):
         }
 
         self.uep.getConsumer.return_value = remote_contents
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), local_contents)
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -908,23 +932,23 @@ class TestSyncedStore(SyspurposeTestBase):
             'addons': None
         }
 
-        self.assert_equal_dict(expected_cache, cache_result)
-        self.assert_equal_dict(expected_local, local_result)
+        self.assertEqual(expected_cache, cache_result)
+        self.assertEqual(expected_local, local_result)
 
     def test_server_does_not_support_syspurpose(self):
         # This is how we detect if we have syspurpose support
         self.uep.has_capability = mock.Mock(side_effect=lambda x: x in [])
 
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': 'initial'})
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': 'initial'})
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
 
         remote_content = synced_store.get_remote_contents()
         self.assertEqual(remote_content, {})
 
-        self.assertRaisesNothing(synced_store.set, 'role', 'new_role')
-        result = self.assertRaisesNothing(synced_store.sync)
+        synced_store.set('role', 'new_role')
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -932,14 +956,14 @@ class TestSyncedStore(SyspurposeTestBase):
         cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
 
         # The cache should not be updated at all
-        self.assert_equal_dict({}, cache_result)
-        self.assert_equal_dict({'role': 'new_role'}, local_result)
+        self.assertEqual({}, cache_result)
+        self.assertEqual({'role': 'new_role'}, local_result)
 
         self.uep.updateConsumer.assert_not_called()
 
     def test_server_setting_unsupported_value(self):
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': ''})
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': ''})
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something", use_valid_fields=True)
 
@@ -950,8 +974,8 @@ class TestSyncedStore(SyspurposeTestBase):
             self.assertTrue("SP Server" in captured.out)
 
     def test_server_setting_unsupported_key(self):
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': ''})
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': ''})
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something", use_valid_fields=True)
 
@@ -969,19 +993,19 @@ class TestSyncedStore(SyspurposeTestBase):
         # values
 
         self.uep.has_capability = mock.Mock(side_effect=lambda x: x in [])
-        write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': 'initial'})
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
+        utils.write_to_file_utf8(io.open(self.local_syspurpose_file, 'w'), {'role': 'initial'})
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), {})
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
         local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
         cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
 
-        self.assert_equal_dict({'role': 'initial'}, local_result)
-        self.assert_equal_dict({}, cache_result)
+        self.assertEqual({'role': 'initial'}, local_result)
+        self.assertEqual({}, cache_result)
 
         # Now the "fake" upgrade
 
@@ -989,7 +1013,7 @@ class TestSyncedStore(SyspurposeTestBase):
         self.uep.getConsumer.return_value = self.default_remote_values
 
         synced_store = SyncedStore(self.uep, consumer_uuid="something")
-        result = self.assertRaisesNothing(synced_store.sync)
+        result = synced_store.sync()
 
         self.assertTrue(isinstance(result, SyncResult))
 
@@ -1003,8 +1027,8 @@ class TestSyncedStore(SyspurposeTestBase):
             'addons': self.default_remote_values['addOns']
         }
 
-        self.assert_equal_dict({'role': 'initial'}, local_result)
-        self.assert_equal_dict(expected_cache, cache_result)
+        self.assertEqual({'role': 'initial'}, local_result)
+        self.assertEqual(expected_cache, cache_result)
 
     def test_user_deletes_syspurpose_file(self):
         cache_contents = {
@@ -1021,12 +1045,12 @@ class TestSyncedStore(SyspurposeTestBase):
         }
         consumer_uuid = "something"
         self.uep.getConsumer.return_value = remote_contents
-        write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
+        utils.write_to_file_utf8(io.open(self.cache_syspurpose_file, 'w'), cache_contents)
         # We don't write anything to the self.local_syspurpose_file anywhere else, so not making
         # one is equivalent to removing an existing one.
 
         synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
-        self.assertRaisesNothing(synced_store.sync)
+        synced_store.sync()
 
         expected_cache = {'service_level_agreement': '',
                           'addons': []}
@@ -1035,8 +1059,8 @@ class TestSyncedStore(SyspurposeTestBase):
         local_result = json.load(io.open(self.local_syspurpose_file, 'r'))
         cache_result = json.load(io.open(self.cache_syspurpose_file, 'r'))
 
-        self.assert_equal_dict(expected_local, local_result)
-        self.assert_equal_dict(expected_cache, cache_result)
+        self.assertEqual(expected_local, local_result)
+        self.assertEqual(expected_cache, cache_result)
         self.uep.updateConsumer.assert_called_once_with(consumer_uuid,
                                                         role="",
                                                         usage="",
@@ -1049,15 +1073,15 @@ class TestSyncedStore(SyspurposeTestBase):
         does not exist
         """
         # Delete the temporary directory
-        os.rmdir(self.temp_dir)
+        os.rmdir(self.temp_dir.name)
 
         consumer_uuid = "something"
         synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
-        local_content = self.assertRaisesNothing(synced_store.get_local_contents)
+        local_content = synced_store.get_local_contents()
         self.assertEqual(local_content, {})
 
         # Make sure that the directory was created
-        res = os.path.isdir(self.temp_dir)
+        res = os.path.isdir(self.temp_dir.name)
         self.assertTrue(res)
 
     def test_read_file_non_existent_cache_directory(self):
@@ -1066,19 +1090,19 @@ class TestSyncedStore(SyspurposeTestBase):
         does not exist
         """
         # Delete the temporary directory
-        os.rmdir(self.temp_cache_dir)
+        os.rmdir(self.temp_cache_dir.name)
 
         consumer_uuid = "something"
         synced_store = SyncedStore(self.uep, consumer_uuid=consumer_uuid)
-        local_content = self.assertRaisesNothing(synced_store.get_local_contents)
+        local_content = synced_store.get_local_contents()
         self.assertEqual(local_content, {})
 
         # Make sure that the directory was created
-        res = os.path.isdir(self.temp_dir)
+        res = os.path.isdir(self.temp_dir.name)
         self.assertTrue(res)
 
 
-class TestDetectChange(SyspurposeTestBase):
+class TestDetectChange(unittest.TestCase):
 
     def test_added(self):
         """
@@ -1185,7 +1209,7 @@ class TestDetectChange(SyspurposeTestBase):
         self.assertEqual(result, False)
 
 
-class TestThreeWayMerge(SyspurposeTestBase):
+class TestThreeWayMerge(unittest.TestCase):
 
     def test_all_empty(self):
         base = {}
@@ -1194,7 +1218,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_empty_base_no_conflict(self):
         base = {}
@@ -1209,7 +1233,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"A": "remote", "B": "local"}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_local_only(self):
         base = {}
@@ -1218,7 +1242,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = local
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_remote_only(self):
         base = {}
@@ -1227,7 +1251,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = remote
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_key_removed_no_conflict(self):
         base = {"C": "base"}
@@ -1236,7 +1260,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"C": None}  # C should have the None value
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_key_removed_remote_not_in_base(self):
         base = {}
@@ -1245,7 +1269,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = local  # Expect Local to win
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_key_no_longer_supported_from_remote(self):
         base = {"C": "base"}
@@ -1254,7 +1278,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = local
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_key_unset_from_remote_with_false_value(self):
         base = {"C": "base"}
@@ -1263,7 +1287,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"C": None}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_key_removed_from_local(self):
         base = {"C": "base"}
@@ -1272,13 +1296,13 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"C": None}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
         # Now with the on_conflict param set to "local"
 
         expected = {"C": None}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_merge_no_potential_conflict(self):
         base = {"C": "base"}
@@ -1289,7 +1313,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"A": "remote", "B": "local", "C": "base"}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_merge(self):
         """
@@ -1301,12 +1325,12 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"A": "remote", "B": "local", "C": "remote"}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
         # Now with local as the on_conflict winner
         expected = {"A": "remote", "B": "local", "C": "remote"}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_concurrent_modification(self):
         """
@@ -1322,12 +1346,12 @@ class TestThreeWayMerge(SyspurposeTestBase):
         expected = {"A": "remote", "B": "local", shared_key: "remote"}
 
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
         # Now with local set to win
         expected = {"A": "remote", "B": "local", shared_key: "local"}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_concurrent_modification_key_added(self):
         """
@@ -1344,12 +1368,12 @@ class TestThreeWayMerge(SyspurposeTestBase):
         expected = {"A": "remote", "B": "local", shared_key: "remote"}
 
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
         # Now with local set to win
         expected = {"A": "remote", "B": "local", shared_key: "local"}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_merge_conflicting_lists(self):
         """
@@ -1363,12 +1387,12 @@ class TestThreeWayMerge(SyspurposeTestBase):
 
         expected = {"A": "remote", "B": "local", shared_key: ["remote"]}
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
         # Now with local set to win
         expected = {"A": "remote", "B": "local", shared_key: ["local"]}
         result = three_way_merge(local=local, base=base, remote=remote, on_conflict="local")
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_invalid_on_conflict_value(self):
         self.assertRaises(ValueError, three_way_merge, local={}, base={}, remote={},
@@ -1385,7 +1409,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
         expected = {"B": "local"}
 
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_merge_remote_empty_field(self):
         """
@@ -1398,7 +1422,7 @@ class TestThreeWayMerge(SyspurposeTestBase):
         expected = {"B": "local"}
 
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)
 
     def test_merge_missing_remote_list(self):
         """
@@ -1411,4 +1435,4 @@ class TestThreeWayMerge(SyspurposeTestBase):
         expected = {"B": ["local"]}
 
         result = three_way_merge(local=local, base=base, remote=remote)
-        self.assert_equal_dict(expected, result)
+        self.assertEqual(expected, result)

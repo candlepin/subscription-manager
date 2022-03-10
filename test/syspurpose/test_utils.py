@@ -13,17 +13,18 @@
 
 # A group of tests for the miscellaneous utilities in the utils module of syspurpose
 
-from .base import SyspurposeTestBase
 import io
 import os
 import errno
 import json
 import mock
+import tempfile
+import unittest
 
 from syspurpose import utils
 
 
-class UtilsTests(SyspurposeTestBase):
+class UtilsTests(unittest.TestCase):
 
     def tearDown(self):
         utils.HOST_CONFIG_DIR = "/etc/rhsm-host/"
@@ -33,38 +34,38 @@ class UtilsTests(SyspurposeTestBase):
         Verify that the create_dir utility method creates directories as we expect.
         :return:
         """
-        temp_dir = self._mktmp()
+        temp_dir = tempfile.TemporaryDirectory()
 
         # A directory that does not exist yet
-        new_dir = os.path.join(temp_dir, "new_dir")
-        res = self.assertRaisesNothing(utils.create_dir, new_dir)
+        new_dir = os.path.join(temp_dir.name, "new_dir")
+        res = utils.create_dir(new_dir)
         self.assertTrue(os.path.exists(new_dir))
         # There was a change, so the result should be True
         self.assertTrue(res)
 
         # Create another directory
-        existing_dir = os.path.join(temp_dir, "existing")
+        existing_dir = os.path.join(temp_dir.name, "existing")
         os.mkdir(existing_dir, 0o644)
-        res = self.assertRaisesNothing(utils.create_dir, existing_dir)
+        res = utils.create_dir(existing_dir)
         # Should have been no change, so the result should be false
         self.assertFalse(res)
 
         # Create one more directory that does not have the right permissions
-        bad_perm_dir = os.path.join(temp_dir, "bad_perm_dir")
+        bad_perm_dir = os.path.join(temp_dir.name, "bad_perm_dir")
         os.mkdir(bad_perm_dir, 0o400)
 
         impossible_sub_dir = os.path.join(bad_perm_dir, "any_sub_dir")
 
-        self.assertRaisesNothing(utils.create_dir, impossible_sub_dir)
+        utils.create_dir(impossible_sub_dir)
         self.assertFalse(os.path.exists(impossible_sub_dir))
 
     def test_create_file(self):
-        temp_dir = self._mktmp()
-        to_create = os.path.join(temp_dir, "my_cool_file.json")
+        temp_dir = tempfile.TemporaryDirectory()
+        to_create = os.path.join(temp_dir.name, "my_cool_file.json")
 
         test_data = {"arbitrary_key": "arbitrary_value"}
 
-        res = self.assertRaisesNothing(utils.create_file, to_create, test_data)
+        res = utils.create_file(to_create, test_data)
         self.assertTrue(res)
         self.assertTrue(os.path.exists(to_create))
 
@@ -73,7 +74,7 @@ class UtilsTests(SyspurposeTestBase):
 
         self.assertDictEqual(actual_contents, test_data)
 
-        to_create = os.path.join(temp_dir, "my_super_chill_file.json")
+        to_create = os.path.join(temp_dir.name, "my_super_chill_file.json")
 
         # And now when the file appears to exist
         with mock.patch('syspurpose.utils.io.open') as mock_open:
@@ -81,10 +82,10 @@ class UtilsTests(SyspurposeTestBase):
             error_to_raise.errno = errno.EEXIST
             mock_open.side_effect = error_to_raise
 
-            res = self.assertRaisesNothing(utils.create_file, to_create, test_data)
+            res = utils.create_file(to_create, test_data)
             self.assertFalse(res)
 
-        to_create = os.path.join(temp_dir, "my_other_cool_file.json")
+        to_create = os.path.join(temp_dir.name, "my_other_cool_file.json")
 
         # And now with an unexpected OSError
         with mock.patch('syspurpose.utils.io.open') as mock_open:

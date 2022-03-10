@@ -690,13 +690,13 @@ class TestProductBrand(BaseBrandFixture):
 
     def test_format_brand(self):
         fb = self.brand_class.format_brand('Blip')
-        self.assert_string_equals(fb, 'Blip\n')
+        self.assertEqual(fb, 'Blip\n')
 
         fb = self.brand_class.format_brand('')
-        self.assert_string_equals(fb, '\n')
+        self.assertEqual(fb, '\n')
 
         fb = self.brand_class.format_brand('Foo\n')
-        self.assert_string_equals(fb, 'Foo\n')
+        self.assertEqual(fb, 'Foo\n')
 
 
 class TestRHELProductBrand(TestProductBrand):
@@ -754,7 +754,7 @@ class TestBrandFile(fixture.SubManFixture):
         mo = mock.mock_open(read_data=brand_string)
         with mock.patch('subscription_manager.entbranding.open', mo, create=True):
             b = brand_file.read()
-        self.assert_string_equals(brand_string, b)
+        self.assertEqual(brand_string, b)
 
 
 class TestRHELBrandFile(TestBrandFile):

@@ -1,8 +1,5 @@
-import difflib
 import io
 import locale
-import os
-import pprint
 import sys
 import tempfile
 
@@ -79,19 +76,6 @@ def open_mock_many(file_content_map=None, **kwargs):
     with patch(OPEN_FUNCTION, **kwargs) as mo:
         mo.side_effect = get_file
         yield mo
-
-
-@contextmanager
-def temp_file(content, *args, **kwargs):
-    try:
-        kwargs['delete'] = False
-        kwargs.setdefault('prefix', 'sub-man-test')
-        fh = tempfile.NamedTemporaryFile(mode='w+', *args, **kwargs)
-        fh.write(content)
-        fh.close()
-        yield fh.name
-    finally:
-        os.unlink(fh.name)
 
 
 @contextmanager
@@ -328,63 +312,6 @@ class SubManFixture(unittest.TestCase):
         invalid_identity.cert_dir_path = "/not/a/real/path/to/pki/consumer/"
         inj.provide(inj.IDENTITY, invalid_identity)
         return invalid_identity
-
-    # use our naming convention here to make it clear
-    # this is our extension. Note that python 2.7 adds a
-    # assertMultilineEquals that assertEqual of strings does
-    # automatically
-    def assert_string_equals(self, expected_str, actual_str, msg=None):
-        if expected_str != actual_str:
-            expected_lines = expected_str.splitlines(True)
-            actual_lines = actual_str.splitlines(True)
-            delta = difflib.unified_diff(expected_lines, actual_lines, "expected", "actual")
-            message = ''.join(delta)
-
-            if msg:
-                message += " : " + msg
-
-            self.fail("Multi-line strings are unequal:\n" + message)
-
-    def assert_equal_dict(self, expected_dict, actual_dict):
-        mismatches = []
-        missing_keys = []
-        extra = []
-
-        for key in expected_dict:
-            if key not in actual_dict:
-                missing_keys.append(key)
-                continue
-            if expected_dict[key] != actual_dict[key]:
-                mismatches.append((key, expected_dict[key], actual_dict[key]))
-
-        for key in actual_dict:
-            if key not in expected_dict:
-                extra.append(key)
-
-        message = ""
-        if missing_keys or extra:
-            message += "Keys in only one dict: \n"
-            if missing_keys:
-                for key in missing_keys:
-                    message += "actual_dict:  %s\n" % key
-            if extra:
-                for key in extra:
-                    message += "expected_dict: %s\n" % key
-        if mismatches:
-            message += "Unequal values: \n"
-            for info in mismatches:
-                message += "%s: %s != %s\n" % info
-
-        # pprint the dicts
-        message += "\n"
-        message += "expected_dict:\n"
-        message += pprint.pformat(expected_dict)
-        message += "\n"
-        message += "actual_dict:\n"
-        message += pprint.pformat(actual_dict)
-
-        if mismatches or missing_keys or extra:
-            self.fail(message)
 
     def assert_items_equals(self, a, b):
         """Assert that two lists contain the same items regardless of order."""

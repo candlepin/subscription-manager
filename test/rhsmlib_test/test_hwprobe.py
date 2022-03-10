@@ -736,7 +736,7 @@ VARIANT_ID=server
                 'cpu.topology_source': 's390 book_siblings_list'
             }
 
-            self.assert_equal_dict(expected, self.hw_check_topo.get_cpu_info())
+            self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
     @patch.object(hwprobe.HardwareCollector, 'has_s390x_sysinfo')
     @patch.object(hwprobe.HardwareCollector, 'read_s390x_sysinfo')
@@ -784,7 +784,7 @@ VARIANT_ID=server
                 'cpu.cpu_socket(s)': 24,
                 'cpu.topology_source': 's390x sysinfo'
             }
-            self.assert_equal_dict(expected, self.hw_check_topo.get_cpu_info())
+            self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
     @patch.object(hwprobe.HardwareCollector, 'count_cpumask_entries')
     @patch("os.listdir")
@@ -806,7 +806,7 @@ VARIANT_ID=server
                 'cpu.thread(s)_per_core': 1,
                 'cpu.topology_source': 'kernel /sys cpu sibling lists'
             }
-            self.assert_equal_dict(expected, self.hw_check_topo.get_cpu_info())
+            self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
     @patch("os.listdir")
     def test_cpu_info_no_topo(self, mock_list_dir):
@@ -828,7 +828,7 @@ VARIANT_ID=server
                 'cpu.thread(s)_per_core': 1,
                 'cpu.topology_source': "fallback one socket"
             }
-            self.assert_equal_dict(expected, self.hw_check_topo.get_cpu_info())
+            self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
     @patch.object(hwprobe.HardwareCollector, "read_physical_id")
     @patch("os.listdir")
@@ -858,7 +858,7 @@ VARIANT_ID=server
                     'cpu.thread(s)_per_core': 1,
                     'cpu.topology_source': 'ppc64 physical_package_id'
                 }
-                self.assert_equal_dict(expected, self.hw_check_topo.get_cpu_info())
+                self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
     @patch("os.listdir")
     def test_cpu_info_lots_cpu(self, mock_list_dir):
@@ -881,7 +881,7 @@ VARIANT_ID=server
                 'cpu.cpu_socket(s)': 1,
                 'cpu.topology_source': 'kernel /sys cpu sibling lists'
             }
-            self.assert_equal_dict(expected, self.hw_check_topo.get_cpu_info())
+            self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
     @patch("os.listdir")
     def test_cpu_info_other_files(self, mock_list_dir):
@@ -913,7 +913,7 @@ VARIANT_ID=server
                 'cpu.cpu_socket(s)': 1,
                 'cpu.topology_source': 'kernel /sys cpu sibling lists'
             }
-            self.assert_equal_dict(expected, self.hw_check_topo.get_cpu_info())
+            self.assertEqual(expected, self.hw_check_topo.get_cpu_info())
 
 
 class TestLscpu(unittest.TestCase):

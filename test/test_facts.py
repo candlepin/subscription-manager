@@ -158,7 +158,7 @@ class TestFacts(fixture.SubManFixture):
         test_facts = json.loads(facts_buf)
         mock_collect.return_value = test_facts
         changed = self.f.has_changed()
-        self.assert_equal_dict(test_facts, self.f.facts)
+        self.assertEqual(test_facts, self.f.facts)
         self.assertFalse(changed)
 
     @patch('subscription_manager.facts.Facts.get_facts')
@@ -180,7 +180,7 @@ class TestFacts(fixture.SubManFixture):
         mock_collect.return_value = test_facts
 
         changed = self.f.has_changed()
-        self.assert_equal_dict(test_facts, self.f.facts)
+        self.assertEqual(test_facts, self.f.facts)
         self.assertTrue(changed)
 
     @patch('subscription_manager.facts.Facts._cache_exists',

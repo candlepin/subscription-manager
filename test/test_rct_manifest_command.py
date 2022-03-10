@@ -76,7 +76,7 @@ class RCTManifestCommandTests(SubManFixture):
             catman._do_command()
 
         self.assertEqual("", cap.err)
-        self.assert_string_equals(manifestdata.correct_manifest_output, cap.out)
+        self.assertEqual(manifestdata.correct_manifest_output, cap.out)
 
     def test_extract_manifest(self):
         tmp_dir = tempfile.mkdtemp()
