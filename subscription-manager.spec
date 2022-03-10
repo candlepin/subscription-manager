@@ -824,7 +824,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/pki/entitlement
 # Setup cert directories for the container plugin:
 mkdir -p %{buildroot}%{_sysconfdir}/docker/certs.d/
 mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
-install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
+install -m 644 %{_builddir}/%{buildsubdir}/src/content_plugins/redhat-entitlement-authority.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
 %endif
 
 %if %use_cockpit
