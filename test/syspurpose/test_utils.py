@@ -13,18 +13,18 @@
 
 # A group of tests for the miscellaneous utilities in the utils module of syspurpose
 
-from .base import SyspurposeTestBase
 import io
 import os
 import errno
 import json
 import mock
 import tempfile
+import unittest
 
 from syspurpose import utils
 
 
-class UtilsTests(SyspurposeTestBase):
+class UtilsTests(unittest.TestCase):
 
     def tearDown(self):
         utils.HOST_CONFIG_DIR = "/etc/rhsm-host/"

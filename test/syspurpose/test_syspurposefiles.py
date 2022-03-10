@@ -11,19 +11,19 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from .base import SyspurposeTestBase
 from ..fixture import Capture
 import io
 import json
 import os
 import mock
 import tempfile
+import unittest
 
 from syspurpose import files, utils
 from syspurpose.files import detect_changed, three_way_merge, UNSUPPORTED, SyncedStore, SyncResult
 
 
-class SyspurposeStoreTests(SyspurposeTestBase):
+class SyspurposeStoreTests(unittest.TestCase):
 
     def test_new_syspurpose_store(self):
         """
@@ -466,7 +466,7 @@ class SyspurposeStoreTests(SyspurposeTestBase):
         self.assertDictEqual(syspurpose_store.contents, test_data)
 
 
-class TestSyncedStore(SyspurposeTestBase):
+class TestSyncedStore(unittest.TestCase):
     """
     Tests to show the proper overall syncing functionality of the SyncedStore class.
     This class (at the time of writing) is responsible for maintaining the local syspurpose file,
@@ -1102,7 +1102,7 @@ class TestSyncedStore(SyspurposeTestBase):
         self.assertTrue(res)
 
 
-class TestDetectChange(SyspurposeTestBase):
+class TestDetectChange(unittest.TestCase):
 
     def test_added(self):
         """
@@ -1209,7 +1209,7 @@ class TestDetectChange(SyspurposeTestBase):
         self.assertEqual(result, False)
 
 
-class TestThreeWayMerge(SyspurposeTestBase):
+class TestThreeWayMerge(unittest.TestCase):
 
     def test_all_empty(self):
         base = {}
