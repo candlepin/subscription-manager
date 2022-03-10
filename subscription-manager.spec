@@ -635,7 +635,7 @@ Requires: %{py_package_prefix}-dateutil
 Requires: %{py_package_prefix}-iniparse
 # rpm-python is an old name for python2-rpm but RHEL6 uses the old name
 Requires: %{py_package_prefix}-six
-Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
+Requires: subscription-manager-rhsm-certificates
 # Required by Fedora packaging guidelines
 %{?python_provide:%python_provide %{py_package_prefix}-rhsm}
 %if %{with python3}
@@ -675,7 +675,7 @@ Requires: %{py2_package_prefix}-dateutil
 Requires: %{py2_package_prefix}-iniparse
 # rpm-python is an old name for python2-rpm but RHEL6 uses the old name
 Requires: %{py2_package_prefix}-six
-Requires: subscription-manager-rhsm-certificates = %{version}-%{release}
+Requires: subscription-manager-rhsm-certificates
 # Required by Fedora packaging guidelines
 %{?python_provide:%python_provide %{py2_package_prefix}-rhsm}
 Requires: rpm-python
