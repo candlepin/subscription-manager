@@ -680,21 +680,6 @@ Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
 %endif
 
-%package -n subscription-manager-rhsm-certificates
-Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
-%if 0%{?suse_version}
-Group: Development/Libraries/Python
-%else
-Group: Development/Libraries
-%endif
-Provides: python-rhsm-certificates = %{version}-%{release}
-Obsoletes: python-rhsm-certificates <= 1.20.3-1
-
-%description -n subscription-manager-rhsm-certificates
-This package contains certificates required for communicating with the REST interface
-of a Red Hat Unified Entitlement Platform, used for the management of system entitlements
-and to receive access to content.
-
 %if %use_cockpit
 %package -n subscription-manager-cockpit
 Summary: Subscription Manager Cockpit UI
@@ -841,10 +826,6 @@ mkdir -p %{buildroot}%{_sysconfdir}/docker/certs.d/
 mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
 install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
 %endif
-
-mkdir -p %{buildroot}%{_sysconfdir}/etc/rhsm/ca
-install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-entitlement-authority.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
-install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/redhat-uep.pem %{buildroot}/%{_sysconfdir}/rhsm/ca/redhat-uep.pem
 
 %if %use_cockpit
     # install cockpit dist targz
@@ -1309,13 +1290,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/cloud_what/__pycache__
 %{python_sitearch}/cloud_what/providers/__pycache__
 %endif
-
-%files -n subscription-manager-rhsm-certificates
-%attr(755,root,root) %dir %{_sysconfdir}/rhsm
-%attr(755,root,root) %dir %{_sysconfdir}/rhsm/ca
-
-%attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-entitlement-authority.pem
-%attr(644,root,root) %{_sysconfdir}/rhsm/ca/redhat-uep.pem
 
 %if %use_cockpit
 %files -n subscription-manager-cockpit
