@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-09 12:25-0500\n"
+"POT-Creation-Date: 2022-03-02 12:40+0100\n"
 "PO-Revision-Date: 2021-12-14 12:57+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
@@ -54,7 +54,9 @@ msgstr "'required' は、位置引数の無効な引数です"
 msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
-msgstr "無効なオプション文字列 %(option)r: 文字 %(prefix_chars)r で始まる必要があります"
+msgstr ""
+"無効なオプション文字列 %(option)r: 文字 %(prefix_chars)r で始まる必要がありま"
+"す"
 
 #: /usr/lib64/python3.6/argparse.py:1473
 #, python-format
@@ -138,7 +140,8 @@ msgstr[0] "%s 引数が必要です"
 #: /usr/lib64/python3.6/argparse.py:2122
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "あいまいなオプション: %(option)s は %(matches)s に一致する可能性があります"
+msgstr ""
+"あいまいなオプション: %(option)s は %(matches)s に一致する可能性があります"
 
 #: /usr/lib64/python3.6/argparse.py:2185
 #, python-format
@@ -227,8 +230,8 @@ msgid ""
 "release. Please use the 'subscription-manager syspurpose' command going "
 "forward."
 msgstr ""
-"syspurpose コマンドは非推奨となり、今後のメジャーリリースで削除されます。今後は subscription-manager "
-"syspurpose コマンドを使用してください。"
+"syspurpose コマンドは非推奨となり、今後のメジャーリリースで削除されます。今後"
+"は subscription-manager syspurpose コマンドを使用してください。"
 
 #: src/syspurpose/cli.py:165 src/syspurpose/cli.py:230
 msgid "The value(s) to add"
@@ -335,7 +338,7 @@ msgstr ""
 "syspurpose ファイル {} を読み込めません。\n"
 "root ユーザーでしょうか?"
 
-#: src/syspurpose/files.py:430
+#: src/syspurpose/files.py:466
 #, python-brace-format
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
@@ -344,7 +347,7 @@ msgstr ""
 "警告: 指定された値 \"{val}\" は、属性 {attr} の有効な値のリストに含まれていま"
 "せん:"
 
-#: src/syspurpose/files.py:438
+#: src/syspurpose/files.py:473
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
