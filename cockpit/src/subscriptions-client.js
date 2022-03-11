@@ -67,6 +67,7 @@ client.syspurposeStatus = {
 
 client.insightsAvailable = false;
 client.insightsPackage = "insights-client";
+client.orgList = [];
 
 const RHSM_DEFAULTS = { // TODO get these from a d-bus service instead
     hostname: 'subscription.rhsm.redhat.com',
@@ -78,8 +79,7 @@ const RHSM_DEFAULTS = { // TODO get these from a d-bus service instead
 // we trigger an event called "dataChanged" when the data has changed
 
 function needRender() {
-    let event = document.createEvent("Event");
-    event.initEvent("dataChanged", false, false);
+    const event = new Event('dataChanged', {"bubbles":false, "cancelable":false});
     client.dispatchEvent(event);
 }
 
@@ -101,6 +101,18 @@ function parseProducts(text) {
             'ends': product[7]
         };
     });
+}
+
+function parseError(error) {
+    let err;
+    try {
+        err = JSON.parse(error);
+    } catch (parse_err) {
+        console.log('Error parsing D-Bus error message: ', parse_err.message);
+        console.log('Returning original error message: ', error);
+        err = {};
+    }
+    return err;
 }
 
 // Error message produced by D-Bus API should be string containing
@@ -331,6 +343,7 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                         'com.redhat.RHSM1.Register',
                         '/com/redhat/RHSM1/Register'
                     );
+                    registerService.addEventListener("UserMemberOfOrgs", selectingOrgsRequired);
                     if (subscriptionDetails.activation_keys) {
                         if (update_progress)
                             update_progress(_("Registering using activation key ..."), null);
@@ -372,10 +385,19 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
                     }
                 })
                 .catch(error => {
-                    console.error('error registering', error);
-                    isRegistering = false;
-                    registered = false;
-                    dfd.reject(parseErrorMessage(error));
+                    let decoded_err = parseError(error);
+                    if (decoded_err.exception === 'OrgNotSpecifiedException') {
+                        console.debug('Organization has to be selected');
+                        isRegistering = false;
+                        registered = false;
+                        // TODO: do not show error. I don't see any way how to do it :-(
+                        dfd.reject(parseErrorMessage(error));
+                    } else {
+                        console.error('error registering', error);
+                        isRegistering = false;
+                        registered = false;
+                        dfd.reject(parseErrorMessage(error));
+                    }
                 })
                 .then(result => {
                     console.debug('Result of registration: ', result);
@@ -508,6 +530,36 @@ function requestSyspurposeUpdate() {
     return client.getSyspurpose()
             .catch(ex => statusUpdateFailed(ex));
 }
+
+function selectingOrgsRequired(orgs) {
+    return client.setOrgList(orgs)
+            .catch(ex => statusUpdateFailed(ex));
+}
+
+client.setOrgList = function(orgs) {
+    let dfd = cockpit.defer();
+
+    console.debug(orgs.detail);
+    let parsed = false;
+    let org_list;
+    try {
+        org_list = JSON.parse(orgs.detail);
+        parsed = true;
+    } catch (ex) {
+        console.error(ex);
+    }
+    if (parsed === true) {
+        console.debug('>>> Received list of available organizations');
+        console.debug(org_list);
+        client.orgList = org_list;
+        // FIXME: we need to enforce registration dialog to rerender somehow, no clue how :-(
+        // maybe set show_org_list?
+        needRender(); // This rerender only main window, but not a dialog window :-(
+        dfd.resolve();
+    }
+
+    return dfd.promise();
+};
 
 /* get subscription summary */
 client.getSubscriptionStatus = function() {

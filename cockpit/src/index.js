@@ -40,6 +40,7 @@ let registerDialogDetails = {
     password: '',
     activation_keys: '',
     org: '',
+    show_org_list: false,
     proxy_server: '',
     proxy_user: '',
     proxy_password: '',
@@ -76,12 +77,14 @@ function openRegisterDialog() {
             password: '',
             activation_keys: '',
             org: '',
+            show_org_list: false,
             insights: true,
             insights_available: subscriptionsClient.insightsAvailable,
             insights_detected: false,
             register_method: 'account',
             auto_attach: true
         });
+        subscriptionsClient.orgList = [];
 
         Insights.detect().then(installed => {
             registerDialogDetails.insights_detected = installed;
@@ -101,10 +104,11 @@ function openRegisterDialog() {
                     'body': React.createElement(SubscriptionRegisterDialog, registerDialogDetails),
                 };
 
-                if (renderDialog)
+                if (renderDialog) {
                     renderDialog.setProps(dialogProps);
-                else
+                } else {
                     renderDialog = Dialog.show_modal_dialog(dialogProps, footerProps);
+                }
             };
             updatedData();
         });

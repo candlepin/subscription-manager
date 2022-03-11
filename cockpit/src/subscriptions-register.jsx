@@ -44,8 +44,11 @@ class SubscriptionRegisterDialog extends React.Component {
         let customURL;
         if (this.props.url === 'custom') {
             customURL = (
-                <TextInput id="subscription-register-url-custom"
-                           value={this.props.server_url} onChange={value => this.props.onChange('server_url', value)} />
+                <TextInput
+                    id="subscription-register-url-custom"
+                    value={this.props.server_url}
+                    onChange={value => this.props.onChange('server_url', value)}
+                />
             );
         }
         let proxy;
@@ -92,7 +95,7 @@ class SubscriptionRegisterDialog extends React.Component {
                     <p>
                         { Insights.arrfmt(
                             _("The $0 package will be installed."),
-                            <strong>{subscriptionsClient.insightsPackage}</strong>
+                            <strong key='insights_package'>{subscriptionsClient.insightsPackage}</strong>
                         )}
                     </p>
                 }
@@ -101,7 +104,53 @@ class SubscriptionRegisterDialog extends React.Component {
 
 
         let credentials;
+        let organizations;
         if (this.props.register_method === "account") {
+            // Show the list of available organizations, when user have to choose one org from the list
+            if (subscriptionsClient.orgList.length > 0) {
+                let orgs_list = [];
+                let org;
+                // Javascript/JSX is doomed, when I have to do it in this way :-/
+                let disabled=true;
+                let is_placeholder=true
+                // It seems that FormSelect does not have regular placeholder :-(
+                orgs_list.push(
+                    <FormSelectOption
+                        value=''
+                        label={_('Choose an organization')}
+                        isDisabled={disabled}
+                        isPlaceholder={is_placeholder}
+                        key='form_select_placeholder'
+                    />
+                );
+                for (let i = 0; i < subscriptionsClient.orgList.length; i++) {
+                    // console.debug(i);
+                    org = subscriptionsClient.orgList[i];
+                    // console.debug(org);
+                    orgs_list.push(
+                        <FormSelectOption
+                            key={org.key}
+                            value={org.key}
+                            label={org.displayName}
+                            isDisabled={false}
+                        />
+                    );
+                }
+
+                console.debug('>>> Organizations', orgs_list);
+                organizations = (
+                    <FormGroup fieldId="org=selector" label={_("Organization")}>
+                        <FormSelect
+                           value={this.props.org}
+                           onChange={value => this.props.onChange('org', value)}
+                           aria-label="FormSelect Input"
+                        >
+                            {orgs_list}
+                        </FormSelect>
+                    </FormGroup>
+                );
+            }
+
             credentials = (
                 <>
                     <FormGroup fieldId="subscription-register-username" label={_("Username")}>
@@ -114,11 +163,7 @@ class SubscriptionRegisterDialog extends React.Component {
                                    value={this.props.password}
                                    onChange={value => this.props.onChange('password', value)} />
                     </FormGroup>
-                    <FormGroup fieldId="subscription-register-org" label={_("Organization")}>
-                        <TextInput id="subscription-register-org"
-                                   value={this.props.org}
-                                   onChange={value => this.props.onChange('org', value)} />
-                    </FormGroup>
+                    {organizations}
                 </>
             );
         } else {
