@@ -443,11 +443,7 @@ class TestSubscriptions(SubscriptionsCase):
         m.execute("systemctl start insights-client; while systemctl --quiet is-active insights-client; do sleep 1; done",
                   timeout=360)
 
-        # We can't rely on the insights-client actually succeeding.
-        # It seems to randomly run out of its TasksMax=20 limit, for
-        # example.
-        if m.execute("systemctl is-failed insights-client || true").strip() != "failed":
-            b.wait_not_present("button .pf-c-button__icon svg[fill='orange']")
+        b.wait_not_present("button .pf-c-button__icon svg[fill='orange']")
 
         b.click("button:contains('Unregister')")
         b.wait_not_in_text("#overview", "Insights")
