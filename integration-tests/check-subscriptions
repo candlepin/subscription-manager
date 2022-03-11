@@ -402,6 +402,14 @@ class TestSubscriptions(SubscriptionsCase):
         m = self.machine
         b = self.browser
 
+        # HACK - https://bugzilla.redhat.com/show_bug.cgi?id=2062136
+        #
+        # We rely on insights-client.service to be working, let's not
+        # get distracted by SELinux.  Denials will still be logged and
+        # tracked as known issues even when not enforcing.
+        #
+        m.execute("setenforce 0")
+
         self.login_and_go("/subscriptions")
 
         b.click("button:contains('Register')")
