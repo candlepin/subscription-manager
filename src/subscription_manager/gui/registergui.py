@@ -1991,7 +1991,7 @@ class AsyncBackend(object):
 
             cp = self.backend.cp_provider.get_basic_auth_cp()
             retval = cp.registerConsumer(name=name, facts=facts_dict,
-                                         owner=owner, environment=env,
+                                         owner=owner, environments=env,
                                          keys=activation_keys,
                                          installed_products=installed_mgr.format_for_server(),
                                          role=syspurpose.get('role'),
