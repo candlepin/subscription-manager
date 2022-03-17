@@ -249,7 +249,7 @@
 
 Name: subscription-manager
 Version: 1.28.29
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
 Group:   Productivity/Networking/System
@@ -1491,6 +1491,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Mar 17 2022 Christopher Snyder <csnyder@redhat.com> 1.28.29-2
+- 2064002: fix named argument for registerConsumer() (ptoscano@redhat.com)
+
 * Fri Mar 11 2022 Christopher Snyder <csnyder@redhat.com> 1.28.29-1
 - Update translation files (noreply@weblate.org)
 
