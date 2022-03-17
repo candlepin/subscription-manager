@@ -110,7 +110,7 @@
 
 Name: subscription-manager
 Version: 1.29.26
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
 Group:   Productivity/Networking/System
@@ -866,6 +866,11 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Mar 17 2022 Christopher Snyder <csnyder@redhat.com> 1.29.26-2
+- Update translation files (noreply@weblate.org)
+- 1935446: Revert "Revert "1935446: Use updated cert with SHA-256 algorithm""
+  (ptoscano@redhat.com)
+
 * Tue Feb 15 2022 Christopher Snyder <csnyder@redhat.com> 1.29.26-1
 - Translated using Weblate (Korean) (simmon@nplob.com)
 - Translated using Weblate (German) (atalanttore@googlemail.com)
