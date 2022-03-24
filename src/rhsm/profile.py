@@ -153,14 +153,14 @@ class ModulesProfile(object):
             all_module_list = modules.getModulePackages()
 
             for module_pkg in all_module_list:
-                status = "unknown"
+                status = "default"
                 active = False
                 if modules.isEnabled(module_pkg.getName(), module_pkg.getStream()):
                     status = "enabled"
-                    if modules.isModuleActive(module_pkg.getId()):
-                        active = True
                 elif modules.isDisabled(module_pkg.getName()):
                     status = "disabled"
+                if modules.isModuleActive(module_pkg.getId()):
+                    active = True
                 installed_profiles = []
                 if status == "enabled":
                     # It has to be list, because we compare this with cached json document and
