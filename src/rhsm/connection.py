@@ -758,7 +758,13 @@ class Restlib(BaseRestLib):
         # Handle 204s
         if not len(result['content']):
             return None
-        return json.loads(result['content'])
+
+        try:
+            return json.loads(result['content'])
+        except ValueError:
+            # This is primarily intended for getting releases from CDN, because
+            # the file containing releases is plaintext and not json.
+            return result['content']
 
 
 # FIXME: there should probably be a class here for just
@@ -979,10 +985,38 @@ class UEPConnection(object):
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
 
+    def getJWToken(self, cloud_id, metadata, signature):
+        """
+        When automatic registration is enabled in rhsm.conf, and it was possible
+        to gather cloud metadata, then it is possible to try to get JSON Web Token
+        for automatic registration. When candlepin does not provide automatic
+        registration, then raise exception.
+        :param cloud_id: ID of cloud provider, e.g. "aws", "azure", "gcp"
+        :param metadata: string with base64 encoded metadata
+        :param signature: string with base64 encoded signature
+        :return: string with JWT
+        """
+        params = {
+            "type": cloud_id,
+            "payload": metadata,
+            "signature": signature
+        }
+        # "Accept" http header has to be text/plain, because candlepin return
+        # token as simple text, and it is not wrapped in json document
+        headers = {
+            "Content-type": "application/json",
+            "Accept": "text/plain"
+        }
+        return self.conn.request_post(
+            method="/cloud/authorize",
+            params=params,
+            headers=headers
+        )
+
     def registerConsumer(self, name="unknown", type="system", facts={},
             owner=None, environment=None, keys=None,
             installed_products=None, uuid=None, hypervisor_id=None,
-            content_tags=None, role=None, addons=None, service_level=None, usage=None):
+            content_tags=None, role=None, addons=None, service_level=None, usage=None, jwt_token=None):
         """
         Creates a consumer on candlepin server
         """
@@ -1009,6 +1043,10 @@ class UEPConnection(object):
         if service_level is not None:
             params['serviceLevel'] = service_level
 
+        headers = {}
+        if jwt_token:
+            headers['Authorization'] = 'Bearer {jwt_token}'.format(jwt_token=jwt_token)
+
         url = "/consumers"
         if environment:
             url = "/environments/%s/consumers" % self.sanitize(environment)
@@ -1022,7 +1060,7 @@ class UEPConnection(object):
                     url = url + prepend + self.sanitize(key)
                     prepend = ","
 
-        return self.conn.request_post(url, params)
+        return self.conn.request_post(url, params, headers=headers)
 
     def hypervisorCheckIn(self, owner, env, host_guest_mapping, options=None):
         """
