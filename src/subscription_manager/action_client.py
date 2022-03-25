@@ -33,7 +33,6 @@ log = logging.getLogger(__name__)
 
 
 class ActionClient(base_action_client.BaseActionClient):
-
     def _get_libset(self):
 
         # TODO: replace with FSM thats progress through this async and wait/joins if needed
@@ -48,9 +47,15 @@ class ActionClient(base_action_client.BaseActionClient):
         # WARNING: order is important here, we need to update a number
         # of things before attempting to autoheal, and we need to autoheal
         # before attempting to fetch our certificates:
-        lib_set = [self.entcertlib, self.idcertlib, self.content_client,
-                   self.factlib, self.profilelib,
-                   self.installedprodlib, self.syspurposelib]
+        lib_set = [
+            self.entcertlib,
+            self.idcertlib,
+            self.content_client,
+            self.factlib,
+            self.profilelib,
+            self.installedprodlib,
+            self.syspurposelib,
+        ]
 
         return lib_set
 
@@ -78,6 +83,7 @@ class UnregisterActionClient(base_action_client.BaseActionClient):
     This class should not need a consumer id, or a uep connection, since it
     is running post unregister.
     """
+
     def _get_libset(self):
 
         self.entcertlib = EntCertActionInvoker()
@@ -92,6 +98,7 @@ class ProfileActionClient(base_action_client.BaseActionClient):
     This class should not need a consumer id, or a uep connection, since it
     is running post unregister.
     """
+
     def _get_libset(self):
 
         self.profilelib = PackageProfileActionInvoker()

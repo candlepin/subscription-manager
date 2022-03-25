@@ -39,72 +39,74 @@ class Reasons(object):
         """
         result = {}
         for s in self.sorter.valid_entitlement_certs:
-            result[s.subject['CN']] = []
+            result[s.subject["CN"]] = []
 
         for reason in self.reasons:
-            if 'entitlement_id' in reason['attributes']:
+            if "entitlement_id" in reason["attributes"]:
                 # Note 'result' won't have entries for any expired certs, so
                 # result['some_ent_that_has_expired'] could throw a KeyError
-                ent_id = reason['attributes']['entitlement_id']
+                ent_id = reason["attributes"]["entitlement_id"]
                 if ent_id in result:
-                    if reason['message'] in result[ent_id]:
+                    if reason["message"] in result[ent_id]:
                         continue
 
-                    result[ent_id].append(reason['message'])
+                    result[ent_id].append(reason["message"])
 
-            elif 'stack_id' in reason['attributes']:
-                for s_id in self.get_stack_subscriptions(reason['attributes']['stack_id']):
-                    if reason['message'] in result[s_id]:
+            elif "stack_id" in reason["attributes"]:
+                for s_id in self.get_stack_subscriptions(reason["attributes"]["stack_id"]):
+                    if reason["message"] in result[s_id]:
                         continue
-                    result[s_id].append(reason['message'])
+                    result[s_id].append(reason["message"])
         return result
 
     def get_name_message_map(self):
         result = {}
         for reason in self.reasons:
-            reason_name = reason['attributes']['name']
+            reason_name = reason["attributes"]["name"]
             if reason_name not in result:
                 result[reason_name] = []
-            if reason['message'] in result[reason_name]:
+            if reason["message"] in result[reason_name]:
                 continue
-            result[reason_name].append(reason['message'])
+            result[reason_name].append(reason["message"])
         return result
 
     def get_reason_ids_map(self):
         result = {}
         for reason in self.reasons:
-            if 'attributes' in reason and 'product_id' in reason['attributes']:
-                reason_id = reason['attributes']['product_id']
+            if "attributes" in reason and "product_id" in reason["attributes"]:
+                reason_id = reason["attributes"]["product_id"]
                 if reason_id not in result:
                     result[reason_id] = []
-                if reason['key'] in [res['key'] for res in result[reason_id]]:
+                if reason["key"] in [res["key"] for res in result[reason_id]]:
                     continue
-                result[reason_id].append({
-                    'key': reason['key'],
-                    'product_name': reason['attributes']['name']
-                })
+                result[reason_id].append(
+                    {
+                        "key": reason["key"],
+                        "product_name": reason["attributes"]["name"],
+                    }
+                )
         return result
 
     def get_stack_subscriptions(self, stack_id):
         result = set([])
         for s in self.sorter.valid_entitlement_certs:
             if s.order.stacking_id and s.order.stacking_id == stack_id:
-                result.add(s.subject['CN'])
+                result.add(s.subject["CN"])
         return list(result)
 
     def get_reason_id(self, reason):
         # returns ent/prod/stack id
         # ex: Subscription 123456
-        if 'product_id' in reason['attributes']:
-            return _('Product ') + reason['attributes']['product_id']
-        elif 'entitlement_id' in reason['attributes']:
-            return _('Subscription ') + reason['attributes']['entitlement_id']
-        elif 'stack_id' in reason['attributes']:
-            return _('Stack ') + reason['attributes']['stack_id']
+        if "product_id" in reason["attributes"]:
+            return _("Product ") + reason["attributes"]["product_id"]
+        elif "entitlement_id" in reason["attributes"]:
+            return _("Subscription ") + reason["attributes"]["entitlement_id"]
+        elif "stack_id" in reason["attributes"]:
+            return _("Stack ") + reason["attributes"]["stack_id"]
         else:
             # Shouldn't be reachable.
             # Reason has no id attr
-            return _('Unknown')
+            return _("Unknown")
 
     def get_product_reasons(self, prod):
         """
@@ -124,20 +126,20 @@ class Reasons(object):
         stack_ids = []
 
         for s in subscriptions:
-            if 'CN' in s.subject:
-                sub_ids.append(s.subject['CN'])
+            if "CN" in s.subject:
+                sub_ids.append(s.subject["CN"])
             if s.order.stacking_id:
                 stack_ids.append(s.order.stacking_id)
         for reason in self.reasons:
-            if 'product_id' in reason['attributes']:
-                if reason['attributes']['product_id'] == prod.id:
-                    result.add(reason['message'])
-            elif 'entitlement_id' in reason['attributes']:
-                if reason['attributes']['entitlement_id'] in sub_ids:
-                    result.add(reason['message'])
-            elif 'stack_id' in reason['attributes']:
-                if reason['attributes']['stack_id'] in stack_ids:
-                    result.add(reason['message'])
+            if "product_id" in reason["attributes"]:
+                if reason["attributes"]["product_id"] == prod.id:
+                    result.add(reason["message"])
+            elif "entitlement_id" in reason["attributes"]:
+                if reason["attributes"]["entitlement_id"] in sub_ids:
+                    result.add(reason["message"])
+            elif "stack_id" in reason["attributes"]:
+                if reason["attributes"]["stack_id"] in stack_ids:
+                    result.add(reason["message"])
         return list(result)
 
     def get_product_subscriptions(self, prod):
@@ -145,6 +147,7 @@ class Reasons(object):
         Returns a list of subscriptions that provide
         the product.
         """
-        results = [valid_ent for valid_ent in self.sorter.valid_entitlement_certs
-                   if prod in valid_ent.products]
+        results = [
+            valid_ent for valid_ent in self.sorter.valid_entitlement_certs if prod in valid_ent.products
+        ]
         return results

@@ -24,7 +24,7 @@ import logging
 
 # Init logging very early so we can log any issues that occur at import time
 logging.basicConfig(level=logging.DEBUG, format="%(levelname)5s [%(name)s:%(lineno)s] %(message)s")
-log = logging.getLogger('')
+log = logging.getLogger("")
 log.setLevel(logging.INFO)
 
 
@@ -39,12 +39,12 @@ def main():
             objects.EntitlementDBusObject,
             objects.ConsumerDBusObject,
             objects.SyspurposeDBusObject,
-            objects.Main
+            objects.Main,
         ]
         sys.exit(service_wrapper.main(sys.argv, object_classes=object_classes))
     except Exception:
         log.exception("DBus service startup failed")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

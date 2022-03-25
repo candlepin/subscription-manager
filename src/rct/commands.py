@@ -21,8 +21,7 @@ class RCTCliCommand(AbstractCLICommand):
     FILE_ARG_IDX = 0
 
     def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
-        AbstractCLICommand.__init__(self, name=name, aliases=aliases,
-                                    shortdesc=shortdesc, primary=primary)
+        AbstractCLICommand.__init__(self, name=name, aliases=aliases, shortdesc=shortdesc, primary=primary)
 
     def main(self, args=None):
         # In testing we sometimes specify args, otherwise use the default:
@@ -39,5 +38,5 @@ class RCTCliCommand(AbstractCLICommand):
 
     def _get_file_from_args(self):
         if not len(self.args) > self.FILE_ARG_IDX:
-            return ''
+            return ""
         return self.args[self.FILE_ARG_IDX]

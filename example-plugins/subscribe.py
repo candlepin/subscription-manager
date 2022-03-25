@@ -13,11 +13,13 @@
 #
 
 from subscription_manager.base_plugin import SubManPlugin
+
 requires_api_version = "1.0"
 
 
 class SubscribePlugin(SubManPlugin):
     """Plugin triggered when a consumer subscribes to an entitlement"""
+
     name = "subscribe"
 
     def pre_subscribe_hook(self, conduit):

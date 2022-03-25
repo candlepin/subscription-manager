@@ -41,8 +41,14 @@ from rhsm.connection import ProxyException
 
 import subscription_manager.version
 from rhsm.connection import RestlibException, GoneException
-from rhsm.config import DEFAULT_PORT, DEFAULT_PREFIX, DEFAULT_HOSTNAME, \
-    DEFAULT_CDN_HOSTNAME, DEFAULT_CDN_PORT, DEFAULT_CDN_PREFIX
+from rhsm.config import (
+    DEFAULT_PORT,
+    DEFAULT_PREFIX,
+    DEFAULT_HOSTNAME,
+    DEFAULT_CDN_HOSTNAME,
+    DEFAULT_CDN_PORT,
+    DEFAULT_CDN_PREFIX,
+)
 
 from subscription_manager.i18n import ugettext as _
 
@@ -50,7 +56,7 @@ from subscription_manager.i18n import ugettext as _
 log = logging.getLogger(__name__)
 
 
-VIRT_WHO_PID_FILES = ['/var/run/virt-who.pid', '/run/virt-who.pid']
+VIRT_WHO_PID_FILES = ["/var/run/virt-who.pid", "/run/virt-who.pid"]
 
 
 class DefaultDict(collections.defaultdict):
@@ -64,29 +70,33 @@ class DefaultDict(collections.defaultdict):
 
 
 def parse_server_info(local_server_entry, config=None):
-    hostname = ''
-    port = ''
-    prefix = ''
+    hostname = ""
+    port = ""
+    prefix = ""
     if config is not None:
         hostname = config["server"]["hostname"]
         port = config["server"]["port"]
         prefix = config["server"]["prefix"]
-    return parse_url(local_server_entry,
-                     hostname or DEFAULT_HOSTNAME,
-                     port or DEFAULT_PORT,
-                     prefix or DEFAULT_PREFIX)[2:]
+    return parse_url(
+        local_server_entry,
+        hostname or DEFAULT_HOSTNAME,
+        port or DEFAULT_PORT,
+        prefix or DEFAULT_PREFIX,
+    )[2:]
 
 
 def parse_baseurl_info(local_server_entry):
-    return parse_url(local_server_entry,
-                     DEFAULT_CDN_HOSTNAME,
-                     DEFAULT_CDN_PORT,
-                     DEFAULT_CDN_PREFIX)[2:]
+    return parse_url(
+        local_server_entry,
+        DEFAULT_CDN_HOSTNAME,
+        DEFAULT_CDN_PORT,
+        DEFAULT_CDN_PREFIX,
+    )[2:]
 
 
 def format_baseurl(hostname, port, prefix):
     # just to avoid double slashs. cosmetic
-    if prefix and prefix[0] != '/':
+    if prefix and prefix[0] != "/":
         prefix = "/%s" % prefix
 
     # remove trailing slash, just so same
@@ -97,12 +107,9 @@ def format_baseurl(hostname, port, prefix):
     # just so we match how we format this by
     # default
     if port == DEFAULT_CDN_PORT:
-        return "https://%s%s" % (hostname,
-                                 prefix)
+        return "https://%s%s" % (hostname, prefix)
 
-    return "https://%s:%s%s" % (hostname,
-                                port,
-                                prefix)
+    return "https://%s:%s%s" % (hostname, port, prefix)
 
 
 def url_base_join(base, url):
@@ -115,13 +122,13 @@ def url_base_join(base, url):
     # potentially non-empty and "" return ""? -akl
     if len(url) == 0:
         return url
-    elif '://' in url:
+    elif "://" in url:
         return url
     else:
-        if (base and (not base.endswith('/'))):
-            base = base + '/'
-        if (url and (url.startswith('/'))):
-            url = url.lstrip('/')
+        if base and (not base.endswith("/")):
+            base = base + "/"
+        if url and (url.startswith("/")):
+            url = url.lstrip("/")
         return urllib.parse.urljoin(base, url)
 
 
@@ -277,9 +284,10 @@ def get_server_versions(cp, exception_on_timeout=False):
             supported_resources = get_supported_resources()
             if "status" in supported_resources:
                 status = cp.getStatus()
-                cp_version = '-'.join([status.get('version', _("Unknown")),
-                                       status.get('release', _("Unknown"))])
-                rules_version = status.get('rulesVersion', _("Unknown"))
+                cp_version = "-".join(
+                    [status.get("version", _("Unknown")), status.get("release", _("Unknown"))]
+                )
+                rules_version = status.get("rulesVersion", _("Unknown"))
         except socket.timeout as e:
             log.error("Timeout error while checking server version")
             log.exception(e)
@@ -300,9 +308,7 @@ def get_server_versions(cp, exception_on_timeout=False):
             log.exception(e)
             cp_version = _("Unknown")
 
-    return {"candlepin": cp_version,
-            "server-type": server_type,
-            "rules-version": rules_version}
+    return {"candlepin": cp_version, "server-type": server_type, "rules-version": rules_version}
 
 
 def restart_virt_who():
@@ -321,7 +327,7 @@ def restart_virt_who():
         return
 
     try:
-        with open(virt_who_pid_file_name, 'r') as pid_file:
+        with open(virt_who_pid_file_name, "r") as pid_file:
             pid = int(pid_file.read())
         log.debug("Restarted virt-who")
     except IOError:
@@ -355,7 +361,7 @@ def friendly_join(items):
     first_string = ", ".join(first)
 
     if len(items) > 2:
-        first_string = first_string + ','
+        first_string = first_string + ","
 
     # FIXME: This is wrong in most non english locales.
     return first_string + " %s " % _("and") + last
@@ -411,8 +417,8 @@ class ProductCertificateFilter(CertificateFilter):
         output = False
 
         wildcard_map = {
-            '*': '.*',
-            '?': '.',
+            "*": ".*",
+            "?": ".",
         }
 
         expression = """
@@ -445,7 +451,7 @@ class ProductCertificateFilter(CertificateFilter):
                     if len(wildcards):
                         translated.append(wildcard_map.get(wildcards.pop(0)))
 
-                self._fs_regex = re.compile("^%s$" % ''.join(translated), re.IGNORECASE)
+                self._fs_regex = re.compile("^%s$" % "".join(translated), re.IGNORECASE)
                 output = True
             except TypeError:
                 # Invalid filter string type. Rethrow with a proper message and backtrace?
@@ -466,7 +472,9 @@ class ProductCertificateFilter(CertificateFilter):
         if self._fs_regex is not None:
             # Perhaps we should be validating our input object here...?
             for product in cert.products:
-                if (product.name and self._fs_regex.match(product.name) is not None) or (product.id and self._fs_regex.match(product.id) is not None):
+                if (product.name and self._fs_regex.match(product.name) is not None) or (
+                    product.id and self._fs_regex.match(product.id) is not None
+                ):
                     return True
 
         return False
@@ -493,7 +501,7 @@ class EntitlementCertificateFilter(ProductCertificateFilter):
 
         if service_level is not None:
             try:
-                self._sl_filter = '' + service_level.lower()
+                self._sl_filter = "" + service_level.lower()
                 output = True
             except (TypeError, AttributeError):
                 # Likely not a string or otherwise bad input.
@@ -517,16 +525,15 @@ class EntitlementCertificateFilter(ProductCertificateFilter):
         cert_service_level = ""  # No service level should match "".
         if cert.order and cert.order.service_level:
             cert_service_level = cert.order.service_level
-        sl_check = self._sl_filter is None or \
-            cert_service_level.lower() == self._sl_filter.lower()
+        sl_check = self._sl_filter is None or cert_service_level.lower() == self._sl_filter.lower()
 
         # Check filter string (contains-text)
         fs_check = self._fs_regex is None or (
-            super(EntitlementCertificateFilter, self).match(cert) or
-            (cert.order.name and self._fs_regex.match(cert.order.name) is not None) or
-            (cert.order.sku and self._fs_regex.match(cert.order.sku) is not None) or
-            (cert.order.service_level and self._fs_regex.match(cert.order.service_level) is not None) or
-            (cert.order.contract and self._fs_regex.match(cert.order.contract) is not None)
+            super(EntitlementCertificateFilter, self).match(cert)
+            or (cert.order.name and self._fs_regex.match(cert.order.name) is not None)
+            or (cert.order.sku and self._fs_regex.match(cert.order.sku) is not None)
+            or (cert.order.service_level and self._fs_regex.match(cert.order.service_level) is not None)
+            or (cert.order.contract and self._fs_regex.match(cert.order.contract) is not None)
         )
 
         return sl_check and fs_check and (self._sl_filter is not None or self._fs_regex is not None)
@@ -559,7 +566,7 @@ def unique_list_items(items, hash_function=lambda x: x):
 
 
 def generate_correlation_id():
-    return str(uuid.uuid4()).replace('-', '')  # FIXME cp should accept -
+    return str(uuid.uuid4()).replace("-", "")  # FIXME cp should accept -
 
 
 def get_process_names():
@@ -569,9 +576,9 @@ def get_process_names():
     It will only work on unix-like systems.
     """
     proc_name_expr = r"[Nn][Aa][Mm][Ee]:?[\s]*(?P<proc_name>.*)"
-    for subdir in os.listdir('/proc'):
-        if re.match('[0-9]+', subdir):
-            process_status_file_path = os.path.join(os.path.sep, 'proc', subdir, 'status')
+    for subdir in os.listdir("/proc"):
+        if re.match("[0-9]+", subdir):
+            process_status_file_path = os.path.join(os.path.sep, "proc", subdir, "status")
             status_file = None
             lines = ""
             try:
@@ -582,12 +589,16 @@ def get_process_names():
                 # Sometimes when processes are killed after we have listed the
                 # /proc dir content we can end up trying to open a file which no
                 # longer exists.
-                log.debug("A process has likely ended before it's status could be read for"
-                          " {subdir} : {ex}".format(subdir=subdir, ex=e))
+                log.debug(
+                    "A process has likely ended before it's status could be read for"
+                    " {subdir} : {ex}".format(subdir=subdir, ex=e)
+                )
                 continue
             except Exception as e:
-                log.debug("Unexpected exception while trying to read process names from /proc for"
-                          " {subdir} : {ex}".format(subdir=subdir, ex=e))
+                log.debug(
+                    "Unexpected exception while trying to read process names from /proc for"
+                    " {subdir} : {ex}".format(subdir=subdir, ex=e)
+                )
                 continue
             finally:
                 if status_file is not None:
@@ -596,7 +607,7 @@ def get_process_names():
             # Find first value of something that looks like "Name: THING"
             match = re.search(proc_name_expr, lines)
             if match:
-                proc_name = match.groupdict().get('proc_name')
+                proc_name = match.groupdict().get("proc_name")
                 if proc_name:
                     yield proc_name
 

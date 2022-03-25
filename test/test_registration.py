@@ -31,19 +31,23 @@ from rhsmlib.services import exceptions
 class CliRegistrationTests(SubManFixture):
     def setUp(self):
         super(CliRegistrationTests, self).setUp()
-        register_patcher = patch('subscription_manager.cli_command.register.register.RegisterService',
-                                 spec=RegisterService)
+        register_patcher = patch(
+            "subscription_manager.cli_command.register.register.RegisterService", spec=RegisterService
+        )
         self.mock_register = register_patcher.start().return_value
         self.mock_register.register.return_value = MagicMock(name="MockConsumer")
         self.addCleanup(register_patcher.stop)
 
-        get_supported_resources_patcher = patch('subscription_manager.cli_command.register.get_supported_resources')
+        get_supported_resources_patcher = patch(
+            "subscription_manager.cli_command.register.get_supported_resources"
+        )
         self.mock_get_resources = get_supported_resources_patcher.start()
-        self.mock_get_resources.return_value = ['environments']
+        self.mock_get_resources.return_value = ["environments"]
         self.addCleanup(self.mock_get_resources.stop)
 
-        identity_patcher = patch('subscription_manager.cli_command.register.identity.ConsumerIdentity',
-                                 spec=ConsumerIdentity)
+        identity_patcher = patch(
+            "subscription_manager.cli_command.register.identity.ConsumerIdentity", spec=ConsumerIdentity
+        )
         self.mock_consumer_identity = identity_patcher.start().return_value
         self.addCleanup(identity_patcher.stop)
 
@@ -52,17 +56,17 @@ class CliRegistrationTests(SubManFixture):
         self.syspurposelib = syspurposelib
         self.syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name
 
-        syspurpose_patch = patch('subscription_manager.syspurposelib.SyncedStore')
+        syspurpose_patch = patch("subscription_manager.syspurposelib.SyncedStore")
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)
 
-        _syspurpose_patch = patch('subscription_manager.managerlib.SyncedStore')
+        _syspurpose_patch = patch("subscription_manager.managerlib.SyncedStore")
         self._mock_sp_store = _syspurpose_patch.start()
         self._mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self._mock_sp_store)
         self.addCleanup(_syspurpose_patch.stop)
 
-        clean_all_data_patch = patch('subscription_manager.managerlib.clean_all_data')
+        clean_all_data_patch = patch("subscription_manager.managerlib.clean_all_data")
         self.mock_clean_all_data = clean_all_data_patch.start()
         self.addCleanup(clean_all_data_patch.stop)
 
@@ -76,39 +80,39 @@ class CliRegistrationTests(SubManFixture):
         """
         Test normal registration (test of proper patching)
         """
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             self.stub_cp_provider.basic_auth_cp = mock_uep
             cmd = RegisterCommand()
-            cmd.main(['--force', '--username', 'admin', '--password', 'admin', '--org', 'admin'])
+            cmd.main(["--force", "--username", "admin", "--password", "admin", "--org", "admin"])
 
-    @patch('subscription_manager.cli_command.cli.EntCertActionInvoker')
+    @patch("subscription_manager.cli_command.cli.EntCertActionInvoker")
     def test_activation_keys_updates_certs_and_repos(self, mock_entcertlib):
-        self.stub_cp_provider.basic_auth_cp = Mock('rhsm.connection.UEPConnection', new_callable=StubUEP)
+        self.stub_cp_provider.basic_auth_cp = Mock("rhsm.connection.UEPConnection", new_callable=StubUEP)
         self._inject_mock_invalid_consumer()
 
         cmd = RegisterCommand()
         mock_entcertlib = mock_entcertlib.return_value
         self._inject_ipm()
 
-        cmd.main(['--activationkey=test_key', '--org=test_org'])
+        cmd.main(["--activationkey=test_key", "--org=test_org"])
         self.mock_register.register.assert_called_once()
         mock_entcertlib.update.assert_called_once()
 
-    @patch('subscription_manager.cli_command.cli.EntCertActionInvoker')
+    @patch("subscription_manager.cli_command.cli.EntCertActionInvoker")
     def test_consumerid_updates_certs_and_repos(self, mock_entcertlib):
-        self.stub_cp_provider.basic_auth_cp = Mock('rhsm.connection.UEPConnection', new_callable=StubUEP)
+        self.stub_cp_provider.basic_auth_cp = Mock("rhsm.connection.UEPConnection", new_callable=StubUEP)
         self._inject_mock_invalid_consumer()
 
         cmd = RegisterCommand()
         mock_entcertlib = mock_entcertlib.return_value
         self._inject_ipm()
 
-        cmd.main(['--consumerid=123456', '--username=testuser1', '--password=password', '--org=test_org'])
-        self.mock_register.register.assert_called_once_with(None, consumerid='123456')
+        cmd.main(["--consumerid=123456", "--username=testuser1", "--password=password", "--org=test_org"])
+        self.mock_register.register.assert_called_once_with(None, consumerid="123456")
         mock_entcertlib.update.assert_called_once()
 
     def test_consumerid_with_distributor_id(self):
-        self.stub_cp_provider.basic_auth_cp = Mock('rhsm.connection.UEPConnection', new_callable=StubUEP)
+        self.stub_cp_provider.basic_auth_cp = Mock("rhsm.connection.UEPConnection", new_callable=StubUEP)
 
         self._inject_mock_invalid_consumer()
         cmd = RegisterCommand()
@@ -117,7 +121,14 @@ class CliRegistrationTests(SubManFixture):
 
         with Capture(silent=True):
             with self.assertRaises(SystemExit) as e:
-                cmd.main(['--consumerid=TaylorSwift', '--username=testuser1', '--password=password', '--org=test_org'])
+                cmd.main(
+                    [
+                        "--consumerid=TaylorSwift",
+                        "--username=testuser1",
+                        "--password=password",
+                        "--org=test_org",
+                    ]
+                )
                 self.assertEqual(e.code, os.EX_USAGE)
 
     def test_strip_username_and_password(self):
@@ -133,7 +144,7 @@ class CliRegistrationTests(SubManFixture):
         def env_list(*args, **kwargs):
             return []
 
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             mock_uep.getEnvironmentList = env_list
             mock_uep.supports_resource = Mock(return_value=True)
             self.stub_cp_provider.basic_auth_cp = mock_uep
@@ -142,7 +153,7 @@ class CliRegistrationTests(SubManFixture):
             rc.options = Mock()
             rc.options.activation_keys = None
             rc.options.environments = None
-            env_id = rc._process_environments(mock_uep, 'owner')
+            env_id = rc._process_environments(mock_uep, "owner")
 
             expected = None
             self.assertEqual(expected, env_id)
@@ -151,7 +162,7 @@ class CliRegistrationTests(SubManFixture):
         def env_list(*args, **kwargs):
             return [{"id": "1234", "name": "somename"}]
 
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             mock_uep.getEnvironmentList = env_list
             mock_uep.supports_resource = Mock(return_value=True)
             self.stub_cp_provider.basic_auth_cp = mock_uep
@@ -160,17 +171,16 @@ class CliRegistrationTests(SubManFixture):
             rc.options = Mock()
             rc.options.activation_keys = None
             rc.options.environments = None
-            env_id = rc._process_environments(mock_uep, 'owner')
+            env_id = rc._process_environments(mock_uep, "owner")
 
             expected = "1234"
             self.assertEqual(expected, env_id)
 
     def test_get_environment_id_multi_available(self):
         def env_list(*args, **kwargs):
-            return [{"id": "1234", "name": "somename"},
-                    {"id": "5678", "name": "othername"}]
+            return [{"id": "1234", "name": "somename"}, {"id": "5678", "name": "othername"}]
 
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             mock_uep.getEnvironmentList = env_list
             mock_uep.supports_resource = Mock(return_value=True)
             self.stub_cp_provider.basic_auth_cp = mock_uep
@@ -181,17 +191,16 @@ class CliRegistrationTests(SubManFixture):
             rc.options.activation_keys = None
             rc.options.environments = None
             rc._prompt_for_environment = Mock(return_value="othername")
-            env_id = rc._process_environments(mock_uep, 'owner')
+            env_id = rc._process_environments(mock_uep, "owner")
 
             expected = "5678"
             self.assertEqual(expected, env_id)
 
     def test_get_environment_id_multi_available_bad_name(self):
         def env_list(*args, **kwargs):
-            return [{"id": "1234", "name": "somename"},
-                    {"id": "5678", "name": "othername"}]
+            return [{"id": "1234", "name": "somename"}, {"id": "5678", "name": "othername"}]
 
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             mock_uep.getEnvironmentList = env_list
             mock_uep.supports_resource = Mock(return_value=True)
             self.stub_cp_provider.basic_auth_cp = mock_uep
@@ -205,14 +214,13 @@ class CliRegistrationTests(SubManFixture):
 
             with Capture(silent=True):
                 with self.assertRaises(SystemExit):
-                    rc._process_environments(mock_uep, 'owner')
+                    rc._process_environments(mock_uep, "owner")
 
     def test_set_multi_environment_id_multi_available(self):
         def env_list(*args, **kwargs):
-            return [{"id": "1234", "name": "somename"},
-                    {"id": "5678", "name": "othername"}]
+            return [{"id": "1234", "name": "somename"}, {"id": "5678", "name": "othername"}]
 
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             mock_uep.getEnvironmentList = env_list
             mock_uep.supports_resource = Mock(return_value=True)
             mock_uep.has_capability = Mock(return_value=True)
@@ -224,12 +232,12 @@ class CliRegistrationTests(SubManFixture):
             rc.options.activation_keys = None
             rc.options.environments = None
             rc._prompt_for_environment = Mock(return_value="somename,othername")
-            env_id = rc._process_environments(mock_uep, 'owner')
+            env_id = rc._process_environments(mock_uep, "owner")
             expected = "1234,5678"
             self.assertEqual(expected, env_id)
 
     def test_validate_multi_capable_multi_entry(self):
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             rc = RegisterCommand()
             rc.cp = mock_uep
             rc.is_registered = Mock(return_value=False)
@@ -237,7 +245,7 @@ class CliRegistrationTests(SubManFixture):
             rc.options.activation_keys = None
             rc.options.force = None
             rc.options.consumertype = None
-            rc.options.environments = 'One,Two'
+            rc.options.environments = "One,Two"
 
             mock_uep.has_capability = Mock(return_value=False)
             try:
@@ -253,24 +261,23 @@ class CliRegistrationTests(SubManFixture):
                 self.fail("Exception Raised")
 
     def test_validate_multi_environment_with_activation_key(self):
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             mock_uep.supports_resource = Mock(return_value=True)
             self.stub_cp_provider.basic_auth_cp = mock_uep
 
             rc = RegisterCommand()
             rc.cp = mock_uep
             rc.options = Mock()
-            rc.options.activation_keys = 'someAK'
+            rc.options.activation_keys = "someAK"
             rc.options.environments = None
-            ret = rc._process_environments(mock_uep, 'owner')
+            ret = rc._process_environments(mock_uep, "owner")
             self.assertIsNone(ret)
 
     def test_set_duplicate_multi_environment(self):
         def env_list(*args, **kwargs):
-            return [{"id": "1234", "name": "somename"},
-                    {"id": "5678", "name": "othername"}]
+            return [{"id": "1234", "name": "somename"}, {"id": "5678", "name": "othername"}]
 
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             mock_uep.getEnvironmentList = env_list
             mock_uep.supports_resource = Mock(return_value=True)
             self.stub_cp_provider.basic_auth_cp = mock_uep
@@ -284,33 +291,34 @@ class CliRegistrationTests(SubManFixture):
 
             with Capture(silent=True):
                 with self.assertRaises(SystemExit):
-                    rc._process_environments(mock_uep, 'owner')
+                    rc._process_environments(mock_uep, "owner")
 
     def test_registration_with_failed_profile_upload(self):
 
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             profile_mgr = inj.require(inj.PROFILE_MANAGER)
 
             def raise_remote_server_exception(*args, **kwargs):
                 """Raise remote server exception (uploading of profile failed)"""
                 from rhsm.connection import RemoteServerException
+
                 raise RemoteServerException(
                     502,
                     request_type="PUT",
-                    handler="/subscription/consumers/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/profiles"
+                    handler="/subscription/consumers/xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/profiles",
                 )
 
             profile_mgr.update_check = Mock(side_effect=raise_remote_server_exception)
             self.stub_cp_provider.basic_auth_cp = mock_uep
             cmd = RegisterCommand()
             with Capture() as cap:
-                cmd.main(['--force', '--username', 'admin', '--password', 'admin', '--org', 'admin'])
+                cmd.main(["--force", "--username", "admin", "--password", "admin", "--org", "admin"])
                 output = cap.out
                 self.assertTrue("The system has been registered with ID" in output)
                 self.assertTrue("The registered system name is:" in output)
 
     def test_deprecate_consumer_type(self):
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             self.stub_cp_provider.basic_auth_cp = mock_uep
 
             cmd = RegisterCommand()
@@ -318,5 +326,5 @@ class CliRegistrationTests(SubManFixture):
 
             with Capture(silent=True):
                 with self.assertRaises(SystemExit) as e:
-                    cmd.main(['--type=candlepin'])
+                    cmd.main(["--type=candlepin"])
                     self.assertEqual(e.code, os.EX_USAGE)

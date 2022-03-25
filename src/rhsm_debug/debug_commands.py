@@ -31,47 +31,71 @@ from rhsmlib.services import config
 
 from subscription_manager.i18n import ugettext as _
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger("rhsm-app." + __name__)
 
 conf = config.Config(get_config_parser())
 
-ERR_NOT_REGISTERED_MSG = _("This system is not yet registered. Try 'subscription-manager register --help' for more information.")
+ERR_NOT_REGISTERED_MSG = _(
+    "This system is not yet registered. Try 'subscription-manager register --help' for more information."
+)
 ERR_NOT_REGISTERED_CODE = 1
 
-ASSEMBLE_DIR = '/var/spool/rhsm/debug'
+ASSEMBLE_DIR = "/var/spool/rhsm/debug"
 ROOT_READ_ONLY_DIR = 0o700
 ROOT_READ_ONLY_FILE = 0o600
-KEY_IGNORE_PATS = ['*key.pem']
+KEY_IGNORE_PATS = ["*key.pem"]
 
 
 class SystemCommand(CliCommand):
-
-    def __init__(self, name="system",
-                 shortdesc=_("Assemble system information as a tar file or directory"),
-                 primary=True):
+    def __init__(
+        self,
+        name="system",
+        shortdesc=_("Assemble system information as a tar file or directory"),
+        primary=True,
+    ):
         CliCommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
 
-        self.parser.add_argument("--destination", dest="destination",
-                                 default="/tmp", help=_("the destination location of the result; default is /tmp"))
+        self.parser.add_argument(
+            "--destination",
+            dest="destination",
+            default="/tmp",
+            help=_("the destination location of the result; default is /tmp"),
+        )
         # default is to build an archive, this skips the archive and clean up,
         # just leaving the directory of debug info for sosreport to report
-        self.parser.add_argument("--no-archive", action='store_false',
-                                 default=True, dest="archive",
-                                 help=_("data will be in an uncompressed directory"))
-        self.parser.add_argument("--sos", action='store_true',
-                                 default=False, dest="sos",
-                                 help=_("only data not already included in sos report will be collected"))
+        self.parser.add_argument(
+            "--no-archive",
+            action="store_false",
+            default=True,
+            dest="archive",
+            help=_("data will be in an uncompressed directory"),
+        )
+        self.parser.add_argument(
+            "--sos",
+            action="store_true",
+            default=False,
+            dest="sos",
+            help=_("only data not already included in sos report will be collected"),
+        )
         # These options don't do anything anymore, since current versions of
         # RHSM api doesn't support it, and previously they failed silently.
         # So now they are hidden, and they are not hooked up to anything. This
         # avoids breaking existing scripts, since it also didn't do anything
         # before. See rhbz #1246680
-        self.parser.add_argument("--no-subscriptions", action='store_true',
-                                 dest="placeholder_for_subscriptions_option",
-                                 default=False, help=argparse.SUPPRESS)
-        self.parser.add_argument("--subscriptions", action='store_true',
-                                 dest="placeholder_for_subscriptions_option",
-                                 default=False, help=argparse.SUPPRESS)
+        self.parser.add_argument(
+            "--no-subscriptions",
+            action="store_true",
+            dest="placeholder_for_subscriptions_option",
+            default=False,
+            help=argparse.SUPPRESS,
+        )
+        self.parser.add_argument(
+            "--subscriptions",
+            action="store_true",
+            dest="placeholder_for_subscriptions_option",
+            default=False,
+            help=argparse.SUPPRESS,
+        )
 
         self.assemble_path = ASSEMBLE_DIR
 
@@ -87,10 +111,11 @@ class SystemCommand(CliCommand):
         # no archive, check if we can safely copy to dest.
         if not self.options.archive:
             if not self._dirs_on_same_device(self.assemble_path, self.options.destination):
-                msg = _("To use the no-archive option, the destination directory '{destination}' "
-                        "must exist on the same file system as the "
-                        "data assembly directory '{assembly}'.").format(destination=self.options.destination,
-                                                                        assembly=self.assemble_path)
+                msg = _(
+                    "To use the no-archive option, the destination directory '{destination}' "
+                    "must exist on the same file system as the "
+                    "data assembly directory '{assembly}'."
+                ).format(destination=self.options.destination, assembly=self.assemble_path)
                 raise InvalidCLIOptionError(msg)
         # In case folks are using this in a script
         if self.options.placeholder_for_subscriptions_option:
@@ -120,16 +145,15 @@ class SystemCommand(CliCommand):
 
             owner = self.cp.getOwner(consumer.uuid)
 
-            self._write_flat_file(content_path, "consumer.json",
-                                  self.cp.getConsumer(consumer.uuid))
-            self._write_flat_file(content_path, "compliance.json",
-                                  self.cp.getCompliance(consumer.uuid))
-            self._write_flat_file(content_path, "entitlements.json",
-                                  self.cp.getEntitlementList(consumer.uuid))
-            self._write_flat_file(content_path, "pools.json",
-                                  self.cp.getPoolsList(consumer.uuid, True, None, owner['key']))
-            self._write_flat_file(content_path, "version.json",
-                                  self._get_version_info())
+            self._write_flat_file(content_path, "consumer.json", self.cp.getConsumer(consumer.uuid))
+            self._write_flat_file(content_path, "compliance.json", self.cp.getCompliance(consumer.uuid))
+            self._write_flat_file(
+                content_path, "entitlements.json", self.cp.getEntitlementList(consumer.uuid)
+            )
+            self._write_flat_file(
+                content_path, "pools.json", self.cp.getPoolsList(consumer.uuid, True, None, owner["key"])
+            )
+            self._write_flat_file(content_path, "version.json", self._get_version_info())
 
             # FIXME: we need to anon proxy passwords?
             sos = self.options.sos
@@ -139,34 +163,34 @@ class SystemCommand(CliCommand):
             if not sos:
                 # copy rhsm.conf specifically
                 self._copy_cert_directory("/etc/rhsm", content_path)
-                self._copy_directory('/var/log/rhsm', content_path)
-                self._copy_directory('/var/lib/rhsm', content_path)
+                self._copy_directory("/var/log/rhsm", content_path)
+                self._copy_directory("/var/lib/rhsm", content_path)
 
             if not sos:
                 self._copy_cert_directory(DEFAULT_PRODUCT_CERT_DIR, content_path)
 
-            if defaults['productcertdir'] != conf['rhsm']['productCertDir'] or not sos:
-                self._copy_cert_directory(conf['rhsm']['productCertDir'], content_path)
+            if defaults["productcertdir"] != conf["rhsm"]["productCertDir"] or not sos:
+                self._copy_cert_directory(conf["rhsm"]["productCertDir"], content_path)
 
-            if defaults['entitlementcertdir'] != conf['rhsm']['entitlementCertDir'] or not sos:
-                self._copy_cert_directory(conf['rhsm']['entitlementCertDir'], content_path)
+            if defaults["entitlementcertdir"] != conf["rhsm"]["entitlementCertDir"] or not sos:
+                self._copy_cert_directory(conf["rhsm"]["entitlementCertDir"], content_path)
 
-            if defaults['consumercertdir'] != conf['rhsm']['consumerCertDir'] or not sos:
-                self._copy_cert_directory(conf['rhsm']['consumerCertDir'], content_path)
+            if defaults["consumercertdir"] != conf["rhsm"]["consumerCertDir"] or not sos:
+                self._copy_cert_directory(conf["rhsm"]["consumerCertDir"], content_path)
 
             # If ca_cert_dir and pluginconfdif are configured as subdirs of /etc/rhsm
             # (as is the default) we will have already copied there contents,
             # so ignore directory exists errors
             try:
-                if defaults['ca_cert_dir'] != conf['rhsm']['ca_cert_dir'] or not sos:
-                    self._copy_cert_directory(conf['rhsm']['ca_cert_dir'], content_path)
+                if defaults["ca_cert_dir"] != conf["rhsm"]["ca_cert_dir"] or not sos:
+                    self._copy_cert_directory(conf["rhsm"]["ca_cert_dir"], content_path)
             except EnvironmentError as e:
                 if e.errno != errno.EEXIST:
                     raise
 
             try:
-                if defaults['pluginconfdir'] != conf['rhsm']['pluginconfdir'] or not sos:
-                    self._copy_directory(conf['rhsm']['pluginconfdir'], content_path)
+                if defaults["pluginconfdir"] != conf["rhsm"]["pluginconfdir"] or not sos:
+                    self._copy_directory(conf["rhsm"]["pluginconfdir"], content_path)
             except EnvironmentError as e:
                 if e.errno != errno.EEXIST:
                     raise
@@ -212,9 +236,11 @@ class SystemCommand(CliCommand):
         return datetime.now().strftime("%Y%m%d-%f")
 
     def _get_version_info(self):
-        return {"server type": self.server_versions["server-type"],
-                "subscription management server": self.server_versions["candlepin"],
-                "subscription-manager": self.client_versions["subscription-manager"]}
+        return {
+            "server type": self.server_versions["server-type"],
+            "subscription management server": self.server_versions["candlepin"],
+            "subscription-manager": self.client_versions["subscription-manager"],
+        }
 
     def _write_flat_file(self, content_path, filename, content):
         path = os.path.join(content_path, filename)
@@ -226,15 +252,12 @@ class SystemCommand(CliCommand):
         if os.path.isabs(src_path):
             rel_path = src_path[1:]
         if ignore_pats is not None:
-            shutil.copytree(src_path, os.path.join(dest_path, rel_path),
-                            ignore=ignore_patterns(*ignore_pats))
+            shutil.copytree(src_path, os.path.join(dest_path, rel_path), ignore=ignore_patterns(*ignore_pats))
         else:
             shutil.copytree(src_path, os.path.join(dest_path, rel_path))
 
     def _copy_cert_directory(self, src_path, dest_path):
-        self._copy_directory(src_path,
-                             dest_path,
-                             KEY_IGNORE_PATS)
+        self._copy_directory(src_path, dest_path, KEY_IGNORE_PATS)
 
     def _makedir(self, dest_dir_name):
         os.makedirs(dest_dir_name, ROOT_READ_ONLY_DIR)
@@ -250,6 +273,7 @@ class SaferFileMove(object):
 
     Then we copy the contents of the src file to the new dest file,
     and unlink the src file."""
+
     def __init__(self):
         # based on shutils copyfileob
         self.buf_size = 16 * 1024
@@ -261,7 +285,7 @@ class SaferFileMove(object):
 
         If dest is /tmp, or a specific name in /tmp, we want to
         create it excl if we can."""
-        with open(src, 'rb') as src_fo:
+        with open(src, "rb") as src_fo:
             # if dest doesn't exist, and we can open it excl, then open it,
             # keep the fd, create a file object for it, and write to it
             with self._open_excl(dest) as dest_fo:
@@ -271,8 +295,7 @@ class SaferFileMove(object):
 
     def _open_excl(self, path):
         """Return a file object that we know we created and nothing else owns."""
-        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL,
-                                 self.default_perms), 'wb+')
+        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL, self.default_perms), "wb+")
 
     def _copyfileobj(self, src_fo, dest_fo):
         while True:

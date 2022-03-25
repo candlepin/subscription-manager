@@ -17,7 +17,6 @@ from rhsm_debug.debug_commands import SystemCommand
 
 
 class RhsmDebugCLI(CLI):
-
     def __init__(self):
         commands = [SystemCommand]
         CLI.__init__(self, commands)

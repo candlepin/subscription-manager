@@ -27,6 +27,7 @@ class RHELBrandsInstaller(entbranding.BrandsInstaller):
     """RHEL specific impl of BrandsInstaller.
 
     Currently just the RHELBrandInstaller."""
+
     def _get_brand_installers(self):
         return [RHELBrandInstaller(self.ent_certs)]
 
@@ -89,11 +90,19 @@ class RHELBrandPicker(entbranding.BrandPicker):
         else:
             # note product_name_set should never be empty here, since we check
             # for emtpty branded_certs
-            log.warning("More than one entitlement provided branded name information for an installed RHEL product")
+            log.warning(
+                "More than one entitlement provided branded name information for an installed RHEL product"
+            )
             for branded_cert in branded_certs:
-                log.debug("Entitlement cert %s (%s) provided branded name information for (%s, %s)" %
-                          (branded_cert[0].serial, branded_cert[0].order.name,
-                           branded_cert[1].id, branded_cert[1].brand_name))
+                log.debug(
+                    "Entitlement cert %s (%s) provided branded name information for (%s, %s)"
+                    % (
+                        branded_cert[0].serial,
+                        branded_cert[0].order.name,
+                        branded_cert[1].id,
+                        branded_cert[1].brand_name,
+                    )
+                )
             return None
 
     def _get_branded_cert_products(self):
@@ -110,8 +119,10 @@ class RHELBrandPicker(entbranding.BrandPicker):
             if len(installed_branded_products) > 1:
                 log.warning("More than one installed product with RHEL brand information is installed")
                 for installed_branded_product in installed_branded_products:
-                    log.debug("Entitlement cert %s is providing brand info for product %s" %
-                              (cert, installed_branded_product))
+                    log.debug(
+                        "Entitlement cert %s is providing brand info for product %s"
+                        % (cert, installed_branded_product)
+                    )
                 continue
             else:
                 installed_branded_product = installed_branded_products[0]
@@ -149,12 +160,12 @@ class RHELBrandPicker(entbranding.BrandPicker):
         return product.id in self.installed_products
 
     def _is_rhel_branded_product(self, product):
-        if not hasattr(product, 'brand_type'):
+        if not hasattr(product, "brand_type"):
             return False
-        elif product.brand_type != 'OS':
+        elif product.brand_type != "OS":
             return False
 
-        if not hasattr(product, 'brand_name'):
+        if not hasattr(product, "brand_name"):
             return False
 
         if not product.brand_name:

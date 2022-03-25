@@ -85,7 +85,7 @@ class CacheManager(object):
 
     @classmethod
     def delete_cache(cls):
-        """ Delete the cache for this collection from disk. """
+        """Delete the cache for this collection from disk."""
         if os.path.exists(cls.CACHE_FILE):
             log.debug("Deleting cache: %s" % cls.CACHE_FILE)
             os.remove(cls.CACHE_FILE)
@@ -158,9 +158,10 @@ class CacheManager(object):
         # end up calling this with consumer_uuid=None if the system
         # is unregistered.
         if not consumer_uuid:
-            msg = _("consumer_uuid={consumer_uuid} is not a valid consumer_uuid. "
-                    "Not attempting to sync {class_name} cache with server.").format(
-                        consumer_uuid=consumer_uuid, class_name=self.__class__.__name__)
+            msg = _(
+                "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. "
+                "Not attempting to sync {class_name} cache with server."
+            ).format(consumer_uuid=consumer_uuid, class_name=self.__class__.__name__)
             log.debug(msg)
 
             # Raising an exception here would be better, but that is just
@@ -196,6 +197,7 @@ class StatusCache(CacheManager):
     Unlike other cache managers, this one gets info from the server rather
     than sending it.
     """
+
     def __init__(self):
         self.server_status = None
         self.last_error = None
@@ -234,8 +236,12 @@ class StatusCache(CacheManager):
             return None
         # all of the above are subclasses of ConnectionException that
         # get handled first
-        except (connection.ConnectionException, connection.RateLimitExceededException,
-                socket.error, connection.ProxyException) as ex:
+        except (
+            connection.ConnectionException,
+            connection.RateLimitExceededException,
+            socket.error,
+            connection.ProxyException,
+        ) as ex:
             log.error(ex)
             self.last_error = ex
             if not self._cache_exists():
@@ -265,10 +271,10 @@ class StatusCache(CacheManager):
         """
         if self.server_status is None:
             if self._cache_exists():
-                log.debug('Trying to read status from %s file' % self.CACHE_FILE)
+                log.debug("Trying to read status from %s file" % self.CACHE_FILE)
                 self.server_status = super(StatusCache, self)._read_cache()
         else:
-            log.debug('Reading status from in-memory cache of %s file' % self.CACHE_FILE)
+            log.debug("Reading status from in-memory cache of %s file" % self.CACHE_FILE)
         return self.server_status
 
     def _cache_exists(self):
@@ -299,7 +305,7 @@ class StatusCache(CacheManager):
             if self.server_status is None:
                 self.server_status = self.load_status(uep, uuid, on_date)
         else:
-            log.debug('Reading status from in-memory cache of %s file' % self.CACHE_FILE)
+            log.debug("Reading status from in-memory cache of %s file" % self.CACHE_FILE)
         return self.server_status
 
     def write_cache(self):
@@ -307,9 +313,11 @@ class StatusCache(CacheManager):
         This is threaded because it should never block in runtime.
         Writing to disk means it will be read from memory for the rest of this run.
         """
-        threading.Thread(target=super(StatusCache, self).write_cache,
-                         args=[True],
-                         name="WriteCache%sThread" % self.__class__.__name__).start()
+        threading.Thread(
+            target=super(StatusCache, self).write_cache,
+            args=[True],
+            name="WriteCache%sThread" % self.__class__.__name__,
+        ).start()
         log.debug("Started thread to write cache: %s" % self.CACHE_FILE)
 
     # we override a @classmethod with an instance method in the sub class?
@@ -324,6 +332,7 @@ class EntitlementStatusCache(StatusCache):
     Unlike other cache managers, this one gets info from the server rather
     than sending it.
     """
+
     CACHE_FILE = "/var/lib/rhsm/cache/entitlement_status.json"
 
     def _sync_with_server(self, uep, uuid, on_date=None, *args, **kwargs):
@@ -336,6 +345,7 @@ class SyspurposeComplianceStatusCache(StatusCache):
     Unlike other cache managers, this one gets info from the server rather
     than sending it.
     """
+
     CACHE_FILE = "/var/lib/rhsm/cache/syspurpose_compliance_status.json"
 
     def _sync_with_server(self, uep, uuid, on_date=None, *args, **kwargs):
@@ -343,24 +353,24 @@ class SyspurposeComplianceStatusCache(StatusCache):
         self.server_status = self.syspurpose_service.get_syspurpose_status(on_date)
 
     def write_cache(self):
-        if self.server_status is not None and self.server_status['status'] != 'unknown':
+        if self.server_status is not None and self.server_status["status"] != "unknown":
             super(SyspurposeComplianceStatusCache, self).write_cache()
 
     def get_overall_status(self):
         if self.server_status is not None:
-            return self.syspurpose_service.get_overall_status(self.server_status['status'])
+            return self.syspurpose_service.get_overall_status(self.server_status["status"])
         else:
-            return self.syspurpose_service.get_overall_status('unknown')
+            return self.syspurpose_service.get_overall_status("unknown")
 
     def get_overall_status_code(self):
         if self.server_status is not None:
             return self.server_status
         else:
-            return 'unknown'
+            return "unknown"
 
     def get_status_reasons(self):
-        if self.server_status is not None and 'reasons' in self.server_status:
-            return self.server_status['reasons']
+        if self.server_status is not None and "reasons" in self.server_status:
+            return self.server_status["reasons"]
         else:
             return None
 
@@ -369,21 +379,23 @@ class ProductStatusCache(StatusCache):
     """
     Manages the system cache of installed product valid date ranges.
     """
+
     CACHE_FILE = "/var/lib/rhsm/cache/product_status.json"
 
     def _sync_with_server(self, uep, uuid, *args, **kwargs):
         consumer_data = uep.getConsumer(uuid)
 
-        if 'installedProducts' not in consumer_data:
+        if "installedProducts" not in consumer_data:
             log.warning("Server does not support product date ranges.")
         else:
-            self.server_status = consumer_data['installedProducts']
+            self.server_status = consumer_data["installedProducts"]
 
 
 class OverrideStatusCache(StatusCache):
     """
     Manages the cache of yum repo overrides set on the server.
     """
+
     CACHE_FILE = "/var/lib/rhsm/cache/content_overrides.json"
 
     def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
@@ -394,6 +406,7 @@ class ReleaseStatusCache(StatusCache):
     """
     Manages the cache of the consumers 'release' setting applied to yum repos.
     """
+
     CACHE_FILE = "/var/lib/rhsm/cache/releasever.json"
 
     def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
@@ -428,10 +441,11 @@ class ProfileManager(CacheManager):
         # If profile reporting is disabled from the environment, that overrides the setting in the conf file
         # If the environment variable is 0, defer to the setting in the conf file; likewise if the environment
         # variable is completely unset.
-        if 'SUBMAN_DISABLE_PROFILE_REPORTING' in os.environ and \
-            os.environ['SUBMAN_DISABLE_PROFILE_REPORTING'].lower() in ['true', '1', 'yes', 'on']:
+        if "SUBMAN_DISABLE_PROFILE_REPORTING" in os.environ and os.environ[
+            "SUBMAN_DISABLE_PROFILE_REPORTING"
+        ].lower() in ["true", "1", "yes", "on"]:
             return False
-        return conf['rhsm'].get_int('report_package_profile') == 1
+        return conf["rhsm"].get_int("report_package_profile") == 1
 
     # give tests a chance to use something other than RPMProfile
     def _get_profile(self, profile_type):
@@ -440,18 +454,18 @@ class ProfileManager(CacheManager):
     @staticmethod
     def _assembly_profile(rpm_profile, enabled_repos_profile, module_profile):
         combined_profile = {
-            'rpm': rpm_profile,
-            'enabled_repos': enabled_repos_profile,
-            'modulemd': module_profile
+            "rpm": rpm_profile,
+            "enabled_repos": enabled_repos_profile,
+            "modulemd": module_profile,
         }
         return combined_profile
 
     @property
     def current_profile(self):
         if not self._current_profile:
-            rpm_profile = get_profile('rpm').collect()
-            enabled_repos = get_profile('enabled_repos').collect()
-            module_profile = get_profile('modulemd').collect()
+            rpm_profile = get_profile("rpm").collect()
+            enabled_repos = get_profile("enabled_repos").collect()
+            module_profile = get_profile("modulemd").collect()
             combined_profile = self._assembly_profile(rpm_profile, enabled_repos, module_profile)
             self._current_profile = combined_profile
         return self._current_profile
@@ -502,28 +516,13 @@ class ProfileManager(CacheManager):
         combined_profile = self.current_profile
         if uep.has_capability("combined_reporting"):
             _combined_profile = [
-                {
-                    "content_type": "rpm",
-                    "profile": combined_profile["rpm"]
-                },
-                {
-                    "content_type": "enabled_repos",
-                    "profile": combined_profile["enabled_repos"]
-                },
-                {
-                    "content_type": "modulemd",
-                    "profile": combined_profile["modulemd"]
-                },
+                {"content_type": "rpm", "profile": combined_profile["rpm"]},
+                {"content_type": "enabled_repos", "profile": combined_profile["enabled_repos"]},
+                {"content_type": "modulemd", "profile": combined_profile["modulemd"]},
             ]
-            uep.updateCombinedProfile(
-                consumer_uuid,
-                _combined_profile
-            )
+            uep.updateCombinedProfile(consumer_uuid, _combined_profile)
         else:
-            uep.updatePackageProfile(
-                consumer_uuid,
-                combined_profile["rpm"]
-            )
+            uep.updatePackageProfile(consumer_uuid, combined_profile["rpm"])
 
 
 class InstalledProductsManager(CacheManager):
@@ -531,6 +530,7 @@ class InstalledProductsManager(CacheManager):
     Manages the cache of the products installed on this system, and what we
     last sent to the server.
     """
+
     CACHE_FILE = "/var/lib/rhsm/cache/installed_products.json"
 
     def __init__(self):
@@ -568,8 +568,8 @@ class InstalledProductsManager(CacheManager):
 
         cached = self._read_cache()
         try:
-            products = cached['products']
-            tags = set(cached['tags'])
+            products = cached["products"]
+            tags = set(cached["tags"])
         except KeyError:
             # Handle older cache formats
             return True
@@ -598,10 +598,10 @@ class InstalledProductsManager(CacheManager):
             prod = prod_cert.products[0]
             self.tags |= set(prod.provided_tags)
             self._installed[prod.id] = {
-                'productId': prod.id,
-                'productName': prod.name,
-                'version': prod.version,
-                'arch': ','.join(prod.architectures)
+                "productId": prod.id,
+                "productName": prod.name,
+                "version": prod.version,
+                "arch": ",".join(prod.architectures),
             }
 
     def format_for_server(self):
@@ -615,15 +615,18 @@ class InstalledProductsManager(CacheManager):
         return final
 
     def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
-        uep.updateConsumer(consumer_uuid,
-                           installed_products=self.format_for_server(),
-                           content_tags=self.tags)
+        uep.updateConsumer(
+            consumer_uuid,
+            installed_products=self.format_for_server(),
+            content_tags=self.tags,
+        )
 
 
 class PoolStatusCache(StatusCache):
     """
     Manages the system cache of pools
     """
+
     CACHE_FILE = "/var/lib/rhsm/cache/pool_status.json"
 
     def _sync_with_server(self, uep, uuid, *args, **kwargs):
@@ -644,28 +647,26 @@ class PoolTypeCache(object):
         self.update()
 
     def get(self, pool_id):
-        return self.pooltype_map.get(pool_id, '')
+        return self.pooltype_map.get(pool_id, "")
 
     def update(self):
         if self.requires_update():
             self._do_update()
 
     def requires_update(self):
-        attached_pool_ids = set([ent.pool.id for ent in self.ent_dir.list()
-                                 if ent.pool and ent.pool.id])
+        attached_pool_ids = set([ent.pool.id for ent in self.ent_dir.list() if ent.pool and ent.pool.id])
         missing_types = attached_pool_ids - set(self.pooltype_map)
         return bool(missing_types)
 
     def _do_update(self):
         result = {}
         if self.identity.is_valid():
-            self.pool_cache.load_status(self.cp_provider.get_consumer_auth_cp(),
-                                        self.identity.uuid)
+            self.pool_cache.load_status(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
             entitlement_list = self.pool_cache.server_status
 
             if entitlement_list is not None:
                 for ent in entitlement_list:
-                    pool = PoolWrapper(ent.get('pool', {}))
+                    pool = PoolWrapper(ent.get("pool", {}))
                     pool_type = pool.get_pool_type()
                     result[pool.get_id()] = pool_type
 
@@ -713,10 +714,7 @@ class ContentAccessCache(object):
                 data = json.loads(self.read())
                 last_update = parse_date(data["lastUpdate"])
             except (ValueError, KeyError) as err:
-                log.debug("Cache file {file} is corrupted: {err}".format(
-                    file=self.CACHE_FILE,
-                    err=err
-                ))
+                log.debug("Cache file {file} is corrupted: {err}".format(file=self.CACHE_FILE, err=err))
                 last_update = None
         else:
             last_update = None
@@ -879,28 +877,30 @@ class ConsumerCache(CacheManager):
                 cur_time = time.time()
                 diff = cur_time - mod_time
                 if diff > self.TIMEOUT:
-                    log.debug('Validity of cache file %s timed out (%d)' % (self.CACHE_FILE, self.TIMEOUT))
+                    log.debug("Validity of cache file %s timed out (%d)" % (self.CACHE_FILE, self.TIMEOUT))
                     cache_file_obsoleted = True
 
         if cache_file_obsoleted is False:
             # Try to read data from cache first
-            log.debug('Trying to read %s from cache file %s' % (self.__class__.__name__, self.CACHE_FILE))
+            log.debug("Trying to read %s from cache file %s" % (self.__class__.__name__, self.CACHE_FILE))
             data = self.read_cache_only()
             if data is not None:
                 if identity.uuid in data:
                     current_data = data[identity.uuid]
                 else:
-                    log.debug("Identity of system has changed. The cache file: %s is obsolete" % self.CACHE_FILE)
+                    log.debug(
+                        "Identity of system has changed. The cache file: %s is obsolete" % self.CACHE_FILE
+                    )
 
         # When valid data are not in cached, then try to load it from candlepin server
         if len(current_data) != 0:
-            log.debug('Data loaded from cache file: %s' % self.CACHE_FILE)
+            log.debug("Data loaded from cache file: %s" % self.CACHE_FILE)
         else:
             if uep is None:
                 cp_provider = inj.require(inj.CP_PROVIDER)
                 uep = cp_provider.get_consumer_auth_cp()
 
-            log.debug('Getting data from server for %s' % self.__class__)
+            log.debug("Getting data from server for %s" % self.__class__)
             try:
                 current_data = self._sync_with_server(uep=uep, consumer_uuid=identity.uuid)
             except connection.RestlibException as rest_err:
@@ -930,8 +930,8 @@ class SyspurposeValidFieldsCache(ConsumerCache):
     def _sync_with_server(self, uep, *args, **kwargs):
         cache = inj.require(inj.CURRENT_OWNER_CACHE)
         owner = cache.read_data(uep)
-        if 'key' in owner:
-            data = uep.getOwnerSyspurposeValidFields(owner['key'])
+        if "key" in owner:
+            data = uep.getOwnerSyspurposeValidFields(owner["key"])
             return post_process_received_data(data)
         else:
             return self.DEFAULT_VALUE
@@ -965,7 +965,7 @@ class CurrentOwnerCache(ConsumerCache):
         if uep is None:
             cp_provider = inj.require(inj.CP_PROVIDER)
             uep = cp_provider.get_consumer_auth_cp()
-        if hasattr(uep.conn, 'is_consumer_cert_key_valid') and uep.conn.is_consumer_cert_key_valid is True:
+        if hasattr(uep.conn, "is_consumer_cert_key_valid") and uep.conn.is_consumer_cert_key_valid is True:
             return False
         else:
             return True
@@ -990,15 +990,19 @@ class ContentAccessModeCache(ConsumerCache):
         try:
             current_owner = uep.getOwner(consumer_uuid)
         except Exception:
-            log.debug("Error checking for content access mode,"
-                      "defaulting to assuming not in Simple Content Access mode")
+            log.debug(
+                "Error checking for content access mode,"
+                "defaulting to assuming not in Simple Content Access mode"
+            )
         else:
             if "contentAccessMode" in current_owner:
                 return current_owner["contentAccessMode"]
             else:
-                log.debug("The owner returned from the server did not contain a "
-                          "'content_access_mode'. Perhaps the connected Entitlement Server doesn't"
-                          "support 'content_access_mode'?")
+                log.debug(
+                    "The owner returned from the server did not contain a "
+                    "'content_access_mode'. Perhaps the connected Entitlement Server doesn't"
+                    "support 'content_access_mode'?"
+                )
         return "unknown"
 
     def _is_cache_obsoleted(self, uep, identity, *args, **kwargs):
@@ -1014,19 +1018,19 @@ class ContentAccessModeCache(ConsumerCache):
             cp_provider = inj.require(inj.CP_PROVIDER)
             uep = cp_provider.get_consumer_auth_cp()
 
-        if hasattr(uep.conn, 'is_consumer_cert_key_valid'):
+        if hasattr(uep.conn, "is_consumer_cert_key_valid"):
             if uep.conn.is_consumer_cert_key_valid is None:
                 log.debug(
-                    f'Cache file {self.CACHE_FILE} cannot be considered as valid, because no connection has '
-                    'been created yet'
+                    f"Cache file {self.CACHE_FILE} cannot be considered as valid, because no connection has "
+                    "been created yet"
                 )
                 return True
             elif uep.conn.is_consumer_cert_key_valid is True:
                 return False
             else:
                 log.debug(
-                    f'Cache file {self.CACHE_FILE} cannot be considered as valid, because consumer certificate '
-                    'probably is not valid'
+                    f"Cache file {self.CACHE_FILE} cannot be considered as valid, because consumer certificate "
+                    "probably is not valid"
                 )
                 return True
         else:
@@ -1099,15 +1103,15 @@ class AvailableEntitlementsCache(CacheManager):
         if data is not None:
             if identity.uuid in data:
                 cached_data = data[identity.uuid]
-                if cached_data['filter_options'] == filter_options:
-                    log.debug('timeout: %s, current time: %s' % (cached_data['timeout'], time.time()))
-                    if cached_data['timeout'] > time.time():
-                        log.debug('Using cached list of available entitlements')
-                        available_pools = cached_data['pools']
+                if cached_data["filter_options"] == filter_options:
+                    log.debug("timeout: %s, current time: %s" % (cached_data["timeout"], time.time()))
+                    if cached_data["timeout"] > time.time():
+                        log.debug("Using cached list of available entitlements")
+                        available_pools = cached_data["pools"]
                     else:
-                        log.debug('Cache of available entitlements timed-out')
+                        log.debug("Cache of available entitlements timed-out")
                 else:
-                    log.debug('Cache of available entitlements does not contain given filter options')
+                    log.debug("Cache of available entitlements does not contain given filter options")
         return available_pools
 
     def _load_data(self, open_file):

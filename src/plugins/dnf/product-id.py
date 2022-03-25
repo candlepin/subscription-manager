@@ -30,13 +30,13 @@ import librepo
 import os
 from rhsm import ourjson as json, logutil
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger("rhsm-app." + __name__)
 
-log = logging.getLogger('rhsm-app.' + __name__)
+log = logging.getLogger("rhsm-app." + __name__)
 
 
 class ProductId(dnf.Plugin):
-    name = 'product-id'
+    name = "product-id"
 
     def __init__(self, base, cli):
         super(ProductId, self).__init__(base, cli)
@@ -50,9 +50,9 @@ class ProductId(dnf.Plugin):
         # able to access this list later in transaction hook
         for repo in self.base.repos.iter_enabled():
             self._enabled_repos.append(repo)
-            if hasattr(repo, 'add_metadata_type_to_download'):
-                log.debug('Adding productid metadata type to download for repo: %s' % repo.id)
-                repo.add_metadata_type_to_download('productid')
+            if hasattr(repo, "add_metadata_type_to_download"):
+                log.debug("Adding productid metadata type to download for repo: %s" % repo.id)
+                repo.add_metadata_type_to_download("productid")
 
     def transaction(self):
         """
@@ -73,7 +73,7 @@ class ProductId(dnf.Plugin):
         try:
             pm = DnfProductManager(self.base)
             pm.update_all(self._enabled_repos)
-            logger.info(_('Installed products updated.'))
+            logger.info(_("Installed products updated."))
         except Exception as e:
             log.error(str(e))
 
@@ -88,23 +88,21 @@ class DnfProductManager(ProductManager):
         ProductManager.__init__(self)
 
     def update_all(self, enabled_repos):
-        return self.update(self.get_certs_for_enabled_repos(enabled_repos),
-                           self.get_active(),
-                           True)
+        return self.update(self.get_certs_for_enabled_repos(enabled_repos), self.get_active(), True)
 
     def _download_productid(self, repo, tmpdir):
-        if hasattr(repo, 'get_metadata_content'):
-            log.debug('Getting productid cert for repo: %s' % repo.id)
-            content = repo.get_metadata_content('productid')
+        if hasattr(repo, "get_metadata_content"):
+            log.debug("Getting productid cert for repo: %s" % repo.id)
+            content = repo.get_metadata_content("productid")
             log.debug("Content of productid cert: %s" % content)
 
-            filename = repo.get_metadata_path('productid')
+            filename = repo.get_metadata_path("productid")
             if filename == "":
                 filename = None
             if filename is not None:
-                log.debug('Filename with productid cert: %s' % filename)
+                log.debug("Filename with productid cert: %s" % filename)
             else:
-                log.debug('Unable to load product id cert')
+                log.debug("Unable to load product id cert")
         else:
             handle = repo._handle_new_remote(tmpdir)
             handle.setopt(librepo.LRO_PROGRESSCB, None)
@@ -130,7 +128,7 @@ class DnfProductManager(ProductManager):
                     if filename:
                         cert = self._get_cert(filename)
                         if cert is None:
-                            log.debug('Repository %s does not provide cert' % repo.id)
+                            log.debug("Repository %s does not provide cert" % repo.id)
                             continue
                         lst.append((cert, repo.id))
                         cache[repo.id] = cert.pem
@@ -147,8 +145,7 @@ class DnfProductManager(ProductManager):
                 self.meta_data_errors.append(repo.id)
 
         if self.meta_data_errors:
-            log.debug("Unable to load productid metadata for repos: %s",
-                      self.meta_data_errors)
+            log.debug("Unable to load productid metadata for repos: %s", self.meta_data_errors)
 
         if len(cache) > 0:
             self.write_productid_cache(cache)

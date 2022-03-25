@@ -28,28 +28,42 @@ log = logging.getLogger(__name__)
 
 
 class ReleaseCommand(CliCommand):
-
     def __init__(self):
         shortdesc = _("Configure which operating system release to use")
         super(ReleaseCommand, self).__init__("release", shortdesc, True)
 
-        self.parser.add_argument("--show", dest="show", action="store_true",
-                                 help=_("shows current release setting; default command"))
-        self.parser.add_argument("--list", dest="list", action="store_true",
-                                 help=_("list available releases"))
-        self.parser.add_argument("--set", dest="release", action="store",
-                                 default=None,
-                                 help=_("set the release for this system"))
-        self.parser.add_argument("--unset", dest="unset",
-                                 action='store_true',
-                                 help=_("unset the release for this system"))
+        self.parser.add_argument(
+            "--show",
+            dest="show",
+            action="store_true",
+            help=_("shows current release setting; default command"),
+        )
+        self.parser.add_argument(
+            "--list",
+            dest="list",
+            action="store_true",
+            help=_("list available releases"),
+        )
+        self.parser.add_argument(
+            "--set",
+            dest="release",
+            action="store",
+            default=None,
+            help=_("set the release for this system"),
+        )
+        self.parser.add_argument(
+            "--unset",
+            dest="unset",
+            action="store_true",
+            help=_("unset the release for this system"),
+        )
 
     def _get_consumer_release(self):
         err_msg = _("Error: The 'release' command is not supported by the server.")
         consumer = self.cp.getConsumer(self.identity.uuid)
-        if 'releaseVer' not in consumer:
+        if "releaseVer" not in consumer:
             system_exit(os.EX_UNAVAILABLE, err_msg)
-        return consumer['releaseVer']['releaseVer']
+        return consumer["releaseVer"]["releaseVer"]
 
     def show_current_release(self):
         release = self._get_consumer_release()
@@ -59,13 +73,12 @@ class ReleaseCommand(CliCommand):
             print(_("Release not set"))
 
     def _do_command(self):
-        cdn_url = conf['rhsm']['baseurl']
+        cdn_url = conf["rhsm"]["baseurl"]
         # note: parse_baseurl_info will populate with defaults if not found
         (cdn_hostname, cdn_port, _cdn_prefix) = parse_baseurl_info(cdn_url)
 
         # Base CliCommand has already setup proxy info etc
-        self.cp_provider.set_content_connection_info(cdn_hostname=cdn_hostname,
-                                                     cdn_port=cdn_port)
+        self.cp_provider.set_content_connection_info(cdn_hostname=cdn_hostname, cdn_port=cdn_port)
         self.release_backend = ReleaseBackend()
 
         self.assert_should_be_registered()
@@ -73,8 +86,7 @@ class ReleaseCommand(CliCommand):
         repo_action_invoker = RepoActionInvoker()
 
         if self.options.unset:
-            self.cp.updateConsumer(self.identity.uuid,
-                                   release="")
+            self.cp.updateConsumer(self.identity.uuid, release="")
             repo_action_invoker.update()
             print(_("Release preference has been unset"))
         elif self.options.release is not None:
@@ -86,15 +98,14 @@ class ReleaseCommand(CliCommand):
                 system_exit(os.EX_CONFIG, err.translated_message())
 
             if self.options.release in releases:
-                self.cp.updateConsumer(
-                    self.identity.uuid,
-                    release=self.options.release
-                )
+                self.cp.updateConsumer(self.identity.uuid, release=self.options.release)
             else:
-                system_exit(os.EX_DATAERR, _(
-                    "No releases match '{release}'.  "
-                    "Consult 'release --list' for a full listing.").format(
-                        release=self.options.release))
+                system_exit(
+                    os.EX_DATAERR,
+                    _(
+                        "No releases match '{release}'.  " "Consult 'release --list' for a full listing."
+                    ).format(release=self.options.release),
+                )
             repo_action_invoker.update()
             print(_("Release set to: {release}").format(release=self.options.release))
         elif self.options.list:
@@ -105,11 +116,10 @@ class ReleaseCommand(CliCommand):
                 system_exit(os.EX_CONFIG, err.translated_message())
 
             if len(releases) == 0:
-                system_exit(os.EX_CONFIG, _(
-                    "No release versions available, please check subscriptions."))
+                system_exit(os.EX_CONFIG, _("No release versions available, please check subscriptions."))
 
             print("+-------------------------------------------+")
-            print("          {label}       ".format(label=_('Available Releases')))
+            print("          {label}       ".format(label=_("Available Releases")))
             print("+-------------------------------------------+")
             for release in releases:
                 print(release)

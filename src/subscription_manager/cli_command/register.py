@@ -39,8 +39,12 @@ from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_CAPABILITY
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.utils import restart_virt_who, print_error, get_supported_resources, \
-    is_simple_content_access
+from subscription_manager.utils import (
+    restart_virt_who,
+    print_error,
+    get_supported_resources,
+    is_simple_content_access,
+)
 from subscription_manager.cli_command.environments import check_set_environment_names
 
 log = logging.getLogger(__name__)
@@ -53,50 +57,97 @@ class RegisterCommand(UserPassCommand):
         super(RegisterCommand, self).__init__("register", shortdesc, True)
 
         self._add_url_options()
-        self.parser.add_argument("--baseurl", dest="base_url",
-                                 default=None, help=_("base URL for content in form of https://hostname:port/prefix"))
-        self.parser.add_argument("--type", dest="consumertype", default="system", metavar="UNITTYPE",
-                                 help=SUPPRESS)
-        self.parser.add_argument("--name", dest="consumername", metavar="SYSTEMNAME",
-                                 help=_("name of the system to register, defaults to the hostname"))
-        self.parser.add_argument("--consumerid", dest="consumerid", metavar="SYSTEMID",
-                                 help=_("the existing system data is pulled from the server"))
-        self.parser.add_argument("--org", dest="org", metavar="ORG_KEY",
-                                 help=_(
-                                     "register with one of multiple organizations for the user, using organization key"))
-        self.parser.add_argument("--environments", dest="environments",
-                                 help=_("register with a specific environment (single value) or multiple environments "
-                                        "(a comma-separated list) in the destination org. The ability to use multiple "
-                                        "environments is controlled by the entitlement server"))
-        self.parser.add_argument("--release", dest="release",
-                                 help=_("set a release version"))
-        self.parser.add_argument("--autosubscribe", action='store_true',
-                                 help=_("Deprecated, see --auto-attach"))
-        self.parser.add_argument("--auto-attach", action='store_true', dest="autoattach",
-                                 help=_("automatically attach compatible subscriptions to this system"))
-        self.parser.add_argument("--force", action='store_true',
-                                 help=_("include an implicit attempt to unregister before registering a new system identity"))
-        self.parser.add_argument("--activationkey", action='append', dest="activation_keys",
-                                 help=_("activation key to use for registration (can be specified more than once)"))
-        self.parser.add_argument("--servicelevel", dest="service_level",
-                                 help=_("system preference used when subscribing automatically, requires --auto-attach"))
+        self.parser.add_argument(
+            "--baseurl",
+            dest="base_url",
+            default=None,
+            help=_("base URL for content in form of https://hostname:port/prefix"),
+        )
+        self.parser.add_argument(
+            "--type",
+            dest="consumertype",
+            default="system",
+            metavar="UNITTYPE",
+            help=SUPPRESS,
+        )
+        self.parser.add_argument(
+            "--name",
+            dest="consumername",
+            metavar="SYSTEMNAME",
+            help=_("name of the system to register, defaults to the hostname"),
+        )
+        self.parser.add_argument(
+            "--consumerid",
+            dest="consumerid",
+            metavar="SYSTEMID",
+            help=_("the existing system data is pulled from the server"),
+        )
+        self.parser.add_argument(
+            "--org",
+            dest="org",
+            metavar="ORG_KEY",
+            help=_("register with one of multiple organizations for the user, using organization key"),
+        )
+        self.parser.add_argument(
+            "--environments",
+            dest="environments",
+            help=_(
+                "register with a specific environment (single value) or multiple environments "
+                "(a comma-separated list) in the destination org. The ability to use multiple "
+                "environments is controlled by the entitlement server"
+            ),
+        )
+        self.parser.add_argument(
+            "--release",
+            dest="release",
+            help=_("set a release version"),
+        )
+        self.parser.add_argument(
+            "--autosubscribe",
+            action="store_true",
+            help=_("Deprecated, see --auto-attach"),
+        )
+        self.parser.add_argument(
+            "--auto-attach",
+            action="store_true",
+            dest="autoattach",
+            help=_("automatically attach compatible subscriptions to this system"),
+        )
+        self.parser.add_argument(
+            "--force",
+            action="store_true",
+            help=_("include an implicit attempt to unregister before registering a new system identity"),
+        )
+        self.parser.add_argument(
+            "--activationkey",
+            action="append",
+            dest="activation_keys",
+            help=_("activation key to use for registration (can be specified more than once)"),
+        )
+        self.parser.add_argument(
+            "--servicelevel",
+            dest="service_level",
+            help=_("system preference used when subscribing automatically, requires --auto-attach"),
+        )
 
     def _validate_options(self):
         self.autoattach = self.options.autosubscribe or self.options.autoattach
         if self.is_registered() and not self.options.force:
             system_exit(os.EX_USAGE, _("This system is already registered. Use --force to override"))
-        elif self.options.consumername == '':
+        elif self.options.consumername == "":
             system_exit(os.EX_USAGE, _("Error: system name can not be empty."))
         elif (self.options.username or self.options.token) and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys do not require user credentials."))
         elif self.options.consumerid and self.options.activation_keys:
-            system_exit(os.EX_USAGE, _("Error: Activation keys can not be used with previously registered IDs."))
+            system_exit(
+                os.EX_USAGE, _("Error: Activation keys can not be used with previously registered IDs.")
+            )
         elif self.options.environments and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys do not allow environments to be specified."))
         elif self.autoattach and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys cannot be used with --auto-attach."))
         # 746259: Don't allow the user to pass in an empty string as an activation key
-        elif self.options.activation_keys and '' in self.options.activation_keys:
+        elif self.options.activation_keys and "" in self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Must specify an activation key"))
         elif self.options.service_level and not self.autoattach:
             system_exit(os.EX_USAGE, _("Error: Must use --auto-attach with --servicelevel."))
@@ -105,15 +156,19 @@ class RegisterCommand(UserPassCommand):
         elif self.options.force and self.options.consumerid:
             system_exit(
                 os.EX_USAGE,
-                _("Error: Can not force registration while attempting to recover registration with consumerid. "
-                  "Please use --force without --consumerid to re-register or use the clean command and "
-                  "try again without --force."))
+                _(
+                    "Error: Can not force registration while attempting to recover registration with consumerid. "
+                    "Please use --force without --consumerid to re-register or use the clean command and "
+                    "try again without --force."
+                ),
+            )
         # 1485008: allow registration, when --type=RHUI (many of KBase articles describe using RHUI not rhui)
-        elif self.options.consumertype and not \
-                (self.options.consumertype.lower() == 'rhui' or self.options.consumertype == 'system'):
+        elif self.options.consumertype and not (
+            self.options.consumertype.lower() == "rhui" or self.options.consumertype == "system"
+        ):
             system_exit(os.EX_USAGE, _("Error: The --type option has been deprecated and may not be used."))
         if self.options.environments:
-            if not self.cp.has_capability(MULTI_ENV) and ',' in self.options.environments:
+            if not self.cp.has_capability(MULTI_ENV) and "," in self.options.environments:
                 system_exit(os.EX_USAGE, _("The entitlement server does not allow multiple environments"))
 
     def persist_server_options(self):
@@ -135,13 +190,13 @@ class RegisterCommand(UserPassCommand):
             self._print_ignore_auto_attach_mesage()
             return
 
-        if 'serviceLevel' not in consumer and self.options.service_level:
+        if "serviceLevel" not in consumer and self.options.service_level:
             system_exit(
                 os.EX_UNAVAILABLE,
                 _(
                     "Error: The --servicelevel option is not supported "
                     "by the server. Did not complete your request."
-                )
+                ),
             )
         try:
             # We don't call auto_attach with self.option.service_level, because it has been already
@@ -178,8 +233,13 @@ class RegisterCommand(UserPassCommand):
             # managerlib.unregister handles the special case that the consumer has already been removed.
             old_uuid = self.identity.uuid
 
-            print(_("Unregistering from: {hostname}:{port}{prefix}").format(
-                  hostname=conf["server"]["hostname"], port=conf["server"]["port"], prefix=conf["server"]["prefix"]))
+            print(
+                _("Unregistering from: {hostname}:{port}{prefix}").format(
+                    hostname=conf["server"]["hostname"],
+                    port=conf["server"]["port"],
+                    prefix=conf["server"]["prefix"],
+                )
+            )
             try:
                 unregister.UnregisterService(self.cp).unregister()
                 self.entitlement_dir.__init__()
@@ -208,8 +268,13 @@ class RegisterCommand(UserPassCommand):
                     normalized_hostname = "[{hostname}]".format(hostname=hostname)
                 else:
                     normalized_hostname = hostname
-                print(_("Registering to: {hostname}:{port}{prefix}").format(
-                      hostname=normalized_hostname, port=conf["server"]["port"], prefix=conf["server"]["prefix"]))
+                print(
+                    _("Registering to: {hostname}:{port}{prefix}").format(
+                        hostname=normalized_hostname,
+                        port=conf["server"]["port"],
+                        prefix=conf["server"]["prefix"],
+                    )
+                )
                 self.cp_provider.set_user_pass(self.username, self.password)
                 admin_cp = self.cp_provider.get_basic_auth_cp()
             else:
@@ -227,9 +292,7 @@ class RegisterCommand(UserPassCommand):
                     owner_key = self.options.org
                 else:
                     owner_key = service.determine_owner_key(
-                        username=self.username,
-                        get_owner_cb=self._get_owner_cb,
-                        no_owner_cb=self._no_owner_cb
+                        username=self.username, get_owner_cb=self._get_owner_cb, no_owner_cb=self._no_owner_cb
                     )
                 environment_ids = self._process_environments(admin_cp, owner_key)
                 consumer = service.register(
@@ -249,7 +312,7 @@ class RegisterCommand(UserPassCommand):
         except Exception as e:
             handle_exception(_("Error during registration: {e}").format(e=e), e)
         else:
-            consumer_info = identity.ConsumerIdentity(consumer['idCert']['key'], consumer['idCert']['cert'])
+            consumer_info = identity.ConsumerIdentity(consumer["idCert"]["key"], consumer["idCert"]["cert"])
             print(_("The system has been registered with ID: {id}").format(id=consumer_info.getConsumerId()))
             print(_("The registered system name is: {name}").format(name=consumer_info.getConsumerName()))
             if self.options.service_level:
@@ -275,25 +338,27 @@ class RegisterCommand(UserPassCommand):
             # FIXME: Need a ConsumerFacts.sync or update or something
             # TODO: We register, with facts, then update facts again...?
             #       Are we trying to sync potential new or dynamic facts?
-            facts.update_check(self.cp, consumer['uuid'], force=True)
+            facts.update_check(self.cp, consumer["uuid"], force=True)
 
         # Facts and installed products went out with the registration request,
         # manually write caches to disk:
         # facts service job now(soon)
         facts.write_cache()
-        self.installed_mgr.update_check(self.cp, consumer['uuid'])
+        self.installed_mgr.update_check(self.cp, consumer["uuid"])
 
         if self.options.release:
             # TODO: grab the list of valid options, and check
-            self.cp.updateConsumer(consumer['uuid'], release=self.options.release)
+            self.cp.updateConsumer(consumer["uuid"], release=self.options.release)
 
         if self.autoattach:
             self._do_auto_attach(consumer)
 
-        if self.options.consumerid or \
-                self.options.activation_keys or \
-                self.autoattach or \
-                self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
+        if (
+            self.options.consumerid
+            or self.options.activation_keys
+            or self.autoattach
+            or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY)
+        ):
             log.debug("System registered, updating entitlements if needed")
             # update certs, repos, and caches.
             # FIXME: aside from the overhead, should this be cert_action_client.update?
@@ -302,7 +367,7 @@ class RegisterCommand(UserPassCommand):
         try:
             profile_mgr = inj.require(inj.PROFILE_MANAGER)
             # 767265: always force an upload of the packages when registering
-            profile_mgr.update_check(self.cp, consumer['uuid'], True)
+            profile_mgr.update_check(self.cp, consumer["uuid"], True)
         except RemoteServerException as err:
             # When it is not possible to upload profile ATM, then print only error about this
             # to rhsm.log. The rhsmcertd will try to upload it next time.
@@ -335,7 +400,7 @@ class RegisterCommand(UserPassCommand):
         and a choice needs to be made
         """
         supported_resources = get_supported_resources()
-        supports_environments = 'environments' in supported_resources
+        supports_environments = "environments" in supported_resources
 
         if not supports_environments:
             if self.options.environments is not None:
@@ -357,14 +422,19 @@ class RegisterCommand(UserPassCommand):
 
             # If the envronment list is len 1, pick that environment
             if len(all_env_list) == 1:
-                log.debug("Using the only available environment: \"{name}\"".format(name=all_env_list[0]["name"]))
-                return all_env_list[0]['id']
+                log.debug(
+                    'Using the only available environment: "{name}"'.format(name=all_env_list[0]["name"])
+                )
+                return all_env_list[0]["id"]
 
-            env_name_list = [env['name'] for env in all_env_list]
-            print(_('Hint: Organization "{key}" contains following environments: {list}').format(
-                  key=owner_key, list=", ".join(env_name_list)))
+            env_name_list = [env["name"] for env in all_env_list]
+            print(
+                _('Hint: Organization "{key}" contains following environments: {list}').format(
+                    key=owner_key, list=", ".join(env_name_list)
+                )
+            )
             environments = self._prompt_for_environment()
-            if not self.cp.has_capability(MULTI_ENV) and ',' in environments:
+            if not self.cp.has_capability(MULTI_ENV) and "," in environments:
                 system_exit(os.EX_USAGE, _("The entitlement server does not allow multiple environments"))
 
         return check_set_environment_names(all_env_list, environments)
@@ -385,9 +455,12 @@ class RegisterCommand(UserPassCommand):
         :return:
         """
         # Print list of owners to the console
-        org_keys = [owner['key'] for owner in owners]
-        print(_('Hint: User "{name}" is member of following organizations: {orgs}').format(
-              name=self.username, orgs=', '.join(org_keys)))
+        org_keys = [owner["key"] for owner in owners]
+        print(
+            _('Hint: User "{name}" is member of following organizations: {orgs}').format(
+                name=self.username, orgs=", ".join(org_keys)
+            )
+        )
 
         # Read the owner key from stdin
         owner_key = None

@@ -19,13 +19,19 @@ import unittest
 
 from test import subman_marker_functional
 
-from rhsm.connection import ContentConnection, UEPConnection, Restlib,\
-    UnauthorizedException, ForbiddenException, RestlibException
+from rhsm.connection import (
+    ContentConnection,
+    UEPConnection,
+    Restlib,
+    UnauthorizedException,
+    ForbiddenException,
+    RestlibException,
+)
 from mock import patch
 
 
 def random_string(name, target_length=32):
-    ''' Returns a len 32 string starting with "name"'''
+    '''Returns a len 32 string starting with "name"'''
     for i in range(max(target_length - len(name), 0)):
         name += random.choice(string.ascii_lowercase)
     return name
@@ -33,22 +39,21 @@ def random_string(name, target_length=32):
 
 @subman_marker_functional
 class ConnectionTests(unittest.TestCase):
-
     def setUp(self):
         self.cp = UEPConnection(username="admin", password="admin", insecure=True)
 
         self.consumer = self.cp.registerConsumer("test-consumer", "system", owner="admin")
-        self.consumer_uuid = self.consumer['uuid']
+        self.consumer_uuid = self.consumer["uuid"]
 
     def test_supports_resource(self):
-        self.assertTrue(self.cp.supports_resource('consumers'))
-        self.assertTrue(self.cp.supports_resource('admin'))
-        self.assertFalse(self.cp.supports_resource('boogity'))
+        self.assertTrue(self.cp.supports_resource("consumers"))
+        self.assertTrue(self.cp.supports_resource("admin"))
+        self.assertFalse(self.cp.supports_resource("boogity"))
 
     def test_has_capability(self):
-        self.cp.capabilities = ['cores', 'hypervisors_async']
-        self.assertTrue(self.cp.has_capability('cores'))
-        self.assertFalse(self.cp.has_capability('boogityboo'))
+        self.cp.capabilities = ["cores", "hypervisors_async"]
+        self.assertTrue(self.cp.has_capability("cores"))
+        self.assertFalse(self.cp.has_capability("boogityboo"))
 
     def test_update_consumer_can_update_guests_with_empty_list(self):
         self.cp.updateConsumer(self.consumer_uuid, guest_uuids=[])
@@ -62,20 +67,21 @@ class ConnectionTests(unittest.TestCase):
     def test_update_consumer_sets_hypervisor_id(self):
         testing_hypervisor_id = random_string("testHypervisor")
         self.cp.updateConsumer(self.consumer_uuid, hypervisor_id=testing_hypervisor_id)
-        hypervisor_id = self.cp.getConsumer(self.consumer_uuid)['hypervisorId']
+        hypervisor_id = self.cp.getConsumer(self.consumer_uuid)["hypervisorId"]
         # Hypervisor ID should be set and lower case
         expected = testing_hypervisor_id.lower()
-        self.assertEqual(expected, hypervisor_id['hypervisorId'])
+        self.assertEqual(expected, hypervisor_id["hypervisorId"])
 
     def test_create_consumer_sets_hypervisor_id(self):
         testing_hypervisor_id = random_string("someId")
-        consumerInfo = self.cp.registerConsumer("other-test-consumer",
-                                                "system", owner="admin", hypervisor_id=testing_hypervisor_id)
+        consumerInfo = self.cp.registerConsumer(
+            "other-test-consumer", "system", owner="admin", hypervisor_id=testing_hypervisor_id
+        )
         # Unregister before making assertions, that way it should always happen
-        self.cp.unregisterConsumer(consumerInfo['uuid'])
+        self.cp.unregisterConsumer(consumerInfo["uuid"])
         # Hypervisor ID should be set and lower case
         expected = testing_hypervisor_id.lower()
-        self.assertEqual(expected, consumerInfo['hypervisorId']['hypervisorId'])
+        self.assertEqual(expected, consumerInfo["hypervisorId"]["hypervisorId"])
 
     def test_add_single_guest_id_string(self):
         testing_guest_id = random_string("guestid")
@@ -91,8 +97,8 @@ class ConnectionTests(unittest.TestCase):
         guestId = self.cp.getGuestId(self.consumer_uuid, testing_guest_id)
 
         # This check seems silly...
-        self.assertEqual(testing_guest_id, guestId['guestId'])
-        self.assertEqual('some value', guestId['attributes']['some attr'])
+        self.assertEqual(testing_guest_id, guestId["guestId"])
+        self.assertEqual("some value", guestId["attributes"]["some attr"])
 
     def test_remove_single_guest_id(self):
         testing_guest_id = random_string("guestid")
@@ -113,9 +119,9 @@ class ConnectionTests(unittest.TestCase):
         self.cp.addOrUpdateGuestId(self.consumer_uuid, guest_id_object)
         guestId = self.cp.getGuestId(self.consumer_uuid, testing_guest_id)
         # check the guestId was created and has the expected attribute
-        self.assertEqual('some value', guestId['attributes']['some attr'])
+        self.assertEqual("some value", guestId["attributes"]["some attr"])
 
-        guest_id_object['attributes']['some attr'] = 'crazy new value'
+        guest_id_object["attributes"]["some attr"] = "crazy new value"
         self.cp.addOrUpdateGuestId(self.consumer_uuid, guest_id_object)
         guestId = self.cp.getGuestId(self.consumer_uuid, testing_guest_id)
 
@@ -124,17 +130,17 @@ class ConnectionTests(unittest.TestCase):
         self.assertEqual(1, len(guestIds))
 
         # Check that the attribute has changed
-        self.assertEqual('crazy new value', guestId['attributes']['some attr'])
+        self.assertEqual("crazy new value", guestId["attributes"]["some attr"])
 
     def test_get_owner_hypervisors(self):
         testing_hypervisor_id = random_string("testHypervisor")
         self.cp.updateConsumer(self.consumer_uuid, hypervisor_id=testing_hypervisor_id)
-        self.cp.getConsumer(self.consumer_uuid)['hypervisorId']
+        self.cp.getConsumer(self.consumer_uuid)["hypervisorId"]
 
         hypervisors = self.cp.getOwnerHypervisors("admin", [testing_hypervisor_id])
 
         self.assertEqual(1, len(hypervisors))
-        self.assertEqual(self.consumer_uuid, hypervisors[0]['uuid'])
+        self.assertEqual(self.consumer_uuid, hypervisors[0]["uuid"])
 
     def tearDown(self):
         self.cp.unregisterConsumer(self.consumer_uuid)
@@ -146,7 +152,7 @@ class EntitlementRegenerationTests(unittest.TestCase):
         self.cp = UEPConnection(username="admin", password="admin", insecure=True)
 
         self.consumer = self.cp.registerConsumer("test-consumer", "system", owner="admin")
-        self.consumer_uuid = self.consumer['uuid']
+        self.consumer_uuid = self.consumer["uuid"]
 
         # This product is present in the Candlepin test data
         self.cp.bindByProduct(self.consumer_uuid, ["awesomeos-instancebased"])
@@ -155,7 +161,7 @@ class EntitlementRegenerationTests(unittest.TestCase):
         self.assertTrue(len(entitlements) > 0)
 
         self.entitlement = entitlements[0]
-        self.entitlement_id = self.entitlement['id']
+        self.entitlement_id = self.entitlement["id"]
 
     def test_regenerate_entitlements_default(self):
         result = self.cp.regenEntitlementCertificates(self.consumer_uuid)
@@ -203,11 +209,11 @@ class BindRequestTests(unittest.TestCase):
         self.cp = UEPConnection(username="admin", password="admin", insecure=True)
 
         consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
-        self.consumer_uuid = consumerInfo['uuid']
+        self.consumer_uuid = consumerInfo["uuid"]
 
-    @patch.object(Restlib, 'validateResponse')
-    @patch('rhsm.connection.drift_check', return_value=False)
-    @patch('httplib.HTTPSConnection', auto_spec=True)
+    @patch.object(Restlib, "validateResponse")
+    @patch("rhsm.connection.drift_check", return_value=False)
+    @patch("httplib.HTTPSConnection", auto_spec=True)
     def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
 
         self.cp.bind(self.consumer_uuid)
@@ -217,96 +223,90 @@ class BindRequestTests(unittest.TestCase):
         # it does by default, results in None here. bin() passes no args there
         # so we use the default, "". See  bz #907536
         for (name, args, kwargs) in mock_conn.mock_calls:
-            if name == '().request':
-                self.assertEqual(None, kwargs['body'])
+            if name == "().request":
+                self.assertEqual(None, kwargs["body"])
 
-    @patch.object(Restlib, 'validateResponse')
-    @patch('rhsm.connection.drift_check', return_value=False)
-    @patch('httplib.HTTPSConnection', auto_spec=True)
+    @patch.object(Restlib, "validateResponse")
+    @patch("rhsm.connection.drift_check", return_value=False)
+    @patch("httplib.HTTPSConnection", auto_spec=True)
     def test_bind_by_pool(self, mock_conn, mock_drift, mock_validate):
         # this test is just to verify we make the httplib connection with
         # right args, we don't validate the bind here
-        self.cp.bindByEntitlementPool(self.consumer_uuid, '123121111', '1')
+        self.cp.bindByEntitlementPool(self.consumer_uuid, "123121111", "1")
         for (name, args, kwargs) in mock_conn.mock_calls:
-            if name == '().request':
-                self.assertEqual(None, kwargs['body'])
+            if name == "().request":
+                self.assertEqual(None, kwargs["body"])
 
 
 @subman_marker_functional
 class ContentConnectionTests(unittest.TestCase):
-
     def testInsecure(self):
         ContentConnection(host="127.0.0.1", insecure=True)
 
     # sigh camelCase
     def testEnvProxyUrl(self):
-        with patch.dict('os.environ', {'https_proxy': 'https://user:pass@example.com:1111'}):
+        with patch.dict("os.environ", {"https_proxy": "https://user:pass@example.com:1111"}):
             cc = ContentConnection(host="127.0.0.1")
             self.assertEqual("user", cc.proxy_user)
             self.assertEqual("pass", cc.proxy_password)
             self.assertEqual("example.com", cc.proxy_hostname)
             self.assertEqual(1111, cc.proxy_port)
-        assert 'https_proxy' not in os.environ
+        assert "https_proxy" not in os.environ
 
     def testEnvProxyUrlNoPort(self):
-        with patch.dict('os.environ', {'https_proxy': 'https://user:pass@example.com'}):
+        with patch.dict("os.environ", {"https_proxy": "https://user:pass@example.com"}):
             cc = ContentConnection(host="127.0.0.1")
             self.assertEqual("user", cc.proxy_user)
             self.assertEqual("pass", cc.proxy_password)
             self.assertEqual("example.com", cc.proxy_hostname)
             self.assertEqual(3128, cc.proxy_port)
-        assert 'https_proxy' not in os.environ
+        assert "https_proxy" not in os.environ
 
     def testEnvProxyUrlNouserOrPass(self):
-        with patch.dict('os.environ', {'https_proxy': 'https://example.com'}):
+        with patch.dict("os.environ", {"https_proxy": "https://example.com"}):
             cc = ContentConnection(host="127.0.0.1")
             self.assertEqual(None, cc.proxy_user)
             self.assertEqual(None, cc.proxy_password)
             self.assertEqual("example.com", cc.proxy_hostname)
             self.assertEqual(3128, cc.proxy_port)
-        assert 'https_proxy' not in os.environ
+        assert "https_proxy" not in os.environ
 
     def testEnvNoProxy(self):
-        with patch.dict('os.environ', {'no_proxy': '.localdomain',
-                                       'https_proxy': 'https://example.com'}):
+        with patch.dict("os.environ", {"no_proxy": ".localdomain", "https_proxy": "https://example.com"}):
             cc = ContentConnection(host="localhost.localdomain")
             self.assertEquals(None, cc.proxy_user)
             self.assertEquals(None, cc.proxy_password)
             self.assertEquals(None, cc.proxy_hostname)
             self.assertEquals(None, cc.proxy_port)
-        assert 'no_proxy' not in os.environ and 'https_proxy' not in os.environ
+        assert "no_proxy" not in os.environ and "https_proxy" not in os.environ
 
     def testEnvNoProxyWithAsterisk(self):
-        with patch.dict('os.environ', {'no_proxy': '*.localdomain',
-                                       'https_proxy': 'https://example.com'}):
+        with patch.dict("os.environ", {"no_proxy": "*.localdomain", "https_proxy": "https://example.com"}):
             cc = ContentConnection(host="localhost.localdomain")
             self.assertEquals(None, cc.proxy_user)
             self.assertEquals(None, cc.proxy_password)
             self.assertEquals(None, cc.proxy_hostname)
             self.assertEquals(None, cc.proxy_port)
-        assert 'no_proxy' not in os.environ and 'https_proxy' not in os.environ
+        assert "no_proxy" not in os.environ and "https_proxy" not in os.environ
 
 
 @subman_marker_functional
 class HypervisorCheckinTests(unittest.TestCase):
-
     def setUp(self):
-        self.cp = UEPConnection(username="admin", password="admin",
-                                insecure=True)
+        self.cp = UEPConnection(username="admin", password="admin", insecure=True)
 
     def test_hypervisor_checkin_can_pass_empty_map_and_updates_nothing(self):
         response = self.cp.hypervisorCheckIn("admin", "", {})
-        if self.cp.has_capability('hypervisors_async'):
-            self.assertEqual(response['resultData'], None)
+        if self.cp.has_capability("hypervisors_async"):
+            self.assertEqual(response["resultData"], None)
         else:
-            self.assertEqual(len(response['failedUpdate']), 0)
-            self.assertEqual(len(response['updated']), 0)
-            self.assertEqual(len(response['created']), 0)
+            self.assertEqual(len(response["failedUpdate"]), 0)
+            self.assertEqual(len(response["updated"]), 0)
+            self.assertEqual(len(response["created"]), 0)
 
 
 @subman_marker_functional
 class RestlibTests(unittest.TestCase):
-
     def setUp(self):
         # Get handle to Restlib
         self.conn = UEPConnection().conn
@@ -315,14 +315,11 @@ class RestlibTests(unittest.TestCase):
 
     def _validate_response(self, response):
         # wrapper to specify request_type and handler
-        return self.conn.validateResponse(response,
-                                          request_type=self.request_type,
-                                          handler=self.handler)
+        return self.conn.validateResponse(response, request_type=self.request_type, handler=self.handler)
 
     def test_invalid_credentitals_thrown_on_401_with_empty_body(self):
         mock_response = {"status": 401}
-        self.assertRaises(UnauthorizedException, self._validate_response,
-                          mock_response)
+        self.assertRaises(UnauthorizedException, self._validate_response, mock_response)
 
     def test_standard_error_handling_on_401_with_defined_body(self):
         self._run_standard_error_handling_test(401)
@@ -332,8 +329,7 @@ class RestlibTests(unittest.TestCase):
 
     def test_invalid_credentitals_thrown_on_403_with_empty_body(self):
         mock_response = {"status": 403}
-        self.assertRaises(ForbiddenException, self._validate_response,
-                          mock_response)
+        self.assertRaises(ForbiddenException, self._validate_response, mock_response)
 
     def test_standard_error_handling_on_403_with_defined_body(self):
         self._run_standard_error_handling_test(403)
@@ -341,19 +337,14 @@ class RestlibTests(unittest.TestCase):
     def test_standard_error_handling_on_403_with_invalid_json_body(self):
         self._run_standard_error_handling_test_invalid_json(403, ForbiddenException)
 
-    def _run_standard_error_handling_test_invalid_json(self, expected_error_code,
-                                                       expected_exception):
-        mock_response = {"status": expected_error_code,
-                         "content": '<this is not valid json>>'}
+    def _run_standard_error_handling_test_invalid_json(self, expected_error_code, expected_exception):
+        mock_response = {"status": expected_error_code, "content": "<this is not valid json>>"}
 
-        self._check_for_remote_server_exception(expected_error_code,
-                                                expected_exception,
-                                                mock_response)
+        self._check_for_remote_server_exception(expected_error_code, expected_exception, mock_response)
 
     def _run_standard_error_handling_test(self, expected_error):
         expected_error = "My Expected Error."
-        mock_response = {"status": expected_error,
-                         "content": '{"displayMessage":"%s"}' % expected_error}
+        mock_response = {"status": expected_error, "content": '{"displayMessage":"%s"}' % expected_error}
 
         try:
             self._validate_response(mock_response)
@@ -363,8 +354,7 @@ class RestlibTests(unittest.TestCase):
             self.assertEqual(expected_error, ex.code)
             self.assertEqual(expected_error, str(ex))
 
-    def _check_for_remote_server_exception(self, expected_error_code,
-                                           expected_exception, mock_response):
+    def _check_for_remote_server_exception(self, expected_error_code, expected_exception, mock_response):
         try:
             self._validate_response(mock_response)
             self.fail("An %s exception should have been thrown." % expected_exception)
@@ -376,11 +366,9 @@ class RestlibTests(unittest.TestCase):
 @subman_marker_functional
 class OwnerInfoTests(unittest.TestCase):
     def setUp(self):
-        self.cp = UEPConnection(username="admin", password="admin",
-                                insecure=True)
+        self.cp = UEPConnection(username="admin", password="admin", insecure=True)
         self.owner_key = "test_owner_%d" % (random.randint(1, 5000))
-        self.cp.conn.request_post('/owners', {'key': self.owner_key,
-                                              'displayName': self.owner_key})
+        self.cp.conn.request_post("/owners", {"key": self.owner_key, "displayName": self.owner_key})
 
     def test_get_owner_info(self):
         owner_info = self.cp.getOwnerInfo(self.owner_key)

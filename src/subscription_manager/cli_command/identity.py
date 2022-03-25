@@ -38,16 +38,23 @@ log = logging.getLogger(__name__)
 
 class IdentityCommand(UserPassCommand):
     def __init__(self):
-        shortdesc = _("Display the identity certificate for this system or "
-                      "request a new one")
+        shortdesc = _("Display the identity certificate for this system or " "request a new one")
 
         super(IdentityCommand, self).__init__("identity", shortdesc, False)
 
-        self.parser.add_argument("--regenerate", action='store_true',
-                                 help=_("request a new certificate be generated"))
-        self.parser.add_argument("--force", action='store_true',
-                                 help=_("force certificate regeneration (requires username and password); "
-                                        "Only used with --regenerate"))
+        self.parser.add_argument(
+            "--regenerate",
+            action="store_true",
+            help=_("request a new certificate be generated"),
+        )
+        self.parser.add_argument(
+            "--force",
+            action="store_true",
+            help=_(
+                "force certificate regeneration (requires username and password); "
+                "Only used with --regenerate"
+            ),
+        )
 
     def _validate_options(self):
         self.assert_should_be_registered()
@@ -77,29 +84,35 @@ class IdentityCommand(UserPassCommand):
             consumer_name = self.identity.name
             if not self.options.regenerate:
                 owner = get_current_owner(self.cp, self.identity)
-                ownername = owner['displayName']
-                ownerid = owner['key']
+                ownername = owner["displayName"]
+                ownerid = owner["key"]
 
-                print(_('system identity: {consumerid}').format(consumerid=consumerid))
-                print(_('name: {consumer_name}').format(consumer_name=consumer_name))
-                print(_('org name: {ownername}').format(ownername=ownername))
-                print(_('org ID: {ownerid}').format(ownerid=ownerid))
+                print(_("system identity: {consumerid}").format(consumerid=consumerid))
+                print(_("name: {consumer_name}").format(consumer_name=consumer_name))
+                print(_("org name: {ownername}").format(ownername=ownername))
+                print(_("org ID: {ownerid}").format(ownerid=ownerid))
 
                 supported_resources = get_supported_resources(self.cp, self.identity)
-                if 'environments' in supported_resources:
+                if "environments" in supported_resources:
                     consumer = self.cp.getConsumer(consumerid)
-                    evn_key = 'environments' if self.cp.has_capability(MULTI_ENV) else 'environment'
+                    evn_key = "environments" if self.cp.has_capability(MULTI_ENV) else "environment"
                     environments = consumer[evn_key]
                     if environments:
-                        if evn_key == 'environment':
-                            environment_names = environments['name']
+                        if evn_key == "environment":
+                            environment_names = environments["name"]
                         else:
-                            environment_names = (','.join([environment['name'] for environment in environments]))
+                            environment_names = ",".join(
+                                [environment["name"] for environment in environments]
+                            )
                     else:
                         environment_names = _("None")
-                    print(ungettext('environment name: {environment_name}',
-                                    'environment names: {environment_name}',
-                                    len(environment_names.split(','))).format(environment_name=environment_names))
+                    print(
+                        ungettext(
+                            "environment name: {environment_name}",
+                            "environment names: {environment_name}",
+                            len(environment_names.split(",")),
+                        ).format(environment_name=environment_names)
+                    )
             else:
                 if self.options.force:
                     # get an UEP with basic auth or keycloak auth

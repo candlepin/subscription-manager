@@ -107,6 +107,7 @@ def _interval_bisearch(value, table):
     return False
 
 
+# fmt: off
 _COMBINING = (
     (0x300, 0x36f), (0x483, 0x489), (0x591, 0x5bd),
     (0x5bf, 0x5bf), (0x5c1, 0x5c2), (0x5c4, 0x5c5),
@@ -183,7 +184,9 @@ _COMBINING = (
     (0x1e000, 0x1e006), (0x1e008, 0x1e018), (0x1e01b, 0x1e021),
     (0x1e023, 0x1e024), (0x1e026, 0x1e02a), (0x1e8d0, 0x1e8d6),
     (0x1e944, 0x1e94a), (0xe0001, 0xe0001), (0xe0020, 0xe007f),
-    (0xe0100, 0xe01ef), )
+    (0xe0100, 0xe01ef),
+)
+# fmt: on
 
 
 # Handling of control chars rewritten.  Rest is JA's port of MK's C code.
@@ -209,25 +212,28 @@ def _ucp_width(ucs):
         # the width from other characters
         return 0
 
-    if ucs <= 0x1f:
+    if ucs <= 0x1F:
         return 0
 
     # if we arrive here, ucs is not a combining character
 
-    return (1 +
-            (ucs >= 0x1100 and
-             (ucs <= 0x115f or                      # Hangul Jamo init. consonants
-              ucs == 0x2329 or ucs == 0x232a or
-              (ucs >= 0x2e80 and ucs <= 0xa4cf and
-               ucs != 0x303f) or                    # CJK ... Yi
-              (ucs >= 0xac00 and ucs <= 0xd7a3) or  # Hangul Syllables
-              (ucs >= 0xf900 and ucs <= 0xfaff) or  # CJK Compatibility Ideographs
-              (ucs >= 0xfe10 and ucs <= 0xfe19) or  # Vertical forms
-              (ucs >= 0xfe30 and ucs <= 0xfe6f) or  # CJK Compatibility Forms
-              (ucs >= 0xff00 and ucs <= 0xff60) or  # Fullwidth Forms
-              (ucs >= 0xffe0 and ucs <= 0xffe6) or
-              (ucs >= 0x20000 and ucs <= 0x2fffd) or
-              (ucs >= 0x30000 and ucs <= 0x3fffd))))
+    return 1 + (
+        ucs >= 0x1100
+        and (
+            ucs <= 0x115F
+            or ucs == 0x2329  # Hangul Jamo init. consonants
+            or ucs == 0x232A
+            or (ucs >= 0x2E80 and ucs <= 0xA4CF and ucs != 0x303F)
+            or (ucs >= 0xAC00 and ucs <= 0xD7A3)  # CJK ... Yi
+            or (ucs >= 0xF900 and ucs <= 0xFAFF)  # Hangul Syllables
+            or (ucs >= 0xFE10 and ucs <= 0xFE19)  # CJK Compatibility Ideographs
+            or (ucs >= 0xFE30 and ucs <= 0xFE6F)  # Vertical forms
+            or (ucs >= 0xFF00 and ucs <= 0xFF60)  # CJK Compatibility Forms
+            or (ucs >= 0xFFE0 and ucs <= 0xFFE6)  # Fullwidth Forms
+            or (ucs >= 0x20000 and ucs <= 0x2FFFD)
+            or (ucs >= 0x30000 and ucs <= 0x3FFFD)
+        )
+    )
 
 
 # Wholly rewritten by me (LGPLv2+) -Toshio Kuratomi

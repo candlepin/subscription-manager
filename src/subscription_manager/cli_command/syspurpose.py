@@ -51,26 +51,17 @@ class SyspurposeCommand(CliCommand):
         Initialize the syspurpose command
         """
         short_desc = _("Convenient module for managing all system purpose settings")
-        super(SyspurposeCommand, self).__init__(
-            "syspurpose",
-            short_desc,
-            primary=False
-        )
+        super(SyspurposeCommand, self).__init__("syspurpose", short_desc, primary=False)
         self.parser.add_argument(
             "--show",
-            dest='syspurpose_show',
+            dest="syspurpose_show",
             action="store_true",
-            help=_("show current system purpose")
+            help=_("show current system purpose"),
         )
 
         # all the subcommands of 'syspurpose'; add them to this list to be
         # registered as such
-        syspurpose_command_classes = [
-            AddonsCommand,
-            RoleCommand,
-            ServiceLevelCommand,
-            UsageCommand
-        ]
+        syspurpose_command_classes = [AddonsCommand, RoleCommand, ServiceLevelCommand, UsageCommand]
         # create a subparser for all the subcommands: it is passed to all
         # the subcommand classes, so they will create an ArgumentParser that
         # is a child of the 'syspurpose' one, rather than as standalone
@@ -83,10 +74,10 @@ class SyspurposeCommand(CliCommand):
             # the ArgumentParser (self.parser), which contains the '[OPTIONS]'
             # help text (see AbstractCLICommand._get_usage())
             prog=_("{prog} {name}").format(prog=prog, name=self.name),
-            dest='subparser_name',
-            title=_('Syspurpose submodules'),
-            help='',  # trick argparse a bit to not show the {cmd1, cmd2, ..}
-            metavar=''  # trick argparse a bit to not show the {cmd1, cmd2, ..}
+            dest="subparser_name",
+            title=_("Syspurpose submodules"),
+            help="",  # trick argparse a bit to not show the {cmd1, cmd2, ..}
+            metavar="",  # trick argparse a bit to not show the {cmd1, cmd2, ..}
         )
         self.cli_commands = {}
         for clazz in syspurpose_command_classes:

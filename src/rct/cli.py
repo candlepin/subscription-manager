@@ -17,7 +17,6 @@ from rct.manifest_commands import CatManifestCommand, DumpManifestCommand
 
 
 class RctCLI(CLI):
-
     def __init__(self):
         commands = [CatCertCommand, CatManifestCommand, StatCertCommand, DumpManifestCommand]
         CLI.__init__(self, commands)
@@ -25,6 +24,6 @@ class RctCLI(CLI):
 
 def xstr(value):
     if value is None:
-        return ''
+        return ""
 
-    return value.encode('utf-8')
+    return value.encode("utf-8")

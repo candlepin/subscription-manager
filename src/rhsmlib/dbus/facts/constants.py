@@ -13,24 +13,24 @@
 from rhsmlib.dbus import constants
 
 __all__ = [
-    'SUB_SERVICE_NAME',
-    'FACTS_DBUS_NAME',
-    'FACTS_DBUS_INTERFACE',
-    'FACTS_DBUS_PATH',
-    'FACTS_VERSION',
-    'FACTS_NAME',
+    "SUB_SERVICE_NAME",
+    "FACTS_DBUS_NAME",
+    "FACTS_DBUS_INTERFACE",
+    "FACTS_DBUS_PATH",
+    "FACTS_VERSION",
+    "FACTS_NAME",
 ]
 
 SUB_SERVICE_NAME = "Facts"
 
 # com.redhat.RHSM1.Facts
-FACTS_DBUS_NAME = constants.BUS_NAME + '.' + SUB_SERVICE_NAME
+FACTS_DBUS_NAME = constants.BUS_NAME + "." + SUB_SERVICE_NAME
 
 # also, com.redhat.RHSM1.Facts
-FACTS_DBUS_INTERFACE = constants.BUS_NAME + '.' + SUB_SERVICE_NAME
+FACTS_DBUS_INTERFACE = constants.BUS_NAME + "." + SUB_SERVICE_NAME
 
 # /com/redhat/RHSM1/Facts
-FACTS_DBUS_PATH = constants.ROOT_DBUS_PATH + '/' + SUB_SERVICE_NAME
+FACTS_DBUS_PATH = constants.ROOT_DBUS_PATH + "/" + SUB_SERVICE_NAME
 
 FACTS_VERSION = "1.1e1"
 FACTS_NAME = "Red Hat Subscription Manager facts."

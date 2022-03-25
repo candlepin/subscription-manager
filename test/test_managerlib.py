@@ -16,14 +16,24 @@ import unittest
 from datetime import datetime, timedelta
 import os
 
-from .stubs import StubCertificateDirectory, StubProductCertificate, \
-    StubProduct, StubProductDirectory, StubCertSorter
+from .stubs import (
+    StubCertificateDirectory,
+    StubProductCertificate,
+    StubProduct,
+    StubProductDirectory,
+    StubCertSorter,
+)
 from .fixture import SubManFixture
-from subscription_manager.managerlib import merge_pools, PoolFilter, \
-    MergedPoolsStackingGroupSorter, MergedPools, \
-    PoolStash, allows_multi_entitlement, valid_quantity
-from subscription_manager.injection import provide, \
-    PROD_DIR
+from subscription_manager.managerlib import (
+    merge_pools,
+    PoolFilter,
+    MergedPoolsStackingGroupSorter,
+    MergedPools,
+    PoolStash,
+    allows_multi_entitlement,
+    valid_quantity,
+)
+from subscription_manager.injection import provide, PROD_DIR
 from .modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
@@ -31,7 +41,7 @@ from rhsm.certificate import create_from_pem, DateRange, GMT
 from mock import Mock, patch
 
 cfg = rhsm.config.get_config_parser()
-ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
+ENT_CONFIG_DIR = cfg.get("rhsm", "entitlementCertDir")
 
 # [-]*BEGIN [\w\ ]*[-]* - Find all begin lines
 # [-]*BEGIN[\w\ ]*[-]*|[-]*END[\w\ ]*[-]* - Find all BEGIN END lines
@@ -249,26 +259,27 @@ ndmrxQKBgGJiXMZnKjK9AUUDvsFBSp8Otrf20BoeCiq+tZF95S5jR9/I8nv4NBYp
 X2mYlgErL9vzxIQrwfL5JdEo9f+PQ0eVs/lh9MPY2TliwEyXDrVp
 -----END RSA PRIVATE KEY-----"""
 
-EXPECTED_CERT_V3 = create_from_pem(EXPECTED_CERT_CONTENT_V3 + os.linesep +
-                                   EXPECTED_CERT_ENTITLEMENT_V3 +
-                                   os.linesep + EXPECTED_CERT_SIGNATURE_V3)
+EXPECTED_CERT_V3 = create_from_pem(
+    EXPECTED_CERT_CONTENT_V3
+    + os.linesep
+    + EXPECTED_CERT_ENTITLEMENT_V3
+    + os.linesep
+    + EXPECTED_CERT_SIGNATURE_V3
+)
 
 
 class MergePoolsTests(SubManFixture):
-
     def test_single_pool(self):
-        product = 'product1'
-        pools = [
-            create_pool(product, product, quantity=10, consumed=5)
-        ]
+        product = "product1"
+        pools = [create_pool(product, product, quantity=10, consumed=5)]
         results = merge_pools(pools)
         self.assertEqual(1, len(list(results.values())))
         result = list(results.values())[0]
         self.assertEqual(product, result.product_id)
 
     def test_multiple_pools(self):
-        product1 = 'product1'
-        product2 = 'product2'
+        product1 = "product1"
+        product2 = "product2"
         pools = [
             create_pool(product1, product1, quantity=10, consumed=5),
             create_pool(product1, product1, quantity=55, consumed=20),
@@ -293,15 +304,12 @@ class MergePoolsTests(SubManFixture):
 
 
 class PoolFilterTests(SubManFixture):
-
     def test_uninstalled_filter_direct_match(self):
-        product1 = 'product1'
-        product2 = 'product2'
+        product1 = "product1"
+        product2 = "product2"
 
-        pd = StubCertificateDirectory([
-            StubProductCertificate(StubProduct(product2))])
-        pool_filter = PoolFilter(product_dir=pd,
-                                 entitlement_dir=StubCertificateDirectory([]))
+        pd = StubCertificateDirectory([StubProductCertificate(StubProduct(product2))])
+        pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
             create_pool(product1, product1),
@@ -310,16 +318,14 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_out_uninstalled(pools)
         self.assertEqual(1, len(result))
-        self.assertEqual(product2, result[0]['productId'])
+        self.assertEqual(product2, result[0]["productId"])
 
     def test_uninstalled_filter_provided_match(self):
-        product1 = 'product1'
-        product2 = 'product2'
-        provided = 'providedProduct'
-        pd = StubCertificateDirectory([
-            StubProductCertificate(StubProduct(provided))])
-        pool_filter = PoolFilter(product_dir=pd,
-                                 entitlement_dir=StubCertificateDirectory([]))
+        product1 = "product1"
+        product2 = "product2"
+        provided = "providedProduct"
+        pd = StubCertificateDirectory([StubProductCertificate(StubProduct(provided))])
+        pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
             create_pool(product1, product1),
@@ -327,15 +333,13 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_out_uninstalled(pools)
         self.assertEqual(1, len(result))
-        self.assertEqual(product2, result[0]['productId'])
+        self.assertEqual(product2, result[0]["productId"])
 
     def test_installed_filter_direct_match(self):
-        product1 = 'product1'
-        product2 = 'product2'
-        pd = StubCertificateDirectory([
-            StubProductCertificate(StubProduct(product2))])
-        pool_filter = PoolFilter(product_dir=pd,
-                                 entitlement_dir=StubCertificateDirectory([]))
+        product1 = "product1"
+        product2 = "product2"
+        pd = StubCertificateDirectory([StubProductCertificate(StubProduct(product2))])
+        pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
             create_pool(product1, product1),
@@ -344,16 +348,14 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_out_installed(pools)
         self.assertEqual(1, len(result))
-        self.assertEqual(product1, result[0]['productId'])
+        self.assertEqual(product1, result[0]["productId"])
 
     def test_installed_filter_provided_match(self):
-        product1 = 'product1'
-        product2 = 'product2'
-        provided = 'providedProduct'
-        pd = StubCertificateDirectory([
-            StubProductCertificate(StubProduct(provided))])
-        pool_filter = PoolFilter(product_dir=pd,
-                                 entitlement_dir=StubCertificateDirectory([]))
+        product1 = "product1"
+        product2 = "product2"
+        provided = "providedProduct"
+        pd = StubCertificateDirectory([StubProductCertificate(StubProduct(provided))])
+        pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
             create_pool(product1, product1),
@@ -361,17 +363,16 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_out_installed(pools)
         self.assertEqual(1, len(result))
-        self.assertEqual(product1, result[0]['productId'])
+        self.assertEqual(product1, result[0]["productId"])
 
     def test_installed_filter_multi_match(self):
-        product1 = 'product1'
-        product2 = 'product2'
-        provided = 'providedProduct'
-        pd = StubCertificateDirectory([
-            StubProductCertificate(StubProduct(provided)),
-            StubProductCertificate(StubProduct(product2))])
-        pool_filter = PoolFilter(product_dir=pd,
-                                 entitlement_dir=StubCertificateDirectory([]))
+        product1 = "product1"
+        product2 = "product2"
+        provided = "providedProduct"
+        pd = StubCertificateDirectory(
+            [StubProductCertificate(StubProduct(provided)), StubProductCertificate(StubProduct(product2))]
+        )
+        pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
             create_pool(product1, product1),
@@ -379,14 +380,13 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_out_installed(pools)
         self.assertEqual(1, len(result))
-        self.assertEqual(product1, result[0]['productId'])
+        self.assertEqual(product1, result[0]["productId"])
 
     def test_filter_product_name(self):
-        product1 = 'Foo Product'
-        product2 = 'Bar Product'
+        product1 = "Foo Product"
+        product2 = "Bar Product"
         pd = StubCertificateDirectory([])
-        pool_filter = PoolFilter(product_dir=pd,
-                                 entitlement_dir=StubCertificateDirectory([]))
+        pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
             create_pool(product1, product1),
@@ -394,36 +394,39 @@ class PoolFilterTests(SubManFixture):
         ]
         result = pool_filter.filter_product_name(pools, "Foo")
         self.assertEqual(1, len(result))
-        self.assertEqual(product1, result[0]['productId'])
+        self.assertEqual(product1, result[0]["productId"])
 
     def test_filter_product_name_matches_provided(self):
-        product1 = 'Foo Product'
-        product2 = 'Bar Product'
+        product1 = "Foo Product"
+        product2 = "Bar Product"
         pd = StubCertificateDirectory([])
-        pool_filter = PoolFilter(product_dir=pd,
-                                 entitlement_dir=StubCertificateDirectory([]))
+        pool_filter = PoolFilter(product_dir=pd, entitlement_dir=StubCertificateDirectory([]))
 
         pools = [
             create_pool(product1, product1, provided_products=[product2]),
         ]
         result = pool_filter.filter_product_name(pools, "Bar")
         self.assertEqual(1, len(result))
-        self.assertEqual(product1, result[0]['productId'])
+        self.assertEqual(product1, result[0]["productId"])
 
     def test_filter_no_overlap(self):
         product1 = "Test Product 1"
         provided1 = "1"  # Provided by product 1
 
         pd = StubCertificateDirectory([])
-        pool_filter = PoolFilter(product_dir=pd,
-                                 entitlement_dir=StubCertificateDirectory([]),
-                                 sorter=StubCertSorter())
+        pool_filter = PoolFilter(
+            product_dir=pd, entitlement_dir=StubCertificateDirectory([]), sorter=StubCertSorter()
+        )
 
         begin_date = datetime.now() - timedelta(days=10)
         end_date = datetime.now() + timedelta(days=365)
         pools = [
-            self._create_pool(product1, product1, provided_products=[provided1],
-                              start_end_range=DateRange(begin_date, end_date)),
+            self._create_pool(
+                product1,
+                product1,
+                provided_products=[provided1],
+                start_end_range=DateRange(begin_date, end_date),
+            ),
         ]
         result = pool_filter.filter_out_overlapping(pools)
         self.assertEqual(1, len(result))
@@ -439,20 +442,26 @@ class PoolFilterTests(SubManFixture):
 
         cert_start = datetime.now() - timedelta(days=10)
         cert_end = datetime.now() + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1),
-                                       start_date=cert_start,
-                                       end_date=cert_end)
+        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
 
         ent_dir = StubCertificateDirectory([cert1])
-        pool_filter = PoolFilter(product_dir=StubCertificateDirectory([]),
-                                 entitlement_dir=ent_dir,
-                                 sorter=StubCertSorter())
+        pool_filter = PoolFilter(
+            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=StubCertSorter()
+        )
 
         pools = [
-            self._create_pool(product1, product1, provided_products=[provided1],
-                              start_end_range=DateRange(cert_start, cert_end)),
-            self._create_pool(product2, product2, provided_products=[provided2],
-                              start_end_range=DateRange(cert_start, cert_end)),
+            self._create_pool(
+                product1,
+                product1,
+                provided_products=[provided1],
+                start_end_range=DateRange(cert_start, cert_end),
+            ),
+            self._create_pool(
+                product2,
+                product2,
+                provided_products=[provided2],
+                start_end_range=DateRange(cert_start, cert_end),
+            ),
         ]
         result = pool_filter.filter_out_overlapping(pools)
         self.assertEqual([pools[1]], result)
@@ -466,20 +475,22 @@ class PoolFilterTests(SubManFixture):
 
         cert_start = datetime.now() - timedelta(days=10)
         cert_end = datetime.now() + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1),
-                                       start_date=cert_start,
-                                       end_date=cert_end)
+        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
 
         ent_dir = StubCertificateDirectory([cert1])
         mock_sorter = StubCertSorter()
         mock_sorter.partially_valid_products = {}
-        pool_filter = PoolFilter(product_dir=StubCertificateDirectory([]),
-                                 entitlement_dir=ent_dir,
-                                 sorter=mock_sorter)
+        pool_filter = PoolFilter(
+            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
+        )
 
         pools = [
-            self._create_pool(product1, product1, provided_products=[provided1],
-                              start_end_range=DateRange(cert_start, cert_end)),
+            self._create_pool(
+                product1,
+                product1,
+                provided_products=[provided1],
+                start_end_range=DateRange(cert_start, cert_end),
+            ),
         ]
         result = pool_filter.filter_out_overlapping(pools)
         self.assertEqual(0, len(result))
@@ -496,27 +507,35 @@ class PoolFilterTests(SubManFixture):
 
         cert_start = datetime.now() - timedelta(days=10)
         cert_end = datetime.now() + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1),
-                                       start_date=cert_start,
-                                       end_date=cert_end)
-        cert2 = StubProductCertificate(StubProduct(provided2),
-                                       start_date=cert_start,
-                                       end_date=cert_end)
+        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
+        cert2 = StubProductCertificate(StubProduct(provided2), start_date=cert_start, end_date=cert_end)
 
         ent_dir = StubCertificateDirectory([cert1, cert2])
         mock_sorter = StubCertSorter()
         mock_sorter.partially_valid_products = {cert1.products[0].id: set([cert1])}
-        pool_filter = PoolFilter(product_dir=StubCertificateDirectory([]),
-                                 entitlement_dir=ent_dir,
-                                 sorter=mock_sorter)
+        pool_filter = PoolFilter(
+            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
+        )
 
         pools = [
-            self._create_pool(product1, product1, provided_products=[provided1],
-                              start_end_range=DateRange(cert_start, cert_end)),
-            self._create_pool(product2, product2, provided_products=[provided2, provided1],
-                              start_end_range=DateRange(cert_start, cert_end)),
-            self._create_pool(product3, product3, provided_products=[provided2],
-                              start_end_range=DateRange(cert_start, cert_end)),
+            self._create_pool(
+                product1,
+                product1,
+                provided_products=[provided1],
+                start_end_range=DateRange(cert_start, cert_end),
+            ),
+            self._create_pool(
+                product2,
+                product2,
+                provided_products=[provided2, provided1],
+                start_end_range=DateRange(cert_start, cert_end),
+            ),
+            self._create_pool(
+                product3,
+                product3,
+                provided_products=[provided2],
+                start_end_range=DateRange(cert_start, cert_end),
+            ),
         ]
         result = pool_filter.filter_out_overlapping(pools)
         self.assertEqual([pools[0], pools[1]], result)
@@ -530,21 +549,23 @@ class PoolFilterTests(SubManFixture):
 
         cert_start = datetime.now() + timedelta(days=365)
         cert_end = cert_start + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1),
-                                       start_date=cert_start,
-                                       end_date=cert_end)
+        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
 
         ent_dir = StubCertificateDirectory([cert1])
         mock_sorter = StubCertSorter()
-        pool_filter = PoolFilter(product_dir=StubCertificateDirectory([]),
-                                 entitlement_dir=ent_dir,
-                                 sorter=mock_sorter)
+        pool_filter = PoolFilter(
+            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
+        )
 
         begin_date = datetime.now() - timedelta(days=100)
         end_date = datetime.now() + timedelta(days=100)
         pools = [
-            self._create_pool(product1, product1, provided_products=[provided1],
-                              start_end_range=DateRange(begin_date, end_date)),
+            self._create_pool(
+                product1,
+                product1,
+                provided_products=[provided1],
+                start_end_range=DateRange(begin_date, end_date),
+            ),
         ]
         result = pool_filter.filter_out_overlapping(pools)
         self.assertEqual(1, len(result))
@@ -559,16 +580,20 @@ class PoolFilterTests(SubManFixture):
 
         ent_dir = StubCertificateDirectory()
         mock_sorter = StubCertSorter()
-        pool_filter = PoolFilter(product_dir=StubCertificateDirectory([]),
-                                 entitlement_dir=ent_dir,
-                                 sorter=mock_sorter)
+        pool_filter = PoolFilter(
+            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
+        )
 
         begin_date = datetime.now() - timedelta(days=100)
         end_date = datetime.now() + timedelta(days=100)
         pools = [
-            self._create_pool(product1, product1, provided_products=[provided1],
-                              start_end_range=DateRange(begin_date, end_date),
-                              stacking_id=stacking_id1),
+            self._create_pool(
+                product1,
+                product1,
+                provided_products=[provided1],
+                start_end_range=DateRange(begin_date, end_date),
+                stacking_id=stacking_id1,
+            ),
         ]
         result = pool_filter.filter_out_overlapping(pools)
         self.assertEqual([pools[0]], result)
@@ -580,24 +605,30 @@ class PoolFilterTests(SubManFixture):
 
         cert_start = datetime.now() - timedelta(days=10)
         cert_end = datetime.now() + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1),
-                                       start_date=cert_start,
-                                       end_date=cert_end)
+        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
         ent_dir = StubCertificateDirectory([cert1])
         mock_sorter = StubCertSorter()
         mock_sorter.partial_stacks = {stacking_id1: [cert1]}
-        pool_filter = PoolFilter(product_dir=StubCertificateDirectory([]),
-                                 entitlement_dir=ent_dir,
-                                 sorter=mock_sorter)
+        pool_filter = PoolFilter(
+            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
+        )
         begin_date = datetime.now() - timedelta(days=100)
         end_date = datetime.now() + timedelta(days=100)
         pools = [
-            self._create_pool(product1, product1, provided_products=[provided1],
-                              start_end_range=DateRange(begin_date, end_date),
-                              stacking_id=stacking_id1),
-            self._create_pool(product1, product1, provided_products=[provided1],
-                              start_end_range=DateRange(begin_date, end_date),
-                              stacking_id=stacking_id1),
+            self._create_pool(
+                product1,
+                product1,
+                provided_products=[provided1],
+                start_end_range=DateRange(begin_date, end_date),
+                stacking_id=stacking_id1,
+            ),
+            self._create_pool(
+                product1,
+                product1,
+                provided_products=[provided1],
+                start_end_range=DateRange(begin_date, end_date),
+                stacking_id=stacking_id1,
+            ),
         ]
         result = pool_filter.filter_out_overlapping(pools)
         self.assertEqual(2, len(result))
@@ -607,27 +638,33 @@ class PoolFilterTests(SubManFixture):
         provided1 = "1"
         product2 = "0"  # different product id than that of product 1
         provided2 = "1"  # same provided product as product 1
-        product2_type = 'SVC'
+        product2_type = "SVC"
 
         cert_start = datetime.now() - timedelta(days=10)
         cert_end = datetime.now() + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1),
-                                       start_date=cert_start,
-                                       end_date=cert_end)
+        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
 
         ent_dir = StubCertificateDirectory([cert1])
         mock_sorter = StubCertSorter()
         mock_sorter.partially_valid_products = {}
-        pool_filter = PoolFilter(product_dir=StubCertificateDirectory([]),
-                                 entitlement_dir=ent_dir,
-                                 sorter=mock_sorter)
+        pool_filter = PoolFilter(
+            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
+        )
 
         pools = [
-            self._create_pool(product1, product1, provided_products=[provided1],
-                              start_end_range=DateRange(cert_start, cert_end)),
-            self._create_pool(product2, product2, provided_products=[provided2],
-                              start_end_range=DateRange(cert_start, cert_end),
-                              type=product2_type)
+            self._create_pool(
+                product1,
+                product1,
+                provided_products=[provided1],
+                start_end_range=DateRange(cert_start, cert_end),
+            ),
+            self._create_pool(
+                product2,
+                product2,
+                provided_products=[provided2],
+                start_end_range=DateRange(cert_start, cert_end),
+                type=product2_type,
+            ),
         ]
         result = pool_filter.filter_out_overlapping(pools)
         self.assertEqual([pools[1]], result)
@@ -637,30 +674,24 @@ class PoolFilterTests(SubManFixture):
 
         # Adds in a stacking_id to be used in testing the partial stacks
         # Assume default type attribute of 'MKT'
-    def _create_pool(self,
-                     product_id,
-                     product_name,
-                     provided_products,
-                     start_end_range,
-                     stacking_id=None,
-                     type='MKT'):
+
+    def _create_pool(
+        self, product_id, product_name, provided_products, start_end_range, stacking_id=None, type="MKT"
+    ):
         prod_attrs = []
         if stacking_id:
-            stacking_id_attribute = {
-                "name": "stacking_id",
-                "value": stacking_id
-            }
+            stacking_id_attribute = {"name": "stacking_id", "value": stacking_id}
             prod_attrs.append(stacking_id_attribute)
         if type:
-            type_attribute = {
-                "name": "type",
-                "value": type
-            }
+            type_attribute = {"name": "type", "value": type}
             prod_attrs.append(type_attribute)
-        pool = create_pool(product_id, product_name,
-                           provided_products=provided_products,
-                           start_end_range=start_end_range,
-                           productAttributes=prod_attrs)
+        pool = create_pool(
+            product_id,
+            product_name,
+            provided_products=provided_products,
+            start_end_range=start_end_range,
+            productAttributes=prod_attrs,
+        )
         return pool
 
 
@@ -674,15 +705,17 @@ def MockSystemLog(self, message, priority):
 
 
 EXPECTED_CONTENT = EXPECTED_CERT_CONTENT + os.linesep + EXPECTED_KEY_CONTENT
-EXPECTED_CERT_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + os.linesep + \
-    EXPECTED_CERT_ENTITLEMENT_V3 + os.linesep + \
-    EXPECTED_CERT_SIGNATURE_V3
-EXPECTED_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + os.linesep + \
-    EXPECTED_KEY_CONTENT_V3
+EXPECTED_CERT_CONTENT_V3 = (
+    EXPECTED_CERT_CONTENT_V3
+    + os.linesep
+    + EXPECTED_CERT_ENTITLEMENT_V3
+    + os.linesep
+    + EXPECTED_CERT_SIGNATURE_V3
+)
+EXPECTED_CONTENT_V3 = EXPECTED_CERT_CONTENT_V3 + os.linesep + EXPECTED_KEY_CONTENT_V3
 
 
 class ExtractorStub(managerlib.ImportFileExtractor):
-
     def __init__(self, content, file_path="test/file/path"):
         self.content = content
         self.writes = []
@@ -701,7 +734,6 @@ class ExtractorStub(managerlib.ImportFileExtractor):
 
 
 class TestImportFileExtractor(unittest.TestCase):
-
     def test_contains_key_content_when_key_and_cert_exists_in_import_file(self):
         extractor = ExtractorStub(EXPECTED_CONTENT)
         self.assertTrue(extractor.contains_key_content())
@@ -764,8 +796,7 @@ class TestImportFileExtractor(unittest.TestCase):
 
     def test_verify_valid_entitlement_for_invalid_cert_bundle(self):
         # Use a bundle of cert + key, but the cert is not an entitlement cert:
-        extractor = ExtractorStub(IDENTITY_CERT_WITH_KEY,
-                                  file_path="12345.pem")
+        extractor = ExtractorStub(IDENTITY_CERT_WITH_KEY, file_path="12345.pem")
         self.assertFalse(extractor.verify_valid_entitlement())
 
     def test_verify_valid_entitlement_for_no_key(self):
@@ -880,7 +911,6 @@ class TestImportFileExtractor(unittest.TestCase):
 
 
 class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
-
     def test_sorter_adds_group_for_non_stackable_entitlement(self):
         pool = self._create_pool("test-prod-1", "Test Prod 1")
         merged = merge_pools([pool])
@@ -969,71 +999,64 @@ class TestMergedPoolsStackingGroupSorter(unittest.TestCase):
     def _create_pool(self, product_id, product_name, stacking_id=None):
         prod_attrs = []
         if stacking_id:
-            stacking_id_attribute = {
-                "name": "stacking_id",
-                "value": stacking_id
-            }
+            stacking_id_attribute = {"name": "stacking_id", "value": stacking_id}
             prod_attrs.append(stacking_id_attribute)
         return create_pool(product_id, product_name, productAttributes=prod_attrs)
 
 
 class MergedPoolsTests(unittest.TestCase):
-
     def test_sort_virt_to_top(self):
         # Fake some pool JSON with the bare minimum of data:
         pools = [
             {
-                'id': 1,
-                'attributes': [],
-                'consumed': 0,
-                'quantity': 10,
-                'providedProducts': [],
+                "id": 1,
+                "attributes": [],
+                "consumed": 0,
+                "quantity": 10,
+                "providedProducts": [],
             },
             {
-                'id': 2,
-                'attributes': [{'name': 'virt_only', 'value': 'true'}],
-                'consumed': 0,
-                'quantity': 10,
-                'providedProducts': [],
+                "id": 2,
+                "attributes": [{"name": "virt_only", "value": "true"}],
+                "consumed": 0,
+                "quantity": 10,
+                "providedProducts": [],
             },
             {
-                'id': 3,
-                'attributes': [],
-                'consumed': 0,
-                'quantity': 10,
-                'providedProducts': [],
+                "id": 3,
+                "attributes": [],
+                "consumed": 0,
+                "quantity": 10,
+                "providedProducts": [],
             },
             {
-                'id': 4,
-                'attributes': [{'name': 'virt_only', 'value': 'true'}],
-                'consumed': 0,
-                'quantity': 10,
-                'providedProducts': [],
-            }]
+                "id": 4,
+                "attributes": [{"name": "virt_only", "value": "true"}],
+                "consumed": 0,
+                "quantity": 10,
+                "providedProducts": [],
+            },
+        ]
 
-        merged_pools = MergedPools('product', 'A Product')
+        merged_pools = MergedPools("product", "A Product")
         for p in pools:
             merged_pools.add_pool(p)
 
         merged_pools.sort_virt_to_top()
         # If we sort, the virt pools should become the first two in the list:
-        self.assertEqual(merged_pools.pools[0]['attributes'][0]['value'],
-                         "true")
-        self.assertEqual(merged_pools.pools[1]['attributes'][0]['value'],
-                         "true")
-        self.assertFalse('virt_only' in merged_pools.pools[2]['attributes'])
-        self.assertFalse('virt_only' in merged_pools.pools[3]['attributes'])
+        self.assertEqual(merged_pools.pools[0]["attributes"][0]["value"], "true")
+        self.assertEqual(merged_pools.pools[1]["attributes"][0]["value"], "true")
+        self.assertFalse("virt_only" in merged_pools.pools[2]["attributes"])
+        self.assertFalse("virt_only" in merged_pools.pools[3]["attributes"])
 
 
 class PoolStashTest(SubManFixture):
-
     def test_empty_stash_zero_length(self):
         my_stash = PoolStash()
         self.assertTrue(my_stash.all_pools_size() == 0)
 
 
 class TestAllowsMutliEntitlement(unittest.TestCase):
-
     def test_allows_when_yes(self):
         pool = self._create_pool_data_with_multi_entitlement_attribute("yes")
         self.assertTrue(allows_multi_entitlement(pool))
@@ -1088,9 +1111,8 @@ class TestValidQuantity(unittest.TestCase):
 
 
 class TestGetAvailableEntitlements(SubManFixture):
-
     def setUp(self):
-        self.p1 = patch('subscription_manager.facts.Facts.write_cache')
+        self.p1 = patch("subscription_manager.facts.Facts.write_cache")
         self.p1.start()
         super(TestGetAvailableEntitlements, self).setUp()
 
@@ -1109,13 +1131,21 @@ class TestGetAvailableEntitlements(SubManFixture):
         cp = self.get_consumer_cp()
 
         # patch the mock for getPoolsList
-        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None, filter_string=None,
-                           after_date=None, future=None, page=0, items_per_page=0):
+        def get_pools_list(
+            consumer=None,
+            listAll=False,
+            active_on=None,
+            owner=None,
+            filter_string=None,
+            after_date=None,
+            future=None,
+            page=0,
+            items_per_page=0,
+        ):
             if listAll:
-                return [self.build_pool_dict('1234'),
-                        self.build_pool_dict('4321')]
+                return [self.build_pool_dict("1234"), self.build_pool_dict("4321")]
             else:
-                return [self.build_pool_dict('1234')]
+                return [self.build_pool_dict("1234")]
 
         cp.getPoolsList = Mock(side_effect=get_pools_list)
 
@@ -1128,18 +1158,29 @@ class TestGetAvailableEntitlements(SubManFixture):
     def test_installed(self):
         cp = self.get_consumer_cp()
 
-        def get_pools_list(consumer=None, listAll=False, active_on=None, owner=None, filter_string=None,
-                           after_date=None, future=None, page=0, items_per_page=0):
+        def get_pools_list(
+            consumer=None,
+            listAll=False,
+            active_on=None,
+            owner=None,
+            filter_string=None,
+            after_date=None,
+            future=None,
+            page=0,
+            items_per_page=0,
+        ):
             if listAll:
-                return [self.build_pool_dict('1234', ['some_product']),
-                        self.build_pool_dict('4321'),
-                        self.build_pool_dict('12321', ['some_product'])]
+                return [
+                    self.build_pool_dict("1234", ["some_product"]),
+                    self.build_pool_dict("4321"),
+                    self.build_pool_dict("12321", ["some_product"]),
+                ]
             else:
-                return [self.build_pool_dict('1234', ['some_product'])]
+                return [self.build_pool_dict("1234", ["some_product"])]
 
         cp.getPoolsList = Mock(side_effect=get_pools_list)
 
-        product_directory = StubProductDirectory(pids=['some_product'])
+        product_directory = StubProductDirectory(pids=["some_product"])
         provide(PROD_DIR, product_directory)
 
         res = managerlib.get_available_entitlements(get_all=True, uninstalled=True)
@@ -1150,15 +1191,14 @@ class TestGetAvailableEntitlements(SubManFixture):
 
     def build_pool_dict(self, pool_id, provided_products=[]):
         return {
-            'id': str(pool_id),
+            "id": str(pool_id),
             # note things fail if any of these are not set, or
             # incorrect types
-            'quantity': 5,
-            'consumed': 1,
-            'productId': '',
-            'startDate': datetime.now(GMT()).isoformat(),
-            'endDate': datetime.now(GMT()).isoformat(),
-            'providedProducts': [{'productId': prod_id} for prod_id in provided_products],
-            'productAttributes': [{'name': 'foo',
-                                   'value': 'blip'}]
+            "quantity": 5,
+            "consumed": 1,
+            "productId": "",
+            "startDate": datetime.now(GMT()).isoformat(),
+            "endDate": datetime.now(GMT()).isoformat(),
+            "providedProducts": [{"productId": prod_id} for prod_id in provided_products],
+            "productAttributes": [{"name": "foo", "value": "blip"}],
         }

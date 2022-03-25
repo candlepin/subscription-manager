@@ -38,15 +38,15 @@ PARTIALLY_SUBSCRIBED = "partially_subscribed"
 # Warning: Do not change following strings, because these strings
 # are in D-Bus API. The API is used by other applications (Anaconda,
 # Cockpit, GNOME, ...)
-VALID = 'valid'
-INVALID = 'invalid'
-PARTIAL = 'partial'
-DISABLED = 'disabled'
+VALID = "valid"
+INVALID = "invalid"
+PARTIAL = "partial"
+DISABLED = "disabled"
 UNKNOWN = "unknown"
 
 
-SOCKET_FACT = 'cpu.cpu_socket(s)'
-RAM_FACT = 'memory.memtotal'
+SOCKET_FACT = "cpu.cpu_socket(s)"
+RAM_FACT = "memory.memtotal"
 
 RHSM_VALID = 0
 RHSM_EXPIRED = 1
@@ -57,7 +57,6 @@ RHSM_REGISTRATION_REQUIRED = 5
 
 
 class ComplianceManager(object):
-
     def __init__(self, on_date=None):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.product_dir = inj.require(inj.PROD_DIR)
@@ -131,14 +130,12 @@ class ComplianceManager(object):
         """
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
         self.status = status_cache.load_status(
-            self.cp_provider.get_consumer_auth_cp(),
-            self.identity.uuid,
-            self.on_date
+            self.cp_provider.get_consumer_auth_cp(), self.identity.uuid, self.on_date
         )
         return self.status
 
     def _parse_server_status(self):
-        """ Fetch entitlement status info from server and parse. """
+        """Fetch entitlement status info from server and parse."""
 
         if not self.is_registered():
             log.debug("Unregistered, skipping server compliance check.")
@@ -152,23 +149,22 @@ class ComplianceManager(object):
         # TODO: we're now mapping product IDs to entitlement cert JSON,
         # previously we mapped to actual entitlement cert objects. However,
         # nothing seems to actually use these, so it may not matter for now.
-        self.valid_products = status['compliantProducts']
+        self.valid_products = status["compliantProducts"]
 
-        self.partially_valid_products = status['partiallyCompliantProducts']
+        self.partially_valid_products = status["partiallyCompliantProducts"]
 
-        self.partial_stacks = status['partialStacks']
+        self.partial_stacks = status["partialStacks"]
 
-        if 'reasons' in status:
+        if "reasons" in status:
             self.supports_reasons = True
-            self.reasons = Reasons(status['reasons'], self)
+            self.reasons = Reasons(status["reasons"], self)
 
-        if 'status' in status and len(status['status']):
-            self.system_status = status['status']
+        if "status" in status and len(status["status"]):
+            self.system_status = status["status"]
         # Some old candlepin versions do not return 'status' with information
-        elif status['nonCompliantProducts']:
+        elif status["nonCompliantProducts"]:
             self.system_status = INVALID
-        elif self.partially_valid_products or self.partial_stacks or \
-                self.reasons.reasons:
+        elif self.partially_valid_products or self.partial_stacks or self.reasons.reasons:
             self.system_status = PARTIAL
         else:
             self.system_status = UNKNOWN
@@ -180,29 +176,29 @@ class ComplianceManager(object):
         # invalid from midnight to midnight.
         self.compliant_until = None
 
-        if status['compliantUntil'] is not None:
-            self.compliant_until = parse_date(status['compliantUntil'])
+        if status["compliantUntil"] is not None:
+            self.compliant_until = parse_date(status["compliantUntil"])
 
         # Lookup product certs for each unentitled product returned by
         # the server:
-        unentitled_pids = status['nonCompliantProducts']
+        unentitled_pids = status["nonCompliantProducts"]
         # Add in any installed products not in the server response. This
         # could happen if something changes before the certd runs. Log
         # a warning if it does, and treat it like an unentitled product.
         for pid in list(self.installed_products.keys()):
-            if pid not in self.valid_products and pid not in \
-                    self.partially_valid_products and pid not in \
-                    unentitled_pids:
-                log.warning("Installed product %s not present in response from "
-                            "server." % pid)
+            if (
+                pid not in self.valid_products
+                and pid not in self.partially_valid_products
+                and pid not in unentitled_pids
+            ):
+                log.warning("Installed product %s not present in response from " "server." % pid)
                 unentitled_pids.append(pid)
 
         for unentitled_pid in unentitled_pids:
             prod_cert = self.product_dir.find_by_product(unentitled_pid)
             # Ignore anything server thinks we have but we don't.
             if prod_cert is None:
-                log.warning("Server reported installed product not on system: %s" %
-                            unentitled_pid)
+                log.warning("Server reported installed product not on system: %s" % unentitled_pid)
                 continue
             self.unentitled_products[unentitled_pid] = prod_cert
 
@@ -213,14 +209,16 @@ class ComplianceManager(object):
     def log_products(self):
         fj = utils.friendly_join
 
-        log.debug("Product status: valid_products=%s partial_products=%s expired_products=%s"
-                  " unentitled_producs=%s future_products=%s valid_until=%s",
-                  fj(list(self.valid_products.keys())),
-                  fj(list(self.partially_valid_products.keys())),
-                  fj(list(self.expired_products.keys())),
-                  fj(list(self.unentitled_products.keys())),
-                  fj(list(self.future_products.keys())),
-                  self.compliant_until)
+        log.debug(
+            "Product status: valid_products=%s partial_products=%s expired_products=%s"
+            " unentitled_producs=%s future_products=%s valid_until=%s",
+            fj(list(self.valid_products.keys())),
+            fj(list(self.partially_valid_products.keys())),
+            fj(list(self.expired_products.keys())),
+            fj(list(self.unentitled_products.keys())),
+            fj(list(self.future_products.keys())),
+            self.compliant_until,
+        )
 
         log.debug("partial stacks: %s" % list(self.partial_stacks.keys()))
 
@@ -234,9 +232,12 @@ class ComplianceManager(object):
         """
         # Subtract out the valid and partially valid items from the
         # list of installed products
-        unknown_products = dict((k, v) for (k, v) in list(self.installed_products.items()) if
-                                k not in list(self.valid_products.keys()) and
-                                k not in list(self.partially_valid_products.keys()))
+        unknown_products = dict(
+            (k, v)
+            for (k, v) in list(self.installed_products.items())
+            if k not in list(self.valid_products.keys())
+            and k not in list(self.partially_valid_products.keys())
+        )
         ent_certs = self.entitlement_dir.list()
 
         on_date = datetime.now(GMT())
@@ -275,11 +276,11 @@ class ComplianceManager(object):
         # when function is called (not during start of application) due to
         # rhsm.service which can run for very long time
         status_map = {
-            VALID: _('Current'),
-            PARTIAL: _('Insufficient'),
-            INVALID: _('Invalid'),
-            DISABLED: _('Disabled'),
-            UNKNOWN: _('Unknown')
+            VALID: _("Current"),
+            PARTIAL: _("Insufficient"),
+            INVALID: _("Invalid"),
+            DISABLED: _("Disabled"),
+            UNKNOWN: _("Unknown"),
         }
         return status_map
 
@@ -329,9 +330,9 @@ class ComplianceManager(object):
 
     # Assumes classic and identity validity have been tested
     def get_status_for_icon(self):
-        if self.system_status == 'invalid':
+        if self.system_status == "invalid":
             return RHSM_EXPIRED
-        if self.system_status == 'partial':
+        if self.system_status == "partial":
             return RHSM_PARTIALLY_VALID
         if self.in_warning_period():
             return RHSM_WARNING
@@ -353,6 +354,7 @@ class CertSorter(ComplianceManager):
     re-use this cached data for a period of time, before falling back to
     reporting unknown.
     """
+
     def __init__(self, on_date=None):
         # Sync installed product info with server.
         # This will be done on register if we aren't registered.
@@ -367,17 +369,14 @@ class CertSorter(ComplianceManager):
 
         cert_dir_monitors = {
             file_monitor.PRODUCT_WATCHER: file_monitor.DirectoryWatch(
-                inj.require(inj.PROD_DIR).path,
-                [self.on_prod_dir_changed, self.load]
+                inj.require(inj.PROD_DIR).path, [self.on_prod_dir_changed, self.load]
             ),
             file_monitor.ENTITLEMENT_WATCHER: file_monitor.DirectoryWatch(
-                inj.require(inj.ENT_DIR).path,
-                [self.on_ent_dir_changed, self.load]
+                inj.require(inj.ENT_DIR).path, [self.on_ent_dir_changed, self.load]
             ),
             file_monitor.CONSUMER_WATCHER: file_monitor.DirectoryWatch(
-                inj.require(inj.IDENTITY).cert_dir_path,
-                [self.on_identity_changed, self.load]
-            )
+                inj.require(inj.IDENTITY).cert_dir_path, [self.on_identity_changed, self.load]
+            ),
         }
 
         # Note: no timer is setup to poll file_monitor by cert_sorter itself,
@@ -389,10 +388,7 @@ class CertSorter(ComplianceManager):
             cp_provider = inj.require(inj.CP_PROVIDER)
             consumer_identity = inj.require(inj.IDENTITY)
             try:
-                self.installed_mgr.update_check(
-                    cp_provider.get_consumer_auth_cp(),
-                    consumer_identity.uuid
-                )
+                self.installed_mgr.update_check(cp_provider.get_consumer_auth_cp(), consumer_identity.uuid)
             except RestlibException:
                 # Invalid consumer certificate
                 pass
@@ -458,8 +454,7 @@ class StackingGroupSorter(object):
             stacking_id = self._get_stacking_id(entitlement)
             if stacking_id:
                 if stacking_id not in stacking_groups:
-                    group = EntitlementGroup(entitlement,
-                                             self._get_identity_name(entitlement))
+                    group = EntitlementGroup(entitlement, self._get_identity_name(entitlement))
                     self.groups.append(group)
                     stacking_groups[stacking_id] = group
                 else:
@@ -472,12 +467,11 @@ class StackingGroupSorter(object):
         raise NotImplementedError("Subclasses must implement: _get_stacking_id")
 
     def _get_identity_name(self, entitlement):
-        raise NotImplementedError(
-            "Subclasses must implement: _get_identity_name")
+        raise NotImplementedError("Subclasses must implement: _get_identity_name")
 
 
 class EntitlementGroup(object):
-    def __init__(self, entitlement, name=''):
+    def __init__(self, entitlement, name=""):
         self.name = name
         self.entitlements = []
         self.add_entitlement_cert(entitlement)

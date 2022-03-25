@@ -20,20 +20,20 @@ from .fixture import SubManFixture, Capture
 
 
 class CliEnvironmentTests(SubManFixture):
-
     def setUp(self):
         super(CliEnvironmentTests, self).setUp()
-        get_supported_resources_patcher = patch('subscription_manager.cli_command.environments.get_supported_resources')
+        get_supported_resources_patcher = patch(
+            "subscription_manager.cli_command.environments.get_supported_resources"
+        )
         self.mock_get_resources = get_supported_resources_patcher.start()
-        self.mock_get_resources.return_value = ['environments']
+        self.mock_get_resources.return_value = ["environments"]
         self.addCleanup(self.mock_get_resources.stop)
 
     def env_list(*args, **kwargs):
-        return [{"id": "1234", "name": "somename"},
-                {"id": "5678", "name": "othername"}]
+        return [{"id": "1234", "name": "somename"}, {"id": "5678", "name": "othername"}]
 
     def test_update_environments(self):
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             mock_identity = self._inject_mock_valid_consumer()
             mock_uep.getEnvironmentList = self.env_list
             mock_uep.supports_resource = Mock(return_value=True)
@@ -42,12 +42,12 @@ class CliEnvironmentTests(SubManFixture):
             self.stub_cp_provider.basic_auth_cp = mock_uep
             cmd = EnvironmentsCommand()
 
-            serial1 = '1234'
-            cmd.main(['--set=somename', '--username', 'foo', '--password', 'bar'])
+            serial1 = "1234"
+            cmd.main(["--set=somename", "--username", "foo", "--password", "bar"])
             cmd.cp.updateConsumer.assert_called_once_with(mock_identity.uuid, environments=serial1)
 
     def test_update_environments_multiple(self):
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             mock_identity = self._inject_mock_valid_consumer()
             mock_uep.getEnvironmentList = self.env_list
             mock_uep.supports_resource = Mock(return_value=True)
@@ -56,12 +56,12 @@ class CliEnvironmentTests(SubManFixture):
             self.stub_cp_provider.basic_auth_cp = mock_uep
             cmd = EnvironmentsCommand()
 
-            serial1 = '1234,5678'
-            cmd.main(['--set=somename,othername', '--username', 'foo', '--password', 'bar'])
+            serial1 = "1234,5678"
+            cmd.main(["--set=somename,othername", "--username", "foo", "--password", "bar"])
             cmd.cp.updateConsumer.assert_called_once_with(mock_identity.uuid, environments=serial1)
 
     def test_update_environments_multiple_handles_spaces(self):
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             mock_identity = self._inject_mock_valid_consumer()
             mock_uep.getEnvironmentList = self.env_list
             mock_uep.supports_resource = Mock(return_value=True)
@@ -70,12 +70,12 @@ class CliEnvironmentTests(SubManFixture):
             self.stub_cp_provider.basic_auth_cp = mock_uep
             cmd = EnvironmentsCommand()
 
-            serial1 = '1234,5678'
-            cmd.main(['--set=somename, othername', '--username', 'foo', '--password', 'bar'])
+            serial1 = "1234,5678"
+            cmd.main(["--set=somename, othername", "--username", "foo", "--password", "bar"])
             cmd.cp.updateConsumer.assert_called_once_with(mock_identity.uuid, environments=serial1)
 
     def test_update_environments_repeated(self):
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             self._inject_mock_valid_consumer()
             mock_uep.getEnvironmentList = self.env_list
             mock_uep.has_capability = Mock(return_value=True)
@@ -85,10 +85,10 @@ class CliEnvironmentTests(SubManFixture):
 
             with Capture(silent=True):
                 with self.assertRaises(SystemExit):
-                    cmd.main(['--set=somename,othername,somename', '--username', 'foo', '--password', 'bar'])
+                    cmd.main(["--set=somename,othername,somename", "--username", "foo", "--password", "bar"])
 
     def test_update_environments_not_valid(self):
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             self._inject_mock_valid_consumer()
             mock_uep.getEnvironmentList = self.env_list
             mock_uep.has_capability = Mock(return_value=True)
@@ -98,10 +98,10 @@ class CliEnvironmentTests(SubManFixture):
 
             with Capture(silent=True):
                 with self.assertRaises(SystemExit):
-                    cmd.main(['--set=somename,notagoodname', '--username', 'foo', '--password', 'bar'])
+                    cmd.main(["--set=somename,notagoodname", "--username", "foo", "--password", "bar"])
 
     def test_update_indentity_not_valid(self):
-        with patch('rhsm.connection.UEPConnection', new_callable=StubUEP) as mock_uep:
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             self._inject_mock_invalid_consumer()
             mock_uep.getEnvironmentList = self.env_list
             mock_uep.has_capability = Mock(return_value=True)
@@ -111,4 +111,4 @@ class CliEnvironmentTests(SubManFixture):
 
             with Capture(silent=True):
                 with self.assertRaises(SystemExit):
-                    cmd.main(['--set=somename', '--username', 'foo', '--password', 'bar'])
+                    cmd.main(["--set=somename", "--username", "foo", "--password", "bar"])

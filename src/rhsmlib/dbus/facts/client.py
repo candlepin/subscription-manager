@@ -45,11 +45,11 @@ class FactsClient(object):
         if interface_name:
             self.interface_name = interface_name
 
-        self.dbus_proxy_object = self.bus.get_object(self.bus_name, self.object_path,
-                                                     follow_name_owner_changes=True)
+        self.dbus_proxy_object = self.bus.get_object(
+            self.bus_name, self.object_path, follow_name_owner_changes=True
+        )
 
-        self.interface = dbus.Interface(self.dbus_proxy_object,
-                                        dbus_interface=self.interface_name)
+        self.interface = dbus.Interface(self.dbus_proxy_object, dbus_interface=self.interface_name)
 
         self.bus.call_on_disconnection(self._on_bus_disconnect)
 

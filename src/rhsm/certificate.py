@@ -36,12 +36,12 @@ log = logging.getLogger(__name__)
 
 
 # Regex used to scan for OIDs:
-OID_PATTERN = re.compile(r'([0-9]+\.)+[0-9]+:')
+OID_PATTERN = re.compile(r"([0-9]+\.)+[0-9]+:")
 
 
 # Regex used to parse OID values such as:
 #    0:d=0  hl=2 l=   3 prim: UTF8STRING        :2.0
-VALUE_PATTERN = re.compile(r'.*prim:\s(\w*)\s*:*(.*)')
+VALUE_PATTERN = re.compile(r".*prim:\s(\w*)\s*:*(.*)")
 
 
 # NOTE: These factory methods create new style certificate objects from
@@ -50,11 +50,13 @@ VALUE_PATTERN = re.compile(r'.*prim:\s(\w*)\s*:*(.*)')
 # should be moved here.
 def create_from_file(path):
     from rhsm.certificate2 import _CertFactory  # prevent circular deps
+
     return _CertFactory().create_from_file(path)
 
 
 def create_from_pem(pem):
     from rhsm.certificate2 import _CertFactory  # prevent circular deps
+
     return _CertFactory().create_from_pem(pem)
 
 
@@ -92,10 +94,11 @@ def deprecated(func):
     A decorator that marks a function as deprecated. This will cause a
     warning to be emitted any time that function is used by a caller.
     """
+
     def new_func(*args, **kwargs):
-        warnings.warn("Call to deprecated function: %s" % func.__name__,
-                      category=DeprecationWarning)
+        warnings.warn("Call to deprecated function: %s" % func.__name__, category=DeprecationWarning)
         return func(*args, **kwargs)
+
     new_func.__name__ = func.__name__
     new_func.__doc__ = func.__doc__
     new_func.__dict__.update(func.__dict__)
@@ -134,7 +137,7 @@ class Certificate(object):
         self.subj = self.x509.get_subject()
         self.serial = self.x509.get_serial_number()
 
-        self.altName = x509.get_extension(name='subjectAltName')
+        self.altName = x509.get_extension(name="subjectAltName")
 
     def serialNumber(self):
         """
@@ -172,8 +175,10 @@ class Certificate(object):
         :return: The valid date range.
         :rtype: :class:`DateRange`
         """
-        return DateRange(get_datetime_from_x509(self.x509.get_not_before()),
-                         get_datetime_from_x509(self.x509.get_not_after()))
+        return DateRange(
+            get_datetime_from_x509(self.x509.get_not_before()),
+            get_datetime_from_x509(self.x509.get_not_after()),
+        )
 
     def valid(self, on_date=None):
         """
@@ -250,7 +255,7 @@ class Certificate(object):
         :return: self
         :rtype :class:`Certificate`
         """
-        f = open(pem_path, 'w')
+        f = open(pem_path, "w")
         f.write(self.toPEM())
         self.path = pem_path
         f.close()
@@ -260,10 +265,10 @@ class Certificate(object):
         """
         Delete the file associated with this certificate.
         """
-        if hasattr(self, 'path'):
+        if hasattr(self, "path"):
             os.unlink(self.path)
         else:
-            raise Exception('no path, not deleted')
+            raise Exception("no path, not deleted")
 
     def toPEM(self):
         """
@@ -280,7 +285,7 @@ class Certificate(object):
     def __repr__(self):
         sn = self.serialNumber()
         cert_path = None
-        if hasattr(self, 'path'):
+        if hasattr(self, "path"):
             cert_path = self.path
         return '[sn: %d, path: "%s"]' % (sn, cert_path)
 
@@ -304,7 +309,7 @@ class RedhatCertificate(Certificate):
     :type REDHAT: str
     """
 
-    REDHAT = '1.3.6.1.4.1.2312.9'
+    REDHAT = "1.3.6.1.4.1.2312.9"
 
     def __init__(self, *args, **kwargs):
         super(RedhatCertificate, self).__init__(*args, **kwargs)
@@ -329,10 +334,10 @@ class RedhatCertificate(Certificate):
     def bogus(self):
         bogus = Certificate.bogus(self)
         if self.serialNumber() < 1:
-            bogus.append('Serial number must be > 0')
-        cn = self.subject().get('CN')
+            bogus.append("Serial number must be > 0")
+        cn = self.subject().get("CN")
         if not cn:
-            bogus.append('Invalid common name: %s' % cn)
+            bogus.append("Invalid common name: %s" % cn)
         return bogus
 
 
@@ -352,7 +357,7 @@ class ProductCertificate(RedhatCertificate):
         :rtype: :class:`Product`
         """
         rhns = self.redhat()
-        products = rhns.find('1.*.1', 1)
+        products = rhns.find("1.*.1", 1)
         if products:
             p = products[0]
             oid = p[0]
@@ -370,7 +375,7 @@ class ProductCertificate(RedhatCertificate):
         """
         lst = []
         rhns = self.redhat()
-        for p in rhns.find('1.*.1'):
+        for p in rhns.find("1.*.1"):
             oid = p[0]
             root = oid.rtrim(1)
             product_id = oid[1]
@@ -384,27 +389,28 @@ class ProductCertificate(RedhatCertificate):
 
     def __str__(self):
         s = []
-        s.append('RAW:')
-        s.append('===================================')
+        s.append("RAW:")
+        s.append("===================================")
         s.append(Certificate.__str__(self))
-        s.append('MODEL:')
-        s.append('===================================')
-        s.append('Serial#: %s' % self.serialNumber())
-        s.append('Subject (CN): %s' % self.subject().get('CN'))
+        s.append("MODEL:")
+        s.append("===================================")
+        s.append("Serial#: %s" % self.serialNumber())
+        s.append("Subject (CN): %s" % self.subject().get("CN"))
         for p in self.getProducts():
             s.append(str(p))
-        return '\n'.join(s)
+        return "\n".join(s)
 
 
 class EntitlementCertificate(ProductCertificate):
     """
     Represents an entitlement certificate.
     """
+
     def _update(self, content):
         ProductCertificate._update(self, content)
 
         rhns = self.redhat()
-        order = rhns.find('4.1', 1, True)
+        order = rhns.find("4.1", 1, True)
         if order:
             p = order[0]
             oid = p[0]
@@ -418,15 +424,15 @@ class EntitlementCertificate(ProductCertificate):
         """
         Delete the file associated with this certificate.
         """
-        if hasattr(self, 'path'):
+        if hasattr(self, "path"):
             os.unlink(self.path)
             # we should keep the key path around, but
             # we dont seem to, but it's consistent
-            parts = self.path.split('.')
+            parts = self.path.split(".")
             key_path = "%s-key.pem" % parts[0]
             os.unlink(key_path)
         else:
-            raise Exception('no path, not deleted')
+            raise Exception("no path, not deleted")
 
     def getOrder(self):
         """
@@ -444,8 +450,7 @@ class EntitlementCertificate(ProductCertificate):
         :return: A list of entitlement object.
         :rtype: List of :class:`Entitlement`
         """
-        return self.getContentEntitlements() \
-            + self.getRoleEntitlements()
+        return self.getContentEntitlements() + self.getRoleEntitlements()
 
     # TODO: Not a great name, this is just getting content, self is
     # the entitlement.
@@ -458,7 +463,7 @@ class EntitlementCertificate(ProductCertificate):
         """
         lst = []
         rhns = self.redhat()
-        entitlements = rhns.find('2.*.1.1')
+        entitlements = rhns.find("2.*.1.1")
         for ent in entitlements:
             oid = ent[0]
             root = oid.rtrim(1)
@@ -475,7 +480,7 @@ class EntitlementCertificate(ProductCertificate):
         """
         lst = []
         rhns = self.redhat()
-        entitlements = rhns.find('3.*.1')
+        entitlements = rhns.find("3.*.1")
         for ent in entitlements:
             oid = ent[0]
             root = oid.rtrim(1)
@@ -494,7 +499,7 @@ class EntitlementCertificate(ProductCertificate):
     def bogus(self):
         bogus = ProductCertificate.bogus(self)
         if self.getOrder() is None:
-            bogus.append('No order infomation')
+            bogus.append("No order infomation")
         return bogus
 
     def __str__(self):
@@ -504,7 +509,7 @@ class EntitlementCertificate(ProductCertificate):
         for ent in self.getEntitlements():
             s.append(str(ent))
         s.append(str(order))
-        return '\n'.join(s)
+        return "\n".join(s)
 
 
 class Key(object):
@@ -558,7 +563,7 @@ class Key(object):
         :type pem_path: str
         :return: self
         """
-        f = open(pem_path, 'w')
+        f = open(pem_path, "w")
         f.write(self.content)
         self.path = pem_path
         f.close()
@@ -569,10 +574,10 @@ class Key(object):
         """
         Delete the file associated with this key.
         """
-        if hasattr(self, 'path'):
+        if hasattr(self, "path"):
             os.unlink(self.path)
         else:
-            raise Exception('no path, not deleted')
+            raise Exception("no path, not deleted")
 
     def __str__(self):
         return self.content
@@ -636,7 +641,7 @@ class DateRange(object):
         :return: True if valid.
         :rtype: boolean
         """
-        return (date >= self.begin() and date <= self.end())
+        return date >= self.begin() and date <= self.end()
 
     @deprecated
     def hasDate(self, date):
@@ -647,7 +652,7 @@ class DateRange(object):
         return self.has_now()
 
     def __str__(self):
-        return '\n\t%s\n\t%s' % (self._begin, self._end)
+        return "\n\t%s\n\t%s" % (self._begin, self._end)
 
 
 class GMT(tzinfo):
@@ -657,7 +662,7 @@ class GMT(tzinfo):
         return timedelta(seconds=0)
 
     def tzname(self, date_time):
-        return 'GMT'
+        return "GMT"
 
     def dst(self, date_time):
         return timedelta(seconds=0)
@@ -758,7 +763,7 @@ class Extensions(dict):
         if isinstance(root, str):
             root = OID(root)
         if root[-1]:
-            root = root.append('')
+            root = root.append("")
         ln = len(root) - 1
         for oid, v in self.find(root):
             trimmed = oid.ltrim(ln)
@@ -777,7 +782,7 @@ class Extensions(dict):
         s = []
         for item in list(self.items()):
             s.append('%s = "%s"' % item)
-        return '\n'.join(s)
+        return "\n".join(s)
 
 
 class OID(object):
@@ -790,11 +795,11 @@ class OID(object):
     :type WILDCARD: str
     """
 
-    WILDCARD = '*'
+    WILDCARD = "*"
 
     @classmethod
     def join(cls, *oid):
-        return '.'.join(oid)
+        return ".".join(oid)
 
     @classmethod
     def split(cls, s):
@@ -806,7 +811,7 @@ class OID(object):
         :return: A list of OID parts.
         :rtype: [str,]
         """
-        return s.split('.')
+        return s.split(".")
 
     def __init__(self, oid):
         """
@@ -889,11 +894,11 @@ class OID(object):
         # Matching the end
         if not oid[0]:
             oid = oid[1:]
-            parts = self.part[-len(oid):]
+            parts = self.part[-len(oid) :]
         # Matching the beginning
         elif not oid[-1]:
             oid = oid[:-1]
-            parts = self.part[:len(oid)]
+            parts = self.part[: len(oid)]
         # Full on match
         else:
             parts = self.part
@@ -904,7 +909,7 @@ class OID(object):
 
         for x in parts:
             val = oid[i]
-            if (x == val or val == self.WILDCARD):
+            if x == val or val == self.WILDCARD:
                 i += 1
             else:
                 return False
@@ -930,53 +935,52 @@ class OID(object):
         return self._hash
 
     def __eq__(self, other):
-        return (str(self) == str(other))
+        return str(self) == str(other)
 
     def __lt__(self, other):
         return str(self) < str(other)
 
     def __str__(self):
         if not self._str:
-            self._str = '.'.join(self.part)
+            self._str = ".".join(self.part)
 
         return self._str
 
 
 class Order(object):
-
     @deprecated
     def __init__(self, ext):
         self.ext = ext
 
     def getName(self):
-        return self.ext.get('1')
+        return self.ext.get("1")
 
     def getNumber(self):
-        return self.ext.get('2')
+        return self.ext.get("2")
 
     def getSku(self):
-        return self.ext.get('3')
+        return self.ext.get("3")
 
     def getSubscription(self):
-        return self.ext.get('4')
+        return self.ext.get("4")
 
     def getQuantity(self):
-        return self.ext.get('5')
+        return self.ext.get("5")
 
     def getStart(self):
-        return self.ext.get('6')
+        return self.ext.get("6")
 
     def getEnd(self):
-        return self.ext.get('7')
+        return self.ext.get("7")
 
     def getVirtLimit(self):
-        return self.ext.get('8')
+        return self.ext.get("8")
 
     def getSocketLimit(self):
-        return self.ext.get('9')
+        return self.ext.get("9")
 
     def getContract(self):
-        return self.ext.get('10')
+        return self.ext.get("10")
 
     def getQuantityUsed(self):
         """
@@ -986,65 +990,64 @@ class Order(object):
         and (b) sounds suspiciously like the total consumed quantity of the
         subscription.
         """
-        return self.ext.get('11')
+        return self.ext.get("11")
 
     def getWarningPeriod(self):
-        return self.ext.get('12')
+        return self.ext.get("12")
 
     def getAccountNumber(self):
-        return self.ext.get('13')
+        return self.ext.get("13")
 
     def getProvidesManagement(self):
-        return self.ext.get('14')
+        return self.ext.get("14")
 
     def getSupportLevel(self):
-        return self.ext.get('15')
+        return self.ext.get("15")
 
     def getSupportType(self):
-        return self.ext.get('16')
+        return self.ext.get("16")
 
     def getStackingId(self):
-        return self.ext.get('17')
+        return self.ext.get("17")
 
     def getVirtOnly(self):
-        return self.ext.get('18')
+        return self.ext.get("18")
 
     def __str__(self):
         s = []
-        s.append('Order {')
-        s.append('\tName .............. = %s' % self.getName())
-        s.append('\tNumber ............ = %s' % self.getNumber())
-        s.append('\tSKU ............... = %s' % self.getSku())
-        s.append('\tSubscription ...... = %s' % self.getSubscription())
-        s.append('\tQuantity .......... = %s' % self.getQuantity())
-        s.append('\tStart (Ent) ....... = %s' % self.getStart())
-        s.append('\tEnd (Ent) ......... = %s' % self.getEnd())
-        s.append('\tVirt Limit ........ = %s' % self.getVirtLimit())
-        s.append('\tSocket Limit ...... = %s' % self.getSocketLimit())
-        s.append('\tContract .......... = %s' % self.getContract())
-        s.append('\tWarning Period .... = %s' % self.getWarningPeriod())
-        s.append('\tAccount Number .... = %s' % self.getAccountNumber())
-        s.append('\tProvides Management = %s' % self.getProvidesManagement())
-        s.append('\tSupport Level ..... = %s' % self.getSupportLevel())
-        s.append('\tSupport Type ...... = %s' % self.getSupportType())
-        s.append('\tStacking Id ....... = %s' % self.getStackingId())
-        s.append('\tVirt Only ......... = %s' % self.getVirtOnly())
-        s.append('}')
-        return '\n'.join(s)
+        s.append("Order {")
+        s.append("\tName .............. = %s" % self.getName())
+        s.append("\tNumber ............ = %s" % self.getNumber())
+        s.append("\tSKU ............... = %s" % self.getSku())
+        s.append("\tSubscription ...... = %s" % self.getSubscription())
+        s.append("\tQuantity .......... = %s" % self.getQuantity())
+        s.append("\tStart (Ent) ....... = %s" % self.getStart())
+        s.append("\tEnd (Ent) ......... = %s" % self.getEnd())
+        s.append("\tVirt Limit ........ = %s" % self.getVirtLimit())
+        s.append("\tSocket Limit ...... = %s" % self.getSocketLimit())
+        s.append("\tContract .......... = %s" % self.getContract())
+        s.append("\tWarning Period .... = %s" % self.getWarningPeriod())
+        s.append("\tAccount Number .... = %s" % self.getAccountNumber())
+        s.append("\tProvides Management = %s" % self.getProvidesManagement())
+        s.append("\tSupport Level ..... = %s" % self.getSupportLevel())
+        s.append("\tSupport Type ...... = %s" % self.getSupportType())
+        s.append("\tStacking Id ....... = %s" % self.getStackingId())
+        s.append("\tVirt Only ......... = %s" % self.getVirtOnly())
+        s.append("}")
+        return "\n".join(s)
 
 
 class Product(object):
-
     @deprecated
     def __init__(self, p_hash, ext):
         self.hash = p_hash
         self.ext = ext
-        self.name = self.ext.get('1')
-        self.version = self.ext.get('2')
-        self.arch = self.ext.get('3')
-        self.provided_tags = parse_tags(self.ext.get('4'))
-        self.brand_type = self.ext.get('5')
-        self.brand_name = self.ext.get('6')
+        self.name = self.ext.get("1")
+        self.version = self.ext.get("2")
+        self.arch = self.ext.get("3")
+        self.provided_tags = parse_tags(self.ext.get("4"))
+        self.brand_type = self.ext.get("5")
+        self.brand_name = self.ext.get("6")
 
     def getHash(self):
         return self.hash
@@ -1068,45 +1071,43 @@ class Product(object):
         return self.brand_name
 
     def __eq__(self, rhs):
-        return (self.getHash() == rhs.getHash())
+        return self.getHash() == rhs.getHash()
 
     def __str__(self):
         s = []
-        s.append('Product {')
-        s.append('\tHash ......... = %s' % self.getHash())
-        s.append('\tName ......... = %s' % self.getName())
-        s.append('\tVersion ...... = %s' % self.getVersion())
-        s.append('\tArchitecture . = %s' % self.getArch())
-        s.append('\tProvided Tags  = %s' % self.getProvidedTags())
-        s.append('\tBrand Type     = %s' % self.getBrandType())
-        s.append('\tBrand Name     = %s' % self.getBrandName())
-        s.append('}')
-        return '\n'.join(s)
+        s.append("Product {")
+        s.append("\tHash ......... = %s" % self.getHash())
+        s.append("\tName ......... = %s" % self.getName())
+        s.append("\tVersion ...... = %s" % self.getVersion())
+        s.append("\tArchitecture . = %s" % self.getArch())
+        s.append("\tProvided Tags  = %s" % self.getProvidedTags())
+        s.append("\tBrand Type     = %s" % self.getBrandType())
+        s.append("\tBrand Name     = %s" % self.getBrandName())
+        s.append("}")
+        return "\n".join(s)
 
     def __repr__(self):
         return str(self)
 
 
 class Entitlement(object):
-
     def __init__(self, ext):
         self.ext = ext
 
 
 class Content(Entitlement):
-
     def __init__(self, ext):
         Entitlement.__init__(self, ext)
-        self.name = self.ext.get('1')
-        self.label = self.ext.get('2')
-        self.quantity = self.ext.get('3')
-        self.flex_quantity = self.ext.get('4')
-        self.vendor = self.ext.get('5')
-        self.url = self.ext.get('6')
-        self.gpg = self.ext.get('7')
-        self.enabled = self.ext.get('8')
-        self.metadata_expire = self.ext.get('9')
-        self.required_tags = parse_tags(self.ext.get('10'))
+        self.name = self.ext.get("1")
+        self.label = self.ext.get("2")
+        self.quantity = self.ext.get("3")
+        self.flex_quantity = self.ext.get("4")
+        self.vendor = self.ext.get("5")
+        self.url = self.ext.get("6")
+        self.gpg = self.ext.get("7")
+        self.enabled = self.ext.get("8")
+        self.metadata_expire = self.ext.get("9")
+        self.required_tags = parse_tags(self.ext.get("10"))
 
     def getName(self):
         return self.name
@@ -1143,19 +1144,19 @@ class Content(Entitlement):
 
     def __str__(self):
         s = []
-        s.append('Entitlement (content) {')
-        s.append('\tName .......... = %s' % self.getName())
-        s.append('\tLabel ......... = %s' % self.getLabel())
-        s.append('\tQuantity ...... = %s' % self.getQuantity())
-        s.append('\tFlex Quantity . = %s' % self.getFlexQuantity())
-        s.append('\tVendor ........ = %s' % self.getVendor())
-        s.append('\tURL ........... = %s' % self.getUrl())
-        s.append('\tGPG Key ....... = %s' % self.getGpg())
-        s.append('\tEnabled ....... = %s' % self.getEnabled())
-        s.append('\tMetadata Expire = %s' % self.getMetadataExpire())
-        s.append('\tRequired Tags . = %s' % self.getRequiredTags())
-        s.append('}')
-        return '\n'.join(s)
+        s.append("Entitlement (content) {")
+        s.append("\tName .......... = %s" % self.getName())
+        s.append("\tLabel ......... = %s" % self.getLabel())
+        s.append("\tQuantity ...... = %s" % self.getQuantity())
+        s.append("\tFlex Quantity . = %s" % self.getFlexQuantity())
+        s.append("\tVendor ........ = %s" % self.getVendor())
+        s.append("\tURL ........... = %s" % self.getUrl())
+        s.append("\tGPG Key ....... = %s" % self.getGpg())
+        s.append("\tEnabled ....... = %s" % self.getEnabled())
+        s.append("\tMetadata Expire = %s" % self.getMetadataExpire())
+        s.append("\tRequired Tags . = %s" % self.getRequiredTags())
+        s.append("}")
+        return "\n".join(s)
 
     def __repr__(self):
         return str(self)
@@ -1165,23 +1166,22 @@ class Content(Entitlement):
 
 
 class Role(Entitlement):
-
     def getName(self):
-        return self.ext.get('1')
+        return self.ext.get("1")
 
     def getDescription(self):
-        return self.ext.get('2')
+        return self.ext.get("2")
 
     def __eq__(self, rhs):
-        return (self.getName() == rhs.getName())
+        return self.getName() == rhs.getName()
 
     def __str__(self):
         s = []
-        s.append('Entitlement (role) {')
-        s.append('\tName ......... = %s' % self.getName())
-        s.append('\tDescription .. = %s' % self.getDescription())
-        s.append('}')
-        return '\n'.join(s)
+        s.append("Entitlement (role) {")
+        s.append("\tName ......... = %s" % self.getName())
+        s.append("\tDescription .. = %s" % self.getDescription())
+        s.append("}")
+        return "\n".join(s)
 
     def __repr__(self):
         return str(self)

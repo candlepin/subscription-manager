@@ -15,8 +15,14 @@
 from subscription_manager import managercli
 from subscription_manager import injection as inj
 
-from .stubs import StubEntitlementDirectory, StubProductDirectory, StubEntActionInvoker, \
-    StubEntitlementCertificate, StubProduct, StubPool
+from .stubs import (
+    StubEntitlementDirectory,
+    StubProductDirectory,
+    StubEntActionInvoker,
+    StubEntitlementCertificate,
+    StubProduct,
+    StubPool,
+)
 from . import fixture
 
 
@@ -28,26 +34,28 @@ class CliRemoveTests(fixture.SubManFixture):
         mock_identity = self._inject_mock_valid_consumer()
         managercli.EntCertActionInvoker = StubEntActionInvoker
 
-        cmd.main(['--all'])
+        cmd.main(["--all"])
         self.assertEqual(cmd.cp.called_unbind_uuid, mock_identity.uuid)
 
-        serial1 = '123456'
-        cmd.main(['--serial=%s' % serial1])
+        serial1 = "123456"
+        cmd.main(["--serial=%s" % serial1])
         self.assertEqual(cmd.cp.called_unbind_serial, [serial1])
         cmd.cp.reset()
 
-        serial2 = '789012'
-        cmd.main(['--serial=%s' % serial1, '--serial=%s' % serial2])
+        serial2 = "789012"
+        cmd.main(["--serial=%s" % serial1, "--serial=%s" % serial2])
         self.assertEqual(cmd.cp.called_unbind_serial, [serial1, serial2])
         cmd.cp.reset()
 
-        pool_id1 = '39993922b'
-        cmd.main(['--serial=%s' % serial1, '--serial=%s' % serial2, '--pool=%s' % pool_id1, '--pool=%s' % pool_id1])
+        pool_id1 = "39993922b"
+        cmd.main(
+            ["--serial=%s" % serial1, "--serial=%s" % serial2, "--pool=%s" % pool_id1, "--pool=%s" % pool_id1]
+        )
         self.assertEqual(cmd.cp.called_unbind_serial, [serial1, serial2])
         self.assertEqual(cmd.cp.called_unbind_pool_id, [pool_id1])
 
     def test_unsubscribe_unregistered(self):
-        prod = StubProduct('stub_product')
+        prod = StubProduct("stub_product")
         ent = StubEntitlementCertificate(prod)
 
         inj.provide(inj.ENT_DIR, StubEntitlementDirectory([ent]))
@@ -56,12 +64,12 @@ class CliRemoveTests(fixture.SubManFixture):
 
         self._inject_mock_invalid_consumer()
 
-        cmd.main(['--all'])
+        cmd.main(["--all"])
         self.assertTrue(cmd.entitlement_dir.list_called)
         self.assertTrue(ent.is_deleted)
 
-        prod = StubProduct('stub_product')
-        pool = StubPool('stub_pool')
+        prod = StubProduct("stub_product")
+        pool = StubPool("stub_pool")
         ent1 = StubEntitlementCertificate(prod)
         ent2 = StubEntitlementCertificate(prod)
         ent3 = StubEntitlementCertificate(prod)
@@ -71,7 +79,7 @@ class CliRemoveTests(fixture.SubManFixture):
         inj.provide(inj.PROD_DIR, StubProductDirectory([]))
         cmd = managercli.RemoveCommand()
 
-        cmd.main(['--serial=%s' % ent1.serial, '--serial=%s' % ent3.serial, '--pool=%s' % ent4.pool.id])
+        cmd.main(["--serial=%s" % ent1.serial, "--serial=%s" % ent3.serial, "--pool=%s" % ent4.pool.id])
         self.assertTrue(cmd.entitlement_dir.list_called)
         self.assertTrue(ent1.is_deleted)
         self.assertFalse(ent2.is_deleted)

@@ -23,8 +23,15 @@ from datetime import datetime, timedelta
 from rhsm import _certificate
 
 from rhsm.connection import safe_int
-from rhsm.certificate import Extensions, OID, DateRange, GMT, \
-    get_datetime_from_x509, parse_tags, CertificateException
+from rhsm.certificate import (
+    Extensions,
+    OID,
+    DateRange,
+    GMT,
+    get_datetime_from_x509,
+    parse_tags,
+    CertificateException,
+)
 from rhsm.pathtree import PathTree
 from rhsm import ourjson as json
 
@@ -64,7 +71,7 @@ class _CertFactory(object):
         Create appropriate certificate object from a PEM file on disk.
         """
         try:
-            pem = open(path, 'r').read()
+            pem = open(path, "r").read()
         except IOError as err:
             raise CertificateException("Error loading certificate: %s" % err)
         return self._read_x509(_certificate.load(path), path, pem)
@@ -94,7 +101,7 @@ class _CertFactory(object):
             # Check the certificate version, absence of the extension implies v1.0:
             cert_version_str = "1.0"
             if EXT_CERT_VERSION in extensions:
-                cert_version_str = extensions[EXT_CERT_VERSION].decode('utf-8')
+                cert_version_str = extensions[EXT_CERT_VERSION].decode("utf-8")
 
             version = Version(cert_version_str)
             if version.major == 1:
@@ -121,13 +128,13 @@ class _CertFactory(object):
 
     def _read_alt_name(self, x509):
         """Try to read subjectAltName from certificate"""
-        alt_name = x509.get_extension(name='subjectAltName')
+        alt_name = x509.get_extension(name="subjectAltName")
         # When certificate does not include subjectAltName, then
         # return emtpy string
         if alt_name is None:
-            return ''
+            return ""
         else:
-            return alt_name.decode('utf-8')
+            return alt_name.decode("utf-8")
 
     def _read_issuer(self, x509):
         return x509.get_issuer()
@@ -191,25 +198,25 @@ class _CertFactory(object):
         certificate.
         """
         products = []
-        for prod_namespace in extensions.find('1.*.1'):
+        for prod_namespace in extensions.find("1.*.1"):
             oid = prod_namespace[0]
             root = oid.rtrim(1)
             product_id = oid[1]
             ext = extensions.branch(root)
             product_data = {
-                'name': ext.get('1'),
-                'version': ext.get('2'),
-                'architectures': ext.get('3'),
-                'provided_tags': ext.get('4'),
+                "name": ext.get("1"),
+                "version": ext.get("2"),
+                "architectures": ext.get("3"),
+                "provided_tags": ext.get("4"),
                 # not populated, only added for parity with
                 # v3 product objects
-                'brand_type': ext.get('5'),
-                'brand_name': ext.get('6'),
+                "brand_type": ext.get("5"),
+                "brand_name": ext.get("6"),
             }
             for key, value in list(product_data.items()):
                 if value is not None:
-                    product_data[key] = value.decode('utf-8')
-            product_data['provided_tags'] = parse_tags(product_data['provided_tags'])
+                    product_data[key] = value.decode("utf-8")
+            product_data["provided_tags"] = parse_tags(product_data["provided_tags"])
             products.append(Product(id=product_id, **product_data))
         return products
 
@@ -217,26 +224,26 @@ class _CertFactory(object):
         order_extensions = extensions.branch(ORDER_NAMESPACE)
         # TODO: implement reading syspurpose attributes: usage, roles and addons, when they are implemented
         order_data = {
-            'name': order_extensions.get('1'),
-            'number': order_extensions.get('2'),
-            'sku': order_extensions.get('3'),
-            'subscription': order_extensions.get('4'),
-            'quantity': order_extensions.get('5'),
-            'virt_limit': order_extensions.get('8'),
-            'socket_limit': order_extensions.get('9'),
-            'contract': order_extensions.get('10'),
-            'quantity_used': order_extensions.get('11'),
-            'warning_period': order_extensions.get('12'),
-            'account': order_extensions.get('13'),
-            'provides_management': order_extensions.get('14'),
-            'service_level': order_extensions.get('15'),
-            'service_type': order_extensions.get('16'),
-            'stacking_id': order_extensions.get('17'),
-            'virt_only': order_extensions.get('18'),
+            "name": order_extensions.get("1"),
+            "number": order_extensions.get("2"),
+            "sku": order_extensions.get("3"),
+            "subscription": order_extensions.get("4"),
+            "quantity": order_extensions.get("5"),
+            "virt_limit": order_extensions.get("8"),
+            "socket_limit": order_extensions.get("9"),
+            "contract": order_extensions.get("10"),
+            "quantity_used": order_extensions.get("11"),
+            "warning_period": order_extensions.get("12"),
+            "account": order_extensions.get("13"),
+            "provides_management": order_extensions.get("14"),
+            "service_level": order_extensions.get("15"),
+            "service_type": order_extensions.get("16"),
+            "stacking_id": order_extensions.get("17"),
+            "virt_only": order_extensions.get("18"),
         }
         for key, value in list(order_data.items()):
             if value is not None:
-                order_data[key] = value.decode('utf-8')
+                order_data[key] = value.decode("utf-8")
         order = Order(**order_data)
         return order
 
@@ -247,20 +254,20 @@ class _CertFactory(object):
             oid = ent[0].rtrim(1)
             content_ext = extensions.branch(oid)
             content_data = {
-                'content_type': extensions.get(oid),
-                'name': content_ext.get('1'),
-                'label': content_ext.get('2'),
-                'vendor': content_ext.get('5'),
-                'url': content_ext.get('6'),
-                'gpg': content_ext.get('7'),
-                'enabled': content_ext.get('8'),
-                'metadata_expire': content_ext.get('9'),
-                'required_tags': content_ext.get('10'),
+                "content_type": extensions.get(oid),
+                "name": content_ext.get("1"),
+                "label": content_ext.get("2"),
+                "vendor": content_ext.get("5"),
+                "url": content_ext.get("6"),
+                "gpg": content_ext.get("7"),
+                "enabled": content_ext.get("8"),
+                "metadata_expire": content_ext.get("9"),
+                "required_tags": content_ext.get("10"),
             }
             for key, value in list(content_data.items()):
                 if value is not None:
-                    content_data[key] = value.decode('utf-8')
-            content_data['required_tags'] = parse_tags(content_data['required_tags'])
+                    content_data[key] = value.decode("utf-8")
+            content_data["required_tags"] = parse_tags(content_data["required_tags"])
             content.append(Content(**content_data))
         return content
 
@@ -269,7 +276,7 @@ class _CertFactory(object):
         if EXT_ORDER_NAME in extensions:
             return ENTITLEMENT_CERT
         # If there is no order, but there are products, must be a product cert:
-        elif len(extensions.find('1.*.1', 1, True)) > 0:
+        elif len(extensions.find("1.*.1", 1, True)) > 0:
             return PRODUCT_CERT
         # Otherwise we assume it's a plain identity certificate:
         else:
@@ -315,35 +322,35 @@ class _CertFactory(object):
         return cert
 
     def _parse_v3_order(self, payload):
-        sub = payload['subscription']
-        order = payload['order']
+        sub = payload["subscription"]
+        order = payload["order"]
 
         service_level = None
         service_type = None
-        if 'service' in sub:
-            service_level = sub['service'].get('level', None)
-            service_type = sub['service'].get('type', None)
+        if "service" in sub:
+            service_level = sub["service"].get("level", None)
+            service_type = sub["service"].get("type", None)
 
         return Order(
-            name=sub['name'],
-            number=order.get('number', None),
-            sku=sub.get('sku', None),
-            quantity=order.get('quantity', None),
-            socket_limit=sub.get('sockets', None),
-            contract=order.get('contract', None),
-            quantity_used=payload.get('quantity', 1),
-            warning_period=sub.get('warning', 0),
-            account=order.get('account', None),
-            provides_management=sub.get('management', False),
+            name=sub["name"],
+            number=order.get("number", None),
+            sku=sub.get("sku", None),
+            quantity=order.get("quantity", None),
+            socket_limit=sub.get("sockets", None),
+            contract=order.get("contract", None),
+            quantity_used=payload.get("quantity", 1),
+            warning_period=sub.get("warning", 0),
+            account=order.get("account", None),
+            provides_management=sub.get("management", False),
             service_level=service_level,
             service_type=service_type,
-            stacking_id=sub.get('stacking_id', None),
-            virt_only=sub.get('virt_only', False),
-            ram_limit=sub.get('ram', None),
-            core_limit=sub.get('cores', None),
-            roles=sub.get('roles', None),
-            usage=sub.get('usage', None),
-            addons=sub.get('addons', None)
+            stacking_id=sub.get("stacking_id", None),
+            virt_only=sub.get("virt_only", False),
+            ram_limit=sub.get("ram", None),
+            core_limit=sub.get("cores", None),
+            roles=sub.get("roles", None),
+            usage=sub.get("usage", None),
+            addons=sub.get("addons", None),
         )
 
     def _parse_v3_products(self, payload):
@@ -351,18 +358,20 @@ class _CertFactory(object):
         Returns an ordered list of all the product data in the
         certificate.
         """
-        product_payload = payload['products']
+        product_payload = payload["products"]
         products = []
         for product in product_payload:
 
-            products.append(Product(
-                id=product['id'],
-                name=product['name'],
-                version=product.get('version', None),
-                architectures=product.get('architectures', []),
-                brand_type=product.get('brand_type', None),
-                brand_name=product.get('brand_name', None)
-            ))
+            products.append(
+                Product(
+                    id=product["id"],
+                    name=product["name"],
+                    version=product.get("version", None),
+                    architectures=product.get("architectures", []),
+                    brand_type=product.get("brand_type", None),
+                    brand_name=product.get("brand_name", None),
+                )
+            )
             # TODO: skipping provided tags here, we don't yet generate
             # v3 product certs, we may never, which is the only place provided
             # tags can exist.
@@ -370,26 +379,28 @@ class _CertFactory(object):
 
     def _parse_v3_content(self, payload):
         content = []
-        for product in payload['products']:
-            for c in product['content']:
-                content.append(Content(
-                    content_type=c['type'],
-                    name=c['name'],
-                    label=c['label'],
-                    vendor=c.get('vendor', None),
-                    url=c.get('path', None),
-                    gpg=c.get('gpg_url', None),
-                    enabled=c.get('enabled', True),
-                    metadata_expire=c.get('metadata_expire', None),
-                    required_tags=c.get('required_tags', []),
-                    arches=c.get('arches', []),
-                ))
+        for product in payload["products"]:
+            for c in product["content"]:
+                content.append(
+                    Content(
+                        content_type=c["type"],
+                        name=c["name"],
+                        label=c["label"],
+                        vendor=c.get("vendor", None),
+                        url=c.get("path", None),
+                        gpg=c.get("gpg_url", None),
+                        enabled=c.get("enabled", True),
+                        metadata_expire=c.get("metadata_expire", None),
+                        required_tags=c.get("required_tags", []),
+                        arches=c.get("arches", []),
+                    )
+                )
         return content
 
     def _parse_v3_pool(self, payload):
-        pool = payload.get('pool', None)
+        pool = payload.get("pool", None)
         if pool:
-            return Pool(id=pool['id'])
+            return Pool(id=pool["id"])
         return None
 
     def _decompress_payload(self, payload):
@@ -400,16 +411,16 @@ class _CertFactory(object):
         resulting dict.
         """
         try:
-            decompressed = zlib.decompress(payload).decode('utf-8')
+            decompressed = zlib.decompress(payload).decode("utf-8")
             return json.loads(decompressed)
         except Exception as e:
             log.exception(e)
-            raise CertificateException("Error decompressing/parsing "
-                                       "certificate payload.")
+            raise CertificateException("Error decompressing/parsing " "certificate payload.")
 
 
 class Version(object):
-    """ Small wrapper for version string comparisons. """
+    """Small wrapper for version string comparisons."""
+
     def __init__(self, version_str):
         self.version_str = version_str
         self.segments = version_str.split(".")
@@ -427,7 +438,6 @@ class Version(object):
 
 
 class _Extensions2(Extensions):
-
     def _parse(self, x509):
         """
         Override parent method for an X509 object from the new C wrapper.
@@ -439,9 +449,20 @@ class _Extensions2(Extensions):
 
 
 class Certificate(object):
-    """ Parent class of all x509 certificate types. """
-    def __init__(self, x509=None, path=None, version=None, serial=None, start=None,
-                 end=None, subject=None, pem=None, issuer=None):
+    """Parent class of all x509 certificate types."""
+
+    def __init__(
+        self,
+        x509=None,
+        path=None,
+        version=None,
+        serial=None,
+        start=None,
+        end=None,
+        subject=None,
+        pem=None,
+        issuer=None,
+    ):
 
         # The rhsm._certificate X509 object for this certificate.
         # WARNING: May be None in tests
@@ -496,10 +517,10 @@ class Certificate(object):
         return self.end > other.end
 
     def __eq__(self, other):
-        return hasattr(other, 'serial') and self.serial == other.serial
+        return hasattr(other, "serial") and self.serial == other.serial
 
     def __ne__(self, other):
-        return not hasattr(other, 'serial') or self.serial != other.serial
+        return not hasattr(other, "serial") or self.serial != other.serial
 
     def __hash__(self):
         return self.serial
@@ -508,7 +529,7 @@ class Certificate(object):
         """
         Write the certificate to disk.
         """
-        f = open(path, 'w')
+        f = open(path, "w")
         # if we were given the original pem, preserve it
         # ie for certv3 detached format.
         if self.pem is not None:
@@ -526,7 +547,7 @@ class Certificate(object):
         if self.path:
             os.unlink(self.path)
         else:
-            raise CertificateException('Certificate has no path, cannot delete.')
+            raise CertificateException("Certificate has no path, cannot delete.")
 
 
 class IdentityCertificate(Certificate):
@@ -547,7 +568,6 @@ class ProductCertificate(Certificate):
 
 
 class EntitlementCertificate(ProductCertificate):
-
     def __init__(self, order=None, content=None, pool=None, extensions=None, **kwargs):
         ProductCertificate.__init__(self, **kwargs)
         self.order = order
@@ -559,9 +579,9 @@ class EntitlementCertificate(ProductCertificate):
     @property
     def entitlement_type(self):
         if self.extensions.get(EXT_ENT_TYPE):
-            return self.extensions.get(EXT_ENT_TYPE).decode('utf-8')
+            return self.extensions.get(EXT_ENT_TYPE).decode("utf-8")
         else:
-            return 'Basic'
+            return "Basic"
 
     @property
     def _path_tree(self):
@@ -573,8 +593,7 @@ class EntitlementCertificate(ProductCertificate):
         """
         # This data was not present in certificates prior to v3.
         if self.version.major < 3:
-            raise AttributeError(
-                'path tree not used for v%d certs' % self.version.major)
+            raise AttributeError("path tree not used for v%d certs" % self.version.major)
         if not self._path_tree_object:
             # generate and cache the tree
             data = self.extensions[EXT_ENT_PAYLOAD]
@@ -629,12 +648,12 @@ class EntitlementCertificate(ProductCertificate):
         :return:    True iff the path matches, else False
         :rtype:     bool
         """
-        path = path.strip('/')
+        path = path.strip("/")
         valid = False
         for ext_oid, oid_url in list(self.extensions.items()):
-            oid_url = oid_url.decode('utf-8')
+            oid_url = oid_url.decode("utf-8")
             # if this is a download URL
-            if ext_oid.match(OID('2.')) and ext_oid.match(OID('.1.6')):
+            if ext_oid.match(OID("2.")) and ext_oid.match(OID(".1.6")):
                 if self._validate_v1_url(oid_url, path):
                     valid = True
                     break
@@ -663,7 +682,7 @@ class EntitlementCertificate(ProductCertificate):
         """
         # Remove initial and trailing '/', and substitute the $variables for
         # equivalent regular expressions in oid_url.
-        oid_re = re.sub(r'\$[^/]+(/|$)', '[^/]+/', oid_url.strip('/'))
+        oid_re = re.sub(r"\$[^/]+(/|$)", "[^/]+/", oid_url.strip("/"))
         return re.match(oid_re, dest) is not None
 
     def delete(self):
@@ -686,9 +705,11 @@ class EntitlementCertificate(ProductCertificate):
             key_filename = "%s-key.%s" % tuple(cert_filename.rsplit(".", 1))
         except TypeError as e:
             log.exception(e)
-            raise CertificateException("Entitlement certificate path \"%s\" is not in "
-                                       "in the expected format so the key file path "
-                                       "could not be based on it." % self.path)
+            raise CertificateException(
+                'Entitlement certificate path "%s" is not in '
+                "in the expected format so the key file path "
+                "could not be based on it." % self.path
+            )
         key_path = os.path.join(dir_path, key_filename)
         return key_path
 
@@ -697,8 +718,17 @@ class Product(object):
     """
     Represents the product information from a certificate.
     """
-    def __init__(self, id=None, name=None, version=None, architectures=None,
-                 provided_tags=None, brand_type=None, brand_name=None):
+
+    def __init__(
+        self,
+        id=None,
+        name=None,
+        version=None,
+        architectures=None,
+        provided_tags=None,
+        brand_type=None,
+        brand_name=None,
+    ):
 
         if name is None:
             raise CertificateException("Product missing name")
@@ -725,7 +755,7 @@ class Product(object):
         self.brand_name = brand_name
 
     def __eq__(self, other):
-        return (self.id == other.id)
+        return self.id == other.id
 
 
 class Order(object):
@@ -734,13 +764,30 @@ class Order(object):
     originated from.
     """
 
-    def __init__(self, name=None, number=None, sku=None, subscription=None,
-                 quantity=None, virt_limit=None, socket_limit=None,
-                 contract=None, quantity_used=None, warning_period=None,
-                 account=None, provides_management=None, service_level=None,
-                 service_type=None, stacking_id=None, virt_only=None,
-                 ram_limit=None, core_limit=None, roles=None, usage=None,
-                 addons=None):
+    def __init__(
+        self,
+        name=None,
+        number=None,
+        sku=None,
+        subscription=None,
+        quantity=None,
+        virt_limit=None,
+        socket_limit=None,
+        contract=None,
+        quantity_used=None,
+        warning_period=None,
+        account=None,
+        provides_management=None,
+        service_level=None,
+        service_type=None,
+        stacking_id=None,
+        virt_only=None,
+        ram_limit=None,
+        core_limit=None,
+        roles=None,
+        usage=None,
+        addons=None,
+    ):
 
         self.name = name
         self.number = number  # order number
@@ -778,14 +825,23 @@ class Order(object):
         self.core_limit = safe_int(core_limit, None)
 
     def __str__(self):
-        return "<Order: name=%s number=%s sku=%s>" % \
-               (self.name, self.number, self.sku)
+        return "<Order: name=%s number=%s sku=%s>" % (self.name, self.number, self.sku)
 
 
 class Content(object):
-
-    def __init__(self, content_type=None, name=None, label=None, vendor=None, url=None,
-                 gpg=None, enabled=None, metadata_expire=None, required_tags=None, arches=None):
+    def __init__(
+        self,
+        content_type=None,
+        name=None,
+        label=None,
+        vendor=None,
+        url=None,
+        gpg=None,
+        enabled=None,
+        metadata_expire=None,
+        required_tags=None,
+        arches=None,
+    ):
 
         if (name is None) or (label is None):
             raise CertificateException("Content missing name/label")
@@ -800,9 +856,8 @@ class Content(object):
         if not content_type:
             raise CertificateException("Content does not have a type set.")
 
-        if (enabled not in (None, 0, 1, "0", "1")):
-            raise CertificateException("Invalid content enabled setting: %s"
-                                       % enabled)
+        if enabled not in (None, 0, 1, "0", "1"):
+            raise CertificateException("Invalid content enabled setting: %s" % enabled)
 
         # Convert possible incoming None or string (0/1) to a boolean:
         # If enabled isn't specified in cert we assume True.
@@ -819,8 +874,12 @@ class Content(object):
         return isinstance(other, self.__class__) and (self.label == other.label)
 
     def __str__(self):
-        return "<Content: content_type=%s name=%s label=%s enabled=%s>" % \
-               (self.content_type, self.name, self.label, self.enabled)
+        return "<Content: content_type=%s name=%s label=%s enabled=%s>" % (
+            self.content_type,
+            self.name,
+            self.label,
+            self.enabled,
+        )
 
     def __hash__(self):
         return hash(self.label)
@@ -830,10 +889,11 @@ class Pool(object):
     """
     Represents the pool an entitlement originates from.
     """
+
     def __init__(self, id=None):
         if id is None:
             raise CertificateException("Pool is missing ID")
         self.id = id
 
     def __eq__(self, other):
-        return (self.id == other.id)
+        return self.id == other.id

@@ -21,9 +21,7 @@ from uuid import UUID
 
 ARCHES_WITHOUT_DMI = ["ppc64", "ppc64le", "s390x"]
 ARCHES_WITH_ALTERNATE_UUID_LOC = ["aarch64"]
-ARCH_UUID_LOCATION = {
-    "aarch64": "/sys/devices/virtual/dmi/id/product_uuid"
-}
+ARCH_UUID_LOCATION = {"aarch64": "/sys/devices/virtual/dmi/id/product_uuid"}
 
 log = logging.getLogger(__name__)
 
@@ -34,6 +32,7 @@ class NullFirmwareInfoCollector(object):
     """Default provider for platform without a specific platform info provider.
 
     ie, all platforms except those with DMI (ie, intel platforms)"""
+
     def __init__(self, *args, **kwargs):
         self.info = {}
 
@@ -49,22 +48,21 @@ class UuidFirmwareInfoCollector(collector.FactsCollector):
 
     def __init__(self, prefix=None, testing=None, collected_hw_info=None):
         super(UuidFirmwareInfoCollector, self).__init__(
-            prefix=prefix,
-            testing=testing,
-            collected_hw_info=collected_hw_info
+            prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
         )
 
     def get_all(self):
         uuidinfo = {}
         try:
-            with open(ARCH_UUID_LOCATION[self.arch], 'r') as uuid_file:
+            with open(ARCH_UUID_LOCATION[self.arch], "r") as uuid_file:
                 uuid = uuid_file.read().strip()
             if uuid:
                 UUID(uuid)
-                uuidinfo['dmi.system.uuid'] = uuid
+                uuidinfo["dmi.system.uuid"] = uuid
         except ValueError as err:
-            log.error('Wrong UUID value: %s read from: %s, error: %s' %
-                      (uuid, ARCH_UUID_LOCATION[self.arch], err))
+            log.error(
+                "Wrong UUID value: %s read from: %s, error: %s" % (uuid, ARCH_UUID_LOCATION[self.arch], err)
+            )
         except Exception as e:
             log.warning("Error reading system uuid information: %s", e, exc_info=True)
         return uuidinfo
@@ -73,9 +71,7 @@ class UuidFirmwareInfoCollector(collector.FactsCollector):
 class FirmwareCollector(collector.FactsCollector):
     def __init__(self, prefix=None, testing=None, collected_hw_info=None):
         super(FirmwareCollector, self).__init__(
-            prefix=prefix,
-            testing=testing,
-            collected_hw_info=collected_hw_info
+            prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
         )
 
     def get_firmware_info(self):
@@ -84,9 +80,7 @@ class FirmwareCollector(collector.FactsCollector):
         This is only dmi/smbios data for now (which isn't on ppc/s390).
         """
         firmware_info_collector = get_firmware_collector(
-            arch=self.arch,
-            prefix=self.prefix,
-            testing=self.testing
+            arch=self.arch, prefix=self.prefix, testing=self.testing
         )
 
         # Pass in collected hardware so DMI etc can potentially override it
@@ -108,8 +102,7 @@ class FirmwareCollector(collector.FactsCollector):
 #             version of dmidecode (> 3.0), most of the dmi info is readable
 #             by a user. However, the system-uuid is not readable by a user,
 #             and that is pretty much the only thing from DMI we care about,
-def get_firmware_collector(arch, prefix=None, testing=None,
-                           collected_hw_info=None):
+def get_firmware_collector(arch, prefix=None, testing=None, collected_hw_info=None):
     """
     Return a class that can be used to get firmware info specific to
     this systems platform.
@@ -129,15 +122,14 @@ def get_firmware_collector(arch, prefix=None, testing=None,
     else:
         try:
             import dmidecode  # noqa
+
             firmware_provider_class = dmiinfo.DmiFirmwareInfoCollector
         except ImportError as exc:
             log.debug(f"Cannot import dmidecode: {exc}")
             firmware_provider_class = NullFirmwareInfoCollector
 
     firmware_provider = firmware_provider_class(
-        prefix=prefix,
-        testing=testing,
-        collected_hw_info=collected_hw_info
+        prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
     )
 
     return firmware_provider

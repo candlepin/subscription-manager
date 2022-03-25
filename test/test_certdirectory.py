@@ -19,10 +19,14 @@ import os
 from mock import patch, MagicMock
 from shutil import rmtree
 
-from .stubs import StubProduct, StubEntitlementCertificate, \
-    StubProductCertificate
-from subscription_manager.certdirectory import Path, EntitlementDirectory, \
-    ProductDirectory, ProductCertificateDirectory, Directory
+from .stubs import StubProduct, StubEntitlementCertificate, StubProductCertificate
+from subscription_manager.certdirectory import (
+    Path,
+    EntitlementDirectory,
+    ProductDirectory,
+    ProductCertificateDirectory,
+    Directory,
+)
 from subscription_manager.repolib import YumRepoFile
 from subscription_manager.productid import ProductDatabase
 
@@ -34,7 +38,7 @@ class PathTests(unittest.TestCase):
     """
 
     def setUp(self):
-        patcher = patch('os.path.exists')
+        patcher = patch("os.path.exists")
         self.addCleanup(patcher.stop)
         mock_exists = patcher.start()
         mock_exists.return_value = True
@@ -45,52 +49,47 @@ class PathTests(unittest.TestCase):
     def test_normal_root(self):
         # this is the default, but have to set it as other tests can modify
         # it if they run first.
-        self.assertEqual('/etc/pki/consumer/', Path.abs('/etc/pki/consumer/'))
-        self.assertEqual('/etc/pki/consumer/', Path.abs('etc/pki/consumer/'))
+        self.assertEqual("/etc/pki/consumer/", Path.abs("/etc/pki/consumer/"))
+        self.assertEqual("/etc/pki/consumer/", Path.abs("etc/pki/consumer/"))
 
     def test_modified_root(self):
-        Path.ROOT = '/mnt/sysimage/'
-        self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
-                         Path.abs('/etc/pki/consumer/'))
-        self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
-                         Path.abs('etc/pki/consumer/'))
+        Path.ROOT = "/mnt/sysimage/"
+        self.assertEqual("/mnt/sysimage/etc/pki/consumer/", Path.abs("/etc/pki/consumer/"))
+        self.assertEqual("/mnt/sysimage/etc/pki/consumer/", Path.abs("etc/pki/consumer/"))
 
     def test_modified_root_no_trailing_slash(self):
-        Path.ROOT = '/mnt/sysimage'
-        self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
-                         Path.abs('/etc/pki/consumer/'))
-        self.assertEqual('/mnt/sysimage/etc/pki/consumer/',
-                         Path.abs('etc/pki/consumer/'))
+        Path.ROOT = "/mnt/sysimage"
+        self.assertEqual("/mnt/sysimage/etc/pki/consumer/", Path.abs("/etc/pki/consumer/"))
+        self.assertEqual("/mnt/sysimage/etc/pki/consumer/", Path.abs("etc/pki/consumer/"))
 
     def test_repo_file(self):
         # Fake that the redhat.repo exists:
 
-        Path.ROOT = '/mnt/sysimage'
+        Path.ROOT = "/mnt/sysimage"
         rf = YumRepoFile()
         self.assertEqual("/mnt/sysimage/etc/yum.repos.d/redhat.repo", rf.path)
 
     def test_product_database(self):
-        Path.ROOT = '/mnt/sysimage'
+        Path.ROOT = "/mnt/sysimage"
         prod_db = ProductDatabase()
-        self.assertEqual('/mnt/sysimage/var/lib/rhsm/productid.js',
-                         prod_db.dir.abspath('productid.js'))
+        self.assertEqual("/mnt/sysimage/var/lib/rhsm/productid.js", prod_db.dir.abspath("productid.js"))
 
     def test_sysimage_pathjoin(self):
-        Path.ROOT = '/mnt/sysimage'
+        Path.ROOT = "/mnt/sysimage"
         ed = EntitlementDirectory()
-        self.assertEqual('/mnt/sysimage/etc/pki/entitlement/1-key.pem',
-                         Path.join(ed.productpath(), '1-key.pem'))
+        self.assertEqual(
+            "/mnt/sysimage/etc/pki/entitlement/1-key.pem", Path.join(ed.productpath(), "1-key.pem")
+        )
 
     def test_normal_pathjoin(self):
         ed = EntitlementDirectory()
-        self.assertEqual('/etc/pki/entitlement/1-key.pem',
-                         Path.join(ed.productpath(), "1-key.pem"))
+        self.assertEqual("/etc/pki/entitlement/1-key.pem", Path.join(ed.productpath(), "1-key.pem"))
 
 
 # make sure _check_key returns the right value
 class TestEntitlementDirectoryCheckKey(unittest.TestCase):
-    @patch('os.path.exists')
-    @patch('os.access')
+    @patch("os.path.exists")
+    @patch("os.access")
     def test_check_key(self, MockAccess, MockExists):
         ent_dir = EntitlementDirectory()
         MockAccess.return_value = True
@@ -100,8 +99,8 @@ class TestEntitlementDirectoryCheckKey(unittest.TestCase):
         ret = ent_dir._check_key(ent_cert)
         self.assertTrue(ret)
 
-    @patch('os.path.exists')
-    @patch('os.access')
+    @patch("os.path.exists")
+    @patch("os.access")
     def test_check_key_false(self, MockAccess, MockExists):
         ent_dir = EntitlementDirectory()
         MockAccess.return_value = False
@@ -113,7 +112,6 @@ class TestEntitlementDirectoryCheckKey(unittest.TestCase):
 
 
 class StubPath(Path):
-
     @staticmethod
     def join(a, b):
         return os.path.join(a, b)
@@ -124,14 +122,14 @@ class StubPath(Path):
 
     @classmethod
     def isdir(cls, path):
-        if path.endswith('.pem'):
+        if path.endswith(".pem"):
             return False
-        if path.endswith('doesnt/exist/'):
+        if path.endswith("doesnt/exist/"):
             return False
         return True
 
 
-@patch('subscription_manager.certdirectory.Path', new_callable=StubPath)
+@patch("subscription_manager.certdirectory.Path", new_callable=StubPath)
 class DirectoryTest(unittest.TestCase):
     klass = Directory
 
@@ -144,15 +142,15 @@ class DirectoryTest(unittest.TestCase):
             rmtree(path)
 
     def _get_directory(self):
-        temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        temp_dir = tempfile.mkdtemp(prefix="subscription-manager-unit-tests-tmp")
         self.cleanup_paths.append(temp_dir)
         self.list_len = 0
         return self.klass(path=temp_dir)
 
     def _get_missing_directory(self):
-        temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        temp_dir = tempfile.mkdtemp(prefix="subscription-manager-unit-tests-tmp")
         self.cleanup_paths.append(temp_dir)
-        return self.klass(path=os.path.join(temp_dir, '/doesnt/exist/'))
+        return self.klass(path=os.path.join(temp_dir, "/doesnt/exist/"))
 
     def test(self, mockPath):
         self.assertEqual(len(self.d.list()), self.list_len)
@@ -163,8 +161,8 @@ class DirectoryTest(unittest.TestCase):
     def test_listdirs(self, mockPath):
         self.d.listdirs()
 
-    @patch('os.path.exists')
-    @patch('os.makedirs')
+    @patch("os.path.exists")
+    @patch("os.makedirs")
     def test_missing_dir(self, mockPath, mockMakedirs, mockExists):
         mockExists.return_value = False
         self.d = self._get_missing_directory()
@@ -172,18 +170,18 @@ class DirectoryTest(unittest.TestCase):
 
 class DirectoryWithCertsTest(DirectoryTest):
     def _get_directory(self):
-        temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        temp_dir = tempfile.mkdtemp(prefix="subscription-manager-unit-tests-tmp")
         self.cleanup_paths.append(temp_dir)
         self._populate_directory(temp_dir)
         return self.klass(path=temp_dir)
 
     def _populate_directory(self, path):
         for i in range(1, 5):
-            file_path = os.path.join(path, '%s.pem' % i)
-            f = open(file_path, 'w')
+            file_path = os.path.join(path, "%s.pem" % i)
+            f = open(file_path, "w")
             f.close()
 
-        f = open(os.path.join(path, 'blip.blorp'), 'w')
+        f = open(os.path.join(path, "blip.blorp"), "w")
         f.close()
         self.list_len = 4
 
@@ -192,7 +190,7 @@ class EntitlementDirectoryWithCertsTest(DirectoryWithCertsTest):
     klass = EntitlementDirectory
 
     def setUp(self):
-        self.patcher = patch('subscription_manager.certdirectory.create_from_file')
+        self.patcher = patch("subscription_manager.certdirectory.create_from_file")
         self.mock_cff = self.patcher.start()
 
         # sub in tmp path
@@ -200,10 +198,10 @@ class EntitlementDirectoryWithCertsTest(DirectoryWithCertsTest):
         self.mock_productpath = self.path_patcher.start()
 
         mock_product = MagicMock()
-        mock_product.id = '123456789'
+        mock_product.id = "123456789"
 
         self.mock_cert = MagicMock()
-        self.mock_cert.serial = '37'
+        self.mock_cert.serial = "37"
         self.mock_cert.is_expired.return_value = False
         self.mock_cert.products = [mock_product]
 
@@ -213,7 +211,7 @@ class EntitlementDirectoryWithCertsTest(DirectoryWithCertsTest):
         self.mock_cert.key_path.return_value = self.temp_dir
 
     def _get_directory(self):
-        self.temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        self.temp_dir = tempfile.mkdtemp(prefix="subscription-manager-unit-tests-tmp")
         self.cleanup_paths.append(self.temp_dir)
         self._populate_directory(self.temp_dir)
         self.mock_productpath.return_value = self.temp_dir
@@ -221,21 +219,21 @@ class EntitlementDirectoryWithCertsTest(DirectoryWithCertsTest):
 
     def _populate_directory(self, path):
         for i in range(1, 5):
-            file_path = os.path.join(path, '%s.pem' % i)
+            file_path = os.path.join(path, "%s.pem" % i)
             key_path = os.path.join(path, "%s-key.pem" % i)
-            f = open(file_path, 'w')
-            k = open(key_path, 'w')
+            f = open(file_path, "w")
+            k = open(key_path, "w")
             f.close()
             k.close()
 
-        f = open(os.path.join(path, 'blip.blorp'), 'w')
+        f = open(os.path.join(path, "blip.blorp"), "w")
         f.close()
         self.list_len = 4
 
     def _get_missing_directory(self):
-        temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        temp_dir = tempfile.mkdtemp(prefix="subscription-manager-unit-tests-tmp")
         self.cleanup_paths.append(temp_dir)
-        self.mock_productpath.return_value = os.path.join(temp_dir, '/doesnt/exist/')
+        self.mock_productpath.return_value = os.path.join(temp_dir, "/doesnt/exist/")
         return self.klass()
 
     def tearDown(self):
@@ -248,11 +246,11 @@ class EntitlementDirectoryWithCertsTest(DirectoryWithCertsTest):
         self.assertEqual(len(res), self.list_len)
 
     def test_list_for_product(self):
-        res = self.d.list_for_product('123')
+        res = self.d.list_for_product("123")
         self.assertTrue(isinstance(res, list))
 
     def test_list_for_product_match(self):
-        res = self.d.list_for_product('123456789')
+        res = self.d.list_for_product("123456789")
         self.assertTrue(isinstance(res, list))
 
 
@@ -265,16 +263,16 @@ class ProductCertificateDirectoryWithCertsTest(DirectoryWithCertsTest):
 
     def setUp(self):
         self.cleanup_paths = []
-        self.patcher = patch('subscription_manager.certdirectory.create_from_file')
+        self.patcher = patch("subscription_manager.certdirectory.create_from_file")
         self.mock_cff = self.patcher.start()
 
         mock_product = MagicMock()
-        mock_product.id = '123456789'
-        mock_product.provided_tags = ['mock-tag-1']
+        mock_product.id = "123456789"
+        mock_product.provided_tags = ["mock-tag-1"]
 
         self.mock_cert = MagicMock()
         self.mock_cert.products = [mock_product]
-        self.mock_cert.serial = '37'
+        self.mock_cert.serial = "37"
         self.mock_cert.is_expired.return_value = False
 
         self.mock_cff.return_value = self.mock_cert
@@ -301,35 +299,35 @@ class ProductCertificateDirectoryWithCertsTest(DirectoryWithCertsTest):
         self.assertEqual(len(res), self.list_len)
 
     def test_find(self):
-        res = self.d.find('1')
+        res = self.d.find("1")
         self.assertEqual(res, None)
 
     def test_find_matches(self):
-        res = self.d.find('37')
-        self.assertEqual(res.serial, '37')
+        res = self.d.find("37")
+        self.assertEqual(res.serial, "37")
 
     def test_find_by_product(self):
-        res = self.d.find_by_product('123')
+        res = self.d.find_by_product("123")
         self.assertEqual(res, None)
 
     def test_find_by_product_match(self):
-        res = self.d.find_by_product('123456789')
+        res = self.d.find_by_product("123456789")
         self.assertEqual(res, self.mock_cert)
 
     def test_find_all_by_product_no_match(self):
-        res = self.d.find_all_by_product('123')
+        res = self.d.find_all_by_product("123")
         self.assertTrue(isinstance(res, list))
         self.assertEqual(len(res), 0)
 
     def test_find_all_by_product_match(self):
-        res = self.d.find_all_by_product('123456789')
+        res = self.d.find_all_by_product("123456789")
         self.assertTrue(isinstance(res, list))
         self.assertEqual(len(res), 1)
 
     def test_get_provided_tags(self):
         res = self.d.get_provided_tags()
         self.assertTrue(isinstance(res, set))
-        self.assertEqual(set(['mock-tag-1']), res)
+        self.assertEqual(set(["mock-tag-1"]), res)
 
     def test_get_installed_products(self):
         res = self.d.get_installed_products()
@@ -359,17 +357,17 @@ class ProductDirectoryTest(ProductCertificateDirectoryWithCertsTest):
     klass = ProductDirectory
 
     def _get_directory(self):
-        int_temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        int_temp_dir = tempfile.mkdtemp(prefix="subscription-manager-unit-tests-tmp")
         self.cleanup_paths.append(int_temp_dir)
         self._populate_directory(int_temp_dir)
-        default_temp_dir = tempfile.mkdtemp(prefix='subscription-manager-unit-tests-tmp')
+        default_temp_dir = tempfile.mkdtemp(prefix="subscription-manager-unit-tests-tmp")
         self.cleanup_paths.append(default_temp_dir)
         self.list_len = 4
         return self.klass(path=int_temp_dir, default_path=default_temp_dir)
 
 
 class AlsoProductDirectoryTest(unittest.TestCase):
-    @patch('os.path.exists')
+    @patch("os.path.exists")
     def test_get_installed_products(self, MockExists):
         MockExists.return_value = True
         pd = ProductDirectory()
@@ -379,7 +377,7 @@ class AlsoProductDirectoryTest(unittest.TestCase):
         installed_products = pd.get_installed_products()
         self.assertTrue("top" in installed_products)
 
-    @patch('os.path.exists')
+    @patch("os.path.exists")
     def test_default_products(self, MockExists):
         MockExists.return_value = True
         pd = ProductDirectory()
@@ -393,7 +391,7 @@ class AlsoProductDirectoryTest(unittest.TestCase):
         self.assertTrue("top" in resulting_ids)
         self.assertTrue("default" in resulting_ids)
 
-    @patch('os.path.exists')
+    @patch("os.path.exists")
     def test_default_products_matching_ids(self, MockExists):
         MockExists.return_value = True
         pd = ProductDirectory()

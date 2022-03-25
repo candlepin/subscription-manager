@@ -15,16 +15,16 @@ class TestSyspurposeCommand(TestCliProxyCommand):
     command_class = managercli.RoleCommand
 
     def setUp(self):
-        synced_store_patch = patch('subscription_manager.cli_command.abstract_syspurpose.SyncedStore')
+        synced_store_patch = patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
         self.synced_store_mock = synced_store_patch.start()
         self.addCleanup(self.synced_store_mock)
-        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        syspurpose_patch = patch("syspurpose.files.SyncedStore")
         sp_patch = syspurpose_patch.start()
         self.addCleanup(sp_patch.stop)
         super(TestSyspurposeCommand, self).setUp(False)
         self.cc = self.command_class()
         self.cc.cp = StubUEP()
-        self.cc.cp.registered_consumer_info['role'] = None
+        self.cc.cp.registered_consumer_info["role"] = None
         self.cc.cp._capabilities = ["syspurpose"]
 
     def test_show_option(self):
@@ -35,16 +35,16 @@ class TestRoleCommand(TestCliProxyCommand):
     command_class = managercli.RoleCommand
 
     def setUp(self):
-        synced_store_patch = patch('subscription_manager.cli_command.abstract_syspurpose.SyncedStore')
+        synced_store_patch = patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
         self.synced_store_mock = synced_store_patch.start()
         self.addCleanup(self.synced_store_mock)
-        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        syspurpose_patch = patch("syspurpose.files.SyncedStore")
         sp_patch = syspurpose_patch.start()
         self.addCleanup(sp_patch.stop)
         super(TestRoleCommand, self).setUp(False)
         self.cc = self.command_class()
         self.cc.cp = StubUEP()
-        self.cc.cp.registered_consumer_info['role'] = None
+        self.cc.cp.registered_consumer_info["role"] = None
         self.cc.cp._capabilities = ["syspurpose"]
 
     def test_list_username_password_org(self):
@@ -169,9 +169,9 @@ class TestRoleCommand(TestCliProxyCommand):
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
-        instance_syspurpose_store.local_contents = {'role': 'Foo'}
+        instance_syspurpose_store.local_contents = {"role": "Foo"}
 
-        with patch.object(AbstractSyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
+        with patch.object(AbstractSyspurposeCommand, "check_syspurpose_support", Mock(return_value=None)):
             super(TestRoleCommand, self).test_main_no_args()
 
     @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
@@ -180,9 +180,9 @@ class TestRoleCommand(TestCliProxyCommand):
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
-        instance_syspurpose_store.local_contents = {'role': 'Foo'}
+        instance_syspurpose_store.local_contents = {"role": "Foo"}
 
-        with patch.object(AbstractSyspurposeCommand, 'check_syspurpose_support', Mock(return_value=None)):
+        with patch.object(AbstractSyspurposeCommand, "check_syspurpose_support", Mock(return_value=None)):
             super(TestRoleCommand, self).test_main_empty_args()
 
     @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
@@ -191,9 +191,9 @@ class TestRoleCommand(TestCliProxyCommand):
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
-        instance_syspurpose_store.contents = {'role': 'Foo'}
+        instance_syspurpose_store.contents = {"role": "Foo"}
 
-        self.cc.options = Mock(spec=['set', 'unset'])
+        self.cc.options = Mock(spec=["set", "unset"])
         self.cc.options.set = None
         self.cc.options.unset = False
 
@@ -213,9 +213,9 @@ class TestRoleCommand(TestCliProxyCommand):
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
-        instance_syspurpose_store.contents = {'role': None}
+        instance_syspurpose_store.contents = {"role": None}
 
-        self.cc.options = Mock(spec=['set', 'unset'])
+        self.cc.options = Mock(spec=["set", "unset"])
         self.cc.options.set = None
         self.cc.options.unset = False
         with Capture() as cap:
@@ -229,7 +229,7 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_syspurpose_store = mock_syspurpose.read.return_value
         instance_syspurpose_store.contents = {}
 
-        self.cc.options = Mock(spec=['set', 'unset'])
+        self.cc.options = Mock(spec=["set", "unset"])
         self.cc.options.set = None
         self.cc.options.unset = False
 
@@ -253,15 +253,15 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
         instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": "Foo"}))
 
-        self.cc.options = Mock(spec=['set', 'unset'])
-        self.cc.options.set = 'Foo'
+        self.cc.options = Mock(spec=["set", "unset"])
+        self.cc.options.set = "Foo"
         self.cc.options.unset = False
 
         with Capture() as cap:
             self.cc._do_command()
 
         self.assertIn('role set to "Foo"', cap.out)
-        instance_syspurpose_store.set.assert_called_once_with('role', 'Foo')
+        instance_syspurpose_store.set.assert_called_once_with("role", "Foo")
         instance_syspurpose_store.sync.assert_called_once()
 
     @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
@@ -283,8 +283,8 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
         instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": "Foo"}))
 
-        self.cc.options = Mock(spec=['set', 'unset'])
-        self.cc.options.set = 'Bar'
+        self.cc.options = Mock(spec=["set", "unset"])
+        self.cc.options.set = "Bar"
         self.cc.options.unset = False
 
         with Capture() as cap:
@@ -294,11 +294,11 @@ class TestRoleCommand(TestCliProxyCommand):
 
         self.assertIn(
             'Warning: A role of "Foo" was recently set for this system by the entitlement server administrator.',
-            cap.err
+            cap.err,
         )
         self.assertIn(
             'If you\'d like to overwrite the server side change please run: subscription-manager syspurpose role --set "Bar"',
-            cap.err
+            cap.err,
         )
 
     @patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
@@ -307,7 +307,7 @@ class TestRoleCommand(TestCliProxyCommand):
         mock_syspurpose.read = Mock()
         mock_syspurpose.read.return_value = Mock()
         instance_syspurpose_store = mock_syspurpose.read.return_value
-        instance_syspurpose_store.contents = {'role': 'Foo'}
+        instance_syspurpose_store.contents = {"role": "Foo"}
         instance_syspurpose_store.unset = MagicMock(return_value=True)
         instance_syspurpose_store.write = MagicMock(return_value=None)
         instance_syspurpose_store.get_cached_contents = MagicMock(return_value={})
@@ -317,14 +317,14 @@ class TestRoleCommand(TestCliProxyCommand):
         instance_mock_syspurpose_sync = mock_syspurpose_sync.return_value
         instance_mock_syspurpose_sync.perform = Mock(return_value=({}, {"role": ""}))
 
-        self.cc.options = Mock(spec=['set', 'unset'])
+        self.cc.options = Mock(spec=["set", "unset"])
         self.cc.options.set = None
         self.cc.options.unset = True
         with Capture() as cap:
             self.cc._do_command()
 
         self.assertIn("role unset", cap.out)
-        instance_syspurpose_store.unset.assert_called_once_with('role')
+        instance_syspurpose_store.unset.assert_called_once_with("role")
         instance_syspurpose_store.sync.assert_called_once()
 
     def test_is_provided_value_valid(self):
@@ -340,6 +340,7 @@ class InvalidOrg(Exception):
     Small Exception to be used in TestRoleOrgCheckingCommand; it will be
     passed through handle_exception().
     """
+
     def __init__(self, org_key):
         self.org_key = org_key
 
@@ -355,12 +356,13 @@ class OrgCheckingStubUEP(StubUEP):
     The extra implementation on top of StubUEP is the minimal one to check
     AbstractSyspurposeCommand in TestRoleOrgCheckingCommand.
     """
+
     def __init__(self, allowed_orgs):
         super(OrgCheckingStubUEP, self).__init__()
         self.allowed_orgs = allowed_orgs
 
     def getOwnerList(self, username):
-        return [{'key': org} for org in self.allowed_orgs]
+        return [{"key": org} for org in self.allowed_orgs]
 
     def getOwnerSyspurposeValidFields(self, org_key):
         if org_key not in self.allowed_orgs:
@@ -369,7 +371,7 @@ class OrgCheckingStubUEP(StubUEP):
 
 
 class TestRoleOrgCheckingCommand(SubManFixture):
-    common_args = ['--list', '--username', 'test', '--password', 'test']
+    common_args = ["--list", "--username", "test", "--password", "test"]
 
     def do_reraise(self, *args, **kwargs):
         # handle_exception() was called with (msg, ex); we need to reraise
@@ -384,13 +386,13 @@ class TestRoleOrgCheckingCommand(SubManFixture):
         cp_provider.no_auth_cp = OrgCheckingStubUEP(orgs)
 
     def setUp(self):
-        synced_store_patch = patch('subscription_manager.cli_command.abstract_syspurpose.SyncedStore')
+        synced_store_patch = patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
         self.synced_store_mock = synced_store_patch.start()
         self.addCleanup(self.synced_store_mock)
-        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        syspurpose_patch = patch("syspurpose.files.SyncedStore")
         sp_patch = syspurpose_patch.start()
         self.addCleanup(sp_patch.stop)
-        handle_exception_patch = patch('subscription_manager.cli_command.cli.handle_exception')
+        handle_exception_patch = patch("subscription_manager.cli_command.cli.handle_exception")
         self.handle_exception_mock = handle_exception_patch.start()
         self.handle_exception_mock.side_effect = self.do_reraise
         self.addCleanup(self.handle_exception_mock)
@@ -401,22 +403,22 @@ class TestRoleOrgCheckingCommand(SubManFixture):
     def test_no_org(self):
         self.set_orgs_for_stub_cp_provider([])
         with self.assertRaises(InvalidOrg):
-            self.cc.main(self.common_args + ['--org', 'foo'])
+            self.cc.main(self.common_args + ["--org", "foo"])
 
     def test_single_org_same(self):
-        self.set_orgs_for_stub_cp_provider(['org1'])
-        self.cc.main(self.common_args + ['--org', 'org1'])
+        self.set_orgs_for_stub_cp_provider(["org1"])
+        self.cc.main(self.common_args + ["--org", "org1"])
 
     def test_single_org_different(self):
-        self.set_orgs_for_stub_cp_provider(['org1'])
+        self.set_orgs_for_stub_cp_provider(["org1"])
         with self.assertRaises(InvalidOrg):
-            self.cc.main(self.common_args + ['--org', 'foo'])
+            self.cc.main(self.common_args + ["--org", "foo"])
 
     def test_multiple_orgs_same(self):
-        self.set_orgs_for_stub_cp_provider(['org1', 'org2'])
-        self.cc.main(self.common_args + ['--org', 'org1'])
+        self.set_orgs_for_stub_cp_provider(["org1", "org2"])
+        self.cc.main(self.common_args + ["--org", "org1"])
 
     def test_multiple_orgs_different(self):
-        self.set_orgs_for_stub_cp_provider(['org1', 'org2'])
+        self.set_orgs_for_stub_cp_provider(["org1", "org2"])
         with self.assertRaises(InvalidOrg):
-            self.cc.main(self.common_args + ['--org', 'foo'])
+            self.cc.main(self.common_args + ["--org", "foo"])

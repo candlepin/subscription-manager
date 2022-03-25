@@ -27,22 +27,21 @@ def yesterday():
 
 
 class ProductTests(unittest.TestCase):
-
     def test_no_provided_tags(self):
-        p = StubProduct('product')
+        p = StubProduct("product")
         self.assertEqual(0, len(p.provided_tags))
-        p = StubProduct('product', provided_tags=None)
+        p = StubProduct("product", provided_tags=None)
         self.assertEqual(0, len(p.provided_tags))
-        p = StubProduct('product', provided_tags="")
+        p = StubProduct("product", provided_tags="")
         self.assertEqual(0, len(p.provided_tags))
 
     def test_one_provided_tags(self):
-        p = StubProduct('product', provided_tags="TAG1")
+        p = StubProduct("product", provided_tags="TAG1")
         self.assertEqual(1, len(p.provided_tags))
         self.assertEqual("TAG1", p.provided_tags[0])
 
     def test_multiple_provided_tags(self):
-        p = StubProduct('product', provided_tags="TAG1,TAG2,TAG3")
+        p = StubProduct("product", provided_tags="TAG1,TAG2,TAG3")
         self.assertEqual(3, len(p.provided_tags))
         self.assertEqual("TAG1", p.provided_tags[0])
         self.assertEqual("TAG2", p.provided_tags[1])
@@ -50,17 +49,16 @@ class ProductTests(unittest.TestCase):
 
 
 class EntitlementCertificateTests(unittest.TestCase):
-
     def test_valid_order_date_gives_valid_cert(self):
-        cert = StubEntitlementCertificate(StubProduct('product'),
-                                          start_date=datetime(2010, 7, 27),
-                                          end_date=datetime(2050, 7, 26))
+        cert = StubEntitlementCertificate(
+            StubProduct("product"), start_date=datetime(2010, 7, 27), end_date=datetime(2050, 7, 26)
+        )
 
         self.assertTrue(cert.is_valid())
 
     def test_expired_order_date_gives_invalid_cert(self):
-        cert = StubEntitlementCertificate(StubProduct('product'),
-                                          start_date=datetime(2010, 7, 27),
-                                          end_date=yesterday())
+        cert = StubEntitlementCertificate(
+            StubProduct("product"), start_date=datetime(2010, 7, 27), end_date=yesterday()
+        )
 
         self.assertFalse(cert.is_valid())

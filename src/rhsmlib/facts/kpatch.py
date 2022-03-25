@@ -32,7 +32,7 @@ class KPatchCollector(collector.FactsCollector):
     DIRS_WITH_LOADED_MODULE = [
         "/sys/kernel/livepatch",
         "/sys/kernel/kpatch/patches",
-        "/sys/kernel/kpatch"
+        "/sys/kernel/kpatch",
     ]
 
     def get_all(self):
@@ -46,8 +46,8 @@ class KPatchCollector(collector.FactsCollector):
         kpatch_info = {}
 
         if self._is_kpatch_installed():
-            kpatch_info['kpatch.installed'] = self._get_installed_live_kernel_patches()
-            kpatch_info['kpatch.loaded'] = self._get_loaded_live_kernel_patch()
+            kpatch_info["kpatch.installed"] = self._get_installed_live_kernel_patches()
+            kpatch_info["kpatch.loaded"] = self._get_loaded_live_kernel_patch()
 
         return kpatch_info
 
@@ -57,7 +57,7 @@ class KPatchCollector(collector.FactsCollector):
         Check if kpatch is installed
         :return: Return true, when kpatch CLI tool is installed. Otherwise return False
         """
-        return shutil.which('kpatch') is not None
+        return shutil.which("kpatch") is not None
 
     def _get_installed_live_kernel_patches(self):
         """

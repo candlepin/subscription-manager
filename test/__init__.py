@@ -31,7 +31,6 @@ def subman_marker_needs_envvars(*envvars: List[str]) -> Callable:
     """Skip test if one or more environment variables are missing."""
     missing_vars: List[str] = [v for v in envvars if v not in os.environ]
     skip_func: Callable = pytest.mark.skipif(
-        missing_vars,
-        reason=f"Missing environment variables {', '.join(missing_vars)}."
+        missing_vars, reason=f"Missing environment variables {', '.join(missing_vars)}."
     )
     return skip_func

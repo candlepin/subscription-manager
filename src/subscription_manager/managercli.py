@@ -51,15 +51,35 @@ log = logging.getLogger(__name__)
 
 
 class ManagerCLI(CLI):
-
     def __init__(self):
-        commands = [RegisterCommand, UnRegisterCommand, AddonsCommand, ConfigCommand, ListCommand,
-                    IdentityCommand, OwnersCommand, RefreshCommand, CleanCommand,
-                    RedeemCommand, ReposCommand, ReleaseCommand, StatusCommand,
-                    EnvironmentsCommand, ImportCertCommand, ServiceLevelCommand,
-                    VersionCommand, RemoveCommand, AttachCommand, PluginsCommand,
-                    AutohealCommand, OverrideCommand, RoleCommand, UsageCommand,
-                    FactsCommand, SyspurposeCommand]
+        commands = [
+            RegisterCommand,
+            UnRegisterCommand,
+            AddonsCommand,
+            ConfigCommand,
+            ListCommand,
+            IdentityCommand,
+            OwnersCommand,
+            RefreshCommand,
+            CleanCommand,
+            RedeemCommand,
+            ReposCommand,
+            ReleaseCommand,
+            StatusCommand,
+            EnvironmentsCommand,
+            ImportCertCommand,
+            ServiceLevelCommand,
+            VersionCommand,
+            RemoveCommand,
+            AttachCommand,
+            PluginsCommand,
+            AutohealCommand,
+            OverrideCommand,
+            RoleCommand,
+            UsageCommand,
+            FactsCommand,
+            SyspurposeCommand,
+        ]
         CLI.__init__(self, command_classes=commands)
 
     def main(self):
@@ -68,7 +88,7 @@ class ManagerCLI(CLI):
         # Try to enable all yum plugins (subscription-manager and plugin-id)
         enabled_yum_plugins = YumPluginManager.enable_pkg_plugins()
         if len(enabled_yum_plugins) > 0:
-            print('\n' + _('WARNING') + '\n\n' + YumPluginManager.warning_message(enabled_yum_plugins) + '\n')
+            print("\n" + _("WARNING") + "\n\n" + YumPluginManager.warning_message(enabled_yum_plugins) + "\n")
         # Try to flush all outputs, see BZ: 1350402
         try:
             sys.stdout.flush()

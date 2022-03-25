@@ -39,11 +39,11 @@ from build_ext import i18n, lint, template, utils  # noqa: E402
 # Read packages we should exclude from the environment
 # This is used to deal with the fact that we have multiple packages which
 # might be built optionally all tracked / installed via one setup.
-exclude_packages = [x.strip() for x in os.environ.get('EXCLUDE_PACKAGES', '').split(',') if x != '']
+exclude_packages = [x.strip() for x in os.environ.get("EXCLUDE_PACKAGES", "").split(",") if x != ""]
 exclude_packages.extend(
     [
-        '*.plugin.ostree',
-        '*.services.examples'
+        "*.plugin.ostree",
+        "*.services.examples",
     ]
 )
 
@@ -55,7 +55,8 @@ RPM_VERSION = None
 # from a guess generated from 'git describe'
 class rpm_version_release_build_py(_build_py):
     user_options = _build_py.user_options + [
-        ('rpm-version=', None, 'version and release of the RPM this is built for')]
+        ("rpm-version=", None, "version and release of the RPM this is built for")
+    ]
 
     def initialize_options(self):
         _build_py.initialize_options(self)
@@ -69,8 +70,8 @@ class rpm_version_release_build_py(_build_py):
             self.rpm_version = RPM_VERSION
         _build_py.finalize_options(self)
         self.set_undefined_options(
-            'build',
-            ('rpm_version', 'rpm_version'),
+            "build",
+            ("rpm_version", "rpm_version"),
         )
 
     def run(self):
@@ -81,15 +82,15 @@ class rpm_version_release_build_py(_build_py):
         if not self.dry_run:
             for package in self.versioned_packages:
                 version_dir = os.path.join(self.build_lib, package)
-                version_file = os.path.join(version_dir, 'version.py')
+                version_file = os.path.join(version_dir, "version.py")
                 try:
                     lines = []
-                    with open(version_file, 'r') as file:
+                    with open(version_file, "r") as file:
                         for line in file.readlines():
                             line = line.replace("RPM_VERSION", str(self.rpm_version))
                             lines.append(line)
 
-                    with open(version_file, 'w') as file:
+                    with open(version_file, "w") as file:
                         for line in lines:
                             file.write(line)
                 except EnvironmentError:
@@ -98,8 +99,12 @@ class rpm_version_release_build_py(_build_py):
 
 class install(_install):
     user_options = _install.user_options + [
-        ('rpm-version=', None, 'version and release of the RPM this is built for'),
-        ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
+        ("rpm-version=", None, "version and release of the RPM this is built for"),
+        (
+            "with-cockpit-desktop-entry=",
+            None,
+            "whether to install desktop entry for subman cockpit plugin or not",
+        ),
     ]
 
     def initialize_options(self):
@@ -113,14 +118,14 @@ class install(_install):
             RPM_VERSION = self.rpm_version
         _install.finalize_options(self)
         self.set_undefined_options(
-            'build',
-            ('rpm_version', 'rpm_version'),
+            "build",
+            ("rpm_version", "rpm_version"),
         )
 
 
 class build(_build):
     user_options = _build.user_options + [
-        ('rpm-version=', None, 'version and release of the RPM this is built for')
+        ("rpm-version=", None, "version and release of the RPM this is built for")
     ]
 
     def initialize_options(self):
@@ -145,9 +150,9 @@ class build(_build):
         try:
             cmd = ["git", "describe"]
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-            output = process.communicate()[0].decode('utf-8').strip()
+            output = process.communicate()[0].decode("utf-8").strip()
             if output.startswith(self.git_tag_prefix):
-                return output[len(self.git_tag_prefix):]
+                return output[len(self.git_tag_prefix) :]
         except OSError:
             # When building the RPM there won't be a git repo to introspect so
             # builders *must* specify the version via the --rpm-version option
@@ -155,20 +160,25 @@ class build(_build):
 
     def has_po_files(self):
         try:
-            next(utils.Utils.find_files_of_type('po', '*.po'))
+            next(utils.Utils.find_files_of_type("po", "*.po"))
             return True
         except StopIteration:
             return False
 
-    sub_commands = _build.sub_commands + [('build_trans', has_po_files), ('build_template', lambda arg: True)]
+    sub_commands = _build.sub_commands + [("build_trans", has_po_files), ("build_template", lambda arg: True)]
 
 
 class install_data(_install_data):
     """Used to intelligently install data files.  For example, files that must be generated (such as .mo files
     or desktop files with merged translations) or an entire tree of data files.
     """
+
     user_options = _install_data.user_options + [
-        ('with-cockpit-desktop-entry=', None, 'whether to install desktop entry for subman cockpit plugin or not'),
+        (
+            "with-cockpit-desktop-entry=",
+            None,
+            "whether to install desktop entry for subman cockpit plugin or not",
+        ),
     ]
 
     def initialize_options(self):
@@ -178,12 +188,12 @@ class install_data(_install_data):
 
     def finalize_options(self):
         _install_data.finalize_options(self)
-        self.set_undefined_options('install', ('with_cockpit_desktop_entry', 'with_cockpit_desktop_entry'))
+        self.set_undefined_options("install", ("with_cockpit_desktop_entry", "with_cockpit_desktop_entry"))
         # Set self.with_cockpit_desktop_entry to True when it is equal to 'true'
         if self.with_cockpit_desktop_entry is None:
             self.with_cockpit_desktop_entry = True  # default to True
         else:
-            self.with_cockpit_desktop_entry = self.with_cockpit_desktop_entry == 'true'
+            self.with_cockpit_desktop_entry = self.with_cockpit_desktop_entry == "true"
 
     def run(self):
         self.add_messages()
@@ -198,25 +208,25 @@ class install_data(_install_data):
         return os.path.normpath(os.path.join(*args))
 
     def add_messages(self):
-        for lang in os.listdir(self.join('build', 'locale')):
-            lang_dir = self.join('share', 'locale', lang, 'LC_MESSAGES')
-            lang_file = self.join('build', 'locale', lang, 'LC_MESSAGES', 'rhsm.mo')
+        for lang in os.listdir(self.join("build", "locale")):
+            lang_dir = self.join("share", "locale", lang, "LC_MESSAGES")
+            lang_file = self.join("build", "locale", lang, "LC_MESSAGES", "rhsm.mo")
             self.data_files.append((lang_dir, [lang_file]))
 
     def __add_desktop_entry(self, desktop_entry_file):
-        desktop_dir = self.join('share', 'applications')
-        desktop_file = self.join('build', 'applications', desktop_entry_file)
+        desktop_dir = self.join("share", "applications")
+        desktop_file = self.join("build", "applications", desktop_entry_file)
         self.data_files.append((desktop_dir, [desktop_file]))
 
     def add_cockpit_desktop_entry(self):
-        self.__add_desktop_entry('subscription-manager-cockpit.desktop')
+        self.__add_desktop_entry("subscription-manager-cockpit.desktop")
 
     def add_dbus_service_files(self):
         """
         Add D-Bus service files to the list of files installed to the system
         """
-        dbus_service_directory = self.join('share', 'dbus-1', 'system-services')
-        source_dir = self.join('build', 'dbus', 'system-services-systemd')
+        dbus_service_directory = self.join("share", "dbus-1", "system-services")
+        source_dir = self.join("build", "dbus", "system-services-systemd")
         for template_file in os.listdir(source_dir):
             self.data_files.append((dbus_service_directory, [self.join(source_dir, template_file)]))
 
@@ -224,16 +234,16 @@ class install_data(_install_data):
         """
         Add .service files for systemd
         """
-        systemd_install_directory = self.join('lib', 'systemd', 'system')
-        source_dir = self.join('build', 'dbus', 'systemd')
-        for file in os.listdir(self.join('build', 'dbus', 'systemd')):
+        systemd_install_directory = self.join("lib", "systemd", "system")
+        source_dir = self.join("build", "dbus", "systemd")
+        for file in os.listdir(self.join("build", "dbus", "systemd")):
             self.data_files.append((systemd_install_directory, [self.join(source_dir, file)]))
 
     def add_icons(self):
-        icon_source_root = self.join('src', 'subscription_manager', 'gui', 'data', 'icons', 'hicolor')
+        icon_source_root = self.join("src", "subscription_manager", "gui", "data", "icons", "hicolor")
         for d in os.listdir(icon_source_root):
-            icon_dir = self.join('share', 'icons', 'hicolor', d, 'apps')
-            icon_source_files = glob(self.join(icon_source_root, d, 'apps', 'subscription-manager*.*'))
+            icon_dir = self.join("share", "icons", "hicolor", d, "apps")
+            icon_source_files = glob(self.join(icon_source_root, d, "apps", "subscription-manager*.*"))
 
             self.data_files.append((icon_dir, icon_source_files))
 
@@ -245,6 +255,7 @@ class GettextWithArgparse(i18n.Gettext):
 
         # We need to grab some strings out of argparse for translation
         import argparse
+
         argparse_source = "%s.py" % os.path.splitext(argparse.__file__)[0]
         if not os.path.exists(argparse_source):
             raise RuntimeError("Could not find argparse.py at %s" % argparse_source)
@@ -255,73 +266,74 @@ class GettextWithArgparse(i18n.Gettext):
 setup_requires = []
 
 install_requires = [
-    'iniparse',
-    'python-dateutil',
-    'ethtool',
-    'dbus-python',
+    "iniparse",
+    "python-dateutil",
+    "ethtool",
+    "dbus-python",
 ]
 
-test_require = [
-    'mock',
-    'pytest',
-    'pytest-randomly',
-    'pytest-timeout',
-    'coverage',
-    'polib',
-    'flake8',
-] + install_requires + setup_requires
+test_require = (
+    [
+        "mock",
+        "pytest",
+        "pytest-randomly",
+        "pytest-timeout",
+        "coverage",
+        "polib",
+        "flake8",
+    ]
+    + install_requires
+    + setup_requires
+)
 
 cmdclass = {
-    'clean': utils.clean,
-    'install': install,
-    'install_data': install_data,
-    'build': build,
-    'build_py': rpm_version_release_build_py,
-    'build_trans': i18n.BuildTrans,
-    'build_template': template.BuildTemplate,
-    'update_trans': i18n.UpdateTrans,
-    'uniq_trans': i18n.UniqTrans,
-    'gettext': GettextWithArgparse,
-    'lint': lint.Lint,
-    'lint_rpm': lint.RpmLint,
-    'flake8': lint.PluginLoadingFlake8
+    "clean": utils.clean,
+    "install": install,
+    "install_data": install_data,
+    "build": build,
+    "build_py": rpm_version_release_build_py,
+    "build_trans": i18n.BuildTrans,
+    "build_template": template.BuildTemplate,
+    "update_trans": i18n.UpdateTrans,
+    "uniq_trans": i18n.UniqTrans,
+    "gettext": GettextWithArgparse,
+    "lint": lint.Lint,
+    "lint_rpm": lint.RpmLint,
+    "flake8": lint.PluginLoadingFlake8,
 }
 
 setup(
     name="subscription-manager",
-    version='1.29.26',
+    version="1.29.26",
     url="http://www.candlepinproject.org",
     description="Manage subscriptions for Red Hat products.",
     license="GPLv2",
     author="Adrian Likins",
     author_email="alikins@redhat.com",
     cmdclass=cmdclass,
-    packages=find_packages('src', exclude=exclude_packages),
-    package_dir={'': 'src'},
+    packages=find_packages("src", exclude=exclude_packages),
+    package_dir={"": "src"},
     entry_points={
-        'console_scripts': [
-            'subscription-manager = subscription_manager.scripts.subscription_manager:main',
-            'rct = subscription_manager.scripts.rct:main',
-            'rhsm-debug = subscription_manager.scripts.rhsm_debug:main',
-            'rhsm-facts-service = subscription_manager.scripts.rhsm_facts_service:main',
-            'rhsm-service = subscription_manager.scripts.rhsm_service:main',
-            'rhsmcertd-worker = subscription_manager.scripts.rhsmcertd_worker:main',
+        "console_scripts": [
+            "subscription-manager = subscription_manager.scripts.subscription_manager:main",
+            "rct = subscription_manager.scripts.rct:main",
+            "rhsm-debug = subscription_manager.scripts.rhsm_debug:main",
+            "rhsm-facts-service = subscription_manager.scripts.rhsm_facts_service:main",
+            "rhsm-service = subscription_manager.scripts.rhsm_service:main",
+            "rhsmcertd-worker = subscription_manager.scripts.rhsmcertd_worker:main",
         ],
     },
     data_files=[
         # man pages for gui are added in add_gui_doc_files(), when GUI package is created
-        (
-            'share/man/man8',
-            set(glob('man/*.8'))
-        ),
-        ('share/man/man5', glob('man/*.5')),
+        ("share/man/man8", set(glob("man/*.8"))),
+        ("share/man/man5", glob("man/*.5")),
     ],
     command_options={
-        'egg_info': {
-            'egg_base': ('setup.py', os.curdir),
+        "egg_info": {
+            "egg_base": ("setup.py", os.curdir),
         },
-        'build_py': {
-            'versioned_packages': ('setup.py', ['subscription_manager', 'rct']),
+        "build_py": {
+            "versioned_packages": ("setup.py", ["subscription_manager", "rct"]),
         },
     },
     classifiers=[
@@ -334,6 +346,7 @@ setup(
     setup_requires=setup_requires,
     install_requires=install_requires,
     tests_require=test_require,
-    ext_modules=[Extension('rhsm._certificate', ['src/certificate.c'],
-                           libraries=['ssl', 'crypto'])],
+    ext_modules=[
+        Extension("rhsm._certificate", ["src/certificate.c"], libraries=["ssl", "crypto"]),
+    ],
 )

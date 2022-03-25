@@ -34,7 +34,7 @@ class AttachService(object):
 
         self.plugin_manager.run(
             "pre_auto_attach",
-            consumer_uuid=self.identity.uuid
+            consumer_uuid=self.identity.uuid,
         )
 
         resp = self.cp.bind(self.identity.uuid)
@@ -42,7 +42,7 @@ class AttachService(object):
         self.plugin_manager.run(
             "post_auto_attach",
             consumer_uuid=self.identity.uuid,
-            entitlement_data=resp
+            entitlement_data=resp,
         )
 
         return resp
@@ -52,10 +52,7 @@ class AttachService(object):
         # If quantity is None, server will assume 1. pre_subscribe will
         # report the same.
         self.plugin_manager.run(
-            "pre_subscribe",
-            consumer_uuid=self.identity.uuid,
-            pool_id=pool,
-            quantity=quantity
+            "pre_subscribe", consumer_uuid=self.identity.uuid, pool_id=pool, quantity=quantity
         )
 
         resp = self.cp.bindByEntitlementPool(self.identity.uuid, pool, quantity)
@@ -63,7 +60,7 @@ class AttachService(object):
         self.plugin_manager.run(
             "post_subscribe",
             consumer_uuid=self.identity.uuid,
-            entitlement_data=resp
+            entitlement_data=resp,
         )
 
         return resp

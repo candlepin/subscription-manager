@@ -28,10 +28,8 @@ class SupportedArchesCollector(collector.FactsCollector):
 
     def __init__(self, arch=None, prefix=None, testing=None, collected_hw_info=None):
         super(SupportedArchesCollector, self).__init__(
-            arch=arch,
-            prefix=prefix,
-            testing=testing,
-            collected_hw_info=collected_hw_info)
+            arch=arch, prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
+        )
 
     def get_arches_on_debian(self):
         """
@@ -42,22 +40,20 @@ class SupportedArchesCollector(collector.FactsCollector):
         arches = []
 
         try:
-            arch = subprocess.check_output(["dpkg", "--print-architecture"]).decode('UTF-8')
-            if arch != '':
-                arches.append(arch.rstrip('\n'))
+            arch = subprocess.check_output(["dpkg", "--print-architecture"]).decode("UTF-8")
+            if arch != "":
+                arches.append(arch.rstrip("\n"))
         except Exception as e:
             log.error("Error getting dpkg main architecture: %s", e)
 
         try:
-            arch = subprocess.check_output(["dpkg", "--print-foreign-architectures"]).decode('UTF-8')
-            if arch != '':
-                arches.append(arch.rstrip('\n'))
+            arch = subprocess.check_output(["dpkg", "--print-foreign-architectures"]).decode("UTF-8")
+            if arch != "":
+                arches.append(arch.rstrip("\n"))
         except Exception as e:
             log.error("Error getting dpkg foreign architecture: %s", e)
 
-        return {
-            'supported_architectures': ','.join(arches)
-        }
+        return {"supported_architectures": ",".join(arches)}
 
     def get_all(self):
         """
@@ -66,7 +62,7 @@ class SupportedArchesCollector(collector.FactsCollector):
         """
         arch_info = {}
 
-        dist_name = self._collected_hw_info['distribution.name'].lower()
+        dist_name = self._collected_hw_info["distribution.name"].lower()
         if any(os in dist_name for os in self.DEBIAN_DISTRIBUTIONS):
             arch_info = self.get_arches_on_debian()
 

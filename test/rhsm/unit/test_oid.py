@@ -4,7 +4,6 @@ from rhsm.certificate import OID
 
 
 class OIDTests(unittest.TestCase):
-
     def setUp(self):
         self.oid = OID("1.2.3.4.5.6.7")
 

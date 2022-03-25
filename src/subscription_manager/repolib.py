@@ -50,11 +50,11 @@ class YumPluginManager(object):
     (formerly for yum plugins, hence the name).
     """
 
-    DNF_PLUGIN_DIR = '/etc/dnf/plugins'
+    DNF_PLUGIN_DIR = "/etc/dnf/plugins"
 
     # List of yum plugins in YUM_PLUGIN_DIR which are automatically enabled
     # during sub-man CLI/GUI start
-    PLUGINS = ['subscription-manager', 'product-id']
+    PLUGINS = ["subscription-manager", "product-id"]
 
     PLUGIN_ENABLED = 1
     PLUGIN_DISABLED = 0
@@ -67,7 +67,7 @@ class YumPluginManager(object):
         :return: True, when auto_enable_yum_plugins is enabled. Otherwise False is returned.
         """
         try:
-            auto_enable_yum_plugins = conf['rhsm'].get_int('auto_enable_yum_plugins')
+            auto_enable_yum_plugins = conf["rhsm"].get_int("auto_enable_yum_plugins")
         except ValueError as err:
             log.exception(err)
             auto_enable_yum_plugins = True
@@ -81,10 +81,12 @@ class YumPluginManager(object):
 
     @staticmethod
     def warning_message(enabled_yum_plugins):
-        message = _('The yum/dnf plugins: %s were automatically enabled for the benefit of '
-                    'Red Hat Subscription Management. If not desired, use '
-                    '"subscription-manager config --rhsm.auto_enable_yum_plugins=0" to '
-                    'block this behavior.') % ', '.join(enabled_yum_plugins)
+        message = _(
+            "The yum/dnf plugins: %s were automatically enabled for the benefit of "
+            "Red Hat Subscription Management. If not desired, use "
+            '"subscription-manager config --rhsm.auto_enable_yum_plugins=0" to '
+            "block this behavior."
+        ) % ", ".join(enabled_yum_plugins)
         return message
 
     @classmethod
@@ -102,7 +104,7 @@ class YumPluginManager(object):
         # Go through the list of yum plugins and try to find configuration
         # file of these plugins.
         for plugin_name in cls.PLUGINS:
-            plugin_file_name = plugin_dir + '/' + plugin_name + '.conf'
+            plugin_file_name = plugin_dir + "/" + plugin_name + ".conf"
             plugin_config = ConfigParser()
             try:
                 result = plugin_config.read(plugin_file_name)
@@ -110,45 +112,47 @@ class YumPluginManager(object):
                 # Capture all errors during reading yum plugin conf file
                 # report them and skip this conf file
                 log.error(
-                    "Error during reading %s plugin config file '%s': %s. Skipping this file." %
-                    (pkg_mgr_name, plugin_file_name, err)
+                    "Error during reading %s plugin config file '%s': %s. Skipping this file."
+                    % (pkg_mgr_name, plugin_file_name, err)
                 )
                 continue
 
             if len(result) == 0:
-                log.warn('Configuration file of %s plugin: "%s" cannot be read' %
-                         (pkg_mgr_name, plugin_file_name))
+                log.warn(
+                    'Configuration file of %s plugin: "%s" cannot be read' % (pkg_mgr_name, plugin_file_name)
+                )
                 continue
 
             is_plugin_enabled = False
-            if not plugin_config.has_section('main'):
+            if not plugin_config.has_section("main"):
                 log.warning(
-                    'Configuration file of %s plugin: "%s" does not include main section. Adding main section.' %
-                    (pkg_mgr_name, plugin_file_name)
+                    'Configuration file of %s plugin: "%s" does not include main section. Adding main section.'
+                    % (pkg_mgr_name, plugin_file_name)
                 )
-                plugin_config.add_section('main')
-            elif plugin_config.has_option('main', 'enabled'):
+                plugin_config.add_section("main")
+            elif plugin_config.has_option("main", "enabled"):
                 try:
                     # Options 'enabled' can be 0 or 1
-                    is_plugin_enabled = plugin_config.getint('main', 'enabled')
+                    is_plugin_enabled = plugin_config.getint("main", "enabled")
                 except ValueError:
                     try:
                         # Options 'enabled' can be also: true or false
-                        is_plugin_enabled = plugin_config.getboolean('main', 'enabled')
+                        is_plugin_enabled = plugin_config.getboolean("main", "enabled")
                     except ValueError:
                         log.warning(
-                            "File %s has wrong value of options: 'enabled' in section: 'main' (not a int nor boolean)" %
-                            plugin_file_name
+                            "File %s has wrong value of options: 'enabled' in section: 'main' (not a int nor boolean)"
+                            % plugin_file_name
                         )
 
             if is_plugin_enabled == cls.PLUGIN_ENABLED:
-                log.debug('%s plugin: "%s" already enabled. Nothing to do.' %
-                          (pkg_mgr_name, plugin_file_name))
+                log.debug(
+                    '%s plugin: "%s" already enabled. Nothing to do.' % (pkg_mgr_name, plugin_file_name)
+                )
             else:
                 log.warning('Enabling %s plugin: "%s".' % (pkg_mgr_name, plugin_file_name))
                 # Change content of plugin configuration file and enable this plugin.
-                with open(plugin_file_name, 'w') as cfg_file:
-                    plugin_config.set('main', 'enabled', cls.PLUGIN_ENABLED)
+                with open(plugin_file_name, "w") as cfg_file:
+                    plugin_config.set("main", "enabled", cls.PLUGIN_ENABLED)
                     plugin_config.write(cfg_file)
                 enabled_lugins.append(plugin_file_name)
 
@@ -164,10 +168,10 @@ class YumPluginManager(object):
 
         # When user doesn't want to automatically enable yum plugins, then return empty list
         if cls.is_auto_enable_enabled() is False:
-            log.debug('The rhsm.auto_enable_yum_plugins is disabled. Skipping the enablement of yum plugins.')
+            log.debug("The rhsm.auto_enable_yum_plugins is disabled. Skipping the enablement of yum plugins.")
             return []
 
-        log.debug('The rhsm.auto_enable_yum_plugins is enabled')
+        log.debug("The rhsm.auto_enable_yum_plugins is enabled")
 
         enabled_plugins = []
 
@@ -178,6 +182,7 @@ class YumPluginManager(object):
 
 class RepoActionInvoker(BaseActionInvoker):
     """Invoker for yum/dnf repo updating related actions."""
+
     def __init__(self, cache_only=False, locker=None):
         super(RepoActionInvoker, self).__init__(locker=locker)
         self.cache_only = cache_only
@@ -200,7 +205,7 @@ class RepoActionInvoker(BaseActionInvoker):
         # Add the current repo data
         yum_repo_file = YumRepoFile()
         yum_repo_file.read()
-        server_value_repo_file = YumRepoFile('var/lib/rhsm/repo_server_val/')
+        server_value_repo_file = YumRepoFile("var/lib/rhsm/repo_server_val/")
         server_value_repo_file.read()
         for repo in repos:
             existing = yum_repo_file.section(repo.id)
@@ -246,6 +251,7 @@ class YumReleaseverSource(object):
     get_expansion() gets 'release' from consumer info from server,
     using the cache as required.
     """
+
     marker = "$releasever"
     # if all eles fails the default is to leave the marker un expanded
     default = marker
@@ -277,7 +283,7 @@ class YumReleaseverSource(object):
         if result is None:
             return False
         try:
-            release = result['releaseVer']
+            release = result["releaseVer"]
             return YumReleaseverSource.is_not_empty(release)
         except Exception:
             return False
@@ -308,7 +314,7 @@ class YumReleaseverSource(object):
             self._expansion = self.default
             return self._expansion
 
-        self._expansion = result['releaseVer']
+        self._expansion = result["releaseVer"]
         return self._expansion
 
 
@@ -328,6 +334,7 @@ class RepoUpdateActionCommand(object):
 
     Returns an RepoActionReport.
     """
+
     def __init__(self, cache_only=False, apply_overrides=True):
         self.identity = inj.require(inj.IDENTITY)
 
@@ -348,7 +355,9 @@ class RepoUpdateActionCommand(object):
         self.override_supported = False
 
         try:
-            self.override_supported = 'content_overrides' in get_supported_resources(uep=None, identity=self.identity)
+            self.override_supported = "content_overrides" in get_supported_resources(
+                uep=None, identity=self.identity
+            )
         except (socket.error, connection.ConnectionException) as e:
             # swallow the error to fix bz 1298327
             log.exception(e)
@@ -385,9 +394,9 @@ class RepoUpdateActionCommand(object):
 
             for item in status or []:
                 # Don't iterate through the list
-                if item['contentLabel'] not in self.overrides:
-                    self.overrides[item['contentLabel']] = {}
-                self.overrides[item['contentLabel']][item['name']] = item['value']
+                if item["contentLabel"] not in self.overrides:
+                    self.overrides[item["contentLabel"]] = {}
+                self.overrides[item["contentLabel"]][item["name"]] = item["value"]
 
     def perform(self):
         # the [rhsm] manage_repos can be overridden to disable generation of the
@@ -397,8 +406,7 @@ class RepoUpdateActionCommand(object):
             for repo_class, _dummy in get_repo_file_classes():
                 repo_file = repo_class()
                 if repo_file.exists():
-                    log.info("Removing %s due to manage_repos configuration." %
-                             repo_file.path)
+                    log.info("Removing %s due to manage_repos configuration." % repo_file.path)
             RepoActionInvoker.delete_repo_file()
             return 0
 
@@ -466,8 +474,8 @@ class RepoUpdateActionCommand(object):
 
         # baseurl and ca_cert could be "CDNInfo" or
         # bundle with "ConnectionInfo" etc
-        baseurl = conf['rhsm']['baseurl']
-        ca_cert = conf['rhsm']['repo_ca_cert']
+        baseurl = conf["rhsm"]["baseurl"]
+        ca_cert = conf["rhsm"]["repo_ca_cert"]
 
         content_list = self.get_all_content(baseurl, ca_cert)
 
@@ -480,8 +488,7 @@ class RepoUpdateActionCommand(object):
     def matching_content(self):
         content = []
         for content_type in ALLOWED_CONTENT_TYPES:
-            content += model.find_content(self.ent_source,
-                                          content_type=content_type)
+            content += model.find_content(self.ent_source, content_type=content_type)
         return content
 
     def get_all_content(self, baseurl, ca_cert):
@@ -498,8 +505,7 @@ class RepoUpdateActionCommand(object):
         release_source = YumReleaseverSource()
 
         for content in matching_content:
-            repo = Repo.from_ent_cert_content(content, baseurl, ca_cert,
-                                              release_source)
+            repo = Repo.from_ent_cert_content(content, baseurl, ca_cert, release_source)
 
             # overrides are yum repo only at the moment, but
             # content sources will likely need to learn how to
@@ -552,10 +558,12 @@ class RepoUpdateActionCommand(object):
             # otherwise left alone. However if we see that the property was overridden
             # but that override has since been removed, we need to revert to the default
             # value.
-            if mutable and not self._is_overridden(old_repo, key) \
-                    and not self._was_overridden(old_repo, key, old_repo.get(key)):
-                if not old_repo.get(key) or \
-                        old_repo.get(key) == server_value_repo.get(key):
+            if (
+                mutable
+                and not self._is_overridden(old_repo, key)
+                and not self._was_overridden(old_repo, key, old_repo.get(key))
+            ):
+                if not old_repo.get(key) or old_repo.get(key) == server_value_repo.get(key):
                     if old_repo.get(key) == new_val:
                         continue
                     if new_val is None:
@@ -581,7 +589,7 @@ class RepoUpdateActionCommand(object):
                 old_repo[key] = new_val
                 changes_made += 1
 
-            if (mutable and new_val is not None):
+            if mutable and new_val is not None:
                 server_value_repo[key] = new_val
 
         return changes_made
@@ -598,6 +606,7 @@ class RepoUpdateActionCommand(object):
 
 class RepoActionReport(ActionReport):
     """Report class for reporting yum repo updates."""
+
     name = "Repo Updates"
 
     def __init__(self):
@@ -611,18 +620,18 @@ class RepoActionReport(ActionReport):
         return len(self.repo_updates) + len(self.repo_added) + len(self.repo_deleted)
 
     def format_repos_info(self, repos, formatter):
-        indent = '    '
+        indent = "    "
         if not repos:
-            return '%s<NONE>' % indent
+            return "%s<NONE>" % indent
 
         r = []
         for repo in repos:
             r.append("%s%s" % (indent, formatter(repo)))
-        return '\n'.join(r)
+        return "\n".join(r)
 
     def repo_format(self, repo):
-        msg = "[id:%s %s]" % (repo.id, repo['name'])
-        return msg.encode('utf8')
+        msg = "[id:%s %s]" % (repo.id, repo["name"])
+        return msg.encode("utf8")
 
     def section_format(self, section):
         return "[%s]" % section
@@ -634,13 +643,13 @@ class RepoActionReport(ActionReport):
         return self.format_repos_info(sections, self.section_format)
 
     def __str__(self):
-        s = [_('Repo updates') + '\n']
-        s.append(_('Total repo updates: %d') % self.updates())
-        s.append(_('Updated'))
+        s = [_("Repo updates") + "\n"]
+        s.append(_("Total repo updates: %d") % self.updates())
+        s.append(_("Updated"))
         s.append(self.format_repos(self.repo_updates))
-        s.append(_('Added (new)'))
+        s.append(_("Added (new)"))
         s.append(self.format_repos(self.repo_added))
-        s.append(_('Deleted'))
+        s.append(_("Deleted"))
         # deleted are former repo sections, but they are the same type
         s.append(self.format_sections(self.repo_deleted))
-        return '\n'.join(s)
+        return "\n".join(s)

@@ -34,9 +34,9 @@ class ConsumerIdentity(object):
     Includes helpers for reading/writing consumer identity certificates
     from disk."""
 
-    PATH = conf['rhsm']['consumerCertDir']
-    KEY = 'key.pem'
-    CERT = 'cert.pem'
+    PATH = conf["rhsm"]["consumerCertDir"]
+    KEY = "key.pem"
+    CERT = "cert.pem"
 
     @staticmethod
     def keypath():
@@ -56,8 +56,7 @@ class ConsumerIdentity(object):
 
     @classmethod
     def exists(cls):
-        return (os.path.exists(cls.keypath()) and
-                os.path.exists(cls.certpath()))
+        return os.path.exists(cls.keypath()) and os.path.exists(cls.certpath())
 
     @classmethod
     def existsAndValid(cls):
@@ -66,7 +65,7 @@ class ConsumerIdentity(object):
                 cls.read()
                 return True
             except Exception as e:
-                log.warn('possible certificate corruption')
+                log.warn("possible certificate corruption")
                 log.error(e)
         return False
 
@@ -79,7 +78,7 @@ class ConsumerIdentity(object):
 
     def getConsumerId(self):
         subject = self.x509.subject
-        return subject.get('CN')
+        return subject.get("CN")
 
     def getConsumerName(self):
         altName = self.x509.alt_name
@@ -93,11 +92,12 @@ class ConsumerIdentity(object):
     # why this landed in a parallel disjoint class wrapping the actual cert.
     def write(self):
         from subscription_manager import managerlib
+
         self.__mkdir()
-        with open(self.keypath(), 'w') as key_file:
+        with open(self.keypath(), "w") as key_file:
             key_file.write(self.key)
         os.chmod(self.keypath(), managerlib.ID_CERT_PERMS)
-        with open(self.certpath(), 'w') as cert_file:
+        with open(self.certpath(), "w") as cert_file:
             cert_file.write(self.cert)
         os.chmod(self.certpath(), managerlib.ID_CERT_PERMS)
 
@@ -115,19 +115,18 @@ class ConsumerIdentity(object):
             os.mkdir(path)
 
     def __str__(self):
-        return 'consumer: name="%s", uuid=%s' % \
-            (self.getConsumerName(),
-             self.getConsumerId())
+        return 'consumer: name="%s", uuid=%s' % (self.getConsumerName(), self.getConsumerId())
 
 
 class Identity(object):
     """Wrapper for sharing consumer identity without constant reloading."""
+
     def __init__(self):
         self.consumer = None
         self._lock = threading.Lock()
         self._name = None
         self._uuid = None
-        self._cert_dir_path = conf['rhsm']['consumerCertDir']
+        self._cert_dir_path = conf["rhsm"]["consumerCertDir"]
         self.reload()
 
     def reload(self):
@@ -141,8 +140,10 @@ class Identity(object):
             except (CertificateException, IOError) as err:
                 self.consumer = None
                 err_msg = err
-                msg = "Reload of consumer identity cert %s raised an exception with msg: %s" \
-                    % (ConsumerIdentity.certpath(), err_msg)
+                msg = "Reload of consumer identity cert %s raised an exception with msg: %s" % (
+                    ConsumerIdentity.certpath(),
+                    err_msg,
+                )
                 if isinstance(err, IOError) and err.errno == errno.ENOENT:
                     log.debug(msg)
                 else:
@@ -157,7 +158,7 @@ class Identity(object):
             else:
                 self._name = None
                 self._uuid = None
-                self._cert_dir_path = conf['rhsm']['consumerCertDir']
+                self._cert_dir_path = conf["rhsm"]["consumerCertDir"]
 
     def _get_consumer_identity(self):
         return ConsumerIdentity.read()

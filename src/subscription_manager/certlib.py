@@ -6,7 +6,6 @@ log = logging.getLogger(__name__)
 
 
 class Locker(object):
-
     def __init__(self):
         self.lock = self._get_lock()
 
@@ -37,6 +36,7 @@ class BaseActionInvoker(object):
 
 class ActionReport(object):
     """Base class for cert lib and action reports"""
+
     name = "Report"
 
     def __init__(self):
@@ -51,10 +51,10 @@ class ActionReport(object):
         log.debug(self)
 
     def format_exceptions(self):
-        buf = ''
+        buf = ""
         for e in self._exceptions:
-            buf += str(e).split('-', maxsplit=1)[-1].strip()
-            buf += '\n'
+            buf += str(e).split("-", maxsplit=1)[-1].strip()
+            buf += "\n"
         return buf
 
     def print_exceptions(self):
@@ -67,7 +67,9 @@ class ActionReport(object):
         updates: %(updates)s
         exceptions: %(exceptions)s
         """
-        return template % {'report_name': self.name,
-                           'status': self._status,
-                           'updates': self._updates,
-                           'exceptions': self.format_exceptions()}
+        return template % {
+            "report_name": self.name,
+            "status": self._status,
+            "updates": self._updates,
+            "exceptions": self.format_exceptions(),
+        }

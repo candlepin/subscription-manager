@@ -60,9 +60,7 @@ def _collect_cloud_info(cloud_list: list, log) -> dict:
     """
 
     # Create dispatcher dictionary from the list of supported cloud providers
-    cloud_providers = {
-        provider_cls.CLOUD_PROVIDER_ID: provider_cls for provider_cls in CLOUD_PROVIDERS
-    }
+    cloud_providers = {provider_cls.CLOUD_PROVIDER_ID: provider_cls for provider_cls in CLOUD_PROVIDERS}
 
     result = {}
     # Go through the list of detected cloud providers and try to collect
@@ -77,7 +75,7 @@ def _collect_cloud_info(cloud_list: list, log) -> dict:
         # When it wasn't possible to get metadata for this cloud provider, then
         # continue with next detected cloud provider
         if metadata is None:
-            log.warning(f'No metadata gathered for cloud provider: {cloud_provider_id}')
+            log.warning(f"No metadata gathered for cloud provider: {cloud_provider_id}")
             continue
 
         # Try to get signature
@@ -89,17 +87,17 @@ def _collect_cloud_info(cloud_list: list, log) -> dict:
         if signature is None:
             signature = ""
 
-        log.info(f'Metadata and signature gathered for cloud provider: {cloud_provider_id}')
+        log.info(f"Metadata and signature gathered for cloud provider: {cloud_provider_id}")
 
         # Encode metadata and signature using base64 encoding. Because base64.b64encode
         # returns values as bytes, then we decode it to string using ASCII encoding.
-        b64_metadata: str = base64.b64encode(bytes(metadata, 'utf-8')).decode('ascii')
-        b64_signature: str = base64.b64encode(bytes(signature, 'utf-8')).decode('ascii')
+        b64_metadata: str = base64.b64encode(bytes(metadata, "utf-8")).decode("ascii")
+        b64_signature: str = base64.b64encode(bytes(signature, "utf-8")).decode("ascii")
 
         result = {
-            'cloud_id': cloud_provider_id,
-            'metadata': b64_metadata,
-            'signature': b64_signature
+            "cloud_id": cloud_provider_id,
+            "metadata": b64_metadata,
+            "signature": b64_signature,
         }
         break
 
@@ -117,24 +115,24 @@ def _auto_register(cp_provider, log):
 
     identity = inj.require(inj.IDENTITY)
     if identity.is_valid() is True:
-        log.debug('System already registered. Skipping auto-registration')
+        log.debug("System already registered. Skipping auto-registration")
         return
 
-    log.debug('Trying to detect cloud provider')
+    log.debug("Trying to detect cloud provider")
 
     # Try to detect cloud provider first. Use lower threshold in this case,
     # because we want to have more sensitive detection in this case
     # (automatic registration is more important than reporting of facts)
     cloud_list = detect_cloud_provider(threshold=0.3)
     if len(cloud_list) == 0:
-        log.warning('This system does not run on any supported cloud provider. Skipping auto-registration')
+        log.warning("This system does not run on any supported cloud provider. Skipping auto-registration")
         sys.exit(-1)
 
     # When some cloud provider(s) was detected, then try to collect metadata
     # and signature
     cloud_info = _collect_cloud_info(cloud_list, log)
     if len(cloud_info) == 0:
-        log.warning('It was not possible to collect any cloud metadata. Unable to perform auto-registration')
+        log.warning("It was not possible to collect any cloud metadata. Unable to perform auto-registration")
         sys.exit(-1)
 
     # Get connection not using any authentication
@@ -143,13 +141,13 @@ def _auto_register(cp_provider, log):
     # Try to get JWT token from candlepin (cloud registration adapter)
     try:
         jwt_token = cp.getJWToken(
-            cloud_id=cloud_info['cloud_id'],
-            metadata=cloud_info['metadata'],
-            signature=cloud_info['signature']
+            cloud_id=cloud_info["cloud_id"],
+            metadata=cloud_info["metadata"],
+            signature=cloud_info["signature"],
         )
     except Exception as err:
-        log.error('Unable to get JWT token: {err}'.format(err=str(err)))
-        log.warning('Canceling auto-registration')
+        log.error("Unable to get JWT token: {err}".format(err=str(err)))
+        log.warning("Canceling auto-registration")
         sys.exit(-1)
 
     # Try to register using JWT token
@@ -177,13 +175,13 @@ def _main(options, log):
 
     cp_provider = inj.require(inj.CP_PROVIDER)
     correlation_id = generate_correlation_id()
-    log.debug('X-Correlation-ID: %s', correlation_id)
+    log.debug("X-Correlation-ID: %s", correlation_id)
     cp_provider.set_correlation_id(correlation_id)
     cfg = config.get_config_parser()
 
-    log.debug('check for rhsmcertd disable')
-    if '1' == cfg.get('rhsmcertd', 'disable') and not options.force:
-        log.warning('The rhsmcertd process has been disabled by configuration.')
+    log.debug("check for rhsmcertd disable")
+    if "1" == cfg.get("rhsmcertd", "disable") and not options.force:
+        log.warning("The rhsmcertd process has been disabled by configuration.")
         sys.exit(-1)
 
     # Was script executed with --auto-register option
@@ -191,13 +189,16 @@ def _main(options, log):
         _auto_register(cp_provider, log)
 
     if not ConsumerIdentity.existsAndValid():
-        log.error('Either the consumer is not registered or the certificates' +
-                  ' are corrupted. Certificate update using daemon failed.')
+        log.error(
+            "Either the consumer is not registered or the certificates"
+            + " are corrupted. Certificate update using daemon failed."
+        )
         sys.exit(-1)
-    print(_('Updating entitlement certificates & repositories'))
+    print(_("Updating entitlement certificates & repositories"))
 
     cp = cp_provider.get_consumer_auth_cp()
-    cp.supports_resource(None)  # pre-load supported resources; serves as a way of failing before locking the repos
+    # pre-load supported resources; serves as a way of failing before locking the repos
+    cp.supports_resource(None)
 
     try:
         if options.autoheal:
@@ -239,25 +240,37 @@ def _main(options, log):
         # cert, but making a request for a different consumer uuid, so unlikely. Could register
         # with --consumerid get there?
         if ge.deleted_id == uuid:
-            log.critical("Consumer profile \"%s\" has been deleted from the server. Its local certificates will now be archived", uuid)
+            log.critical(
+                'Consumer profile "%s" has been deleted from the server. Its local certificates will now be archived',
+                uuid,
+            )
             managerlib.clean_all_data()
-            log.critical("Certificates archived to '/etc/pki/consumer.old'. Contact your system administrator if you need more information.")
+            log.critical(
+                "Certificates archived to '/etc/pki/consumer.old'. Contact your system administrator if you need more information."
+            )
 
         raise ge
 
 
 def main():
     logutil.init_logger()
-    log = logging.getLogger('rhsm-app.' + __name__)
+    log = logging.getLogger("rhsm-app." + __name__)
 
     parser = ArgumentParser(usage=USAGE)
-    parser.add_argument("--autoheal", dest="autoheal", action="store_true",
-                        default=False, help="perform an autoheal check")
-    parser.add_argument("--force", dest="force", action="store_true",
-                        default=False, help=SUPPRESS)
     parser.add_argument(
-        "--auto-register", dest="auto_register", action="store_true",
-        default=False, help="perform auto-registration"
+        "--autoheal",
+        dest="autoheal",
+        action="store_true",
+        default=False,
+        help="perform an autoheal check",
+    )
+    parser.add_argument("--force", dest="force", action="store_true", default=False, help=SUPPRESS)
+    parser.add_argument(
+        "--auto-register",
+        dest="auto_register",
+        action="store_true",
+        default=False,
+        help="perform auto-registration",
     )
 
     (options, args) = parser.parse_known_args()
@@ -272,10 +285,10 @@ def main():
             sys.exit(-1)
     except Exception as e:
         log.error("Error while updating certificates using daemon")
-        print(_('Unable to update entitlement certificates and repositories'))
+        print(_("Unable to update entitlement certificates and repositories"))
         log.exception(e)
         sys.exit(-1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

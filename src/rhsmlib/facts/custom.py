@@ -57,7 +57,7 @@ class CustomFactsFile(object):
 
     def _open_and_read(self):
         try:
-            with open(self.path, 'r') as fd:
+            with open(self.path, "r") as fd:
                 return fd.read()
         except IOError:
             log.warn("Unable to open custom facts file: %s" % self.path)
@@ -100,18 +100,13 @@ class CustomFactsDirectories(object):
 
 
 class CustomFactsCollector(FactsCollector):
-    def __init__(self, prefix=None, testing=None, collected_hw_info=None,
-                 path_and_globs=None):
+    def __init__(self, prefix=None, testing=None, collected_hw_info=None, path_and_globs=None):
         super(CustomFactsCollector, self).__init__(
-            prefix=prefix,
-            testing=testing,
-            collected_hw_info=collected_hw_info
+            prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
         )
         self.path_and_globs = path_and_globs
         if path_and_globs is None:
-            self.path_and_globs = [
-                (os.path.join(rhsm.config.DEFAULT_CONFIG_DIR, 'facts'), '*.facts')
-            ]
+            self.path_and_globs = [(os.path.join(rhsm.config.DEFAULT_CONFIG_DIR, "facts"), "*.facts")]
         self.facts_directories = CustomFactsDirectories(self.path_and_globs)
 
     def get_all(self):

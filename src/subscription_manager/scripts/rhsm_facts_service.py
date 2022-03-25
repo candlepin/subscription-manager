@@ -19,7 +19,7 @@ import logging
 
 # Init logging very early so we can log any issues that occur at import time
 logging.basicConfig(level=logging.DEBUG, format="%(levelname)5s [%(name)s:%(lineno)s] %(message)s")
-log = logging.getLogger('')
+log = logging.getLogger("")
 log.setLevel(logging.INFO)
 
 
@@ -28,10 +28,10 @@ def main():
         object_classes = [
             base.AllFacts,
         ]
-        sys.exit(service_wrapper.main(
-            sys.argv,
-            object_classes=object_classes,
-            default_bus_name=constants.FACTS_DBUS_NAME)
+        sys.exit(
+            service_wrapper.main(
+                sys.argv, object_classes=object_classes, default_bus_name=constants.FACTS_DBUS_NAME
+            )
         )
     except Exception:
         log.exception("DBus service startup failed")

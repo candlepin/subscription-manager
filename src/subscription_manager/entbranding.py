@@ -112,6 +112,7 @@ class Brand(object):
 
 class ProductBrand(Brand):
     """A brand for a branded product"""
+
     def __init__(self, name):
         self.brand_file = self._get_brand_file()
         self.name = name
@@ -129,14 +130,15 @@ class ProductBrand(Brand):
 
     @staticmethod
     def format_brand(brand):
-        if not brand.endswith('\n'):
-            brand += '\n'
+        if not brand.endswith("\n"):
+            brand += "\n"
 
         return brand
 
 
 class CurrentBrand(Brand):
     """The currently installed brand"""
+
     def __init__(self):
         self.brand_file = self._get_brand_file()
         self.load()
@@ -169,11 +171,11 @@ class BrandFile(object):
     path = "/var/lib/rhsm/branded_name"
 
     def write(self, brand_info):
-        with open(self.path, 'w') as brand_file:
+        with open(self.path, "w") as brand_file:
             brand_file.write(brand_info)
 
     def read(self):
-        with open(self.path, 'r') as brand_file:
+        with open(self.path, "r") as brand_file:
             return brand_file.read()
 
     def __str__(self):

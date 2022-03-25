@@ -35,13 +35,16 @@ log = logging.getLogger(__name__)
 
 
 class StatusCommand(CliCommand):
-
     def __init__(self):
         shortdesc = _("Show status information for this system's subscriptions and products")
         super(StatusCommand, self).__init__("status", shortdesc, True)
-        self.parser.add_argument("--ondate", dest="on_date",
-                                 help=_("future date to check status on, defaults to today's date (example: {example})").format(
-                                     example=strftime("%Y-%m-%d", localtime())))
+        self.parser.add_argument(
+            "--ondate",
+            dest="on_date",
+            help=_("future date to check status on, defaults to today's date (example: {example})").format(
+                example=strftime("%Y-%m-%d", localtime())
+            ),
+        )
 
     def _do_command(self):
         # list status and all reasons it is not valid
@@ -57,16 +60,17 @@ class StatusCommand(CliCommand):
         print("+-------------------------------------------+")
 
         service_status = entitlement.EntitlementService(None).get_status(on_date)
-        reasons = service_status['reasons']
+        reasons = service_status["reasons"]
 
-        if service_status['valid']:
+        if service_status["valid"]:
             result = 0
         else:
             result = 1
 
         ca_message = ""
-        has_cert = (_(
-            "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n"))
+        has_cert = _(
+            "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n"
+        )
 
         certs = self.entitlement_dir.list_with_content_access()
         ca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
@@ -76,14 +80,18 @@ class StatusCommand(CliCommand):
             if is_simple_content_access(uep=self.cp, identity=self.identity):
                 ca_message = has_cert
 
-        print(_("Overall Status: {status}\n{message}").format(status=service_status['status'], message=ca_message))
+        print(
+            _("Overall Status: {status}\n{message}").format(
+                status=service_status["status"], message=ca_message
+            )
+        )
 
         columns = get_terminal_width()
         for name in reasons:
-            print(format_name(name + ':', 0, columns))
+            print(format_name(name + ":", 0, columns))
             for message in reasons[name]:
                 print("- {name}".format(name=format_name(message, 2, columns)))
-            print('')
+            print("")
 
         try:
             store = syspurposelib.get_sys_purpose_store()
@@ -97,11 +105,11 @@ class StatusCommand(CliCommand):
         print(_("System Purpose Status: {status}").format(status=syspurpose_cache.get_overall_status()))
 
         syspurpose_status_code = syspurpose_cache.get_overall_status_code()
-        if syspurpose_status_code != 'matched':
+        if syspurpose_status_code != "matched":
             reasons = syspurpose_cache.get_status_reasons()
             if reasons is not None:
                 for reason in reasons:
                     print("- {reason}".format(reason=reason))
-        print('')
+        print("")
 
         return result

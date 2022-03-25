@@ -61,8 +61,8 @@ class AzureCloudProvider(BaseCloudProvider):
 
     # HTTP header "Metadata" has to be equal to "true" to be able to get metadata
     HTTP_HEADERS = {
-        'User-Agent': 'cloud-what/1.0',
-        "Metadata": "true"
+        "User-Agent": "cloud-what/1.0",
+        "Metadata": "true",
     }
 
     # Increased timeout for Azure, because response can have long delay, when wrong
@@ -86,8 +86,10 @@ class AzureCloudProvider(BaseCloudProvider):
         if self.is_vm() is False:
             return False
         # This is valid for virtual machines running on Azure
-        if 'dmi.chassis.asset_tag' in self.hw_info and \
-                self.hw_info['dmi.chassis.asset_tag'] == '7783-7084-3265-9085-8269-3286-77':
+        if (
+            "dmi.chassis.asset_tag" in self.hw_info
+            and self.hw_info["dmi.chassis.asset_tag"] == "7783-7084-3265-9085-8269-3286-77"
+        ):
             return True
         # In other cases return False
         return False
@@ -106,12 +108,14 @@ class AzureCloudProvider(BaseCloudProvider):
             return 0.0
 
         # We know that Azure uses only HyperV
-        if 'virt.host_type' in self.hw_info:
-            if 'hyperv' in self.hw_info['virt.host_type']:
+        if "virt.host_type" in self.hw_info:
+            if "hyperv" in self.hw_info["virt.host_type"]:
                 probability += 0.3
 
-        if 'dmi.chassis.asset_tag' in self.hw_info and \
-                self.hw_info['dmi.chassis.asset_tag'] == '7783-7084-3265-9085-8269-3286-77':
+        if (
+            "dmi.chassis.asset_tag" in self.hw_info
+            and self.hw_info["dmi.chassis.asset_tag"] == "7783-7084-3265-9085-8269-3286-77"
+        ):
             probability += 0.3
 
         # The waagent is installed
@@ -124,9 +128,9 @@ class AzureCloudProvider(BaseCloudProvider):
         for hw_item in self.hw_info.values():
             if type(hw_item) != str:
                 continue
-            if 'microsoft' in hw_item.lower():
+            if "microsoft" in hw_item.lower():
                 found_microsoft = True
-            elif 'azure' in hw_item.lower():
+            elif "azure" in hw_item.lower():
                 found_azure = True
         if found_microsoft is True:
             probability += 0.3
@@ -145,10 +149,10 @@ class AzureCloudProvider(BaseCloudProvider):
         try:
             api_versions_dict = json.loads(api_versions_str)
         except TypeError as err:
-            log.error(f'Unable to decode Azure API versions: {err}')
+            log.error(f"Unable to decode Azure API versions: {err}")
         else:
-            if 'apiVersions' in api_versions_dict:
-                api_versions = api_versions_dict['apiVersions']
+            if "apiVersions" in api_versions_dict:
+                api_versions = api_versions_dict["apiVersions"]
         return api_versions
 
     def _has_azure_linux_agent(self):
@@ -157,7 +161,7 @@ class AzureCloudProvider(BaseCloudProvider):
         on Azure. See: https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/agent-linux
         :return: True if waagent is installed
         """
-        return which('waagent') is not None
+        return which("waagent") is not None
 
     def _fix_supported_api_version(self) -> Union[str, None]:
         """
@@ -168,14 +172,14 @@ class AzureCloudProvider(BaseCloudProvider):
         if api_versions is not None and len(api_versions) > 0:
             if self.API_VERSION not in api_versions:
                 log.warning(
-                    f'Current Azure IMDS API version {self.API_VERSION} not included in the list of '
-                    f'supported API versions: {api_versions}'
+                    f"Current Azure IMDS API version {self.API_VERSION} not included in the list of "
+                    f"supported API versions: {api_versions}"
                 )
             else:
-                log.warning(f'Current Azure IMDS API version {self.API_VERSION} not fully supported')
+                log.warning(f"Current Azure IMDS API version {self.API_VERSION} not fully supported")
             # Get newest version
             api_version = api_versions[-1]
-            log.warning(f'Changing Azure IMDS API version to: {api_version}')
+            log.warning(f"Changing Azure IMDS API version to: {api_version}")
             self.API_VERSION = api_version
             # Fix URL for gathering metadata and signature
             self.CLOUD_PROVIDER_METADATA_URL = self.BASE_CLOUD_PROVIDER_METADATA_URL + api_version
@@ -262,7 +266,7 @@ def _smoke_tests():
 
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     handler.setFormatter(formatter)
     root.addHandler(handler)
 
@@ -271,32 +275,34 @@ def _smoke_tests():
     azure_cloud_provider = AzureCloudProvider(facts)
     result = azure_cloud_provider.is_running_on_cloud()
     probability = azure_cloud_provider.is_likely_running_on_cloud()
-    print('>>> debug <<< result: %s, %6.3f' % (result, probability))
+    print(">>> debug <<< result: %s, %6.3f" % (result, probability))
 
     if result is True:
         metadata = azure_cloud_provider.get_metadata()
         signature = azure_cloud_provider.get_signature()
-        print(f'>>> debug <<< metadata: {metadata}')
-        print(f'>>> debug <<< signature: {signature}')
+        print(f">>> debug <<< metadata: {metadata}")
+        print(f">>> debug <<< signature: {signature}")
         api_versions = azure_cloud_provider.get_api_versions()
-        print(f'>>> debug <<< api_versions: {api_versions}')
+        print(f">>> debug <<< api_versions: {api_versions}")
 
         # Test getting metadata and signature with too old API version
-        AzureCloudProvider.API_VERSION = '2011-01-01'
-        AzureCloudProvider.CLOUD_PROVIDER_METADATA_URL = \
+        AzureCloudProvider.API_VERSION = "2011-01-01"
+        AzureCloudProvider.CLOUD_PROVIDER_METADATA_URL = (
             "http://169.254.169.254/metadata/instance?api-version=2011-01-01"
-        AzureCloudProvider.CLOUD_PROVIDER_SIGNATURE_URL = \
+        )
+        AzureCloudProvider.CLOUD_PROVIDER_SIGNATURE_URL = (
             "http://169.254.169.254/metadata/attested/document?api-version=2011-01-01"
+        )
         azure_cloud_provider = AzureCloudProvider({})
         azure_cloud_provider._cached_metadata = None
         azure_cloud_provider._cached_signature = None
         metadata = azure_cloud_provider.get_metadata()
-        print(f'>>> debug <<< metadata: {metadata}')
+        print(f">>> debug <<< metadata: {metadata}")
         signature = azure_cloud_provider.get_signature()
-        print(f'>>> debug <<< signature: {signature}')
+        print(f">>> debug <<< signature: {signature}")
 
 
 # Some temporary smoke testing code. You can test this module using:
 # sudo PYTHONPATH=./src python3 -m cloud_what.providers.azure
-if __name__ == '__main__':
+if __name__ == "__main__":
     _smoke_tests()

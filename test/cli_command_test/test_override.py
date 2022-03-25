@@ -40,7 +40,7 @@ class TestOverrideCommand(TestCliProxyCommand):
         self._test_exception(["--repo", "x"])
 
     def test_list_by_default(self):
-        with patch.object(sys, 'argv', ['subscription-manager', 'repo-override']):
+        with patch.object(sys, "argv", ["subscription-manager", "repo-override"]):
             self.cc.main([])
             self.cc._validate_options()
             self.assertTrue(self.cc.options.list)
@@ -53,14 +53,14 @@ class TestOverrideCommand(TestCliProxyCommand):
     def test_add_with_multiple_colons(self):
         self.cc.main(["--repo", "x", "--add", "url:http://example.com"])
         self.cc._validate_options()
-        self.assertEqual(self.cc.options.additions, {'url': 'http://example.com'})
+        self.assertEqual(self.cc.options.additions, {"url": "http://example.com"})
 
     def test_add_and_remove_with_multi_repos(self):
         self.cc.main(["--repo", "x", "--repo", "y", "--add", "a:b", "--remove", "a"])
         self.cc._validate_options()
-        self.assertEqual(self.cc.options.repos, ['x', 'y'])
-        self.assertEqual(self.cc.options.additions, {'a': 'b'})
-        self.assertEqual(self.cc.options.removals, ['a'])
+        self.assertEqual(self.cc.options.repos, ["x", "y"])
+        self.assertEqual(self.cc.options.additions, {"a": "b"})
+        self.assertEqual(self.cc.options.removals, ["a"])
 
     def test_remove_empty_arg(self):
         self._test_exception(["--repo", "x", "--remove", ""])
@@ -84,50 +84,45 @@ class TestOverrideCommand(TestCliProxyCommand):
         self.cc._validate_options()
 
     def _build_override(self, repo, name=None, value=None):
-        data = {'contentLabel': repo}
+        data = {"contentLabel": repo}
         if name:
-            data['name'] = name
+            data["name"] = name
         if value:
-            data['value'] = value
+            data["value"] = value
         return data
 
     def test_list_function(self):
         data = [
-            Override('x', 'hello', 'world'),
-            Override('x', 'blast-off', 'space'),
-            Override('y', 'goodbye', 'earth'),
-            Override('z', 'greetings', 'mars')
+            Override("x", "hello", "world"),
+            Override("x", "blast-off", "space"),
+            Override("y", "goodbye", "earth"),
+            Override("z", "greetings", "mars"),
         ]
         with Capture() as cap:
             self.cc._list(data, None)
             output = cap.out
-            self.assertTrue(re.search(r'Repository: x', output))
-            self.assertTrue(re.search(r'\s+hello:\s+world', output))
-            self.assertTrue(re.search(r'\s+blast-off:\s+space', output))
-            self.assertTrue(re.search(r'Repository: y', output))
-            self.assertTrue(re.search(r'\s+goodbye:\s+earth', output))
-            self.assertTrue(re.search(r'Repository: z', output))
-            self.assertTrue(re.search(r'\s+greetings:\s+mars', output))
+            self.assertTrue(re.search(r"Repository: x", output))
+            self.assertTrue(re.search(r"\s+hello:\s+world", output))
+            self.assertTrue(re.search(r"\s+blast-off:\s+space", output))
+            self.assertTrue(re.search(r"Repository: y", output))
+            self.assertTrue(re.search(r"\s+goodbye:\s+earth", output))
+            self.assertTrue(re.search(r"Repository: z", output))
+            self.assertTrue(re.search(r"\s+greetings:\s+mars", output))
 
     def test_list_specific_repos(self):
-        data = [
-            Override('x', 'hello', 'world'),
-            Override('z', 'greetings', 'mars')
-        ]
+        data = [Override("x", "hello", "world"), Override("z", "greetings", "mars")]
         with Capture() as cap:
-            self.cc._list(data, ['x'])
+            self.cc._list(data, ["x"])
             output = cap.out
-            self.assertTrue(re.search(r'Repository: x', output))
-            self.assertTrue(re.search(r'\s+hello:\s+world', output))
-            self.assertFalse(re.search(r'Repository: z', output))
+            self.assertTrue(re.search(r"Repository: x", output))
+            self.assertTrue(re.search(r"\s+hello:\s+world", output))
+            self.assertFalse(re.search(r"Repository: z", output))
 
     def test_list_nonexistant_repos(self):
-        data = [
-            Override('x', 'hello', 'world')
-        ]
+        data = [Override("x", "hello", "world")]
         with Capture() as cap:
-            self.cc._list(data, ['x', 'z'])
+            self.cc._list(data, ["x", "z"])
             output = cap.out
             self.assertTrue(re.search(r"Nothing is known about 'z'", output))
-            self.assertTrue(re.search(r'Repository: x', output))
-            self.assertTrue(re.search(r'\s+hello:\s+world', output))
+            self.assertTrue(re.search(r"Repository: x", output))
+            self.assertTrue(re.search(r"\s+hello:\s+world", output))

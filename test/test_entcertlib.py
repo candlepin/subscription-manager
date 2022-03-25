@@ -33,7 +33,6 @@ class TestDisconnected(fixture.SubManFixture):
 
 
 class TestingUpdateAction(entcertlib.EntCertUpdateAction):
-
     def __init__(self):
         entcertlib.EntCertUpdateAction.__init__(self)
 
@@ -41,42 +40,43 @@ class TestingUpdateAction(entcertlib.EntCertUpdateAction):
 class TestEntCertUpdateReport(fixture.SubManFixture):
     def test(self):
         r = entcertlib.EntCertUpdateReport()
-        r.expected = '12312'
-        r.valid = ['2342∰']
+        r.expected = "12312"
+        r.valid = ["2342∰"]
         r.added.append(self._stub_cert())
         r.rogue.append(self._stub_cert())
 
         # an UnicodeError will fail the tests
         report_str = str(r)
-        '%s' % report_str
+        "%s" % report_str
 
-        with fixture.locale_context('de_DE.utf8'):
+        with fixture.locale_context("de_DE.utf8"):
             report_str = str(r)
-            '%s' % r
+            "%s" % r
 
     def _stub_cert(self):
         stub_ent_cert = StubEntitlementCertificate(StubProduct("ஒரு அற்புதமான இயங்கு"))
-        stub_ent_cert.order.name = '一些秩序'
+        stub_ent_cert.order.name = "一些秩序"
         return stub_ent_cert
 
 
 class UpdateActionTests(fixture.SubManFixture):
-
     @patch("subscription_manager.entcertlib.EntitlementCertBundleInstaller.build_cert")
     @patch.object(Writer, "write")
     def test_expired_are_not_ignored_when_installing_certs(self, write_mock, build_cert_mock):
         valid_ent = StubEntitlementCertificate(StubProduct("PValid"))
-        expired_ent = StubEntitlementCertificate(StubProduct("PExpired"),
-                                                 start_date=datetime.now() - timedelta(days=365),
-                                                 end_date=datetime.now() - timedelta(days=10))
+        expired_ent = StubEntitlementCertificate(
+            StubProduct("PExpired"),
+            start_date=datetime.now() - timedelta(days=365),
+            end_date=datetime.now() - timedelta(days=10),
+        )
 
         cp_certificates = [valid_ent, expired_ent]
         # get certificates actually returns cert bundles
-        cp_bundles = [{'key': Mock(), 'cert': x} for x in cp_certificates]
+        cp_bundles = [{"key": Mock(), "cert": x} for x in cp_certificates]
 
         # so we dont try to build actual x509 objects from stub certs
         def mock_build_cert(bundle):
-            return (bundle['key'], bundle['cert'])
+            return (bundle["key"], bundle["cert"])
 
         build_cert_mock.side_effect = mock_build_cert
 

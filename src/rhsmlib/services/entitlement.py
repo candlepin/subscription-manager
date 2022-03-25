@@ -44,11 +44,12 @@ class EntitlementService(object):
         :return It returns datetime.datime structure representing date
         """
         try:
-            on_date = datetime.datetime.strptime(on_date, '%Y-%m-%d')
+            on_date = datetime.datetime.strptime(on_date, "%Y-%m-%d")
         except ValueError:
             raise ValueError(
-                _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ") +
-                time.strftime("%Y-%m-%d", time.localtime()) + " )"
+                _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ")
+                + time.strftime("%Y-%m-%d", time.localtime())
+                + " )"
             )
         if on_date.date() < datetime.datetime.now().date():
             raise ValueError(_("Past dates are not allowed"))
@@ -66,7 +67,7 @@ class EntitlementService(object):
         # It is necessary to do it for rhsm.service, because it can run for very long time without
         # restart.
         if force is True:
-            log.debug('Deleting cache entitlement status cache')
+            log.debug("Deleting cache entitlement status cache")
             status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
             status_cache.server_status = None
             status_cache.delete_cache()
@@ -80,26 +81,39 @@ class EntitlementService(object):
             reason_ids = sorter.reasons.get_reason_ids_map()
             valid = sorter.is_valid()
             status = {
-                'status': overall_status,
-                'status_id': overall_status_id,
-                'reasons': reasons,
-                'reason_ids': reason_ids,
-                'valid': valid
+                "status": overall_status,
+                "status_id": overall_status_id,
+                "reasons": reasons,
+                "reason_ids": reason_ids,
+                "valid": valid,
             }
         else:
             status = {
-                'status': _('Unknown'),
-                'status_id': 'unknown',
-                'reasons': {},
-                'reason_ids': {},
-                'valid': False
+                "status": _("Unknown"),
+                "status_id": "unknown",
+                "reasons": {},
+                "reason_ids": {},
+                "valid": False,
             }
-        log.debug('entitlement status: %s' % str(status))
+        log.debug("entitlement status: %s" % str(status))
         return status
 
-    def get_pools(self, pool_subsets=None, matches=None, pool_only=None, match_installed=None,
-                  no_overlap=None, service_level=None, show_all=None, on_date=None, future=None,
-                  after_date=None, page=0, items_per_page=0, **kwargs):
+    def get_pools(
+        self,
+        pool_subsets=None,
+        matches=None,
+        pool_only=None,
+        match_installed=None,
+        no_overlap=None,
+        service_level=None,
+        show_all=None,
+        on_date=None,
+        future=None,
+        after_date=None,
+        page=0,
+        items_per_page=0,
+        **kwargs
+    ):
         # We accept a **kwargs argument so that the DBus object can pass whatever dictionary it receives
         # via keyword expansion.
         if kwargs:
@@ -110,33 +124,34 @@ class EntitlementService(object):
 
         # [] or None means look at all pools
         if not pool_subsets:
-            pool_subsets = ['installed', 'consumed', 'available']
+            pool_subsets = ["installed", "consumed", "available"]
 
         options = {
-            'pool_subsets': pool_subsets,
-            'matches': matches,
-            'pool_only': pool_only,
-            'match_installed': match_installed,
-            'no_overlap': no_overlap,
-            'service_level': service_level,
-            'show_all': show_all,
-            'on_date': on_date,
-            'future': future,
-            'after_date': after_date,
+            "pool_subsets": pool_subsets,
+            "matches": matches,
+            "pool_only": pool_only,
+            "match_installed": match_installed,
+            "no_overlap": no_overlap,
+            "service_level": service_level,
+            "show_all": show_all,
+            "on_date": on_date,
+            "future": future,
+            "after_date": after_date,
         }
         self.validate_options(options)
         results = {}
-        if 'installed' in pool_subsets:
+        if "installed" in pool_subsets:
             installed = products.InstalledProducts(self.cp).list(matches, iso_dates=True)
-            results['installed'] = [x._asdict() for x in installed]
-        if 'consumed' in pool_subsets:
-            consumed = self.get_consumed_product_pools(service_level=service_level, matches=matches,
-                                                       iso_dates=True)
+            results["installed"] = [x._asdict() for x in installed]
+        if "consumed" in pool_subsets:
+            consumed = self.get_consumed_product_pools(
+                service_level=service_level, matches=matches, iso_dates=True
+            )
             if pool_only:
-                results['consumed'] = [x._asdict()['pool_id'] for x in consumed]
+                results["consumed"] = [x._asdict()["pool_id"] for x in consumed]
             else:
-                results['consumed'] = [x._asdict() for x in consumed]
-        if 'available' in pool_subsets:
+                results["consumed"] = [x._asdict() for x in consumed]
+        if "available" in pool_subsets:
             available = self.get_available_pools(
                 show_all=show_all,
                 on_date=on_date,
@@ -148,59 +163,65 @@ class EntitlementService(object):
                 after_date=after_date,
                 page=int(page),
                 items_per_page=int(items_per_page),
-                iso_dates=True
+                iso_dates=True,
             )
             if pool_only:
-                results['available'] = [x['id'] for x in available]
+                results["available"] = [x["id"] for x in available]
             else:
-                results['available'] = available
+                results["available"] = available
 
         return results
 
     def get_consumed_product_pools(self, service_level=None, matches=None, iso_dates=False):
         # Use a named tuple so that the result can be unpacked into other functions
-        OldConsumedStatus = collections.namedtuple('OldConsumedStatus', [
-            'subscription_name',
-            'provides',
-            'sku',
-            'contract',
-            'account',
-            'serial',
-            'pool_id',
-            'provides_management',
-            'active',
-            'quantity_used',
-            'service_type',
-            'service_level',
-            'status_details',
-            'subscription_type',
-            'starts',
-            'ends',
-            'system_type',
-        ])
+        OldConsumedStatus = collections.namedtuple(
+            "OldConsumedStatus",
+            [
+                "subscription_name",
+                "provides",
+                "sku",
+                "contract",
+                "account",
+                "serial",
+                "pool_id",
+                "provides_management",
+                "active",
+                "quantity_used",
+                "service_type",
+                "service_level",
+                "status_details",
+                "subscription_type",
+                "starts",
+                "ends",
+                "system_type",
+            ],
+        )
         # Use a named tuple so that the result can be unpacked into other functions
-        ConsumedStatus = collections.namedtuple('ConsumedStatus', [
-            'subscription_name',
-            'provides',
-            'sku',
-            'contract',
-            'account',
-            'serial',
-            'pool_id',
-            'provides_management',
-            'active',
-            'quantity_used',
-            'service_type',
-            'roles',
-            'service_level',
-            'usage',
-            'addons',
-            'status_details',
-            'subscription_type',
-            'starts',
-            'ends',
-            'system_type',
-        ])
+        ConsumedStatus = collections.namedtuple(
+            "ConsumedStatus",
+            [
+                "subscription_name",
+                "provides",
+                "sku",
+                "contract",
+                "account",
+                "serial",
+                "pool_id",
+                "provides_management",
+                "active",
+                "quantity_used",
+                "service_type",
+                "roles",
+                "service_level",
+                "usage",
+                "addons",
+                "status_details",
+                "subscription_type",
+                "starts",
+                "ends",
+                "system_type",
+            ],
+        )
         sorter = inj.require(inj.CERT_SORTER)
         cert_reasons_map = sorter.reasons.get_subscription_reasons_map()
         pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
@@ -275,12 +296,12 @@ class EntitlementService(object):
             provided_products = {p.id: p.name for p in cert.products}
 
             reasons = []
-            pool_type = ''
+            pool_type = ""
 
             if inj.require(inj.CERT_SORTER).are_reasons_supported():
-                if cert.subject and 'CN' in cert.subject:
-                    if cert.subject['CN'] in cert_reasons_map:
-                        reasons = cert_reasons_map[cert.subject['CN']]
+                if cert.subject and "CN" in cert.subject:
+                    if cert.subject["CN"] in cert_reasons_map:
+                        reasons = cert_reasons_map[cert.subject["CN"]]
                     pool_type = pooltype_cache.get(pool_id)
 
                 # 1180400: Status details is empty when GUI is not
@@ -296,51 +317,68 @@ class EntitlementService(object):
                 reasons.append(_("Subscription management service doesn't support Status Details."))
 
             if roles is None and usage is None and addons is None:
-                consumed_statuses.append(OldConsumedStatus(
-                    name,
-                    provided_products,
-                    sku,
-                    contract,
-                    account,
-                    cert.serial,
-                    pool_id,
-                    provides_management,
-                    cert.is_valid(),
-                    quantity_used,
-                    service_type,
-                    service_level,
-                    reasons,
-                    pool_type,
-                    date_formatter(cert.valid_range.begin()),
-                    date_formatter(cert.valid_range.end()),
-                    system_type))
+                consumed_statuses.append(
+                    OldConsumedStatus(
+                        name,
+                        provided_products,
+                        sku,
+                        contract,
+                        account,
+                        cert.serial,
+                        pool_id,
+                        provides_management,
+                        cert.is_valid(),
+                        quantity_used,
+                        service_type,
+                        service_level,
+                        reasons,
+                        pool_type,
+                        date_formatter(cert.valid_range.begin()),
+                        date_formatter(cert.valid_range.end()),
+                        system_type,
+                    )
+                )
             else:
-                consumed_statuses.append(ConsumedStatus(
-                    name,
-                    provided_products,
-                    sku,
-                    contract,
-                    account,
-                    cert.serial,
-                    pool_id,
-                    provides_management,
-                    cert.is_valid(),
-                    quantity_used,
-                    service_type,
-                    roles,
-                    service_level,
-                    usage,
-                    addons,
-                    reasons,
-                    pool_type,
-                    date_formatter(cert.valid_range.begin()),
-                    date_formatter(cert.valid_range.end()),
-                    system_type))
+                consumed_statuses.append(
+                    ConsumedStatus(
+                        name,
+                        provided_products,
+                        sku,
+                        contract,
+                        account,
+                        cert.serial,
+                        pool_id,
+                        provides_management,
+                        cert.is_valid(),
+                        quantity_used,
+                        service_type,
+                        roles,
+                        service_level,
+                        usage,
+                        addons,
+                        reasons,
+                        pool_type,
+                        date_formatter(cert.valid_range.begin()),
+                        date_formatter(cert.valid_range.end()),
+                        system_type,
+                    )
+                )
         return consumed_statuses
 
-    def get_available_pools(self, show_all=None, on_date=None, no_overlap=None,
-                            match_installed=None, matches=None, service_level=None, future=None,
-                            after_date=None, page=0, items_per_page=0, iso_dates=False):
+    def get_available_pools(
+        self,
+        show_all=None,
+        on_date=None,
+        no_overlap=None,
+        match_installed=None,
+        matches=None,
+        service_level=None,
+        future=None,
+        after_date=None,
+        page=0,
+        items_per_page=0,
+        iso_dates=False,
+    ):
         """
         Get list of available pools
         :param show_all:
@@ -376,7 +414,7 @@ class EntitlementService(object):
             "future": future,
             "after_date": after_date,
             "page": _page,
-            "items_per_page": _items_per_page
+            "items_per_page": _items_per_page,
         }
 
         # Try to get identity
@@ -397,16 +435,16 @@ class EntitlementService(object):
                 after_date=after_date,
                 page=_page,
                 items_per_page=_items_per_page,
-                iso_dates=iso_dates
+                iso_dates=iso_dates,
             )
 
             timeout = cache.timeout()
 
             data = {
                 identity.uuid: {
-                    'filter_options': filter_options,
-                    'pools': available_pools,
-                    'timeout': time.time() + timeout
+                    "filter_options": filter_options,
+                    "pools": available_pools,
+                    "timeout": time.time() + timeout,
                 }
             }
             cache.available_entitlements = data
@@ -414,8 +452,8 @@ class EntitlementService(object):
 
         def filter_pool_by_service_level(pool_data):
             pool_level = ""
-            if pool_data['service_level']:
-                pool_level = pool_data['service_level']
+            if pool_data["service_level"]:
+                pool_level = pool_data["service_level"]
             return service_level.lower() == pool_level.lower()
 
         if service_level is not None:
@@ -440,38 +478,36 @@ class EntitlementService(object):
         return available_pools
 
     def validate_options(self, options):
-        if not set(['installed', 'consumed', 'available']).issuperset(options['pool_subsets']):
+        if not set(["installed", "consumed", "available"]).issuperset(options["pool_subsets"]):
             raise exceptions.ValidationError(
-                _('Error: invalid listing type provided.  Only "installed", '
-                  '"consumed", or "available" are allowed')
+                _(
+                    'Error: invalid listing type provided.  Only "installed", '
+                    '"consumed", or "available" are allowed'
+                )
             )
-        if options['show_all'] and 'available' not in options['pool_subsets']:
-            raise exceptions.ValidationError(
-                _("Error: --all is only applicable with --available")
-            )
-        elif options['on_date'] and 'available' not in options['pool_subsets']:
-            raise exceptions.ValidationError(
-                _("Error: --ondate is only applicable with --available")
-            )
-        elif options['service_level'] is not None \
-                and not set(['consumed', 'available']).intersection(options['pool_subsets']):
+        if options["show_all"] and "available" not in options["pool_subsets"]:
+            raise exceptions.ValidationError(_("Error: --all is only applicable with --available"))
+        elif options["on_date"] and "available" not in options["pool_subsets"]:
+            raise exceptions.ValidationError(_("Error: --ondate is only applicable with --available"))
+        elif options["service_level"] is not None and not set(["consumed", "available"]).intersection(
+            options["pool_subsets"]
+        ):
             raise exceptions.ValidationError(
                 _("Error: --servicelevel is only applicable with --available or --consumed")
             )
-        elif options['match_installed'] and 'available' not in options['pool_subsets']:
+        elif options["match_installed"] and "available" not in options["pool_subsets"]:
             raise exceptions.ValidationError(
                 _("Error: --match-installed is only applicable with --available")
             )
-        elif options['no_overlap'] and 'available' not in options['pool_subsets']:
-            raise exceptions.ValidationError(
-                _("Error: --no-overlap is only applicable with --available")
-            )
-        elif options['pool_only'] \
-                and not set(['consumed', 'available']).intersection(options['pool_subsets']):
+        elif options["no_overlap"] and "available" not in options["pool_subsets"]:
+            raise exceptions.ValidationError(_("Error: --no-overlap is only applicable with --available"))
+        elif options["pool_only"] and not set(["consumed", "available"]).intersection(
+            options["pool_subsets"]
+        ):
             raise exceptions.ValidationError(
                 _("Error: --pool-only is only applicable with --available and/or --consumed")
             )
-        elif not self.identity.is_valid() and 'available' in options['pool_subsets']:
+        elif not self.identity.is_valid() and "available" in options["pool_subsets"]:
             raise exceptions.ValidationError(_("Error: this system is not registered"))
 
     def _unbind_ids(self, unbind_method, consumer_uuid, ids):
@@ -519,7 +555,9 @@ class EntitlementService(object):
         # should not be necessary. I vote for i-notify to be used there somehow.
         self.entitlement_dir.refresh()
         pool_id_to_serials = self.entitlement_dir.list_serials_for_pool_ids(_pool_ids)
-        removed_pools, unremoved_pools = self._unbind_ids(self.cp.unbindByPoolId, self.identity.uuid, _pool_ids)
+        removed_pools, unremoved_pools = self._unbind_ids(
+            self.cp.unbindByPoolId, self.identity.uuid, _pool_ids
+        )
         if removed_pools:
             for pool_id in removed_pools:
                 removed_serials.extend(pool_id_to_serials[pool_id])
@@ -535,7 +573,9 @@ class EntitlementService(object):
         """
 
         _serials = utils.unique_list_items(serials)  # Don't allow duplicates
-        removed_serials, unremoved_serials = self._unbind_ids(self.cp.unbindBySerial, self.identity.uuid, _serials)
+        removed_serials, unremoved_serials = self._unbind_ids(
+            self.cp.unbindBySerial, self.identity.uuid, _serials
+        )
         self.entcertlib.update()
 
         return removed_serials, unremoved_serials
@@ -548,7 +588,7 @@ class EntitlementService(object):
         """
         sorter = inj.require(inj.CERT_SORTER, on_date=None)
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
-        log.debug('Clearing in-memory cache of file %s' % status_cache.CACHE_FILE)
+        log.debug("Clearing in-memory cache of file %s" % status_cache.CACHE_FILE)
         status_cache.server_status = None
         sorter.load()
 

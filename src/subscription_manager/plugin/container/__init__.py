@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 
 CONTAINER_CONTENT_TYPE = "containerimage"
 
-RH_CDN_REGEX = re.compile(r'^cdn\.(?:.*\.)?redhat\.com$')
+RH_CDN_REGEX = re.compile(r"^cdn\.(?:.*\.)?redhat\.com$")
 RH_CDN_CA = "/etc/rhsm/ca/redhat-entitlement-authority.pem"
 
 
@@ -37,6 +37,7 @@ class ContainerContentUpdateActionCommand(object):
 
     Return a ContainerContentUpdateReport.
     """
+
     def __init__(self, ent_source, registry_hostnames, host_cert_dir):
         self.ent_source = ent_source
         self.registry_hostnames = registry_hostnames
@@ -52,16 +53,14 @@ class ContainerContentUpdateActionCommand(object):
 
         for registry_hostname in self.registry_hostnames:
             cert_dir = ContainerCertDir(
-                report=report,
-                registry=registry_hostname,
-                host_cert_dir=self.host_cert_dir)
+                report=report, registry=registry_hostname, host_cert_dir=self.host_cert_dir
+            )
             cert_dir.sync(unique_cert_paths)
 
         return report
 
     def _find_content(self):
-        return find_content(self.ent_source,
-                            content_type=CONTAINER_CONTENT_TYPE)
+        return find_content(self.ent_source, content_type=CONTAINER_CONTENT_TYPE)
 
     def _get_unique_paths(self, content_sets):
         """
@@ -71,13 +70,13 @@ class ContainerContentUpdateActionCommand(object):
         # Identify all the unique certificates we need to copy:
         unique_cert_paths = set()
         for content in content_sets:
-            unique_cert_paths.add(
-                KeyPair(content.cert.path, content.cert.key_path()))
+            unique_cert_paths.add(KeyPair(content.cert.path, content.cert.key_path()))
         return unique_cert_paths
 
 
 class KeyPair(object):
-    """ Simple object to hold paths to an entitlement cert and key. """
+    """Simple object to hold paths to an entitlement cert and key."""
+
     def __init__(self, cert_path, key_path):
 
         self.cert_path = cert_path
@@ -86,18 +85,18 @@ class KeyPair(object):
         # Calculate the expected filenames for docker certs, just
         # re-use the base filename from entitlement cert and change
         # the file extension.
-        self.dest_cert_filename = "%s.cert" %  \
-            os.path.splitext(os.path.basename(self.cert_path))[0]
+        self.dest_cert_filename = "%s.cert" % os.path.splitext(os.path.basename(self.cert_path))[0]
         # We use the base filename from the cert so avoid the SERIAL-key
         # we would have with our normal entitlement certs. We need the
         # base filename to be the same for both .cert and .key.
-        self.dest_key_filename = "%s.key" % \
-            os.path.splitext(os.path.basename(self.cert_path))[0]
+        self.dest_key_filename = "%s.key" % os.path.splitext(os.path.basename(self.cert_path))[0]
 
     def __eq__(self, other):
-        return (isinstance(other, self.__class__) and
-                self.cert_path == other.cert_path and
-                self.key_path == other.key_path)
+        return (
+            isinstance(other, self.__class__)
+            and self.cert_path == other.cert_path
+            and self.key_path == other.key_path
+        )
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -148,24 +147,20 @@ class ContainerCertDir(object):
         expected_files = []
 
         for keypair in expected_keypairs:
-            full_cert_path = os.path.join(self.path,
-                                          keypair.dest_cert_filename)
-            full_key_path = os.path.join(self.path,
-                                         keypair.dest_key_filename)
+            full_cert_path = os.path.join(self.path, keypair.dest_cert_filename)
+            full_key_path = os.path.join(self.path, keypair.dest_key_filename)
             expected_files.append(keypair.dest_cert_filename)
             expected_files.append(keypair.dest_key_filename)
             # WARNING: We assume that matching filenames must be the same
             # certificate and key. Because we use serials in the filename, this
             # should be safe.
             if not os.path.exists(full_cert_path):
-                log.info("Copying: %s -> %s" %
-                         (keypair.cert_path, full_cert_path))
+                log.info("Copying: %s -> %s" % (keypair.cert_path, full_cert_path))
                 shutil.copyfile(keypair.cert_path, full_cert_path)
                 shutil.copymode(keypair.cert_path, full_cert_path)
                 self.report.added.append(full_cert_path)
             if not os.path.exists(full_key_path):
-                log.info("Copying: %s -> %s" %
-                         (keypair.key_path, full_key_path))
+                log.info("Copying: %s -> %s" % (keypair.key_path, full_key_path))
                 shutil.copyfile(keypair.key_path, full_key_path)
                 shutil.copymode(keypair.key_path, full_key_path)
                 self.report.added.append(full_key_path)
@@ -197,16 +192,19 @@ class ContainerCertDir(object):
         """
         for f in os.listdir(self.path):
             fullpath = os.path.join(self.path, f)
-            if os.path.isfile(fullpath) and \
-                os.path.splitext(f)[1] in self.MANAGED_EXTENSIONS and \
-                f not in expected_files:
-                    log.info("Cleaning up old certificate: %s" % f)
-                    os.remove(fullpath)
-                    self.report.removed.append(fullpath)
+            if (
+                os.path.isfile(fullpath)
+                and os.path.splitext(f)[1] in self.MANAGED_EXTENSIONS
+                and f not in expected_files
+            ):
+                log.info("Cleaning up old certificate: %s" % f)
+                os.remove(fullpath)
+                self.report.removed.append(fullpath)
 
 
 class ContainerUpdateReport(certlib.ActionReport):
     """Track container cert changes."""
+
     name = "Container certificate updates report"
 
     def __init__(self):
@@ -218,14 +216,14 @@ class ContainerUpdateReport(certlib.ActionReport):
         self.removed = []
 
     def updates(self):
-        """ Number of updates. """
+        """Number of updates."""
         return len(self.added) + len(self.removed)
 
     def _format_file_list(self, file_list):
         s = []
         for filename in file_list:
             s.append(file_list)
-        return '\n'.join(s)
+        return "\n".join(s)
 
     def __str__(self):
         s = ["Container content cert updates\n"]
@@ -233,4 +231,4 @@ class ContainerUpdateReport(certlib.ActionReport):
         s.append(self._format_file_list(self.added))
         s.append(_("Removed:"))
         s.append(self._format_file_list(self.removed))
-        return '\n'.join(s)
+        return "\n".join(s)

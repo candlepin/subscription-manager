@@ -49,6 +49,7 @@ log = logging.getLogger(__name__)
 
 class PluginException(Exception):
     """Base exception for rhsm plugins."""
+
     def _add_message(self, repr_msg):
         if hasattr(self, "msg") and self.msg:
             repr_msg = "\n".join([repr_msg, "Message: %s" % self.msg])
@@ -57,14 +58,14 @@ class PluginException(Exception):
 
 class PluginImportException(PluginException):
     """Raised when a SubManPlugin derived class can not be imported."""
+
     def __init__(self, module_file, module_name, msg=None):
         self.module_file = module_file
         self.module_name = module_name
         self.msg = msg
 
     def __str__(self):
-        repr_msg = "Plugin \"%s\" can't be imported from file %s" % \
-                   (self.module_name, self.module_file)
+        repr_msg = 'Plugin "%s" can\'t be imported from file %s' % (self.module_name, self.module_file)
         return self._add_message(repr_msg)
 
 
@@ -74,15 +75,19 @@ class PluginModuleImportException(PluginImportException):
 
 class PluginModuleImportApiVersionMissingException(PluginImportException):
     """Raised when a plugin module does not include a 'requires_api_version'."""
+
     def __str__(self):
         repr_msg = """Plugin module "%s" in %s has no API version.
-                   'requires_api_version' should be set.""" % \
-                   (self.module_name, self.module_file)
+                   'requires_api_version' should be set.""" % (
+            self.module_name,
+            self.module_file,
+        )
         return self._add_message(repr_msg)
 
 
 class PluginModuleImportApiVersionException(PluginImportException):
     """Raised when a plugin module's 'requires_api_version' can not be met."""
+
     def __init__(self, module_file, module_name, module_ver, api_ver, msg=None):
         self.module_file = module_file
         self.module_name = module_name
@@ -91,25 +96,30 @@ class PluginModuleImportApiVersionException(PluginImportException):
         self.msg = msg
 
     def __str__(self):
-        repr_msg = "Plugin \"%s\" requires API version %s. Supported API is %s" % \
-            (self.module_name, self.module_ver, self.api_ver)
+        repr_msg = 'Plugin "%s" requires API version %s. Supported API is %s' % (
+            self.module_name,
+            self.module_ver,
+            self.api_ver,
+        )
         return self._add_message(repr_msg)
 
 
 class PluginConfigException(PluginException):
     """Raised when a PluginConfig fails to load or read a config file."""
+
     def __init__(self, plugin_name, msg=None):
         self.plugin_name = plugin_name
         self.msg = msg
 
     def __str__(self):
-        repr_msg = "Cannot load configuration for plugin \"%s\"" % (self.plugin_name)
+        repr_msg = 'Cannot load configuration for plugin "%s"' % (self.plugin_name)
         return self._add_message(repr_msg)
 
 
 # if code try's to run a hook for a slot_name that doesn't exist
 class SlotNameException(Exception):
     """Raised when PluginManager.run() is called with a unknown slot_name."""
+
     def __init__(self, slot_name):
         self.slot_name = slot_name
 
@@ -143,6 +153,7 @@ class BaseConduit(object):
         slots: A list of slot_name strings this Conduit() will handle
         log: a logger handler
     """
+
     slots = []
 
     # clazz is the class object for class instance of the object the hook method maps too
@@ -253,7 +264,8 @@ class BaseConduit(object):
 
 class RegistrationConduit(BaseConduit):
     """Conduit for uses with registration."""
-    slots = ['pre_register_consumer']
+
+    slots = ["pre_register_consumer"]
 
     def __init__(self, clazz, name, facts):
         """init for RegistrationConduit
@@ -269,7 +281,8 @@ class RegistrationConduit(BaseConduit):
 
 class PostRegistrationConduit(BaseConduit):
     """Conduit for use with post registration."""
-    slots = ['post_register_consumer']
+
+    slots = ["post_register_consumer"]
 
     def __init__(self, clazz, consumer, facts):
         """init for PostRegistrationConduit
@@ -286,7 +299,8 @@ class PostRegistrationConduit(BaseConduit):
 
 class ProductConduit(BaseConduit):
     """Conduit for use with plugins that handle product id functions."""
-    slots = ['pre_product_id_install', 'post_product_id_install']
+
+    slots = ["pre_product_id_install", "post_product_id_install"]
 
     def __init__(self, clazz, product_list):
         """init for ProductConduit
@@ -300,7 +314,8 @@ class ProductConduit(BaseConduit):
 
 class ProductUpdateConduit(BaseConduit):
     """Conduit for use with plugins that handle product id update functions."""
-    slots = ['pre_product_id_update', 'post_product_id_update']
+
+    slots = ["pre_product_id_update", "post_product_id_update"]
 
     def __init__(self, clazz, product_list):
         """init for ProductUpdateConduit
@@ -314,7 +329,8 @@ class ProductUpdateConduit(BaseConduit):
 
 class FactsConduit(BaseConduit):
     """Conduit for collecting facts."""
-    slots = ['post_facts_collection']
+
+    slots = ["post_facts_collection"]
 
     def __init__(self, clazz, facts):
         """init for FactsConduit
@@ -328,7 +344,8 @@ class FactsConduit(BaseConduit):
 
 class UpdateContentConduit(BaseConduit):
     """Conduit for updating content."""
-    slots = ['update_content']
+
+    slots = ["update_content"]
 
     def __init__(self, clazz, reports, ent_source):
         """init for UpdateContentConduit.
@@ -344,7 +361,8 @@ class UpdateContentConduit(BaseConduit):
 
 class SubscriptionConduit(BaseConduit):
     """Conduit for subscription info."""
-    slots = ['pre_subscribe']
+
+    slots = ["pre_subscribe"]
 
     def __init__(self, clazz, consumer_uuid, pool_id, quantity):
         """init for SubscriptionConduit
@@ -362,7 +380,7 @@ class SubscriptionConduit(BaseConduit):
 
 
 class PostSubscriptionConduit(BaseConduit):
-    slots = ['post_subscribe']
+    slots = ["post_subscribe"]
 
     def __init__(self, clazz, consumer_uuid, entitlement_data):
         """init for PostSubscriptionConduit
@@ -377,7 +395,7 @@ class PostSubscriptionConduit(BaseConduit):
 
 
 class AutoAttachConduit(BaseConduit):
-    slots = ['pre_auto_attach']
+    slots = ["pre_auto_attach"]
 
     def __init__(self, clazz, consumer_uuid):
         """
@@ -391,7 +409,7 @@ class AutoAttachConduit(BaseConduit):
 
 
 class PostAutoAttachConduit(PostSubscriptionConduit):
-    slots = ['post_auto_attach']
+    slots = ["post_auto_attach"]
 
     def __init__(self, clazz, consumer_uuid, entitlement_data):
         """init for PostAutoAttachConduit
@@ -411,10 +429,10 @@ class PluginConfig(object):
         plugin_key: a string identifier for plugins, For ex, 'facts.FactsPlugin'
                     Used to find the configuration file.
     """
+
     plugin_key = None
 
-    def __init__(self, plugin_key,
-                 plugin_conf_path=None):
+    def __init__(self, plugin_key, plugin_conf_path=None):
         """init for PluginConfig.
 
         Args:
@@ -449,12 +467,12 @@ class PluginConfig(object):
     def is_plugin_enabled(self):
         """returns True if the plugin is enabled in it's config."""
         try:
-            enabled = self.parser.getboolean('main', 'enabled')
+            enabled = self.parser.getboolean("main", "enabled")
         except Exception as e:
             raise PluginConfigException(self.plugin_key, e)
 
         if not enabled:
-            log.debug("Not loading \"%s\" plugin as it is disabled" % self.plugin_key)
+            log.debug('Not loading "%s" plugin as it is disabled' % self.plugin_key)
             return False
         return True
 
@@ -473,6 +491,7 @@ class PluginHookRunner(object):
     PluginManager.runiter() returns an iterable that will yield
     a PluginHookRunner for each plugin hook to be triggered.
     """
+
     def __init__(self, conduit, func):
         self.conduit = conduit
         self.func = func
@@ -489,6 +508,7 @@ class PluginHookRunner(object):
 # BasePluginManager with our default config info
 class BasePluginManager(object):
     """Finds, load, and provides acccess to subscription-manager plugins."""
+
     def __init__(self, search_path=None, plugin_conf_path=None):
         """init for BasePluginManager().
 
@@ -585,8 +605,7 @@ class BasePluginManager(object):
         """
         for module in modules:
             try:
-                self.add_plugins_from_module(module,
-                                             plugin_to_config_map=plugin_to_config_map)
+                self.add_plugins_from_module(module, plugin_to_config_map=plugin_to_config_map)
             except PluginException as e:
                 log.exception(e)
                 log.error(e)
@@ -638,8 +657,7 @@ class BasePluginManager(object):
             # NOTE: we currently do not catch plugin init exceptions
             # here, and let them bubble. But we could...? that would
             # let some classes from a module fail
-            self.add_plugin_class(plugin_class,
-                                  plugin_to_config_map=plugin_to_config_map)
+            self.add_plugin_class(plugin_class, plugin_to_config_map=plugin_to_config_map)
 
     def add_plugin_class(self, plugin_clazz, plugin_to_config_map=None):
         """Add a SubManPlugin and PluginConfig class to PluginManager.
@@ -659,8 +677,7 @@ class BasePluginManager(object):
         """
         # either look up what we were passed, or create a new PluginConfig
         # default is to create a PluginConfig
-        plugin_conf = self._get_plugin_config(plugin_clazz,
-                                              plugin_to_config_map=plugin_to_config_map)
+        plugin_conf = self._get_plugin_config(plugin_clazz, plugin_to_config_map=plugin_to_config_map)
 
         # associate config with plugin class
         # NOTE: the plugin_class has a PluginConfig instance for it's conf
@@ -688,9 +705,10 @@ class BasePluginManager(object):
             self._plugins[plugin_key] = instance
         else:
             # This shouldn't ever happen
-            raise PluginException("Two or more plugins with the name \"%s\" exist "
-                                  "in the plugin search path" %
-                                  plugin_clazz.__name__)
+            raise PluginException(
+                'Two or more plugins with the name "%s" exist '
+                "in the plugin search path" % plugin_clazz.__name__
+            )
 
         # this is a valid plugin, with config, that instantiates, and is not a  dupe
         self._plugin_classes[plugin_key] = plugin_clazz
@@ -760,12 +778,12 @@ class BasePluginManager(object):
 
         for func in self._slot_to_funcs[slot_name]:
             module = inspect.getmodule(func)
-            func_module_name = getattr(func, '__module__')
+            func_module_name = getattr(func, "__module__")
             if not func_module_name:
                 if module:
                     func_module_name = module.__name__
                 else:
-                    func_module_name = 'unknown_module'
+                    func_module_name = "unknown_module"
             func_class_name = func.__self__.__class__.__name__
             plugin_key = ".".join([func_module_name, func_class_name])
             log.debug("Running %s in %s" % (func.__name__, plugin_key))
@@ -843,6 +861,7 @@ class PluginManager(BasePluginManager):
     using subscription-manager default plugin search path and plugin
     conf path.
     """
+
     default_search_path = DEFAULT_SEARCH_PATH
     default_conf_path = DEFAULT_CONF_PATH
 
@@ -865,22 +884,27 @@ class PluginManager(BasePluginManager):
             cfg_conf_path = None
 
         init_search_path = search_path or cfg_search_path or self.default_search_path
-        init_plugin_conf_path = plugin_conf_path or cfg_conf_path \
-            or self.default_conf_path
+        init_plugin_conf_path = plugin_conf_path or cfg_conf_path or self.default_conf_path
 
-        super(PluginManager, self).__init__(search_path=init_search_path,
-                                            plugin_conf_path=init_plugin_conf_path)
+        super(PluginManager, self).__init__(
+            search_path=init_search_path, plugin_conf_path=init_plugin_conf_path
+        )
 
     def _get_conduits(self):
         """get subscription-manager specific plugin conduits."""
         # we should be able to collect this from the sub classes of BaseConduit
         return [
-            BaseConduit, ProductConduit, ProductUpdateConduit,
-            RegistrationConduit, PostRegistrationConduit,
-            FactsConduit, SubscriptionConduit,
+            BaseConduit,
+            ProductConduit,
+            ProductUpdateConduit,
+            RegistrationConduit,
+            PostRegistrationConduit,
+            FactsConduit,
+            SubscriptionConduit,
             UpdateContentConduit,
             PostSubscriptionConduit,
-            AutoAttachConduit, PostAutoAttachConduit,
+            AutoAttachConduit,
+            PostAutoAttachConduit,
         ]
 
     def _get_modules(self):
@@ -943,19 +967,20 @@ class PluginManager(BasePluginManager):
 
         # FIXME: look up module conf, so we can enable entire plugin modules
         if not hasattr(loaded_module, "requires_api_version"):
-            raise PluginModuleImportApiVersionMissingException(module_file, module_name,
-                                                               "Plugin doesn't specify required API version")
+            raise PluginModuleImportApiVersionMissingException(
+                module_file, module_name, "Plugin doesn't specify required API version"
+            )
         if not api_version_ok(API_VERSION, loaded_module.requires_api_version):
-            raise PluginModuleImportApiVersionException(module_file, module_name,
-                                                        module_ver=loaded_module.requires_api_version,
-                                                        api_ver=API_VERSION)
+            raise PluginModuleImportApiVersionException(
+                module_file, module_name, module_ver=loaded_module.requires_api_version, api_ver=API_VERSION
+            )
 
         return loaded_module
 
 
 def parse_version(api_version):
     """parse an API version string into major and minor version strings."""
-    maj_ver, min_ver = api_version.split('.')
+    maj_ver, min_ver = api_version.split(".")
     return int(maj_ver), int(min_ver)
 
 

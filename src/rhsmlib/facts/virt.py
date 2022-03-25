@@ -32,31 +32,31 @@ class VirtWhatCollector(collector.FactsCollector):
         virt_dict = {}
 
         try:
-            host_type_raw: bytes = subprocess.check_output('/usr/sbin/virt-what')
+            host_type_raw: bytes = subprocess.check_output("/usr/sbin/virt-what")
             host_type: str = host_type_raw.decode("utf-8")
             # BZ1018807 xen can report xen and xen-hvm.
             # Force a single line
             host_type = ", ".join(host_type.splitlines())
 
             # If this is blank, then not a guest
-            virt_dict['virt.is_guest'] = bool(host_type)
+            virt_dict["virt.is_guest"] = bool(host_type)
             if bool(host_type):
-                virt_dict['virt.is_guest'] = True
-                virt_dict['virt.host_type'] = host_type
+                virt_dict["virt.is_guest"] = True
+                virt_dict["virt.host_type"] = host_type
             else:
-                virt_dict['virt.is_guest'] = False
-                virt_dict['virt.host_type'] = "Not Applicable"
+                virt_dict["virt.is_guest"] = False
+                virt_dict["virt.host_type"] = "Not Applicable"
         # TODO:  Should this only catch OSErrors?
         except Exception as e:
             # Otherwise there was an error running virt-what - who knows
             log.exception(e)
-            virt_dict['virt.is_guest'] = 'Unknown'
+            virt_dict["virt.is_guest"] = "Unknown"
 
         # xen dom0 is a guest for virt-what's purposes, but is a host for
         # our purposes. Adjust is_guest accordingly. (#757697)
         try:
-            if virt_dict['virt.host_type'].find('dom0') > -1:
-                virt_dict['virt.is_guest'] = False
+            if virt_dict["virt.host_type"].find("dom0") > -1:
+                virt_dict["virt.is_guest"] = False
         except KeyError:
             # if host_type is not defined, do nothing (#768397)
             pass
@@ -69,10 +69,10 @@ class VirtUuidCollector(collector.FactsCollector):
     # available to non-root users on ppc64*
     # ppc64 LPAR has it's virt.uuid in /proc/devicetree
     # so parts of this don't need to be in AdminHardware
-    devicetree_vm_uuid_arches = ['ppc64', 'ppc64le']
+    devicetree_vm_uuid_arches = ["ppc64", "ppc64le"]
 
     # No virt.uuid equiv is available for guests on these hypervisors
-    no_uuid_platforms = ['powervm_lx86', 'xen-dom0', 'ibm_systemz']
+    no_uuid_platforms = ["powervm_lx86", "xen-dom0", "ibm_systemz"]
 
     def get_all(self):
         return self.get_virt_uuid()
@@ -87,23 +87,23 @@ class VirtUuidCollector(collector.FactsCollector):
         # For 99% of uses, virt.uuid will actually be from dmi info
         virt_uuid_dict = {}
 
-        if self._collected_hw_info and 'dmi.system.uuid' in self._collected_hw_info:
-            virt_uuid_dict['virt.uuid'] = self._collected_hw_info['dmi.system.uuid']
+        if self._collected_hw_info and "dmi.system.uuid" in self._collected_hw_info:
+            virt_uuid_dict["virt.uuid"] = self._collected_hw_info["dmi.system.uuid"]
 
         # ie, ppc64/ppc64le
         if self.arch in self.devicetree_vm_uuid_arches:
             uuid = self._get_devicetree_uuid()
             if uuid is not None:
-                virt_uuid_dict['virt.uuid'] = uuid
+                virt_uuid_dict["virt.uuid"] = uuid
 
         # potentially override DMI-determined UUID with
         # what is on the file system (xen para-virt)
         # Does this need root access?
         try:
-            uuid_file = open('/sys/hypervisor/uuid', 'r')
+            uuid_file = open("/sys/hypervisor/uuid", "r")
             uuid = uuid_file.read()
             uuid_file.close()
-            virt_uuid_dict['virt.uuid'] = uuid.rstrip("\r\n")
+            virt_uuid_dict["virt.uuid"] = uuid.rstrip("\r\n")
         except IOError:
             pass
 
@@ -155,15 +155,15 @@ class VirtCollector(collector.FactsCollector):
         # Ensure we do not gather the virt.uuid fact for host_types we cannot
         # See BZ#1438085
         for no_uuid_host_type in VirtUuidCollector.no_uuid_platforms:
-            if virt_what_info.get('virt.host_type', None) is None or \
-               virt_what_info['virt.host_type'].find(no_uuid_host_type) > -1:
+            if (
+                virt_what_info.get("virt.host_type", None) is None
+                or virt_what_info["virt.host_type"].find(no_uuid_host_type) > -1
+            ):
                 return virt_info
 
-        if virt_what_info['virt.is_guest']:
+        if virt_what_info["virt.is_guest"]:
             virt_uuid_collector = VirtUuidCollector(
-                prefix=self.prefix,
-                testing=self.testing,
-                collected_hw_info=self._collected_hw_info
+                prefix=self.prefix, testing=self.testing, collected_hw_info=self._collected_hw_info
             )
             virt_uuid_info = virt_uuid_collector.get_all()
             virt_info.update(virt_uuid_info)

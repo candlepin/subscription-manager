@@ -19,7 +19,11 @@ import logging
 
 from subscription_manager import injection as inj
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.syspurposelib import merge_syspurpose_values, write_syspurpose, get_sys_purpose_store
+from subscription_manager.syspurposelib import (
+    merge_syspurpose_values,
+    write_syspurpose,
+    get_sys_purpose_store,
+)
 
 from rhsmlib.file_monitor import SYSPURPOSE_WATCHER
 from rhsmlib.dbus.server import Server
@@ -28,11 +32,10 @@ log = logging.getLogger(__name__)
 
 
 class Syspurpose(object):
-
     def __init__(self, cp):
         self.cp = cp
         self.identity = inj.require(inj.IDENTITY)
-        self.purpose_status = {'status': 'unknown'}
+        self.purpose_status = {"status": "unknown"}
         self.owner = None
         self.valid_fields = None
 
@@ -66,9 +69,7 @@ class Syspurpose(object):
         Server.temporary_disable_dir_watchers({SYSPURPOSE_WATCHER})
         if self.identity.is_valid() and self.cp.has_capability("syspurpose"):
             local_result = merge_syspurpose_values(
-                local=syspurpose_values,
-                uep=self.cp,
-                consumer_uuid=self.identity.uuid
+                local=syspurpose_values, uep=self.cp, consumer_uuid=self.identity.uuid
             )
             write_syspurpose(local_result)
             synced_store = get_sys_purpose_store()
@@ -93,13 +94,13 @@ class Syspurpose(object):
         # when function is called (not during start of application) due to
         # rhsm.service which can run for very long time
         status_map = {
-            'valid': _('Matched'),
-            'invalid': _('Mismatched'),
-            'partial': _('Partial'),
-            'matched': _('Matched'),
-            'mismatched': _('Mismatched'),
-            'not specified': _('Not Specified'),
-            'disabled': _('Disabled'),
-            'unknown': _('Unknown')
+            "valid": _("Matched"),
+            "invalid": _("Mismatched"),
+            "partial": _("Partial"),
+            "matched": _("Matched"),
+            "mismatched": _("Mismatched"),
+            "not specified": _("Not Specified"),
+            "disabled": _("Disabled"),
+            "unknown": _("Unknown"),
         }
-        return status_map.get(status, status_map['unknown'])
+        return status_map.get(status, status_map["unknown"])

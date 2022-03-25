@@ -13,7 +13,7 @@ class TestRegisterCommand(TestCliProxyCommand):
     def setUp(self):
         super(TestRegisterCommand, self).setUp()
         self._inject_mock_invalid_consumer()
-        argv_patcher = patch.object(sys, 'argv', ['subscription-manager', 'register'])
+        argv_patcher = patch.object(sys, "argv", ["subscription-manager", "register"])
         argv_patcher.start()
         self.addCleanup(argv_patcher.stop)
         syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name

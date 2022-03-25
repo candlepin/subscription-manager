@@ -15,14 +15,14 @@
 from setuptools import setup, find_packages
 
 test_require = [
-    'pytest',
-    'pytest-randomly',
-    'pytest-timeout',
-    'mock'
+    "pytest",
+    "pytest-randomly",
+    "pytest-timeout",
+    "mock",
 ]
 
 install_requires = [
-    'flake8',
+    "flake8",
 ]
 
 setup(

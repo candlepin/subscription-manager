@@ -57,20 +57,20 @@ def send_only_imds_v2_is_supported(request, *args, **kwargs):
     """
     mock_result = Mock()
 
-    if request.method == 'PUT':
+    if request.method == "PUT":
         if request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_URL:
-            if 'X-aws-ec2-metadata-token-ttl-seconds' in request.headers:
+            if "X-aws-ec2-metadata-token-ttl-seconds" in request.headers:
                 mock_result.status_code = 200
                 mock_result.text = AWS_TOKEN
             else:
                 mock_result.status_code = 400
-                mock_result.text = 'Error: TTL for token not specified'
+                mock_result.text = "Error: TTL for token not specified"
         else:
             mock_result.status_code = 400
-            mock_result.text = 'Error: Invalid URL'
-    elif request.method == 'GET':
-        if 'X-aws-ec2-metadata-token' in request.headers.keys():
-            if request.headers['X-aws-ec2-metadata-token'] == AWS_TOKEN:
+            mock_result.text = "Error: Invalid URL"
+    elif request.method == "GET":
+        if "X-aws-ec2-metadata-token" in request.headers.keys():
+            if request.headers["X-aws-ec2-metadata-token"] == AWS_TOKEN:
                 if request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_METADATA_URL:
                     mock_result.status_code = 200
                     mock_result.text = AWS_METADATA
@@ -79,16 +79,16 @@ def send_only_imds_v2_is_supported(request, *args, **kwargs):
                     mock_result.text = AWS_SIGNATURE
                 else:
                     mock_result.status_code = 400
-                    mock_result.text = 'Error: Invalid URL'
+                    mock_result.text = "Error: Invalid URL"
             else:
                 mock_result.status_code = 400
-                mock_result.text = 'Error: Invalid metadata token provided'
+                mock_result.text = "Error: Invalid metadata token provided"
         else:
             mock_result.status_code = 400
-            mock_result.text = 'Error: IMDSv1 is not supported on this instance'
+            mock_result.text = "Error: IMDSv1 is not supported on this instance"
     else:
         mock_result.status_code = 400
-        mock_result.text = 'Error: not supported request method'
+        mock_result.text = "Error: not supported request method"
 
     return mock_result
 
@@ -98,7 +98,6 @@ def mock_prepare_request(request):
 
 
 class TestAutomaticRegistration(unittest.TestCase):
-
     def setUp(self):
         aws.AWSCloudProvider._instance = None
         aws.AWSCloudProvider._initialized = False
@@ -107,7 +106,7 @@ class TestAutomaticRegistration(unittest.TestCase):
         gcp.GCPCloudProvider._instance = None
         gcp.GCPCloudProvider._initialized = False
 
-    @patch('cloud_what.providers.aws.requests.Session')
+    @patch("cloud_what.providers.aws.requests.Session")
     def test_collect_cloud_info_one_cloud_provider_detected(self, mock_session_class):
         """
         Test the case, when we try to collect cloud info only for
@@ -116,31 +115,28 @@ class TestAutomaticRegistration(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = send_only_imds_v2_is_supported
         mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
 
-        cloud_list = ['aws']
+        cloud_list = ["aws"]
         cloud_info = _collect_cloud_info(cloud_list, Mock())
 
         self.assertIsNotNone(cloud_info)
         self.assertTrue(len(cloud_info) > 0)
-        self.assertTrue('cloud_id' in cloud_info)
-        self.assertEqual(cloud_info['cloud_id'], 'aws')
+        self.assertTrue("cloud_id" in cloud_info)
+        self.assertEqual(cloud_info["cloud_id"], "aws")
         # Test metadata
-        self.assertTrue('metadata' in cloud_info)
-        b64_metadata = cloud_info['metadata']
-        metadata = base64.b64decode(b64_metadata).decode('utf-8')
+        self.assertTrue("metadata" in cloud_info)
+        b64_metadata = cloud_info["metadata"]
+        metadata = base64.b64decode(b64_metadata).decode("utf-8")
         self.assertEqual(metadata, AWS_METADATA)
         # Test signature
-        self.assertTrue('signature' in cloud_info)
-        b64_signature = cloud_info['signature']
-        signature = base64.b64decode(b64_signature).decode('utf-8')
-        self.assertEqual(
-            signature,
-            '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
-        )
+        self.assertTrue("signature" in cloud_info)
+        b64_signature = cloud_info["signature"]
+        signature = base64.b64decode(b64_signature).decode("utf-8")
+        self.assertEqual(signature, "-----BEGIN PKCS7-----\n" + AWS_SIGNATURE + "\n-----END PKCS7-----")
 
-    @patch('cloud_what.providers.aws.requests.Session')
+    @patch("cloud_what.providers.aws.requests.Session")
     def test_collect_cloud_info_more_cloud_providers_detected(self, mock_session_class):
         """
         Test the case, when we try to collect cloud info only for
@@ -150,28 +146,25 @@ class TestAutomaticRegistration(unittest.TestCase):
         mock_session = Mock()
         mock_session.send = send_only_imds_v2_is_supported
         mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
-        mock_session.hooks = {'response': []}
+        mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
 
         # More cloud providers detected
-        cloud_list = ['azure', 'aws']
+        cloud_list = ["azure", "aws"]
 
         cloud_info = _collect_cloud_info(cloud_list, Mock())
 
         self.assertIsNotNone(cloud_info)
         self.assertTrue(len(cloud_info) > 0)
-        self.assertTrue('cloud_id' in cloud_info)
-        self.assertEqual(cloud_info['cloud_id'], 'aws')
+        self.assertTrue("cloud_id" in cloud_info)
+        self.assertEqual(cloud_info["cloud_id"], "aws")
         # Test metadata
-        self.assertTrue('metadata' in cloud_info)
-        b64_metadata = cloud_info['metadata']
-        metadata = base64.b64decode(b64_metadata).decode('utf-8')
+        self.assertTrue("metadata" in cloud_info)
+        b64_metadata = cloud_info["metadata"]
+        metadata = base64.b64decode(b64_metadata).decode("utf-8")
         self.assertEqual(metadata, AWS_METADATA)
         # Test signature
-        self.assertTrue('signature' in cloud_info)
-        b64_signature = cloud_info['signature']
-        signature = base64.b64decode(b64_signature).decode('utf-8')
-        self.assertEqual(
-            signature,
-            '-----BEGIN PKCS7-----\n' + AWS_SIGNATURE + '\n-----END PKCS7-----'
-        )
+        self.assertTrue("signature" in cloud_info)
+        b64_signature = cloud_info["signature"]
+        signature = base64.b64decode(b64_signature).decode("utf-8")
+        self.assertEqual(signature, "-----BEGIN PKCS7-----\n" + AWS_SIGNATURE + "\n-----END PKCS7-----")

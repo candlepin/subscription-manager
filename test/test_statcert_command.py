@@ -21,7 +21,6 @@ from .fixture import Capture, SubManFixture
 
 
 class StatCertCommandStub(StatCertCommand):
-
     def __init__(self, cert_pem):
         super(StatCertCommandStub, self).__init__()
         self._pem = cert_pem
@@ -39,7 +38,6 @@ class StatCertCommandStub(StatCertCommand):
 
 
 class StatCertCommandTests(SubManFixture):
-
     def setUp(self):
         super(StatCertCommandTests, self).setUp()
 
@@ -49,20 +47,20 @@ class StatCertCommandTests(SubManFixture):
     def test_product_cert_output(self):
         with Capture() as cap:
             command = StatCertCommandStub(certdata.PRODUCT_CERT_V1_0)
-            command.main(['will_use_stub'])
+            command.main(["will_use_stub"])
         cert_output = cap.out
         self.assertEqual(certdata.PRODUCT_CERT_V1_0_STAT_OUTPUT, cert_output)
 
     def test_product_cert_with_os_name_output(self):
         with Capture() as cap:
             command = StatCertCommandStub(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0)
-            command.main(['will_use_stub'])
+            command.main(["will_use_stub"])
         cert_output = cap.out
         self.assertEqual(certdata.PRODUCT_CERT_WITH_OS_NAME_V1_0_STAT_OUTPUT, cert_output)
 
     def test_entitlement_cert_output_includes_content_sets(self):
         with Capture() as cap:
             command = StatCertCommandStub(certdata.ENTITLEMENT_CERT_V3_0)
-            command.main(['will_use_stub'])
+            command.main(["will_use_stub"])
         cert_output = cap.out
         self.assertEqual(certdata.ENTITLEMENT_CERT_V3_0_STAT_OUTPUT, cert_output)

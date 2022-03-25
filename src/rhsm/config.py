@@ -40,61 +40,61 @@ DEFAULT_CDN_HOSTNAME = "cdn.redhat.com"
 DEFAULT_CDN_PORT = "443"
 DEFAULT_CDN_PREFIX = "/"
 
-DEFAULT_CA_CERT_DIR = '/etc/rhsm/ca/'
+DEFAULT_CA_CERT_DIR = "/etc/rhsm/ca/"
 
-DEFAULT_ENT_CERT_DIR = '/etc/pki/entitlement'
-HOST_ENT_CERT_DIR = '/etc/pki/entitlement-host'
+DEFAULT_ENT_CERT_DIR = "/etc/pki/entitlement"
+HOST_ENT_CERT_DIR = "/etc/pki/entitlement-host"
 
 SERVER_DEFAULTS = {
-    'hostname': DEFAULT_HOSTNAME,
-    'prefix': DEFAULT_PREFIX,
-    'port': DEFAULT_PORT,
-    'server_timeout': DEFAULT_SERVER_TIMEOUT,
-    'insecure': '0',
-    'proxy_hostname': '',
-    'proxy_scheme': 'http',
-    'proxy_user': '',
-    'proxy_port': '',
-    'proxy_password': '',
-    'no_proxy': '',
+    "hostname": DEFAULT_HOSTNAME,
+    "prefix": DEFAULT_PREFIX,
+    "port": DEFAULT_PORT,
+    "server_timeout": DEFAULT_SERVER_TIMEOUT,
+    "insecure": "0",
+    "proxy_hostname": "",
+    "proxy_scheme": "http",
+    "proxy_user": "",
+    "proxy_port": "",
+    "proxy_password": "",
+    "no_proxy": "",
 }
 RHSM_DEFAULTS = {
-    'baseurl': 'https://' + DEFAULT_CDN_HOSTNAME,
-    'repomd_gpg_url': '',
-    'ca_cert_dir': DEFAULT_CA_CERT_DIR,
-    'repo_ca_cert': '%(ca_cert_dir)sredhat-uep.pem',
-    'productcertdir': '/etc/pki/product',
-    'entitlementcertdir': DEFAULT_ENT_CERT_DIR,
-    'consumercertdir': '/etc/pki/consumer',
-    'manage_repos': '1',
-    'full_refresh_on_yum': '0',
-    'report_package_profile': '1',
-    'plugindir': '/usr/share/rhsm-plugins',
-    'pluginconfdir': '/etc/rhsm/pluginconf.d',
-    'auto_enable_yum_plugins': '1',
-    'package_profile_on_trans': '0',
-    'inotify': '1'
+    "baseurl": "https://" + DEFAULT_CDN_HOSTNAME,
+    "repomd_gpg_url": "",
+    "ca_cert_dir": DEFAULT_CA_CERT_DIR,
+    "repo_ca_cert": "%(ca_cert_dir)sredhat-uep.pem",
+    "productcertdir": "/etc/pki/product",
+    "entitlementcertdir": DEFAULT_ENT_CERT_DIR,
+    "consumercertdir": "/etc/pki/consumer",
+    "manage_repos": "1",
+    "full_refresh_on_yum": "0",
+    "report_package_profile": "1",
+    "plugindir": "/usr/share/rhsm-plugins",
+    "pluginconfdir": "/etc/rhsm/pluginconf.d",
+    "auto_enable_yum_plugins": "1",
+    "package_profile_on_trans": "0",
+    "inotify": "1",
 }
 
 RHSMCERTD_DEFAULTS = {
-    'certcheckinterval': '240',
-    'autoattachinterval': '1440',
-    'splay': '1',
-    'disable': '0',
-    'auto_registration': '0',
-    'auto_registration_interval': '60'
+    "certcheckinterval": "240",
+    "autoattachinterval": "1440",
+    "splay": "1",
+    "disable": "0",
+    "auto_registration": "0",
+    "auto_registration_interval": "60",
 }
 
 LOGGING_DEFAULTS = {
-    'default_log_level': 'INFO'
+    "default_log_level": "INFO",
 }
 
 # Defaults are applied to each section in the config file.
 DEFAULTS = {
-    'server': SERVER_DEFAULTS,
-    'rhsm': RHSM_DEFAULTS,
-    'rhsmcertd': RHSMCERTD_DEFAULTS,
-    'logging': LOGGING_DEFAULTS
+    "server": SERVER_DEFAULTS,
+    "rhsm": RHSM_DEFAULTS,
+    "rhsmcertd": RHSMCERTD_DEFAULTS,
+    "logging": LOGGING_DEFAULTS,
 }
 
 
@@ -104,7 +104,7 @@ def in_container():
     """
     # For development in containers we must be able to turn container detection
     # off
-    if os.environ.get('SMDEV_CONTAINER_OFF', False):
+    if os.environ.get("SMDEV_CONTAINER_OFF", False):
         return False
     # Known locations to check for as an easy way to detect whether
     # we are running in a container
@@ -112,10 +112,10 @@ def in_container():
         # podman:
         # https://github.com/containers/podman/issues/6192
         # https://github.com/containers/podman/issues/3586#issuecomment-661918679
-        '/run/.containerenv',
+        "/run/.containerenv",
         # docker:
         # https://github.com/moby/moby/issues/18355
-        '/.dockerenv',
+        "/.dockerenv",
         # The host rhsm configuration was shared with us, so assume
         # we must be running in a container
         HOST_CONFIG_DIR,
@@ -128,6 +128,7 @@ def in_container():
 
 class RhsmConfigParser(SafeConfigParser):
     """Config file parser for rhsm configuration."""
+
     # defaults unused but kept to preserve compatibility
     def __init__(self, config_file=None, defaults=None):
         self.config_file = config_file
@@ -220,14 +221,18 @@ class RhsmConfigParser(SafeConfigParser):
         :param print_warning: print warning, when provided value is not valid
         :return: True, when value is valid. Otherwise return False
         """
-        valid = ['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG']
+        valid = ["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]
         if value not in valid + ["NOTSET"]:
             if print_warning is True:
-                print("Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value), file=sys.stderr)
+                print(
+                    "Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value),
+                    file=sys.stderr,
+                )
                 print(
                     "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set "
                     "the default_log_level to a valid value.",
-                    file=sys.stderr)
+                    file=sys.stderr,
+                )
                 valid_str = ", ".join(valid)
                 print("Valid Values: {valid_str}".format(valid_str=valid_str), file=sys.stderr)
             return False
@@ -255,9 +260,7 @@ class RhsmConfigParser(SafeConfigParser):
             # we could also try to handle port name
             # strings (ie, 'http') here with getservbyname
         except (ValueError, TypeError):
-            raise ValueError(
-                "Section: %s, Property: %s - Integer value expected"
-                % (section, prop))
+            raise ValueError("Section: %s, Property: %s - Integer value expected" % (section, prop))
         return value_int
 
     # Overriding this method to address
@@ -334,28 +337,28 @@ class RhsmHostConfigParser(RhsmConfigParser):
     A similar adjustment is necessary for /etc/pki/entitlement-host if
     present.
     """
+
     def __init__(self, config_file=None, defaults=None):
         RhsmConfigParser.__init__(self, config_file, defaults)
 
         # Override the ca_cert_dir and repo_ca_cert if necessary:
-        ca_cert_dir = self.get('rhsm', 'ca_cert_dir')
-        repo_ca_cert = self.get('rhsm', 'repo_ca_cert')
+        ca_cert_dir = self.get("rhsm", "ca_cert_dir")
+        repo_ca_cert = self.get("rhsm", "repo_ca_cert")
 
         ca_cert_dir = ca_cert_dir.replace(DEFAULT_CONFIG_DIR, HOST_CONFIG_DIR)
         repo_ca_cert = repo_ca_cert.replace(DEFAULT_CONFIG_DIR, HOST_CONFIG_DIR)
-        self.set('rhsm', 'ca_cert_dir', ca_cert_dir)
-        self.set('rhsm', 'repo_ca_cert', repo_ca_cert)
+        self.set("rhsm", "ca_cert_dir", ca_cert_dir)
+        self.set("rhsm", "repo_ca_cert", repo_ca_cert)
 
         # Similarly if /etc/pki/entitlement-host exists, override this too.
         # If for some reason the host config is pointing to another directory
         # we leave the config setting alone, our tooling isn't going to be
         # able to handle it anyhow.
         if os.path.exists(HOST_ENT_CERT_DIR):
-            ent_cert_dir = self.get('rhsm', 'entitlementcertdir')
-            if ent_cert_dir == DEFAULT_ENT_CERT_DIR or \
-                    ent_cert_dir == DEFAULT_ENT_CERT_DIR + "/":
+            ent_cert_dir = self.get("rhsm", "entitlementcertdir")
+            if ent_cert_dir == DEFAULT_ENT_CERT_DIR or ent_cert_dir == DEFAULT_ENT_CERT_DIR + "/":
                 ent_cert_dir = HOST_ENT_CERT_DIR
-            self.set('rhsm', 'entitlementcertdir', ent_cert_dir)
+            self.set("rhsm", "entitlementcertdir", ent_cert_dir)
 
 
 def get_config_parser():
@@ -377,8 +380,7 @@ def get_config_parser():
         # Load alternate config file implementation if we detect that we're
         # running in a container.
         if in_container():
-            CFG = RhsmHostConfigParser(
-                config_file=os.path.join(HOST_CONFIG_DIR, 'rhsm.conf'))
+            CFG = RhsmHostConfigParser(config_file=os.path.join(HOST_CONFIG_DIR, "rhsm.conf"))
         else:
             CFG = RhsmConfigParser(config_file=DEFAULT_CONFIG_PATH)
 

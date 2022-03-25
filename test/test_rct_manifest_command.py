@@ -42,10 +42,13 @@ def _build_valid_manifest():
     consumer_export_object = ZipFile(consumer_export_zip, "w", compression=zipfile.ZIP_STORED)
     consumer_export_object.writestr("export/consumer.json", manifestdata.consumer_json)
     consumer_export_object.writestr("export/meta.json", manifestdata.meta_json)
-    consumer_export_object.writestr("export/entitlements/8a99f9833cf86efc013cfd613be066cb.json",
-                                    manifestdata.entitlement_json)
-    consumer_export_object.writestr("export/entitlement_certificates/2414805806930829936.pem",
-                                    manifestdata.ent_cert + '\n' + manifestdata.ent_cert_private)
+    consumer_export_object.writestr(
+        "export/entitlements/8a99f9833cf86efc013cfd613be066cb.json", manifestdata.entitlement_json
+    )
+    consumer_export_object.writestr(
+        "export/entitlement_certificates/2414805806930829936.pem",
+        manifestdata.ent_cert + "\n" + manifestdata.ent_cert_private,
+    )
     consumer_export_object.close()
     manifest_object.writestr("consumer_export.zip", consumer_export_zip.getvalue())
     manifest_object.close()
@@ -53,7 +56,6 @@ def _build_valid_manifest():
 
 
 class RCTManifestCommandTests(SubManFixture):
-
     def test_get_value(self):
         data = {"test": "value", "test2": {"key2": "value2", "key3": []}}
         self.assertEqual("", get_value(data, "some.test"))
@@ -169,7 +171,6 @@ class RCTManifestCommandTests(SubManFixture):
 
 
 class RCTManifestExtractTests(unittest.TestCase):
-
     def test_extractall_outside_base(self):
         zip_file_object = io.BytesIO()
         archive = ZipExtractAll(zip_file_object, "w", compression=zipfile.ZIP_STORED)

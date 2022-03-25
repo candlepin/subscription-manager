@@ -24,8 +24,13 @@ from functools import partial
 from rhsmlib.services import config
 from rhsm.config import get_config_parser
 from rhsmlib.file_monitor import create_filesystem_watcher, DirectoryWatch
-from rhsmlib.file_monitor import CONSUMER_WATCHER, ENTITLEMENT_WATCHER, CONFIG_WATCHER, PRODUCT_WATCHER, \
-    SYSPURPOSE_WATCHER
+from rhsmlib.file_monitor import (
+    CONSUMER_WATCHER,
+    ENTITLEMENT_WATCHER,
+    CONFIG_WATCHER,
+    PRODUCT_WATCHER,
+    SYSPURPOSE_WATCHER,
+)
 from subscription_manager import injection as inj
 from rhsm.logutil import init_logger
 
@@ -79,8 +84,8 @@ class Server(object):
             raise
         self.identity = inj.require(inj.IDENTITY)  # gives us consumer path
         config_cert_dir_path = "/etc/rhsm/rhsm.conf"
-        products_cert_dir_path = conf['rhsm']['productCertDir']
-        entitlement_cert_dir_path = conf['rhsm']['entitlementCertDir']
+        products_cert_dir_path = conf["rhsm"]["productCertDir"]
+        entitlement_cert_dir_path = conf["rhsm"]["entitlementCertDir"]
         syspurpose_cert_dir_path = "/etc/rhsm/syspurpose/syspurpose.json"
 
         self.connection_name = dbus.service.BusName(self.bus_name, self.bus)
@@ -93,7 +98,9 @@ class Server(object):
                 clazz = item
                 kwargs = {}
 
-            clazz_instance = clazz(object_path=clazz.default_dbus_path, bus_name=self.connection_name, **kwargs)
+            clazz_instance = clazz(
+                object_path=clazz.default_dbus_path, bus_name=self.connection_name, **kwargs
+            )
             self.objects.append(clazz_instance)
             self.object_map[str(clazz.__name__)] = clazz_instance
 
@@ -118,37 +125,24 @@ class Server(object):
         if "SyspurposeDBusObject" in self.object_map:
             syspurpose_dir_list.append(self.object_map["SyspurposeDBusObject"].SyspurposeChanged)
 
-        consumer_dir_watch = DirectoryWatch(
-            self.identity.cert_dir_path,
-            consumer_dir_list
-        )
-        entitlement_dir_watch = DirectoryWatch(
-            entitlement_cert_dir_path,
-            entitlement_dir_list
-        )
-        config_dir_watch = DirectoryWatch(
-            config_cert_dir_path,
-            config_dir_list
-        )
-        products_dir_watch = DirectoryWatch(
-            products_cert_dir_path,
-            products_dir_list
-        )
-        syspurpose_dir_watch = DirectoryWatch(
-            syspurpose_cert_dir_path,
-            syspurpose_dir_list
-        )
+        consumer_dir_watch = DirectoryWatch(self.identity.cert_dir_path, consumer_dir_list)
+        entitlement_dir_watch = DirectoryWatch(entitlement_cert_dir_path, entitlement_dir_list)
+        config_dir_watch = DirectoryWatch(config_cert_dir_path, config_dir_list)
+        products_dir_watch = DirectoryWatch(products_cert_dir_path, products_dir_list)
+        syspurpose_dir_watch = DirectoryWatch(syspurpose_cert_dir_path, syspurpose_dir_list)
 
-        self.filesystem_watcher = create_filesystem_watcher({
-            CONSUMER_WATCHER: consumer_dir_watch,
-            ENTITLEMENT_WATCHER: entitlement_dir_watch,
-            CONFIG_WATCHER: config_dir_watch,
-            PRODUCT_WATCHER: products_dir_watch,
-            SYSPURPOSE_WATCHER: syspurpose_dir_watch,
-        })
+        self.filesystem_watcher = create_filesystem_watcher(
+            {
+                CONSUMER_WATCHER: consumer_dir_watch,
+                ENTITLEMENT_WATCHER: entitlement_dir_watch,
+                CONFIG_WATCHER: config_dir_watch,
+                PRODUCT_WATCHER: products_dir_watch,
+                SYSPURPOSE_WATCHER: syspurpose_dir_watch,
+            }
+        )
         self._thread = threading.Thread(
             target=self.filesystem_watcher.loop,
-            name='Thread-FileSystemWatcher',
+            name="Thread-FileSystemWatcher",
         )
         self._thread.start()
 
@@ -204,7 +198,7 @@ class Server(object):
         for obj in self.objects:
             obj.remove_from_connection()
 
-        log.debug(f'Releasing Bus name: {self.bus_name}')
+        log.debug(f"Releasing Bus name: {self.bus_name}")
         self.bus.release_name(self.bus_name)
 
     @classmethod
@@ -224,7 +218,7 @@ class Server(object):
             # included in the set
             if watcher_set is not None and dir_watcher_id not in watcher_set:
                 continue
-            log.debug(f'Disabling directory watcher: {dir_watcher_id}')
+            log.debug(f"Disabling directory watcher: {dir_watcher_id}")
             dir_watcher.temporary_disable()
 
     @classmethod
@@ -240,7 +234,7 @@ class Server(object):
         for dir_watcher_id, dir_watcher in server_instance.filesystem_watcher.dir_watches.items():
             if watcher_set is not None and dir_watcher_id not in watcher_set:
                 continue
-            log.debug(f'Enabling directory watcher: {dir_watcher_id}')
+            log.debug(f"Enabling directory watcher: {dir_watcher_id}")
             dir_watcher.enable()
 
 
@@ -250,14 +244,15 @@ class DomainSocketServer(object):
     session bus since those aren't really locked down. The work-around is the client asks our service
     to open another server on a domain socket, gets socket information back, and then connects and sends
     the register command (with the credentials) to the server on the domain socket."""
+
     @staticmethod
     def connection_added(domain_socket_server, service_class, object_list, conn):
         obj = service_class(
             conn=conn,
             sender=domain_socket_server.sender,
-            cmd_line=domain_socket_server.cmd_line
+            cmd_line=domain_socket_server.cmd_line,
         )
-        log.debug('Instance: %s of %s created' % (obj, service_class))
+        log.debug("Instance: %s of %s created" % (obj, service_class))
         object_list.append(obj)
         with domain_socket_server.lock:
             domain_socket_server.connection_count += 1
@@ -269,12 +264,12 @@ class DomainSocketServer(object):
         with domain_socket_server.lock:
             domain_socket_server.connection_count -= 1
             if domain_socket_server.connection_count == 0:
-                log.debug('No connections remain')
+                log.debug("No connections remain")
             else:
                 if domain_socket_server.connection_count == 1:
-                    log.debug('Server still has one connection')
+                    log.debug("Server still has one connection")
                 else:
-                    log.debug('Server still has %d connections' % domain_socket_server.connection_count)
+                    log.debug("Server still has %d connections" % domain_socket_server.connection_count)
 
     @property
     def address(self):
@@ -321,9 +316,7 @@ class DomainSocketServer(object):
                     partial(DomainSocketServer.connection_added, self, clazz, self.objects)
                 )
 
-            self._server.on_connection_removed.append(
-                partial(DomainSocketServer.connection_removed, self)
-            )
+            self._server.on_connection_removed.append(partial(DomainSocketServer.connection_removed, self))
 
             return self.address
         except Exception as e:

@@ -25,7 +25,6 @@ from subscription_manager.utils import restart_virt_who
 
 
 class UnRegisterCommand(CliCommand):
-
     def __init__(self):
         shortdesc = get_branding().CLI_UNREGISTER
         super(UnRegisterCommand, self).__init__("unregister", shortdesc, True)
@@ -38,8 +37,13 @@ class UnRegisterCommand(CliCommand):
             # TODO: Should this use the standard NOT_REGISTERED message?
             system_exit(ERR_NOT_REGISTERED_CODE, _("This system is currently not registered."))
 
-        print(_("Unregistering from: {hostname}:{port}{prefix}").format(
-              hostname=conf["server"]["hostname"], port=conf["server"]["port"], prefix=conf["server"]["prefix"]))
+        print(
+            _("Unregistering from: {hostname}:{port}{prefix}").format(
+                hostname=conf["server"]["hostname"],
+                port=conf["server"]["port"],
+                prefix=conf["server"]["prefix"],
+            )
+        )
         try:
             unregister.UnregisterService(self.cp).unregister()
         except Exception as e:

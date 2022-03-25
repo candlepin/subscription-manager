@@ -18,6 +18,7 @@ class InstalledProductsActionInvoker(certlib.BaseActionInvoker):
     """Used by rhsmcertd to update the installed
     products on this system periodically.
     """
+
     def _do_update(self):
         action = InstalledProductsActionCommand()
         return action.perform()
@@ -28,6 +29,7 @@ class InstalledProductsActionCommand(object):
 
     Returns a InstalledProductsActionReport.
     """
+
     def __init__(self):
         self.report = InstalledProductsActionReport()
         self.cp_provider = inj.require(inj.CP_PROVIDER)

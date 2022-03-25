@@ -27,10 +27,22 @@ from rhsm.certificate import Key, CertificateException, create_from_pem
 import subscription_manager.cache as cache
 from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
 from subscription_manager import identity
-from subscription_manager.injection import require, CERT_SORTER, \
-    IDENTITY, ENTITLEMENT_STATUS_CACHE, SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, \
-    PROD_STATUS_CACHE, ENT_DIR, PROD_DIR, CP_PROVIDER, OVERRIDE_STATUS_CACHE, \
-    POOLTYPE_CACHE, RELEASE_STATUS_CACHE, FACTS, POOL_STATUS_CACHE
+from subscription_manager.injection import (
+    require,
+    CERT_SORTER,
+    IDENTITY,
+    ENTITLEMENT_STATUS_CACHE,
+    SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE,
+    PROD_STATUS_CACHE,
+    ENT_DIR,
+    PROD_DIR,
+    CP_PROVIDER,
+    OVERRIDE_STATUS_CACHE,
+    POOLTYPE_CACHE,
+    RELEASE_STATUS_CACHE,
+    FACTS,
+    POOL_STATUS_CACHE,
+)
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
 from subscription_manager.repolib import RepoActionInvoker
@@ -46,7 +58,7 @@ from subscription_manager.i18n import ugettext as _
 log = logging.getLogger(__name__)
 
 cfg = get_config_parser()
-ENT_CONFIG_DIR = cfg.get('rhsm', 'entitlementCertDir')
+ENT_CONFIG_DIR = cfg.get("rhsm", "entitlementCertDir")
 
 # Expected permissions for identity certificates:
 ID_CERT_PERMS = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
@@ -59,12 +71,12 @@ def system_log(message, priority=syslog.LOG_NOTICE):
 # FIXME: move me to identity.py
 def persist_consumer_cert(consumerinfo):
     """
-     Calls the consumerIdentity, persists and gets consumer info
+    Calls the consumerIdentity, persists and gets consumer info
     """
-    cert_dir = cfg.get('rhsm', 'consumerCertDir')
+    cert_dir = cfg.get("rhsm", "consumerCertDir")
     if not os.path.isdir(cert_dir):
         os.mkdir(cert_dir)
-    consumer = identity.ConsumerIdentity(consumerinfo['idCert']['key'], consumerinfo['idCert']['cert'])
+    consumer = identity.ConsumerIdentity(consumerinfo["idCert"]["key"], consumerinfo["idCert"]["cert"])
     consumer.write()
     log.info("Consumer created: %s (%s)" % (consumer.getConsumerName(), consumer.getConsumerId()))
     system_log("Registered system with identity: %s" % consumer.getConsumerId())
@@ -75,7 +87,9 @@ class CertificateFetchError(Exception):
         self.errors = errors
 
     def __str__(self, reason=""):
-        msg = 'Entitlement Certificate(s) update failed due to the following reasons:\n' + '\n'.join(self.errors)
+        msg = "Entitlement Certificate(s) update failed due to the following reasons:\n" + "\n".join(
+            self.errors
+        )
         return msg
 
 
@@ -93,6 +107,7 @@ class PoolFilter(object):
     """
     Helper to filter a list of pools.
     """
+
     # Although sorter isn't necessarily required, when present it allows
     # us to not filter out yellow packages when "has no overlap" is selected
     def __init__(self, product_dir, entitlement_dir, sorter=None):
@@ -109,14 +124,14 @@ class PoolFilter(object):
         """
         matched_pools = []
         for pool in pools:
-            if pool['productId'] in product_ids:
-                log.debug("pool matches: %s" % pool['productId'])
+            if pool["productId"] in product_ids:
+                log.debug("pool matches: %s" % pool["productId"])
                 matched_pools.append(pool)
                 continue
 
-            for provided in pool['providedProducts']:
-                if provided['productId'] in product_ids:
-                    log.debug("pool provides: %s" % provided['productId'])
+            for provided in pool["providedProducts"]:
+                if provided["productId"] in product_ids:
+                    log.debug("pool provides: %s" % provided["productId"])
                     matched_pools.append(pool)
                     break
         return matched_pools
@@ -133,11 +148,10 @@ class PoolFilter(object):
                 productid = product.products[0].id
                 # we only need one matched item per pool id, so add to dict to keep unique:
                 # Build a list of provided product IDs for comparison:
-                provided_ids = [p['productId'] for p in d['providedProducts']]
+                provided_ids = [p["productId"] for p in d["providedProducts"]]
 
-                if str(productid) in provided_ids or \
-                        str(productid) == d['productId']:
-                    matched_data_dict[d['id']] = d
+                if str(productid) in provided_ids or str(productid) == d["productId"]:
+                    matched_data_dict[d["id"]] = d
 
         return list(matched_data_dict.values())
 
@@ -149,14 +163,13 @@ class PoolFilter(object):
         installed_products = self.product_directory.list()
         matched_data_dict = {}
         for d in pools:
-            matched_data_dict[d['id']] = d
-            provided_ids = [p['productId'] for p in d['providedProducts']]
+            matched_data_dict[d["id"]] = d
+            provided_ids = [p["productId"] for p in d["providedProducts"]]
             for product in installed_products:
                 productid = product.products[0].id
                 # we only need one matched item per pool id, so add to dict to keep unique:
-                if str(productid) in provided_ids or \
-                        str(productid) == d['productId']:
-                    del matched_data_dict[d['id']]
+                if str(productid) in provided_ids or str(productid) == d["productId"]:
+                    del matched_data_dict[d["id"]]
                     break
 
         return list(matched_data_dict.values())
@@ -169,11 +182,11 @@ class PoolFilter(object):
         lowered = contains_text.lower()
         filtered_pools = []
         for pool in pools:
-            if lowered in pool['productName'].lower():
+            if lowered in pool["productName"].lower():
                 filtered_pools.append(pool)
             else:
-                for provided in pool['providedProducts']:
-                    if lowered in provided['productName'].lower():
+                for provided in pool["providedProducts"]:
+                    if lowered in provided["productName"].lower():
                         filtered_pools.append(pool)
                         break
         return filtered_pools
@@ -196,8 +209,8 @@ class PoolFilter(object):
         return entitled_products_to_certs
 
     def _dates_overlap(self, pool, certs):
-        pool_start = isodate.parse_date(pool['startDate'])
-        pool_end = isodate.parse_date(pool['endDate'])
+        pool_start = isodate.parse_date(pool["startDate"])
+        pool_end = isodate.parse_date(pool["endDate"])
 
         for cert in certs:
             cert_range = cert.valid_range
@@ -209,16 +222,18 @@ class PoolFilter(object):
         entitled_product_ids_to_certs = self._get_entitled_product_to_cert_map()
         filtered_pools = []
         for pool in pools:
-            provided_ids = set([p['productId'] for p in pool['providedProducts']])
+            provided_ids = set([p["productId"] for p in pool["providedProducts"]])
             wrapped_pool = PoolWrapper(pool)
             # NOTE: We may have to check for other types or handle the case of a product with no type in the future
-            if wrapped_pool.get_product_attributes('type')['type'] == 'SVC':
-                provided_ids.add(pool['productId'])
+            if wrapped_pool.get_product_attributes("type")["type"] == "SVC":
+                provided_ids.add(pool["productId"])
             overlap = 0
             possible_overlap_pids = provided_ids.intersection(list(entitled_product_ids_to_certs.keys()))
             for productid in possible_overlap_pids:
-                if self._dates_overlap(pool, entitled_product_ids_to_certs[productid]) \
-                        and productid not in self.sorter.partially_valid_products:
+                if (
+                    self._dates_overlap(pool, entitled_product_ids_to_certs[productid])
+                    and productid not in self.sorter.partially_valid_products
+                ):
                     overlap += 1
                 else:
                     break
@@ -231,26 +246,32 @@ class PoolFilter(object):
         not_overlapping = self.filter_out_overlapping(pools)
         return [pool for pool in pools if pool not in not_overlapping]
 
-    def filter_subscribed_pools(self, pools, subscribed_pool_ids,
-                                compatible_pools):
+    def filter_subscribed_pools(self, pools, subscribed_pool_ids, compatible_pools):
         """
         Filter the given list of pools, removing those for which the system
         already has a subscription, unless the pool can be subscribed to again
         (ie has multi-entitle).
         """
-        resubscribeable_pool_ids = [pool['id'] for pool in
-                                    list(compatible_pools.values())]
+        resubscribeable_pool_ids = [pool["id"] for pool in list(compatible_pools.values())]
 
         filtered_pools = []
         for pool in pools:
-            if (pool['id'] not in subscribed_pool_ids) or \
-                    (pool['id'] in resubscribeable_pool_ids):
+            if (pool["id"] not in subscribed_pool_ids) or (pool["id"] in resubscribeable_pool_ids):
                 filtered_pools.append(pool)
         return filtered_pools
 
 
-def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string=None, future=None,
-               after_date=None, page=0, items_per_page=0):
+def list_pools(
+    uep,
+    consumer_uuid,
+    list_all=False,
+    active_on=None,
+    filter_string=None,
+    future=None,
+    after_date=None,
+    page=0,
+    items_per_page=0,
+):
     """
     Wrapper around the UEP call to fetch pools, which forces a facts update
     if anything has changed before making the request. This ensures the
@@ -279,7 +300,7 @@ def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string
     profile_mgr.update_check(uep, consumer_uuid)
 
     owner = uep.getOwner(consumer_uuid)
-    ownerid = owner['key']
+    ownerid = owner["key"]
 
     return uep.getPoolsList(
         consumer=consumer_uuid,
@@ -290,17 +311,26 @@ def list_pools(uep, consumer_uuid, list_all=False, active_on=None, filter_string
         future=future,
         after_date=after_date,
         page=page,
-        items_per_page=items_per_page
+        items_per_page=items_per_page,
     )
 
 
 # TODO: This method is morphing the actual pool json and returning a new
 # dict which does not contain all the pool info. Not sure if this is really
 # necessary. Also some "view" specific things going on in here.
-def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
-                               uninstalled=False, text=None, filter_string=None,
-                               future=None, after_date=None, page=0, items_per_page=0,
-                               iso_dates=False):
+def get_available_entitlements(
+    get_all=False,
+    active_on=None,
+    overlapping=False,
+    uninstalled=False,
+    text=None,
+    filter_string=None,
+    future=None,
+    after_date=None,
+    page=0,
+    items_per_page=0,
+    iso_dates=False,
+):
     """
     Returns a list of entitlement pools from the server.
 
@@ -308,24 +338,24 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
     not pass. (i.e. show pools that are incompatible for your hardware)
     """
     columns = [
-        'id',
-        'quantity',
-        'consumed',
-        'startDate',
-        'endDate',
-        'productName',
-        'providedProducts',
-        'productId',
-        'roles',
-        'attributes',
-        'pool_type',
-        'service_level',
-        'service_type',
-        'usage',
-        'addons',
-        'suggested',
-        'contractNumber',
-        'management_enabled'
+        "id",
+        "quantity",
+        "consumed",
+        "startDate",
+        "endDate",
+        "productName",
+        "providedProducts",
+        "productId",
+        "roles",
+        "attributes",
+        "pool_type",
+        "service_level",
+        "service_type",
+        "usage",
+        "addons",
+        "suggested",
+        "contractNumber",
+        "management_enabled",
     ]
 
     pool_stash = PoolStash()
@@ -339,7 +369,7 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
         future=future,
         after_date=after_date,
         page=page,
-        items_per_page=items_per_page
+        items_per_page=items_per_page,
     )
 
     if iso_dates:
@@ -349,40 +379,38 @@ def get_available_entitlements(get_all=False, active_on=None, overlapping=False,
 
     for pool in dlist:
         pool_wrapper = PoolWrapper(pool)
-        pool['providedProducts'] = pool_wrapper.get_provided_products()
+        pool["providedProducts"] = pool_wrapper.get_provided_products()
         if allows_multi_entitlement(pool):
-            pool['multi-entitlement'] = "Yes"
+            pool["multi-entitlement"] = "Yes"
         else:
-            pool['multi-entitlement'] = "No"
+            pool["multi-entitlement"] = "No"
 
-        support_attrs = pool_wrapper.get_product_attributes("support_level",
-                                                            "support_type",
-                                                            "roles",
-                                                            "usage",
-                                                            "addons")
-        pool['service_level'] = support_attrs['support_level']
-        pool['service_type'] = support_attrs['support_type']
-        pool['roles'] = support_attrs['roles']
-        pool['usage'] = support_attrs['usage']
-        pool['addons'] = support_attrs['addons']
-        pool['suggested'] = pool_wrapper.get_suggested_quantity()
-        pool['pool_type'] = pool_wrapper.get_pool_type()
-        pool['management_enabled'] = pool_wrapper.management_enabled()
+        support_attrs = pool_wrapper.get_product_attributes(
+            "support_level", "support_type", "roles", "usage", "addons"
+        )
+        pool["service_level"] = support_attrs["support_level"]
+        pool["service_type"] = support_attrs["support_type"]
+        pool["roles"] = support_attrs["roles"]
+        pool["usage"] = support_attrs["usage"]
+        pool["addons"] = support_attrs["addons"]
+        pool["suggested"] = pool_wrapper.get_suggested_quantity()
+        pool["pool_type"] = pool_wrapper.get_pool_type()
+        pool["management_enabled"] = pool_wrapper.management_enabled()
 
-        if pool['suggested'] is None:
-            pool['suggested'] = ""
+        if pool["suggested"] is None:
+            pool["suggested"] = ""
 
     # no default, so default is None if key not found
     data = [_sub_dict(pool, columns) for pool in dlist]
     for d in data:
-        if int(d['quantity']) < 0:
-            d['quantity'] = _('Unlimited')
+        if int(d["quantity"]) < 0:
+            d["quantity"] = _("Unlimited")
         else:
-            d['quantity'] = str(int(d['quantity']) - int(d['consumed']))
+            d["quantity"] = str(int(d["quantity"]) - int(d["consumed"]))
 
-        d['startDate'] = date_formatter(isodate.parse_date(d['startDate']))
-        d['endDate'] = date_formatter(isodate.parse_date(d['endDate']))
-        del d['consumed']
+        d["startDate"] = date_formatter(isodate.parse_date(d["startDate"]))
+        d["endDate"] = date_formatter(isodate.parse_date(d["endDate"]))
+        del d["consumed"]
 
     return data
 
@@ -393,6 +421,7 @@ class MergedPools(object):
     Used to view total entitlement information across all pools for a
     particular product.
     """
+
     def __init__(self, product_id, product_name):
         self.product_id = product_id
         self.product_name = product_name
@@ -403,15 +432,15 @@ class MergedPools(object):
 
     def add_pool(self, pool):
         # TODO: check if product id and name match?
-        self.consumed += pool['consumed']
+        self.consumed += pool["consumed"]
         # we want to add the quantity for this pool
         #  the total. if the pool is unlimited, the
         #  resulting quantity will be set to -1 and
         #  subsequent added pools will not change that.
-        if pool['quantity'] == -1:
+        if pool["quantity"] == -1:
             self.quantity = -1
         elif self.quantity != -1:
-            self.quantity += pool['quantity']
+            self.quantity += pool["quantity"]
         self.pools.append(pool)
 
         # This is a little tricky, technically speaking, subscriptions
@@ -419,7 +448,7 @@ class MergedPools(object):
         # edge cases from one sub to another even though they are for the
         # same product. For now we'll just set this value each time a pool
         # is added and hope they are consistent.
-        self.bundled_products = len(pool['providedProducts'])
+        self.bundled_products = len(pool["providedProducts"])
 
     def _virt_physical_sorter(self, pool):
         """
@@ -428,8 +457,8 @@ class MergedPools(object):
 
         Returning numeric values to simulate the behavior we want.
         """
-        for attr in pool['attributes']:
-            if attr['name'] == 'virt_only' and attr['value'] == 'true':
+        for attr in pool["attributes"]:
+            if attr["name"] == "virt_only" and attr["value"] == "true":
                 return 1
         return 2
 
@@ -456,10 +485,9 @@ def merge_pools(pools):
     merged_pools = {}
 
     for pool in pools:
-        if not pool['productId'] in merged_pools:
-            merged_pools[pool['productId']] = MergedPools(pool['productId'],
-                                                          pool['productName'])
-        merged_pools[pool['productId']].add_pool(pool)
+        if not pool["productId"] in merged_pools:
+            merged_pools[pool["productId"]] = MergedPools(pool["productId"], pool["productName"])
+        merged_pools[pool["productId"]].add_pool(pool)
 
     # Just return a list of the MergedPools objects, without the product ID
     # key hashing:
@@ -470,6 +498,7 @@ class MergedPoolsStackingGroupSorter(StackingGroupSorter):
     """
     Sorts a list of MergedPool objects by stacking_id.
     """
+
     def __init__(self, merged_pools):
         StackingGroupSorter.__init__(self, merged_pools)
 
@@ -477,7 +506,7 @@ class MergedPoolsStackingGroupSorter(StackingGroupSorter):
         return PoolWrapper(merged_pool.pools[0]).get_stacking_id()
 
     def _get_identity_name(self, merged_pool):
-        return merged_pool.pools[0]['productName']
+        return merged_pool.pools[0]["productName"]
 
 
 class PoolStash(object):
@@ -485,6 +514,7 @@ class PoolStash(object):
     Object used to fetch pools from the server, sort them into compatible,
     incompatible, and installed lists. Also does filtering based on name.
     """
+
     def __init__(self):
         self.identity = require(IDENTITY)
         self.sorter = None
@@ -516,19 +546,24 @@ class PoolStash(object):
         self.all_pools = {}
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
-        for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                               self.identity.uuid, active_on=active_on):
-            self.compatible_pools[pool['id']] = pool
-            self.all_pools[pool['id']] = pool
+        for pool in list_pools(
+            require(CP_PROVIDER).get_consumer_auth_cp(), self.identity.uuid, active_on=active_on
+        ):
+            self.compatible_pools[pool["id"]] = pool
+            self.all_pools[pool["id"]] = pool
 
         # Filter the list of all pools, removing those we know are compatible.
         # Sadly this currently requires a second query to the server.
         self.incompatible_pools = {}
-        for pool in list_pools(require(CP_PROVIDER).get_consumer_auth_cp(),
-                               self.identity.uuid, list_all=True, active_on=active_on):
-            if not pool['id'] in self.compatible_pools:
-                self.incompatible_pools[pool['id']] = pool
-                self.all_pools[pool['id']] = pool
+        for pool in list_pools(
+            require(CP_PROVIDER).get_consumer_auth_cp(),
+            self.identity.uuid,
+            list_all=True,
+            active_on=active_on,
+        ):
+            if not pool["id"] in self.compatible_pools:
+                self.incompatible_pools[pool["id"]] = pool
+                self.all_pools[pool["id"]] = pool
 
         self.subscribed_pool_ids = self._get_subscribed_pool_ids()
 
@@ -541,8 +576,19 @@ class PoolStash(object):
         log.debug("   %s incompatible" % len(self.incompatible_pools))
         log.debug("   %s already subscribed" % len(self.subscribed_pool_ids))
 
-    def get_filtered_pools_list(self, active_on, incompatible, overlapping, uninstalled, text, filter_string,
-                                future=None, after_date=None, page=0, items_per_page=0):
+    def get_filtered_pools_list(
+        self,
+        active_on,
+        incompatible,
+        overlapping,
+        uninstalled,
+        text,
+        filter_string,
+        future=None,
+        after_date=None,
+        page=0,
+        items_per_page=0,
+    ):
         """
         Used for CLI --available filtering
         cuts down on api calls
@@ -563,10 +609,10 @@ class PoolStash(object):
                 future=future,
                 after_date=after_date,
                 page=page,
-                items_per_page=items_per_page
+                items_per_page=items_per_page,
             )
             for pool in pools:
-                self.compatible_pools[pool['id']] = pool
+                self.compatible_pools[pool["id"]] = pool
         else:  # --all has been used
             pools = list_pools(
                 require(CP_PROVIDER).get_consumer_auth_cp(),
@@ -577,18 +623,17 @@ class PoolStash(object):
                 future=future,
                 after_date=after_date,
                 page=page,
-                items_per_page=items_per_page
+                items_per_page=items_per_page,
             )
             for pool in pools:
-                self.all_pools[pool['id']] = pool
+                self.all_pools[pool["id"]] = pool
 
         return self._filter_pools(incompatible, overlapping, uninstalled, False, text)
 
     def _get_subscribed_pool_ids(self):
         return [ent.pool.id for ent in require(ENT_DIR).list()]
 
-    def _filter_pools(self, incompatible, overlapping, uninstalled, subscribed,
-                      text):
+    def _filter_pools(self, incompatible, overlapping, uninstalled, subscribed, text):
         """
         Return a list of pool hashes, filtered according to the given options.
 
@@ -601,46 +646,43 @@ class PoolStash(object):
             pools = list(self.all_pools.values())
         else:
             pools = list(self.compatible_pools.values())
-            log.debug("\tRemoved %d incompatible pools" %
-                      len(self.incompatible_pools))
+            log.debug("\tRemoved %d incompatible pools" % len(self.incompatible_pools))
 
-        pool_filter = PoolFilter(require(PROD_DIR),
-                                 require(ENT_DIR), self.sorter)
+        pool_filter = PoolFilter(require(PROD_DIR), require(ENT_DIR), self.sorter)
 
         # Filter out products that are not installed if necessary:
         if uninstalled:
             prev_length = len(pools)
             pools = pool_filter.filter_out_uninstalled(pools)
-            log.debug("\tRemoved %d pools for not installed products" %
-                      (prev_length - len(pools)))
+            log.debug("\tRemoved %d pools for not installed products" % (prev_length - len(pools)))
 
         if overlapping:
             prev_length = len(pools)
             pools = pool_filter.filter_out_overlapping(pools)
-            log.debug("\tRemoved %d pools overlapping existing entitlements" %
-                      (prev_length - len(pools)))
+            log.debug("\tRemoved %d pools overlapping existing entitlements" % (prev_length - len(pools)))
 
         # Filter by product name if necessary:
         if text:
             prev_length = len(pools)
             pools = pool_filter.filter_product_name(pools, text)
-            log.debug("\tRemoved %d pools not matching the search string" %
-                      (prev_length - len(pools)))
+            log.debug("\tRemoved %d pools not matching the search string" % (prev_length - len(pools)))
 
         if subscribed:
             prev_length = len(pools)
-            pools = pool_filter.filter_subscribed_pools(pools,
-                                                        self.subscribed_pool_ids, self.compatible_pools)
-            log.debug("\tRemoved %d pools that we're already subscribed to" %
-                      (prev_length - len(pools)))
+            pools = pool_filter.filter_subscribed_pools(
+                pools, self.subscribed_pool_ids, self.compatible_pools
+            )
+            log.debug("\tRemoved %d pools that we're already subscribed to" % (prev_length - len(pools)))
 
-        log.debug("\t%d pools to display, %d filtered out" %
-                  (len(pools), max(0, len(self.all_pools) - len(pools))))
+        log.debug(
+            "\t%d pools to display, %d filtered out" % (len(pools), max(0, len(self.all_pools) - len(pools)))
+        )
 
         return pools
 
-    def merge_pools(self, incompatible=False, overlapping=False,
-                    uninstalled=False, subscribed=False, text=None):
+    def merge_pools(
+        self, incompatible=False, overlapping=False, uninstalled=False, subscribed=False, text=None
+    ):
         """
         Return a merged view of pools filtered according to the given options.
         Pools for the same product will be merged into a MergedPool object.
@@ -648,8 +690,7 @@ class PoolStash(object):
         Arguments turn on filters, so setting one to True will reduce the
         number of results.
         """
-        pools = self._filter_pools(incompatible, overlapping, uninstalled,
-                                   subscribed, text)
+        pools = self._filter_pools(incompatible, overlapping, uninstalled, subscribed, text)
         merged_pools = merge_pools(pools)
         return merged_pools
 
@@ -665,8 +706,8 @@ class PoolStash(object):
             return None
 
         provided_products = []
-        for product in pool['providedProducts']:
-            provided_products.append((product['productName'], product['productId']))
+        for product in pool["providedProducts"]:
+            provided_products.append((product["productName"], product["productId"]))
         return provided_products
 
 
@@ -695,11 +736,15 @@ class ImportFileExtractor(object):
     -----END PUBLIC KEY-----
 
     """
+
     _REGEX_START_GROUP = "start"
     _REGEX_CONTENT_GROUP = "content"
     _REGEX_END_GROUP = "end"
-    _REGEX = r"(?P<%s>[-]*BEGIN[\w\ ]*[-]*)(?P<%s>[^-]*)(?P<%s>[-]*END[\w\ ]*[-]*)" % \
-        (_REGEX_START_GROUP, _REGEX_CONTENT_GROUP, _REGEX_END_GROUP)
+    _REGEX = r"(?P<%s>[-]*BEGIN[\w\ ]*[-]*)(?P<%s>[^-]*)(?P<%s>[-]*END[\w\ ]*[-]*)" % (
+        _REGEX_START_GROUP,
+        _REGEX_CONTENT_GROUP,
+        _REGEX_END_GROUP,
+    )
     _PATTERN = re.compile(_REGEX)
 
     _CERT_DICT_TAG = "CERTIFICATE"
@@ -754,7 +799,7 @@ class ImportFileExtractor(object):
         return key_content
 
     def get_cert_content(self):
-        cert_content = ''
+        cert_content = ""
         if self._CERT_DICT_TAG in self.parts:
             cert_content = self.parts[self._CERT_DICT_TAG]
         if self._ENT_DICT_TAG in self.parts:
@@ -773,7 +818,7 @@ class ImportFileExtractor(object):
             cert = self.get_cert()
             # Don't want to check class explicitly, instead we'll look for
             # order info, which only an entitlement cert could have:
-            if not hasattr(cert, 'order'):
+            if not hasattr(cert, "order"):
                 return False
         except CertificateException:
             return False
@@ -788,8 +833,7 @@ class ImportFileExtractor(object):
         Write/copy cert to the entitlement cert dir.
         """
         self._ensure_entitlement_dir_exists()
-        dest_file_path = os.path.join(ENT_CONFIG_DIR,
-                                      self._create_filename_from_cert_serial_number())
+        dest_file_path = os.path.join(ENT_CONFIG_DIR, self._create_filename_from_cert_serial_number())
 
         # Write the key/cert content to new files
         log.debug("Writing certificate file: %s" % (dest_file_path))
@@ -877,7 +921,7 @@ def check_identity_cert_perms():
 
 
 def clean_all_data(backup=True):
-    consumer_dir = cfg.get('rhsm', 'consumerCertDir')
+    consumer_dir = cfg.get("rhsm", "consumerCertDir")
     if backup:
         if consumer_dir[-1] == "/":
             consumer_dir_backup = consumer_dir[0:-1] + ".old"
@@ -891,17 +935,17 @@ def clean_all_data(backup=True):
         log.debug("Backing up %s to %s.", consumer_dir, consumer_dir_backup)
         shutil.copytree(consumer_dir, consumer_dir_backup)
 
-# FIXME FIXME
+    # FIXME FIXME
     # Delete current consumer certs:
     for path in [ConsumerIdentity.keypath(), ConsumerIdentity.certpath()]:
-        if (os.path.exists(path)):
+        if os.path.exists(path):
             log.debug("Removing identity cert: %s" % path)
             os.remove(path)
 
     require(IDENTITY).reload()
 
     # Delete all entitlement certs rather than the directory itself:
-    ent_cert_dir = cfg.get('rhsm', 'entitlementCertDir')
+    ent_cert_dir = cfg.get("rhsm", "entitlementCertDir")
     if os.path.exists(ent_cert_dir):
 
         for f in glob.glob("%s/*.pem" % ent_cert_dir):
@@ -950,8 +994,7 @@ def allows_multi_entitlement(pool):
     Determine if this pool allows multi-entitlement based on the pool's
     top-level product's multi-entitlement attribute.
     """
-    for attribute in pool['productAttributes']:
-        if attribute['name'] == "multi-entitlement" and \
-            utils.is_true_value(attribute['value']):
+    for attribute in pool["productAttributes"]:
+        if attribute["name"] == "multi-entitlement" and utils.is_true_value(attribute["value"]):
             return True
     return False

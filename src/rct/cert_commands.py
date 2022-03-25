@@ -26,10 +26,8 @@ from subscription_manager.i18n import ugettext as _
 
 
 class RCTCertCommand(RCTCliCommand):
-
     def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
-        RCTCliCommand.__init__(self, name=name, aliases=aliases,
-                               shortdesc=shortdesc, primary=primary)
+        RCTCliCommand.__init__(self, name=name, aliases=aliases, shortdesc=shortdesc, primary=primary)
 
     def _get_usage(self):
         return _("%(prog)s {name} [OPTIONS] CERT_FILE").format(name=self.name)
@@ -41,7 +39,9 @@ class RCTCertCommand(RCTCliCommand):
         except certificate.CertificateException as ce:
             raise InvalidCLIOptionError(
                 _("Unable to read certificate file '{certificate}': {exception}").format(
-                    certificate=cert_file, exception=ce))
+                    certificate=cert_file, exception=ce
+                )
+            )
 
     def _validate_options(self):
         cert_file = self._get_file_from_args()
@@ -53,32 +53,45 @@ class RCTCertCommand(RCTCliCommand):
 
 
 class CatCertCommand(RCTCertCommand):
-
     def __init__(self):
-        RCTCliCommand.__init__(self, name="cat-cert", aliases=['cc'],
-                               shortdesc=_("Print certificate information"),
-                               primary=True)
+        RCTCliCommand.__init__(
+            self,
+            name="cat-cert",
+            aliases=["cc"],
+            shortdesc=_("Print certificate information"),
+            primary=True,
+        )
 
-        self.parser.add_argument("--no-products", dest="no_products", action="store_true",
-                                 help=_("do not show the cert's product information"))
-        self.parser.add_argument("--no-content", dest="no_content", action="store_true",
-                                 help=_("do not show the cert's content info"))
+        self.parser.add_argument(
+            "--no-products",
+            dest="no_products",
+            action="store_true",
+            help=_("do not show the cert's product information"),
+        )
+        self.parser.add_argument(
+            "--no-content",
+            dest="no_content",
+            action="store_true",
+            help=_("do not show the cert's content info"),
+        )
 
     def _do_command(self):
         """
         Does the work that this command intends.
         """
         cert = self._create_cert()
-        printc(cert, skip_content=self.options.no_content,
-               skip_products=self.options.no_products)
+        printc(cert, skip_content=self.options.no_content, skip_products=self.options.no_products)
 
 
 class StatCertCommand(RCTCertCommand):
-
     def __init__(self):
-        RCTCliCommand.__init__(self, name="stat-cert", aliases=['sc'],
-                               shortdesc=_("Print certificate statistics and sizes"),
-                               primary=True)
+        RCTCliCommand.__init__(
+            self,
+            name="stat-cert",
+            aliases=["sc"],
+            shortdesc=_("Print certificate statistics and sizes"),
+            primary=True,
+        )
 
     def _do_command(self):
         cert = self._create_cert()
@@ -89,7 +102,9 @@ class StatCertCommand(RCTCertCommand):
 
         subject_key_id = self._get_subject_key_id(pem)
         if subject_key_id is not None:
-            print(_("Subject Key ID size: {len_subject_key_id}b").format(len_subject_key_id=len(subject_key_id)))
+            print(
+                _("Subject Key ID size: {len_subject_key_id}b").format(len_subject_key_id=len(subject_key_id))
+            )
 
         if isinstance(cert, EntitlementCertificate):
             content_len = 0
@@ -98,7 +113,7 @@ class StatCertCommand(RCTCertCommand):
             print(_("Content sets: {content_length}").format(content_length=content_len))
 
     def _get_pem(self, filename):
-        return open(filename, 'r',).read()
+        return open(filename, "r").read()
 
     def _get_der_size(self, pem):
         parts = pem.split("-----BEGIN CERTIFICATE-----\n")

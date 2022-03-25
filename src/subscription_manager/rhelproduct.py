@@ -29,6 +29,7 @@ class RHELProductMatcher(object):
 
     Compares the provided tags to see if any provide 'rhel-VERSION'.
     """
+
     def __init__(self, product=None):
         self.product = product
         # Match "rhel-6" or "rhel-11" or "rhel-alt-7" (bz1510024)
@@ -40,5 +41,4 @@ class RHELProductMatcher(object):
     def is_rhel(self):
         """return true if this is a rhel product cert"""
 
-        return any([re.match(self.pattern, tag)
-                    for tag in self.product.provided_tags])
+        return any([re.match(self.pattern, tag) for tag in self.product.provided_tags])

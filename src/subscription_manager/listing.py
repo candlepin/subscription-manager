@@ -37,7 +37,7 @@ class ListingFile(object):
                 continue
 
             # ignore comments
-            if line and line[0] == '#':
+            if line and line[0] == "#":
                 continue
 
             self.releases.append(line)

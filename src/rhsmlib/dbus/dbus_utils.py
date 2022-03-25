@@ -27,22 +27,22 @@ log = logging.getLogger(__name__)
 
 
 def command_of_pid(pid):
-    """ Get command for pid from /proc """
+    """Get command for pid from /proc"""
     try:
         with open("/proc/%d/cmdline" % pid, "r") as f:
-            cmd = f.readlines()[0].replace('\0', " ").strip()
+            cmd = f.readlines()[0].replace("\0", " ").strip()
     except Exception as err:
-        log.warning('Unable to get cmdline of PID: %s, error: %s' % (pid, err))
+        log.warning("Unable to get cmdline of PID: %s, error: %s" % (pid, err))
         return None
     return cmd
 
 
 def pid_of_sender(bus, sender):
-    """ Get pid from sender string using
-    org.freedesktop.DBus.GetConnectionUnixProcessID """
+    """Get pid from sender string using
+    org.freedesktop.DBus.GetConnectionUnixProcessID"""
 
-    dbus_obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
-    dbus_iface = dbus.Interface(dbus_obj, 'org.freedesktop.DBus')
+    dbus_obj = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
+    dbus_iface = dbus.Interface(dbus_obj, "org.freedesktop.DBus")
 
     try:
         pid = int(dbus_iface.GetConnectionUnixProcessID(sender))
@@ -52,11 +52,11 @@ def pid_of_sender(bus, sender):
 
 
 def uid_of_sender(bus, sender):
-    """ Get user id from sender string using
-    org.freedesktop.DBus.GetConnectionUnixUser """
+    """Get user id from sender string using
+    org.freedesktop.DBus.GetConnectionUnixUser"""
 
-    dbus_obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
-    dbus_iface = dbus.Interface(dbus_obj, 'org.freedesktop.DBus')
+    dbus_obj = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
+    dbus_iface = dbus.Interface(dbus_obj, "org.freedesktop.DBus")
 
     try:
         uid = int(dbus_iface.GetConnectionUnixUser(sender))
@@ -66,7 +66,7 @@ def uid_of_sender(bus, sender):
 
 
 def user_of_uid(uid):
-    """ Get user for uid from pwd """
+    """Get user for uid from pwd"""
 
     try:
         pws = pwd.getpwuid(uid)
@@ -76,11 +76,11 @@ def user_of_uid(uid):
 
 
 def context_of_sender(bus, sender):
-    """ Get SELinux context from sender string using
-    org.freedesktop.DBus.GetConnectionSELinuxSecurityContext """
+    """Get SELinux context from sender string using
+    org.freedesktop.DBus.GetConnectionSELinuxSecurityContext"""
 
-    dbus_obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
-    dbus_iface = dbus.Interface(dbus_obj, 'org.freedesktop.DBus')
+    dbus_obj = bus.get_object("org.freedesktop.DBus", "/org/freedesktop/DBus")
+    dbus_iface = dbus.Interface(dbus_obj, "org.freedesktop.DBus")
 
     try:
         context = dbus_iface.GetConnectionSELinuxSecurityContext(sender)
@@ -92,7 +92,7 @@ def context_of_sender(bus, sender):
 
 
 def command_of_sender(bus, sender):
-    """ Return command of D-Bus sender """
+    """Return command of D-Bus sender"""
 
     return command_of_pid(pid_of_sender(bus, sender))
 
@@ -110,13 +110,15 @@ def dbus_to_python(obj, expected_type=None):
         python_obj = str(obj)
     elif isinstance(obj, dbus.ObjectPath):
         python_obj = str(obj)
-    elif isinstance(obj, dbus.Byte) or \
-            isinstance(obj, dbus.Int16) or \
-            isinstance(obj, dbus.Int32) or \
-            isinstance(obj, dbus.Int64) or \
-            isinstance(obj, dbus.UInt16) or \
-            isinstance(obj, dbus.UInt32) or \
-            isinstance(obj, dbus.UInt64):
+    elif (
+        isinstance(obj, dbus.Byte)
+        or isinstance(obj, dbus.Int16)
+        or isinstance(obj, dbus.Int32)
+        or isinstance(obj, dbus.Int64)
+        or isinstance(obj, dbus.UInt16)
+        or isinstance(obj, dbus.UInt32)
+        or isinstance(obj, dbus.UInt64)
+    ):
         python_obj = int(obj)
     elif isinstance(obj, dbus.Double):
         python_obj = float(obj)
@@ -126,23 +128,30 @@ def dbus_to_python(obj, expected_type=None):
         python_obj = tuple([dbus_to_python(x) for x in obj])
     elif isinstance(obj, dbus.Dictionary):
         python_obj = dict([dbus_to_python(k), dbus_to_python(v)] for k, v in list(obj.items()))
-    elif isinstance(obj, bool) or \
-        isinstance(obj, str) or isinstance(obj, bytes) or \
-        isinstance(obj, int) or isinstance(obj, float) or \
-        isinstance(obj, list) or isinstance(obj, tuple) or \
-        isinstance(obj, dict):
+    elif (
+        isinstance(obj, bool)
+        or isinstance(obj, str)
+        or isinstance(obj, bytes)
+        or isinstance(obj, int)
+        or isinstance(obj, float)
+        or isinstance(obj, list)
+        or isinstance(obj, tuple)
+        or isinstance(obj, dict)
+    ):
         python_obj = obj
     else:
         raise TypeError("Unhandled %s" % obj)
 
     if expected_type is not None:
-        if (expected_type == bool and not isinstance(python_obj, bool)) or \
-           (expected_type == str and not isinstance(python_obj, str)) or \
-           (expected_type == int and not isinstance(python_obj, int)) or \
-           (expected_type == float and not isinstance(python_obj, float)) or \
-           (expected_type == list and not isinstance(python_obj, list)) or \
-           (expected_type == tuple and not isinstance(python_obj, tuple)) or \
-           (expected_type == dict and not isinstance(python_obj, dict)):
+        if (
+            (expected_type == bool and not isinstance(python_obj, bool))
+            or (expected_type == str and not isinstance(python_obj, str))
+            or (expected_type == int and not isinstance(python_obj, int))
+            or (expected_type == float and not isinstance(python_obj, float))
+            or (expected_type == list and not isinstance(python_obj, list))
+            or (expected_type == tuple and not isinstance(python_obj, tuple))
+            or (expected_type == dict and not isinstance(python_obj, dict))
+        ):
             raise TypeError("%s is %s, expected %s" % (python_obj, type(python_obj), expected_type))
 
     return python_obj
@@ -161,7 +170,8 @@ _type_map = dict(
     q=dbus.UInt16,
     d=dbus.Double,
     y=dbus.Byte,
-    b=dbus.Boolean)
+    b=dbus.Boolean,
+)
 
 
 def _pass_through(v):
@@ -192,14 +202,17 @@ def add_properties(xml, interface, props):
 
         for c in root:
             # print c.attrib['name']
-            if c.attrib['name'] == interface:
+            if c.attrib["name"] == interface:
                 for p in props:
-                    temp = '<property type="%s" name="%s" access="%s"/>\n' % \
-                        (p['p_t'], p['p_name'], p['p_access'])
+                    temp = '<property type="%s" name="%s" access="%s"/>\n' % (
+                        p["p_t"],
+                        p["p_name"],
+                        p["p_access"],
+                    )
                     log.debug("intro xml temp buf=%s", temp)
                     c.append(Et.fromstring(temp))
 
-        return Et.tostring(root, encoding='utf8')
+        return Et.tostring(root, encoding="utf8")
     return xml
 
 

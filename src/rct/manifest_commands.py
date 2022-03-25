@@ -65,7 +65,7 @@ class ZipExtractAll(ZipFile):
     def _get_inner_zip(self):
         if self.inner_zip is None:
             output = BytesIO(self.read(RCTManifestCommand.INNER_FILE))
-            self.inner_zip = ZipExtractAll(output, 'r')
+            self.inner_zip = ZipExtractAll(output, "r")
         return self.inner_zip
 
     def _read_file(self, file_path, is_inner=False):
@@ -79,7 +79,9 @@ class ZipExtractAll(ZipFile):
                     raise KeyError
                 result = self._get_inner_zip()._read_file(file_path, True)
             except KeyError:
-                raise Exception(_('Unable to find file "{file_path}" in manifest.').format(file_path=file_path))
+                raise Exception(
+                    _('Unable to find file "{file_path}" in manifest.').format(file_path=file_path)
+                )
         return result
 
     def _get_entitlements(self):
@@ -92,7 +94,7 @@ class ZipExtractAll(ZipFile):
         return results
 
     def _open_excl(self, path):
-        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), 'wb')
+        return os.fdopen(os.open(path, os.O_RDWR | os.O_CREAT | os.O_EXCL), "wb")
 
     def _write_file(self, output_path, archive_path):
         outfile = self._open_excl(output_path)
@@ -103,13 +105,13 @@ class ZipExtractAll(ZipFile):
         base_path = os.path.abspath(base)
         new_path = os.path.abspath(new_file)
         if not new_path.startswith(base_path):
-            raise Exception(_('Manifest zip attempted to extract outside of the base directory.'))
+            raise Exception(_("Manifest zip attempted to extract outside of the base directory."))
         # traces symlink to source, and checks that it is valid
         real_new_path = os.path.realpath(new_path)
         if real_new_path != new_path:
             self._is_secure(base, real_new_path)
         elif os.path.islink(new_path):
-            raise Exception(_('Unable to trace symbolic link.  Possibly circular linkage.'))
+            raise Exception(_("Unable to trace symbolic link.  Possibly circular linkage."))
 
     def extractall(self, location, overwrite=False):
         self._is_secure(location, location)
@@ -121,7 +123,7 @@ class ZipExtractAll(ZipFile):
                 os.makedirs(directory)
             new_location = os.path.join(directory, filename)
             self._is_secure(location, new_location)
-            if (os.path.exists(new_location) and overwrite):
+            if os.path.exists(new_location) and overwrite:
                 os.remove(new_location)
             self._write_file(new_location, path_name)
 
@@ -131,8 +133,7 @@ class RCTManifestCommand(RCTCliCommand):
     INNER_FILE = "consumer_export.zip"
 
     def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
-        RCTCliCommand.__init__(self, name=name, aliases=aliases,
-                               shortdesc=shortdesc, primary=primary)
+        RCTCliCommand.__init__(self, name=name, aliases=aliases, shortdesc=shortdesc, primary=primary)
 
     def _get_usage(self):
         return _("%(prog)s {name} [OPTIONS] MANIFEST_FILE").format(name=self.name)
@@ -147,7 +148,7 @@ class RCTManifestCommand(RCTCliCommand):
 
     def _extract_manifest(self, location, overwrite=False):
         # Extract the outer file
-        archive = ZipExtractAll(self._get_file_from_args(), 'r')
+        archive = ZipExtractAll(self._get_file_from_args(), "r")
         archive.extractall(location, overwrite)
 
         # now extract the inner file
@@ -156,7 +157,7 @@ class RCTManifestCommand(RCTCliCommand):
         else:
             inner_file = self.INNER_FILE
 
-        archive = ZipExtractAll(inner_file, 'r')
+        archive = ZipExtractAll(inner_file, "r")
         archive.extractall(location, overwrite)
 
         # Delete the intermediate file
@@ -164,14 +165,20 @@ class RCTManifestCommand(RCTCliCommand):
 
 
 class CatManifestCommand(RCTManifestCommand):
-
     def __init__(self):
-        RCTManifestCommand.__init__(self, name="cat-manifest", aliases=['cm'],
-                                    shortdesc=_("Print manifest information"),
-                                    primary=True)
-        self.parser.add_argument("--no-content", action="store_true",
-                                 default=False,
-                                 help=_("skip printing Content Sets"))
+        RCTManifestCommand.__init__(
+            self,
+            name="cat-manifest",
+            aliases=["cm"],
+            shortdesc=_("Print manifest information"),
+            primary=True,
+        )
+        self.parser.add_argument(
+            "--no-content",
+            action="store_true",
+            default=False,
+            help=_("skip printing Content Sets"),
+        )
 
     def _print_section(self, title, items, indent=1, whitespace=True):
         # Allow a bit of customization of the tabbing
@@ -205,9 +212,9 @@ class CatManifestCommand(RCTManifestCommand):
         to_print.append((_("Name"), get_value(data, "name")))
         to_print.append((_("UUID"), get_value(data, "uuid")))
         # contentAccessMode is entitlement if null, blank or non-present
-        contentAccessMode = 'entitlement'
-        if "contentAccessMode" in data and data["contentAccessMode"] == 'org_environment':
-            contentAccessMode = 'Simple Content Access'
+        contentAccessMode = "entitlement"
+        if "contentAccessMode" in data and data["contentAccessMode"] == "org_environment":
+            contentAccessMode = "Simple Content Access"
         to_print.append((_("Content Access Mode"), contentAccessMode))
         to_print.append((_("Type"), get_value(data, "type.label")))
         to_print.append((_("API URL"), get_value(data, "urlApi")))
@@ -261,11 +268,13 @@ class CatManifestCommand(RCTManifestCommand):
             to_print.append((_("Certificate File"), cert_file))
 
             try:
-                cert = certificate.create_from_pem(zip_archive._read_file(cert_file).decode('utf-8'))
+                cert = certificate.create_from_pem(zip_archive._read_file(cert_file).decode("utf-8"))
             except certificate.CertificateException as ce:
                 raise certificate.CertificateException(
                     _("Unable to read certificate file '{certificate_file}': {exception}").format(
-                        certificate_file=cert_file, exception=ce))
+                        certificate_file=cert_file, exception=ce
+                    )
+                )
             to_print.append((_("Certificate Version"), cert.version))
 
             self._print_section(_("Subscription:"), to_print, 1, False)
@@ -277,7 +286,10 @@ class CatManifestCommand(RCTManifestCommand):
 
             # Get the derived provided Products (if available)
             if "derivedProvidedProducts" in data["pool"]:
-                to_print = [(int(pp["productId"]), pp["productName"]) for pp in data["pool"]["derivedProvidedProducts"]]
+                to_print = [
+                    (int(pp["productId"]), pp["productName"])
+                    for pp in data["pool"]["derivedProvidedProducts"]
+                ]
                 self._print_section(_("Derived Products:"), sorted(to_print), 2, False)
 
             # Get the Content Sets
@@ -291,7 +303,7 @@ class CatManifestCommand(RCTManifestCommand):
         """
         Does the work that this command intends.
         """
-        temp = ZipExtractAll(self._get_file_from_args(), 'r')
+        temp = ZipExtractAll(self._get_file_from_args(), "r")
         # Print out the header
         print("\n+-------------------------------------------+")
         print(_("\tManifest"))
@@ -303,17 +315,28 @@ class CatManifestCommand(RCTManifestCommand):
 
 
 class DumpManifestCommand(RCTManifestCommand):
-
     def __init__(self):
-        RCTManifestCommand.__init__(self, name="dump-manifest", aliases=['dm'],
-                                    shortdesc=_("Dump the contents of a manifest"),
-                                    primary=True)
+        RCTManifestCommand.__init__(
+            self,
+            name="dump-manifest",
+            aliases=["dm"],
+            shortdesc=_("Dump the contents of a manifest"),
+            primary=True,
+        )
 
-        self.parser.add_argument("--destination", dest="destination",
-                                 help=_("directory to extract the manifest to"))
-        self.parser.add_argument("-f", "--force", action="store_true",
-                                 dest="overwrite_files", default=False,
-                                 help=_("overwrite files which may exist"))
+        self.parser.add_argument(
+            "--destination",
+            dest="destination",
+            help=_("directory to extract the manifest to"),
+        )
+        self.parser.add_argument(
+            "-f",
+            "--force",
+            action="store_true",
+            dest="overwrite_files",
+            default=False,
+            help=_("overwrite files which may exist"),
+        )
 
     def _extract(self, destination, overwrite):
         try:
@@ -322,7 +345,11 @@ class DumpManifestCommand(RCTManifestCommand):
             # IOError/OSError base class
             if e.errno == errno.EEXIST:
                 # useful error for file already exists
-                print(_('File "{filename}" exists. Use -f to force overwriting the file.').format(filename=e.filename))
+                print(
+                    _('File "{filename}" exists. Use -f to force overwriting the file.').format(
+                        filename=e.filename
+                    )
+                )
             else:
                 # generic error for everything else
                 print(_("Manifest could not be written:"))
@@ -338,8 +365,11 @@ class DumpManifestCommand(RCTManifestCommand):
         """
         if self.options.destination:
             if self._extract(self.options.destination, self.options.overwrite_files):
-                print(_("The manifest has been dumped to the {destination} directory").format(
-                    destination=self.options.destination))
+                print(
+                    _("The manifest has been dumped to the {destination} directory").format(
+                        destination=self.options.destination
+                    )
+                )
         else:
             if self._extract(os.getcwd(), self.options.overwrite_files):
                 print(_("The manifest has been dumped to the current directory"))

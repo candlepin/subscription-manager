@@ -28,6 +28,7 @@ def request_injection(func):
     """This idempotent decorator can be applied to initialize the dependency
     injection used by subscription manager.  Users of the API methods will not
     normally need to use this decorator as it will already have been called."""
+
     @wraps(func)
     def func_wrapper(*args, **kwargs):
         global injected
@@ -35,17 +36,19 @@ def request_injection(func):
             logutil.init_logger()
 
             from subscription_manager.injectioninit import init_dep_injection
+
             init_dep_injection()
             injected = True
         return func(*args, **kwargs)
+
     return func_wrapper
 
 
 from .repos import disable_yum_repositories, enable_yum_repositories  # noqa: E402
 
 __all__ = [
-    'request_injection',
-    'disable_yum_repositories',
-    'enable_yum_repositories',
-    'version',
+    "request_injection",
+    "disable_yum_repositories",
+    "enable_yum_repositories",
+    "version",
 ]

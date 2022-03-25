@@ -29,7 +29,7 @@ class AllFactsCollector(collector.FactsCollector):
             insights.InsightsCollector,
             kpatch.KPatchCollector,
             cloud_facts.CloudFactsCollector,
-            pkg_arches.SupportedArchesCollector
+            pkg_arches.SupportedArchesCollector,
         ]
 
     def get_all(self):

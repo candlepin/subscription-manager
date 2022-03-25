@@ -29,7 +29,7 @@ def main():
     return RctCLI().main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         sys.exit(abs(main() or 0))
     except SystemExit as err:

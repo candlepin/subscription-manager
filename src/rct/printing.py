@@ -25,7 +25,7 @@ signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 #       not existing at all
 def xstr(value):
     if value is None:
-        return ''
+        return ""
     elif isinstance(value, list):
         return ", ".join([xstr(val) for val in value])
     else:
@@ -33,7 +33,6 @@ def xstr(value):
 
 
 class ProductPrinter(object):
-
     def as_str(self, product):
         s = []
         s.append("%s:" % _("Product"))
@@ -44,25 +43,24 @@ class ProductPrinter(object):
         s.append("\t%s: %s" % (_("Tags"), ",".join(product.provided_tags)))
 
         brand_type = ""
-        if hasattr(product, 'brand_type'):
+        if hasattr(product, "brand_type"):
             brand_type = product.brand_type
         s.append("\t%s: %s" % (_("Brand Type"), xstr(brand_type)))
 
         brand_name = ""
-        if hasattr(product, 'brand_name'):
+        if hasattr(product, "brand_name"):
             brand_name = product.brand_name
 
         s.append("\t%s: %s" % (_("Brand Name"), xstr(brand_name)))
 
-        return "%s\n" % '\n'.join(s)
+        return "%s\n" % "\n".join(s)
 
 
 class OrderPrinter(object):
-
     def as_str(self, order):
 
         if order is None:
-            return ''
+            return ""
 
         s = []
         s.append("%s:" % _("Order"))
@@ -77,8 +75,8 @@ class OrderPrinter(object):
         s.append("\t%s: %s" % (_("Usage"), xstr(order.usage)))
         s.append("\t%s: %s" % (_("Add-ons"), xstr(order.addons)))
         quantity = xstr(order.quantity)
-        if quantity == '-1':
-            quantity = _('Unlimited')
+        if quantity == "-1":
+            quantity = _("Unlimited")
         s.append("\t%s: %s" % (_("Quantity"), quantity))
         s.append("\t%s: %s" % (_("Quantity Used"), xstr(order.quantity_used)))
         s.append("\t%s: %s" % (_("Socket Limit"), xstr(order.socket_limit)))
@@ -89,11 +87,10 @@ class OrderPrinter(object):
         s.append("\t%s: %s" % (_("Warning Period"), xstr(order.warning_period)))
         s.append("\t%s: %s" % (_("Provides Management"), xstr(order.provides_management)))
 
-        return "%s\n" % '\n'.join(s)
+        return "%s\n" % "\n".join(s)
 
 
 class ContentPrinter(object):
-
     def as_str(self, content):
         s = []
         s.append("%s:" % _("Content"))
@@ -109,11 +106,10 @@ class ContentPrinter(object):
         s.append("\t%s: %s" % (_("Required Tags"), ", ".join(content.required_tags)))
         s.append("\t%s: %s" % (_("Arches"), ", ".join(content.arches)))
 
-        return '\n'.join(s)
+        return "\n".join(s)
 
 
 class CertificatePrinter(object):
-
     def cert_to_str(self, cert):
         s = []
         s.append("\n+-------------------------------------------+")
@@ -128,7 +124,7 @@ class CertificatePrinter(object):
         self._append_to_cert_section(cert, s)
         s.append("\n%s" % xstr(self._get_subject(cert)))
         s.append("%s" % xstr(self._get_issuer(cert)))
-        return "%s" % '\n'.join(s)
+        return "%s" % "\n".join(s)
 
     def printc(self, cert):
         print(self.cert_to_str(cert))
@@ -138,14 +134,14 @@ class CertificatePrinter(object):
         s.append(_("Subject:"))
         for key in sorted(cert.subject):
             s.append("\t%s: %s" % (key, cert.subject[key]))
-        return "%s\n" % '\n'.join(s)
+        return "%s\n" % "\n".join(s)
 
     def _get_issuer(self, cert):
         s = []
         s.append(_("Issuer:"))
         for key in sorted(cert.issuer):
             s.append("\t%s: %s" % (key, cert.issuer[key]))
-        return "%s\n" % '\n'.join(s)
+        return "%s\n" % "\n".join(s)
 
     def _append_to_cert_section(self, cert, str_parts_list):
         """
@@ -156,7 +152,6 @@ class CertificatePrinter(object):
 
 
 class IdentityCertPrinter(CertificatePrinter):
-
     def __init__(self, **kwargs):
         CertificatePrinter.__init__(self)
 
@@ -213,8 +208,11 @@ class EntitlementCertificatePrinter(ProductCertificatePrinter):
                 for c in sorted_content:
                     s.append("\n%s" % content_printer.as_str(c))
 
-        return "%s\n%s%s" % (ProductCertificatePrinter.cert_to_str(self, cert),
-                             order_printer.as_str(cert.order), "\n".join(s))
+        return "%s\n%s%s" % (
+            ProductCertificatePrinter.cert_to_str(self, cert),
+            order_printer.as_str(cert.order),
+            "\n".join(s),
+        )
 
     def _append_to_cert_section(self, cert, str_parts_list):
         pool_id = _("Not Available")
@@ -227,11 +225,10 @@ class EntitlementCertificatePrinter(ProductCertificatePrinter):
         s.append(_("Authorized Content URLs:"))
         for p in sorted(cert.provided_paths):
             s.append("\t%s" % p)
-        return "%s" % '\n'.join(s)
+        return "%s" % "\n".join(s)
 
 
 class CertificatePrinterFactory(object):
-
     def get_printer(self, cert, **kwargs):
         if isinstance(cert, EntitlementCertificate):
             return EntitlementCertificatePrinter(**kwargs)

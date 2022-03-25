@@ -23,8 +23,8 @@ import sys
 import os
 
 # work around for https://bugzilla.redhat.com/show_bug.cgi?id=1402009
-if 'TERM' in os.environ:
-    del os.environ['TERM']
+if "TERM" in os.environ:
+    del os.environ["TERM"]
 
 
 def system_exit(code, msgs=None):
@@ -32,20 +32,21 @@ def system_exit(code, msgs=None):
 
     if msgs:
         if type(msgs) not in [type([]), type(())]:
-            msgs = (msgs, )
+            msgs = (msgs,)
         for msg in msgs:
-            sys.stderr.write(str(msg) + '\n')
+            sys.stderr.write(str(msg) + "\n")
     sys.exit(code)
 
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
-    sys.stderr.write('Error: this command requires root access to execute\n')
+    sys.stderr.write("Error: this command requires root access to execute\n")
     sys.exit(8)
 
 try:
     # this has to be done first thing due to module level translated vars.
     from subscription_manager.i18n import configure_i18n
+
     configure_i18n()
 
     from rhsm import logutil
@@ -53,6 +54,7 @@ try:
     logutil.init_logger()
 
     from subscription_manager.injectioninit import init_dep_injection
+
     init_dep_injection()
 
     from subscription_manager import managercli
@@ -62,8 +64,7 @@ try:
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")
 except ImportError as err:
-    system_exit(2, "Unable to find Subscription Manager module.\n"
-                   "Error: %s" % err)
+    system_exit(2, "Unable to find Subscription Manager module.\n" "Error: %s" % err)
 
 
 def main():
@@ -76,7 +77,7 @@ def main():
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         sys.exit(abs(main() or 0))
     except SystemExit as err:

@@ -22,4 +22,5 @@ init_dep_injection()
 
 class Main(base_object.BaseObject):
     """Just a place holder for now"""
+
     pass

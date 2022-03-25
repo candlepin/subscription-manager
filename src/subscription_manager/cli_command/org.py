@@ -26,6 +26,7 @@ class OrgCommand(UserPassCommand):
     """
     Abstract class for commands that require an org.
     """
+
     def __init__(self, name, shortdesc=None, primary=False):
         super(OrgCommand, self).__init__(name, shortdesc, primary)
         self._org = None
@@ -35,7 +36,7 @@ class OrgCommand(UserPassCommand):
             "--org",
             dest="org",
             metavar="ORG_KEY",
-            help=self._org_help_text
+            help=self._org_help_text,
         )
 
     @staticmethod
@@ -57,17 +58,19 @@ class OrgCommand(UserPassCommand):
                         os.EX_DATAERR,
                         _("Error: User {username} is not member of any organization.").format(
                             username=self.options.username
-                        )
+                        ),
                     )
                 elif len(owners) == 1:
-                    self._org = owners[0]['key']
+                    self._org = owners[0]["key"]
                 else:
                     # Get a list of valid owners. Since no owner was specified,
                     # print a hint message showing available owners, before asking
                     # to enter one.
-                    org_keys = [owner['key'] for owner in owners]
-                    print(_(
-                        'Hint: User "{name}" is member of following organizations: {orgs}'
-                    ).format(name=self.username, orgs=', '.join(org_keys)))
+                    org_keys = [owner["key"] for owner in owners]
+                    print(
+                        _('Hint: User "{name}" is member of following organizations: {orgs}').format(
+                            name=self.username, orgs=", ".join(org_keys)
+                        )
+                    )
                     self._org = self._get_org(self.options.org)
         return self._org

@@ -30,6 +30,7 @@ class Facts(CacheManager):
     Includes both those hard coded in the app itself, as well as custom
     facts to be loaded from /etc/rhsm/facts/.
     """
+
     CACHE_FILE = "/var/lib/rhsm/facts/facts.json"
 
     def __init__(self):
@@ -40,7 +41,7 @@ class Facts(CacheManager):
         # can change constantly on laptops, it makes for a lot of
         # fact churn, so we report it, but ignore it as an indicator
         # that we need to update
-        self.graylist = ['cpu.cpu_mhz', 'lscpu.cpu_mhz']
+        self.graylist = ["cpu.cpu_mhz", "lscpu.cpu_mhz"]
 
         # plugin manager so we can add custom facts via plugin
         self.plugin_manager = require(PLUGIN_MANAGER)
@@ -73,7 +74,7 @@ class Facts(CacheManager):
         if len(self.facts) == 0 or refresh:
             collector = AllFactsCollector()
             facts = collector.get_all()
-            self.plugin_manager.run('post_facts_collection', facts=facts)
+            self.plugin_manager.run("post_facts_collection", facts=facts)
             self.facts = facts
         return self.facts
 

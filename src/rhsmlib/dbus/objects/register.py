@@ -43,8 +43,9 @@ class RegisterDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.REGISTER_INTERFACE,
-        in_signature='s',
-        out_signature='s')
+        in_signature="s",
+        out_signature="s",
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Start(self, locale, sender=None):
@@ -55,12 +56,10 @@ class RegisterDBusObject(base_object.BaseObject):
             if self.server:
                 return self.server.address
 
-            log.debug('Attempting to create new domain socket server')
+            log.debug("Attempting to create new domain socket server")
             cmd_line = DBusSender.get_cmd_line(sender)
             self.server = server.DomainSocketServer(
-                object_classes=[DomainSocketRegisterDBusObject],
-                sender=sender,
-                cmd_line=cmd_line
+                object_classes=[DomainSocketRegisterDBusObject], sender=sender, cmd_line=cmd_line
             )
             address = self.server.run()
             log.debug('DomainSocketServer for sender %s created and listening on "%s"' % (sender, address))
@@ -68,8 +67,9 @@ class RegisterDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.REGISTER_INTERFACE,
-        in_signature='s',
-        out_signature='b')
+        in_signature="s",
+        out_signature="b",
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Stop(self, locale, sender=None):
@@ -90,6 +90,7 @@ class OrgNotSpecifiedException(dbus.DBusException):
     This exception is intended for signaling that user is member of more
     organizations and no organization was specified
     """
+
     _dbus_error_name = "%s.Error" % constants.REGISTER_INTERFACE
     include_traceback = False
     severity = "info"
@@ -106,6 +107,7 @@ class NoOrganizationException(dbus.DBusException):
     This exception is intended for signaling that user is not member of any
     organization and such user cannot register to candlepin server.
     """
+
     _dbus_error_name = "%s.Error" % constants.REGISTER_INTERFACE
     include_traceback = False
 
@@ -124,17 +126,15 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         # On our DomainSocket DBus server since a private connection is not a "bus", we have to treat
         # it slightly differently. In particular there are no names, no discovery and so on.
         super(DomainSocketRegisterDBusObject, self).__init__(
-            conn=conn,
-            object_path=object_path,
-            bus_name=bus_name
+            conn=conn, object_path=object_path, bus_name=bus_name
         )
         self.sender = sender
         self.cmd_line = cmd_line
 
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
-        in_signature='ssa{sv}s',
-        out_signature='s'
+        in_signature="ssa{sv}s",
+        out_signature="s",
     )
     @util.dbus_handle_exceptions
     def GetOrgs(self, username, password, connection_options, locale):
@@ -149,22 +149,22 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         :return: string with json returned by candlepin server
         """
         connection_options = dbus_utils.dbus_to_python(connection_options, expected_type=dict)
-        connection_options['username'] = dbus_utils.dbus_to_python(username, expected_type=str)
-        connection_options['password'] = dbus_utils.dbus_to_python(password, expected_type=str)
+        connection_options["username"] = dbus_utils.dbus_to_python(username, expected_type=str)
+        connection_options["password"] = dbus_utils.dbus_to_python(password, expected_type=str)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
         with DBusSender() as dbus_sender:
             dbus_sender.set_cmd_line(sender=self.sender, cmd_line=self.cmd_line)
             Locale.set(locale)
             cp = self.build_uep(connection_options, basic_auth_method=True)
-            owners = cp.getOwnerList(connection_options['username'])
+            owners = cp.getOwnerList(connection_options["username"])
             dbus_sender.reset_cmd_line()
 
         return json.dumps(owners)
 
     @util.dbus_service_signal(
         constants.PRIVATE_REGISTER_INTERFACE,
-        signature='s'
+        signature="s",
     )
     @util.dbus_handle_exceptions
     def UserMemberOfOrgs(self, orgs):
@@ -175,8 +175,10 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         :param orgs: string with json.dump of org dictionary
         :return: None
         """
-        log.debug("D-Bus signal UserMemberOfOrgs emitted on the interface %s with arg: %s" %
-                  (constants.PRIVATE_REGISTER_INTERFACE, orgs))
+        log.debug(
+            "D-Bus signal UserMemberOfOrgs emitted on the interface %s with arg: %s"
+            % (constants.PRIVATE_REGISTER_INTERFACE, orgs)
+        )
         return None
 
     def _no_owner_cb(self, username):
@@ -212,26 +214,27 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         :param consumer: Dictionary representing consumer
         :return: None
         """
-        content_access_mode = consumer['owner']['contentAccessMode']
+        content_access_mode = consumer["owner"]["contentAccessMode"]
         enabled_content = None
 
-        if content_access_mode == 'entitlement':
-            log.debug('Auto-attaching due to enable_content option')
+        if content_access_mode == "entitlement":
+            log.debug("Auto-attaching due to enable_content option")
             attach_service = AttachService(cp)
             enabled_content = attach_service.attach_auto()
-        elif content_access_mode == 'org_environment':
-            log.debug('Refreshing due to enabled_content option and simple content access mode')
+        elif content_access_mode == "org_environment":
+            log.debug("Refreshing due to enabled_content option and simple content access mode")
             entitlement_service = EntitlementService(cp)
             # TODO: try get anything useful from refresh result. It is not possible atm.
             entitlement_service.refresh(remove_cache=False, force=False)
         else:
-            log.error(f"Unable to enable content due to unsupported content access mode: "
-                      f"{content_access_mode}")
+            log.error(
+                f"Unable to enable content due to unsupported content access mode: " f"{content_access_mode}"
+            )
 
         # When it was possible to enable content, then extend consumer
         # with information about enabled content
         if enabled_content is not None:
-            consumer['enabledContent'] = enabled_content
+            consumer["enabledContent"] = enabled_content
 
     @staticmethod
     def _remove_enable_content_option(options: dict) -> bool:
@@ -241,12 +244,12 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         :param options: dictionary with options
         :return: Value of enable_options
         """
-        if 'enable_content' in options:
+        if "enable_content" in options:
             log.debug(
                 f"Value and type of enable_content: '{options['enable_content']}' "
                 f"({type(options['enable_content'])})"
             )
-            enable_content = bool(options.pop('enable_content'))
+            enable_content = bool(options.pop("enable_content"))
             log.debug(f"Value of converted enable_content: {enable_content}")
         else:
             enable_content = False
@@ -254,8 +257,8 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
-        in_signature='sssa{sv}a{sv}s',
-        out_signature='s'
+        in_signature="sssa{sv}a{sv}s",
+        out_signature="s",
     )
     @util.dbus_handle_exceptions
     def Register(self, org, username, password, options, connection_options, locale):
@@ -274,8 +277,8 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         org = dbus_utils.dbus_to_python(org, expected_type=str)
         connection_options = dbus_utils.dbus_to_python(connection_options, expected_type=dict)
-        connection_options['username'] = dbus_utils.dbus_to_python(username, expected_type=str)
-        connection_options['password'] = dbus_utils.dbus_to_python(password, expected_type=str)
+        connection_options["username"] = dbus_utils.dbus_to_python(username, expected_type=str)
+        connection_options["password"] = dbus_utils.dbus_to_python(password, expected_type=str)
         options = dbus_utils.dbus_to_python(options, expected_type=dict)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
@@ -290,15 +293,15 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             # only one item, then register_service.determine_owner_key will return this organization
             if not org:
                 org = register_service.determine_owner_key(
-                    username=connection_options['username'],
+                    username=connection_options["username"],
                     get_owner_cb=self._get_owner_cb,
-                    no_owner_cb=self._no_owner_cb
+                    no_owner_cb=self._no_owner_cb,
                 )
 
             # When there is more organizations, then signal was triggered in callback method
             # _get_owner_cb, but some exception has to be raised here to not try registration process
             if not org:
-                raise OrgNotSpecifiedException(username=connection_options['username'])
+                raise OrgNotSpecifiedException(username=connection_options["username"])
 
             # Remove 'enable_content' option, because it will not be proceed in register service
             enable_content = self._remove_enable_content_option(options)
@@ -316,8 +319,9 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
-        in_signature='sasa{sv}a{sv}s',
-        out_signature='s')
+        in_signature="sasa{sv}a{sv}s",
+        out_signature="s",
+    )
     @util.dbus_handle_exceptions
     def RegisterWithActivationKeys(self, org, activation_keys, options, connection_options, locale):
         """
@@ -325,7 +329,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         """
         connection_options = dbus_utils.dbus_to_python(connection_options, expected_type=dict)
         options = dbus_utils.dbus_to_python(options, expected_type=dict)
-        options['activation_keys'] = dbus_utils.dbus_to_python(activation_keys, expected_type=list)
+        options["activation_keys"] = dbus_utils.dbus_to_python(activation_keys, expected_type=list)
         org = dbus_utils.dbus_to_python(org, expected_type=str)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 

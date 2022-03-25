@@ -23,13 +23,12 @@ import mock
 
 
 class SyspurposeStoreInterfaceTests(unittest.TestCase):
-
     def setUp(self):
         temp_dir = tempfile.mkdtemp()
         self.addCleanup(shutil.rmtree, temp_dir)
         mock_syspurpose_file = os.path.join(temp_dir, "mock_syspurpose.json")
         syspurpose_values = {}
-        with open(mock_syspurpose_file, 'w') as f:
+        with open(mock_syspurpose_file, "w") as f:
             json.dump(syspurpose_values, f)
             f.flush()
 
@@ -38,7 +37,7 @@ class SyspurposeStoreInterfaceTests(unittest.TestCase):
         self.syspurposelib = syspurposelib
         syspurposelib.USER_SYSPURPOSE = mock_syspurpose_file
 
-        syspurpose_patch = mock.patch('subscription_manager.syspurposelib.SyncedStore')
+        syspurpose_patch = mock.patch("subscription_manager.syspurposelib.SyncedStore")
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)
         self.addCleanup(syspurpose_patch.stop)

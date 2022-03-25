@@ -64,16 +64,15 @@ INST_PROD_STATUS = """
 }
 """
 
-INST_PID_1 = '37060'
-INST_PID_2 = '100000000000002'
-INST_PID_3 = '69'
+INST_PID_1 = "37060"
+INST_PID_2 = "100000000000002"
+INST_PID_3 = "69"
 
 
 class ValidProductDateRangeCalculatorTests(SubManFixture):
-
     def setUp(self):
         SubManFixture.setUp(self)
-        self.status = json.loads(INST_PROD_STATUS)['installedProducts']
+        self.status = json.loads(INST_PROD_STATUS)["installedProducts"]
         self.prod_status_cache = NonCallableMock()
         self.prod_status_cache.load_status = Mock(return_value=self.status)
         inj.provide(inj.PROD_STATUS_CACHE, self.prod_status_cache)
@@ -83,13 +82,13 @@ class ValidProductDateRangeCalculatorTests(SubManFixture):
     # know is installed, this is very weird, but we will log and handle
     # gracefully:
     def test_installed_product_mismatch(self):
-        self.assertTrue(self.calculator.calculate('NOTTHERE') is None)
+        self.assertTrue(self.calculator.calculate("NOTTHERE") is None)
 
     # Very old servers may not expose product date ranges:
     def test_missing_installed_status(self):
         for prod in self.status:
-            prod.pop('startDate')
-            prod.pop('endDate')
+            prod.pop("startDate")
+            prod.pop("endDate")
         for pid in (INST_PID_1, INST_PID_2, INST_PID_3):
             self.assertTrue(self.calculator.calculate(pid) is None)
 

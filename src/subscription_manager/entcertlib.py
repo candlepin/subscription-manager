@@ -34,6 +34,7 @@ CONTENT_ACCESS_CERT_CAPABILITY = "org_level_content_access"
 
 class EntCertActionInvoker(certlib.BaseActionInvoker):
     """Invoker for entitlement certificate updating actions."""
+
     def _do_update(self):
         action = EntCertUpdateAction()
         return action.perform()
@@ -45,8 +46,8 @@ class EntCertActionInvoker(certlib.BaseActionInvoker):
 # with a CertActionClient.delete invocation
 class EntCertDeleteLib(object):
     """Invoker for entitlement certificate delete actions."""
-    def __init__(self, serial_numbers=None,
-                 ent_dir=None):
+
+    def __init__(self, serial_numbers=None, ent_dir=None):
         self.locker = certlib.Locker()
         self.ent_dir = ent_dir
 
@@ -54,14 +55,14 @@ class EntCertDeleteLib(object):
         self.locker.run(self._do_delete)
 
     def _do_delete(self):
-        action = EntCertDeleteAction(ent_dir=self.ent_dir,
-                                     serial_numbers=self.serial_numbers)
+        action = EntCertDeleteAction(ent_dir=self.ent_dir, serial_numbers=self.serial_numbers)
         return action.perform()
 
 
 # FIXME: currently unused
 class EntCertDeleteAction(object):
     """Action for deleting all entitlement certs."""
+
     def __init__(self, ent_dir=None):
         self.ent_dir = ent_dir
 
@@ -100,6 +101,7 @@ class EntCertUpdateAction(object):
     rogue: ent certs installed on system but not known by RHSM API.
     missing: ent certs RHSM API knows, but are not installed on system.
     """
+
     def __init__(self, report=None):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
@@ -116,7 +118,7 @@ class EntCertUpdateAction(object):
             expected = self._get_expected_serials()
         except socket.error as ex:
             log.exception(ex)
-            log.error('Cannot modify subscriptions while disconnected')
+            log.error("Cannot modify subscriptions while disconnected")
             raise Disconnected()
 
         cert_changed = False
@@ -126,7 +128,7 @@ class EntCertUpdateAction(object):
         self.delete(rogue_serials)
         self.install(missing_serials)
 
-        log.info('certs updated:\n%s', self.report)
+        log.info("certs updated:\n%s", self.report)
         self.syslog_results()
 
         # We call EntCertlibActionInvoker.update() solo from
@@ -147,7 +149,7 @@ class EntCertUpdateAction(object):
                     if cont_access_cert.serial not in expected:
                         obsolete_certs.append(cont_access_cert)
                 if len(obsolete_certs) > 0:
-                    log.info('Deleting obsolete content access certificate')
+                    log.info("Deleting obsolete content access certificate")
                     self.delete(obsolete_certs)
             update_data = self.content_access_hook()
             if update_data is not None:
@@ -215,7 +217,7 @@ class EntCertUpdateAction(object):
             log.debug("Failed to update repos")
 
     def _find_missing_serials(self, local, expected):
-        """ Find serials from the server we do not have locally. """
+        """Find serials from the server we do not have locally."""
         missing = [sn for sn in expected if sn not in local]
         return missing
 
@@ -227,17 +229,17 @@ class EntCertUpdateAction(object):
     def syslog_results(self):
         """Write generated EntCertUpdateReport info to syslog."""
         for cert in self.report.added:
-            utils.system_log("Added subscription for '%s' contract '%s'" %
-                             (cert.order.name, cert.order.contract))
+            utils.system_log(
+                "Added subscription for '%s' contract '%s'" % (cert.order.name, cert.order.contract)
+            )
             for product in cert.products:
-                utils.system_log("Added subscription for product '%s'" %
-                                 (product.name))
+                utils.system_log("Added subscription for product '%s'" % (product.name))
         for cert in self.report.rogue:
-            utils.system_log("Removed subscription for '%s' contract '%s'" %
-                             (cert.order.name, cert.order.contract))
+            utils.system_log(
+                "Removed subscription for '%s' contract '%s'" % (cert.order.name, cert.order.contract)
+            )
             for product in cert.products:
-                utils.system_log("Removed subscription for product '%s'" %
-                                 (product.name))
+                utils.system_log("Removed subscription for product '%s'" % (product.name))
 
     def _get_local_serials(self):
         local = {}
@@ -270,7 +272,7 @@ class EntCertUpdateAction(object):
 
         reply = self.uep.getCertificateSerials(identity.uuid)
         for d in reply:
-            sn = d['serial']
+            sn = d["serial"]
             results.append(sn)
         return results
 
@@ -281,8 +283,7 @@ class EntCertUpdateAction(object):
             sn_list = [str(sn) for sn in sn_list]
             # NOTE: use injected IDENTITY, need to validate this
             # handles disconnected errors properly
-            reply = self.uep.getCertificates(self.identity.uuid,
-                                             serials=sn_list)
+            reply = self.uep.getCertificates(self.identity.uuid, serials=sn_list)
             for cert in reply:
                 result.append(cert)
         return result
@@ -305,9 +306,14 @@ class EntCertUpdateAction(object):
         # entitlement directory before we go to delete expired certs.
         rogue_count = len(self.report.rogue)
         if rogue_count > 0:
-            print(ungettext("%s local certificate has been deleted.",
-                            "%s local certificates have been deleted.",
-                            rogue_count) % rogue_count)
+            print(
+                ungettext(
+                    "%s local certificate has been deleted.",
+                    "%s local certificates have been deleted.",
+                    rogue_count,
+                )
+                % rogue_count
+            )
             self.ent_dir.refresh()
 
 
@@ -390,8 +396,8 @@ class EntitlementCertBundleInstaller(object):
     # should probably be in python-rhsm/certificate
     def build_cert(self, bundle):
         """Split a cert bundle into a EntitlementCertificate and a Key."""
-        keypem = bundle['key']
-        crtpem = bundle['cert']
+        keypem = bundle["key"]
+        crtpem = bundle["cert"]
 
         key = Key(keypem)
         cert = create_from_pem(crtpem)
@@ -401,7 +407,7 @@ class EntitlementCertBundleInstaller(object):
     def install_exception(self, bundle, exception):
         """Log exceptions and add them to the EntCertUpdateReport."""
         log.exception(exception)
-        log.error('Bundle not loaded:\n%s\n%s', bundle, exception)
+        log.error("Bundle not loaded:\n%s\n%s", bundle, exception)
 
         self.report._exceptions.append(exception)
 
@@ -416,6 +422,7 @@ class Disconnected(Exception):
 
 class EntCertUpdateReport(certlib.ActionReport):
     """Report entitlement cert update action changes."""
+
     name = "Entitlement Cert Updates"
 
     def __init__(self):
@@ -427,7 +434,7 @@ class EntCertUpdateReport(certlib.ActionReport):
 
     def updates(self):
         """Total number of ent certs installed and deleted."""
-        return (len(self.added) + len(self.rogue))
+        return len(self.added) + len(self.rogue)
 
     # need an ExceptionsReport?
     # FIXME: needs to be properties
@@ -436,32 +443,24 @@ class EntCertUpdateReport(certlib.ActionReport):
 
     def write(self, s, title, certificates):
         """Generate a report stanza for a list of certs."""
-        indent = '  '
+        indent = "  "
         s.append(title)
         if certificates:
             for c in certificates:
                 products = c.products
                 if not products:
-                    s.append('%s[sn:%d (%s) @ %s]' %
-                             (indent,
-                              c.serial,
-                              c.order.name,
-                              c.path))
+                    s.append("%s[sn:%d (%s) @ %s]" % (indent, c.serial, c.order.name, c.path))
                 for product in products:
-                    s.append('%s[sn:%d (%s,) @ %s]' %
-                             (indent,
-                              c.serial,
-                              product.name,
-                              c.path))
+                    s.append("%s[sn:%d (%s,) @ %s]" % (indent, c.serial, product.name, c.path))
         else:
-            s.append('%s<NONE>' % indent)
+            s.append("%s<NONE>" % indent)
 
     def __str__(self):
         """__str__ of report. Used in rhsm and rhsmcertd logging."""
         s = []
-        s.append(_('Total updates: %d') % self.updates())
-        s.append(_('Found (local) serial# %s') % self.valid)
-        s.append(_('Expected (UEP) serial# %s') % self.expected)
-        self.write(s, _('Added (new)'), self.added)
-        self.write(s, _('Deleted (rogue):'), self.rogue)
-        return '\n'.join(s)
+        s.append(_("Total updates: %d") % self.updates())
+        s.append(_("Found (local) serial# %s") % self.valid)
+        s.append(_("Expected (UEP) serial# %s") % self.expected)
+        self.write(s, _("Added (new)"), self.added)
+        self.write(s, _("Deleted (rogue):"), self.rogue)
+        return "\n".join(s)

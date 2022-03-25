@@ -43,7 +43,9 @@ class TestEntitlementService(InjectionMockingTest):
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection").return_value
         self.mock_sorter_class = mock.Mock(spec=CertSorter, name="CertSorter")
         self.mock_ent_dir = mock.Mock(spec=EntitlementDirectory, name="EntitlementDirectory").return_value
-        self.mock_cache_avail_ent = mock.Mock(spec=AvailableEntitlementsCache, name="AvailableEntitlements").return_value
+        self.mock_cache_avail_ent = mock.Mock(
+            spec=AvailableEntitlementsCache, name="AvailableEntitlements"
+        ).return_value
         self.mock_cache_avail_ent.get_not_obsolete_data = mock.Mock(return_value=[])
         self.mock_cache_avail_ent.timeout = mock.Mock(return_value=10.0)
         self.mock_provider = mock.Mock(spec=CPProvider, name="CPProvider")
@@ -74,35 +76,21 @@ class TestEntitlementService(InjectionMockingTest):
         self.mock_identity.is_valid.return_value = True
 
         mock_reasons = mock.Mock(spec=Reasons, name="Reasons").return_value
-        mock_reasons.get_name_message_map.return_value = {
-            "RHEL": ["Not supported by a valid subscription"]
-        }
-        mock_reasons.get_reason_ids_map.return_value = {
-            '69': {
-                'key': 'NOTCOVERED',
-                'product_name': 'RHEL'
-            }
-        }
+        mock_reasons.get_name_message_map.return_value = {"RHEL": ["Not supported by a valid subscription"]}
+        mock_reasons.get_reason_ids_map.return_value = {"69": {"key": "NOTCOVERED", "product_name": "RHEL"}}
 
         mock_sorter = self.mock_sorter_class.return_value
         mock_sorter.get_system_status.return_value = "Invalid"
-        mock_sorter.get_system_status_id.return_value = 'invalid'
+        mock_sorter.get_system_status_id.return_value = "invalid"
         mock_sorter.reasons = mock_reasons
         mock_sorter.is_valid.return_value = False
 
         expected_value = {
-            'status': 'Invalid',
-            'status_id': 'invalid',
-            'reasons': {
-                'RHEL': ['Not supported by a valid subscription']
-            },
-            'reason_ids': {
-                '69': {
-                    'key': 'NOTCOVERED',
-                    'product_name': 'RHEL'
-                }
-            },
-            'valid': False
+            "status": "Invalid",
+            "status_id": "invalid",
+            "reasons": {"RHEL": ["Not supported by a valid subscription"]},
+            "reason_ids": {"69": {"key": "NOTCOVERED", "product_name": "RHEL"}},
+            "valid": False,
         }
 
         self.assertEqual(expected_value, service.get_status())
@@ -118,47 +106,44 @@ class TestEntitlementService(InjectionMockingTest):
 
         mock_reasons = mock.Mock(spec=Reasons, name="Reasons").return_value
         mock_reasons.get_name_message_map.return_value = {"RHEL": ["Not supported by a valid subscription"]}
-        mock_reasons.get_reason_ids_map.return_value = {
-            '69': {
-                'key': 'NOTCOVERED',
-                'product_name': 'RHEL'
-            }
-        }
+        mock_reasons.get_reason_ids_map.return_value = {"69": {"key": "NOTCOVERED", "product_name": "RHEL"}}
 
         mock_sorter.get_system_status.return_value = "Invalid"
-        mock_sorter.get_system_status_id.return_value = 'invalid'
+        mock_sorter.get_system_status_id.return_value = "invalid"
         mock_sorter.reasons = mock_reasons
         mock_sorter.is_valid.return_value = False
 
         expected_value = {
-            'status': 'Invalid',
-            'status_id': 'invalid',
-            'reasons': {
-                'RHEL': ['Not supported by a valid subscription']
-            },
-            'reason_ids': {
-                '69': {
-                    'key': 'NOTCOVERED',
-                    'product_name': 'RHEL'
-                }
-            },
-            'valid': False
+            "status": "Invalid",
+            "status_id": "invalid",
+            "reasons": {"RHEL": ["Not supported by a valid subscription"]},
+            "reason_ids": {"69": {"key": "NOTCOVERED", "product_name": "RHEL"}},
+            "valid": False,
         }
 
         self.assertEqual(expected_value, service.get_status("some_date"))
         self.mock_sorter_class.assert_called_once_with("some_date")
 
-    def _build_options(self, pool_subsets=None, matches=None, pool_only=None, match_installed=None,
-                       no_overlap=None, service_level=None, show_all=None, on_date=None):
+    def _build_options(
+        self,
+        pool_subsets=None,
+        matches=None,
+        pool_only=None,
+        match_installed=None,
+        no_overlap=None,
+        service_level=None,
+        show_all=None,
+        on_date=None,
+    ):
         return {
-            'pool_subsets': pool_subsets,
-            'matches': matches,
-            'pool_only': pool_only,
-            'match_installed': match_installed,
-            'no_overlap': no_overlap,
-            'service_level': service_level,
-            'show_all': show_all,
-            'on_date': on_date,
+            "pool_subsets": pool_subsets,
+            "matches": matches,
+            "pool_only": pool_only,
+            "match_installed": match_installed,
+            "no_overlap": no_overlap,
+            "service_level": service_level,
+            "show_all": show_all,
+            "on_date": on_date,
         }
 
     def test_get_status_when_unregistered(self):
@@ -167,141 +152,145 @@ class TestEntitlementService(InjectionMockingTest):
 
         self.mock_identity.is_valid.return_value = False
         expected_value = {
-            'status': 'Unknown',
-            'status_id': 'unknown',
-            'reasons': {},
-            'reason_ids': {},
-            'valid': False
+            "status": "Unknown",
+            "status_id": "unknown",
+            "reasons": {},
+            "reason_ids": {},
+            "valid": False,
         }
         self.assertEqual(expected_value, service.get_status())
 
     def test_only_accepts_correct_pool_subsets(self):
         service = EntitlementService()
-        options = self._build_options(pool_subsets=['foo'])
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*invalid listing type.*'):
+        options = self._build_options(pool_subsets=["foo"])
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*invalid listing type.*"):
             service.validate_options(options)
 
     def test_show_all_requires_available(self):
         service = EntitlementService()
-        options = self._build_options(pool_subsets=['installed'], show_all=True)
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
+        options = self._build_options(pool_subsets=["installed"], show_all=True)
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*only applicable with --available"):
             service.validate_options(options)
-        options['pool_subsets'].append('available')
+        options["pool_subsets"].append("available")
         service.validate_options(options)
 
     def test_on_date_requires_available(self):
         service = EntitlementService()
-        on_date = datetime.date.today().strftime('%Y-%m-%d')
-        options = self._build_options(pool_subsets=['installed', 'consumed'], on_date=on_date)
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
+        on_date = datetime.date.today().strftime("%Y-%m-%d")
+        options = self._build_options(pool_subsets=["installed", "consumed"], on_date=on_date)
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*only applicable with --available"):
             service.validate_options(options)
-        options['pool_subsets'].append('available')
+        options["pool_subsets"].append("available")
         service.validate_options(options)
 
     def test_service_level_requires_consumed_or_available(self):
         service = EntitlementService()
-        options = self._build_options(pool_subsets=['installed'], service_level='foo')
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
+        options = self._build_options(pool_subsets=["installed"], service_level="foo")
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*only applicable with --available"):
             service.validate_options(options)
-        options['pool_subsets'].append('available')
+        options["pool_subsets"].append("available")
         service.validate_options(options)
 
     def test_match_installed_requires_available(self):
         service = EntitlementService()
-        options = self._build_options(pool_subsets=['installed', 'consumed'], match_installed=True)
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
+        options = self._build_options(pool_subsets=["installed", "consumed"], match_installed=True)
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*only applicable with --available"):
             service.validate_options(options)
-        options['pool_subsets'].append('available')
+        options["pool_subsets"].append("available")
         service.validate_options(options)
 
     def test_no_overlap_requires_available(self):
         service = EntitlementService()
-        options = self._build_options(pool_subsets=['installed', 'consumed'], no_overlap=True)
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
+        options = self._build_options(pool_subsets=["installed", "consumed"], no_overlap=True)
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*only applicable with --available"):
             service.validate_options(options)
-        options['pool_subsets'].append('available')
+        options["pool_subsets"].append("available")
         service.validate_options(options)
 
     def test_pool_only_requires_consumed_or_available(self):
         service = EntitlementService()
-        options = self._build_options(pool_subsets=['installed'], pool_only=True)
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*only applicable with --available'):
+        options = self._build_options(pool_subsets=["installed"], pool_only=True)
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*only applicable with --available"):
             service.validate_options(options)
-        options['pool_subsets'].append('available')
+        options["pool_subsets"].append("available")
         service.validate_options(options)
 
     def test_available_requires_registration(self):
         service = EntitlementService()
         self.mock_identity.is_valid.return_value = False
-        options = self._build_options(pool_subsets=['available'])
-        with self.assertRaisesRegex(exceptions.ValidationError, r'.*not registered.*'):
+        options = self._build_options(pool_subsets=["available"])
+        with self.assertRaisesRegex(exceptions.ValidationError, r".*not registered.*"):
             service.validate_options(options)
 
-    @mock.patch('rhsmlib.services.entitlement.managerlib')
+    @mock.patch("rhsmlib.services.entitlement.managerlib")
     def test_filter_only_specified_service_level(self, mock_managerlib):
         service = EntitlementService()
-        pools = [{'service_level': 'Level1'},
-                 {'service_level': 'Level2'},
-                 {'service_level': 'Level3'}]
+        pools = [{"service_level": "Level1"}, {"service_level": "Level2"}, {"service_level": "Level3"}]
         mock_managerlib.get_available_entitlements.return_value = pools
 
         filtered = service.get_available_pools(service_level="Level2")
 
         self.assertEqual(1, len(filtered))
-        self.assertEqual("Level2", filtered[0]['service_level'])
+        self.assertEqual("Level2", filtered[0]["service_level"])
 
-    @mock.patch('rhsmlib.services.entitlement.managerlib')
+    @mock.patch("rhsmlib.services.entitlement.managerlib")
     def test_pagged_result(self, mock_managerlib):
         service = EntitlementService()
-        pools = [{'id': 'ff8080816ea20fb9016ea21283ab02e0'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e1'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e2'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e3'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e4'}]
+        pools = [
+            {"id": "ff8080816ea20fb9016ea21283ab02e0"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e1"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e2"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e3"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e4"},
+        ]
         mock_managerlib.get_available_entitlements.return_value = pools
 
         filtered = service.get_available_pools(page=1, items_per_page=3)
 
         self.assertEqual(2, len(filtered))
-        self.assertEqual("ff8080816ea20fb9016ea21283ab02e3", filtered[0]['id'])
-        self.assertEqual(1, filtered[0]['page'])
-        self.assertEqual(3, filtered[0]['items_per_page'])
+        self.assertEqual("ff8080816ea20fb9016ea21283ab02e3", filtered[0]["id"])
+        self.assertEqual(1, filtered[0]["page"])
+        self.assertEqual(3, filtered[0]["items_per_page"])
 
-    @mock.patch('rhsmlib.services.entitlement.managerlib')
+    @mock.patch("rhsmlib.services.entitlement.managerlib")
     def test_no_pagged_result(self, mock_managerlib):
         service = EntitlementService()
-        pools = [{'id': 'ff8080816ea20fb9016ea21283ab02e0'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e1'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e2'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e3'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e4'}]
+        pools = [
+            {"id": "ff8080816ea20fb9016ea21283ab02e0"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e1"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e2"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e3"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e4"},
+        ]
         mock_managerlib.get_available_entitlements.return_value = pools
 
         filtered = service.get_available_pools(page=0, items_per_page=0)
 
         self.assertEqual(5, len(filtered))
-        self.assertEqual("ff8080816ea20fb9016ea21283ab02e0", filtered[0]['id'])
-        self.assertNotIn('page', filtered[0])
-        self.assertNotIn('items_per_page', filtered[0])
+        self.assertEqual("ff8080816ea20fb9016ea21283ab02e0", filtered[0]["id"])
+        self.assertNotIn("page", filtered[0])
+        self.assertNotIn("items_per_page", filtered[0])
 
-    @mock.patch('rhsmlib.services.entitlement.managerlib')
+    @mock.patch("rhsmlib.services.entitlement.managerlib")
     def test_pagged_result_too_big_page_value(self, mock_managerlib):
         service = EntitlementService()
-        pools = [{'id': 'ff8080816ea20fb9016ea21283ab02e0'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e1'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e2'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e3'},
-                 {'id': 'ff8080816ea20fb9016ea21283ab02e4'}]
+        pools = [
+            {"id": "ff8080816ea20fb9016ea21283ab02e0"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e1"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e2"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e3"},
+            {"id": "ff8080816ea20fb9016ea21283ab02e4"},
+        ]
         mock_managerlib.get_available_entitlements.return_value = pools
 
         filtered = service.get_available_pools(page=10, items_per_page=3)
 
         self.assertEqual(0, len(filtered))
 
-    @mock.patch('rhsmlib.services.entitlement.managerlib')
+    @mock.patch("rhsmlib.services.entitlement.managerlib")
     def test_no_pool_with_specified_filter(self, mock_managerlib):
         service = EntitlementService()
-        pools = [{'service_level': 'Level1'}]
+        pools = [{"service_level": "Level1"}]
         mock_managerlib.get_available_entitlements.return_value = pools
 
         filtered = service.get_available_pools(service_level="NotFound")
@@ -314,10 +303,10 @@ class TestEntitlementService(InjectionMockingTest):
         ent_service = EntitlementService(self.mock_cp)
         ent_service.entcertlib = mock.Mock().return_value
         ent_service.entcertlib.update = mock.Mock()
-        ent_service.cp.unbindAll = mock.Mock(return_value='[]')
+        ent_service.cp.unbindAll = mock.Mock(return_value="[]")
 
         response = ent_service.remove_all_entitlements()
-        self.assertEqual(response, '[]')
+        self.assertEqual(response, "[]")
 
     def test_remove_all_pools_by_id(self):
         """
@@ -325,26 +314,21 @@ class TestEntitlementService(InjectionMockingTest):
         """
         ent_service = EntitlementService(self.mock_cp)
         ent_service.cp.unbindByPoolId = mock.Mock()
-        ent_service.entitlement_dir.list_serials_for_pool_ids = mock.Mock(return_value={
-            '4028fa7a5dea087d015dea0b025003f6': ['6219625278114868779'],
-            '4028fa7a5dea087d015dea0adf560152': ['3573249574655121394']
-        })
+        ent_service.entitlement_dir.list_serials_for_pool_ids = mock.Mock(
+            return_value={
+                "4028fa7a5dea087d015dea0b025003f6": ["6219625278114868779"],
+                "4028fa7a5dea087d015dea0adf560152": ["3573249574655121394"],
+            }
+        )
         ent_service.entcertlib = mock.Mock().return_value
         ent_service.entcertlib.update = mock.Mock()
 
         removed_pools, unremoved_pools, removed_serials = ent_service.remove_entilements_by_pool_ids(
-            ['4028fa7a5dea087d015dea0b025003f6',
-             '4028fa7a5dea087d015dea0adf560152']
+            ["4028fa7a5dea087d015dea0b025003f6", "4028fa7a5dea087d015dea0adf560152"]
         )
 
-        expected_removed_serials = [
-            '6219625278114868779',
-            '3573249574655121394'
-        ]
-        expected_removed_pools = [
-            '4028fa7a5dea087d015dea0b025003f6',
-            '4028fa7a5dea087d015dea0adf560152'
-        ]
+        expected_removed_serials = ["6219625278114868779", "3573249574655121394"]
+        expected_removed_pools = ["4028fa7a5dea087d015dea0b025003f6", "4028fa7a5dea087d015dea0adf560152"]
 
         self.assertEqual(expected_removed_serials, removed_serials)
         self.assertEqual(expected_removed_pools, removed_pools)
@@ -357,27 +341,25 @@ class TestEntitlementService(InjectionMockingTest):
         """
         ent_service = EntitlementService(self.mock_cp)
         ent_service.cp.unbindByPoolId = mock.Mock()
-        ent_service.entitlement_dir.list_serials_for_pool_ids = mock.Mock(return_value={
-            '4028fa7a5dea087d015dea0b025003f6': ['6219625278114868779'],
-            '4028fa7a5dea087d015dea0adf560152': ['3573249574655121394']
-        })
+        ent_service.entitlement_dir.list_serials_for_pool_ids = mock.Mock(
+            return_value={
+                "4028fa7a5dea087d015dea0b025003f6": ["6219625278114868779"],
+                "4028fa7a5dea087d015dea0adf560152": ["3573249574655121394"],
+            }
+        )
         ent_service.entcertlib = mock.Mock().return_value
         ent_service.entcertlib.update = mock.Mock()
 
         removed_pools, unremoved_pools, removed_serials = ent_service.remove_entilements_by_pool_ids(
-            ['4028fa7a5dea087d015dea0b025003f6',
-             '4028fa7a5dea087d015dea0b025003f6',
-             '4028fa7a5dea087d015dea0adf560152']
+            [
+                "4028fa7a5dea087d015dea0b025003f6",
+                "4028fa7a5dea087d015dea0b025003f6",
+                "4028fa7a5dea087d015dea0adf560152",
+            ]
         )
 
-        expected_removed_serials = [
-            '6219625278114868779',
-            '3573249574655121394'
-        ]
-        expected_removed_pools = [
-            '4028fa7a5dea087d015dea0b025003f6',
-            '4028fa7a5dea087d015dea0adf560152'
-        ]
+        expected_removed_serials = ["6219625278114868779", "3573249574655121394"]
+        expected_removed_pools = ["4028fa7a5dea087d015dea0b025003f6", "4028fa7a5dea087d015dea0adf560152"]
 
         self.assertEqual(expected_removed_serials, removed_serials)
         self.assertEqual(expected_removed_pools, removed_pools)
@@ -390,24 +372,26 @@ class TestEntitlementService(InjectionMockingTest):
         ent_service = EntitlementService(self.mock_cp)
 
         def stub_unbind(uuid, pool_id):
-            if pool_id == 'does_not_exist_d015dea0adf560152':
-                raise connection.RestlibException(400, 'Error')
+            if pool_id == "does_not_exist_d015dea0adf560152":
+                raise connection.RestlibException(400, "Error")
 
         ent_service.cp.unbindByPoolId = mock.Mock(side_effect=stub_unbind)
-        ent_service.entitlement_dir.list_serials_for_pool_ids = mock.Mock(return_value={
-            '4028fa7a5dea087d015dea0b025003f6': ['6219625278114868779'],
-            '4028fa7a5dea087d015dea0adf560152': ['3573249574655121394']
-        })
+        ent_service.entitlement_dir.list_serials_for_pool_ids = mock.Mock(
+            return_value={
+                "4028fa7a5dea087d015dea0b025003f6": ["6219625278114868779"],
+                "4028fa7a5dea087d015dea0adf560152": ["3573249574655121394"],
+            }
+        )
         ent_service.entcertlib = mock.Mock().return_value
         ent_service.entcertlib.update = mock.Mock()
 
         removed_pools, unremoved_pools, removed_serials = ent_service.remove_entilements_by_pool_ids(
-            ['4028fa7a5dea087d015dea0b025003f6', 'does_not_exist_d015dea0adf560152']
+            ["4028fa7a5dea087d015dea0b025003f6", "does_not_exist_d015dea0adf560152"]
         )
 
-        expected_removed_serials = ['6219625278114868779']
-        expected_removed_pools = ['4028fa7a5dea087d015dea0b025003f6']
-        expected_unremoved_pools = ['does_not_exist_d015dea0adf560152']
+        expected_removed_serials = ["6219625278114868779"]
+        expected_removed_pools = ["4028fa7a5dea087d015dea0b025003f6"]
+        expected_unremoved_pools = ["does_not_exist_d015dea0adf560152"]
 
         self.assertEqual(expected_removed_serials, removed_serials)
         self.assertEqual(expected_removed_pools, removed_pools)
@@ -424,10 +408,10 @@ class TestEntitlementService(InjectionMockingTest):
         ent_service.entcertlib.update = mock.Mock()
 
         removed_serial, unremoved_serials = ent_service.remove_entitlements_by_serials(
-            ['6219625278114868779', '3573249574655121394']
+            ["6219625278114868779", "3573249574655121394"]
         )
 
-        expected_removed_serials = ['6219625278114868779', '3573249574655121394']
+        expected_removed_serials = ["6219625278114868779", "3573249574655121394"]
 
         self.assertEqual(expected_removed_serials, removed_serial)
         self.assertEqual([], unremoved_serials)
@@ -444,12 +428,10 @@ class TestEntitlementService(InjectionMockingTest):
         ent_service.entcertlib.update = mock.Mock()
 
         removed_serial, unremoved_serials = ent_service.remove_entitlements_by_serials(
-            ['6219625278114868779',
-             '6219625278114868779',
-             '3573249574655121394']
+            ["6219625278114868779", "6219625278114868779", "3573249574655121394"]
         )
 
-        expected_removed_serials = ['6219625278114868779', '3573249574655121394']
+        expected_removed_serials = ["6219625278114868779", "3573249574655121394"]
 
         self.assertEqual(expected_removed_serials, removed_serial)
         self.assertEqual([], unremoved_serials)
@@ -462,8 +444,8 @@ class TestEntitlementService(InjectionMockingTest):
         ent_service = EntitlementService(self.mock_cp)
 
         def stub_unbind(uuid, serial):
-            if serial == 'does_not_exist_1394':
-                raise connection.RestlibException(400, 'Error')
+            if serial == "does_not_exist_1394":
+                raise connection.RestlibException(400, "Error")
 
         ent_service.cp.unbindBySerial = mock.Mock(side_effect=stub_unbind)
 
@@ -471,12 +453,11 @@ class TestEntitlementService(InjectionMockingTest):
         ent_service.entcertlib.update = mock.Mock()
 
         removed_serial, unremoved_serials = ent_service.remove_entitlements_by_serials(
-            ['6219625278114868779',
-             'does_not_exist_1394']
+            ["6219625278114868779", "does_not_exist_1394"]
         )
 
-        expected_removed_serials = ['6219625278114868779']
-        expected_unremoved_serials = ['does_not_exist_1394']
+        expected_removed_serials = ["6219625278114868779"]
+        expected_unremoved_serials = ["does_not_exist_1394"]
 
         self.assertEqual(expected_removed_serials, removed_serial)
         self.assertEqual(expected_unremoved_serials, unremoved_serials)
@@ -485,7 +466,7 @@ class TestEntitlementService(InjectionMockingTest):
         """
         Test parsing valid date
         """
-        on_date = datetime.date.today().strftime('%Y-%m-%d')
+        on_date = datetime.date.today().strftime("%Y-%m-%d")
         ent_service = EntitlementService(self.mock_cp)
         expected_result = datetime.datetime.strptime(on_date, "%Y-%m-%d")
         parsed_date = ent_service.parse_date(on_date)
@@ -504,7 +485,7 @@ class TestEntitlementService(InjectionMockingTest):
         Test parsing invalid date (past dates are not allowed)
         """
         yesterday = datetime.date.today() - datetime.timedelta(1)
-        on_date = yesterday.strftime('%Y-%m-%d')
+        on_date = yesterday.strftime("%Y-%m-%d")
         ent_service = EntitlementService(self.mock_cp)
         self.assertRaises(ValueError, ent_service.parse_date, on_date)
 
@@ -516,7 +497,7 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
         self.proxy = self.proxy_for(EntitlementDBusObject.default_dbus_path)
         self.interface = dbus.Interface(self.proxy, constants.ENTITLEMENT_INTERFACE)
 
-        entitlement_patcher = mock.patch('rhsmlib.dbus.objects.entitlement.EntitlementService', autospec=True)
+        entitlement_patcher = mock.patch("rhsmlib.dbus.objects.entitlement.EntitlementService", autospec=True)
         self.mock_entitlement = entitlement_patcher.start().return_value
         self.addCleanup(entitlement_patcher.stop)
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection").return_value
@@ -545,7 +526,7 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
         return [EntitlementDBusObject]
 
     def test_get_status(self):
-        expected_status = {'status': 'Unknown', 'reasons': {}, 'valid': False}
+        expected_status = {"status": "Unknown", "reasons": {}, "valid": False}
         expected_return = json.dumps(expected_status)
 
         def assertions(*args):
@@ -561,7 +542,9 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
         Test of D-Bus object for removing entitlements by serial number.
         """
         removed_unremoved_serials = (["6219625278114868779"], [])
-        self.mock_entitlement.remove_entitlements_by_serials = mock.Mock(return_value=removed_unremoved_serials)
+        self.mock_entitlement.remove_entitlements_by_serials = mock.Mock(
+            return_value=removed_unremoved_serials
+        )
         expected_return = json.dumps(removed_unremoved_serials[0])
 
         def assertation(*args):
@@ -576,7 +559,9 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
         Test of D-Bus object for removing entitlements by more than one serial number.
         """
         removed_unremoved_serials = (["6219625278114868779", "3573249574655121394"], [])
-        self.mock_entitlement.remove_entitlements_by_serials = mock.Mock(return_value=removed_unremoved_serials)
+        self.mock_entitlement.remove_entitlements_by_serials = mock.Mock(
+            return_value=removed_unremoved_serials
+        )
         expected_return = json.dumps(removed_unremoved_serials[0])
 
         def assertation(*args):
@@ -592,7 +577,9 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
         List of serial numbers containts also not valid number.
         """
         removed_unremoved_serials = (["6219625278114868779"], ["3573249574655121394"])
-        self.mock_entitlement.remove_entitlements_by_serials = mock.Mock(return_value=removed_unremoved_serials)
+        self.mock_entitlement.remove_entitlements_by_serials = mock.Mock(
+            return_value=removed_unremoved_serials
+        )
         expected_return = json.dumps(removed_unremoved_serials[0])
 
         def assertation(*args):
@@ -606,8 +593,10 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
         """
         Test of D-Bus object for removing entitlements by pool IDs
         """
-        removed_unremoved_pools_serials = (['4028fa7a5dea087d015dea0b025003f6'], [], ['6219625278114868779'])
-        self.mock_entitlement.remove_entilements_by_pool_ids = mock.Mock(return_value=removed_unremoved_pools_serials)
+        removed_unremoved_pools_serials = (["4028fa7a5dea087d015dea0b025003f6"], [], ["6219625278114868779"])
+        self.mock_entitlement.remove_entilements_by_pool_ids = mock.Mock(
+            return_value=removed_unremoved_pools_serials
+        )
 
         expected_result = json.dumps(removed_unremoved_pools_serials[2])
 

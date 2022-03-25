@@ -33,12 +33,21 @@ from subscription_manager.cli import AbstractCLICommand, InvalidCLIOptionError, 
 from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.utils import generate_correlation_id, get_client_versions, get_server_versions, \
-    parse_server_info, parse_baseurl_info, format_baseurl, is_valid_server_info, MissingCaCertException, \
-    get_current_owner
+from subscription_manager.utils import (
+    generate_correlation_id,
+    get_client_versions,
+    get_server_versions,
+    parse_server_info,
+    parse_baseurl_info,
+    format_baseurl,
+    is_valid_server_info,
+    MissingCaCertException,
+    get_current_owner,
+)
 
 ERR_NOT_REGISTERED_MSG = _(
-    "This system is not yet registered. Try 'subscription-manager register --help' for more information.")
+    "This system is not yet registered. Try 'subscription-manager register --help' for more information."
+)
 ERR_NOT_REGISTERED_CODE = 1
 
 log = logging.getLogger(__name__)
@@ -67,7 +76,7 @@ def handle_exception(msg, ex):
 
 
 class CliCommand(AbstractCLICommand):
-    """ Base class for all sub-commands. """
+    """Base class for all sub-commands."""
 
     def __init__(self, name="cli", shortdesc=None, primary=False):
         AbstractCLICommand.__init__(self, name=name, shortdesc=shortdesc, primary=primary)
@@ -113,39 +122,67 @@ class CliCommand(AbstractCLICommand):
         # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
         # was not consistent with rest of subscription-manager
         # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
-        owner_id = owner['key']
+        owner_id = owner["key"]
         print(
             _(
-                'Ignoring request to auto-attach. '
+                "Ignoring request to auto-attach. "
                 'It is disabled for org "{owner_id}" because of the content access mode setting.'
             ).format(owner_id=owner_id)
         )
 
     def _get_logger(self):
-        return logging.getLogger("rhsm-app.{module}.{name}".format(module=self.__module__, name=self.__class__.__name__))
+        return logging.getLogger(
+            "rhsm-app.{module}.{name}".format(module=self.__module__, name=self.__class__.__name__)
+        )
 
     def _request_validity_check(self):
         # Make sure the sorter is fresh (low footprint if it is)
         inj.require(inj.CERT_SORTER).force_cert_check()
 
     def _add_url_options(self):
-        """ Add options that allow the setting of the server URL."""
-        self.parser.add_argument("--serverurl", dest="server_url",
-                                 default=None, help=_("server URL in the form of https://hostname:port/prefix"))
-        self.parser.add_argument("--insecure", action="store_true",
-                                 default=False, help=_("do not check the entitlement server SSL certificate against "
-                                                       "available certificate authorities"))
+        """Add options that allow the setting of the server URL."""
+        self.parser.add_argument(
+            "--serverurl",
+            dest="server_url",
+            default=None,
+            help=_("server URL in the form of https://hostname:port/prefix"),
+        )
+        self.parser.add_argument(
+            "--insecure",
+            action="store_true",
+            default=False,
+            help=_(
+                "do not check the entitlement server SSL certificate against "
+                "available certificate authorities"
+            ),
+        )
 
     def _add_proxy_options(self):
-        """ Add proxy options that apply to sub-commands that require network connections. """
-        self.parser.add_argument("--proxy", dest="proxy_url",
-                                 default=None, help=_("proxy URL in the form of hostname:port"))
-        self.parser.add_argument("--proxyuser", dest="proxy_user",
-                                 default=None, help=_("user for HTTP proxy with basic authentication"))
-        self.parser.add_argument("--proxypassword", dest="proxy_password",
-                                 default=None, help=_("password for HTTP proxy with basic authentication"))
-        self.parser.add_argument('--noproxy', dest='no_proxy',
-                                 default=None, help=_("host suffixes that should bypass HTTP proxy"))
+        """Add proxy options that apply to sub-commands that require network connections."""
+        self.parser.add_argument(
+            "--proxy",
+            dest="proxy_url",
+            default=None,
+            help=_("proxy URL in the form of hostname:port"),
+        )
+        self.parser.add_argument(
+            "--proxyuser",
+            dest="proxy_user",
+            default=None,
+            help=_("user for HTTP proxy with basic authentication"),
+        )
+        self.parser.add_argument(
+            "--proxypassword",
+            dest="proxy_password",
+            default=None,
+            help=_("password for HTTP proxy with basic authentication"),
+        )
+        self.parser.add_argument(
+            "--noproxy",
+            dest="no_proxy",
+            default=None,
+            help=_("host suffixes that should bypass HTTP proxy"),
+        )
 
     def _do_command(self):
         pass
@@ -154,9 +191,10 @@ class CliCommand(AbstractCLICommand):
         if not self.is_consumer_cert_present():
             system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
         elif not self.is_registered():
-            system_exit(os.EX_DATAERR, _(
-                "Consumer identity either does not exist or is corrupted. Try register --help"
-            ))
+            system_exit(
+                os.EX_DATAERR,
+                _("Consumer identity either does not exist or is corrupted. Try register --help"),
+            )
 
     def is_consumer_cert_present(self):
         self.identity = inj.require(inj.IDENTITY)
@@ -182,9 +220,11 @@ class CliCommand(AbstractCLICommand):
         return {"subscription-manager": _("Unknown")}
 
     def _default_server_version(self):
-        return {"candlepin": _("Unknown"),
-                "rules-type": _("Unknown"),
-                "server-type": _("Unknown")}
+        return {
+            "candlepin": _("Unknown"),
+            "rules-type": _("Unknown"),
+            "server-type": _("Unknown"),
+        }
 
     def log_client_version(self):
         self.client_versions = get_client_versions()
@@ -205,7 +245,12 @@ class CliCommand(AbstractCLICommand):
 
         # TODO: For now, we disable the CLI entirely. We may want to allow some commands in the future.
         if rhsm.config.in_container():
-            system_exit(os.EX_CONFIG, _("subscription-manager is disabled when running inside a container. Please refer to your host system for subscription management.\n"))
+            system_exit(
+                os.EX_CONFIG,
+                _(
+                    "subscription-manager is disabled when running inside a container. Please refer to your host system for subscription management.\n"
+                ),
+            )
 
         config_changed = False
 
@@ -229,9 +274,9 @@ class CliCommand(AbstractCLICommand):
 
         if hasattr(self.options, "server_url") and self.options.server_url:
             try:
-                (self.server_hostname,
-                 self.server_port,
-                 self.server_prefix) = parse_server_info(self.options.server_url, conf)
+                (self.server_hostname, self.server_port, self.server_prefix) = parse_server_info(
+                    self.options.server_url, conf
+                )
             except ServerUrlParseError as e:
                 print(_("Error parsing serverurl:"))
                 handle_exception("Error parsing serverurl:", e)
@@ -245,29 +290,28 @@ class CliCommand(AbstractCLICommand):
 
         if hasattr(self.options, "base_url") and self.options.base_url:
             try:
-                (baseurl_server_hostname,
-                 baseurl_server_port,
-                 baseurl_server_prefix) = parse_baseurl_info(self.options.base_url)
+                (baseurl_server_hostname, baseurl_server_port, baseurl_server_prefix) = parse_baseurl_info(
+                    self.options.base_url
+                )
             except ServerUrlParseError as e:
                 print(_("Error parsing baseurl:"))
                 handle_exception("Error parsing baseurl:", e)
 
             conf["rhsm"]["baseurl"] = format_baseurl(
-                baseurl_server_hostname,
-                baseurl_server_port,
-                baseurl_server_prefix)
+                baseurl_server_hostname, baseurl_server_port, baseurl_server_prefix
+            )
             config_changed = True
 
         # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
-            parts = remove_scheme(self.options.proxy_url).split(':')
+            parts = remove_scheme(self.options.proxy_url).split(":")
             self.proxy_hostname = parts[0]
             # no ':'
             if len(parts) > 1:
                 self.proxy_port = int(parts[1])
             else:
                 # if no port specified, use the one from the config, or fallback to the default
-                self.proxy_port = conf['server'].get_int('proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
+                self.proxy_port = conf["server"].get_int("proxy_port") or rhsm.config.DEFAULT_PROXY_PORT
             config_changed = True
 
         if hasattr(self.options, "proxy_user") and self.options.proxy_user:
@@ -281,21 +325,21 @@ class CliCommand(AbstractCLICommand):
         # the sorter gets it
         connection_info = {}
         if self.proxy_hostname:
-            connection_info['proxy_hostname_arg'] = self.proxy_hostname
+            connection_info["proxy_hostname_arg"] = self.proxy_hostname
         if self.proxy_port:
-            connection_info['proxy_port_arg'] = self.proxy_port
+            connection_info["proxy_port_arg"] = self.proxy_port
         if self.proxy_user:
-            connection_info['proxy_user_arg'] = self.proxy_user
+            connection_info["proxy_user_arg"] = self.proxy_user
         if self.proxy_password:
-            connection_info['proxy_password_arg'] = self.proxy_password
+            connection_info["proxy_password_arg"] = self.proxy_password
         if self.server_hostname:
-            connection_info['host'] = self.server_hostname
+            connection_info["host"] = self.server_hostname
         if self.server_port:
-            connection_info['ssl_port'] = self.server_port
+            connection_info["ssl_port"] = self.server_port
         if self.server_prefix:
-            connection_info['handler'] = self.server_prefix
+            connection_info["handler"] = self.server_prefix
         if self.no_proxy:
-            connection_info['no_proxy_arg'] = self.no_proxy
+            connection_info["no_proxy_arg"] = self.no_proxy
 
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.cp_provider.set_connection_info(**connection_info)
@@ -321,15 +365,20 @@ class CliCommand(AbstractCLICommand):
                 try:
                     # this tries to actually connect to the server and ping it
                     if not is_valid_server_info(self.no_auth_cp):
-                        system_exit(os.EX_UNAVAILABLE, _("Unable to reach the server at {host}:{port}{handler}").format(
-                            host=self.no_auth_cp.host,
-                            port=self.no_auth_cp.ssl_port,
-                            handler=self.no_auth_cp.handler
-                        ))
+                        system_exit(
+                            os.EX_UNAVAILABLE,
+                            _("Unable to reach the server at {host}:{port}{handler}").format(
+                                host=self.no_auth_cp.host,
+                                port=self.no_auth_cp.ssl_port,
+                                handler=self.no_auth_cp.handler,
+                            ),
+                        )
 
                 except MissingCaCertException:
-                    system_exit(os.EX_CONFIG,
-                                _("Error: CA certificate for subscription service has not been installed."))
+                    system_exit(
+                        os.EX_CONFIG,
+                        _("Error: CA certificate for subscription service has not been installed."),
+                    )
                 except ProxyException:
                     system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
 
@@ -349,11 +398,20 @@ class CliCommand(AbstractCLICommand):
                 return return_code
         except (CertificateException, ssl.SSLError) as e:
             log.error(e)
-            system_exit(os.EX_SOFTWARE, _('System certificates corrupted. Please reregister.'))
+            system_exit(os.EX_SOFTWARE, _("System certificates corrupted. Please reregister."))
         except connection.GoneException as ge:
             if ge.deleted_id == self.identity.uuid:
-                log.critical("Consumer profile \"{uuid}\" has been deleted from the server.".format(uuid=self.identity.uuid))
-                system_exit(os.EX_UNAVAILABLE, _("Consumer profile \"{uuid}\" has been deleted from the server. You can use command clean or unregister to remove local profile.").format(uuid=self.identity.uuid))
+                log.critical(
+                    'Consumer profile "{uuid}" has been deleted from the server.'.format(
+                        uuid=self.identity.uuid
+                    )
+                )
+                system_exit(
+                    os.EX_UNAVAILABLE,
+                    _(
+                        'Consumer profile "{uuid}" has been deleted from the server. You can use command clean or unregister to remove local profile.'
+                    ).format(uuid=self.identity.uuid),
+                )
             else:
                 raise ge
         except InvalidCLIOptionError as err:

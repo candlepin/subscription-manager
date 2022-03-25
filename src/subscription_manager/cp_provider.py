@@ -70,18 +70,20 @@ class CPProvider(object):
 
     # Reread the config file and prefer arguments over config values
     # then recreate connections
-    def set_connection_info(self,
-                            host=None,
-                            ssl_port=None,
-                            handler=None,
-                            cert_file=None,
-                            key_file=None,
-                            proxy_hostname_arg=None,
-                            proxy_port_arg=None,
-                            proxy_user_arg=None,
-                            proxy_password_arg=None,
-                            no_proxy_arg=None,
-                            restlib_class=connection.Restlib):
+    def set_connection_info(
+        self,
+        host=None,
+        ssl_port=None,
+        handler=None,
+        cert_file=None,
+        key_file=None,
+        proxy_hostname_arg=None,
+        proxy_port_arg=None,
+        proxy_user_arg=None,
+        proxy_password_arg=None,
+        no_proxy_arg=None,
+        restlib_class=connection.Restlib,
+    ):
         self.cert_file = ConsumerIdentity.certpath()
         self.key_file = ConsumerIdentity.keypath()
 
@@ -113,7 +115,7 @@ class CPProvider(object):
     def set_token(self, token=None):
         self.token = token
         if token:
-            self.token_username = self._parse_token(token)['preferred_username']
+            self.token_username = self._parse_token(token)["preferred_username"]
         else:
             self.token_username = None
         self.keycloak_auth_cp = None
@@ -139,7 +141,7 @@ class CPProvider(object):
         Try to get version of subscription manager
         :return: string with version of subscription-manager
         """
-        return " subscription-manager/%s" % utils.get_client_versions()['subscription-manager']
+        return " subscription-manager/%s" % utils.get_client_versions()["subscription-manager"]
 
     @staticmethod
     def get_dbus_sender():
@@ -163,12 +165,13 @@ class CPProvider(object):
                 proxy_port=self.proxy_port,
                 proxy_user=self.proxy_user,
                 proxy_password=self.proxy_password,
-                cert_file=self.cert_file, key_file=self.key_file,
+                cert_file=self.cert_file,
+                key_file=self.key_file,
                 correlation_id=self.correlation_id,
                 no_proxy=self.no_proxy,
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
-                dbus_sender=self.get_dbus_sender()
+                dbus_sender=self.get_dbus_sender(),
             )
         return self.consumer_auth_cp
 
@@ -178,18 +181,18 @@ class CPProvider(object):
 
         uep = self.get_no_auth_cp()
 
-        if not uep.has_capability('keycloak_auth'):
+        if not uep.has_capability("keycloak_auth"):
             raise TokenAuthUnsupportedException
 
         # check type
-        token_type = self._parse_token(token)['typ']
-        if token_type.lower() == 'bearer':
+        token_type = self._parse_token(token)["typ"]
+        if token_type.lower() == "bearer":
             access_token = token
         else:
             status = uep.getStatus()
-            auth_url = status['keycloakAuthUrl']
-            realm = status['keycloakRealm']
-            resource = status['keycloakResource']
+            auth_url = status["keycloakAuthUrl"]
+            realm = status["keycloakRealm"]
+            resource = status["keycloakResource"]
             keycloak_instance = connection.KeycloakConnection(realm, auth_url, resource)
 
             access_token = keycloak_instance.get_access_token_through_refresh(token)
@@ -211,7 +214,7 @@ class CPProvider(object):
             restlib_class=self.restlib_class,
             token=self.token,
             client_version=self.get_client_version(),
-            dbus_sender=self.get_dbus_sender()
+            dbus_sender=self.get_dbus_sender(),
         )
         return self.keycloak_auth_cp
 
@@ -231,7 +234,7 @@ class CPProvider(object):
                 no_proxy=self.no_proxy,
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
-                dbus_sender=self.get_dbus_sender()
+                dbus_sender=self.get_dbus_sender(),
             )
         return self.basic_auth_cp
 
@@ -249,7 +252,7 @@ class CPProvider(object):
                 no_proxy=self.no_proxy,
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
-                dbus_sender=self.get_dbus_sender()
+                dbus_sender=self.get_dbus_sender(),
             )
         return self.no_auth_cp
 
@@ -264,6 +267,6 @@ class CPProvider(object):
                 proxy_password=self.proxy_password,
                 no_proxy=self.no_proxy,
                 client_version=self.get_client_version(),
-                dbus_sender=self.get_dbus_sender()
+                dbus_sender=self.get_dbus_sender(),
             )
         return self.content_connection

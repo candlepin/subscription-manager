@@ -24,7 +24,11 @@ from rhsm.connection import UnauthorizedException, ProxyException
 
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.abstract_syspurpose import AbstractSyspurposeCommand
-from subscription_manager.cli_command.cli import ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG, handle_exception
+from subscription_manager.cli_command.cli import (
+    ERR_NOT_REGISTERED_CODE,
+    ERR_NOT_REGISTERED_MSG,
+    handle_exception,
+)
 from subscription_manager.cli_command.org import OrgCommand
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
@@ -35,7 +39,6 @@ log = logging.getLogger(__name__)
 
 
 class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
-
     def __init__(self, subparser=None):
 
         shortdesc = _("Show or modify the system purpose service-level setting")
@@ -45,7 +48,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             shortdesc,
             False,
             attr="service_level_agreement",
-            commands=['set', 'unset', 'show', 'list']
+            commands=["set", "unset", "show", "list"],
         )
         self._add_url_options()
 
@@ -57,11 +60,13 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             self.options.set = self.options.set.strip()
 
         # Assume --show if run with no args:
-        if not self.options.list and \
-                not self.options.show and \
-                not self.options.set and \
-                not self.options.set == "" and \
-                not self.options.unset:
+        if (
+            not self.options.list
+            and not self.options.show
+            and not self.options.set
+            and not self.options.set == ""
+            and not self.options.unset
+        ):
             self.options.show = True
 
         if self.options.org and not self.options.list and not self.options.set:
@@ -72,7 +77,9 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                 if not (self.options.username and self.options.password) and not self.options.token:
                     system_exit(
                         os.EX_USAGE,
-                        _("Error: you must register or specify --username and --password to list service levels")
+                        _(
+                            "Error: you must register or specify --username and --password to list service levels"
+                        ),
                     )
             elif self.options.unset or self.options.set:
                 pass  # RHBZ 1632248 : User should be able to set/unset while not registered.
@@ -82,16 +89,19 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                 system_exit(ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG)
 
         if self.is_registered() and (
-            getattr(self.options, "username", None) or
-            getattr(self.options, "password", None) or
-            getattr(self.options, "token", None) or
-            getattr(self.options, "org", None) or
-            getattr(self.options, "server_url", None)
+            getattr(self.options, "username", None)
+            or getattr(self.options, "password", None)
+            or getattr(self.options, "token", None)
+            or getattr(self.options, "org", None)
+            or getattr(self.options, "server_url", None)
         ):
-            system_exit(os.EX_USAGE, _(
-                "Error: --username, --password, --token, --org and --serverurl "
-                "can be used only on unregistered systems"
-            ))
+            system_exit(
+                os.EX_USAGE,
+                _(
+                    "Error: --username, --password, --token, --org and --serverurl "
+                    "can be used only on unregistered systems"
+                ),
+            )
 
     def _do_command(self):
         self._validate_options()
@@ -140,7 +150,10 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                 mapped_message: str = ExceptionMapper().get_message(re_err)
                 system_exit(os.EX_SOFTWARE, mapped_message)
             except ProxyException:
-                system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+                system_exit(
+                    os.EX_UNAVAILABLE,
+                    _("Proxy connection failed, please check your settings."),
+                )
 
     def set(self):
         if self.cp.has_capability("syspurpose"):
@@ -148,7 +161,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             super(ServiceLevelCommand, self).set()
         else:
             self.update_service_level(self.options.set)
-            print(_("Service level set to: \"{val}\".").format(val=self.options.set))
+            print(_('Service level set to: "{val}".').format(val=self.options.set))
 
     def unset(self):
         if self.cp.has_capability("syspurpose"):
@@ -160,9 +173,11 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def update_service_level(self, service_level):
         consumer = self.cp.getConsumer(self.identity.uuid)
-        if 'serviceLevel' not in consumer:
-            system_exit(os.EX_UNAVAILABLE,
-                        _("Error: The service-level command is not supported by the server."))
+        if "serviceLevel" not in consumer:
+            system_exit(
+                os.EX_UNAVAILABLE,
+                _("Error: The service-level command is not supported by the server."),
+            )
         self.cp.updateConsumer(self.identity.uuid, service_level=service_level)
 
     def show(self):
@@ -174,9 +189,12 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def show_service_level(self):
         consumer = self.cp.getConsumer(self.identity.uuid)
-        if 'serviceLevel' not in consumer:
-            system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
-        service_level = consumer['serviceLevel'] or ""
+        if "serviceLevel" not in consumer:
+            system_exit(
+                os.EX_UNAVAILABLE,
+                _("Error: The service-level command is not supported by the server."),
+            )
+        service_level = consumer["serviceLevel"] or ""
         if service_level:
             print(_("Current service level: {level}").format(level=service_level))
         else:
@@ -184,7 +202,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
     def list_service_levels(self):
         if self.is_registered():
-            org_key = self.cp.getOwner(self.identity.uuid)['key']
+            org_key = self.cp.getOwner(self.identity.uuid)["key"]
         else:
             org_key = self.org
 
@@ -192,23 +210,31 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             slas = self.cp.getServiceLevelList(org_key)
             if len(slas):
                 print("+-------------------------------------------+")
-                print("           {label}".format(label=_('Available Service Levels')))
+                print("           {label}".format(label=_("Available Service Levels")))
                 print("+-------------------------------------------+")
                 for sla in slas:
                     print(sla)
             else:
-                print(_('There are no available values for the system purpose "{syspurpose_attr}" '
-                        'from the available subscriptions in this '
-                        'organization.').format(syspurpose_attr="service_level"))
+                print(
+                    _(
+                        'There are no available values for the system purpose "{syspurpose_attr}" '
+                        "from the available subscriptions in this "
+                        "organization."
+                    ).format(syspurpose_attr="service_level")
+                )
         except UnauthorizedException as e:
             raise e
         except connection.RemoteServerException:
-            system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
+            system_exit(
+                os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server.")
+            )
         except connection.GoneException as ge:
             raise ge
         except connection.RestlibException as e:
-            if e.code == 404 and e.msg.find('/servicelevels') > 0:
-                system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
+            if e.code == 404 and e.msg.find("/servicelevels") > 0:
+                system_exit(
+                    os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server.")
+                )
             elif e.code == 404:
                 mapped_message: str = ExceptionMapper().get_message(e)
                 system_exit(os.EX_DATAERR, mapped_message)

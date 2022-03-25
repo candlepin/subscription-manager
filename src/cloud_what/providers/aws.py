@@ -31,8 +31,8 @@ log = logging.getLogger(__name__)
 
 # Instance from one region will be redirected to another region's CDS for content
 REDIRECT_MAP = {
-    'us-gov-west-1': 'us-west-2',
-    'us-gov-east-1': 'us-east-2'
+    "us-gov-west-1": "us-west-2",
+    "us-gov-east-1": "us-east-2",
 }
 
 
@@ -58,7 +58,7 @@ class AWSCloudProvider(BaseCloudProvider):
     TOKEN_CACHE_FILE = "/var/cache/cloud-what/aws_token.json"
 
     HTTP_HEADERS = {
-        'User-Agent': 'cloud-what/1.0'
+        "User-Agent": "cloud-what/1.0",
     }
 
     def __init__(self, hw_info):
@@ -78,13 +78,13 @@ class AWSCloudProvider(BaseCloudProvider):
         if self.is_vm() is False:
             return False
         # This is valid for AWS systems using Xen
-        if 'dmi.bios.version' in self.hw_info and 'amazon' in self.hw_info['dmi.bios.version']:
+        if "dmi.bios.version" in self.hw_info and "amazon" in self.hw_info["dmi.bios.version"]:
             return True
         # This is valid for AWS systems using KVM
-        if 'dmi.bios.vendor' in self.hw_info and 'Amazon EC2' in self.hw_info['dmi.bios.vendor']:
+        if "dmi.bios.vendor" in self.hw_info and "Amazon EC2" in self.hw_info["dmi.bios.vendor"]:
             return True
         # Try to get output from virt-what
-        if 'virt.host_type' in self.hw_info and 'aws' in self.hw_info['virt.host_type']:
+        if "virt.host_type" in self.hw_info and "aws" in self.hw_info["virt.host_type"]:
             return True
         # In other cases return False
         return False
@@ -103,16 +103,16 @@ class AWSCloudProvider(BaseCloudProvider):
             return 0.0
 
         # We know that AWS uses mostly KVM and it uses Xen in some cases
-        if 'virt.host_type' in self.hw_info:
+        if "virt.host_type" in self.hw_info:
             # It seems that KVM is used more often
-            if 'kvm' in self.hw_info['virt.host_type']:
+            if "kvm" in self.hw_info["virt.host_type"]:
                 probability += 0.3
-            elif 'xen' in self.hw_info['virt.host_type']:
+            elif "xen" in self.hw_info["virt.host_type"]:
                 probability += 0.2
 
         # Every system UUID of VM running on AWS EC2 starts with EC2 string. Not strong sign, but
         # it can increase probability a little
-        if 'dmi.system.uuid' in self.hw_info and self.hw_info['dmi.system.uuid'].lower().startswith('ec2'):
+        if "dmi.system.uuid" in self.hw_info and self.hw_info["dmi.system.uuid"].lower().startswith("ec2"):
             probability += 0.1
 
         # Try to find "Amazon EC2", "Amazon" or "AWS" keywords in output of dmidecode
@@ -122,11 +122,11 @@ class AWSCloudProvider(BaseCloudProvider):
         for hw_item in self.hw_info.values():
             if type(hw_item) != str:
                 continue
-            if 'amazon ec2' in hw_item.lower():
+            if "amazon ec2" in hw_item.lower():
                 found_amazon_ec2 = True
-            elif 'amazon' in hw_item.lower():
+            elif "amazon" in hw_item.lower():
                 found_amazon = True
-            elif 'aws' in hw_item.lower():
+            elif "aws" in hw_item.lower():
                 found_aws = True
         if found_amazon_ec2 is True:
             probability += 0.3
@@ -149,11 +149,9 @@ class AWSCloudProvider(BaseCloudProvider):
             region = REDIRECT_MAP[region]
 
         if repo.baseurl:
-            repo.baseurl = tuple(
-                url.replace('REGION', region, 1) for url in repo.baseurl
-            )
+            repo.baseurl = tuple(url.replace("REGION", region, 1) for url in repo.baseurl)
         elif repo.mirrorlist:
-            repo.mirrorlist = repo.mirrorlist.replace('REGION', region, 1)
+            repo.mirrorlist = repo.mirrorlist.replace("REGION", region, 1)
         else:
             raise ValueError(f"RHUI repository {repo.name} does not have any url")
 
@@ -167,7 +165,7 @@ class AWSCloudProvider(BaseCloudProvider):
         for repo_name, repo in base.repos.items():
             # TODO: we need more reliable mechanism for detection of RHUI repository, because
             # CDN provides some repositories containing 'rhui-' in the repository name too.
-            if 'rhui-' in repo_name:
+            if "rhui-" in repo_name:
                 yield repo
 
     def _get_metadata_from_cache(self) -> None:
@@ -188,22 +186,22 @@ class AWSCloudProvider(BaseCloudProvider):
 
         :return: String of token or None, when it wasn't possible to get the token
         """
-        log.debug(f'Requesting AWS token from {self.CLOUD_PROVIDER_TOKEN_URL}')
+        log.debug(f"Requesting AWS token from {self.CLOUD_PROVIDER_TOKEN_URL}")
 
         headers = {
-            'X-aws-ec2-metadata-token-ttl-seconds': str(self.CLOUD_PROVIDER_TOKEN_TTL),
-            **self.HTTP_HEADERS
+            "X-aws-ec2-metadata-token-ttl-seconds": str(self.CLOUD_PROVIDER_TOKEN_TTL),
+            **self.HTTP_HEADERS,
         }
 
-        http_req = requests.Request(method='PUT', url=self.CLOUD_PROVIDER_TOKEN_URL, headers=headers)
+        http_req = requests.Request(method="PUT", url=self.CLOUD_PROVIDER_TOKEN_URL, headers=headers)
         prepared_http_req = self._session.prepare_request(http_req)
-        if 'SUBMAN_DEBUG_PRINT_REQUEST' in os.environ:
+        if "SUBMAN_DEBUG_PRINT_REQUEST" in os.environ:
             self._debug_print_http_request(prepared_http_req)
 
         try:
             response = self._session.send(prepared_http_req, timeout=self.TIMEOUT)
         except requests.ConnectionError as err:
-            log.error(f'Unable to receive token from AWS: {err}')
+            log.error(f"Unable to receive token from AWS: {err}")
         else:
             if response.status_code == 200:
                 self._token = response.text
@@ -212,7 +210,7 @@ class AWSCloudProvider(BaseCloudProvider):
                 self._write_token_to_cache_file()
                 return response.text
             else:
-                log.error(f'Unable to receive token from AWS; status code: {response.status_code}')
+                log.error(f"Unable to receive token from AWS; status code: {response.status_code}")
         return None
 
     def _token_exists(self) -> bool:
@@ -245,11 +243,11 @@ class AWSCloudProvider(BaseCloudProvider):
         Try to get metadata from server using IMDSv1
         :return: String with metadata or None
         """
-        log.debug(f'Trying to get AWS metadata from {self.CLOUD_PROVIDER_METADATA_URL} using IMDSv1')
+        log.debug(f"Trying to get AWS metadata from {self.CLOUD_PROVIDER_METADATA_URL} using IMDSv1")
 
         self._cached_metadata = self._get_data_from_server(
-            data_type='metadata',
-            url=self.CLOUD_PROVIDER_METADATA_URL
+            data_type="metadata",
+            url=self.CLOUD_PROVIDER_METADATA_URL,
         )
         if self._cached_metadata is not None:
             self._cached_metadata_ctime = time.time()
@@ -260,21 +258,21 @@ class AWSCloudProvider(BaseCloudProvider):
         Try to get metadata from server using IMDSv2
         :return: String with metadata or None
         """
-        log.debug(f'Trying to get AWS metadata from {self.CLOUD_PROVIDER_METADATA_URL} using IMDSv2')
+        log.debug(f"Trying to get AWS metadata from {self.CLOUD_PROVIDER_METADATA_URL} using IMDSv2")
 
         token = self._get_token()
         if token is None:
             return None
 
         headers = {
-            'X-aws-ec2-metadata-token': token,
-            **self.HTTP_HEADERS
+            "X-aws-ec2-metadata-token": token,
+            **self.HTTP_HEADERS,
         }
 
         self._cached_metadata = self._get_data_from_server(
-            data_type='metadata',
+            data_type="metadata",
             url=self.CLOUD_PROVIDER_METADATA_URL,
-            headers=headers
+            headers=headers,
         )
 
         if self._cached_metadata is not None:
@@ -315,33 +313,25 @@ class AWSCloudProvider(BaseCloudProvider):
         Try to get signature using IMDSv1
         :return: String of signature or None, when it wasn't possible to get signature from server
         """
-        log.debug(f'Trying to get AWS signature from {self.CLOUD_PROVIDER_SIGNATURE_URL} using IMDSv1')
+        log.debug(f"Trying to get AWS signature from {self.CLOUD_PROVIDER_SIGNATURE_URL} using IMDSv1")
 
-        return self._get_data_from_server(
-            data_type='signature',
-            url=self.CLOUD_PROVIDER_SIGNATURE_URL
-        )
+        return self._get_data_from_server(data_type="signature", url=self.CLOUD_PROVIDER_SIGNATURE_URL)
 
     def _get_signature_from_server_imds_v2(self) -> Union[str, None]:
         """
         Try to get signature using IMDSv2
         :return: String of signature or None, when it wasn't possible to get signature from server
         """
-        log.debug(f'Trying to get AWS signature from {self.CLOUD_PROVIDER_SIGNATURE_URL} using IMDSv2')
+        log.debug(f"Trying to get AWS signature from {self.CLOUD_PROVIDER_SIGNATURE_URL} using IMDSv2")
 
         token = self._get_token()
         if token is None:
             return None
 
-        headers = {
-            'X-aws-ec2-metadata-token': token,
-            **self.HTTP_HEADERS
-        }
+        headers = {"X-aws-ec2-metadata-token": token, **self.HTTP_HEADERS}
 
         return self._get_data_from_server(
-            data_type='signature',
-            url=self.CLOUD_PROVIDER_SIGNATURE_URL,
-            headers=headers
+            data_type="signature", url=self.CLOUD_PROVIDER_SIGNATURE_URL, headers=headers
         )
 
     def _get_signature_from_server(self) -> Union[str, None]:
@@ -365,7 +355,7 @@ class AWSCloudProvider(BaseCloudProvider):
             signature = self._get_signature_from_server_imds_v2()
 
         if signature is not None:
-            signature = f'-----BEGIN PKCS7-----\n{signature}\n-----END PKCS7-----'
+            signature = f"-----BEGIN PKCS7-----\n{signature}\n-----END PKCS7-----"
 
         # Save signature in in-memory cache
         if signature is not None:
@@ -405,7 +395,7 @@ def _smoke_tests():
 
     handler = logging.StreamHandler(sys.stdout)
     handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     handler.setFormatter(formatter)
     root.addHandler(handler)
 
@@ -414,21 +404,21 @@ def _smoke_tests():
     aws_cloud_provider = AWSCloudProvider(facts)
     result = aws_cloud_provider.is_running_on_cloud()
     probability = aws_cloud_provider.is_likely_running_on_cloud()
-    print(f'>>> debug <<< cloud provider: {result}, probability: {probability}')
+    print(f">>> debug <<< cloud provider: {result}, probability: {probability}")
 
     if result is True:
         metadata = aws_cloud_provider.get_metadata()
-        print(f'>>> debug <<< cloud metadata: {metadata}')
+        print(f">>> debug <<< cloud metadata: {metadata}")
         signature = aws_cloud_provider.get_signature()
-        print(f'>>> debug <<< metadata signature: {signature}')
+        print(f">>> debug <<< metadata signature: {signature}")
 
         metadata_v2 = aws_cloud_provider._get_metadata_from_server_imds_v2()
-        print(f'>>> debug <<< cloud metadata: {metadata_v2}')
+        print(f">>> debug <<< cloud metadata: {metadata_v2}")
         signature_v2 = aws_cloud_provider._get_signature_from_server_imds_v2()
-        print(f'>>> debug <<< cloud signature: {signature_v2}')
+        print(f">>> debug <<< cloud signature: {signature_v2}")
 
 
 # Some temporary smoke testing code. You can test this module using:
 # sudo PYTHONPATH=./src python3 -m cloud_what.providers.aws
-if __name__ == '__main__':
+if __name__ == "__main__":
     _smoke_tests()

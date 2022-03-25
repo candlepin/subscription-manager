@@ -20,15 +20,13 @@ from subscription_manager.cli import InvalidCLIOptionError
 
 
 class RCTCertCommandTests(unittest.TestCase):
-
     def test_file_arg_required(self):
         command = RCTCertCommand()
         try:
             command.main([])
             self.fail("Expected InvalidCLIOptionError since no file arg.")
         except InvalidCLIOptionError as e:
-            self.assertEqual("You must specify a certificate file.",
-                             str(e))
+            self.assertEqual("You must specify a certificate file.", str(e))
 
     def test_invalid_file_arg(self):
         command = RCTCertCommand()
@@ -47,9 +45,7 @@ class RCTCertCommandTests(unittest.TestCase):
 
         command._do_command = lambda: command._create_cert()
         try:
-            command.main(['dummy-file.pem'])
+            command.main(["dummy-file.pem"])
             self.fail("Expected InvalidCLIOptionError since bad x509 file.")
         except InvalidCLIOptionError as e:
-            self.assertEqual(
-                "Unable to read certificate file 'dummy-file.pem': error!",
-                str(e))
+            self.assertEqual("Unable to read certificate file 'dummy-file.pem': error!", str(e))

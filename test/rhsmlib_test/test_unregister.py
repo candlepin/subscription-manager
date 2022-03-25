@@ -35,7 +35,7 @@ class TestUnregisterService(InjectionMockingTest):
         super(TestUnregisterService, self).setUp()
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
-        self.mock_identity.uuid = mock.Mock(return_value='7a002098-c167-41f2-91b3-d0c71e808142')
+        self.mock_identity.uuid = mock.Mock(return_value="7a002098-c167-41f2-91b3-d0c71e808142")
         self.mock_provider = mock.Mock(spec=CPProvider, name="CPProvider")
         self.mock_provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
 
@@ -47,7 +47,7 @@ class TestUnregisterService(InjectionMockingTest):
         else:
             return None
 
-    @mock.patch('subscription_manager.managerlib.clean_all_data')
+    @mock.patch("subscription_manager.managerlib.clean_all_data")
     def test_unregister(self, clean_all_data):
         """
         Testing normal unregistration process
@@ -63,7 +63,7 @@ class TestUnregisterDBusObject(DBusObjectTest, InjectionMockingTest):
         self.proxy = self.proxy_for(UnregisterDBusObject.default_dbus_path)
         self.interface = dbus.Interface(self.proxy, constants.UNREGISTER_INTERFACE)
 
-        unregister_patcher = mock.patch('rhsmlib.dbus.objects.unregister.UnregisterService')
+        unregister_patcher = mock.patch("rhsmlib.dbus.objects.unregister.UnregisterService")
         self.unregister = unregister_patcher.start().return_value
         self.addCleanup(unregister_patcher.stop)
 
@@ -86,6 +86,6 @@ class TestUnregisterDBusObject(DBusObjectTest, InjectionMockingTest):
 
     def test_must_be_registered_unregister(self):
         self.mock_identity.is_valid.return_value = False
-        unregister_method_args = [{}, '']
-        with self.assertRaisesRegex(dbus.DBusException, r'requires the consumer to be registered.*'):
+        unregister_method_args = [{}, ""]
+        with self.assertRaisesRegex(dbus.DBusException, r"requires the consumer to be registered.*"):
             self.dbus_request(None, self.interface.Unregister, unregister_method_args)

@@ -121,7 +121,7 @@ facts_buf = """
 
 
 def stub_get_facts():
-    return {'newstuff': True}
+    return {"newstuff": True}
 
 
 class TestFacts(fixture.SubManFixture):
@@ -148,12 +148,11 @@ class TestFacts(fixture.SubManFixture):
         # FIXME: verify the date is correct
         self.f.get_last_update()
 
-    @patch('subscription_manager.facts.Facts.get_facts',
-           return_value={'newstuff': 'a new_hope'})
+    @patch("subscription_manager.facts.Facts.get_facts", return_value={"newstuff": "a new_hope"})
     def test_facts_has_changed(self, mock_collect):
         self.assertTrue(self.f.has_changed())
 
-    @patch('subscription_manager.facts.Facts.get_facts')
+    @patch("subscription_manager.facts.Facts.get_facts")
     def test_facts_has_changed_no_change(self, mock_collect):
         test_facts = json.loads(facts_buf)
         mock_collect.return_value = test_facts
@@ -161,20 +160,19 @@ class TestFacts(fixture.SubManFixture):
         self.assertEqual(test_facts, self.f.facts)
         self.assertFalse(changed)
 
-    @patch('subscription_manager.facts.Facts.get_facts')
+    @patch("subscription_manager.facts.Facts.get_facts")
     def test_facts_has_changed_with_change(self, mock_collect):
         test_facts = json.loads(facts_buf)
         # change socket fact count from what is in the cache
-        test_facts['cpu.cpu_socket(s)'] = '16'
+        test_facts["cpu.cpu_socket(s)"] = "16"
         mock_collect.return_value = test_facts
 
         changed = self.f.has_changed()
-        self.assertEqual(self.f.facts['cpu.cpu_socket(s)'], '16')
+        self.assertEqual(self.f.facts["cpu.cpu_socket(s)"], "16")
         self.assertTrue(changed)
 
-    @patch('subscription_manager.facts.Facts._read_cache',
-           return_value=None)
-    @patch('subscription_manager.facts.Facts.get_facts')
+    @patch("subscription_manager.facts.Facts._read_cache", return_value=None)
+    @patch("subscription_manager.facts.Facts.get_facts")
     def test_facts_has_changed_cache_is_none(self, mock_collect, mock_read_cache):
         test_facts = json.loads(facts_buf)
         mock_collect.return_value = test_facts
@@ -183,9 +181,8 @@ class TestFacts(fixture.SubManFixture):
         self.assertEqual(test_facts, self.f.facts)
         self.assertTrue(changed)
 
-    @patch('subscription_manager.facts.Facts._cache_exists',
-           return_value=False)
-    @patch('subscription_manager.facts.Facts.get_facts')
+    @patch("subscription_manager.facts.Facts._cache_exists", return_value=False)
+    @patch("subscription_manager.facts.Facts.get_facts")
     def test_facts_has_changed_cache_exists_false(self, mock_collect, mock_read_cache):
         test_facts = json.loads(facts_buf)
         mock_collect.return_value = test_facts
@@ -193,12 +190,11 @@ class TestFacts(fixture.SubManFixture):
         changed = self.f.has_changed()
         self.assertTrue(changed)
 
-    @patch('subscription_manager.facts.Facts.get_facts')
+    @patch("subscription_manager.facts.Facts.get_facts")
     def test_get_facts(self, mock_collect):
-        mock_collect.return_value = \
-            {'net.interface.lo.ipv4_address': '127.0.0.1'}
+        mock_collect.return_value = {"net.interface.lo.ipv4_address": "127.0.0.1"}
 
         f = self.f.get_facts()
 
         self.assertTrue(isinstance(f, dict))
-        self.assertEqual(f['net.interface.lo.ipv4_address'], '127.0.0.1')
+        self.assertEqual(f["net.interface.lo.ipv4_address"], "127.0.0.1")

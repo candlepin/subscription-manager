@@ -19,16 +19,15 @@ from rhsm.bitstream import GhettoBitStream
 from rhsm.huffman import HuffmanNode
 from rhsm.pathtree import PathTree, PATH_END
 
-DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                    'entitlement_data.bin')
+DATA = os.path.join(os.path.dirname(os.path.abspath(__file__)), "entitlement_data.bin")
 
 
 class TestPathTree(unittest.TestCase):
     def test_get_leaf_from_dict(self):
-        codes = {'1010': 'abc'}
-        bitstream = '10101111110000'
+        codes = {"1010": "abc"}
+        bitstream = "10101111110000"
         ret = PathTree._get_leaf_from_dict(codes, bitstream)
-        self.assertEqual(ret, 'abc')
+        self.assertEqual(ret, "abc")
 
     # see v3 entitlement cert format docs for explanation of how node count
     # is represented, which will explain the following tests
@@ -54,18 +53,18 @@ class TestPathTree(unittest.TestCase):
         self.assertEqual(ret, 273)
 
     def test_unpack_data(self):
-        data = open(DATA, 'rb').read()
+        data = open(DATA, "rb").read()
         nodes, bits = PathTree._unpack_data(data)
         self.assertEqual(len(nodes), 6)
         # first node always gets weight of 1
         self.assertEqual(nodes[0].weight, 1)
-        self.assertEqual(nodes[0].value, 'never')
+        self.assertEqual(nodes[0].value, "never")
         self.assertEqual(nodes[5].weight, 6)
-        self.assertEqual(nodes[5].value, '')
+        self.assertEqual(nodes[5].value, "")
         self.assertEqual(len(bits), 6)
 
     def test_generate_path_leaves(self):
-        data = open(DATA, 'rb').read()
+        data = open(DATA, "rb").read()
         nodes, bits = PathTree._unpack_data(data)
         ret = PathTree._generate_path_leaves(GhettoBitStream(bits))
 
@@ -74,97 +73,107 @@ class TestPathTree(unittest.TestCase):
             self.assertTrue(isinstance(node, HuffmanNode))
 
     def test_generate_path_tree(self):
-        data = open(DATA, 'rb').read()
+        data = open(DATA, "rb").read()
         pt = PathTree(data).path_tree
-        self.assertTrue('foo' in pt)
+        self.assertTrue("foo" in pt)
         self.assertEqual(len(list(pt.keys())), 1)
 
     def test_match_path(self):
-        data = open(DATA, 'rb').read()
+        data = open(DATA, "rb").read()
         pt = PathTree(data)
-        self.assertTrue(pt.match_path('/foo/path'))
-        self.assertTrue(pt.match_path('/foo/path/'))
+        self.assertTrue(pt.match_path("/foo/path"))
+        self.assertTrue(pt.match_path("/foo/path/"))
         # the '2' should match against "$releasever"
-        self.assertTrue(pt.match_path('/foo/path/always/2'))
-        self.assertTrue(pt.match_path('/foo/path/bar'))
-        self.assertTrue(pt.match_path('/foo/path/bar/a/b/c'))
-        self.assertFalse(pt.match_path('/foo'))
-        self.assertFalse(pt.match_path('/bar'))
+        self.assertTrue(pt.match_path("/foo/path/always/2"))
+        self.assertTrue(pt.match_path("/foo/path/bar"))
+        self.assertTrue(pt.match_path("/foo/path/bar/a/b/c"))
+        self.assertFalse(pt.match_path("/foo"))
+        self.assertFalse(pt.match_path("/bar"))
 
     def test_build_path_list(self):
         f = os.path.join(os.path.dirname(os.path.abspath(__file__)), "satellite_generated_data.bin")
-        data = open(f, 'rb').read()
+        data = open(f, "rb").read()
         pt = PathTree(data)
         paths = []
         pt.build_path_list(paths)
         expected = [
-            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/os',
-            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/optional/os',
-            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/rh-common/os',
-            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/rhn-tools/os',
-            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/extras/os',
-            '/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/sat-tools/6.3/os'
+            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/os",
+            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/optional/os",
+            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/rh-common/os",
+            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/rhn-tools/os",
+            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/extras/os",
+            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/sat-tools/6.3/os",
         ]
         # Assert the lists contain the same items regardless of order
         self.assertCountEqual(expected, paths)
 
     def test_match_path_listing(self):
-        tree = {'foo': [{'path': [{'bar': [{PATH_END: None}]}]}]}
-        data = open(DATA, 'rb').read()
+        tree = {"foo": [{"path": [{"bar": [{PATH_END: None}]}]}]}
+        data = open(DATA, "rb").read()
         pt = PathTree(data)
         pt.path_tree = tree
-        self.assertTrue(pt.match_path('/foo/path/bar/listing'))
-        self.assertTrue(pt.match_path('/foo/path/listing'))
-        self.assertTrue(pt.match_path('/foo/listing'))
-        self.assertFalse(pt.match_path('/foo/path/alfred'))
-        self.assertFalse(pt.match_path('/foo/path/listing/for/alfred'))
+        self.assertTrue(pt.match_path("/foo/path/bar/listing"))
+        self.assertTrue(pt.match_path("/foo/path/listing"))
+        self.assertTrue(pt.match_path("/foo/listing"))
+        self.assertFalse(pt.match_path("/foo/path/alfred"))
+        self.assertFalse(pt.match_path("/foo/path/listing/for/alfred"))
 
     def test_match_variable(self):
-        tree = {'foo': [{'$releasever': [{'bar': [{PATH_END: None}]}]}]}
-        data = open(DATA, 'rb').read()
+        tree = {"foo": [{"$releasever": [{"bar": [{PATH_END: None}]}]}]}
+        data = open(DATA, "rb").read()
         pt = PathTree(data)
         # just swap out the pre-cooked data with out with
         pt.path_tree = tree
-        self.assertTrue(pt.match_path('/foo/path/bar'))
-        self.assertFalse(pt.match_path('/foo/path/abc'))
+        self.assertTrue(pt.match_path("/foo/path/bar"))
+        self.assertFalse(pt.match_path("/foo/path/abc"))
 
     def test_match_first_variable(self):
-        tree = {'$anything': [{'$releasever': [{'bar': [{PATH_END: None}]}]}]}
-        data = open(DATA, 'rb').read()
+        tree = {"$anything": [{"$releasever": [{"bar": [{PATH_END: None}]}]}]}
+        data = open(DATA, "rb").read()
         pt = PathTree(data)
         # just swap out the pre-cooked data with out with
         pt.path_tree = tree
-        self.assertTrue(pt.match_path('/foo/path/bar'))
-        self.assertFalse(pt.match_path('/foo/path/abc'))
+        self.assertTrue(pt.match_path("/foo/path/bar"))
+        self.assertFalse(pt.match_path("/foo/path/abc"))
 
     def test_match_last_variable(self):
-        tree = {'foo': [{'$releasever': [{'$bar': [{PATH_END: None}]}]}]}
-        data = open(DATA, 'rb').read()
+        tree = {"foo": [{"$releasever": [{"$bar": [{PATH_END: None}]}]}]}
+        data = open(DATA, "rb").read()
         pt = PathTree(data)
         # just swap out the pre-cooked data with out with
         pt.path_tree = tree
-        self.assertTrue(pt.match_path('/foo/path/bar'))
-        self.assertTrue(pt.match_path('/foo/path/abc'))
-        self.assertFalse(pt.match_path('/boo/path/abc'))
+        self.assertTrue(pt.match_path("/foo/path/bar"))
+        self.assertTrue(pt.match_path("/foo/path/abc"))
+        self.assertFalse(pt.match_path("/boo/path/abc"))
 
     def test_match_different_variables(self):
-        tree1 = {'foo': [{'$releasever': [{'bar': [{PATH_END: None}]}],
-                         'jarjar': [{'binks': [{PATH_END: None}]}]}]}
-        tree2 = {'foo': [{'jarjar': [{'binks': [{PATH_END: None}]}],
-                         '$releasever': [{'bar': [{PATH_END: None}]}]}]}
-        tree3 = {'foo': [{'$releasever': [{'bar': [{PATH_END: None}]}]},
-                         {'jarjar': [{'binks': [{PATH_END: None}]}]}]}
-        tree4 = {'foo': [{'jarjar': [{'binks': [{PATH_END: None}]}]},
-                         {'$releasever': [{'bar': [{PATH_END: None}]}]}]}
+        tree1 = {
+            "foo": [{"$releasever": [{"bar": [{PATH_END: None}]}], "jarjar": [{"binks": [{PATH_END: None}]}]}]
+        }
+        tree2 = {
+            "foo": [{"jarjar": [{"binks": [{PATH_END: None}]}], "$releasever": [{"bar": [{PATH_END: None}]}]}]
+        }
+        tree3 = {
+            "foo": [
+                {"$releasever": [{"bar": [{PATH_END: None}]}]},
+                {"jarjar": [{"binks": [{PATH_END: None}]}]},
+            ]
+        }
+        tree4 = {
+            "foo": [
+                {"jarjar": [{"binks": [{PATH_END: None}]}]},
+                {"$releasever": [{"bar": [{PATH_END: None}]}]},
+            ]
+        }
         trees = [tree1, tree2, tree3, tree4]
-        data = open(DATA, 'rb').read()
+        data = open(DATA, "rb").read()
         pt = PathTree(data)
         # just swap out the pre-cooked data with out with
         for tree in trees:
             pt.path_tree = tree
-            self.assertTrue(pt.match_path('/foo/path/bar'))
-            self.assertFalse(pt.match_path('/foo/path/abc'))
-            self.assertFalse(pt.match_path('/foo/path/abc'))
-            self.assertTrue(pt.match_path('/foo/jarjar/binks'))
-            self.assertTrue(pt.match_path('/foo/jarjar/bar'))
-            self.assertFalse(pt.match_path('/foo/jarjar/notbinks'))
+            self.assertTrue(pt.match_path("/foo/path/bar"))
+            self.assertFalse(pt.match_path("/foo/path/abc"))
+            self.assertFalse(pt.match_path("/foo/path/abc"))
+            self.assertTrue(pt.match_path("/foo/jarjar/binks"))
+            self.assertTrue(pt.match_path("/foo/jarjar/bar"))
+            self.assertFalse(pt.match_path("/foo/jarjar/notbinks"))

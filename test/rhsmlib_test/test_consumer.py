@@ -65,7 +65,7 @@ class TestConsumerDBusObject(DBusObjectTest, InjectionMockingTest):
         self.proxy = self.proxy_for(ConsumerDBusObject.default_dbus_path)
         self.interface = dbus.Interface(self.proxy, constants.CONSUMER_INTERFACE)
 
-        consumer_patcher = mock.patch('rhsmlib.dbus.objects.consumer.Consumer', autospec=True)
+        consumer_patcher = mock.patch("rhsmlib.dbus.objects.consumer.Consumer", autospec=True)
         self.mock_consumer = consumer_patcher.start().return_value
         self.addCleanup(consumer_patcher.stop)
 
@@ -76,7 +76,7 @@ class TestConsumerDBusObject(DBusObjectTest, InjectionMockingTest):
 
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
-            if not hasattr(self, 'mock_identity'):
+            if not hasattr(self, "mock_identity"):
                 self._create_mock_identity()
             return self.mock_identity
         else:
@@ -97,5 +97,5 @@ class TestConsumerDBusObject(DBusObjectTest, InjectionMockingTest):
 
         self.mock_consumer.get_consumer_uuid.return_value = expected_result
 
-        dbus_method_args = ['']
+        dbus_method_args = [""]
         self.dbus_request(assertions, self.interface.GetUuid, dbus_method_args)

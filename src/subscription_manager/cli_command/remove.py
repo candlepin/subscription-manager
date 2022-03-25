@@ -31,19 +31,29 @@ log = logging.getLogger(__name__)
 
 
 class RemoveCommand(CliCommand):
-
     def __init__(self):
-        super(RemoveCommand, self).__init__(
-            self._command_name(),
-            self._short_description(),
-            self._primary())
+        super(RemoveCommand, self).__init__(self._command_name(), self._short_description(), self._primary())
 
-        self.parser.add_argument("--serial", action='append', dest="serials", metavar="SERIAL",
-                                 help=_("certificate serial number to remove (can be specified more than once)"))
-        self.parser.add_argument("--pool", action='append', dest="pool_ids", metavar="POOL_ID",
-                                 help=_("the ID of the pool to remove (can be specified more than once)"))
-        self.parser.add_argument("--all", dest="all", action="store_true",
-                                 help=_("remove all subscriptions from this system"))
+        self.parser.add_argument(
+            "--serial",
+            action="append",
+            dest="serials",
+            metavar="SERIAL",
+            help=_("certificate serial number to remove (can be specified more than once)"),
+        )
+        self.parser.add_argument(
+            "--pool",
+            action="append",
+            dest="pool_ids",
+            metavar="POOL_ID",
+            help=_("the ID of the pool to remove (can be specified more than once)"),
+        )
+        self.parser.add_argument(
+            "--all",
+            dest="all",
+            action="store_true",
+            help=_("remove all subscriptions from this system"),
+        )
 
     def _short_description(self):
         return _("Remove all or specific subscriptions from this system")
@@ -65,12 +75,18 @@ class RemoveCommand(CliCommand):
                 system_exit(os.EX_USAGE)
         elif self.options.pool_ids:
             if not self.cp.has_capability("remove_by_pool_id"):
-                system_exit(os.EX_UNAVAILABLE,
-                            _("Error: The registered entitlement server does not support remove --pool."
-                              "\nInstead, use the remove --serial option."))
+                system_exit(
+                    os.EX_UNAVAILABLE,
+                    _(
+                        "Error: The registered entitlement server does not support remove --pool."
+                        "\nInstead, use the remove --serial option."
+                    ),
+                )
         elif not self.options.all and not self.options.pool_ids:
-            system_exit(os.EX_USAGE,
-                        _("Error: This command requires that you specify one of --serial, --pool or --all."))
+            system_exit(
+                os.EX_USAGE,
+                _("Error: This command requires that you specify one of --serial, --pool or --all."),
+            )
 
     def _print_unbind_ids_result(self, success, failure, id_name):
         if success:
@@ -108,15 +124,23 @@ class RemoveCommand(CliCommand):
                     if total is None:
                         print(_("All subscriptions have been removed at the server."))
                     else:
-                        count = total['deletedRecords']
-                        print(ungettext("%s subscription removed at the server.",
-                                        "%s subscriptions removed at the server.",
-                                        count) % count)
+                        count = total["deletedRecords"]
+                        print(
+                            ungettext(
+                                "%s subscription removed at the server.",
+                                "%s subscriptions removed at the server.",
+                                count,
+                            )
+                            % count
+                        )
                 else:
                     # Try to remove subscriptions defined by pool IDs first (remove --pool=...)
                     if self.options.pool_ids:
-                        removed_pools, unremoved_pools, removed_serials = ent_service.remove_entilements_by_pool_ids(
-                            self.options.pool_ids)
+                        (
+                            removed_pools,
+                            unremoved_pools,
+                            removed_serials,
+                        ) = ent_service.remove_entilements_by_pool_ids(self.options.pool_ids)
                         if not removed_pools:
                             return_code = 1
                         self._print_unbind_ids_result(removed_pools, unremoved_pools, "pools")
@@ -129,7 +153,8 @@ class RemoveCommand(CliCommand):
                         # Don't remove serials already removed by a pool
                         serials_to_remove = [serial for serial in serials if serial not in removed_serials]
                         _removed_serials, unremoved_serials = ent_service.remove_entitlements_by_serials(
-                            serials_to_remove)
+                            serials_to_remove
+                        )
                         removed_serials.extend(_removed_serials)
                         if not _removed_serials:
                             return_code = 1
@@ -143,7 +168,9 @@ class RemoveCommand(CliCommand):
                 mapped_message: str = ExceptionMapper().get_message(err)
                 system_exit(os.EX_SOFTWARE, mapped_message)
             except Exception as e:
-                handle_exception(_("Unable to perform remove due to the following exception: {e}").format(e=e), e)
+                handle_exception(
+                    _("Unable to perform remove due to the following exception: {e}").format(e=e), e
+                )
         else:
             # We never got registered, just remove the cert
             try:
@@ -159,16 +186,21 @@ class RemoveCommand(CliCommand):
                         pool_ids = self.options.pool_ids or []
                         count = 0
                         for ent in self.entitlement_dir.list():
-                            ent_pool_id = str(getattr(ent.pool, 'id', None) or "")
+                            ent_pool_id = str(getattr(ent.pool, "id", None) or "")
                             if str(ent.serial) in serials or ent_pool_id in pool_ids:
                                 ent.delete()
                                 print(
-                                    _("Subscription with serial number {serial} removed from this system").format(serial=str(ent.serial)))
+                                    _(
+                                        "Subscription with serial number {serial} removed from this system"
+                                    ).format(serial=str(ent.serial))
+                                )
                                 count = count + 1
                         if count == 0:
                             return_code = 1
             except Exception as e:
-                handle_exception(_("Unable to perform remove due to the following exception: {e}").format(e=e), e)
+                handle_exception(
+                    _("Unable to perform remove due to the following exception: {e}").format(e=e), e
+                )
 
         # it is okay to call this no matter what happens above,
         # it's just a notification to perform a check

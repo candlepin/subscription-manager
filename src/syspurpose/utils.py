@@ -37,7 +37,7 @@ def create_dir(path):
             # If the directory exists no changes necessary
             return False
         if e.errno == errno.EACCES:
-            log.error('Cannot create directory {}'.format(path))
+            log.error("Cannot create directory {}".format(path))
     return True
 
 
@@ -49,7 +49,7 @@ def create_file(path, contents):
     :return: True if the file was newly created, false otherwise
     """
     try:
-        with io.open(path, 'w', encoding='utf-8') as f:
+        with io.open(path, "w", encoding="utf-8") as f:
             write_to_file_utf8(f, contents)
             f.flush()
 

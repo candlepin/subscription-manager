@@ -133,8 +133,8 @@ class BaseCloudProvider(object):
 
         # HTTP Session
         self._session = requests.Session()
-        if 'SUBMAN_DEBUG_PRINT_RESPONSE' in os.environ:
-            self._session.hooks['response'].append(self._cb_debug_print_http_response)
+        if "SUBMAN_DEBUG_PRINT_RESPONSE" in os.environ:
+            self._session.hooks["response"].append(self._cb_debug_print_http_response)
 
         # In-memory cache of token. The token is simple string
         self._token: Union[str, None] = None
@@ -159,7 +159,7 @@ class BaseCloudProvider(object):
         Is current system virtual machine?
         :return: Return True, when it is virtual machine; otherwise return False
         """
-        return 'virt.is_guest' in self.hw_info and self.hw_info['virt.is_guest'] is True
+        return "virt.is_guest" in self.hw_info and self.hw_info["virt.is_guest"] is True
 
     def is_running_on_cloud(self) -> bool:
         """
@@ -182,29 +182,29 @@ class BaseCloudProvider(object):
         :return: None
         """
         if self._token is None or self._token_ctime is None or self.TOKEN_CACHE_FILE is None:
-            log.debug(f'Unable to write {self.CLOUD_PROVIDER_ID} token to cache file due to missing data')
+            log.debug(f"Unable to write {self.CLOUD_PROVIDER_ID} token to cache file due to missing data")
             return None
 
         token_cache_content = {
             "ctime": str(self._token_ctime),
             "ttl": str(self._token_ttl),
-            "token": self._token
+            "token": self._token,
         }
 
         token_cache_dir = os.path.dirname(self.TOKEN_CACHE_FILE)
         try:
             os.makedirs(token_cache_dir, exist_ok=True)
         except OSError as err_msg:
-            log.debug(f'Unable to create cache directory {token_cache_dir}: {err_msg}')
+            log.debug(f"Unable to create cache directory {token_cache_dir}: {err_msg}")
             return
 
-        log.debug(f'Writing {self.CLOUD_PROVIDER_ID} token to file {self.TOKEN_CACHE_FILE}')
+        log.debug(f"Writing {self.CLOUD_PROVIDER_ID} token to file {self.TOKEN_CACHE_FILE}")
 
         try:
             with open(self.TOKEN_CACHE_FILE, "w") as token_cache_file:
                 json.dump(token_cache_content, token_cache_file)
         except IOError as err_msg:
-            log.error(f'Unable to write token to cache file: {self.TOKEN_CACHE_FILE}: {err_msg}')
+            log.error(f"Unable to write token to cache file: {self.TOKEN_CACHE_FILE}: {err_msg}")
         else:
             # Only owner (root) should be able to read the token file
             os.chmod(self.TOKEN_CACHE_FILE, 0o600)
@@ -235,7 +235,7 @@ class BaseCloudProvider(object):
         return self._is_in_memory_cache_valid(
             self._token,
             self._token_ctime,
-            self.CLOUD_PROVIDER_TOKEN_TTL
+            self.CLOUD_PROVIDER_TOKEN_TTL,
         )
 
     def _get_token_from_cache_file(self) -> Union[str, None]:
@@ -251,54 +251,60 @@ class BaseCloudProvider(object):
         The cache file can be read only by owner.
         :return: String with token or None, when it possible to load token from cache file
         """
-        log.debug(f'Reading cache file with {self.CLOUD_PROVIDER_ID} token: {self.TOKEN_CACHE_FILE}')
+        log.debug(f"Reading cache file with {self.CLOUD_PROVIDER_ID} token: {self.TOKEN_CACHE_FILE}")
 
         if not os.path.exists(self.TOKEN_CACHE_FILE):
-            log.debug(f'Cache file: {self.TOKEN_CACHE_FILE} with {self.CLOUD_PROVIDER_ID} token does not exist')
+            log.debug(
+                f"Cache file: {self.TOKEN_CACHE_FILE} with {self.CLOUD_PROVIDER_ID} token does not exist"
+            )
             return None
 
         with open(self.TOKEN_CACHE_FILE, "r") as token_cache_file:
             try:
                 cache_file_content = token_cache_file.read()
             except OSError as err:
-                log.error(f'Unable to load token cache file: {self.TOKEN_CACHE_FILE}: {err}')
+                log.error(f"Unable to load token cache file: {self.TOKEN_CACHE_FILE}: {err}")
                 return None
         try:
             cache = json.loads(cache_file_content)
         except json.JSONDecodeError as err:
-            log.error(f'Unable to parse token cache file: {self.TOKEN_CACHE_FILE}: {err}')
+            log.error(f"Unable to parse token cache file: {self.TOKEN_CACHE_FILE}: {err}")
             return None
 
-        required_keys = ['ctime', 'token', 'ttl']
+        required_keys = ["ctime", "token", "ttl"]
         for key in required_keys:
             if key not in cache:
-                log.error(f'Required key: {key} is not included in token cache file: {self.TOKEN_CACHE_FILE}')
+                log.error(f"Required key: {key} is not included in token cache file: {self.TOKEN_CACHE_FILE}")
                 return None
 
         try:
-            ctime = float(cache['ctime'])
+            ctime = float(cache["ctime"])
         except ValueError as err:
-            log.error(f'Wrong ctime value in {self.TOKEN_CACHE_FILE}, error: {err}')
+            log.error(f"Wrong ctime value in {self.TOKEN_CACHE_FILE}, error: {err}")
             return None
         else:
             self._token_ctime = ctime
 
         try:
-            ttl = float(cache['ttl'])
+            ttl = float(cache["ttl"])
         except ValueError as err:
             log.warning(
-                f'Wrong TTL value in {self.TOKEN_CACHE_FILE} '
-                f'error: {err} '
-                f'using default value: {self.CLOUD_PROVIDER_TOKEN_TTL}'
+                f"Wrong TTL value in {self.TOKEN_CACHE_FILE} "
+                f"error: {err} "
+                f"using default value: {self.CLOUD_PROVIDER_TOKEN_TTL}"
             )
             ttl = self.CLOUD_PROVIDER_TOKEN_TTL
         self._token_ttl = ttl
 
         if time.time() < ctime + ttl:
-            log.debug(f'Cache file: {self.TOKEN_CACHE_FILE} with {self.CLOUD_PROVIDER_ID} token read successfully')
-            return cache['token']
+            log.debug(
+                f"Cache file: {self.TOKEN_CACHE_FILE} with {self.CLOUD_PROVIDER_ID} token read successfully"
+            )
+            return cache["token"]
         else:
-            log.debug(f'Cache file with {self.CLOUD_PROVIDER_ID} token file: {self.TOKEN_CACHE_FILE} timed out')
+            log.debug(
+                f"Cache file with {self.CLOUD_PROVIDER_ID} token file: {self.TOKEN_CACHE_FILE} timed out"
+            )
             return None
 
     def _get_metadata_from_in_memory_cache(self) -> Union[str, None]:
@@ -309,7 +315,7 @@ class BaseCloudProvider(object):
         valid = self._is_in_memory_cache_valid(
             self._cached_metadata,
             self._cached_metadata_ctime,
-            self.IN_MEMORY_CACHE_TTL
+            self.IN_MEMORY_CACHE_TTL,
         )
 
         if valid is True:
@@ -331,16 +337,16 @@ class BaseCloudProvider(object):
         :param request: prepared HTTP request
         :return: None
         """
-        yellow_col = '\033[93m'
-        blue_col = '\033[94m'
-        red_col = '\033[91m'
-        end_col = '\033[0m'
+        yellow_col = "\033[93m"
+        blue_col = "\033[94m"
+        red_col = "\033[91m"
+        end_col = "\033[0m"
         msg = blue_col + "Making request: " + end_col
-        msg += red_col + request.method + ' ' + request.url + end_col
-        if 'SUBMAN_DEBUG_PRINT_REQUEST_HEADER' in os.environ:
-            headers = ', '.join('{}: {}'.format(k, v) for k, v in request.headers.items())
+        msg += red_col + request.method + " " + request.url + end_col
+        if "SUBMAN_DEBUG_PRINT_REQUEST_HEADER" in os.environ:
+            headers = ", ".join("{}: {}".format(k, v) for k, v in request.headers.items())
             msg += blue_col + " {{{headers}}}".format(headers=headers) + end_col
-        if 'SUBMAN_DEBUG_PRINT_REQUEST_BODY' in os.environ and request.body is not None:
+        if "SUBMAN_DEBUG_PRINT_REQUEST_BODY" in os.environ and request.body is not None:
             msg += yellow_col + f" {request.body}" + end_col
         print()
         print(msg)
@@ -355,11 +361,15 @@ class BaseCloudProvider(object):
         :param **kwargs: Not used
         :return: Instance of response
         """
-        print('\n{code} {{{headers}}}\n{body}\n'.format(
-            code=response.status_code,
-            headers=', '.join('{key}: {value}'.format(key=k, value=v) for k, v in response.headers.items()),
-            body=response.text,
-        ))
+        print(
+            "\n{code} {{{headers}}}\n{body}\n".format(
+                code=response.status_code,
+                headers=", ".join(
+                    "{key}: {value}".format(key=k, value=v) for k, v in response.headers.items()
+                ),
+                body=response.text,
+            )
+        )
         return response
 
     def _get_data_from_server(self, data_type: str, url: str, headers: dict = None) -> Union[str, None]:
@@ -370,26 +380,26 @@ class BaseCloudProvider(object):
         :param headers: optional headers parameters. When not set, then self.HTTP_HEADERS are used
         :return: String representing body, when status code is 200; Otherwise return None
         """
-        log.debug(f'Trying to get {data_type} from {url}')
+        log.debug(f"Trying to get {data_type} from {url}")
 
         if headers is None:
             headers = self.HTTP_HEADERS
 
-        http_req = requests.Request(method='GET', url=url, headers=headers)
+        http_req = requests.Request(method="GET", url=url, headers=headers)
         prepared_http_req = self._session.prepare_request(http_req)
 
-        if 'SUBMAN_DEBUG_PRINT_REQUEST' in os.environ:
+        if "SUBMAN_DEBUG_PRINT_REQUEST" in os.environ:
             self._debug_print_http_request(prepared_http_req)
 
         try:
             response = self._session.send(prepared_http_req, timeout=self.TIMEOUT)
         except requests.RequestException as err:
-            log.debug(f'Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {err}')
+            log.debug(f"Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {err}")
         else:
             if response.status_code == 200:
                 return response.text
             else:
-                log.debug(f'Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {response.status_code}')
+                log.debug(f"Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {response.status_code}")
 
     def _get_metadata_from_server(self, headers: dict = None) -> Union[str, None]:
         """
@@ -399,7 +409,7 @@ class BaseCloudProvider(object):
         self._cached_metadata = self._get_data_from_server(
             data_type="metadata",
             url=self.CLOUD_PROVIDER_METADATA_URL,
-            headers=headers
+            headers=headers,
         )
         if self._cached_metadata is not None:
             self._cached_metadata_ctime = time.time()
@@ -413,7 +423,7 @@ class BaseCloudProvider(object):
         valid = self._is_in_memory_cache_valid(
             self._cached_signature,
             self._cached_signature_ctime,
-            self.IN_MEMORY_CACHE_TTL
+            self.IN_MEMORY_CACHE_TTL,
         )
 
         if valid is True:
@@ -445,7 +455,7 @@ class BaseCloudProvider(object):
         """
         signature = self._get_signature_from_in_memory_cache()
         if signature is not None:
-            log.debug('Using signature from in-memory cache')
+            log.debug("Using signature from in-memory cache")
             return signature
 
         signature = self._get_signature_from_cache_file()
@@ -461,7 +471,7 @@ class BaseCloudProvider(object):
         """
         metadata = self._get_metadata_from_in_memory_cache()
         if metadata is not None:
-            log.debug('Using metadata from in-memory cache')
+            log.debug("Using metadata from in-memory cache")
             return metadata
 
         metadata = self._get_metadata_from_cache()

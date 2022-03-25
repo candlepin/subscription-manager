@@ -32,7 +32,7 @@ class CloudFactsCollector(collector.FactsCollector):
             arch=arch,
             prefix=prefix,
             testing=testing,
-            collected_hw_info=collected_hw_info
+            collected_hw_info=collected_hw_info,
         )
 
         self.hardware_methods = []
@@ -40,7 +40,7 @@ class CloudFactsCollector(collector.FactsCollector):
         # Try to detect cloud provider using only strong method
         self.cloud_provider = get_cloud_provider(
             facts=self._collected_hw_info,
-            methods=DetectionMethod.STRONG
+            methods=DetectionMethod.STRONG,
         )
 
         if self.cloud_provider is not None:
@@ -48,13 +48,11 @@ class CloudFactsCollector(collector.FactsCollector):
             cloud_provider_dispatcher = {
                 "aws": self.get_aws_facts,
                 "azure": self.get_azure_facts,
-                "gcp": self.get_gcp_facts
+                "gcp": self.get_gcp_facts,
             }
             # Set method according detected cloud provider
             if self.cloud_provider.CLOUD_PROVIDER_ID in cloud_provider_dispatcher:
-                self.hardware_methods = [
-                    cloud_provider_dispatcher[self.cloud_provider.CLOUD_PROVIDER_ID]
-                ]
+                self.hardware_methods = [cloud_provider_dispatcher[self.cloud_provider.CLOUD_PROVIDER_ID]]
 
     def get_aws_facts(self):
         """
@@ -70,32 +68,32 @@ class CloudFactsCollector(collector.FactsCollector):
             values = self.parse_json_content(metadata_str)
 
             # Add these three attributes to system facts
-            if 'instanceId' in values:
-                facts['aws_instance_id'] = values['instanceId']
+            if "instanceId" in values:
+                facts["aws_instance_id"] = values["instanceId"]
 
-            if 'accountId' in values:
-                facts['aws_account_id'] = values['accountId']
+            if "accountId" in values:
+                facts["aws_account_id"] = values["accountId"]
 
             # BTW: There should be only two types of billing codes: bp-63a5400a and bp-6fa54006 in the list,
             # when RHEL is used. When the subscription-manager is used by some other Linux distribution,
             # then there could be different codes or it could be null
-            if 'billingProducts' in values:
-                billing_products = values['billingProducts']
+            if "billingProducts" in values:
+                billing_products = values["billingProducts"]
                 if isinstance(billing_products, list):
-                    facts['aws_billing_products'] = " ".join(billing_products)
+                    facts["aws_billing_products"] = " ".join(billing_products)
                 elif billing_products is None:
-                    facts['aws_billing_products'] = billing_products
+                    facts["aws_billing_products"] = billing_products
                 else:
-                    log.debug('AWS metadata attribute billingProducts has to be list or null')
+                    log.debug("AWS metadata attribute billingProducts has to be list or null")
 
-            if 'marketplaceProductCodes' in values:
-                marketplace_product_codes = values['marketplaceProductCodes']
+            if "marketplaceProductCodes" in values:
+                marketplace_product_codes = values["marketplaceProductCodes"]
                 if isinstance(marketplace_product_codes, list):
-                    facts['aws_marketplace_product_codes'] = " ".join(marketplace_product_codes)
+                    facts["aws_marketplace_product_codes"] = " ".join(marketplace_product_codes)
                 elif marketplace_product_codes is None:
-                    facts['aws_marketplace_product_codes'] = marketplace_product_codes
+                    facts["aws_marketplace_product_codes"] = marketplace_product_codes
                 else:
-                    log.debug('AWS metadata attribute marketplaceProductCodes has to be list or null')
+                    log.debug("AWS metadata attribute marketplaceProductCodes has to be list or null")
 
         return facts
 
@@ -116,13 +114,13 @@ class CloudFactsCollector(collector.FactsCollector):
         facts = {}
         if metadata_str is not None:
             values = self.parse_json_content(metadata_str)
-            if 'compute' in values:
-                if 'vmId' in values['compute']:
-                    facts["azure_instance_id"] = values['compute']['vmId']
-                if 'sku' in values['compute']:
-                    facts['azure_sku'] = values['compute']['sku']
-                if 'offer' in values['compute']:
-                    facts['azure_offer'] = values['compute']['offer']
+            if "compute" in values:
+                if "vmId" in values["compute"]:
+                    facts["azure_instance_id"] = values["compute"]["vmId"]
+                if "sku" in values["compute"]:
+                    facts["azure_sku"] = values["compute"]["sku"]
+                if "offer" in values["compute"]:
+                    facts["azure_offer"] = values["compute"]["offer"]
         return facts
 
     def get_gcp_facts(self):
@@ -139,14 +137,14 @@ class CloudFactsCollector(collector.FactsCollector):
             jose_header, metadata, signature = self.cloud_provider.decode_jwt(encoded_jwt_token)
             if metadata is not None:
                 values = self.parse_json_content(metadata)
-                if 'google' in values and \
-                        'compute_engine' in values['google'] and \
-                        'instance_id' in values['google']['compute_engine']:
-                    facts = {
-                        "gcp_instance_id": values['google']['compute_engine']['instance_id']
-                    }
+                if (
+                    "google" in values
+                    and "compute_engine" in values["google"]
+                    and "instance_id" in values["google"]["compute_engine"]
+                ):
+                    facts = {"gcp_instance_id": values["google"]["compute_engine"]["instance_id"]}
                 else:
-                    log.debug('GCP instance_id not found in JWT token')
+                    log.debug("GCP instance_id not found in JWT token")
         return facts
 
     @staticmethod
@@ -159,4 +157,4 @@ class CloudFactsCollector(collector.FactsCollector):
         try:
             return json.loads(content)
         except ValueError as e:
-            raise ValueError('Failed to parse json data with error: %s', str(e))
+            raise ValueError("Failed to parse json data with error: %s", str(e))

@@ -1,0 +1,10 @@
+# git blame ignore list
+#
+# This file contains git hashes of commits to be ignored by git blame.
+# These commits are considered not important (in means of "they don't
+# change any code logic/abstract syntax tree").
+#
+# - Only large global changes should be added to this list.
+# - Add comment above every commit hash, preferably with timestamp,
+#   author and commit title.
+# - Append new hashes to the bottom; keep the list chronological.

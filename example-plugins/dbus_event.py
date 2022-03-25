@@ -16,6 +16,7 @@ import dbus.service
 import dbus.glib
 
 from subscription_manager.base_plugin import SubManPlugin
+
 requires_api_version = "1.0"
 
 # This connects to the dbus system bus and emits dbus
@@ -35,7 +36,7 @@ requires_api_version = "1.0"
 # FIXME: this dbus stuff is almost surely not complete
 # or correct
 class SubManEventDbus(dbus.service.Object):
-    def __init__(self, conn, object_path='/PluginEvent'):
+    def __init__(self, conn, object_path="/PluginEvent"):
         dbus.service.Object.__init__(self, conn, object_path)
 
     # we probably want to have a proxy object of some sort so we can
@@ -43,7 +44,7 @@ class SubManEventDbus(dbus.service.Object):
     # pass other info as the signal payload.
     # maybe the dbus.service.Object works as a mixin and we can
     # inherit from it and SubManPlugin?
-    @dbus.service.signal('com.redhat.SubscriptionManager.PluginEvent')
+    @dbus.service.signal("com.redhat.SubscriptionManager.PluginEvent")
     def SubManPluginEvent(self, message):
         # The signal is emitted when this method exits
         # You can have code here if you wish, but the
@@ -53,6 +54,7 @@ class SubManEventDbus(dbus.service.Object):
 
 class DbusEventPlugin(SubManPlugin):
     """Plugin to emit dbus signals for each hook"""
+
     name = "all_dbus"
 
     def __init__(self, conf=None):

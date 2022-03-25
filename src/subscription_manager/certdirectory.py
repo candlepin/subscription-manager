@@ -31,7 +31,6 @@ DEFAULT_PRODUCT_CERT_DIR = "/etc/pki/product-default"
 
 
 class Directory(object):
-
     def __init__(self, path):
         self.path = Path.abs(path)
 
@@ -97,7 +96,7 @@ class Directory(object):
 
 class CertificateDirectory(Directory):
 
-    KEY = 'key.pem'
+    KEY = "key.pem"
 
     def __init__(self, path):
         super(CertificateDirectory, self).__init__(path)
@@ -113,7 +112,7 @@ class CertificateDirectory(Directory):
             return self._listing
         listing = []
         for _p, fn in Directory.list(self):
-            if not fn.endswith('.pem') or fn.endswith(self.KEY):
+            if not fn.endswith(".pem") or fn.endswith(self.KEY):
                 continue
             path = self.abspath(fn)
             listing.append(create_from_file(path))
@@ -180,7 +179,6 @@ class CertificateDirectory(Directory):
 
 
 class ProductCertificateDirectory(CertificateDirectory):
-
     def get_provided_tags(self):
         """
         Iterates all product certificates in the directory and extracts a set
@@ -217,7 +215,7 @@ class ProductCertificateDirectory(CertificateDirectory):
 
 class ProductDirectory(ProductCertificateDirectory):
     def __init__(self, path=None, default_path=None):
-        installed_prod_path = path or conf['rhsm']['productCertDir']
+        installed_prod_path = path or conf["rhsm"]["productCertDir"]
         default_prod_path = default_path or DEFAULT_PRODUCT_CERT_DIR
         self.installed_prod_dir = ProductCertificateDirectory(path=installed_prod_path)
         self.default_prod_dir = ProductCertificateDirectory(path=default_prod_path)
@@ -229,12 +227,7 @@ class ProductDirectory(ProductCertificateDirectory):
         # Product IDs in installed_prod dir.
         pids = set([cert.products[0].id for cert in installed_prod_list])
         # Everything from /etc/pki/product, only use product-default for pids that don't already exist
-        return installed_prod_list + [
-            cert
-            for cert
-            in default_prod_list
-            if cert.products[0].id not in pids
-        ]
+        return installed_prod_list + [cert for cert in default_prod_list if cert.products[0].id not in pids]
 
     def refresh(self):
         self.installed_prod_dir.refresh()
@@ -255,8 +248,8 @@ class ProductDirectory(ProductCertificateDirectory):
 
 class EntitlementDirectory(CertificateDirectory):
 
-    PATH = conf['rhsm']['entitlementCertDir']
-    PRODUCT = 'product'
+    PATH = conf["rhsm"]["entitlementCertDir"]
+    PRODUCT = "product"
 
     @classmethod
     def productpath(cls):
@@ -337,7 +330,9 @@ class EntitlementDirectory(CertificateDirectory):
         Returns all entitlement certificates provided by the given
         pool ID.
         """
-        entitlements = [entitlement for entitlement in self.list() if str(entitlement.pool.id) == str(pool_id)]
+        entitlements = [
+            entitlement for entitlement in self.list() if str(entitlement.pool.id) == str(pool_id)
+        ]
         return entitlements
 
     def list_serials_for_pool_ids(self, pool_ids):
@@ -354,7 +349,7 @@ class Path(object):
 
     # Used during Anaconda install by the yum pidplugin to ensure we operate
     # beneath /mnt/sysimage/ instead of /.
-    ROOT = '/'
+    ROOT = "/"
 
     @classmethod
     def join(cls, a, b):
@@ -363,7 +358,7 @@ class Path(object):
 
     @classmethod
     def abs(cls, path):
-        """ Append the ROOT path to the given path. """
+        """Append the ROOT path to the given path."""
         if os.path.isabs(path):
             return os.path.join(cls.ROOT, path[1:])
         else:
@@ -375,7 +370,6 @@ class Path(object):
 
 
 class Writer(object):
-
     def __init__(self):
         self.ent_dir = require(ENT_DIR)
 
@@ -383,10 +377,10 @@ class Writer(object):
         serial = cert.serial
         ent_dir_path = self.ent_dir.productpath()
 
-        key_filename = '%s-key.pem' % str(serial)
+        key_filename = "%s-key.pem" % str(serial)
         key_path = Path.join(ent_dir_path, key_filename)
         key.write(key_path)
 
-        cert_filename = '%s.pem' % str(serial)
+        cert_filename = "%s.pem" % str(serial)
         cert_path = Path.join(ent_dir_path, cert_filename)
         cert.write(cert_path)

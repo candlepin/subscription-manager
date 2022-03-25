@@ -12,11 +12,13 @@
 # in this software or its documentation.
 #
 from subscription_manager.base_plugin import SubManPlugin
+
 requires_api_version = "1.0"
 
 
 class ProductInstallPlugin(SubManPlugin):
     """Plugin triggered when product id certs are installed"""
+
     name = "product_install"
 
     def post_product_id_install_hook(self, conduit):

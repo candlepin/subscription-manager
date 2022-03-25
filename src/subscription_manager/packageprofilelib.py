@@ -18,6 +18,7 @@ class PackageProfileActionInvoker(certlib.BaseActionInvoker):
     """Used by rhsmcertd to update the profile
     periodically.
     """
+
     def _do_update(self):
         action = PackageProfileActionCommand()
         return action.perform()
@@ -28,6 +29,7 @@ class PackageProfileActionCommand(object):
 
     Returns a PackageProfileActionReport.
     """
+
     def __init__(self):
         self.report = PackageProfileActionReport()
         self.cp_provider = inj.require(inj.CP_PROVIDER)

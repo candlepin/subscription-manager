@@ -31,12 +31,21 @@ class UserPassCommand(CliCommand):
         self._username = None
         self._password = None
 
-        self.parser.add_argument("--username", dest="username",
-                                 help=_("username to use when authorizing against the server"))
-        self.parser.add_argument("--password", dest="password",
-                                 help=_("password to use when authorizing against the server"))
-        self.parser.add_argument("--token", dest="token",
-                                 help=_("token to use when authorizing against the server"))
+        self.parser.add_argument(
+            "--username",
+            dest="username",
+            help=_("username to use when authorizing against the server"),
+        )
+        self.parser.add_argument(
+            "--password",
+            dest="password",
+            help=_("password to use when authorizing against the server"),
+        )
+        self.parser.add_argument(
+            "--token",
+            dest="token",
+            help=_("token to use when authorizing against the server"),
+        )
 
     @staticmethod
     def _get_username_and_password(username, password):
@@ -62,12 +71,14 @@ class UserPassCommand(CliCommand):
                 self._username = self.cp_provider.token_username
                 return self._username
             (self._username, self._password) = self._get_username_and_password(
-                self.options.username, self.options.password)
+                self.options.username, self.options.password
+            )
         return self._username
 
     @property
     def password(self):
         if not self._password and not self.options.token:
             (self._username, self._password) = self._get_username_and_password(
-                self.options.username, self.options.password)
+                self.options.username, self.options.password
+            )
         return self._password

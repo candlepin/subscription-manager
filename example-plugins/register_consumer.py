@@ -13,11 +13,13 @@
 #
 
 from subscription_manager.base_plugin import SubManPlugin
+
 requires_api_version = "1.0"
 
 
 class RegisterConsumerPlugin(SubManPlugin):
     """Plugin triggered when a consumer registers"""
+
     name = "register_consumer"
 
     def post_register_consumer_hook(self, conduit):
@@ -27,7 +29,7 @@ class RegisterConsumerPlugin(SubManPlugin):
             conduit: A RegistrationConduit()
         """
         conduit.log.debug("post consumer register called")
-        conduit.log.debug("consumer uuid: %s" % conduit.consumer['uuid'])
+        conduit.log.debug("consumer uuid: %s" % conduit.consumer["uuid"])
 
     def pre_register_consumer_hook(self, conduit):
         """`pre_register_consumer` hook

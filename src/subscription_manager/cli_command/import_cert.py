@@ -30,16 +30,26 @@ class ImportCertCommand(CliCommand):
         shortdesc = _("Import certificates which were provided outside of the tool")
         super(ImportCertCommand, self).__init__("import", shortdesc, False)
 
-        self.parser.add_argument("--certificate", action="append", dest="certificate_file",
-                                 help=_("certificate file to import (can be specified more than once)"))
+        self.parser.add_argument(
+            "--certificate",
+            action="append",
+            dest="certificate_file",
+            help=_("certificate file to import (can be specified more than once)"),
+        )
 
     def _validate_options(self):
         if self.is_registered():
-            system_exit(os.EX_USAGE, _(
-                "Error: You may not import certificates into a system that is registered to a subscription management service."))
+            system_exit(
+                os.EX_USAGE,
+                _(
+                    "Error: You may not import certificates into a system that is registered to a subscription management service."
+                ),
+            )
         if not self.options.certificate_file:
-            system_exit(os.EX_USAGE,
-                        _("Error: This command requires that you specify a certificate with --certificate."))
+            system_exit(
+                os.EX_USAGE,
+                _("Error: This command requires that you specify a certificate with --certificate."),
+            )
 
     def _do_command(self):
         self._validate_options()
@@ -54,19 +64,32 @@ class ImportCertCommand(CliCommand):
                     # Verify the entitlement data.
                     if extractor.verify_valid_entitlement():
                         extractor.write_to_disk()
-                        print(_("Successfully imported certificate {file}").format(file=os.path.basename(src_cert_file)))
+                        print(
+                            _("Successfully imported certificate {file}").format(
+                                file=os.path.basename(src_cert_file)
+                            )
+                        )
                         imported_certs.append(extractor.get_cert())
                     else:
-                        log.error("Error parsing manually imported entitlement "
-                                  "certificate: {src_cert_file}".format(src_cert_file=src_cert_file))
-                        print(_("{file} is not a valid certificate file. Please use a valid certificate.").format(
-                              file=os.path.basename(src_cert_file)))
+                        log.error(
+                            "Error parsing manually imported entitlement "
+                            "certificate: {src_cert_file}".format(src_cert_file=src_cert_file)
+                        )
+                        print(
+                            _(
+                                "{file} is not a valid certificate file. Please use a valid certificate."
+                            ).format(file=os.path.basename(src_cert_file))
+                        )
 
                 except Exception as e:
                     # Should not get here unless something really bad happened.
                     log.exception(e)
-                    print(_("An error occurred while importing the certificate. "
-                            "Please check log file for more information."))
+                    print(
+                        _(
+                            "An error occurred while importing the certificate. "
+                            "Please check log file for more information."
+                        )
+                    )
             else:
                 log.error("Supplied certificate file does not exist: {file}".format(file=src_cert_file))
                 print(_("{file}: file not found.").format(file=os.path.basename(src_cert_file)))

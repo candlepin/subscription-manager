@@ -61,12 +61,12 @@ class Candlepin(object):
         return self._default_kwargs
 
     def call(self, rest_method, *args, **kwargs):
-        success_callback = kwargs.get('success_callback', None)
-        error_callback = kwargs.get('error_callback', None)
+        success_callback = kwargs.get("success_callback", None)
+        error_callback = kwargs.get("error_callback", None)
 
-        log.debug('success_cb=%s', success_callback)
-        log.debug('error_callback=%s', error_callback)
-        log.debug('rest_method=%s %s', rest_method, type(rest_method))
+        log.debug("success_cb=%s", success_callback)
+        log.debug("error_callback=%s", error_callback)
+        log.debug("rest_method=%s %s", rest_method, type(rest_method))
 
         try:
             args = self.default_args + args
@@ -78,19 +78,20 @@ class Candlepin(object):
             log.exception(ex)
             self.last_error = ex
             log.error("Consumer certificate is invalid")
-            raise CandlepinApiSSLError('SSL related error (consumer identity cert is invalid?): %s' % ex)
+            raise CandlepinApiSSLError("SSL related error (consumer identity cert is invalid?): %s" % ex)
         except rhsm.connection.RestlibException as ex:
             # Indicates we may be talking to a very old candlepin server
             # which does not have the necessary API call.
             log.exception(ex)
             self.last_error = ex
-            raise CandlepinApiRestlibError('Error from candlepin: %s' % ex)
+            raise CandlepinApiRestlibError("Error from candlepin: %s" % ex)
         except rhsm.connection.AuthenticationException as ex:
             log.error("Could not authenticate with server. Check registration status.")
             log.exception(ex)
             self.last_error = ex
-            raise CandlepinApiAuthenticationError("Could not authenticate with server. "
-                  "Check registration status.: %s" % ex)
+            raise CandlepinApiAuthenticationError(
+                "Could not authenticate with server. " "Check registration status.: %s" % ex
+            )
         except rhsm.connection.ExpiredIdentityCertException as ex:
             log.exception(ex)
             self.last_error = ex
@@ -106,7 +107,7 @@ class Candlepin(object):
 
             msg = "Unable to reach server."
             log.warn(msg)
-            raise CandlepinApiNetworkError('%s: %s' % (msg, ex))
+            raise CandlepinApiNetworkError("%s: %s" % (msg, ex))
 
 
 class CandlepinConsumer(Candlepin):

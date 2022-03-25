@@ -27,9 +27,20 @@ class Content(object):
     """
     A generic representation of entitled content.
     """
-    def __init__(self, content_type, name, label,
-                 url=None, gpg=None, tags=None, cert=None,
-                 enabled=None, metadata_expire=None, arches=None):
+
+    def __init__(
+        self,
+        content_type,
+        name,
+        label,
+        url=None,
+        gpg=None,
+        tags=None,
+        cert=None,
+        enabled=None,
+        metadata_expire=None,
+        arches=None,
+    ):
         self.content_type = content_type
         self.name = name
         self.label = label
@@ -63,6 +74,7 @@ class EntitlementSource(object):
 
     Acts as a iterable over entitlements.
     """
+
     def __init__(self):
         self._entitlements = []
         self.product_tags = []
@@ -91,8 +103,9 @@ def find_content(ent_source, content_type=None):
     for entitlement in ent_source:
         for content in entitlement.contents:
             # this is basically matching_content from repolib
-            if content.content_type.lower() == content_type.lower() and \
-                    content_tag_match(content.tags, ent_source.product_tags):
+            if content.content_type.lower() == content_type.lower() and content_tag_match(
+                content.tags, ent_source.product_tags
+            ):
                 if entitlement.entitlement_type == CONTENT_ACCESS_CERT_TYPE:
                     content_access_entitlement_content[content.label] = content
                 else:

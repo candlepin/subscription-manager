@@ -61,6 +61,7 @@ class HealingUpdateAction(object):
         pre_auto_attach
         post_auto_attach
     """
+
     def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = self.cp_provider.get_consumer_auth_cp()
@@ -73,7 +74,7 @@ class HealingUpdateAction(object):
         uuid = identity.uuid
         consumer = self.uep.getConsumer(uuid)
 
-        if 'autoheal' not in consumer or not consumer['autoheal']:
+        if "autoheal" not in consumer or not consumer["autoheal"]:
             log.warning("Auto-heal disabled on server, skipping.")
             return 0
 
@@ -95,8 +96,7 @@ class HealingUpdateAction(object):
                 log.warning("Found invalid entitlements for today: %s" % today)
                 self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
                 ents = self.uep.bind(uuid, today)
-                self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
-                                        entitlement_data=ents)
+                self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid, entitlement_data=ents)
 
                 # NOTE: we need to call EntCertActionInvoker.update after Healing.update
                 # otherwise, the locking get's crazy
@@ -114,8 +114,7 @@ class HealingUpdateAction(object):
                     log.warning("Entitlements will be invalid by tomorrow: %s" % tomorrow)
                     self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
                     ents = self.uep.bind(uuid, tomorrow)
-                    self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid,
-                                            entitlement_data=ents)
+                    self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid, entitlement_data=ents)
                     self.report = cert_updater.update()
                 else:
                     valid_tomorrow = True

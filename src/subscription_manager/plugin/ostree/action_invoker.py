@@ -35,6 +35,7 @@ class OstreeContentUpdateActionCommand(object):
 
     Return a OstreeContentUpdateReport.
     """
+
     def __init__(self, ent_source):
         self.ent_source = ent_source
 
@@ -49,8 +50,7 @@ class OstreeContentUpdateActionCommand(object):
             return ostree_core_config
 
         # empty the remote list
-        self.update_config(ostree_core_config,
-                           contents=[])
+        self.update_config(ostree_core_config, contents=[])
 
         return ostree_core_config
 
@@ -69,12 +69,10 @@ class OstreeContentUpdateActionCommand(object):
         self.load_config(ostree_repo_config)
 
         # return the composed set of EntitledContents
-        entitled_contents = find_content(self.ent_source,
-                                         content_type=OSTREE_CONTENT_TYPE)
+        entitled_contents = find_content(self.ent_source, content_type=OSTREE_CONTENT_TYPE)
 
         # update repo configs
-        report = self.update_config(ostree_repo_config,
-                                    contents=entitled_contents)
+        report = self.update_config(ostree_repo_config, contents=entitled_contents)
 
         # reload the new config, so we have fresh remotes, etc
         self.load_config(ostree_repo_config)
@@ -87,9 +85,7 @@ class OstreeContentUpdateActionCommand(object):
 
         report = OstreeContentUpdateActionReport()
 
-        updates_builder = \
-            model.OstreeConfigUpdatesBuilder(ostree_config,
-                                             contents=contents)
+        updates_builder = model.OstreeConfigUpdatesBuilder(ostree_config, contents=contents)
         updates = updates_builder.build()
 
         for remote in updates.orig.remotes:
@@ -111,12 +107,15 @@ class OstreeContentUpdateActionCommand(object):
         try:
             ostree_config.load()
         except configparser.Error:
-            log.warn("No ostree content config file found at: %s. Not loading ostree config.",
-                     ostree_config.repo_file_path)
+            log.warn(
+                "No ostree content config file found at: %s. Not loading ostree config.",
+                ostree_config.repo_file_path,
+            )
 
 
 class OstreeContentUpdateActionReport(certlib.ActionReport):
     """Track ostree repo config changes."""
+
     name = "Ostree repo updates report"
 
     def __init__(self):
@@ -135,7 +134,7 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
         s = []
         for remote in remotes:
             s.append(remote.report())
-        return '\n'.join(s)
+        return "\n".join(s)
 
     def __str__(self):
         s = ["Ostree repo updates\n"]
@@ -145,4 +144,4 @@ class OstreeContentUpdateActionReport(certlib.ActionReport):
         s.append(self._format_remotes(self.remote_added))
         s.append(_("Deleted:"))
         s.append(self._format_remotes(self.remote_deleted))
-        return '\n'.join(s)
+        return "\n".join(s)

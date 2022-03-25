@@ -29,16 +29,16 @@ logutil.init_logger()
 
 try:
     from subscription_manager.injectioninit import init_dep_injection
+
     init_dep_injection()
 except KeyboardInterrupt:
     system_exit(0, "\nUser interrupted process.")
 except ImportError as err:
-    system_exit(2, "Unable to find Subscription Manager module.\n"
-                   "Error: %s" % err)
+    system_exit(2, "Unable to find Subscription Manager module.\n" "Error: %s" % err)
 
 # quick check to see if you are a super-user.
 if os.getuid() != 0:
-    sys.stderr.write('Error: this command requires root access to execute\n')
+    sys.stderr.write("Error: this command requires root access to execute\n")
     sys.exit(8)
 
 
@@ -46,7 +46,7 @@ def main():
     return RhsmDebugCLI().main()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         sys.exit(abs(main() or 0))
     except SystemExit as sys_err:

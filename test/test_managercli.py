@@ -7,16 +7,13 @@ import os
 
 from subscription_manager import syspurposelib
 from subscription_manager import managercli, managerlib
-from subscription_manager.injection import provide, \
-    CERT_SORTER, PROD_DIR
+from subscription_manager.injection import provide, CERT_SORTER, PROD_DIR
 from rhsmlib.services.products import InstalledProducts
 from subscription_manager.cli_command.cli import handle_exception, system_exit
 from subscription_manager.cli_command import cli
 
-from .stubs import StubEntitlementCertificate, StubUEP, StubProductDirectory, \
-    StubCertSorter
-from .fixture import FakeException, FakeLogger, SubManFixture, \
-    Capture
+from .stubs import StubEntitlementCertificate, StubUEP, StubProductDirectory, StubCertSorter
+from .fixture import FakeException, FakeLogger, SubManFixture, Capture
 
 from mock import patch
 
@@ -26,7 +23,6 @@ from rhsm.https import ssl
 
 
 class InstalledProductStatusTests(SubManFixture):
-
     def test_entitlement_for_not_installed_product_shows_nothing(self):
         product_directory = StubProductDirectory([])
         provide(PROD_DIR, product_directory)
@@ -37,12 +33,12 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEqual(0, len(product_status))
 
     def test_entitlement_for_installed_product_shows_subscribed(self):
-        product_directory = StubProductDirectory(pids=['product1'])
+        product_directory = StubProductDirectory(pids=["product1"])
         provide(PROD_DIR, product_directory)
-        ent_cert = StubEntitlementCertificate('product1')
+        ent_cert = StubEntitlementCertificate("product1")
 
         stub_sorter = StubCertSorter()
-        stub_sorter.valid_products['product1'] = [ent_cert]
+        stub_sorter.valid_products["product1"] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
         product_status = InstalledProducts(StubUEP()).list()
@@ -51,13 +47,12 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEqual("subscribed", product_status[0][4])
 
     def test_expired_entitlement_for_installed_product_shows_expired(self):
-        ent_cert = StubEntitlementCertificate('product1',
-                                              end_date=(datetime.now() - timedelta(days=2)))
+        ent_cert = StubEntitlementCertificate("product1", end_date=(datetime.now() - timedelta(days=2)))
 
-        product_directory = StubProductDirectory(pids=['product1'])
+        product_directory = StubProductDirectory(pids=["product1"])
         provide(PROD_DIR, product_directory)
         stub_sorter = StubCertSorter()
-        stub_sorter.expired_products['product1'] = [ent_cert]
+        stub_sorter.expired_products["product1"] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
         product_status = InstalledProducts(StubUEP()).list()
@@ -66,10 +61,10 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEqual("expired", product_status[0][4])
 
     def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
-        product_directory = StubProductDirectory(pids=['product1'])
+        product_directory = StubProductDirectory(pids=["product1"])
         provide(PROD_DIR, product_directory)
         stub_sorter = StubCertSorter()
-        stub_sorter.unentitled_products['product1'] = None  # prod cert unused here
+        stub_sorter.unentitled_products["product1"] = None  # prod cert unused here
         provide(CERT_SORTER, stub_sorter)
 
         product_status = InstalledProducts(StubUEP()).list()
@@ -78,12 +73,11 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEqual("not_subscribed", product_status[0][4])
 
     def test_future_dated_entitlement_shows_future_subscribed(self):
-        product_directory = StubProductDirectory(pids=['product1'])
+        product_directory = StubProductDirectory(pids=["product1"])
         provide(PROD_DIR, product_directory)
-        ent_cert = StubEntitlementCertificate('product1',
-                                              start_date=(datetime.now() + timedelta(days=1365)))
+        ent_cert = StubEntitlementCertificate("product1", start_date=(datetime.now() + timedelta(days=1365)))
         stub_sorter = StubCertSorter()
-        stub_sorter.future_products['product1'] = [ent_cert]
+        stub_sorter.future_products["product1"] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
         product_status = InstalledProducts(StubUEP()).list()
@@ -91,12 +85,11 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEqual("future_subscribed", product_status[0][4])
 
     def test_one_product_with_two_entitlements_lists_product_twice(self):
-        ent_cert = StubEntitlementCertificate('product1',
-                                              ['product2', 'product3'], sockets=10)
-        product_directory = StubProductDirectory(pids=['product1'])
+        ent_cert = StubEntitlementCertificate("product1", ["product2", "product3"], sockets=10)
+        product_directory = StubProductDirectory(pids=["product1"])
         provide(PROD_DIR, product_directory)
         stub_sorter = StubCertSorter()
-        stub_sorter.valid_products['product1'] = [ent_cert, ent_cert]
+        stub_sorter.valid_products["product1"] = [ent_cert, ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
         product_status = InstalledProducts(StubUEP()).list()
@@ -105,14 +98,13 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEqual(1, len(product_status))
 
     def test_one_subscription_with_bundled_products_lists_once(self):
-        ent_cert = StubEntitlementCertificate('product1',
-                                              ['product2', 'product3'], sockets=10)
-        product_directory = StubProductDirectory(pids=['product1'])
+        ent_cert = StubEntitlementCertificate("product1", ["product2", "product3"], sockets=10)
+        product_directory = StubProductDirectory(pids=["product1"])
         provide(PROD_DIR, product_directory)
         stub_sorter = StubCertSorter()
-        stub_sorter.valid_products['product1'] = [ent_cert]
-        stub_sorter.valid_products['product2'] = [ent_cert]
-        stub_sorter.valid_products['product3'] = [ent_cert]
+        stub_sorter.valid_products["product1"] = [ent_cert]
+        stub_sorter.valid_products["product2"] = [ent_cert]
+        stub_sorter.valid_products["product3"] = [ent_cert]
         provide(CERT_SORTER, stub_sorter)
 
         product_status = InstalledProducts(StubUEP()).list()
@@ -123,14 +115,13 @@ class InstalledProductStatusTests(SubManFixture):
         self.assertEqual("subscribed", product_status[0][4])
 
     def test_one_subscription_with_bundled_products_lists_once_part_two(self):
-        ent_cert = StubEntitlementCertificate('product1',
-                                              ['product2', 'product3'], sockets=10)
+        ent_cert = StubEntitlementCertificate("product1", ["product2", "product3"], sockets=10)
 
-        prod_dir = StubProductDirectory(pids=['product1', 'product2'])
+        prod_dir = StubProductDirectory(pids=["product1", "product2"])
         provide(PROD_DIR, prod_dir)
         stub_sorter = StubCertSorter()
-        stub_sorter.valid_products['product1'] = [ent_cert]
-        stub_sorter.valid_products['product2'] = [ent_cert]
+        stub_sorter.valid_products["product1"] = [ent_cert]
+        stub_sorter.valid_products["product2"] = [ent_cert]
 
         provide(CERT_SORTER, stub_sorter)
 
@@ -146,7 +137,7 @@ class InstalledProductStatusTests(SubManFixture):
 
 class TestCli(SubManFixture):
     def setUp(self):
-        syspurpose_patch = patch('syspurpose.files.SyncedStore')
+        syspurpose_patch = patch("syspurpose.files.SyncedStore")
         sp_patch = syspurpose_patch.start()
         self.addCleanup(sp_patch.stop)
         super(TestCli, self).setUp()
@@ -158,7 +149,7 @@ class TestCli(SubManFixture):
 
     def test_cli(self):
         cli = managercli.ManagerCLI()
-        self.assertTrue('register' in cli.cli_commands)
+        self.assertTrue("register" in cli.cli_commands)
 
     @patch.object(managerlib, "check_identity_cert_perms")
     def test_main_checks_identity_cert_perms(self, check_identity_cert_perms_mock):
@@ -173,13 +164,13 @@ class TestCli(SubManFixture):
 
     def test_cli_find_best_match(self):
         cli = managercli.ManagerCLI()
-        best_match = cli._find_best_match(['subscription-manager', 'version'])
-        self.assertEqual(best_match.name, 'version')
+        best_match = cli._find_best_match(["subscription-manager", "version"])
+        self.assertEqual(best_match.name, "version")
 
     # shouldn't match on -sdf names
     def test_cli_find_best_match_no_dash(self):
         cli = managercli.ManagerCLI()
-        best_match = cli._find_best_match(['subscription-manager', '--version'])
+        best_match = cli._find_best_match(["subscription-manager", "--version"])
         self.assertEqual(best_match, None)
 
 
@@ -193,7 +184,7 @@ class TestCliCommand(SubManFixture):
         if hide_do:
             # patch the _do_command with a mock
             self._orig_do_command = self.cc._do_command
-            do_command_patcher = patch.object(self.command_class, '_do_command')
+            do_command_patcher = patch.object(self.command_class, "_do_command")
             self.mock_do_command = do_command_patcher.start()
             self.addCleanup(do_command_patcher.stop)
 
@@ -202,7 +193,7 @@ class TestCliCommand(SubManFixture):
             # we fall back to sys.argv if there
             # is no args passed in, so stub out
             # sys.argv for test
-            with patch.object(sys, 'argv', ['subscription-manager']):
+            with patch.object(sys, "argv", ["subscription-manager"]):
                 self.cc.main()
         except SystemExit as e:
             # 2 == no args given
@@ -210,7 +201,7 @@ class TestCliCommand(SubManFixture):
 
     def test_main_empty_args(self):
         try:
-            with patch.object(sys, 'argv', ['subscription-manager']):
+            with patch.object(sys, "argv", ["subscription-manager"]):
                 self.cc.main([])
         except SystemExit as e:
             # 2 == no args given
@@ -218,9 +209,10 @@ class TestCliCommand(SubManFixture):
 
     def test_unknown_args_cause_exit(self):
         with Capture() as cap, patch.object(
-            sys, 'argv',
+            sys,
+            "argv",
             # test with some subcommand; sub-man prints help without it
-            ['subscription-manager', 'attach', '--foo', 'bar', 'baz'],
+            ["subscription-manager", "attach", "--foo", "bar", "baz"],
         ):
             try:
                 self.cc.main()
@@ -250,12 +242,14 @@ class TestCliCommand(SubManFixture):
         self._main_help(["--help"])
 
     # docker error message should output to stderr
-    @patch('subscription_manager.cli_command.cli.rhsm.config.in_container')
+    @patch("subscription_manager.cli_command.cli.rhsm.config.in_container")
     def test_cli_in_container_error_message(self, mock_in_container):
-        with patch.object(sys, 'argv', ['subscription-manager', 'version']):
+        with patch.object(sys, "argv", ["subscription-manager", "version"]):
             mock_in_container.return_value = True
-            err_msg = 'subscription-manager is disabled when running inside a container.'\
-                      ' Please refer to your host system for subscription management.\n\n'
+            err_msg = (
+                "subscription-manager is disabled when running inside a container."
+                " Please refer to your host system for subscription management.\n\n"
+            )
             with Capture() as cap:
                 try:
                     self.cc.main()
@@ -385,17 +379,17 @@ class HandleExceptionTests(unittest.TestCase):
 
     def test_he_unicode(self):
         e = Exception("Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
-    #    e = FakeException(msg="Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
+        #    e = FakeException(msg="Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
         try:
             handle_exception("a: %s" % e, e)
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
-    @patch('subscription_manager.managercli.log', FakeLogger())
+    @patch("subscription_manager.managercli.log", FakeLogger())
     def test_he_socket_error(self):
         # these error messages are bare strings, so we need to update the tests
         # if those messages change
-        expected_msg = 'Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information.'
+        expected_msg = "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information."
         managercli.log.set_expected_msg(expected_msg)
         try:
             handle_exception(self.msg, socket.error())
@@ -411,8 +405,9 @@ class HandleExceptionTests(unittest.TestCase):
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
     def test_he_restlib_exception_unicode(self):
-        e = connection.RestlibException(404,
-                                        "Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log")
+        e = connection.RestlibException(
+            404, "Ошибка при обновлении системных данных (см. /var/log/rhsm/rhsm.log"
+        )
         try:
             handle_exception("обновлении", e)
         except SystemExit as e:

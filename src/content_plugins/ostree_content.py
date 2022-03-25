@@ -22,6 +22,7 @@ requires_api_version = "1.1"
 
 class OstreeContentPlugin(base_plugin.SubManPlugin):
     """Plugin for adding ostree content action to subscription-manager"""
+
     name = "ostree_content"
 
     def update_content_hook(self, conduit):

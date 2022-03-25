@@ -35,8 +35,10 @@ def _set_enable_for_yum_repositories(setting, *repo_ids):
     identity = inj.require(inj.IDENTITY)
     cp_provider = inj.require(inj.CP_PROVIDER)
 
-    if identity.is_valid() and cp_provider.get_consumer_auth_cp().supports_resource('content_overrides'):
-        overrides = [{'contentLabel': repo.id, 'name': 'enabled', 'value': setting} for repo in repos_to_change]
+    if identity.is_valid() and cp_provider.get_consumer_auth_cp().supports_resource("content_overrides"):
+        overrides = [
+            {"contentLabel": repo.id, "name": "enabled", "value": setting} for repo in repos_to_change
+        ]
         cp = cp_provider.get_consumer_auth_cp()
         results = cp.setContentOverrides(identity.uuid, overrides)
 
@@ -49,7 +51,7 @@ def _set_enable_for_yum_repositories(setting, *repo_ids):
         invoker.update()
     else:
         for repo in repos_to_change:
-            repo['enabled'] = setting
+            repo["enabled"] = setting
 
         repo_file = YumRepoFile()
         repo_file.read()
@@ -63,10 +65,10 @@ def _set_enable_for_yum_repositories(setting, *repo_ids):
 def enable_yum_repositories(*repo_ids):
     """Enable a Yum repo by repoid.  Wildcards are honored.  Any matching repos are
     enabled *even if they are already enabled*."""
-    return _set_enable_for_yum_repositories('1', *repo_ids)
+    return _set_enable_for_yum_repositories("1", *repo_ids)
 
 
 def disable_yum_repositories(*repo_ids):
     """Disable a Yum repo by repoid.  Wildcards are honored.  Any matching repos are
     disabled *even if they are already enabled*."""
-    return _set_enable_for_yum_repositories('0', *repo_ids)
+    return _set_enable_for_yum_repositories("0", *repo_ids)

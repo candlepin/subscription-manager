@@ -27,6 +27,7 @@ from rhsmlib.file_monitor import CONFIG_WATCHER
 from rhsmlib.dbus.server import Server
 
 from dbus import DBusException
+
 log = logging.getLogger(__name__)
 
 
@@ -40,7 +41,7 @@ class ConfigDBusObject(base_object.BaseObject):
 
     @util.dbus_service_signal(
         constants.CONFIG_INTERFACE,
-        signature=''
+        signature="",
     )
     @util.dbus_handle_exceptions
     def ConfigChanged(self):
@@ -53,7 +54,8 @@ class ConfigDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
-        in_signature='svs')
+        in_signature="svs",
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Set(self, property_name, new_value, locale, sender=None):
@@ -72,14 +74,14 @@ class ConfigDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        section, _dot, property_name = property_name.partition('.')
+        section, _dot, property_name = property_name.partition(".")
 
         if not property_name:
             raise DBusException("Setting an entire section is not supported.  Use 'section.property' format.")
 
         self.config[section][property_name] = new_value
 
-        if section == 'logging':
+        if section == "logging":
             logging_changed = True
         else:
             logging_changed = False
@@ -102,7 +104,8 @@ class ConfigDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
-        in_signature='a{sv}s')
+        in_signature="a{sv}s",
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def SetAll(self, configuration, locale, sender=None):
@@ -118,19 +121,21 @@ class ConfigDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        log.debug('Setting new configuration values: %s' % str(configuration))
+        log.debug("Setting new configuration values: %s" % str(configuration))
 
         logging_changed = False
 
         for property_name, new_value in configuration.items():
-            section_name, _dot, property_name = property_name.partition('.')
+            section_name, _dot, property_name = property_name.partition(".")
 
             if not property_name:
-                raise DBusException("Setting an entire section is not supported.  Use 'section.property' format.")
+                raise DBusException(
+                    "Setting an entire section is not supported.  Use 'section.property' format."
+                )
 
             self.config[section_name][property_name] = new_value
 
-            if section_name == 'logging':
+            if section_name == "logging":
                 logging_changed = True
 
         # Try to temporary disable dir watcher, because 'self.config.persist()' writes configuration
@@ -151,8 +156,9 @@ class ConfigDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
-        in_signature='s',
-        out_signature='a{sv}')
+        in_signature="s",
+        out_signature="a{sv}",
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetAll(self, locale, sender=None):
@@ -165,9 +171,9 @@ class ConfigDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        d = dbus.Dictionary({}, signature='sv')
+        d = dbus.Dictionary({}, signature="sv")
         for k, v in self.config.items():
-            d[k] = dbus.Dictionary({}, signature='ss')
+            d[k] = dbus.Dictionary({}, signature="ss")
             for kk, vv in v.items():
                 d[k][kk] = vv
 
@@ -175,8 +181,9 @@ class ConfigDBusObject(base_object.BaseObject):
 
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
-        in_signature='ss',
-        out_signature='v')
+        in_signature="ss",
+        out_signature="v",
+    )
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Get(self, property_name, locale, sender=None):
@@ -190,12 +197,12 @@ class ConfigDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        section, _dot, property_name = property_name.partition('.')
+        section, _dot, property_name = property_name.partition(".")
 
         if property_name:
             return self.config[section][property_name]
         else:
-            return dbus.Dictionary(self.config[section], signature='sv')
+            return dbus.Dictionary(self.config[section], signature="sv")
 
     def reload(self):
         """
@@ -212,7 +219,7 @@ class ConfigDBusObject(base_object.BaseObject):
         files_read = parser.read()
 
         if len(files_read) > 0:
-            log.debug('files read: %s' % str(files_read))
+            log.debug("files read: %s" % str(files_read))
             self.config = Config(parser)
             rhsm.logutil.init_logger(parser)
             log.debug("Configuration file: %s reloaded: %s" % (parser.config_file, str(self.config)))

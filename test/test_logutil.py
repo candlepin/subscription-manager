@@ -21,7 +21,7 @@ class TestLogutil(fixture.SubManFixture):
     def setUp(self):
         super(TestLogutil, self).setUp()
         self.rhsm_config = stubs.StubConfig()
-        rhsm_patcher = mock.patch('rhsm.config')
+        rhsm_patcher = mock.patch("rhsm.config")
         self.rhsm_config_mock = rhsm_patcher.start()
         self.rhsm_config_mock.get_config_parser.return_value = self.rhsm_config
         self.addCleanup(rhsm_patcher.stop)
@@ -43,12 +43,10 @@ class TestLogutil(fixture.SubManFixture):
         sm_effective = sm_logger.getEffectiveLevel()
         rhsm_effective = rhsm_logger.getEffectiveLevel()
         # Fun hack for 2.6/2.7 interoperability
+        self.assertTrue(logging.DEBUG == sm_effective or logging._levelNames[sm_effective] == logging.DEBUG)
         self.assertTrue(
-            logging.DEBUG == sm_effective or
-            logging._levelNames[sm_effective] == logging.DEBUG)
-        self.assertTrue(
-            logging.DEBUG == rhsm_effective or
-            logging._levelNames[rhsm_effective] == logging.DEBUG)
+            logging.DEBUG == rhsm_effective or logging._levelNames[rhsm_effective] == logging.DEBUG
+        )
 
     def test_log_init_default_log_level(self):
         self.rhsm_config.set("logging", "default_log_level", "WARNING")
@@ -60,11 +58,11 @@ class TestLogutil(fixture.SubManFixture):
         rhsm_effective = rhsm_logger.getEffectiveLevel()
         # Fun hack for 2.6/2.7 interoperability
         self.assertTrue(
-            logging.WARNING == sm_effective or
-            logging._levelNames[sm_effective] == logging.WARNING)
+            logging.WARNING == sm_effective or logging._levelNames[sm_effective] == logging.WARNING
+        )
         self.assertTrue(
-            logging.WARNING == rhsm_effective or
-            logging._levelNames[rhsm_effective] == logging.WARNING)
+            logging.WARNING == rhsm_effective or logging._levelNames[rhsm_effective] == logging.WARNING
+        )
 
     def test_log_init_invalid_default_log_level(self):
         self.rhsm_config.set("logging", "default_log_level", "FOO")
@@ -75,12 +73,8 @@ class TestLogutil(fixture.SubManFixture):
         sm_effective = sm_logger.getEffectiveLevel()
         rhsm_effective = rhsm_logger.getEffectiveLevel()
         # Fun hack for 2.6/2.7 interoperability
-        self.assertTrue(
-            logging.INFO == sm_effective or
-            logging._levelNames[sm_effective] == logging.INFO)
-        self.assertTrue(
-            logging.INFO == rhsm_effective or
-            logging._levelNames[rhsm_effective] == logging.INFO)
+        self.assertTrue(logging.INFO == sm_effective or logging._levelNames[sm_effective] == logging.INFO)
+        self.assertTrue(logging.INFO == rhsm_effective or logging._levelNames[rhsm_effective] == logging.INFO)
 
     def test_init_logger_for_yum(self):
         logutil.init_logger_for_yum()
@@ -96,30 +90,27 @@ class TestLogutil(fixture.SubManFixture):
 
     def test_set_valid_logger_level(self):
         logging_conf = [
-            ('subscription_manager.managercli', "ERROR"),
-            ('rhsm', "WARNING"),
-            ('rhsm-app', "CRITICAL")
+            ("subscription_manager.managercli", "ERROR"),
+            ("rhsm", "WARNING"),
+            ("rhsm-app", "CRITICAL"),
         ]
 
         for logger_name, log_level in logging_conf:
-            self.rhsm_config.set('logging', logger_name, log_level)
+            self.rhsm_config.set("logging", logger_name, log_level)
 
         logutil.init_logger()
 
         for logger_name, log_level in logging_conf:
             real_log_level = logging.getLogger(logger_name).getEffectiveLevel()
-            self.assertTrue(
-                logging.getLevelName(log_level) == real_log_level or
-                log_level == real_log_level)
+            self.assertTrue(logging.getLevelName(log_level) == real_log_level or log_level == real_log_level)
 
     def test_set_invalid_logger_level(self):
-        test_logger_name = 'foobar'
+        test_logger_name = "foobar"
         initial_level = logging.ERROR
         test_logger = logging.getLogger(test_logger_name)
         test_logger.setLevel(initial_level)
         config_level = logging.DEBUG
-        self.rhsm_config.set('logging', test_logger_name,
-                             config_level)
+        self.rhsm_config.set("logging", test_logger_name, config_level)
 
         logutil.init_logger()
 
