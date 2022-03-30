@@ -874,7 +874,7 @@ class TestEntitlementStatusCache(SubManFixture):
         self.assertEqual(None, self.status_cache.load_status(uep, "SOMEUUID"))
 
     def test_write_cache(self):
-        mock_server_status = {"fake server status": random.uniform(1, 2 ** 32)}
+        mock_server_status = {"fake server status": random.uniform(1, 2**32)}
         status_cache = EntitlementStatusCache()
         status_cache.server_status = mock_server_status
         cache_dir = tempfile.mkdtemp()
