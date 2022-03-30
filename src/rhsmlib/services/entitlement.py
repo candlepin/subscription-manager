@@ -47,10 +47,11 @@ class EntitlementService:
         try:
             on_date = datetime.datetime.strptime(on_date, "%Y-%m-%d")
         except ValueError:
+            local_date = time.strftime("%Y-%m-%d", time.localtime())
             raise ValueError(
-                _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: ")
-                + time.strftime("%Y-%m-%d", time.localtime())
-                + " )"
+                _("Date entered is invalid. Date should be in YYYY-MM-DD format (example: {date})").format(
+                    date=local_date
+                )
             )
         if on_date.date() < datetime.datetime.now().date():
             raise ValueError(_("Past dates are not allowed"))
