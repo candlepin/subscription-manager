@@ -177,7 +177,13 @@ class RemoveCommand(CliCommand):
                     for ent in self.entitlement_dir.list():
                         ent.delete()
                         total = total + 1
-                    print(_("{total} subscriptions removed from this system.").format(total=total))
+                    print(
+                        ungettext(
+                            "{total} subscription removed from this system.",
+                            "{total} subscriptions removed from this system.",
+                            total,
+                        ).format(total=total)
+                    )
                 else:
                     if self.options.serials or self.options.pool_ids:
                         serials = self.options.serials or []
