@@ -146,6 +146,8 @@ class HardwareCollector(collector.FactsCollector):
         version = "Unknown"
         distname = "Unknown"
         dist_id = "Unknown"
+        id = "Unknown"
+        id_like = [""]
         version_modifier = ""
 
         if os.path.exists("/etc/os-release"):
@@ -155,7 +157,8 @@ class HardwareCollector(collector.FactsCollector):
             data = {
                 "PRETTY_NAME": "Unknown",
                 "NAME": distname,
-                "ID": "Unknown",
+                "ID": id,
+                "ID_LIKE": "",
                 "VERSION": dist_id,
                 "VERSION_ID": version,
                 "CPE_NAME": "Unknown",
@@ -172,6 +175,8 @@ class HardwareCollector(collector.FactsCollector):
             dist_id_search = re.search(r"\((.*?)\)", dist_id)
             if dist_id_search:
                 dist_id = dist_id_search.group(1)
+            id_like = data["ID_LIKE"].split()
+            id = data["ID"]
             # Split on ':' that is not preceded by '\'
             vers_mod_data = re.split(r"(?<!\\):", data["CPE_NAME"])
             if len(vers_mod_data) >= 6:
@@ -194,7 +199,7 @@ class HardwareCollector(collector.FactsCollector):
             (distname, version, dist_id) = platform.linux_distribution()
             version_modifier = "Unknown"
 
-        return distname, version, dist_id, version_modifier
+        return distname, version, dist_id, version_modifier, id, id_like
 
     def get_mem_info(self):
         meminfo = {}
