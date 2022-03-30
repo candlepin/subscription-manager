@@ -39,8 +39,8 @@ import testvm
 # if you download product files onto the test machine, these will show up as installed products
 # local directory: /etc/pki/product
 # sample products used in the tests (different subscription results for doc and admin):
-# /home/admin/candlepin/generated_certs/6050.pem
-# /home/admin/candlepin/generated_certs/88888.pem
+# /home/admin/devel/candlepin/generated_certs/6050.pem
+# /home/admin/devel/candlepin/generated_certs/88888.pem
 #
 # to use the candlepin image on a test machine, either add the certificate or
 # allow insecure connections (/etc/rhsm/rhsm.conf -> "insecure = 1")
@@ -146,7 +146,7 @@ class SubscriptionsCase(MachineCase):
         def download_product(product):
             prod_id = product["id"]
             filename = os.path.join(self.tmpdir, "%s.pem" % prod_id)
-            self.candlepin.download("/home/admin/candlepin/generated_certs/%s.pem" % prod_id, filename)
+            self.candlepin.download("/home/admin/devel/candlepin/generated_certs/%s.pem" % prod_id, filename)
             m.upload([filename], "/etc/pki/product")
 
         m.execute("mkdir -p /etc/pki/product")
@@ -156,7 +156,7 @@ class SubscriptionsCase(MachineCase):
         # download the candlepin CA certificate
         candlepin_ca_filename = "candlepin-ca.pem"
         candlepin_ca_tmpfile = os.path.join(self.tmpdir, candlepin_ca_filename)
-        self.candlepin.download("/home/admin/candlepin/certs/candlepin-ca.crt", candlepin_ca_tmpfile)
+        self.candlepin.download("/home/admin/devel/candlepin/certs/candlepin-ca.crt", candlepin_ca_tmpfile)
         # make it available for the system, updating the system certificate store
         m.upload([candlepin_ca_tmpfile], f"/etc/pki/ca-trust/source/anchors/{candlepin_ca_filename}")
         m.execute("update-ca-trust extract")
