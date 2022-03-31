@@ -13,6 +13,7 @@
 #
 import base64
 import json
+import logging
 
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import utils
@@ -20,6 +21,8 @@ from subscription_manager import utils
 from rhsmlib.client_info import DBusSender
 
 import rhsm.connection as connection
+
+log = logging.getLogger(__name__)
 
 
 class TokenAuthUnsupportedException(Exception):
@@ -154,6 +157,24 @@ class CPProvider(object):
             return " dbus_sender=%s" % dbus_sender.cmd_line
         else:
             return ""
+
+    def close_all_connections(self):
+        """
+        Try to close all connections to candlepin server, CDN, etc.
+        :return: None
+        """
+        if self.consumer_auth_cp is not None:
+            log.debug("Closing consumer authenticated connection...")
+            self.consumer_auth_cp.conn.close_connection()
+        if self.no_auth_cp is not None:
+            log.debug("Closing no authenticated connection...")
+            self.no_auth_cp.conn.close_connection()
+        if self.basic_auth_cp is not None:
+            log.debug("Closing basically authenticated connection...")
+            self.basic_auth_cp.conn.close_connection()
+        if self.keycloak_auth_cp is not None:
+            log.debug("Closing keycloak authenticated connection...")
+            self.keycloak_auth_cp.conn.close_connestion()
 
     def get_consumer_auth_cp(self):
         if not self.consumer_auth_cp:

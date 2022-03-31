@@ -518,6 +518,8 @@ class BaseRestLib(object):
     responses
     """
 
+    __conn = None
+
     ALPHA = 0.9
 
     def __init__(
@@ -541,6 +543,7 @@ class BaseRestLib(object):
         token=None,
         user_agent=None,
     ):
+        log.debug("Creating new BaseRestLib instance")
         self.host = host
         self.ssl_port = ssl_port
         self.apihandler = apihandler
@@ -580,6 +583,25 @@ class BaseRestLib(object):
             self.headers["Authorization"] = _encode_auth(username, password)
         elif token:
             self.headers["Authorization"] = "Bearer " + token
+
+    def close_connection(self):
+        """
+        Try to close connection to server
+        :return: None
+        """
+        if self.__conn is not None:
+            log.debug(f"Closing HTTPS connection {self.__conn}")
+            # Do proper TLS shutdown handshake (TLS tear down) first
+            if self.__conn.sock is not None:
+                try:
+                    self.__conn.sock.unwrap()
+                except ssl.SSLEOFError as err:
+                    log.debug(f"Unable to close TLS connection properly: {err}")
+                else:
+                    log.debug("TLS connection closed")
+            # Then it is possible to close TCP connection
+            self.__conn.close()
+        self.__conn = None
 
     def _get_cert_key_list(self):
         """
@@ -652,23 +674,32 @@ class BaseRestLib(object):
         if cert_file and os.path.exists(cert_file):
             context.load_cert_chain(cert_file, keyfile=key_file)
 
-        if self.proxy_hostname and self.proxy_port:
-            log.debug(
-                "Using proxy: %s:%s" % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port))
-            )
-            proxy_headers = {
-                "User-Agent": self.user_agent,
-                "Host": "%s:%s" % (normalized_host(self.host), safe_int(self.ssl_port)),
-            }
-            if self.proxy_user and self.proxy_password:
-                proxy_headers["Proxy-Authorization"] = _encode_auth(self.proxy_user, self.proxy_password)
-            conn = httplib.HTTPSConnection(
-                self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout
-            )
-            conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
-            self.headers["Host"] = "%s:%s" % (normalized_host(self.host), safe_int(self.ssl_port))
+        if self.__conn is None:
+            log.debug("Creating new connection")
+            if self.proxy_hostname and self.proxy_port:
+                log.debug(
+                    "Using proxy: %s:%s" % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port))
+                )
+                proxy_headers = {
+                    "User-Agent": self.user_agent,
+                    "Host": "%s:%s" % (normalized_host(self.host), safe_int(self.ssl_port)),
+                }
+                if self.proxy_user and self.proxy_password:
+                    proxy_headers["Proxy-Authorization"] = _encode_auth(self.proxy_user, self.proxy_password)
+                conn = httplib.HTTPSConnection(
+                    self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout
+                )
+                conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
+                self.headers["Host"] = "%s:%s" % (normalized_host(self.host), safe_int(self.ssl_port))
+            else:
+                conn = httplib.HTTPSConnection(
+                    self.host, self.ssl_port, context=context, timeout=self.timeout
+                )
+            log.debug(f"Created connection: {conn}")
+            self.__conn = conn
         else:
-            conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
+            log.debug("Reusing connection: %s", self.__conn)
+            conn = self.__conn
 
         return conn
 
@@ -693,10 +724,18 @@ class BaseRestLib(object):
             green_col = "\033[92m"
             red_col = "\033[91m"
             end_col = "\033[0m"
-            if self.insecure is True:
-                msg = blue_col + "Making insecure request:" + end_col
+            if self.token:
+                auth = "keycloak auth"
+            elif self.username and self.password:
+                auth = "basic auth"
+            elif self.cert_file and self.key_file:
+                auth = "consumer auth"
             else:
-                msg = blue_col + "Making request:" + end_col
+                auth = "no auth"
+            if self.insecure is True:
+                msg = blue_col + f"Making insecure ({auth}) request:" + end_col
+            else:
+                msg = blue_col + f"Making ({auth}) request:" + end_col
             msg += red_col + " %s:%s %s %s" % (self.host, self.ssl_port, request_type, handler) + end_col
             if self.proxy_hostname and self.proxy_port:
                 msg += (
@@ -803,6 +842,9 @@ class BaseRestLib(object):
         else:
             body = None
 
+        if self.__conn is not None:
+            self.headers["Connection"] = "keep-alive"
+
         log.debug("Making request: %s %s" % (request_type, handler))
 
         if self.user_agent:
@@ -885,6 +927,17 @@ class BaseRestLib(object):
             )
         response_log = '%s, request="%s %s"' % (response_log, request_type, handler)
         log.debug(response_log)
+
+        connection_http_header = response.getheader("Connection")
+        if connection_http_header == "keep-alive":
+            log.debug("Server wants to keep connection")
+        elif connection_http_header == "close":
+            log.debug("Server wants to close connection. Closing HTTP connection")
+            self.close_connection()
+        elif connection_http_header is None:
+            log.debug("HTTP header 'Connection' not included in response")
+        else:
+            log.debug(f"Unsupported value of HTTP header 'Connection': {connection_http_header}")
 
         # Look for server drift, and log a warning
         if drift_check(response.getheader("date")):
@@ -1161,10 +1214,6 @@ class UEPConnection(BaseConnection):
         if self.capabilities is None:
             self.capabilities = self._load_manager_capabilities()
         return capability in self.capabilities
-
-    def shutDown(self):
-        self.conn.close()
-        log.debug("remote connection closed")
 
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/", description=_("Checking connection status"))

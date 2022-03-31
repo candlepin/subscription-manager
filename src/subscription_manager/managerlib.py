@@ -68,6 +68,15 @@ def system_log(message, priority=syslog.LOG_NOTICE):
     utils.system_log(message, priority)
 
 
+def close_all_connections():
+    """
+    Close all connections
+    :return: None
+    """
+    cpp_provider = require(CP_PROVIDER)
+    cpp_provider.close_all_connections()
+
+
 # FIXME: move me to identity.py
 def persist_consumer_cert(consumerinfo):
     """
