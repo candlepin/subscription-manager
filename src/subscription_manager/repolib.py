@@ -29,6 +29,7 @@ from subscription_manager.utils import get_supported_resources
 from rhsm.config import get_config_parser, in_container
 from rhsm import connection
 import configparser
+from rhsmlib.facts.hwprobe import HardwareCollector
 
 # FIXME: local imports
 
@@ -169,6 +170,11 @@ class YumPluginManager(object):
         # When user doesn't want to automatically enable yum plugins, then return empty list
         if cls.is_auto_enable_enabled() is False:
             log.debug("The rhsm.auto_enable_yum_plugins is disabled. Skipping the enablement of yum plugins.")
+            return []
+
+        dist_info = HardwareCollector().get_distribution()
+
+        if dist_info[4] == "debian" or "debian" in dist_info[5]:
             return []
 
         log.debug("The rhsm.auto_enable_yum_plugins is enabled")

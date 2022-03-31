@@ -1268,8 +1268,48 @@ class TestYumPluginManager(unittest.TestCase):
         os.unlink(self.plug_file_name_02)
         os.rmdir(self.tmp_dir)
 
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "debian", []),
+    )
+    def test_enable_pkg_plugins_deb(self, mock_get_distribution):
+        """
+        Test not enabling of yum plugins on deb based systems (Test 1 of 2)
+        """
+        plugin_list = YumPluginManager.enable_pkg_plugins()
+        self.assertEqual(len(plugin_list), 0)
+
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "", ["debian"]),
+    )
+    def test_enable_pkg_plugins_deb_like(self, mock_get_distribution):
+        """
+        Test not enabling of yum plugins on deb based systems (Test 2 of 2)
+        """
+        plugin_list = YumPluginManager.enable_pkg_plugins()
+        self.assertEqual(len(plugin_list), 0)
+
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
-    def test_enabling_disabled_dnf_plugin(self):
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "rhel", []),
+    )
+    def test_enable_pkg_plugins_yum(self, mock_get_distribution):
+        """
+        Test enabling of yum plugins on yum based systems
+        """
+        self.init_dnf_plugin_conf_files(conf_string=PKG_PLUGIN_CONF_FILE_DISABLED_INT)
+        plugin_list = YumPluginManager.enable_pkg_plugins()
+        print(plugin_list)
+        self.assertEqual(len(plugin_list), 2)
+
+    @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "rhel", []),
+    )
+    def test_enabling_disabled_dnf_plugin(self, mock_get_distribution):
         """
         Test automatic enabling of configuration files of disabled plugins
         """
@@ -1287,7 +1327,11 @@ class TestYumPluginManager(unittest.TestCase):
         self.restore_dnf_plugin_conf_files()
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
-    def test_enabling_enabled_dnf_plugin_int(self):
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "rhel", []),
+    )
+    def test_enabling_enabled_dnf_plugin_int(self, mock_get_distribution):
         """
         Test automatic enabling of configuration files of already enabled plugins
         """
@@ -1305,7 +1349,11 @@ class TestYumPluginManager(unittest.TestCase):
         self.restore_dnf_plugin_conf_files()
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
-    def test_enabling_enabled_dnf_plugin_bool(self):
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "rhel", []),
+    )
+    def test_enabling_enabled_dnf_plugin_bool(self, mock_get_distribution):
         """
         Test automatic enabling of configuration files of already enabled plugins
         """
@@ -1324,7 +1372,11 @@ class TestYumPluginManager(unittest.TestCase):
         self.restore_dnf_plugin_conf_files()
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
-    def test_enabling_dnf_plugin_with_invalid_values(self):
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "rhel", []),
+    )
+    def test_enabling_dnf_plugin_with_invalid_values(self, mock_get_distribution):
         """
         Test automatic enabling of configuration files of already enabled plugins
         """
@@ -1342,7 +1394,11 @@ class TestYumPluginManager(unittest.TestCase):
         self.restore_dnf_plugin_conf_files()
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
-    def test_enabling_dnf_plugin_with_wrong_conf(self):
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "rhel", []),
+    )
+    def test_enabling_dnf_plugin_with_wrong_conf(self, mock_get_distribution):
         """
         Test automatic enabling of configuration files of already plugins with wrong values in conf file.
         """
@@ -1360,7 +1416,11 @@ class TestYumPluginManager(unittest.TestCase):
         self.restore_dnf_plugin_conf_files()
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
-    def test_enabling_dnf_plugin_with_corrupted_conf_file(self):
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "rhel", []),
+    )
+    def test_enabling_dnf_plugin_with_corrupted_conf_file(self, mock_get_distribution):
         """
         This test only test YumPluginManager.enable_yum_plugins() can survive reading of corrupted
         dnf plugin configuration file
@@ -1370,7 +1430,11 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 0)
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
-    def test_enabling_dnf_plugin_with_missing_main_section(self):
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "rhel", []),
+    )
+    def test_enabling_dnf_plugin_with_missing_main_section(self, mock_get_distribution):
         """
         This test only test YumPluginManager.enable_yum_plugins() can survive reading of corrupted
         dnf plugin configuration file (missing main section)
@@ -1380,7 +1444,11 @@ class TestYumPluginManager(unittest.TestCase):
         self.assertEqual(len(plugin_list), 2)
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
-    def test_enabling_dnf_plugin_with_missing_enabled_option(self):
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "rhel", []),
+    )
+    def test_enabling_dnf_plugin_with_missing_enabled_option(self, mock_get_distribution):
         """
         This test only test YumPluginManager.enable_yum_plugins() can survive reading of corrupted
         dnf plugin configuration file (missing option 'enabled')
