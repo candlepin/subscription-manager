@@ -41,3 +41,4 @@ export PYTHONPATH="$PYTHON_RHSM"/src
 
 # make set-versions
 make stylish
+black --diff --check .
