@@ -492,14 +492,14 @@ class TestGetServerVersions(fixture.SubManFixture):
 class TestGetClientVersions(fixture.SubManFixture):
     @patch("subscription_manager.utils.subscription_manager.version")
     def test_get_client_versions(self, mock_sub_version):
-        mock_sub_version.rpm_version = "9.8.7-6"
+        mock_sub_version.pkg_version = "9.8.7-6"
         cv = get_client_versions()
         self.assertEqual(cv["subscription-manager"], "9.8.7-6")
         self.assertTrue(isinstance(cv["subscription-manager"], str))
 
     @patch("subscription_manager.utils.subscription_manager.version")
     def test_get_client_versions_strings(self, mock_sub_version):
-        mock_sub_version.rpm_version = "ef-gh"
+        mock_sub_version.pkg_version = "ef-gh"
         cv = get_client_versions()
         self.assertEqual(cv["subscription-manager"], "ef-gh")
 

@@ -22,7 +22,7 @@ class ApiVersionTest(SubManFixture):
     def test_version_is_available(self):
         from subscription_manager import version
 
-        self.assertEqual(version.rpm_version, api.version)
+        self.assertEqual(version.pkg_version, api.version)
 
 
 class RepoApiTest(SubManFixture):

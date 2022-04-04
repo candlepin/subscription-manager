@@ -252,7 +252,7 @@ def get_client_versions():
     sm_version = _("Unknown")
 
     try:
-        sm_version = subscription_manager.version.rpm_version
+        sm_version = subscription_manager.version.pkg_version
         if sm_version is None or sm_version == "None":
             sm_version = pkg_resources.require("subscription-manager")[0].version
     except Exception as e:

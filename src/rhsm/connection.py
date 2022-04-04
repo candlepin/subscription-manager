@@ -41,7 +41,7 @@ from rhsm import utils
 try:
     import subscription_manager.version
 
-    subman_version = subscription_manager.version.rpm_version
+    subman_version = subscription_manager.version.pkg_version
 except ImportError:
     subman_version = "unknown"
 
