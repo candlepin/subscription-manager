@@ -123,8 +123,6 @@
 %global rhsm_package_name subscription-manager-rhsm
 %endif
 
-%global include_syspurpose 1
-
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
 
@@ -201,8 +199,6 @@
 %else
 %global with_cockpit WITH_COCKPIT=false
 %endif
-
-%global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 # Build a list of python package to exclude from the build.
 # This is necessary because we have multiple rpms which may or may not
@@ -765,7 +761,7 @@ cloud metadata and signatures.
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
     LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
-    %{?gtk_version} %{?subpackages} %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
+    %{?gtk_version} \
     %{exclude_packages} %{?with_subman_gui} %{?with_subman_migration}
 
 %if %{with python2_rhsm}
@@ -797,8 +793,6 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?with_subman_gui} \
     %{?with_subman_migration} \
     %{?with_cockpit} \
-    %{?subpackages} \
-    %{?include_syspurpose:INCLUDE_SYSPURPOSE="1"} \
     %{?exclude_packages}
 
 %if (%{use_dnf} && (0%{?fedora} >= 29 || 0%{?rhel} >= 8))
@@ -838,9 +832,7 @@ desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-c
 %endif
 
 %find_lang rhsm
-%if 0%{?include_syspurpose}
 %find_lang syspurpose
-%endif
 
 # fake out the redhat.repo file
 %if %{use_yum} || %{use_dnf}
