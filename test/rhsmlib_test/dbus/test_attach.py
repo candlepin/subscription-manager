@@ -17,17 +17,13 @@ import mock
 from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
 
 from subscription_manager import injection as inj
-from subscription_manager.identity import Identity
-from subscription_manager.plugins import PluginManager
 from subscription_manager.cp_provider import CPProvider
-
-from rhsm import connection
 
 from rhsmlib.dbus.objects import AttachDBusObject
 from rhsmlib.dbus import constants
-from rhsmlib.services import attach
 
 from test import subman_marker_dbus
+
 
 CONTENT_JSON = [
     {
@@ -97,66 +93,6 @@ CONTENT_JSON = [
         "updated": "2017-07-11T19:23:14+0000",
     }
 ]
-
-
-class TestAttachService(InjectionMockingTest):
-    def setUp(self):
-        super(TestAttachService, self).setUp()
-        self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
-        self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection").return_value
-        self.mock_pm = mock.Mock(spec=PluginManager, name="PluginManager").return_value
-
-    def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.PLUGIN_MANAGER:
-            return self.mock_pm
-        else:
-            return None
-
-    def test_pool_attach(self):
-        self.mock_identity.is_valid.return_value = True
-        self.mock_identity.uuid = "id"
-
-        self.mock_cp.bindByEntitlementPool.return_value = CONTENT_JSON
-
-        result = attach.AttachService(self.mock_cp).attach_pool("x", 1)
-
-        self.assertEqual(CONTENT_JSON, result)
-
-        expected_bind_calls = [
-            mock.call("id", "x", 1),
-        ]
-        self.assertEqual(expected_bind_calls, self.mock_cp.bindByEntitlementPool.call_args_list)
-
-        expected_plugin_calls = [
-            mock.call("pre_subscribe", consumer_uuid="id", pool_id="x", quantity=1),
-            mock.call("post_subscribe", consumer_uuid="id", entitlement_data=CONTENT_JSON),
-        ]
-        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
-
-    def test_auto_attach(self):
-        self.mock_identity.is_valid.return_value = True
-        self.mock_identity.uuid = "id"
-
-        self.mock_cp.bind.return_value = CONTENT_JSON
-
-        result = attach.AttachService(self.mock_cp).attach_auto("service_level")
-        self.assertEqual(CONTENT_JSON, result)
-
-        expected_update_calls = [mock.call("id", service_level="service_level")]
-        self.assertEqual(expected_update_calls, self.mock_cp.updateConsumer.call_args_list)
-
-        expected_bind_calls = [
-            mock.call("id"),
-        ]
-        self.assertEqual(expected_bind_calls, self.mock_cp.bind.call_args_list)
-
-        expected_plugin_calls = [
-            mock.call("pre_auto_attach", consumer_uuid="id"),
-            mock.call("post_auto_attach", consumer_uuid="id", entitlement_data=CONTENT_JSON),
-        ]
-        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
 
 @subman_marker_dbus

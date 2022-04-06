@@ -13,7 +13,7 @@
 
 import unittest
 
-from ..fixture import open_mock_many
+from test.fixture import open_mock_many
 from rhsmlib.facts import insights
 from mock import patch
 import tempfile

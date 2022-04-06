@@ -14,7 +14,6 @@
 import mock
 import dbus
 
-from rhsmlib.services import consumer
 from rhsmlib.dbus import constants
 from rhsmlib.dbus.objects.consumer import ConsumerDBusObject
 
@@ -23,39 +22,6 @@ from subscription_manager.identity import Identity
 from test.rhsmlib_test.base import InjectionMockingTest, DBusObjectTest
 
 from test import subman_marker_dbus
-
-
-class TestConsumerService(InjectionMockingTest):
-    def setUp(self):
-        super(TestConsumerService, self).setUp()
-        self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
-        self.mock_identity.is_valid.return_value = True
-        self.mock_identity.uuid = "43b30b32-86cf-459e-9310-cb4182c23c4a"
-
-    def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        else:
-            return None
-
-    def test_get_consumer_uuid(self):
-        """
-        Test of getting UUID
-        """
-        test_concumer = consumer.Consumer()
-        uuid = test_concumer.get_consumer_uuid()
-        self.assertEqual(uuid, "43b30b32-86cf-459e-9310-cb4182c23c4a")
-
-    def test_get_consumer_uuid_unregistered_system(self):
-        """
-        When system is not registered, then get_consumer_uuid should
-        return empty string.
-        :return:
-        """
-        self.mock_identity.uuid = None
-        test_concumer = consumer.Consumer()
-        uuid = test_concumer.get_consumer_uuid()
-        self.assertEqual(uuid, "")
 
 
 @subman_marker_dbus
