@@ -104,6 +104,32 @@ REDHAT_BUGZILLA_PRODUCT_VERSION=42.0
 REDHAT_SUPPORT_PRODUCT="AwesomeOS Enterprise"
 REDHAT_SUPPORT_PRODUCT_VERSION=42.0"""
 
+OS_RELEASE_ID_LIKE = """NAME="Awesome OS"
+VERSION="42 (Go4It)"
+ID="awesomeos"
+ID_LIKE="awe some os"
+VERSION_ID="42"
+PRETTY_NAME="Awesome OS 42 (Go4It)"
+CPE_NAME="cpe:/o:awesomeos:best_linux:42:beta:server"
+
+REDHAT_BUGZILLA_PRODUCT="AwesomeOS Enterprise 42"
+REDHAT_BUGZILLA_PRODUCT_VERSION=42.0
+REDHAT_SUPPORT_PRODUCT="AwesomeOS Enterprise"
+REDHAT_SUPPORT_PRODUCT_VERSION=42.0"""
+
+OS_RELEASE_SINGLE_ID_LIKE = """NAME="Awesome OS"
+VERSION="42 (Go4It)"
+ID="awesomeos"
+ID_LIKE="awe"
+VERSION_ID="42"
+PRETTY_NAME="Awesome OS 42 (Go4It)"
+CPE_NAME="cpe:/o:awesomeos:best_linux:42:beta:server"
+
+REDHAT_BUGZILLA_PRODUCT="AwesomeOS Enterprise 42"
+REDHAT_BUGZILLA_PRODUCT_VERSION=42.0
+REDHAT_SUPPORT_PRODUCT="AwesomeOS Enterprise"
+REDHAT_SUPPORT_PRODUCT_VERSION=42.0"""
+
 OS_RELEASE_COLON = r"""NAME="Awesome OS"
 VERSION="42 (Go4It)"
 ID="awesomeos"
@@ -514,6 +540,33 @@ VARIANT_ID=server
                 "distribution.version.modifier": "be:ta",
             }
             self.assertEqual(hw.get_release_info(), expected)
+
+    @patch("os.path.exists")
+    @patch(OPEN_FUNCTION)
+    def test_get_distribution(self, MockOpen, MockExists):
+        MockExists.return_value = True
+        hw = hwprobe.HardwareCollector()
+        MockOpen.return_value.readlines.return_value = OS_RELEASE.split("\n")
+        expected = ("Awesome OS", "42", "Go4It", "beta", "awesomeos", [])
+        self.assertEqual(hw.get_distribution(), expected)
+
+    @patch("os.path.exists")
+    @patch(OPEN_FUNCTION)
+    def test_get_distribution_id_like(self, MockOpen, MockExists):
+        MockExists.return_value = True
+        hw = hwprobe.HardwareCollector()
+        MockOpen.return_value.readlines.return_value = OS_RELEASE_ID_LIKE.split("\n")
+        expected = ("Awesome OS", "42", "Go4It", "beta", "awesomeos", ["awe", "some", "os"])
+        self.assertEqual(hw.get_distribution(), expected)
+
+    @patch("os.path.exists")
+    @patch(OPEN_FUNCTION)
+    def test_get_distribution_single_id_like(self, MockOpen, MockExists):
+        MockExists.return_value = True
+        hw = hwprobe.HardwareCollector()
+        MockOpen.return_value.readlines.return_value = OS_RELEASE_SINGLE_ID_LIKE.split("\n")
+        expected = ("Awesome OS", "42", "Go4It", "beta", "awesomeos", ["awe"])
+        self.assertEqual(hw.get_distribution(), expected)
 
     def test_meminfo(self):
         hw = hwprobe.HardwareCollector()
