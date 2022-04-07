@@ -144,14 +144,20 @@ class CloudFactsCollector(collector.FactsCollector):
             jose_header, metadata, signature = self.cloud_provider.decode_jwt(encoded_jwt_token)
             if metadata is not None:
                 values = self.parse_json_content(metadata)
-                if 'google' in values and \
-                        'compute_engine' in values['google'] and \
-                        'instance_id' in values['google']['compute_engine']:
-                    facts = {
-                        "gcp_instance_id": values['google']['compute_engine']['instance_id']
-                    }
+                if "google" in values and "compute_engine" in values["google"]:
+                    # ID of instance
+                    if "instance_id" in values["google"]["compute_engine"]:
+                        facts["gcp_instance_id"] = values["google"]["compute_engine"]["instance_id"]
+                    else:
+                        log.debug("GCP instance_id not found in JWT token")
+                    # IDs of licenses
+                    if "license_id" in values["google"]["compute_engine"]:
+                        gcp_license_codes = values["google"]["compute_engine"]["license_id"]
+                        facts["gcp_license_codes"] = " ".join(gcp_license_codes)
+                    else:
+                        log.debug("GCP license codes not found in JWT token")
                 else:
-                    log.debug('GCP instance_id not found in JWT token')
+                    log.debug("GCP google.compute_engine on found in JWT token")
         return facts
 
     @staticmethod
