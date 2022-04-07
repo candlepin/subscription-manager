@@ -24,7 +24,7 @@ from subscription_manager.plugins import PluginManager
 
 from test.fixture import set_up_mock_sp_store
 
-from test.rhsmlib_test.base import InjectionMockingTest
+from test.rhsmlib.base import InjectionMockingTest
 
 from rhsm import connection
 

@@ -23,7 +23,7 @@ import subscription_manager.injection as inj
 
 from subscription_manager.cp_provider import CPProvider
 
-from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
+from test.rhsmlib.base import DBusObjectTest, InjectionMockingTest
 
 from rhsm import connection
 

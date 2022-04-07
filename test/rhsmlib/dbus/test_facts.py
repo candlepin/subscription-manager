@@ -16,7 +16,7 @@ import dbus.exceptions
 from rhsmlib.dbus.facts.base import AllFacts
 from rhsmlib.dbus.facts import constants
 
-from test.rhsmlib_test.base import DBusObjectTest
+from test.rhsmlib.base import DBusObjectTest
 
 from test import subman_marker_dbus
 

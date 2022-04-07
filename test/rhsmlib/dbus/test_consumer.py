@@ -19,7 +19,7 @@ from rhsmlib.dbus.objects.consumer import ConsumerDBusObject
 
 from subscription_manager import injection as inj
 from subscription_manager.identity import Identity
-from test.rhsmlib_test.base import InjectionMockingTest, DBusObjectTest
+from test.rhsmlib.base import InjectionMockingTest, DBusObjectTest
 
 from test import subman_marker_dbus
 
