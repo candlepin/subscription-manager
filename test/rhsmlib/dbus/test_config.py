@@ -18,44 +18,8 @@ from rhsmlib.dbus import constants
 from rhsmlib.dbus.objects.config import ConfigDBusObject
 from test.rhsmlib.base import DBusObjectTest, TestUtilsMixin
 
+from test.rhsmlib.services.test_config import TEST_CONFIG
 from test import subman_marker_dbus
-
-TEST_CONFIG = """
-[foo]
-bar =
-quux = baz
-bigger_than_32_bit = 21474836470
-bigger_than_64_bit = 123456789009876543211234567890
-
-[server]
-hostname = server.example.com
-prefix = /candlepin
-port = 8443
-insecure = 1
-proxy_hostname =
-proxy_port =
-proxy_user =
-proxy_password =
-
-[rhsm]
-ca_cert_dir = /etc/rhsm/ca-test/
-baseurl = https://content.example.com
-repomd_gpg_url =
-repo_ca_cert = %(ca_cert_dir)sredhat-uep-non-default.pem
-productCertDir = /etc/pki/product
-entitlementCertDir = /etc/pki/entitlement
-consumerCertDir = /etc/pki/consumer
-report_package_profile = 1
-pluginDir = /usr/lib/rhsm-plugins
-some_option = %(repo_ca_cert)stest
-manage_repos =
-
-[rhsmcertd]
-certCheckInterval = 245
-
-[logging]
-default_log_level = DEBUG
-"""
 
 
 @subman_marker_dbus
