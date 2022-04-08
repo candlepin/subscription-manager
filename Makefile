@@ -53,7 +53,7 @@ INITIAL_SETUP_INST_DIR := $(ANACONDA_ADDON_INST_DIR)/$(ANACONDA_ADDON_NAME)
 POLKIT_ACTIONS_INST_DIR := $(INSTALL_DIR)/polkit-1/actions
 COMPLETION_DIR ?= $(INSTALL_DIR)/bash-completion/completions/
 LIBEXEC_DIR ?= $(shell rpm --eval='%_libexecdir')
-SUBPACKAGES ?= $(shell ls -d syspurpose)
+SUBPACKAGES = syspurpose
 
 # If we skip install ostree plugin, unset by default
 # override from spec file for rhel6
@@ -95,7 +95,6 @@ INSTALL_DNF_PLUGINS ?= false
 DNF_PLUGINS_SRC_DIR := src/plugins
 
 INSTALL_ZYPPER_PLUGINS ?= false
-INCLUDE_SYSPURPOSE ?= 0
 
 # sets a version that is more or less latest tag plus commit sha
 VERSION ?= $(shell git describe | awk ' { sub(/subscription-manager-/,"")};1' )
@@ -205,10 +204,8 @@ install-conf:
 	install -d $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.Facts.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
-	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
-		install -m 644 etc-conf/syspurpose/valid_fields.json $(DESTDIR)/etc/rhsm/syspurpose/valid_fields.json; \
-		install -m 644 etc-conf/syspurpose.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/syspurpose; \
-	fi;
+	install -m 644 etc-conf/syspurpose/valid_fields.json $(DESTDIR)/etc/rhsm/syspurpose/valid_fields.json
+	install -m 644 etc-conf/syspurpose.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/syspurpose
 	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
 	    install -m 644 etc-conf/dbus/polkit/com.redhat.SubscriptionManager.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR); \
 		install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml; \
@@ -348,9 +345,7 @@ install-via-setup: install-subpackages-via-setup
 	else \
 	    rm $(DESTDIR)/$(PREFIX)/bin/rhn-migrate-classic-to-rhsm; \
 	fi;
-	if [[ "$(INCLUDE_SYSPURPOSE)" = "1" ]]; then \
-		mv $(DESTDIR)/$(PREFIX)/bin/syspurpose $(DESTDIR)/$(PREFIX)/sbin/; \
-	fi;
+	mv $(DESTDIR)/$(PREFIX)/bin/syspurpose $(DESTDIR)/$(PREFIX)/sbin/
 	find $(DESTDIR)/$(PYTHON_SITELIB) -name requires.txt -exec sed -i '/dbus-python/d' {} \;
 
 
