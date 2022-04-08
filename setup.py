@@ -48,36 +48,36 @@ exclude_packages.extend(
 )
 
 
-RPM_VERSION = None
+PKG_VERSION = None
 
 
-# subclass build_py so we can generate version.py based on --rpm-version or
+# subclass build_py so we can generate version.py based on --pkg-version or
 # from a guess generated from 'git describe'
-class rpm_version_release_build_py(_build_py):
+class pkg_version_release_build_py(_build_py):
     user_options = _build_py.user_options + [
-        ("rpm-version=", None, "version and release of the RPM this is built for")
+        ("pkg-version=", None, "version and release of the PKG this is built for")
     ]
 
     def initialize_options(self):
         _build_py.initialize_options(self)
-        self.rpm_version = None
+        self.pkg_version = None
         self.versioned_packages = []
 
     def finalize_options(self):
-        # When --rpm-version was provided as command line
+        # When --pkg-version was provided as command line
         # option of install command, then get this value from global variables
-        if self.rpm_version is None and RPM_VERSION is not None:
-            self.rpm_version = RPM_VERSION
+        if self.pkg_version is None and PKG_VERSION is not None:
+            self.pkg_version = PKG_VERSION
         _build_py.finalize_options(self)
         self.set_undefined_options(
             "build",
-            ("rpm_version", "rpm_version"),
+            ("pkg_version", "pkg_version"),
         )
 
     def run(self):
-        log.debug("Building with RPM_VERSION=%s" % self.rpm_version)
+        log.debug("Building with PKG_VERSION=%s" % self.pkg_version)
         _build_py.run(self)
-        # create a "version.py" that includes the rpm version
+        # create a "version.py" that includes the pkg version
         # info passed to our new build_py args
         if not self.dry_run:
             for package in self.versioned_packages:
@@ -87,7 +87,7 @@ class rpm_version_release_build_py(_build_py):
                     lines = []
                     with open(version_file, "r") as file:
                         for line in file.readlines():
-                            line = line.replace("RPM_VERSION", str(self.rpm_version))
+                            line = line.replace("PKG_VERSION", str(self.pkg_version))
                             lines.append(line)
 
                     with open(version_file, "w") as file:
@@ -99,7 +99,7 @@ class rpm_version_release_build_py(_build_py):
 
 class install(_install):
     user_options = _install.user_options + [
-        ("rpm-version=", None, "version and release of the RPM this is built for"),
+        ("pkg-version=", None, "version and release of the PKG this is built for"),
         (
             "with-cockpit-desktop-entry=",
             None,
@@ -109,42 +109,42 @@ class install(_install):
 
     def initialize_options(self):
         _install.initialize_options(self)
-        self.rpm_version = None
+        self.pkg_version = None
         self.with_cockpit_desktop_entry = None
 
     def finalize_options(self):
-        global RPM_VERSION
-        if self.rpm_version is not None:
-            RPM_VERSION = self.rpm_version
+        global PKG_VERSION
+        if self.pkg_version is not None:
+            PKG_VERSION = self.pkg_version
         _install.finalize_options(self)
         self.set_undefined_options(
             "build",
-            ("rpm_version", "rpm_version"),
+            ("pkg_version", "pkg_version"),
         )
 
 
 class build(_build):
     user_options = _build.user_options + [
-        ("rpm-version=", None, "version and release of the RPM this is built for")
+        ("pkg-version=", None, "version and release of the PKG this is built for")
     ]
 
     def initialize_options(self):
         _build.initialize_options(self)
-        self.rpm_version = None
+        self.pkg_version = None
         self.git_tag_prefix = "subscription-manager-"
 
     def finalize_options(self):
-        # When --rpm-version was provided as command line
+        # When --pkg-version was provided as command line
         # option of install command, then get this value from global variables
-        if self.rpm_version is None and RPM_VERSION is not None:
-            self.rpm_version = RPM_VERSION
+        if self.pkg_version is None and PKG_VERSION is not None:
+            self.pkg_version = PKG_VERSION
 
         _build.finalize_options(self)
 
-        # When the rpm-version was not provided as command line options,
+        # When the pkg-version was not provided as command line options,
         # then try to get such information from .git or rpm
-        if not self.rpm_version:
-            self.rpm_version = self.get_git_describe()
+        if not self.pkg_version:
+            self.pkg_version = self.get_git_describe()
 
     def get_git_describe(self):
         try:
@@ -154,8 +154,8 @@ class build(_build):
             if output.startswith(self.git_tag_prefix):
                 return output[len(self.git_tag_prefix) :]
         except OSError:
-            # When building the RPM there won't be a git repo to introspect so
-            # builders *must* specify the version via the --rpm-version option
+            # When building the package there won't be a git repo to introspect so
+            # builders *must* specify the version via the --pkg-version option
             return "unknown"
 
     def has_po_files(self):
@@ -291,7 +291,7 @@ cmdclass = {
     "install": install,
     "install_data": install_data,
     "build": build,
-    "build_py": rpm_version_release_build_py,
+    "build_py": pkg_version_release_build_py,
     "build_trans": i18n.BuildTrans,
     "build_template": template.BuildTemplate,
     "update_trans": i18n.UpdateTrans,

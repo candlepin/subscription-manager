@@ -85,7 +85,7 @@ STYLEFILES=$(PYFILES) $(BIN_FILES)
 
 build: rhsmcertd
 	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
-	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --rpm-version=$(VERSION)
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --pkg-version=$(VERSION)
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
@@ -195,7 +195,7 @@ install-example-plugins: install-plugins
 
 .PHONY: install-via-setup
 install-via-setup: install-subpackages-via-setup
-	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
+	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --pkg-version=$(VERSION) --prefix=$(PREFIX) \
 	--with-cockpit-desktop-entry=${WITH_COCKPIT} \
 	$(SETUP_PY_INSTALL_PARAMS)
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
