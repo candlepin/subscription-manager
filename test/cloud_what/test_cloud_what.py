@@ -923,7 +923,7 @@ class TestGCPCloudProvider(unittest.TestCase):
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
             url="http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?"
-            "audience=https://subscription.rhsm.redhat.com:443/subscription&format=full",
+            "audience=https://subscription.rhsm.redhat.com:443/subscription&format=full&licenses=TRUE",
             headers={"User-Agent": "cloud-what/1.0", "Metadata-Flavor": "Google"},
         )
         self.assertEqual(token, GCP_JWT_TOKEN)
@@ -948,7 +948,7 @@ class TestGCPCloudProvider(unittest.TestCase):
         self.requests_mock.Request.assert_called_once_with(
             method="GET",
             url="http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?"
-            "audience=https://example.com:8443/rhsm&format=full",
+            "audience=https://example.com:8443/rhsm&format=full&licenses=TRUE",
             headers={"User-Agent": "cloud-what/1.0", "Metadata-Flavor": "Google"},
         )
         mock_session.send.assert_called_once()
