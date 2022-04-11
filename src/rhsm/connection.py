@@ -998,7 +998,7 @@ class UEPConnection(object):
         """
         params = {
             "type": cloud_id,
-            "payload": metadata,
+            "metadata": metadata,
             "signature": signature
         }
         # "Accept" http header has to be text/plain, because candlepin return
