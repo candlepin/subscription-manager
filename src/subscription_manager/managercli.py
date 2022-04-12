@@ -2317,6 +2317,7 @@ class ReleaseCommand(CliCommand):
         if self.options.unset:
             self.cp.updateConsumer(self.identity.uuid,
                         release="")
+            inj.require(inj.RELEASE_STATUS_CACHE).delete_cache()
             repo_action_invoker.update()
             print(_("Release preference has been unset"))
         elif self.options.release is not None:
@@ -2337,6 +2338,7 @@ class ReleaseCommand(CliCommand):
                     "No releases match '%s'.  "
                     "Consult 'release --list' for a full listing.")
                     % self.options.release)
+            inj.require(inj.RELEASE_STATUS_CACHE).delete_cache()
             repo_action_invoker.update()
             print(_("Release set to: %s") % self.options.release)
         elif self.options.list:
