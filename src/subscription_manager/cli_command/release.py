@@ -23,6 +23,7 @@ from subscription_manager.i18n import ugettext as _
 from subscription_manager.release import ReleaseBackend, MultipleReleaseProductsError
 from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.utils import parse_baseurl_info
+import subscription_manager.injection as inj
 
 log = logging.getLogger(__name__)
 
@@ -75,6 +76,7 @@ class ReleaseCommand(CliCommand):
         if self.options.unset:
             self.cp.updateConsumer(self.identity.uuid,
                                    release="")
+            inj.require(inj.RELEASE_STATUS_CACHE).delete_cache()
             repo_action_invoker.update()
             print(_("Release preference has been unset"))
         elif self.options.release is not None:
@@ -95,6 +97,7 @@ class ReleaseCommand(CliCommand):
                     "No releases match '{release}'.  "
                     "Consult 'release --list' for a full listing.").format(
                         release=self.options.release))
+            inj.require(inj.RELEASE_STATUS_CACHE).delete_cache()
             repo_action_invoker.update()
             print(_("Release set to: {release}").format(release=self.options.release))
         elif self.options.list:
