@@ -1268,6 +1268,9 @@ class RefreshCommand(CliCommand):
             content_access_mode = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
             if content_access_mode.exists():
                 content_access_mode.delete_cache()
+            # Remove the release status cache, in case it was changed
+            # on the server; it will be fetched when needed again
+            inj.require(inj.RELEASE_STATUS_CACHE).delete_cache()
             if self.options.force is True:
                 # get current consumer identity
                 consumer_identity = inj.require(inj.IDENTITY)
@@ -2317,6 +2320,7 @@ class ReleaseCommand(CliCommand):
         if self.options.unset:
             self.cp.updateConsumer(self.identity.uuid,
                         release="")
+            inj.require(inj.RELEASE_STATUS_CACHE).delete_cache()
             repo_action_invoker.update()
             print(_("Release preference has been unset"))
         elif self.options.release is not None:
@@ -2337,6 +2341,7 @@ class ReleaseCommand(CliCommand):
                     "No releases match '%s'.  "
                     "Consult 'release --list' for a full listing.")
                     % self.options.release)
+            inj.require(inj.RELEASE_STATUS_CACHE).delete_cache()
             repo_action_invoker.update()
             print(_("Release set to: %s") % self.options.release)
         elif self.options.list:
