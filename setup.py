@@ -100,17 +100,11 @@ class pkg_version_release_build_py(_build_py):
 class install(_install):
     user_options = _install.user_options + [
         ("pkg-version=", None, "version and release of the PKG this is built for"),
-        (
-            "with-cockpit-desktop-entry=",
-            None,
-            "whether to install desktop entry for subman cockpit plugin or not",
-        ),
     ]
 
     def initialize_options(self):
         _install.initialize_options(self)
         self.pkg_version = None
-        self.with_cockpit_desktop_entry = None
 
     def finalize_options(self):
         global PKG_VERSION
@@ -169,37 +163,20 @@ class build(_build):
 
 
 class install_data(_install_data):
-    """Used to intelligently install data files.  For example, files that must be generated (such as .mo files
-    or desktop files with merged translations) or an entire tree of data files.
-    """
+    """Used to intelligently install data files.  For example, files that must be generated
+    (such as .mo files) or an entire tree of data files."""
 
-    user_options = _install_data.user_options + [
-        (
-            "with-cockpit-desktop-entry=",
-            None,
-            "whether to install desktop entry for subman cockpit plugin or not",
-        ),
-    ]
+    user_options = _install_data.user_options + []
 
     def initialize_options(self):
         _install_data.initialize_options(self)
-        self.with_cockpit_desktop_entry = None
         # Can't use super() because Command isn't a new-style class.
 
     def finalize_options(self):
         _install_data.finalize_options(self)
-        self.set_undefined_options("install", ("with_cockpit_desktop_entry", "with_cockpit_desktop_entry"))
-        # Set self.with_cockpit_desktop_entry to True when it is equal to 'true'
-        if self.with_cockpit_desktop_entry is None:
-            self.with_cockpit_desktop_entry = True  # default to True
-        else:
-            self.with_cockpit_desktop_entry = self.with_cockpit_desktop_entry == "true"
 
     def run(self):
         self.add_messages()
-        if self.with_cockpit_desktop_entry:
-            self.add_cockpit_desktop_entry()
-            self.add_icons()
         self.add_dbus_service_files()
         self.add_systemd_services()
         _install_data.run(self)
@@ -212,14 +189,6 @@ class install_data(_install_data):
             lang_dir = self.join("share", "locale", lang, "LC_MESSAGES")
             lang_file = self.join("build", "locale", lang, "LC_MESSAGES", "rhsm.mo")
             self.data_files.append((lang_dir, [lang_file]))
-
-    def __add_desktop_entry(self, desktop_entry_file):
-        desktop_dir = self.join("share", "applications")
-        desktop_file = self.join("build", "applications", desktop_entry_file)
-        self.data_files.append((desktop_dir, [desktop_file]))
-
-    def add_cockpit_desktop_entry(self):
-        self.__add_desktop_entry("subscription-manager-cockpit.desktop")
 
     def add_dbus_service_files(self):
         """
@@ -238,14 +207,6 @@ class install_data(_install_data):
         source_dir = self.join("build", "dbus", "systemd")
         for file in os.listdir(self.join("build", "dbus", "systemd")):
             self.data_files.append((systemd_install_directory, [self.join(source_dir, file)]))
-
-    def add_icons(self):
-        icon_source_root = self.join("src", "subscription_manager", "gui", "data", "icons", "hicolor")
-        for d in os.listdir(icon_source_root):
-            icon_dir = self.join("share", "icons", "hicolor", d, "apps")
-            icon_source_files = glob(self.join(icon_source_root, d, "apps", "subscription-manager*.*"))
-
-            self.data_files.append((icon_dir, icon_source_files))
 
 
 class GettextWithArgparse(i18n.Gettext):

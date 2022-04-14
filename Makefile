@@ -56,8 +56,6 @@ INSTALL_OSTREE_PLUGIN ?= true
 # from spec file
 INSTALL_CONTAINER_PLUGIN ?= true
 
-WITH_COCKPIT ?= true
-
 # for fc22 or newer
 INSTALL_DNF_PLUGINS ?= false
 DNF_PLUGINS_SRC_DIR := src/plugins
@@ -138,7 +136,6 @@ install-conf:
 	install -m 644 etc-conf/rct.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rct
 	install -m 644 etc-conf/rhsm-debug.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhsm-debug
 	install -m 644 etc-conf/rhsmcertd.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhsmcertd
-	install -d $(DESTDIR)/$(PREFIX)/share/appdata
 	install -d $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
 	install -m 644 etc-conf/dbus/polkit/com.redhat.RHSM1.Facts.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR)
@@ -196,7 +193,6 @@ install-example-plugins: install-plugins
 .PHONY: install-via-setup
 install-via-setup: install-subpackages-via-setup
 	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --pkg-version=$(VERSION) --prefix=$(PREFIX) \
-	--with-cockpit-desktop-entry=${WITH_COCKPIT} \
 	$(SETUP_PY_INSTALL_PARAMS)
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
 	mkdir -p $(DESTDIR)/$(LIBEXEC_DIR)/

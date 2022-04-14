@@ -24,7 +24,6 @@ htmlcov/
 **/po/build
 **/po/POTFILES.*
 **/po/.zanata-cache
-etc-conf/*.desktop
 bin/rhsmcertd
 .idea
 cmake-build-*
@@ -36,11 +35,5 @@ dist
 *.retry
 updates.img
 src/plugins/libdnf/Makefile
-/bots
-/cockpit/subscription-manager-cockpit.tar.gz
-/node_modules
-/integration-tests/common
 /integration-tests/submancockpit/
-/test/images
-package-lock.json
 test_results/

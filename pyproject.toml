@@ -1,6 +1,2 @@
 [tool.black]
 line-length = 110
-extend-exclude = """
-# Ignore integration-tests/ directory, because these files are not managed by us
-integration-tests/
-"""

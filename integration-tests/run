@@ -41,7 +41,7 @@ $(SUBMAN_TAR):
         mv dist/$$fn.tar.gz $(SUBMAN_TAR)
 
 $(SMBEXT_TAR):
-	tar czf $(SMBEXT_TAR) build_ext src/subscription_manager/gui/data/icons/hicolor
+	tar czf $(SMBEXT_TAR) build_ext
 
 $(VM_IMAGE): $(SUB_MAN_COCKPIT) $(SUBMAN_TAR) $(SMBEXT_TAR) integration-tests/vm.install
 	rm -f $(VM_IMAGE)

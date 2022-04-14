@@ -27,7 +27,6 @@
 
 %global use_dnf (0%{?fedora} || (0%{?rhel}))
 %global create_libdnf_rpm (0%{?fedora} || 0%{?rhel} > 8)
-%global use_cockpit 0%{?fedora} || 0%{?rhel}
 
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
@@ -67,12 +66,6 @@
 %global install_dnf_plugins INSTALL_DNF_PLUGINS=false
 %endif
 
-%if %{use_cockpit}
-%global with_cockpit WITH_COCKPIT=true
-%else
-%global with_cockpit WITH_COCKPIT=false
-%endif
-
 # Build a list of python package to exclude from the build.
 # This is necessary because we have multiple rpms which may or may not
 # need to be built depending on the distro which are all in one source tree.
@@ -103,11 +96,6 @@
 
 %global exclude_packages %{exclude_packages}"
 
-# Moving our shared icon dependancies to their own package
-# Cockpit plugin requires these icons. They are placed in separate package
-# because they have been shared with subscription-manager-gui in RHEL < 9.
-%global use_rhsm_icons 0%{use_cockpit}
-
 Name: subscription-manager
 Version: 1.29.26
 Release: 1%{?dist}
@@ -127,11 +115,6 @@ URL:     http://www.candlepinproject.org/
 # yum install tito
 # tito build --tag subscription-manager-$VERSION-$RELEASE --tgz
 Source0: %{name}-%{version}.tar.gz
-# this is a little different from the Source0, because of limitations in tito,
-# namely that tito expects only one source tarball
-%if %{use_cockpit}
-Source1: %{name}-cockpit-%{version}.tar.gz
-%endif
 
 # Especially for the OpenSuse Build Service we need to have another lint config
 %if 0%{?suse_version}
@@ -208,12 +191,7 @@ BuildRequires: openssl-devel
 BuildRequires: gcc
 BuildRequires: %{py_package_prefix}-setuptools
 BuildRequires: gettext
-BuildRequires: intltool
 BuildRequires: libnotify-devel
-
-%if %{use_cockpit}
-BuildRequires: desktop-file-utils
-%endif
 
 %if 0%{?suse_version}
 BuildRequires: distribution-release
@@ -377,43 +355,6 @@ Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
 
 
-%if %use_cockpit
-%package -n subscription-manager-cockpit
-Summary: Subscription Manager Cockpit UI
-License: GPLv2
-BuildArch: noarch
-
-Requires: subscription-manager
-Requires: cockpit-bridge
-Requires: cockpit-shell
-Requires: rhsm-icons
-# Used by desktop UI, but not necessary for web UI
-Recommends: cockpit-ws
-
-%description -n subscription-manager-cockpit
-Subscription Manager Cockpit UI
-%endif
-
-%if %{use_rhsm_icons}
-%package -n rhsm-icons
-Summary: Icons for Red Hat Subscription Management client tools
-License: GPLv2
-BuildArch: noarch
-
-# As these two packages previously contained the icons now contained in
-# rhsm-icons package, we need to specify the logical complement to a
-# "Requires", which is "Conflicts". With any luck the underlying
-# depsolver will cause the removal of this package if the request
-# is to downgrade either of the following to a version below these
-# requirements.
-Conflicts: rhsm-gtk < 1.26.7
-Conflicts: subscription-manager-cockpit < 1.26.7
-
-%description -n rhsm-icons
-This package contains the desktop icons for the graphical interfaces provided for management
-of Red Hat subscriptions: subscription-manager-gui, subscription-manager-cockpit-plugin.
-%endif
-
 
 %package -n python3-cloud-what
 Summary: Python package for detection of public cloud provider
@@ -462,7 +403,6 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?install_ostree} %{?install_container} \
     %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
-    %{?with_cockpit} \
     %{?subpackages} \
     %{?exclude_packages}
 
@@ -475,10 +415,6 @@ mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
 %cmake_install
 %endif
 popd
-%endif
-
-%if %use_cockpit
-desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-cockpit.desktop
 %endif
 
 %find_lang rhsm
@@ -498,11 +434,6 @@ mkdir -p %{buildroot}%{_sysconfdir}/pki/entitlement
 mkdir -p %{buildroot}%{_sysconfdir}/docker/certs.d/
 mkdir %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com
 install -m 644 %{_builddir}/%{buildsubdir}/src/content_plugins/redhat-entitlement-authority.pem %{buildroot}%{_sysconfdir}/docker/certs.d/cdn.redhat.com/redhat-entitlement-authority.crt
-%endif
-
-%if %use_cockpit
-    # install cockpit dist targz
-    tar --strip-components=1 -xzf %{SOURCE1} -C %{buildroot}
 %endif
 
 # fix timestamps on our byte compiled files so they match across arches
@@ -744,27 +675,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{python_sitearch}/cloud_what/*
 %{python_sitearch}/cloud_what/__pycache__
 %{python_sitearch}/cloud_what/providers/__pycache__
-
-%if %use_cockpit
-%files -n subscription-manager-cockpit
-%defattr(-,root,root,-)
-%dir %{_datadir}/cockpit/subscription-manager
-%{_datadir}/cockpit/subscription-manager/index.html
-%{_datadir}/cockpit/subscription-manager/index.min.js.gz
-%{_datadir}/cockpit/subscription-manager/index.css
-%{_datadir}/cockpit/subscription-manager/manifest.json
-%{_datadir}/cockpit/subscription-manager/po.*.js
-%{_datadir}/cockpit/subscription-manager/po.js
-%{_datadir}/metainfo/org.candlepinproject.subscription_manager.metainfo.xml
-%{_datadir}/applications/subscription-manager-cockpit.desktop
-%endif
-
-%if %use_rhsm_icons
-%files -n rhsm-icons
-%defattr(-,root,root,-)
-%{_datadir}/icons/hicolor/scalable/apps/*.svg
-%{_datadir}/icons/hicolor/symbolic/apps/*.svg
-%endif
 
 %pre
 
