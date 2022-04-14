@@ -50,7 +50,7 @@ class GCPCloudProvider(BaseCloudProvider):
     # Google uses little bit different approach. It provides everything in JSON Web Token (JWT)
     CLOUD_PROVIDER_METADATA_URL = None
 
-    CLOUD_PROVIDER_METADATA_URL_TEMPLATE = "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience={audience}&format=full"
+    CLOUD_PROVIDER_METADATA_URL_TEMPLATE = "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience={audience}&format=full&licenses=TRUE"
 
     # Token (metadata) expires within one hour. Thus it is save to cache the token.
     CLOUD_PROVIDER_METADATA_TTL = 3600
