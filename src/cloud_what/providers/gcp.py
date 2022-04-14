@@ -46,7 +46,7 @@ class GCPCloudProvider(BaseCloudProvider):
     # Google uses little bit different approach. It provides everything in JSON Web Token (JWT)
     CLOUD_PROVIDER_METADATA_URL = None
 
-    CLOUD_PROVIDER_METADATA_URL_TEMPLATE = "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience={audience}&format=full"
+    CLOUD_PROVIDER_METADATA_URL_TEMPLATE = "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience={audience}&format=full&licenses=TRUE"
 
     # Token (metadata) expires within one hour. Thus it is save to cache the token.
     CLOUD_PROVIDER_METADATA_TTL = 3600
@@ -298,6 +298,10 @@ def _smoke_test():
         # 1. using default audience
         token = gcp_cloud_provider.get_metadata()
         print('>>> debug <<< 1. token: {}'.format(token))
+        jose, metadata, signature = gcp_cloud_provider.decode_jwt(token)
+        print('>>> jose header: {jose}'.format(jose=jose))
+        print('>>> metadata: {metadata}'.format(metadata=metadata))
+        print('>>> signature: {signature}'.format(signature=signature))
         # 2. using some custom audience
         gcp_cloud_provider = GCPCloudProvider(facts, audience_url="https://localhost:8443/candlepin")
         token = gcp_cloud_provider.get_metadata()
@@ -305,6 +309,6 @@ def _smoke_test():
 
 
 # Some temporary smoke testing code. You can test this module using:
-# sudo PYTHONPATH=./src python3 -m cloud_what.providers.gcp
+# sudo PYTHONPATH=./src python -m cloud_what.providers.gcp
 if __name__ == '__main__':
     _smoke_test()

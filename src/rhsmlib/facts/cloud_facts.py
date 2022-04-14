@@ -41,7 +41,7 @@ AZURE_INSTANCE_TIMEOUT = 5  # value is in seconds
 
 AUDIENCE = "https://subscription.rhsm.redhat.com:443/subscription"
 GCP_INSTANCE_IP = "metadata"
-GCP_INSTANCE_PATH = "/computeMetadata/v1/instance/service-accounts/default/identity?audience={audience}&format=full".format(
+GCP_INSTANCE_PATH = "/computeMetadata/v1/instance/service-accounts/default/identity?audience={audience}&format=full&licenses=TRUE".format(
     audience=AUDIENCE
 )
 GCP_INSTANCE_TIMEOUT = 5
@@ -369,13 +369,18 @@ class CloudFactsCollector(collector.FactsCollector):
             if metadata is not None:
                 log.debug('GCP metadata gathered')
                 values = self.parse_content(metadata)
-                if 'google' in values and \
-                        'compute_engine' in values['google'] and \
-                        'instance_id' in values['google']['compute_engine']:
-                    facts = {
-                        "gcp_instance_id": values['google']['compute_engine']['instance_id']
-                    }
-                    log.debug('GCP instance_id found in metadata')
+                if "google" in values and "compute_engine" in values["google"]:
+                    # ID of instance
+                    if "instance_id" in values["google"]["compute_engine"]:
+                        facts["gcp_instance_id"] = values["google"]["compute_engine"]["instance_id"]
+                    else:
+                        log.debug("GCP instance_id not found in JWT token")
+                    # IDs of licenses
+                    if "license_id" in values["google"]["compute_engine"]:
+                        gcp_license_codes = values["google"]["compute_engine"]["license_id"]
+                        facts["gcp_license_codes"] = " ".join(gcp_license_codes)
+                    else:
+                        log.debug("GCP google.compute_engine on found in JWT token")
                 else:
                     log.debug('GCP instance_id not found in JWT token')
         return facts

@@ -126,6 +126,9 @@ AZURE_METADATA = """
 }
 """
 
+GCP_JWT_TOKEN = """eyJhbGciOiJSUzI1NiIsImtpZCI6IjZhOGJhNTY1MmE3MDQ0MTIxZDRmZWRhYzhmMTRkMTRjNTRlNDg5NWIiLCJ0eXAiOiJKV1QifQ.eyJhdWQiOiJodHRwczovL3N1YnNjcmlwdGlvbi5yaHNtLnJlZGhhdC5jb206NDQzL3N1YnNjcmlwdGlvbiIsImF6cCI6IjEwNDA3MDk1NTY4MjI5ODczNjE0OSIsImVtYWlsIjoiMTYxOTU4NDY1NjEzLWNvbXB1dGVAZGV2ZWxvcGVyLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZXhwIjoxNjE2NTk5ODIzLCJnb29nbGUiOnsiY29tcHV0ZV9lbmdpbmUiOnsiaW5zdGFuY2VfY3JlYXRpb25fdGltZXN0YW1wIjoxNjE2NTk1ODQ3LCJpbnN0YW5jZV9pZCI6IjI1ODkyMjExNDA2NzY3MTgwMjYiLCJpbnN0YW5jZV9uYW1lIjoiaW5zdGFuY2UtMSIsImxpY2Vuc2VfaWQiOlsiNTczMTAzNTA2NzI1NjkyNTI5OCJdLCJwcm9qZWN0X2lkIjoiZmFpci1raW5nZG9tLTMwODUxNCIsInByb2plY3RfbnVtYmVyIjoxNjE5NTg0NjU2MTMsInpvbmUiOiJ1cy1lYXN0MS1iIn19LCJpYXQiOjE2MTY1OTYyMjMsImlzcyI6Imh0dHBzOi8vYWNjb3VudHMuZ29vZ2xlLmNvbSIsInN1YiI6IjEwNDA3MDk1NTY4MjI5ODczNjE0OSJ9.XQKeqMAvsH2T2wsdN97jlm52DzLfix3DTMCu9QCuhSKLEk1xHYOYtvh5Yzn7j-tbZtV-siyPAfpGZO3Id87573OVGgohN3q7Exlf9CEIHa1-X7zLyiyIlyrnfQJ1aGHeH6y7gb_tWxHFLJRzhulfkfJxSDn5fEBSgBqbjzCr9unQgMkuzQ3uui2BbIbALmOpY6D-IT71mgMDZ_zm4G6q-Mh0nIMkDWhmQ8pa3RAVqqBMBYJninKLdCD8eQzIlDhtIzwmYGLrsJMktFF3pJFCqEFv1rKZy_OUyV4JOkOLtXbKnwxqmFTq-2SP0KtUWjDy1-U8GnVDptISjOf2O9FaLA
+"""
+
 
 class TestCloudFactsCollector(unittest.TestCase):
     def setUp(self):
@@ -176,6 +179,24 @@ class TestCloudFactsCollector(unittest.TestCase):
         facts = self.collector.get_all()
         self.assertIn("azure_instance_id", facts)
         self.assertEqual(facts["azure_instance_id"], "12345678-1234-1234-1234-123456789abc")
+
+    @patch('rhsm.https.httplib.HTTPConnection')
+    def test_get_gcp_facts(self, MockConn):
+        """
+        Test getting GCP instance ID from metadata provided by GCP cloud provider
+        """
+        MockConn.return_value.getresponse.return_value.read.return_value = GCP_JWT_TOKEN
+        self.collector = cloud_facts.CloudFactsCollector(
+            collected_hw_info={"virt.is_guest": True, "dmi.bios.vendor": "google"}
+        )
+        MockConn.return_value.getresponse.return_value.read.return_value = GCP_JWT_TOKEN
+
+        facts = self.collector.get_all()
+
+        self.assertIn("gcp_instance_id", facts)
+        self.assertEqual(facts["gcp_instance_id"], "2589221140676718026")
+        self.assertIn("gcp_license_codes", facts)
+        self.assertEqual(facts["gcp_license_codes"], "5731035067256925298")
 
     @patch('rhsm.https.httplib.HTTPConnection')
     def test_get_not_aws_instance(self, MockConn):
