@@ -133,7 +133,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.50
+Version: 1.24.51
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1170,6 +1170,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Apr 18 2022 Christopher Snyder <csnyder@redhat.com> 1.24.51-1
+- 1.24 Add gcp_license_codes to system facts. (jhnidek@redhat.com)
+- 1.24 Fix of automatic registration (jhnidek@redhat.com)
+- [1.24] Backport support for GCP marketplace ID (jhnidek@redhat.com)
+- [1.24] Backported automatic registration (jhnidek@redhat.com)
+- Back-ported cloud-what for Python 2.7 (jhnidek@redhat.com)
+
 * Thu Oct 21 2021 Christopher Snyder <csnyder@redhat.com> 1.24.50-1
 - 2010137: Newer versions of the rpm tooling expect __python defined
   (csnyder@redhat.com)
