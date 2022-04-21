@@ -664,7 +664,6 @@ class TestSyncedStore(unittest.TestCase):
             self.assertTrue(synced_store.changed)
         mock_sync.assert_called_once()
         local_result = json.load(io.open(self.local_syspurpose_file, "r"))
-        print(local_result)
         self.assertTrue("cool" in local_result)
         self.assertEqual(local_result["cool"], "shark")
         self.assertTrue("foo" in local_result)

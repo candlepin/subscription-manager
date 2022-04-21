@@ -219,7 +219,6 @@ class TestCompileCommand(TestCliCommand):
             self.assertTrue(os.path.exists(path_join(path2, path_join(path1, "7890.pem"))))
             self.assertFalse(os.path.exists(path_join(path2, path_join(path1, "22222-key.pem"))))
         except Exception as e:
-            print(e)
             raise
         finally:
             self._rmtree(path1)

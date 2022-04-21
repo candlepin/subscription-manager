@@ -469,7 +469,6 @@ class TestGetServerVersions(fixture.SubManFixture):
         self.mock_get_resources.side_effect = raise_exception
         MockUep.getStatus.return_value = {"version": "101", "release": "23423c"}
         sv = get_server_versions(MockUep)
-        print(sv)
         self.assertEqual(sv["server-type"], "Red Hat Subscription Management")
         self.assertEqual(sv["candlepin"], "Unknown")
 
@@ -900,7 +899,6 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
             # Allow our mock open function to be made to raise errors selectively
             for path in path_to_error.keys():
                 if path in original_path:
-                    print("raise the roof")
                     raise path_to_error.get(original_path)
             corrected_path = os.path.join(new_root, original_path)
             return original_open(corrected_path, *args[1:], **kwargs)

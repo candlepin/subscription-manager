@@ -741,7 +741,6 @@ class TestOsTreeContents(fixture.SubManFixture):
         ent_src.product_tags = ["awesomeos-ostree-1", "awesomeos-ostree-super"]
 
         contents = find_content(ent_src, content_type=action_invoker.OSTREE_CONTENT_TYPE)
-        print("contents", contents)
         self.assertEqual(len(contents), 1)
 
         for content in contents:
