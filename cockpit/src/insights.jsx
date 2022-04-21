@@ -448,9 +448,11 @@ export class InsightsStatus extends React.Component {
         insights_service.addEventListener("changed", this.on_changed);
         last_upload_monitor.addEventListener("changed", this.on_changed);
 
-        this.hosts_details_file = cockpit.file("/var/lib/insights/host-details.json", { syntax: JSON });
+        this.hosts_details_file = cockpit.file("/var/lib/insights/host-details.json",
+                                               { syntax: JSON, superuser: true });
         this.hosts_details_file.watch(data => this.setState({ host_details: data }));
-        this.insights_details_file = cockpit.file("/var/lib/insights/insights-details.json", { syntax: JSON });
+        this.insights_details_file = cockpit.file("/var/lib/insights/insights-details.json",
+                                                  { syntax: JSON, superuser: true });
         this.insights_details_file.watch(data => this.setState({ insights_details: data }));
     }
 
