@@ -1301,7 +1301,6 @@ class TestYumPluginManager(unittest.TestCase):
         """
         self.init_dnf_plugin_conf_files(conf_string=PKG_PLUGIN_CONF_FILE_DISABLED_INT)
         plugin_list = YumPluginManager.enable_pkg_plugins()
-        print(plugin_list)
         self.assertEqual(len(plugin_list), 2)
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))

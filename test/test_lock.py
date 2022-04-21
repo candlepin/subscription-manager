@@ -69,8 +69,8 @@ class TestLock(unittest.TestCase):
     def close_lock_holder(self):
         try:
             self.other_process.communicate("whatever".encode("utf-8"))
-        except Exception as e:
-            print(e)
+        except Exception:
+            pass
             # whatever, we closed it in the other thread
 
     def timeout_fail(self):
