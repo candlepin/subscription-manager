@@ -1,12 +1,9 @@
 #!/bin/sh
 set -eux
 
-dnf install -y cockpit-ws python3-devel openssl-devel intltool gcc
+dnf install -y cockpit-ws python3-devel openssl-devel gcc
 
 cd /var/tmp
-
-rm -rf /usr/share/cockpit/subscriptions
-tar -C / -xzf subscription-manager-cockpit.tar.gz
 
 tar -xzf subscription-manager.tar.gz --transform 's,[^/]*,/sm,'
 cd sm
@@ -18,11 +15,3 @@ RPM_BUILD_ROOT="/" python3 ./setup.py install --prefix /usr --root /
 
 mv /usr/bin/{rhsm-facts-service,rhsm-service,rhsmcertd-worker} /usr/libexec
 mv /usr/bin/subscription-manager /usr/sbin
-
-# don't force https:// (self-signed cert)
-printf "[WebService]\\nAllowUnencrypted=true\\n" > /etc/cockpit/cockpit.conf
-
-if type firewall-cmd >/dev/null 2>&1; then
-    firewall-cmd --add-service=cockpit --permanent
-fi
-systemctl enable cockpit.socket

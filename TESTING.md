@@ -74,12 +74,11 @@ Following text may not be up to date.
 # Testing of the game
 
 - [System testing](#system-testing)
-- [Cockpit Subscriptions Plugin Tests](#cockpit-subscriptions-plugin-tests)
 
 
 ## System testing
 
-If you want to test subscription-manager or cockpit plugin in real life
+If you want to test subscription-manager in real life
 there is a few players in this game:
 
 - [candlepin server](#candlepin-server)
@@ -167,58 +166,3 @@ You can see a status of the services:
 ```shell
 systemctl status rhsm-services
 ```
-
-## Cockpit Subscriptions Plugin Tests
-The tests live in its own repo actually. They fire up firefox and play with Cockpit Subscription Plugin.
-
-```shell
-cd ~/src
-git clone https://github.com/RedHatQE/rhsm-cockpit-qe.git
-cd rhsm-cockpit-qe
-npm install
-npm run e2e-setup
-```
-
-It is important to install `npm` since it uses `nodejs ecosystem`.
-
-### Run them!
-
-```shell
-cd rhsm-cockpit-qe
-npm run test
-```
-
-If you want to run just one test specification:
-```shell
-./node_modules/.bin/wdio wdio.conf.js test/spec/proxy-dialog.js
-```
-
-### Configuration is super duper easy
-Configuration follows a style of [The Twelve-Factor App](https://12factor.net/config)
-
-```shell
-cd rhsm-cockpit-qe
-cp env-example .env
-vim .env
-```
-
-See [env2 repo](https://github.com/dwyl/env2) for more details.
-
-### Stop firefox run!
-
-If you want to stop running of a test at the right moment
-you can set `browser.debug()` in the code line whatever you want.
-
-WDIO executer stops running and offers you a REPL console. 
-
-See [Debugging of WebdriverIO test](http://webdriver.io/guide/testrunner/debugging.html) for details.
-
-### Extending of the tests
-
-There are page objects that describe the main parts of Cockpit Subscription web application.
-
-see `rhsm-cockpit-qe/page_objects`.
-
-Each page object desribes main parts and main operations on a proper web dialog, web page.
-This kind of separation of concern help developers to write well readable tests.
-See http://webdriver.io/guide/testrunner/pageobjects.html for more details.

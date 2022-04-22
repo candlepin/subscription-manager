@@ -18,12 +18,10 @@ RUN dnf install -y \
     glibc-langpack-de \
     glibc-langpack-en \
     glibc-langpack-ja \
-    intltool \
     json-c-devel \
     libdnf-devel \
     libnotify-devel \
     make \
-    npm \
     openssl \
     openssl-devel \
     procps-ng \

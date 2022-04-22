@@ -62,14 +62,14 @@ environment:
 
 ```bash
 dnf install -y pipenv gcc make python2-devel \
-    openssl-devel intltool libnl3-devel
+    openssl-devel libnl3-devel
 ```
 
 ### Python 3
 
 ```bash
 dnf install -y pipenv gcc make python3-devel \
-    openssl-devel intltool libnl3-devel
+    openssl-devel libnl3-devel
 ```
 
 You can create virtual environment using following steps:
@@ -127,19 +127,6 @@ The Ansible role that is used for deploying subscription-manager can be found at
 https://github.com/candlepin/ansible-role-subman-devel. In order to test 
 changes for this Ansible role you will need to check it out locally. 
 This will pull the latest commit from this path and use it for deployment. 
-
-Cockpit
--------
-
-From the directory `cockpit`, the following commands can be used:
-
- - `yarn install` - fetch dependencies, and update the lockfile if necessary.
- - `npm run build` - do a build of the JavaScript source.
- - `npm run watch` - monitor the source for changes and rebuild the cockpit
-  plugin when necessary.
-
-See `cockpit/README.md` for more detailed information on cockpit development.
-
 
 Testing
 -------

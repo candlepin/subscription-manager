@@ -45,27 +45,12 @@ class BuildTrans(BaseCommand):
         cmd = ["msgfmt", "--check", "--statistics", "-o", dest, src]
         spawn(cmd)
 
-    def merge_desktop(self, src, dest):
-        log.debug("Merging desktop file %s" % src)
-        if self.lint:
-            dest = "/dev/null"
-
-        cmd = ["intltool-merge", "-d", "po", src, dest]
-        spawn(cmd)
-
     def run(self):
         for po_file in Utils.find_files_of_type("po", "*.po"):
             lang = os.path.basename(po_file)[:-3]
             dest_path = os.path.join(self.build_base, "locale", lang, "LC_MESSAGES")
             dest = os.path.join(dest_path, self.app_name + ".mo")
             Utils.run_if_new(po_file, dest, self.compile)
-
-        for desktop_file in Utils.find_files_of_type("etc-conf", "*.desktop.in"):
-            output_file = os.path.basename("%s" % os.path.splitext(desktop_file)[0])
-
-            dest_path = os.path.join(self.build_base, "applications")
-            dest = os.path.join(dest_path, output_file)
-            Utils.run_if_new(desktop_file, dest, self.merge_desktop)
 
 
 class UpdateTrans(BaseCommand):
@@ -132,17 +117,6 @@ class Gettext(BaseCommand):
         for src in self.src_dirs.values():
             files.extend(list(Utils.find_files_of_type(src, "*.c", "*.h")))
 
-        files.extend(list(Utils.find_files_of_type("tmp", "*.h")))
-        return files
-
-    def find_js(self):
-        files = []
-        files.extend(list(Utils.find_files_of_type("cockpit/src", "*.js", "*.jsx")))
-        return files
-
-    def find_desktop(self):
-        files = []
-        files.extend(list(Utils.find_files_of_type("etc-conf", "*.desktop.in")))
         return files
 
     def _write_sources(self, manifest_file, find_function):
@@ -159,12 +133,6 @@ class Gettext(BaseCommand):
             tmp_key_file = self.key_file
         else:
             tmp_key_file = os.path.join("tmp", os.path.basename(self.key_file))
-
-        # Create xgettext friendly header files from the desktop files.
-        # See http://stackoverflow.com/a/23643848/6124862
-        cmd = ["intltool-extract", "-l", "--type=gettext/ini"]
-        for desktop_file in Utils.find_files_of_type("etc-conf", "*.desktop.in"):
-            spawn(cmd + [desktop_file])
 
         cmd = [
             "xgettext",
@@ -187,7 +155,6 @@ class Gettext(BaseCommand):
             # _() and N_() functions.
             ("%s.c_files", self.find_c, "C", ["-k_", "-kN_"]),
             ("%s.py_files", self.find_py, "Python", []),
-            ("%s.js_files", self.find_js, "JavaScript", []),
         ]
 
         for manifest_template, search_func, language, other_options in trans_types:
@@ -204,8 +171,7 @@ class Gettext(BaseCommand):
         if not self.lint:
             shutil.copy2(tmp_key_file, self.key_file)
 
-        # Delete the directory holding the temporary files created by intltool-extract
-        # and the temporary keys.pot
+        # Delete the directory holding the temporary keys.pot
         shutil.rmtree("tmp")
 
 
