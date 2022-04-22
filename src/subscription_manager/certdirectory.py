@@ -383,8 +383,10 @@ class Writer(object):
 
         key_filename = '%s-key.pem' % str(serial)
         key_path = Path.join(ent_dir_path, key_filename)
+        log.debug(f"Writing key file: '{key_path}'")
         key.write(key_path)
 
         cert_filename = '%s.pem' % str(serial)
         cert_path = Path.join(ent_dir_path, cert_filename)
+        log.debug(f"Writing certificate file: '{cert_path}'")
         cert.write(cert_path)
