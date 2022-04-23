@@ -3,26 +3,18 @@ ignore =
     # E203 whitespace before ':'
     # result of black-formatted code
     E203,
-    # E501: line too long (* > 300 characters)
-    # triggered by very long text string in tests
+    # E501: line too long (* > 110 characters)
     E501,
     # E731: do not assign a lambda expression, use a def
     E731,
     # W503: line break before binary operator
     W503
 per-file-ignores =
-    # cpinfo fake data as unindented """...""" block
-    test/test_utils.py: E122
     # we need to mock some modules before importing additional files
     test/test_repolib.py: E402
-    test/certdata.py:
-        # trailing whitespace in test data
-        W291
-        # wrong way to do a continuation line, however it is for test data
-        E122
+    # trailing whitespace in test data
+    test/certdata.py: W291
 exclude =
     # cockpit bits downloaded during the cockpit CI run
     integration-tests/submancockpit/,
-    # old scripts, possibly no more useful, ignore them for now
-    scripts/,
-max-line-length = 300
+max-line-length = 110
