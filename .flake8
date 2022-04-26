@@ -1,4 +1,7 @@
 [flake8]
+filename =
+    *.py,
+    */debian-stuff/katello,
 ignore =
     # E203 whitespace before ':'
     # result of black-formatted code
@@ -14,7 +17,9 @@ per-file-ignores =
     test/test_repolib.py: E402
     # trailing whitespace in test data
     test/certdata.py: W291
-exclude =
+extend-exclude =
     # cockpit bits downloaded during the cockpit CI run
     integration-tests/submancockpit/,
+    # virtualenvs for testing, e.g. as used in the jenkins CI
+    env-*,
 max-line-length = 110
