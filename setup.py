@@ -260,7 +260,7 @@ cmdclass = {
     "gettext": GettextWithArgparse,
     "lint": lint.Lint,
     "lint_rpm": lint.RpmLint,
-    "flake8": lint.PluginLoadingFlake8,
+    "flake8": lint.Flake8,
 }
 
 setup(
