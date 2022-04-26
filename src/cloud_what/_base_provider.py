@@ -382,7 +382,7 @@ class BaseCloudProvider(object):
 
         try:
             response = self._session.send(prepared_http_req, timeout=self.TIMEOUT)
-        except requests.ConnectionError as err:
+        except requests.RequestException as err:
             log.debug(f'Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {err}')
         else:
             if response.status_code == 200:
