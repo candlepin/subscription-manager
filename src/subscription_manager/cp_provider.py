@@ -164,16 +164,16 @@ class CPProvider(object):
         :return: None
         """
         if self.consumer_auth_cp is not None:
-            log.debug("Closing consumer authenticated connection...")
+            log.debug("Closing auth/consumer connection...")
             self.consumer_auth_cp.conn.close_connection()
         if self.no_auth_cp is not None:
-            log.debug("Closing no authenticated connection...")
+            log.debug("Closing no auth connection...")
             self.no_auth_cp.conn.close_connection()
         if self.basic_auth_cp is not None:
-            log.debug("Closing basically authenticated connection...")
+            log.debug("Closing auth/basic connection...")
             self.basic_auth_cp.conn.close_connection()
         if self.keycloak_auth_cp is not None:
-            log.debug("Closing keycloak authenticated connection...")
+            log.debug("Closing auth/keycloak connection...")
             self.keycloak_auth_cp.conn.close_connestion()
 
     def get_consumer_auth_cp(self):
@@ -193,6 +193,7 @@ class CPProvider(object):
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
+                auth_type="CONSUMER_AUTH_TYPE"
             )
         return self.consumer_auth_cp
 
@@ -236,6 +237,7 @@ class CPProvider(object):
             token=self.token,
             client_version=self.get_client_version(),
             dbus_sender=self.get_dbus_sender(),
+            auth_type="KEYCLOAK_AUTH_TYPE"
         )
         return self.keycloak_auth_cp
 
@@ -256,6 +258,7 @@ class CPProvider(object):
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
+                auth_type="BASIC_AUTH_TYPE"
             )
         return self.basic_auth_cp
 
@@ -274,6 +277,7 @@ class CPProvider(object):
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
+                auth_type="NO_AUTH_TYPE"
             )
         return self.no_auth_cp
 

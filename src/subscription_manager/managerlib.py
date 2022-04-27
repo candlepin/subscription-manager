@@ -954,6 +954,9 @@ def clean_all_data(backup=True):
 
     require(IDENTITY).reload()
 
+    # Close all connections, when consumer certificate was just removed
+    close_all_connections()
+
     # Delete all entitlement certs rather than the directory itself:
     ent_cert_dir = cfg.get("rhsm", "entitlementCertDir")
     if os.path.exists(ent_cert_dir):

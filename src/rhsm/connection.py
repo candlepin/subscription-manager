@@ -163,6 +163,7 @@ class BaseConnection(object):
         user_agent=None,
         correlation_id=None,
         timeout=None,
+        auth_type=None,
         **kwargs,
     ):
 
@@ -211,6 +212,7 @@ class BaseConnection(object):
         self.username = username
         self.password = password
         self.token = token
+        self.auth_type = auth_type
 
         self.ca_dir = ca_dir or config.get("rhsm", "ca_cert_dir")
 
@@ -278,6 +280,7 @@ class BaseConnection(object):
             timeout=self.timeout,
             correlation_id=correlation_id,
             user_agent=user_agent,
+            auth_type=auth_type
         )
 
         if using_keycloak_auth:
@@ -542,6 +545,7 @@ class BaseRestLib(object):
         correlation_id=None,
         token=None,
         user_agent=None,
+        auth_type=None,
     ):
         log.debug("Creating new BaseRestLib instance")
         self.host = host
@@ -574,6 +578,7 @@ class BaseRestLib(object):
         self.proxy_password = proxy_password
         self.smoothed_rt = None
         self.token = token
+        self.auth_type = auth_type
         # We set this to None, because we don't know the truth unless we get
         # first response from the server using cert/key connection
         self.is_consumer_cert_key_valid = None
@@ -695,6 +700,8 @@ class BaseRestLib(object):
                 conn = httplib.HTTPSConnection(
                     self.host, self.ssl_port, context=context, timeout=self.timeout
                 )
+            # Do TCP and TLS handshake here before we make any request
+            conn.connect()
             log.debug(f"Created connection: {conn}")
             self.__conn = conn
         else:
@@ -724,18 +731,27 @@ class BaseRestLib(object):
             green_col = "\033[92m"
             red_col = "\033[91m"
             end_col = "\033[0m"
-            if self.token:
+
+            msg = ""
+
+            if self.auth_type == "KEYCLOAK_AUTH_TYPE":
                 auth = "keycloak auth"
-            elif self.username and self.password:
+            elif self.auth_type == "BASIC_AUTH_TYPE":
                 auth = "basic auth"
-            elif self.cert_file and self.key_file:
+            elif self.auth_type == "CONSUMER_AUTH_TYPE":
                 auth = "consumer auth"
-            else:
+            elif self.auth_type == "NO_AUTH_TYPE":
                 auth = "no auth"
-            if self.insecure is True:
-                msg = blue_col + f"Making insecure ({auth}) request:" + end_col
             else:
-                msg = blue_col + f"Making ({auth}) request:" + end_col
+                auth = "undefined auth"
+
+            if "SUBMAN_DEBUG_TCP_IP" in os.environ and self.__conn is not None and self.__conn.sock is not None:
+                msg += blue_col + f"{self.__conn.sock}\n" + end_col
+
+            if self.insecure is True:
+                msg += blue_col + f"Making insecure ({auth}) request:" + end_col
+            else:
+                msg += blue_col + f"Making ({auth}) request:" + end_col
             msg += red_col + " %s:%s %s %s" % (self.host, self.ssl_port, request_type, handler) + end_col
             if self.proxy_hostname and self.proxy_port:
                 msg += (
@@ -856,14 +872,13 @@ class BaseRestLib(object):
         if headers:
             final_headers.update(headers)
 
-        self._print_debug_info_about_request(request_type, handler, final_headers, body)
-
         response = None
         result = None
         with utils.LiveStatusMessage(description):
             for cert_file, key_file in cert_key_pairs:
                 try:
                     conn = self._create_connection(cert_file=cert_file, key_file=key_file)
+                    self._print_debug_info_about_request(request_type, handler, final_headers, body)
                     ts_start = time.time()
                     conn.request(request_type, handler, body=body, headers=final_headers)
                     ts_end = time.time()
