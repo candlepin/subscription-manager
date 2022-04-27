@@ -17,6 +17,7 @@ from distutils.spawn import spawn
 from build_ext.utils import Utils, BaseCommand
 import os
 import subprocess
+from shutil import which
 
 # These dependencies aren't available in build environments.  We won't need any
 # linting functionality there though, so just create a dummy class so we can proceed.
@@ -25,25 +26,9 @@ try:
 except ImportError:
     pycodestyle = None
 
-try:
-    import pkg_resources
-except ImportError:
-    pkg_resources = None
-
-try:
-    from flake8.main.setuptools_command import Flake8
-except ImportError:
-
-    class Flake8(object):
-        def __init__(self, *args, **kwargs):
-            raise NotImplementedError("flake8 could not be imported")
-
 
 class Lint(BaseCommand):
     description = "examine code for errors"
-
-    def has_pure_modules(self):
-        return self.distribution.has_pure_modules()
 
     def has_spec_file(self):
         try:
@@ -52,6 +37,9 @@ class Lint(BaseCommand):
         except StopIteration:
             return False
 
+    def has_flake8(self):
+        return which("flake8") is not None
+
     def run(self):
         for cmd_name in self.get_sub_commands():
             self.run_command(cmd_name)
@@ -59,7 +47,7 @@ class Lint(BaseCommand):
     # Defined at the end since it references unbound methods
     sub_commands = [
         ("lint_rpm", has_spec_file),
-        ("flake8", has_pure_modules),
+        ("flake8", has_flake8),
     ]
 
 
@@ -72,6 +60,13 @@ class RpmLint(BaseCommand):
         files = [x for x in files if x.endswith(".spec")]
         for f in files:
             spawn(["rpmlint", "--file=rpmlint.config", os.path.realpath(f)])
+
+
+class Flake8(BaseCommand):
+    description = "run flake8"
+
+    def run(self):
+        spawn(["flake8"])
 
 
 class AstVisitor(object):
@@ -206,45 +201,3 @@ class AstChecker(object):
 
         ret = (lineno, col_offset, msg, self)
         return ret
-
-
-class PluginLoadingFlake8(Flake8):
-    """A Flake8 runner that will load our custom plugins.  It's important to note
-    that this has to be invoked via `./setup.py flake8`.  Just running `flake8` won't
-    cut it.
-
-    Flake8 normally wants to load plugins via entry_points, but as far as I can tell
-    that would require packaging our checkers separately.  Instead, we create a phony
-    pkg_resources Distribution that loads up the build_ext directory.  That directory
-    has some metadata files that associate the AstChecker class with the flake8.extension
-    entry point.
-
-    See http://peak.telecommunity.com/DevCenter/PkgResources
-    """
-
-    def __init__(self, *args, **kwargs):
-        ext_dir = pkg_resources.normalize_path("build_ext")
-        dist = pkg_resources.Distribution(
-            ext_dir,
-            project_name="build_ext",
-            metadata=pkg_resources.PathMetadata(ext_dir, ext_dir),
-        )
-        pkg_resources.working_set.add(dist)
-        Flake8.__init__(self, *args, **kwargs)
-
-    def distribution_files(self):
-        # By default Flake8 only runs on packages registered with
-        # setuptools.  We want it to look at tests and other things as well
-        for d in ["src", "test", "build_ext", "example-plugins", "setup.py"]:
-            yield d
-
-    def run(self):
-        # Flake8.run(self)  - use when issue 199 is fixed
-        # Required until https://gitlab.com/pycqa/flake8/issues/199 is fixed
-        self.flake8.run_checks(list(self.distribution_files()))
-        self.flake8.formatter.start()
-        self.flake8.report_errors()
-        self.flake8.report_statistics()
-        self.flake8.report_benchmarks()
-        self.flake8.formatter.stop()
-        self.flake8.exit()
