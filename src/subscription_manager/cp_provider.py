@@ -193,7 +193,7 @@ class CPProvider(object):
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
-                auth_type="CONSUMER_AUTH_TYPE"
+                auth_type=connection.ConnectionType.CONSUMER_CERT_AUTH,
             )
         return self.consumer_auth_cp
 
@@ -237,7 +237,7 @@ class CPProvider(object):
             token=self.token,
             client_version=self.get_client_version(),
             dbus_sender=self.get_dbus_sender(),
-            auth_type="KEYCLOAK_AUTH_TYPE"
+            auth_type=connection.ConnectionType.KEYCLOAK_AUTH,
         )
         return self.keycloak_auth_cp
 
@@ -258,7 +258,7 @@ class CPProvider(object):
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
-                auth_type="BASIC_AUTH_TYPE"
+                auth_type=connection.ConnectionType.BASIC_AUTH,
             )
         return self.basic_auth_cp
 
@@ -277,7 +277,7 @@ class CPProvider(object):
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
-                auth_type="NO_AUTH_TYPE"
+                auth_type=connection.ConnectionType.NO_AUTH,
             )
         return self.no_auth_cp
 

@@ -27,6 +27,8 @@ import time
 import traceback
 from typing import Optional
 from pathlib import Path
+import re
+import enum
 
 from email.utils import format_datetime
 
@@ -138,6 +140,24 @@ class BadCertificateException(ConnectionException):
 
     def __str__(self):
         return "Bad certificate at %s" % self.cert_path
+
+
+class ConnectionType(enum.Enum):
+    """
+    Enumerate of allowed connection types
+    """
+
+    # Connection uses no authentication
+    NO_AUTH = enum.auto()
+
+    # Connection uses basic authentication (username and password)
+    BASIC_AUTH = enum.auto()
+
+    # Connection uses consumer certificate for authentication
+    CONSUMER_CERT_AUTH = enum.auto()
+
+    # Connection uses Keycloak token
+    KEYCLOAK_AUTH = enum.auto()
 
 
 class BaseConnection(object):
@@ -280,7 +300,7 @@ class BaseConnection(object):
             timeout=self.timeout,
             correlation_id=correlation_id,
             user_agent=user_agent,
-            auth_type=auth_type
+            auth_type=auth_type,
         )
 
         if using_keycloak_auth:
@@ -525,6 +545,11 @@ class BaseRestLib(object):
 
     ALPHA = 0.9
 
+    # Default value of timeout. This value is set according observed timeout
+    # on typical installations of candlepin server (hosted 75 seconds,
+    # tomcat 60 seconds)
+    KEEP_ALIVE_TIMEOUT = 50
+
     def __init__(
         self,
         host,
@@ -595,12 +620,12 @@ class BaseRestLib(object):
         :return: None
         """
         if self.__conn is not None:
-            log.debug(f"Closing HTTPS connection {self.__conn}")
             # Do proper TLS shutdown handshake (TLS tear down) first
             if self.__conn.sock is not None:
+                log.debug(f"Closing HTTPS connection {self.__conn.sock}")
                 try:
                     self.__conn.sock.unwrap()
-                except ssl.SSLEOFError as err:
+                except ssl.SSLError as err:
                     log.debug(f"Unable to close TLS connection properly: {err}")
                 else:
                     log.debug("TLS connection closed")
@@ -679,34 +704,56 @@ class BaseRestLib(object):
         if cert_file and os.path.exists(cert_file):
             context.load_cert_chain(cert_file, keyfile=key_file)
 
-        if self.__conn is None:
-            log.debug("Creating new connection")
-            if self.proxy_hostname and self.proxy_port:
+        if self.__conn is not None:
+            # Check if it is still possible to use existing connection
+            now = time.time()
+            if now - self.__conn.last_request_time > self.__conn.keep_alive_timeout:
+                log.debug(f"Connection timeout {self.__conn.keep_alive_timeout}. Closing connection...")
+                self.close_connection()
+            elif (
+                self.__conn.max_requests_num is not None
+                and self.__conn.requests_num > self.__conn.max_requests_num
+            ):
                 log.debug(
-                    "Using proxy: %s:%s" % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port))
+                    f"Maximal number of requests ({self.__conn.max_requests_num}) reached. "
+                    "Closing connection..."
                 )
-                proxy_headers = {
-                    "User-Agent": self.user_agent,
-                    "Host": "%s:%s" % (normalized_host(self.host), safe_int(self.ssl_port)),
-                }
-                if self.proxy_user and self.proxy_password:
-                    proxy_headers["Proxy-Authorization"] = _encode_auth(self.proxy_user, self.proxy_password)
-                conn = httplib.HTTPSConnection(
-                    self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout
-                )
-                conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
-                self.headers["Host"] = "%s:%s" % (normalized_host(self.host), safe_int(self.ssl_port))
+                self.close_connection()
             else:
-                conn = httplib.HTTPSConnection(
-                    self.host, self.ssl_port, context=context, timeout=self.timeout
-                )
-            # Do TCP and TLS handshake here before we make any request
-            conn.connect()
-            log.debug(f"Created connection: {conn}")
-            self.__conn = conn
+                log.debug("Reusing connection: %s", self.__conn.sock)
+                return self.__conn
+
+        log.debug("Creating new connection")
+        if self.proxy_hostname and self.proxy_port:
+            log.debug(
+                "Using proxy: %s:%s" % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port))
+            )
+            proxy_headers = {
+                "User-Agent": self.user_agent,
+                "Host": "%s:%s" % (normalized_host(self.host), safe_int(self.ssl_port)),
+            }
+            if self.proxy_user and self.proxy_password:
+                proxy_headers["Proxy-Authorization"] = _encode_auth(self.proxy_user, self.proxy_password)
+            conn = httplib.HTTPSConnection(
+                self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout
+            )
+            conn.set_tunnel(self.host, safe_int(self.ssl_port), proxy_headers)
+            self.headers["Host"] = "%s:%s" % (normalized_host(self.host), safe_int(self.ssl_port))
         else:
-            log.debug("Reusing connection: %s", self.__conn)
-            conn = self.__conn
+            conn = httplib.HTTPSConnection(self.host, self.ssl_port, context=context, timeout=self.timeout)
+
+        # Set default keep-alive connection timeout in case server does not
+        # send HTTP header Keep-Alive with information about timeout
+        conn.keep_alive_timeout = self.KEEP_ALIVE_TIMEOUT
+        # Number of requests
+        conn.requests_num = 0
+        # Maximal number of requests. None means no limits, when server does not
+        conn.max_requests_num = None
+
+        # Do TCP and TLS handshake here before we make any request
+        conn.connect()
+        log.debug(f"Created connection: {conn.sock}")
+        self.__conn = conn
 
         return conn
 
@@ -734,18 +781,22 @@ class BaseRestLib(object):
 
             msg = ""
 
-            if self.auth_type == "KEYCLOAK_AUTH_TYPE":
+            if self.auth_type == ConnectionType.KEYCLOAK_AUTH:
                 auth = "keycloak auth"
-            elif self.auth_type == "BASIC_AUTH_TYPE":
+            elif self.auth_type == ConnectionType.BASIC_AUTH:
                 auth = "basic auth"
-            elif self.auth_type == "CONSUMER_AUTH_TYPE":
+            elif self.auth_type == ConnectionType.CONSUMER_CERT_AUTH:
                 auth = "consumer auth"
-            elif self.auth_type == "NO_AUTH_TYPE":
+            elif self.auth_type == ConnectionType.NO_AUTH:
                 auth = "no auth"
             else:
                 auth = "undefined auth"
 
-            if "SUBMAN_DEBUG_TCP_IP" in os.environ and self.__conn is not None and self.__conn.sock is not None:
+            if (
+                "SUBMAN_DEBUG_TCP_IP" in os.environ
+                and self.__conn is not None
+                and self.__conn.sock is not None
+            ):
                 msg += blue_col + f"{self.__conn.sock}\n" + end_col
 
             if self.insecure is True:
@@ -826,7 +877,120 @@ class BaseRestLib(object):
         if lc:
             self.headers["Accept-Language"] = lc.lower().replace("_", "-").split(".", 1)[0]
 
-    # FIXME: can method be empty?
+    @staticmethod
+    def parse_keep_alive_header(keep_alive_header: str) -> tuple:
+        """
+        Try to parse 'Keep-Alive' header received from candlepin server
+        :param keep_alive_header: string with value of the header
+        :return: Tuple containing connection timeout and maximal number of requests
+        """
+        keep_alive_timeout = None
+        max_requests_num = None
+        # Regular expression pattern represents: key=number
+        pattern = re.compile(r"^(.*)=(\d+)$")
+
+        items = keep_alive_header.split()
+
+        for item in items:
+            search_result = pattern.search(item)
+            if search_result is not None:
+                key, value = search_result.groups()
+                # Timeout of connection using keep-alive
+                if key == "timeout":
+                    keep_alive_timeout = int(search_result.groups()[1])
+                # Maximal number of request on one connection
+                elif key == "max":
+                    max_requests_num = int(search_result.groups()[1])
+                # Any other argument
+                else:
+                    log.debug(f"Unknown Keep-Alive argument: {key}")
+            else:
+                log.debug(f"Unable to parse value of Keep-Alive HTTP header: {item}")
+
+        return keep_alive_timeout, max_requests_num
+
+    def _make_request(
+        self,
+        request_type,
+        handler,
+        final_headers,
+        body,
+        cert_key_pairs,
+        description: Optional[str] = None,
+    ):
+        """
+        Try to do HTTP request
+        :param request_type: string representing request type
+        :param handler: path of the request
+        :param final_headers: dictionary with HTTP headers
+        :param body: body of request if any
+        :param cert_key_pairs: list of tuples. Tuple contain cert and key
+        :param description: description of request
+        :return: tuple of two items. First is dictionary (content, status and header) of response.
+            Second item is response from server.
+        """
+        response = None
+        result = None
+        with utils.LiveStatusMessage(description):
+            for cert_file, key_file in cert_key_pairs:
+                try:
+                    conn = self._create_connection(cert_file=cert_file, key_file=key_file)
+
+                    self._print_debug_info_about_request(request_type, handler, final_headers, body)
+
+                    ts_start = time.time()
+                    conn.last_request_time = ts_start
+                    conn.request(request_type, handler, body=body, headers=final_headers)
+                    ts_end = time.time()
+                    response = conn.getresponse()
+                    self._update_smoothed_response_time(ts_end - ts_start)
+
+                    result = {
+                        "content": response.read().decode("utf-8"),
+                        "status": response.status,
+                        "headers": dict(response.getheaders()),
+                    }
+                    if response.status == 200:
+                        self.is_consumer_cert_key_valid = True
+                        break  # this client cert worked, no need to try more
+                    elif self.cert_dir:
+                        log.debug("Unable to get valid response: %s from CDN: %s" % (result, self.host))
+                except ssl.SSLError:
+                    if self.cert_file and not self.cert_dir:
+                        id_cert = certificate.create_from_file(self.cert_file)
+                        if not id_cert.is_valid():
+                            self.is_consumer_cert_key_valid = False
+                            raise ExpiredIdentityCertException()
+                    if not self.cert_dir:
+                        raise
+                except socket.gaierror as err:
+                    if self.proxy_hostname and self.proxy_port:
+                        raise ProxyException(
+                            "Unable to connect to: %s:%s %s "
+                            % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port), err)
+                        )
+                    raise
+                except (socket.error, OSError) as err:
+                    # If we get a ConnectionError here and we are using a proxy,
+                    # then the issue was the connection to the proxy, not to the
+                    # destination host.
+                    if isinstance(err, ConnectionError) and self.proxy_hostname and self.proxy_port:
+                        raise ProxyException(
+                            "Unable to connect to: %s:%s %s "
+                            % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port), err)
+                        )
+                    code = httplib.PROXY_AUTHENTICATION_REQUIRED.value
+                    if str(code) in str(err):
+                        raise ProxyException(err)
+                    raise
+            else:
+                if self.cert_dir:
+                    raise NoValidEntitlement(
+                        "Cannot access CDN content on: %s using any of entitlement cert-key pair: %s"
+                        % (self.host, cert_key_pairs)
+                    )
+        return result, response
+
     def _request(
         self,
         request_type,
@@ -872,65 +1036,19 @@ class BaseRestLib(object):
         if headers:
             final_headers.update(headers)
 
-        response = None
-        result = None
-        with utils.LiveStatusMessage(description):
-            for cert_file, key_file in cert_key_pairs:
-                try:
-                    conn = self._create_connection(cert_file=cert_file, key_file=key_file)
-                    self._print_debug_info_about_request(request_type, handler, final_headers, body)
-                    ts_start = time.time()
-                    conn.request(request_type, handler, body=body, headers=final_headers)
-                    ts_end = time.time()
-                    response = conn.getresponse()
-                    self._update_smoothed_response_time(ts_end - ts_start)
-
-                    result = {
-                        "content": response.read().decode("utf-8"),
-                        "status": response.status,
-                        "headers": dict(response.getheaders()),
-                    }
-                    if response.status == 200:
-                        self.is_consumer_cert_key_valid = True
-                        break  # this client cert worked, no need to try more
-                    elif self.cert_dir:
-                        log.debug("Unable to get valid response: %s from CDN: %s" % (result, self.host))
-
-                except ssl.SSLError:
-                    if self.cert_file and not self.cert_dir:
-                        id_cert = certificate.create_from_file(self.cert_file)
-                        if not id_cert.is_valid():
-                            self.is_consumer_cert_key_valid = False
-                            raise ExpiredIdentityCertException()
-                    if not self.cert_dir:
-                        raise
-                except socket.gaierror as err:
-                    if self.proxy_hostname and self.proxy_port:
-                        raise ProxyException(
-                            "Unable to connect to: %s:%s %s "
-                            % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port), err)
-                        )
-                    raise
-                except (socket.error, OSError) as err:
-                    # If we get a ConnectionError here and we are using a proxy,
-                    # then the issue was the connection to the proxy, not to the
-                    # destination host.
-                    if isinstance(err, ConnectionError) and self.proxy_hostname and self.proxy_port:
-                        raise ProxyException(
-                            "Unable to connect to: %s:%s %s "
-                            % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port), err)
-                        )
-                    code = httplib.PROXY_AUTHENTICATION_REQUIRED.value
-                    if str(code) in str(err):
-                        raise ProxyException(err)
-                    raise
-
-            else:
-                if self.cert_dir:
-                    raise NoValidEntitlement(
-                        "Cannot access CDN content on: %s using any of entitlement cert-key pair: %s"
-                        % (self.host, cert_key_pairs)
-                    )
+        # Try to do request, when it wasn't possible, because server closed connection,
+        # then close existing connection and try it once again
+        try:
+            result, response = self._make_request(
+                request_type, handler, final_headers, body, cert_key_pairs, description
+            )
+        except httplib.RemoteDisconnected:
+            log.debug("Connection closed by server")
+            self.close_connection()
+            log.debug("Trying request once again")
+            result, response = self._make_request(
+                request_type, handler, final_headers, body, cert_key_pairs, description
+            )
 
         self._print_debug_info_about_response(result)
 
@@ -953,6 +1071,16 @@ class BaseRestLib(object):
             log.debug("HTTP header 'Connection' not included in response")
         else:
             log.debug(f"Unsupported value of HTTP header 'Connection': {connection_http_header}")
+
+        keep_alive_http_header = response.getheader("Keep-Alive")
+        if keep_alive_http_header is not None:
+            keep_alive_timeout, max_requests_num = self.parse_keep_alive_header(keep_alive_http_header)
+            if keep_alive_timeout is not None:
+                self.__conn.keep_alive_timeout = keep_alive_timeout
+                log.debug(f"Connection timeout: {keep_alive_timeout} is used from 'Keep-Alive' HTTP header")
+            if max_requests_num is not None:
+                self.__conn.max_request_num = max_requests_num
+                log.debug(f"Max number of requests: {max_requests_num} is used from 'Keep-Alive' HTTP header")
 
         # Look for server drift, and log a warning
         if drift_check(response.getheader("date")):
@@ -1737,7 +1865,7 @@ class UEPConnection(BaseConnection):
         if checkin_date:
             method = "%s?checkin_date=%s" % (method, self.sanitize(checkin_date.isoformat(), plus=True))
 
-        return self.conn.request_put(method, description=_("Updating checkin date"))
+        return self.conn.request_put(method)
 
     def getPoolsList(
         self,

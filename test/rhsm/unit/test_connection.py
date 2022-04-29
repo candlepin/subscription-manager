@@ -88,6 +88,73 @@ class ConnectionTests(unittest.TestCase):
         self.assertEqual([], self.cp._load_manager_capabilities())
         self.cp.getStatus = original_getStatus
 
+    def test_parsing_keep_alive_http_header(self):
+        """
+        Testing of valid HTTP header Keep-Alive received from server
+        """
+        keep_alive_http_header = "timeout=60 max=1000"
+        timeout, max_requests = self.cp.conn.parse_keep_alive_header(keep_alive_http_header)
+        self.assertIsNotNone(timeout)
+        self.assertEqual(timeout, 60)
+        self.assertIsNotNone(max_requests)
+        self.assertEqual(max_requests, 1000)
+
+    def test_parsing_keep_alive_http_header_ignore_unsupported(self):
+        """
+        Testing of valid HTTP header Keep-Alive received from server and test that unsupported
+        parameters are ignored
+        """
+        keep_alive_http_header = "timeout=60 max=1000 foo=bar cool=12.34"
+        timeout, max_requests = self.cp.conn.parse_keep_alive_header(keep_alive_http_header)
+        self.assertIsNotNone(timeout)
+        self.assertEqual(timeout, 60)
+        self.assertIsNotNone(max_requests)
+        self.assertEqual(max_requests, 1000)
+
+    def test_parsing_keep_alive_http_header_only_timeout(self):
+        """
+        Testing of valid HTTP header Keep-Alive received from server (only timeout)
+        """
+        keep_alive_http_header = "timeout=60"
+        timeout, max_requests = self.cp.conn.parse_keep_alive_header(keep_alive_http_header)
+        self.assertIsNotNone(timeout)
+        self.assertEqual(timeout, 60)
+        self.assertIsNone(max_requests)
+
+    def test_parsing_keep_alive_http_header_only_max(self):
+        """
+        Testing of valid HTTP header Keep-Alive received from server (only max number of requests)
+        """
+        keep_alive_http_header = "max=1000"
+        timeout, max_requests = self.cp.conn.parse_keep_alive_header(keep_alive_http_header)
+        self.assertIsNone(timeout)
+        self.assertIsNotNone(max_requests)
+        self.assertEqual(max_requests, 1000)
+
+    def test_parsing_keep_alive_http_header_corrupted(self):
+        """
+        Testing of corrupted HTTP header Keep-Alive received from server
+        """
+        wrong_keep_alive_header_values = [
+            ("Timeout without value", "timeout="),
+            ("Timeout with two equal signs", "timeout=123=456"),
+            ("White space after equal sign", "timeout= 123"),
+            ("White space before equal sign", "timeout =123"),
+            ("White space around equal sign", "timeout = 123"),
+            ("Value cannot be string", "timeout=max"),
+            ("Value of timeout cannot be float", "timeout=123.456"),
+            ("Value of timeout cannot be negative number", "timeout=-123"),
+            ("Parameters have to be separated with white space", "timeout=123;max=456"),
+            ("Timeout without value", "timeout= "),
+            ("Empty equal sign", "="),
+            ("Value without parameter name", "=1"),
+        ]
+        for message, wrong_header_value in wrong_keep_alive_header_values:
+            with self.subTest(message):
+                timeout, max_requests = self.cp.conn.parse_keep_alive_header(wrong_header_value)
+                self.assertIsNone(timeout, message)
+                self.assertIsNone(max_requests, message)
+
     def test_update_smoothed_response_time(self):
         self.assertIsNone(self.cp.conn.smoothed_rt)
         self.cp.conn._update_smoothed_response_time(1.0)
