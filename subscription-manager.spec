@@ -138,6 +138,7 @@ Requires:  %{py_package_prefix}-iniparse
 Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what
 Requires:  %{rhsm_package_name} = %{version}
+Requires: subscription-manager-rhsm-certificates
 
 %if 0%{?suse_version}
 Requires: %{py_package_prefix}-python-dateutil
@@ -506,7 +507,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # our config dirs and files
 %attr(755,root,root) %dir %{_sysconfdir}/pki/consumer
 %attr(755,root,root) %dir %{_sysconfdir}/pki/entitlement
-%attr(755,root,root) %dir %{_sysconfdir}/rhsm
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/facts
 
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/syspurpose
