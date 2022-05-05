@@ -18,6 +18,8 @@ per-file-ignores =
     # trailing whitespace in test data
     test/certdata.py: W291
 extend-exclude =
+    # default build directory
+    build/,
     # cockpit bits downloaded during the cockpit CI run
     integration-tests/submancockpit/,
     # virtualenvs for testing, e.g. as used in the jenkins CI
