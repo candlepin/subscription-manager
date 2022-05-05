@@ -104,7 +104,6 @@ Summary: Tools and libraries for subscription and repository management
 Group:   Productivity/Networking/System
 License: GPL-2.0
 %else
-Group:   System Environment/Base
 License: GPLv2
 %endif
 URL:     http://www.candlepinproject.org/
@@ -236,7 +235,6 @@ platform.
 %if %{use_container_plugin}
 %package -n subscription-manager-plugin-container
 Summary: A plugin for handling container content
-Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 
 %description -n subscription-manager-plugin-container
@@ -250,7 +248,6 @@ from the server. Populates /etc/docker/certs.d appropriately.
 %if %{create_libdnf_rpm}
 %package -n libdnf-plugin-subscription-manager
 Summary: Subscription Manager plugin for libdnf
-Group: System Environment/Base
 BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
@@ -271,7 +268,6 @@ e.g. microdnf.
 # RPM containing DNF plugin
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
-Group: System Environment/Base
 
 %if (0%{?fedora} || 0%{?rhel})
 BuildRequires: cmake
@@ -298,7 +294,6 @@ product-id plugins.
 # We need to obsolete old dnf-sub-man-plugin-debuginfo RPM
 %package -n libdnf-plugin-subscription-manager-debuginfo
 Summary: Debug information for package libdnf-plugin-subscription-manager
-Group: Development/Debug
 Obsoletes: dnf-plugin-subscription-manager-debuginfo < 1.29.0
 %description -n libdnf-plugin-subscription-manager-debuginfo
 This package provides debug information for package libdnf-plugin-subscription-manager.
@@ -311,7 +306,6 @@ package or when debugging this package.
 %if %has_ostree
 %package -n subscription-manager-plugin-ostree
 Summary: A plugin for handling OSTree content.
-Group: System Environment/Base
 
 Requires: %{py_package_prefix}-gobject-base
 # plugin needs a slightly newer version of python-iniparse for 'tidy'
@@ -329,9 +323,8 @@ the remote in the currently deployed .origin file.
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
 %if 0%{?suse_version}
 Group: Development/Libraries/Python
-%else
-Group: Development/Libraries
 %endif
+
 
 %if 0%{?suse_version}
 Requires:  %{py_package_prefix}-python-dateutil
