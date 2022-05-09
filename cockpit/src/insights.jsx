@@ -254,7 +254,23 @@ function show_connect_dialog() {
                     caption: _("Connect"),
                     style: "primary",
                     clicked: (update_progress) => {
-                        return PK.install_missing_packages(install_data, update_install_progress(update_progress)).then(() => register(update_progress));
+                        return PK.install_missing_packages(install_data, update_install_progress(update_progress)).then(() =>
+                            new Promise((resolve, reject) => {
+                                register(update_progress)
+                                        .then(() => resolve())
+                                        .catch((err, data) => {
+                                            let msg = spawn_error_to_string(err, data);
+                                            // create a fake error object good enough
+                                            // to be caught by the catch() handler of
+                                            // actions of cockpit.DialogFooter
+                                            let new_err = { };
+                                            new_err.message = msg;
+                                            new_err.toString = function() {
+                                                return this.message;
+                                            };
+                                            reject(new Error(new_err));
+                                        })
+                            }));
                     },
                     disabled: checking_install,
                 }
