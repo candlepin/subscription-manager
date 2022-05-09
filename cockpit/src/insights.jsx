@@ -65,11 +65,13 @@ function spawn_error_to_string(err, data) {
 
 export function catch_error(err, data) {
     let msg = spawn_error_to_string(err, data);
-    // The insights-client frequently dumps
-    // Python backtraces on us. Make them more
-    // readable by wrapping the text in <pre>.
+    // usually the output of insights-client contains more than a single
+    // line; hence, put each line in its own paragraph, so the error message
+    // is displayed in the same format of what insights-client outputs
     if (msg.indexOf("\n") > 0)
-        msg = <pre>{msg}</pre>;
+        msg = msg.split("\n").map(line => {
+            return <p>{line}</p>;
+        });
     subscriptionsClient.setError("error", msg);
 }
 
