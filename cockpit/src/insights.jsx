@@ -48,8 +48,23 @@ export function detect() {
     return cockpit.spawn([ "which", "insights-client" ], { err: "ignore" }).then(() => true, () => false);
 }
 
-export function catch_error(err) {
-    let msg = err.toString();
+/*
+ * Simple helper to get the string representation of the error of
+ * cockpit.spawn(), to be used as catch() handler.
+ */
+function spawn_error_to_string(err, data) {
+    // a problem in starting/running the process: get its string representation
+    // from cockpit directly
+    if (err.problem) {
+        return cockpit.message(err);
+    }
+    // the process ran correctly, and exited with a non-zero code: get its
+    // combined stdout + stderr
+    return data;
+}
+
+export function catch_error(err, data) {
+    let msg = spawn_error_to_string(err, data);
     // The insights-client frequently dumps
     // Python backtraces on us. Make them more
     // readable by wrapping the text in <pre>.
