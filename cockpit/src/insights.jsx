@@ -78,7 +78,7 @@ function ensure_installed(update_progress) {
 
 export function register(update_progress) {
     return ensure_installed(update_progress).then(() => {
-        const proc = cockpit.spawn([ "insights-client", "--register" ], { superuser: true, err: "message" });
+        const proc = cockpit.spawn([ "insights-client", "--register" ], { superuser: true, err: "out" });
         if (update_progress)
             update_progress(_("Connecting to Insights"), () => { proc.close() });
         return proc;
@@ -87,7 +87,7 @@ export function register(update_progress) {
 
 export function unregister() {
     if (insights_timer.enabled) {
-        return cockpit.spawn([ "insights-client", "--unregister" ], { superuser: true, err: "message" })
+        return cockpit.spawn([ "insights-client", "--unregister" ], { superuser: true, err: "out" })
                 .catch(catch_error);
     } else {
         return cockpit.resolve();
