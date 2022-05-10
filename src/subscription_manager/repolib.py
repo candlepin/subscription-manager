@@ -342,6 +342,7 @@ class RepoUpdateActionCommand(object):
         self.ent_source = ent_cert.EntitlementDirEntitlementSource()
 
         self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.uep = None
 
         self.manage_repos = 1
         self.apply_overrides = apply_overrides
@@ -384,14 +385,18 @@ class RepoUpdateActionCommand(object):
             if cache_only:
                 status = override_cache.read_cache_only()
             else:
-                self.uep = self.cp_provider.get_consumer_auth_cp()
-                status = override_cache.load_status(self.uep, self.identity.uuid)
+                status = override_cache.load_status(self.get_consumer_auth_cp(), self.identity.uuid)
 
             for item in status or []:
                 # Don't iterate through the list
                 if item['contentLabel'] not in self.overrides:
                     self.overrides[item['contentLabel']] = {}
                 self.overrides[item['contentLabel']][item['name']] = item['value']
+
+    def get_consumer_auth_cp(self):
+        if self.uep is None:
+            self.uep = self.cp_provider.get_consumer_auth_cp()
+        return self.uep
 
     def perform(self):
         # the [rhsm] manage_repos can be overridden to disable generation of the
