@@ -515,8 +515,14 @@ class RepoUpdateActionCommand(object):
         # cache_only as well.
         release_source = YumReleaseverSource()
 
+        # query whether OCSP stapling is advertized by CP for the repositories
+        has_ssl_verify_status = self.get_consumer_auth_cp().has_capability("ssl_verify_status")
+
         for content in matching_content:
             repo = Repo.from_ent_cert_content(content, baseurl, ca_cert, release_source)
+
+            if has_ssl_verify_status:
+                repo["sslverifystatus"] = "1"
 
             # overrides are yum repo only at the moment, but
             # content sources will likely need to learn how to
