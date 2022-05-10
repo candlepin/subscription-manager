@@ -307,9 +307,103 @@ class TestCliCommand(SubManFixture):
 class TestStatusCommand(SubManFixture):
     command_class = managercli.StatusCommand
 
+    MOCK_SERVICE_STATUS_SCA = {
+        "status": "Disabled",
+        "status_id": "disabled",
+        "reasons": {},
+        "reason_ids": {},
+        "valid": True,
+    }
+
+    MOCK_SERVICE_STATUS_ENTITLEMENT = {
+        "status": "Current",
+        "status_id": "valid",
+        "reasons": {},
+        "reason_ids": {},
+        "valid": True,
+    }
+
     def setUp(self):
         super(TestStatusCommand, self).setUp()
         self.cc = self.command_class()
+        patcher = patch("subscription_manager.managercli.entitlement")
+        self.entitlement_mock = patcher.start()
+        self.addCleanup(patcher.stop)
+        self.mock_entitlement_instance = Mock()
+        self.mock_entitlement_instance.get_status = Mock(return_value=self.MOCK_SERVICE_STATUS_SCA)
+        self.entitlement_mock.EntitlementService = Mock(return_value=self.mock_entitlement_instance)
+        mock_cert = Mock()
+        mock_cert.entitlement_type = CONTENT_ACCESS_CERT_TYPE
+        cert_list = [mock_cert]
+        self.cc.entitlement_dir = Mock()
+        self.cc.entitlement_dir.list_with_content_access = Mock(return_value=cert_list)
+        self.cc.entcertlib = Mock()
+
+    def test_disabled_status_sca_mode(self):
+        """
+        Test status, when SCA mode is used
+        """
+        self.cc.consumerIdentity = StubConsumerIdentity
+        self.cc.cp = StubUEP()
+        self.cc.cp.setSyspurposeCompliance({"status": "disabled"})
+        self.cc.cp._capabilities = ["syspurpose"]
+        self.cc.options = Mock()
+        self.cc.options.on_date = None
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertIn("Overall Status: Disabled", cap.out)
+        self.assertIn("Content Access Mode is set to Simple Content Access.", cap.out)
+        self.assertIn("This host has access to content, regardless of subscription status.", cap.out)
+        self.assertIn("System Purpose Status: Disabled", cap.out)
+
+    def test_current_status_entitlement_mode(self):
+        """
+        Test status, when old entitlement mode is used
+        """
+        # Note that server sent response with "Current" status
+        self.mock_entitlement_instance.get_status = Mock(return_value=self.MOCK_SERVICE_STATUS_ENTITLEMENT)
+        self.cc.consumerIdentity = StubConsumerIdentity
+        self.cc.cp = StubUEP()
+        self.cc.cp.setSyspurposeCompliance({"status": "valid"})
+        self.cc.cp._capabilities = ["syspurpose"]
+        self.cc.options = Mock()
+        self.cc.options.on_date = None
+        # There is not SCA certificate (only old entitlement)
+        mock_cert = Mock()
+        mock_cert.entitlement_type = "entitlement"
+        cert_list = [mock_cert]
+        self.cc.entitlement_dir = Mock()
+        self.cc.entitlement_dir.list_with_content_access = Mock(return_value=cert_list)
+        self.cc.entcertlib = Mock()
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertIn("Overall Status: Current", cap.out)
+        self.assertIn("System Purpose Status: Matched", cap.out)
+
+    def test_status_content_access_mode_changed(self):
+        """
+        Test status, when old entitlement mode is used
+        """
+        # Note that server sent response with "Current" status
+        self.mock_entitlement_instance.get_status = Mock(return_value=self.MOCK_SERVICE_STATUS_ENTITLEMENT)
+        self.cc.consumerIdentity = StubConsumerIdentity
+        self.cc.cp = StubUEP()
+        self.cc.cp.setSyspurposeCompliance({"status": "valid"})
+        self.cc.cp._capabilities = ["syspurpose"]
+        self.cc.options = Mock()
+        self.cc.options.on_date = None
+        # But entitlement directory still contain SCA certificate
+        mock_cert = Mock()
+        mock_cert.entitlement_type = CONTENT_ACCESS_CERT_TYPE
+        cert_list = [mock_cert]
+        self.cc.entitlement_dir = Mock()
+        self.cc.entitlement_dir.list_with_content_access = Mock(return_value=cert_list)
+        self.cc.entcertlib = Mock()
+        # sub-man should be able to resurrect from this situation
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertIn("Overall Status: Current", cap.out)
+        self.assertIn("System Purpose Status: Matched", cap.out)
 
     def test_purpose_status_success(self):
         self.cc.consumerIdentity = StubConsumerIdentity
