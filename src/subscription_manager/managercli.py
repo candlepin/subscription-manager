@@ -74,7 +74,7 @@ from subscription_manager.i18n import ungettext, ugettext as _
 log = logging.getLogger(__name__)
 MULTI_ENV = "multi_environment"
 
-from rhsmlib.services import config, attach, products, unregister, entitlement, register
+from rhsmlib.services import config, attach, products, unregister, entitlement, register, refresh
 from rhsmlib.services import exceptions
 from subscription_manager import syspurposelib
 
@@ -1262,32 +1262,18 @@ class RefreshCommand(CliCommand):
     def _do_command(self):
         self.assert_should_be_registered()
         try:
-            # Also remove the content access mode cache to be sure we display
-            # SCA or regular mode correctly
-            content_access_mode = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
-            if content_access_mode.exists():
-                content_access_mode.delete_cache()
-            # Remove the release status cache, in case it was changed
-            # on the server; it will be fetched when needed again
-            inj.require(inj.RELEASE_STATUS_CACHE).delete_cache()
-            if self.options.force is True:
-                # get current consumer identity
-                consumer_identity = inj.require(inj.IDENTITY)
-                # Force a regen of the entitlement certs for this consumer
-                if not self.cp.regenEntitlementCertificates(consumer_identity.uuid, True):
-                    log.debug("Warning: Unable to refresh entitlement certificates; service likely unavailable")
-
-            self.entcertlib.update()
-
-            log.debug("Refreshed local data")
-            print(_("All local data refreshed"))
-        except connection.RestlibException as re:
-            log.error(re)
-            mapped_message: str = ExceptionMapper().get_message(re)
+            refresh_service = refresh.Refresh(cp=self.cp, ent_cert_lib=self.entcertlib)
+            refresh_service.refresh(force=self.options.force)
+        except connection.RestlibException as re_err:
+            log.error(re_err)
+            mapped_message: str = ExceptionMapper().get_message(re_err)
             system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
-            handle_exception(_("Unable to perform refresh due to the following exception: %s") % e, e)
-
+            handle_exception(
+                _("Unable to perform refresh due to the following exception: {e}").format(e=e), e
+            )
+        else:
+            print(_("All local data refreshed"))
         self._request_validity_check()
 
 
@@ -3652,52 +3638,96 @@ class StatusCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Show status information for this system's subscriptions and products")
         super(StatusCommand, self).__init__("status", shortdesc, True)
-        self.parser.add_argument("--ondate", dest="on_date",
-                                help=_("future date to check status on, defaults to today's date (example: %s)")
-                                      % strftime("%Y-%m-%d", localtime()))
+        self.parser.add_argument(
+            "--ondate", dest="on_date",
+            help=_("future date to check status on, defaults to today's date (example: %s)")
+            % strftime("%Y-%m-%d", localtime())
+        )
 
-    def _do_command(self):
-        # list status and all reasons it is not valid
+    def _get_date_cli_option(self):
+        """
+        Try to get and validate command line options date
+        :return: Return date or None, when date was not provided
+        """
         on_date = None
         if self.options.on_date:
             try:
                 on_date = entitlement.EntitlementService.parse_date(self.options.on_date)
             except ValueError as err:
                 system_exit(os.EX_DATAERR, err)
+        return on_date
+
+    def _print_status(self, service_status):
+        """
+        Print only status
+        :return: Print overall status
+        """
 
         print("+-------------------------------------------+")
         print("   " + _("System Status Details"))
         print("+-------------------------------------------+")
 
-        service_status = entitlement.EntitlementService(None).get_status(on_date)
-        reasons = service_status['reasons']
-
-        if service_status['valid']:
-            result = 0
-        else:
-            result = 1
-
         ca_message = ""
-        has_cert = (_(
-                "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n"))
+        has_cert = _(
+            "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n"
+        )
 
         certs = self.entitlement_dir.list_with_content_access()
-        ca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
-        if ca_certs:
-            ca_message = has_cert
+        sca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
+        sca_mode_detected = False
+
+        refresh_service = refresh.Refresh(cp=self.cp, ent_cert_lib=self.entcertlib)
+
+        if sca_certs:
+            sca_mode_detected = True
         else:
+            # When there are no entitlement SCA certificates, but status_id is "disabled", then
+            # it means that content access mode has changed on the server and entitlement certificates
+            # have to be refreshed
+            if service_status["status_id"] == "disabled":
+                refresh_service.refresh()
             if is_simple_content_access(uep=self.cp, identity=self.identity):
+                sca_mode_detected = True
+
+        if sca_mode_detected is True:
+            # When SCA mode was detected using cache or installed SCA entitlement certificates, but status_id
+            # is not "disabled", then it means that content access mode has changed on the server and entitlement
+            # certificates have to be refreshed
+            status_id = service_status["status_id"]
+            if status_id != "disabled":
+                log.debug(
+                    f"Found SCA cert, but status ID is not 'disabled' ({status_id}). Refreshing entitlement certs..."
+                )
+                refresh_service.refresh()
+            else:
                 ca_message = has_cert
 
-        print(_("Overall Status: %s\n%s") % (service_status['status'], ca_message))
+        print(
+            _("Overall Status: {status}\n{message}").format(
+                status=service_status["status"], message=ca_message
+            )
+        )
+
+    def _print_reasons(self, service_status):
+        """
+        Print reasons for overall status
+        :param service_status:
+        :return: None
+        """
+        reasons = service_status["reasons"]
 
         columns = get_terminal_width()
         for name in reasons:
-            print(format_name(name + ':', 0, columns))
+            print(format_name(name + ":", 0, columns))
             for message in reasons[name]:
-                print('- %s' % format_name(message, 2, columns))
-            print('')
+                print("- {name}".format(name=format_name(message, 2, columns)))
+            print("")
 
+    def _print_syspurpose_status(self, on_date):
+        """
+        Print syspurpose status
+        :return: None
+        """
         try:
             store = syspurposelib.get_sys_purpose_store()
             if store:
@@ -3707,15 +3737,36 @@ class StatusCommand(CliCommand):
 
         syspurpose_cache = inj.require(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE)
         syspurpose_cache.load_status(self.cp, self.identity.uuid, on_date)
-        print(_("System Purpose Status: %s") % syspurpose_cache.get_overall_status())
+        print(_("System Purpose Status: {status}").format(status=syspurpose_cache.get_overall_status()))
 
         syspurpose_status_code = syspurpose_cache.get_overall_status_code()
-        if syspurpose_status_code != 'matched':
+        if syspurpose_status_code != "matched":
             reasons = syspurpose_cache.get_status_reasons()
             if reasons is not None:
                 for reason in reasons:
-                    print("- %s" % reason)
-        print('')
+                    print("- {reason}".format(reason=reason))
+        print("")
+
+    def _do_command(self):
+        """
+        Print status and all reasons it is not valid
+        """
+
+        # First get/check if provided date is valid
+        on_date = self._get_date_cli_option()
+
+        service_status = entitlement.EntitlementService(cp=self.cp).get_status(on_date)
+
+        self._print_status(service_status)
+
+        self._print_reasons(service_status)
+
+        self._print_syspurpose_status(on_date)
+
+        if service_status["valid"]:
+            result = 0
+        else:
+            result = 1
 
         return result
 
