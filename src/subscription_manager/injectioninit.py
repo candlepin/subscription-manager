@@ -50,6 +50,10 @@ def init_dep_injection():
 
     This needs to be called from any entry-point into subscription manager.
     """
+    # Enable or disable status messages. Note that this reflects only the CLI
+    # input, rhsm.conf may be set differently.
+    inj.provide(inj.PROGRESS_MESSAGES, True)
+
     # Set up consumer identity as a singleton so we don't constantly re-load
     # it from disk. Call reload when anything changes and all references will be
     # updated.

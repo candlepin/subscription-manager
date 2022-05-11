@@ -23,6 +23,7 @@ import urllib.parse
 
 import rhsm.config
 from rhsm.config import DEFAULT_PROXY_PORT
+import subscription_manager.injection as inj
 
 
 def remove_scheme(uri):
@@ -314,6 +315,8 @@ class StatusMessage:
         self.quiet = False
         config = rhsm.config.get_config_parser()
         if config.get("rhsm", "progress_messages") == "0":
+            self.quiet = True
+        if not inj.require(inj.PROGRESS_MESSAGES):
             self.quiet = True
         if not sys.stdout.isatty():
             self.quiet = True
