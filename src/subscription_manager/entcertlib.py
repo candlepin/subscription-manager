@@ -126,7 +126,7 @@ class EntCertUpdateAction(object):
         rogue_serials = self._find_rogue_serials(local, expected)
 
         self.delete(rogue_serials)
-        self.install(missing_serials)
+        installed_serials = self.install(missing_serials)
 
         log.info("certs updated:\n%s", self.report)
         self.syslog_results()
@@ -146,6 +146,8 @@ class EntCertUpdateAction(object):
                 # This addresses BZs: 1448855, 1450862
                 obsolete_certs = []
                 for cont_access_cert in content_access_certs:
+                    if cont_access_cert.serial in installed_serials:
+                        continue
                     if cont_access_cert.serial not in expected:
                         obsolete_certs.append(cont_access_cert)
                 if len(obsolete_certs) > 0:
@@ -177,7 +179,7 @@ class EntCertUpdateAction(object):
         cert_bundles = self.get_certificates_by_serial_list(missing_serials)
 
         ent_cert_bundles_installer = EntitlementCertBundlesInstaller(self.report)
-        ent_cert_bundles_installer.install(cert_bundles)
+        return ent_cert_bundles_installer.install(cert_bundles)
 
     def _find_content_access_certs(self):
         certs = self.ent_dir.list_with_content_access()
@@ -332,10 +334,14 @@ class EntitlementCertBundlesInstaller(object):
     def install(self, cert_bundles):
         """Fetch entitliement certs, install them, and update the report."""
         bundle_installer = EntitlementCertBundleInstaller(self.report)
+        installed_serials = []
         for cert_bundle in cert_bundles:
-            bundle_installer.install(cert_bundle)
+            cert_serial = bundle_installer.install(cert_bundle)
+            if cert_serial is not None:
+                installed_serials.append(cert_serial)
         self.exceptions = bundle_installer.exceptions
         self.post_install()
+        return installed_serials
 
     # TODO: add subman plugin slot,conduit,hooks
     def pre_install(self):
@@ -378,15 +384,18 @@ class EntitlementCertBundleInstaller(object):
         self.pre_install(bundle)
 
         cert_bundle_writer = Writer()
+        cert_serial = None
         try:
             key, cert = self.build_cert(bundle)
             cert_bundle_writer.write(key, cert)
-
             self.report.added.append(cert)
+            cert_serial = cert.serial
         except Exception as e:
             self.install_exception(bundle, e)
 
         self.post_install(bundle)
+
+        return cert_serial
 
     # TODO: add subman plugin, slot, and conduit
     def pre_install(self, bundle):
