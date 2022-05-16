@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.29
+Version: 1.28.30
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1483,6 +1483,30 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon May 16 2022 Christopher Snyder <csnyder@redhat.com> 1.28.30-1
+- Add 8.7 tito releaser (csnyder@redhat.com)
+- spec: relax subscription-manager-rhsm-certificates requires
+  (ptoscano@redhat.com)
+- 2073347: [1.28] Print correct status, when access mode has changed
+  (jhnidek@redhat.com)
+- 2056896: Handle all exceptions of gathering data properly
+  (jhnidek@redhat.com)
+- Improve azure determination method (suttner@atix.de)
+- ENT-4939: [1.28] Drop old dbus_interface.py (mhorky@redhat.com)
+- cockpit: Read files in /var/lib/insights as superuser (mvollmer@redhat.com)
+- refresh: clear also the release status (ptoscano@redhat.com)
+- 2074111: clear the release cache on release change (ptoscano@redhat.com)
+- 1.28 Add gcp_license_codes to system facts. (jhnidek@redhat.com)
+- build: always build & ship syspurpose bits (ptoscano@redhat.com)
+- 2057732: [1.28] Fix inaccurate module status in combined profile
+  (jhnidek@redhat.com)
+- 2064002: fix named argument for registerConsumer() (ptoscano@redhat.com)
+- 2057053: Improve API of detection of cloud-what (jhnidek@redhat.com)
+- 2057053: Facts: do no use heuristics detection of cloud (jhnidek@redhat.com)
+- 2018215: Cockpit use "Organization ID" in label (jhnidek@redhat.com)
+- 1822242: Cockpit: another improvement of curtain view (jhnidek@redhat.com)
+- 1822242: cockpit: improve handling of main curtain view (ptoscano@redhat.com)
+
 * Fri Mar 11 2022 Christopher Snyder <csnyder@redhat.com> 1.28.29-1
 - Update translation files (noreply@weblate.org)
 
