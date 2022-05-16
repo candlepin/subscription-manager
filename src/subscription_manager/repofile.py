@@ -61,6 +61,7 @@ class Repo(dict):
         "sslcacert": (0, None),
         "sslclientkey": (0, None),
         "sslclientcert": (0, None),
+        "sslverifystatus": (1, None),
         "metadata_expire": (1, None),
         "enabled_metadata": (1, "0"),
         "proxy": (0, None),
