@@ -818,7 +818,7 @@ class BaseRestLib(object):
 
         response = None
         result = None
-        with utils.StatusMessage(description):
+        with utils.LiveStatusMessage(description):
             for cert_file, key_file in cert_key_pairs:
                 try:
                     conn = self._create_connection(cert_file=cert_file, key_file=key_file)
