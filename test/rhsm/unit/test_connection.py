@@ -126,20 +126,27 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.request_get = Mock(return_value=[])
         self.cp.getEnvironment(owner_key="myorg", name="env name__++=*&")
         self.cp.conn.request_get.assert_called_with(
-            "/owners/myorg/environments?name=env+name__%2B%2B%3D%2A%26"
+            "/owners/myorg/environments?name=env+name__%2B%2B%3D%2A%26",
+            description="Fetching environment information",
         )
 
     def test_entitle_date(self):
         self.cp.conn = Mock()
         self.cp.conn.request_post = Mock(return_value=[])
         self.cp.bind("abcd", date(2011, 9, 2))
-        self.cp.conn.request_post.assert_called_with("/consumers/abcd/entitlements?entitle_date=2011-09-02")
+        self.cp.conn.request_post.assert_called_with(
+            "/consumers/abcd/entitlements?entitle_date=2011-09-02",
+            description="Updating subscriptions",
+        )
 
     def test_no_entitle_date(self):
         self.cp.conn = Mock()
         self.cp.conn.request_post = Mock(return_value=[])
         self.cp.bind("abcd")
-        self.cp.conn.request_post.assert_called_with("/consumers/abcd/entitlements")
+        self.cp.conn.request_post.assert_called_with(
+            "/consumers/abcd/entitlements",
+            description="Updating subscriptions",
+        )
 
     def test_clean_up_prefix(self):
         self.assertTrue(self.cp.handler == "/Test/")
@@ -505,7 +512,10 @@ class ConnectionTests(unittest.TestCase):
         Options = namedtuple("Options", "reporter_id")
         options = Options("tester")
         self.cp.hypervisorHeartbeat("owner", options=options)
-        self.cp.conn.request_put.assert_called_with("/hypervisors/owner/heartbeat?reporter_id=tester")
+        self.cp.conn.request_put.assert_called_with(
+            "/hypervisors/owner/heartbeat?reporter_id=tester",
+            description="Updating hypervisor information",
+        )
 
     def test_hypervisor_check_in_no_capability(self):
         self.cp.conn = Mock()
@@ -976,5 +986,7 @@ class DatetimeFormattingTests(unittest.TestCase):
         with patch("os.path.exists", mock_exists):
             cache.check_for_update()
         self.cp.conn.request_get.assert_called_with(
-            "/consumers/bob/accessible_content", headers=expected_headers
+            "/consumers/bob/accessible_content",
+            headers=expected_headers,
+            description="Fetching content for a certificate",
         )
