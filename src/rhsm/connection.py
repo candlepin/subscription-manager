@@ -46,6 +46,14 @@ try:
 except ImportError:
     subman_version = "unknown"
 
+try:
+    from subscription_manager.i18n import ugettext as _
+except ImportError:
+
+    def _(message: str):
+        return message
+
+
 config = get_config_parser()
 MULTI_ENV = "multi_environment"
 
@@ -1096,7 +1104,7 @@ class UEPConnection(BaseConnection):
         leave the list of supported resources empty.
         """
         self.resources = {}
-        resources_list = self.conn.request_get("/", description="Fetching supported resources")
+        resources_list = self.conn.request_get("/", description=_("Fetching supported resources"))
         for r in resources_list:
             self.resources[r["rel"]] = r["href"]
         log.debug("Server supports the following resources: %s", self.resources)
@@ -1159,7 +1167,7 @@ class UEPConnection(BaseConnection):
         log.debug("remote connection closed")
 
     def ping(self, username=None, password=None):
-        return self.conn.request_get("/status/", description="Checking connection status")
+        return self.conn.request_get("/status/", description=_("Checking connection status"))
 
     def getJWToken(self, cloud_id, metadata, signature):
         """
@@ -1187,7 +1195,7 @@ class UEPConnection(BaseConnection):
             method="/cloud/authorize",
             params=params,
             headers=headers,
-            description="Fetching cloud token",
+            description=_("Fetching cloud token"),
         )
 
     def registerConsumer(
@@ -1258,7 +1266,7 @@ class UEPConnection(BaseConnection):
                     url = url + prepend + self.sanitize(key)
                     prepend = ","
 
-        return self.conn.request_post(url, params, headers=headers, description="Registering system")
+        return self.conn.request_post(url, params, headers=headers, description=_("Registering system"))
 
     def hypervisorCheckIn(self, owner, env, host_guest_mapping, options=None):
         """
@@ -1286,7 +1294,7 @@ class UEPConnection(BaseConnection):
             res = self.conn.request_post(
                 url,
                 host_guest_mapping,
-                description="Updating detected virtual machines running on given host",
+                description=_("Updating detected virtual machines running on given host"),
             )
             self.conn.headers["Content-type"] = priorContentType
         else:
@@ -1298,7 +1306,7 @@ class UEPConnection(BaseConnection):
             res = self.conn.request_post(
                 url,
                 host_guest_mapping,
-                description="Updating detected virtual machines running on given host",
+                description=_("Updating detected virtual machines running on given host"),
             )
         return res
 
@@ -1320,7 +1328,7 @@ class UEPConnection(BaseConnection):
         params["reporter_id"] = options.reporter_id
         query_params = urlencode(params)
         url = "/hypervisors/%s/heartbeat?%s" % (owner, query_params)
-        return self.conn.request_put(url, description="Updating hypervisor information")
+        return self.conn.request_put(url, description=_("Updating hypervisor information"))
 
     def updateConsumerFacts(self, consumer_uuid, facts={}):
         """
@@ -1395,7 +1403,7 @@ class UEPConnection(BaseConnection):
             params["serviceLevel"] = service_level
 
         method = "/consumers/%s" % self.sanitize(uuid)
-        ret = self.conn.request_put(method, params, description="Updating consumer information")
+        ret = self.conn.request_put(method, params, description=_("Updating consumer information"))
         return ret
 
     def addOrUpdateGuestId(self, uuid, guestId):
@@ -1405,19 +1413,19 @@ class UEPConnection(BaseConnection):
         else:
             guest_uuid = guestId["guestId"]
         method = "/consumers/%s/guestids/%s" % (self.sanitize(uuid), self.sanitize(guest_uuid))
-        return self.conn.request_put(method, guestId, description="Updating guest information")
+        return self.conn.request_put(method, guestId, description=_("Updating guest information"))
 
     def getGuestIds(self, uuid):
         method = "/consumers/%s/guestids" % self.sanitize(uuid)
-        return self.conn.request_get(method, description="Fetching guest information")
+        return self.conn.request_get(method, description=_("Fetching guest information"))
 
     def getGuestId(self, uuid, guest_uuid):
         method = "/consumers/%s/guestids/%s" % (self.sanitize(uuid), self.sanitize(guest_uuid))
-        return self.conn.request_get(method, description="Fetching guest information")
+        return self.conn.request_get(method, description=_("Fetching guest information"))
 
     def removeGuestId(self, uuid, guest_uuid):
         method = "/consumers/%s/guestids/%s" % (self.sanitize(uuid), self.sanitize(guest_uuid))
-        return self.conn.request_delete(method, description="Removing guests")
+        return self.conn.request_delete(method, description=_("Removing guests"))
 
     def sanitizeGuestIds(self, guestIds):
         return [self.sanitizeGuestId(guestId) for guestId in guestIds or []]
@@ -1440,7 +1448,7 @@ class UEPConnection(BaseConnection):
         package headers we're interested in. See profile.py.
         """
         method = "/consumers/%s/packages" % self.sanitize(consumer_uuid)
-        return self.conn.request_put(method, pkg_dicts, description="Updating profile information")
+        return self.conn.request_put(method, pkg_dicts, description=_("Updating profile information"))
 
     def updateCombinedProfile(self, consumer_uuid, profile):
         """
@@ -1451,7 +1459,7 @@ class UEPConnection(BaseConnection):
         :return: Dict containing response from HTTP server
         """
         method = "/consumers/%s/profiles" % self.sanitize(consumer_uuid)
-        return self.conn.request_put(method, profile, description="Updating profile information")
+        return self.conn.request_put(method, profile, description=_("Updating profile information"))
 
     # FIXME: username and password not used here
     def getConsumer(self, uuid, username=None, password=None):
@@ -1459,7 +1467,7 @@ class UEPConnection(BaseConnection):
         Returns a consumer object with pem/key for existing consumers
         """
         method = "/consumers/%s" % self.sanitize(uuid)
-        return self.conn.request_get(method, description="Fetching consumer keys")
+        return self.conn.request_get(method, description=_("Fetching consumer keys"))
 
     def getConsumers(self, owner=None):
         """
@@ -1469,7 +1477,7 @@ class UEPConnection(BaseConnection):
         if owner:
             method = "%s?owner=%s" % (method, owner)
 
-        return self.conn.request_get(method, description="Fetching consumers")
+        return self.conn.request_get(method, description=_("Fetching consumers"))
 
     def getCompliance(self, uuid, on_date=None):
         """
@@ -1478,7 +1486,7 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s/compliance" % self.sanitize(uuid)
         if on_date:
             method = "%s?on_date=%s" % (method, self.sanitize(on_date.isoformat(), plus=True))
-        return self.conn.request_get(method, description="Checking compliance status")
+        return self.conn.request_get(method, description=_("Checking compliance status"))
 
     def getSyspurposeCompliance(self, uuid, on_date=None):
         """
@@ -1487,56 +1495,56 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s/purpose_compliance" % self.sanitize(uuid)
         if on_date:
             method = "%s?on_date=%s" % (method, self.sanitize(on_date.isoformat(), plus=True))
-        return self.conn.request_get(method, description="Checking system purpose compliance status")
+        return self.conn.request_get(method, description=_("Checking system purpose compliance status"))
 
     def getOwnerSyspurposeValidFields(self, owner_key):
         """
         Retrieves the system purpose settings available to an owner
         """
         method = "/owners/%s/system_purpose" % self.sanitize(owner_key)
-        return self.conn.request_get(method, description="Fetching available system purpose settings")
+        return self.conn.request_get(method, description=_("Fetching available system purpose settings"))
 
     def createOwner(self, ownerKey, ownerDisplayName=None):
         params = {"key": ownerKey}
         if ownerDisplayName:
             params["displayName"] = ownerDisplayName
         method = "/owners/"
-        return self.conn.request_post(method, params, description="Creating organization")
+        return self.conn.request_post(method, params, description=_("Creating organization"))
 
     def getOwner(self, uuid):
         """
         Returns an owner object with pem/key for existing consumers
         """
         method = "/consumers/%s/owner" % self.sanitize(uuid)
-        return self.conn.request_get(method, description="Fetching organizations")
+        return self.conn.request_get(method, description=_("Fetching organizations"))
 
     def deleteOwner(self, key):
         """
         deletes an owner
         """
         method = "/owners/%s" % self.sanitize(key)
-        return self.conn.request_delete(method, description="Removing organization")
+        return self.conn.request_delete(method, description=_("Removing organization"))
 
     def getOwners(self):
         """
         Returns a list of all owners
         """
         method = "/owners"
-        return self.conn.request_get(method, description="Fetching organizations")
+        return self.conn.request_get(method, description=_("Fetching organizations"))
 
     def getOwnerInfo(self, owner):
         """
         Returns an owner info
         """
         method = "/owners/%s/info" % self.sanitize(owner)
-        return self.conn.request_get(method, description="Fetching organization information")
+        return self.conn.request_get(method, description=_("Fetching organization information"))
 
     def getOwnerList(self, username):
         """
         Returns an owner objects with pem/key for existing consumers
         """
         method = "/users/%s/owners" % self.sanitize(username)
-        owners = self.conn.request_get(method, description="Fetching organizations")
+        owners = self.conn.request_get(method, description=_("Fetching organizations"))
         # BZ 1749395 When a user has no orgs, the return value
         #  is an array with a single None element.
         # Ensures the value is the same for a simple None value
@@ -1550,14 +1558,14 @@ class UEPConnection(BaseConnection):
         method = "/owners/%s/hypervisors?" % owner_key
         for hypervisor_id in hypervisor_ids or []:
             method += "&hypervisor_id=%s" % self.sanitize(hypervisor_id)
-        return self.conn.request_get(method, description="Fetching organization hypervisors")
+        return self.conn.request_get(method, description=_("Fetching organization hypervisors"))
 
     def unregisterConsumer(self, consumerId):
         """
         Deletes a consumer from candlepin server
         """
         method = "/consumers/%s" % self.sanitize(consumerId)
-        return self.conn.request_delete(method, description="Unregistering system")
+        return self.conn.request_delete(method, description=_("Unregistering system"))
 
     def getCertificates(self, consumer_uuid, serials=[]):
         """
@@ -1568,14 +1576,14 @@ class UEPConnection(BaseConnection):
         if len(serials) > 0:
             serials_str = ",".join(serials)
             method = "%s?serials=%s" % (method, serials_str)
-        return self.conn.request_get(method, description="Fetching certificates")
+        return self.conn.request_get(method, description=_("Fetching certificates"))
 
     def getCertificateSerials(self, consumerId):
         """
         Get serial numbers for certs for a given consumer
         """
         method = "/consumers/%s/certificates/serials" % self.sanitize(consumerId)
-        return self.conn.request_get(method, description="Fetching certificate serial numbers")
+        return self.conn.request_get(method, description=_("Fetching certificate serial numbers"))
 
     def getAccessibleContent(self, consumerId, if_modified_since=None):
         """
@@ -1591,7 +1599,7 @@ class UEPConnection(BaseConnection):
             timestamp = BaseRestLib._format_http_date(if_modified_since)
             headers["If-Modified-Since"] = timestamp
         return self.conn.request_get(
-            method, headers=headers, description="Fetching content for a certificate"
+            method, headers=headers, description=_("Fetching content for a certificate")
         )
 
     def bindByEntitlementPool(self, consumerId, poolId, quantity=None):
@@ -1601,7 +1609,7 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s/entitlements?pool=%s" % (self.sanitize(consumerId), self.sanitize(poolId))
         if quantity:
             method = "%s&quantity=%s" % (method, quantity)
-        return self.conn.request_post(method, description="Updating subscriptions")
+        return self.conn.request_post(method, description=_("Updating subscriptions"))
 
     def bindByProduct(self, consumerId, products):
         """
@@ -1611,7 +1619,7 @@ class UEPConnection(BaseConnection):
         """
         args = "&".join(["product=" + product.replace(" ", "%20") for product in products])
         method = "/consumers/%s/entitlements?%s" % (str(consumerId), args)
-        return self.conn.request_post(method, description="Updating subscriptions")
+        return self.conn.request_post(method, description=_("Updating subscriptions"))
 
     def bind(self, consumerId, entitle_date=None):
         """
@@ -1626,7 +1634,7 @@ class UEPConnection(BaseConnection):
         if entitle_date:
             method = "%s?entitle_date=%s" % (method, self.sanitize(entitle_date.isoformat(), plus=True))
 
-        return self.conn.request_post(method, description="Updating subscriptions")
+        return self.conn.request_post(method, description=_("Updating subscriptions"))
 
     def dryRunBind(self, consumer_uuid, service_level):
         """
@@ -1644,19 +1652,19 @@ class UEPConnection(BaseConnection):
                 self.sanitize(consumer_uuid),
                 self.sanitize(service_level),
             )
-        return self.conn.request_get(method, description="Simulating subscribing")
+        return self.conn.request_get(method, description=_("Simulating subscribing"))
 
     def unbindBySerial(self, consumerId, serial):
         method = "/consumers/%s/certificates/%s" % (self.sanitize(consumerId), self.sanitize(str(serial)))
-        return self.conn.request_delete(method, description="Unsubscribing")
+        return self.conn.request_delete(method, description=_("Unsubscribing"))
 
     def unbindByPoolId(self, consumer_uuid, pool_id):
         method = "/consumers/%s/entitlements/pool/%s" % (self.sanitize(consumer_uuid), self.sanitize(pool_id))
-        return self.conn.request_delete(method, description="Unsubscribing")
+        return self.conn.request_delete(method, description=_("Unsubscribing"))
 
     def unbindAll(self, consumerId):
         method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
-        return self.conn.request_delete(method, description="Unsubscribing")
+        return self.conn.request_delete(method, description=_("Unsubscribing"))
 
     def checkin(self, consumerId, checkin_date=None):
         method = "/consumers/%s/checkin" % self.sanitize(consumerId)
@@ -1664,7 +1672,7 @@ class UEPConnection(BaseConnection):
         if checkin_date:
             method = "%s?checkin_date=%s" % (method, self.sanitize(checkin_date.isoformat(), plus=True))
 
-        return self.conn.request_put(method, description="Updating checkin date")
+        return self.conn.request_put(method, description=_("Updating checkin date"))
 
     def getPoolsList(
         self,
@@ -1713,22 +1721,22 @@ class UEPConnection(BaseConnection):
         if items_per_page != 0:
             method = "%s&per_page=%s" % (method, self.sanitize(items_per_page))
 
-        results = self.conn.request_get(method, description="Fetching pools")
+        results = self.conn.request_get(method, description=_("Fetching pools"))
         return results
 
     def getPool(self, poolId, consumerId=None):
         method = "/pools/%s" % self.sanitize(poolId)
         if consumerId:
             method = "%s?consumer=%s" % (method, self.sanitize(consumerId))
-        return self.conn.request_get(method, description="Fetching pool information")
+        return self.conn.request_get(method, description=_("Fetching pool information"))
 
     def getProduct(self, product_uuid):
         method = "/products/%s" % self.sanitize(product_uuid)
-        return self.conn.request_get(method, description="Fetching product information")
+        return self.conn.request_get(method, description=_("Fetching product information"))
 
     def getRelease(self, consumerId):
         method = "/consumers/%s/release" % self.sanitize(consumerId)
-        results = self.conn.request_get(method, description="Fetching release information")
+        results = self.conn.request_get(method, description=_("Fetching release information"))
         return results
 
     def getAvailableReleases(self, consumerId):
@@ -1741,7 +1749,7 @@ class UEPConnection(BaseConnection):
               (API not implemented in candlepin).
         """
         method = "/consumers/%s/available_releases" % self.sanitize(consumerId)
-        return self.conn.request_get(method, description="Fetching available releases")
+        return self.conn.request_get(method, description=_("Fetching available releases"))
 
     def getEntitlementList(self, consumerId, request_certs=False):
         method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
@@ -1750,7 +1758,7 @@ class UEPConnection(BaseConnection):
             filters = "?exclude=certificates.key&exclude=certificates.cert"
         else:
             filters = ""
-        results = self.conn.request_get(method + filters, description="Fetching entitlements")
+        results = self.conn.request_get(method + filters, description=_("Fetching entitlements"))
         return results
 
     def getServiceLevelList(self, owner_key):
@@ -1758,7 +1766,7 @@ class UEPConnection(BaseConnection):
         List the service levels available for an owner.
         """
         method = "/owners/%s/servicelevels" % self.sanitize(owner_key)
-        results = self.conn.request_get(method, description="Fetching service levels")
+        results = self.conn.request_get(method, description=_("Fetching service levels"))
         return results
 
     def getEnvironmentList(self, owner_key):
@@ -1769,7 +1777,7 @@ class UEPConnection(BaseConnection):
         can always check with supports_resource("environments").
         """
         method = "/owners/%s/environments" % self.sanitize(owner_key)
-        results = self.conn.request_get(method, description="Fetching environments")
+        results = self.conn.request_get(method, description=_("Fetching environments"))
         return results
 
     def getEnvironment(self, owner_key=None, name=None):
@@ -1787,18 +1795,18 @@ class UEPConnection(BaseConnection):
 
         query_param = urlencode({"name": name})
         url = "/owners/%s/environments?%s" % (self.sanitize(owner_key), query_param)
-        results = self.conn.request_get(url, description="Fetching environment information")
+        results = self.conn.request_get(url, description=_("Fetching environment information"))
         if len(results) == 0:
             return None
         return results[0]
 
     def getEntitlement(self, entId):
         method = "/entitlements/%s" % self.sanitize(entId)
-        return self.conn.request_get(method, description="Fetching entitlement information")
+        return self.conn.request_get(method, description=_("Fetching entitlement information"))
 
     def regenIdCertificate(self, consumerId):
         method = "/consumers/%s" % self.sanitize(consumerId)
-        return self.conn.request_post(method, description="Updating certificate")
+        return self.conn.request_post(method, description=_("Updating certificate"))
 
     def regenEntitlementCertificates(self, consumer_id, lazy_regen=True):
         """
@@ -1813,7 +1821,7 @@ class UEPConnection(BaseConnection):
         result = False
 
         try:
-            self.conn.request_put(method, description="Updating certificates")
+            self.conn.request_put(method, description=_("Updating certificates"))
             result = True
         except (RemoteServerException, httplib.BadStatusLine, RestlibException) as e:
             # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
@@ -1842,7 +1850,7 @@ class UEPConnection(BaseConnection):
         result = False
 
         try:
-            self.conn.request_put(method, description="Updating certificate")
+            self.conn.request_put(method, description=_("Updating certificate"))
             result = True
         except (RemoteServerException, httplib.BadStatusLine, RestlibException) as e:
             # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
@@ -1857,21 +1865,21 @@ class UEPConnection(BaseConnection):
 
     def getStatus(self):
         method = "/status"
-        return self.conn.request_get(method, description="Checking server status")
+        return self.conn.request_get(method, description=_("Checking server status"))
 
     def getContentOverrides(self, consumerId):
         """
         Get all the overrides for the specified consumer.
         """
         method = "/consumers/%s/content_overrides" % self.sanitize(consumerId)
-        return self.conn.request_get(method, description="Fetching content overrides")
+        return self.conn.request_get(method, description=_("Fetching content overrides"))
 
     def setContentOverrides(self, consumerId, overrides):
         """
         Set an override on a content object.
         """
         method = "/consumers/%s/content_overrides" % self.sanitize(consumerId)
-        return self.conn.request_put(method, overrides, description="Updating content overrides")
+        return self.conn.request_put(method, overrides, description=_("Updating content overrides"))
 
     def deleteContentOverrides(self, consumerId, params=None):
         """
@@ -1880,7 +1888,7 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s/content_overrides" % self.sanitize(consumerId)
         if not params:
             params = []
-        return self.conn.request_delete(method, params, description="Removing content overrides")
+        return self.conn.request_delete(method, params, description=_("Removing content overrides"))
 
     def activateMachine(self, consumerId, email=None, lang=None):
         """
@@ -1895,14 +1903,14 @@ class UEPConnection(BaseConnection):
 
             if lang:
                 method += "&email_locale=%s" % lang
-        return self.conn.request_post(method, description="Activating")
+        return self.conn.request_post(method, description=_("Activating"))
 
     def getSubscriptionList(self, owner_key):
         """
         List the subscriptions for a particular owner.
         """
         method = "/owners/%s/subscriptions" % self.sanitize(owner_key)
-        results = self.conn.request_get(method, description="Fetching subscriptions")
+        results = self.conn.request_get(method, description=_("Fetching subscriptions"))
         return results
 
     def updateSubscriptionList(self, owner_key, auto_create_owner=None, lazy_regen=None):
@@ -1916,7 +1924,7 @@ class UEPConnection(BaseConnection):
         if lazy_regen is not None:
             method += "&lazy_regen=%s" % bool(lazy_regen).lower()
 
-        results = self.conn.request_put(method, description="Updating subscriptions")
+        results = self.conn.request_put(method, description=_("Updating subscriptions"))
         return results
 
     def getJob(self, job_id):
@@ -1925,7 +1933,7 @@ class UEPConnection(BaseConnection):
         """
         query_params = urlencode({"result_data": True})
         method = "/jobs/%s?%s" % (job_id, query_params)
-        results = self.conn.request_get(method, description="Fetching job")
+        results = self.conn.request_get(method, description=_("Fetching job"))
         return results
 
     def updateJobStatus(self, job_status):
@@ -1934,7 +1942,7 @@ class UEPConnection(BaseConnection):
         """
         # let key error bubble up
         method = job_status["statusPath"]
-        results = self.conn.request_get(method, description="Updating job status")
+        results = self.conn.request_get(method, description=_("Updating job status"))
         return results
 
     def cancelJob(self, job_id):
@@ -1942,7 +1950,7 @@ class UEPConnection(BaseConnection):
         Given a job id representing a candlepin JobStatus, cancel it.
         """
         method = "/jobs/%s" % (job_id)
-        results = self.conn.request_delete(method, description="Cancelling job")
+        results = self.conn.request_delete(method, description=_("Cancelling job"))
         return results
 
     def sanitize(self, url_param, plus=False):
