@@ -78,7 +78,8 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                     system_exit(
                         os.EX_USAGE,
                         _(
-                            "Error: you must register or specify --username and --password to list service levels"
+                            "Error: you must register or specify --username "
+                            "and --password to list service levels"
                         ),
                     )
             elif self.options.unset or self.options.set:

@@ -72,7 +72,8 @@ class StatusCommand(CliCommand):
 
         ca_message = ""
         has_cert = _(
-            "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n"
+            "Content Access Mode is set to Simple Content Access. "
+            "This host has access to content, regardless of subscription status.\n"
         )
 
         certs = self.entitlement_dir.list_with_content_access()
@@ -94,12 +95,13 @@ class StatusCommand(CliCommand):
 
         if sca_mode_detected is True:
             # When SCA mode was detected using cache or installed SCA entitlement certificates, but status_id
-            # is not "disabled", then it means that content access mode has changed on the server and entitlement
-            # certificates have to be refreshed
+            # is not "disabled", then it means that content access mode has changed on the server and
+            # entitlement certificates have to be refreshed
             status_id = service_status["status_id"]
             if status_id != "disabled":
                 log.debug(
-                    f"Found SCA cert, but status ID is not 'disabled' ({status_id}). Refreshing entitlement certs..."
+                    f"Found SCA cert, but status ID is not 'disabled' ({status_id}). "
+                    "Refreshing entitlement certs..."
                 )
                 refresh_service.refresh()
             else:

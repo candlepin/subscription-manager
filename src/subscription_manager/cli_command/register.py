@@ -157,9 +157,9 @@ class RegisterCommand(UserPassCommand):
             system_exit(
                 os.EX_USAGE,
                 _(
-                    "Error: Can not force registration while attempting to recover registration with consumerid. "
-                    "Please use --force without --consumerid to re-register or use the clean command and "
-                    "try again without --force."
+                    "Error: Can not force registration while attempting to recover registration "
+                    "with consumerid. Please use --force without --consumerid to re-register or "
+                    "use the clean command and try again without --force."
                 ),
             )
         # 1485008: allow registration, when --type=RHUI (many of KBase articles describe using RHUI not rhui)
@@ -247,9 +247,9 @@ class RegisterCommand(UserPassCommand):
                 log.info("--force specified, unregistered old consumer: {old_uuid}".format(old_uuid=old_uuid))
                 print(_("The system with UUID {old_uuid} has been unregistered").format(old_uuid=old_uuid))
             except ssl.SSLError as e:
-                # since the user can override serverurl for register, a common use case is to try to switch servers
-                # using register --force... However, this normally cannot successfully unregister since the servers
-                # are different.
+                # since the user can override serverurl for register, a common use case
+                # is to try to switch servers using register --force... However, this
+                # normally cannot successfully unregister since the servers are different.
                 handle_exception("Unregister failed: {e}".format(e=e), e)
             except Exception as e:
                 handle_exception("Unregister failed", e)

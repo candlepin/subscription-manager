@@ -224,7 +224,8 @@ class PoolFilter(object):
         for pool in pools:
             provided_ids = set([p["productId"] for p in pool["providedProducts"]])
             wrapped_pool = PoolWrapper(pool)
-            # NOTE: We may have to check for other types or handle the case of a product with no type in the future
+            # NOTE: We may have to check for other types
+            # or handle the case of a product with no type in the future
             if wrapped_pool.get_product_attributes("type")["type"] == "SVC":
                 provided_ids.add(pool["productId"])
             overlap = 0

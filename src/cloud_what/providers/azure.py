@@ -197,7 +197,8 @@ class AzureCloudProvider(BaseCloudProvider):
     def _get_data_from_server(self, data_type: str, url: str, headers: dict = None) -> Union[str, None]:
         """
         This method tries to get data from server using GET method
-        :param data_type: string representation of data type used in log messages (e.g. "metadata", "signature")
+        :param data_type: string representation of data type used in log messages
+            (e.g. "metadata", "signature")
         :param url: URL of GET request
         :return: String of body, when request was successful; otherwise return None
         """

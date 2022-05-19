@@ -34,7 +34,8 @@ UNAUTHORIZED_MESSAGE = _("Unauthorized: Invalid credentials for request.")
 TOKEN_AUTH_UNSUPPORTED_MESSAGE = _("Token authentication not supported by the entitlement server")
 FORBIDDEN_MESSAGE = _("Forbidden: Invalid credentials for request.")
 REMOTE_SERVER_MESSAGE = _(
-    "Remote server error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."
+    "Remote server error. Please check the connection details, "
+    "or see /var/log/rhsm/rhsm.log for more information."
 )
 BAD_CA_CERT_MESSAGE = _("Bad CA certificate: %s")
 EXPIRED_ID_CERT_MESSAGE = _("Your identity certificate has expired")

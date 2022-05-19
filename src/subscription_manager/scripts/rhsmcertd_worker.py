@@ -168,7 +168,8 @@ def _main(options, log):
     # Set default mainloop
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
-    # exit on SIGTERM, otherwise finally statements don't run (one explanation: http://stackoverflow.com/a/41840796)
+    # exit on SIGTERM, otherwise finally statements don't run
+    # (one explanation: http://stackoverflow.com/a/41840796)
     # SIGTERM happens for example when systemd wants the service to stop
     # without finally statements, we get confusing behavior (ex. see bz#1431659)
     signal.signal(signal.SIGTERM, exit_on_signal)
@@ -241,12 +242,16 @@ def _main(options, log):
         # with --consumerid get there?
         if ge.deleted_id == uuid:
             log.critical(
-                'Consumer profile "%s" has been deleted from the server. Its local certificates will now be archived',
+                (
+                    "Consumer profile '%s' has been deleted from the server. "
+                    "Its local certificates will now be archived"
+                ),
                 uuid,
             )
             managerlib.clean_all_data()
             log.critical(
-                "Certificates archived to '/etc/pki/consumer.old'. Contact your system administrator if you need more information."
+                "Certificates archived to '/etc/pki/consumer.old'. "
+                "Contact your system administrator if you need more information."
             )
 
         raise ge

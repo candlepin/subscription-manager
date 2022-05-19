@@ -366,16 +366,16 @@ class AWSCloudProvider(BaseCloudProvider):
 
     def get_metadata(self) -> Union[str, None]:
         """
-        Try to get metadata from the in-memory cache first. When the in-memory cache is not valid, then try to
-        get metadata from server.
+        Try to get metadata from the in-memory cache first. When the in-memory
+        cache is not valid, then try to get metadata from server.
         :return: String with metadata or None
         """
         return super(AWSCloudProvider, self).get_metadata()
 
     def get_signature(self) -> Union[str, None]:
         """
-        Try to get signature from the in-memory cache first. When the in-memory cache is not valid, then try to
-        get signature from server.
+        Try to get signature from the in-memory cache first. When the in-memory
+        cache is not valid, then try to get signature from server.
         :return: String with metadata or None
         """
         return super(AWSCloudProvider, self).get_signature()

@@ -186,7 +186,8 @@ class RhsmConfigParser(SafeConfigParser):
             changed = False
             for interp in interpolations:
                 # Defaults aren't interpolated by default, so bake them in as necessary
-                # has_option throws an exception if the section doesn't exist, but at this point we know it does
+                # has_option throws an exception if the section doesn't exist,
+                # but at this point we know it does.
                 if self.has_option(section, interp):
                     super(RhsmConfigParser, self).set(section, interp, self.get(section, interp))
                     changed = True

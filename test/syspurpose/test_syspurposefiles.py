@@ -36,7 +36,8 @@ class SyspurposeStoreTests(unittest.TestCase):
 
     def test_read_file_non_existent_file(self):
         """
-        Can the SyspurposeStore.read_file method handle attempting to read a file which does not exist?
+        Can the SyspurposeStore.read_file method handle attempting to read
+        a file which does not exist?
         """
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_file = os.path.join(base_temp_dir.name, "syspurpose_file.json")
@@ -48,7 +49,8 @@ class SyspurposeStoreTests(unittest.TestCase):
 
     def test_read_file_existent_file(self):
         """
-        The SyspurposeStore.read_file method should return True if the file was successfully read.
+        The SyspurposeStore.read_file method should return True
+        if the file was successfully read.
         """
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, "syspurpose_file.json")
@@ -64,7 +66,8 @@ class SyspurposeStoreTests(unittest.TestCase):
 
     def test_read_file_with_unicode_content(self):
         """
-        The SyspurposeStore.read_file method should return True if the file with unicode content was successfully read.
+        The SyspurposeStore.read_file method should return True
+        if the file with unicode content was successfully read.
         """
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, "syspurpose_file.json")
@@ -115,8 +118,8 @@ class SyspurposeStoreTests(unittest.TestCase):
 
     def test_create(self):
         """
-        Verify that the create method will create the directory (if needed), and that the resulting \
-        file in the directory is writable by us.
+        Verify that the create method will create the directory (if needed),
+        and that the resulting file in the directory is writable by us.
         """
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, "syspurpose_file.json")
@@ -129,8 +132,8 @@ class SyspurposeStoreTests(unittest.TestCase):
 
     def test_add(self):
         """
-        Verify that the add method of SyspurposeStore is able to add items to lists of items
-        in the store, whether they existed prior or not.
+        Verify that the add method of SyspurposeStore is able to add items to
+        lists of items in the store, whether they existed prior or not.
         """
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, "syspurpose_file.json")
@@ -199,8 +202,8 @@ class SyspurposeStoreTests(unittest.TestCase):
 
     def test_add_with_unicode_strings(self):
         """
-        Verify that the add method of SyspurposeStore is able to add unicode strings to lists of items
-        in the store.
+        Verify that the add method of SyspurposeStore is able to add unicode
+        strings to lists of items in the store.
         """
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, "syspurpose_file.json")
@@ -219,8 +222,8 @@ class SyspurposeStoreTests(unittest.TestCase):
 
     def test_add_does_not_duplicate_existing_value(self):
         """
-        Verify that the add method of SyspurposeStore will not add an item to a list, if that list already contains
-        the item we're trying to add.
+        Verify that the add method of SyspurposeStore will not add an item to
+        a list, if that list already contains the item we're trying to add.
         """
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, "syspurpose_file.json")
@@ -274,15 +277,16 @@ class SyspurposeStoreTests(unittest.TestCase):
         syspurpose_store = files.SyspurposeStore(temp_dir)
         syspurpose_store.contents = dict(**test_data)
 
-        # Remove an item from the store which we have previously seen, whose value is scalar / not contained in a list
+        # Remove an item from the store which we have previously seen, whose
+        # value is scalar / not contained in a list
         res = syspurpose_store.remove("already_present_key", "preexisting_scalar_value")
         self.assertNotIn("already_present_key", syspurpose_store.contents)
         self.assertTrue(res, "The remove method should return true when the store has changed")
 
     def test_remove_with_unicode_strings(self):
         """
-        Verify that the remove method of SyspurposeStore is able to remove unicode strings from lists of items
-        in the store.
+        Verify that the remove method of SyspurposeStore is able to remove
+        unicode strings from lists of items in the store.
         """
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, "syspurpose_file.json")
@@ -328,8 +332,8 @@ class SyspurposeStoreTests(unittest.TestCase):
 
     def test_unset_with_unicode_strings(self):
         """
-        Verify that the unset method of SyspurposeStore is able to unset unicode strings from items
-        in the store.
+        Verify that the unset method of SyspurposeStore is able to unset unicode
+        strings from items in the store.
         """
         base_temp_dir = tempfile.TemporaryDirectory()
         temp_dir = os.path.join(base_temp_dir.name, "syspurpose_file.json")
@@ -963,8 +967,8 @@ class TestSyncedStore(unittest.TestCase):
         with Capture() as captured:
             synced_store.set("role", "new_role")
             self.assertTrue(
-                'Warning: Provided value "new_role" is not included in the list of valid values for attribute role'
-                in captured.out
+                'Warning: Provided value "new_role" is not included '
+                "in the list of valid values for attribute role" in captured.out
             )
             self.assertTrue("SP Starter" in captured.out)
             self.assertTrue("SP Server" in captured.out)

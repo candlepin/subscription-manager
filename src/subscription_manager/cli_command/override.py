@@ -54,7 +54,8 @@ class OverrideCommand(CliCommand):
             action="append",
             metavar="NAME:VALUE",
             help=_(
-                "name and value of the option to override separated by a colon (can be specified more than once); used with --repo option."
+                "name and value of the option to override separated by a colon "
+                "(can be specified more than once); used with --repo option."
             ),
         )
         self.parser.add_argument(

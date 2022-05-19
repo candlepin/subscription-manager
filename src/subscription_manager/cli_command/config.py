@@ -65,7 +65,8 @@ class ConfigCommand(CliCommand):
                 system_exit(
                     os.EX_USAGE,
                     _(
-                        "Error: --list should not be used with any other options for setting or removing configurations."
+                        "Error: --list should not be used with any other "
+                        "options for setting or removing configurations."
                     ),
                 )
 
@@ -89,7 +90,8 @@ class ConfigCommand(CliCommand):
                     system_exit(
                         os.EX_USAGE,
                         _(
-                            "Error: configuration entry designation for removal must be of format [section.name]"
+                            "Error: configuration entry designation for "
+                            "removal must be of format [section.name]"
                         ),
                     )
 

@@ -182,9 +182,9 @@ class RegisterService(object):
         elif options["consumerid"] and options["force"] is True:
             raise exceptions.ValidationError(
                 _(
-                    "Error: Can not force registration while attempting to "
-                    "recover registration with consumerid. Please use --force without --consumerid to re-register"
-                    " or use the clean command and try again without --force."
+                    "Error: Can not force registration while attempting to recover registration "
+                    "with consumerid. Please use --force without --consumerid to re-register "
+                    "or use the clean command and try again without --force."
                 )
             )
 

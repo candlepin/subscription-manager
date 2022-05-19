@@ -13,7 +13,8 @@
 #
 
 """
-This is module implementing detector and metadata collector of virtual machine running on Google Cloud Platform
+This is module implementing detector and metadata collector of virtual machine
+running on Google Cloud Platform.
 """
 
 import logging
@@ -32,15 +33,17 @@ class GCPCloudProvider(BaseCloudProvider):
     """
     Class for GCP cloud provider
 
-    Collector of Google Cloud Platform metadata. Verification of instance identity is described in this document:
+    Collector of Google Cloud Platform metadata. Verification of instance
+    identity is described in this document:
 
     https://cloud.google.com/compute/docs/instances/verifying-instance-identity
     """
 
     CLOUD_PROVIDER_ID = "gcp"
 
-    # The "audience" should be some unique URI agreed upon by both the instance and the system verifying
-    # the instance's identity. For example, the audience could be a URL for the connection between the two systems.
+    # The "audience" should be some unique URI agreed upon by both the instance
+    # and the system verifying the instance's identity. For example, the
+    # audience could be a URL for the connection between the two systems.
     # In fact this string could be anything.
     # TODO: use some more generic URL here and move setting this RHSM specific URL to subscription-manager
     AUDIENCE = "https://subscription.rhsm.redhat.com:443/subscription"
@@ -48,7 +51,10 @@ class GCPCloudProvider(BaseCloudProvider):
     # Google uses little bit different approach. It provides everything in JSON Web Token (JWT)
     CLOUD_PROVIDER_METADATA_URL = None
 
-    CLOUD_PROVIDER_METADATA_URL_TEMPLATE = "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity?audience={audience}&format=full&licenses=TRUE"
+    CLOUD_PROVIDER_METADATA_URL_TEMPLATE = (
+        "http://metadata/computeMetadata/v1/instance/service-accounts/default/identity"
+        "?audience={audience}&format=full&licenses=TRUE"
+    )
 
     # Token (metadata) expires within one hour. Thus it is save to cache the token.
     CLOUD_PROVIDER_METADATA_TTL = 3600
@@ -206,9 +212,12 @@ class GCPCloudProvider(BaseCloudProvider):
     @staticmethod
     def decode_jwt(jwt_token: str) -> tuple:
         """
-        Try to decode metadata stored in JWT token described in this RFC: https://tools.ietf.org/html/rfc7519
+        Try to decode metadata stored in JWT token described in this RFC:
+        https://tools.ietf.org/html/rfc7519
         :param jwt_token: string representing JWT token
-        :return: tuple with: string representing header, string representing metadata and base64 encoded signature
+        :return:
+            tuple with: string representing header, string representing
+            metadata and base64 encoded signature
         """
         # Get the actual payload part: [0] is JOSE header, [1] is metadata and [2] is signature
         parts = jwt_token.split(".")
@@ -216,7 +225,8 @@ class GCPCloudProvider(BaseCloudProvider):
             encoded_jose_header = parts[0]
             encoded_metadata = parts[1]
             encoded_signature = parts[2]
-            # Add some extra padding, JWT tokens have padding trimmed - see https://stackoverflow.com/a/49459036
+            # Add some extra padding, JWT tokens have padding trimmed
+            # See https://stackoverflow.com/a/49459036
             encoded_jose_header += "==="
             encoded_metadata += "==="
             encoded_signature += "==="

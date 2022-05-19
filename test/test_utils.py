@@ -615,8 +615,10 @@ class TestProductCertificateFilter(fixture.SubManFixture):
             self.assertEqual(
                 result,
                 data[1],
-                "ProductCertificateFilter.set_filter_string failed with data set %i.\nActual:   %s\nExpected: %s)"
-                % (index, result, data[1]),
+                (
+                    "ProductCertificateFilter.set_filter_string failed with data set %i.\n"
+                    "Actual:   %s\nExpected: %s)" % (index, result, data[1])
+                ),
             )
 
     def test_match(self):
@@ -661,8 +663,10 @@ class TestProductCertificateFilter(fixture.SubManFixture):
             self.assertEqual(
                 result,
                 data[2],
-                "ProductCertificateFilter.match failed with data set %i.\nActual:   %s\nExpected: %s"
-                % (index, result, data[2]),
+                (
+                    "ProductCertificateFilter.match failed with data set %i.\n"
+                    "Actual:   %s\nExpected: %s" % (index, result, data[2])
+                ),
             )
 
 
@@ -688,8 +692,10 @@ class TestEntitlementCertificateFilter(fixture.SubManFixture):
             self.assertEqual(
                 result,
                 data[1],
-                "EntitlementCertificateFilter.set_service_level failed with data set %i.\nActual:   %s\nExpected: %s)"
-                % (index, result, data[1]),
+                (
+                    "EntitlementCertificateFilter.set_service_level failed with data set %i.\n"
+                    "Actual:   %s\nExpected: %s)" % (index, result, data[1])
+                ),
             )
 
     def test_match(self):
@@ -836,7 +842,7 @@ Mems_allowed:	00000000,00000000,00000000,00000000,00000000,00000000,00000000,000
 Mems_allowed_list:	0
 voluntary_ctxt_switches:	4002321
 nonvoluntary_ctxt_switches:	16572
-"""
+"""  # noqa: E501
 
 PROCESS_STATUS_FILE_LINES = PROCESS_STATUS_FILE.split("\n")
 
