@@ -221,6 +221,13 @@ inotify
 .RS 4
 Inotify is used for monitoring changes in directories with certificates. Currently only the /etc/pki/consumer directory is monitored by the rhsm.service. When this directory is mounted using a network file system without inotify notification support (e.g. NFS), then disabling inotify is strongly recommended. When inotify is disabled, periodical directory polling is used instead.
 .RE
+.PP
+progress_messages
+.RS 4
+Set to
+\fI0\fR
+to disable progress reporting. When subscription-manager waits while fetching certificates or updating user information, it writes temporary informational messages to the standard output. This feature may not be desired in some situations, changing this option prevents those messages from being displayed.
+.RE
 .SH "[RHSMCERTD] OPTIONS"
 .PP
 certCheckInterval

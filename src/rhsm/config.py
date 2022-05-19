@@ -74,6 +74,7 @@ RHSM_DEFAULTS = {
     "auto_enable_yum_plugins": "1",
     "package_profile_on_trans": "0",
     "inotify": "1",
+    "progress_messages": "1",
 }
 
 RHSMCERTD_DEFAULTS = {

@@ -85,6 +85,7 @@ class CliCommand(AbstractCLICommand):
 
         if self.require_connection():
             self._add_proxy_options()
+            self._add_progress_messages_option()
 
         self.server_url = None
 
@@ -99,6 +100,8 @@ class CliCommand(AbstractCLICommand):
         self.proxy_hostname = None
         self.proxy_port = None
         self.no_proxy = None
+        #
+        self.progress_messages = inj.require(inj.PROGRESS_MESSAGES)
 
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.product_dir = inj.require(inj.PROD_DIR)
@@ -184,6 +187,15 @@ class CliCommand(AbstractCLICommand):
             help=_("host suffixes that should bypass HTTP proxy"),
         )
 
+    def _add_progress_messages_option(self):
+        """Add option to disable progress messages."""
+        self.parser.add_argument(
+            "--no-progress-messages",
+            action="store_false",
+            dest="progress_messages",
+            help=_("Do not display progress messages"),
+        )
+
     def _do_command(self):
         pass
 
@@ -267,6 +279,9 @@ class CliCommand(AbstractCLICommand):
                 args=" ".join(unknown_args),
             )
             system_exit(os.EX_USAGE, message)
+
+        if getattr(self.options, "progress_messages", None) is False:
+            inj.provide(inj.PROGRESS_MESSAGES, False)
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             conf["server"]["insecure"] = "1"

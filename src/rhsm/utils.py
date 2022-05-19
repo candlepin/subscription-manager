@@ -15,10 +15,15 @@
 import os
 import re
 import sys
+import time
+import threading
+from typing import Optional, List
 
 import urllib.parse
 
+import rhsm.config
 from rhsm.config import DEFAULT_PROXY_PORT
+import subscription_manager.injection as inj
 
 
 def remove_scheme(uri):
@@ -282,3 +287,201 @@ def suppress_output(func):
             devnull.close()
 
     return wrapper
+
+
+class StatusMessage:
+    """Class for temporary reporting.
+
+    While you can call 'print()' and 'clean()' methods directly, the easier
+    way is to use context manager: 'with StatusMessage("Fetching data"):'.
+
+    This object will print the description to stdout when called. When the
+    context manager exists (either because the code finished or because an
+    error got raised inside), printed output will be cleared before the
+    program continues with its execution. This ensures that the message will
+    disappear after it's no longer valid.
+    """
+
+    def __init__(self, description: Optional[str]):
+        if description is None:
+            description = "Transmitting data"
+        self.raw_text = description
+
+        CURSIVE = "\033[3m"
+        RESET = "\033[0m"
+
+        self.text = f"{CURSIVE}{self.raw_text}{RESET}"
+
+        self.quiet = False
+        config = rhsm.config.get_config_parser()
+        if config.get("rhsm", "progress_messages") == "0":
+            self.quiet = True
+        if not inj.require(inj.PROGRESS_MESSAGES):
+            self.quiet = True
+        if not sys.stdout.isatty():
+            self.quiet = True
+
+    def print(self):
+        if self.quiet:
+            return
+        print(self.text, end="\r")
+
+    def clean(self):
+        if self.quiet:
+            return
+        print(" " * len(self.text), end="\r")
+
+    def __enter__(self):
+        self.print()
+
+    def __exit__(self, error_type, error_value, traceback):
+        self.clean()
+        if error_type:
+            raise
+
+
+class StatusSpinnerStyle:
+    """Class for spinner animations.
+
+    While subscription-manager may not be using all spinners used below,
+    they have been defined here, so they can be easily used in the future.
+
+    The default spinner, LINE, has been chosen for several reasons:
+    - it is small (only one character wide),
+    - it has small loop cycle (so quickly switching several status messages
+      looks like it is one spinner with several messages, even though every
+      message has its own spinner),
+    - it is only made of ASCII characters (which makes it renderable on
+      all TTYs, not just rich terminal emulators in GUI).
+    """
+
+    LINE: List[str] = ["|", "/", "-", "\\"]
+    BRAILLE: List[str] = ["⠋", "⠙", "⠸", "⠴", "⠦", "⠇"]
+    WIDE_BRAILLE: List[str] = ["⠧ ", "⠏ ", "⠋⠁", "⠉⠉", "⠈⠙", " ⠹", " ⠼", "⠠⠴", "⠤⠤", "⠦⠄"]
+    BAR_FORWARD: List[str] = ["[    ]", "[=   ]", "[==  ]", "[=== ]", "[====]", "[ ===]", "[  ==]", "[   =]"]
+    BAR_BACKWARD: List[str] = ["[    ]", "[   =]", "[  ==]", "[ ===]", "[====]", "[=== ]", "[==  ]", "[=   ]"]
+    BAR_BOUNCE: List[str] = BAR_FORWARD + BAR_BACKWARD
+
+
+class LiveStatusMessage(StatusMessage):
+    """Class for temporary reporting, with activity spinner.
+
+    While you can call 'print()' and 'clean()' methods directly, the easier
+    way is to use context manager: 'with LiveStatusMessage("Fetching data"):'.
+
+    This object will print the description to stdout when called. When the
+    context manager exists (either because the code finished or because an
+    error got raised inside), printed output will be cleared before the
+    program continues with its execution. This ensures that the message will
+    disappear after it's no longer valid.
+
+    You can set several loading styles (via class StatusSpinnerStyle) or choose
+    the speed in which the animation is played (per frame, in seconds).
+    """
+
+    def __init__(
+        self,
+        description: Optional[str],
+        *,
+        style: List[str] = StatusSpinnerStyle.LINE,
+        placement: str = "BEFORE",
+        speed: float = 0.15,
+    ):
+        super().__init__(description)
+
+        # Do not use cursive if there is a spinner. When the message is
+        # displayed without the spinner (using plain StatusMessage class)
+        # the cursive is used to visually separate the status message from
+        # real output. When we have a spinner, it is not necessary, because
+        # the spinner itself is making that visual difference.
+        self.text = self.raw_text
+
+        self.busy: bool = False
+        self._loops: int = 0
+        self._thread: threading.Thread = None
+        self._cursor: bool = True
+
+        self.frames: str = style
+        self.delay: float = speed
+        if placement not in ("BEFORE", "AFTER"):
+            raise ValueError(f"String {placement} is not valid spinner placement.")
+        self.placement: str = placement
+
+    @property
+    def spinner_frame(self):
+        """Get next frame of the spinner annimation."""
+        while True:
+            yield self.frames[self._loops % len(self.frames)]
+
+    @property
+    def max_text_width(self) -> int:
+        """Get the length of the longest line possible.
+
+        This is used so we can properly clean the console when we exit.
+        """
+        max_frame_length: int = len(max(self.frames, key=len))
+        return len(self.text) + max_frame_length + 1
+
+    @property
+    def cursor(self) -> bool:
+        """Get cursor visibility state."""
+        return self._cursor
+
+    @cursor.setter
+    def cursor(self, enable: bool):
+        """Enable or disable cursor.
+
+        For more information on these rarely used shell escape codes, see
+        https://en.wikipedia.org/wiki/ANSI_escape_code#CSI_(Control_Sequence_Introducer)_sequences
+        """
+        if type(enable) is not bool:
+            raise ValueError(f"Expected bool, got {type(enable)!s}")
+        if enable:
+            print("\033[?25h", end="")
+            self._cursor = True
+        else:
+            print("\033[?25l", end="")
+            self._cursor = False
+
+    def __enter__(self):
+        self.busy = True
+        if self.quiet:
+            return
+        self.cursor = False
+        self._thread = threading.Thread(target=self.loop)
+        self._thread.start()
+
+    def __exit__(self, error_type, error_value, traceback):
+        self.busy = False
+        if self.quiet:
+            if error_type:
+                raise
+            return
+        self.cursor = True
+        self._thread.join(timeout=self.delay)
+        if error_type:
+            raise
+
+    def print(self):
+        if self.quiet:
+            return
+        frame: str = next(self.spinner_frame)
+        line: str
+        if self.placement == "BEFORE":
+            line = frame + " " + self.text
+        else:
+            line = self.text + " " + frame
+        print(line, end="\r")
+
+    def clean(self):
+        if self.quiet:
+            return
+        print(" " * self.max_text_width, end="\r")
+
+    def loop(self):
+        """Show pretty animation while we fetch data."""
+        while self.busy:
+            self.print()
+            self._loops += 1
+            time.sleep(self.delay)
+            self.clean()
