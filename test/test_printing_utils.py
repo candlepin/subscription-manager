@@ -22,7 +22,10 @@ class TestFormatName(unittest.TestCase):
         self.max_length = 40
 
     def test_format_name_long(self):
-        name = "This is a Really Long Name For A Product That We Do Not Want To See But Should Be Able To Deal With"
+        name = (
+            "This is a Really Long Name For A Product That We Do Not "
+            "Want To See But Should Be Able To Deal With"
+        )
         format_name(name, self.indent, self.max_length)
 
     def test_format_name_short(self):
@@ -35,7 +38,10 @@ class TestFormatName(unittest.TestCase):
         self.assertEqual(name, new_name)
 
     def test_format_name_null_width(self):
-        name = "This is a Really Long Name For A Product That We Do Not Want To See But Should Be Able To Deal With"
+        name = (
+            "This is a Really Long Name For A Product That We Do Not "
+            "Want To See But Should Be Able To Deal With"
+        )
         new_name = format_name(name, self.indent, None)
         self.assertEqual(name, new_name)
 

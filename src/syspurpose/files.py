@@ -120,8 +120,9 @@ class SyspurposeStore(object):
 
     def add(self, key, value):
         """
-        Add a value to a list of values specified by key. If the current value specified by the key is scalar/non-list,
-        it is not overridden, but maintained in the list, along with the new value.
+        Add a value to a list of values specified by key. If the current value
+        specified by the key is scalar/non-list, it is not overridden, but
+        maintained in the list, along with the new value.
         :param key: The name of the list
         :param value: The value to append to the list
         :return: None
@@ -462,8 +463,9 @@ class SyncedStore(object):
 
     def add(self, key, value):
         """
-        Add a value to a list of values specified by key. If the current value specified by the key is scalar/non-list,
-        it is not overridden, but maintained in the list, along with the new value.
+        Add a value to a list of values specified by key. If the current value
+        specified by the key is scalar/non-list, it is not overridden, but
+        maintained in the list, along with the new value.
         :param key: The name of the list
         :param value: The value to append to the list
         :return: None

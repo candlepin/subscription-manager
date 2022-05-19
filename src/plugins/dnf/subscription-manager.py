@@ -36,8 +36,9 @@ expired_warning = _(
 *** WARNING ***
 The subscription for following product(s) has expired:
 %s
-You no longer have access to the repositories that provide these products.  It is important that you apply an active \
-subscription in order to resume access to security and other critical updates. If you don't have other active \
+You no longer have access to the repositories that provide these products.  \
+It is important that you apply an active subscription in order to resume access \
+to security and other critical updates. If you don't have other active \
 subscriptions, you can renew the expired subscription.  """
 )
 
@@ -111,8 +112,8 @@ class SubscriptionManager(dnf.Plugin):
                             disable_count += 1
                     logger.info(
                         _(
-                            "subscription-manager plugin disabled %d system repositories with respect of configuration "
-                            "in /etc/dnf/plugins/subscription-manager.conf"
+                            "subscription-manager plugin disabled %d system repositories with respect "
+                            "of configuration in /etc/dnf/plugins/subscription-manager.conf"
                         )
                         % disable_count
                     )

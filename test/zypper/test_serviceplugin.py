@@ -37,9 +37,8 @@ class TestServicePlugin(TestCase):
 
     def test_provides_subman_repos_if_registered_and_subscribed(self):
         subprocess.call(
-            "{sub_man} register --username={RHSM_USER} --password={RHSM_PASSWORD} --serverurl={RHSM_URL}".format(
-                sub_man=self.SUB_MAN, **os.environ
-            ),
+            "{sub_man} register --username={RHSM_USER} --password={RHSM_PASSWORD} "
+            "--serverurl={RHSM_URL}".format(sub_man=self.SUB_MAN, **os.environ),
             shell=True,
         )
         subprocess.call(
@@ -49,9 +48,8 @@ class TestServicePlugin(TestCase):
 
     def test_can_download_rpm(self):
         subprocess.check_call(
-            "{sub_man} register --username={RHSM_USER} --password={RHSM_PASSWORD} --serverurl={RHSM_URL}".format(
-                sub_man=self.SUB_MAN, **os.environ
-            ),
+            "{sub_man} register --username={RHSM_USER} --password={RHSM_PASSWORD} "
+            "--serverurl={RHSM_URL}".format(sub_man=self.SUB_MAN, **os.environ),
             shell=True,
         )
         subprocess.check_call(
@@ -69,15 +67,13 @@ class TestServicePlugin(TestCase):
             shell=True,
         )
         subprocess.call(
-            "PYTHONPATH=./src zypper --non-interactive --no-gpg-checks in --download-only {RHSM_TEST_PACKAGE}".format(
-                **os.environ
-            ),
+            "PYTHONPATH=./src zypper --non-interactive --no-gpg-checks in "
+            "--download-only {RHSM_TEST_PACKAGE}".format(**os.environ),
             shell=True,
         )
 
         subprocess.check_call(
-            "test \"$(find /var/cache/zypp/packages/ -name '{RHSM_TEST_PACKAGE}*.rpm' | wc -l)\" -gt 0".format(
-                **os.environ
-            ),
+            "test \"$(find /var/cache/zypp/packages/ -name '{RHSM_TEST_PACKAGE}*.rpm' | wc -l)\" "
+            "-gt 0".format(**os.environ),
             shell=True,
         )

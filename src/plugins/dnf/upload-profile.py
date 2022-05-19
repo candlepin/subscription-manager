@@ -34,7 +34,8 @@ class UploadProfileCommand(dnf.cli.Command):
         "upload-profile",
     )
     summary = _(
-        "Upload combined profile to Satellite server (list of installed rpms, enabled repositories and modules"
+        "Upload combined profile to Satellite server (list of installed rpms, "
+        "enabled repositories and modules"
     )
 
     def __init__(self, cli):

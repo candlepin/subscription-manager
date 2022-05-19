@@ -42,7 +42,8 @@ class ImportCertCommand(CliCommand):
             system_exit(
                 os.EX_USAGE,
                 _(
-                    "Error: You may not import certificates into a system that is registered to a subscription management service."
+                    "Error: You may not import certificates into a system that "
+                    "is registered to a subscription management service."
                 ),
             )
         if not self.options.certificate_file:

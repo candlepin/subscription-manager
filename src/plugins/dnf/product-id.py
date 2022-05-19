@@ -213,7 +213,8 @@ class DnfProductManager(ProductManager):
 
         active = set()
         for pkg in q_installed:
-            # FIXME: this protected attribute should be replaced with something from public DNF API in the future.
+            # FIXME: this protected attribute should be replaced with something
+            #  from public DNF API in the future.
             # The public API doesn't provide anything ATM.
             repo_name = pkg._from_repo
             # The repository name includes '@' at the beginning of the string

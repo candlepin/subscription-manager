@@ -1029,8 +1029,8 @@ class ContentAccessModeCache(ConsumerCache):
                 return False
             else:
                 log.debug(
-                    f"Cache file {self.CACHE_FILE} cannot be considered as valid, because consumer certificate "
-                    "probably is not valid"
+                    f"Cache file {self.CACHE_FILE} cannot be considered as valid, "
+                    "because consumer certificate probably is not valid"
                 )
                 return True
         else:

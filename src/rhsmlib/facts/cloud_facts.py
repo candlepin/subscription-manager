@@ -57,8 +57,10 @@ class CloudFactsCollector(collector.FactsCollector):
     def get_aws_facts(self):
         """
         Try to get AWS facts (only instance ID ATM) of machine running on AWS public cloud
-        :return: dictionary containing {"aws_instance_id": some_instance_ID}, when the machine is able to gather
-            metadata from AWS cloud provider; otherwise returns empty dictionary {}
+        :return:
+            dictionary containing {"aws_instance_id": some_instance_ID} when
+            the machine is able to gather metadata from AWS cloud provider;
+            otherwise returns empty dictionary {}
         """
 
         metadata_str = self.cloud_provider.get_metadata()

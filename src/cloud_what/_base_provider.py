@@ -163,16 +163,24 @@ class BaseCloudProvider(object):
 
     def is_running_on_cloud(self) -> bool:
         """
-        Try to guess cloud provider using collected hardware information (output of dmidecode, virt-what, etc.)
-        :return: True, when we detected sign of cloud provider in hw info; Otherwise return False
+        Try to guess cloud provider using collected hardware information
+        (output of dmidecode, virt-what, etc.)
+
+        :return:
+            True, when we detected sign of cloud provider in hw info;
+            otherwise False
         """
         raise NotImplementedError
 
     def is_likely_running_on_cloud(self) -> float:
         """
-        When all subclasses cannot detect cloud provider using method is_running_on_cloud, because cloud provider
-        started to provide something else in output of dmidecode, then try to use this heuristics method
-        :return: Float value representing probability that vm is running using specific cloud provider
+        When all subclasses cannot detect cloud provider using method
+        is_running_on_cloud, because cloud provider started to provide something
+        else in output of dmidecode, then try to use this heuristics method
+
+        :return:
+            Float value representing probability that vm is running using
+            specific cloud provider
         """
         raise NotImplementedError
 

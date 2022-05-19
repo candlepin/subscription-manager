@@ -293,11 +293,13 @@ class TestRoleCommand(TestCliProxyCommand):
             self.assertEqual(cm.exception.code, 70)
 
         self.assertIn(
-            'Warning: A role of "Foo" was recently set for this system by the entitlement server administrator.',
+            'Warning: A role of "Foo" was recently set for this system '
+            "by the entitlement server administrator.",
             cap.err,
         )
         self.assertIn(
-            'If you\'d like to overwrite the server side change please run: subscription-manager syspurpose role --set "Bar"',
+            "If you'd like to overwrite the server side change please run: "
+            'subscription-manager syspurpose role --set "Bar"',
             cap.err,
         )
 

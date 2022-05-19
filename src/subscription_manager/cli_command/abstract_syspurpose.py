@@ -492,9 +492,8 @@ class AbstractSyspurposeCommand(CliCommand):
         if self.is_registered() and not self.cp.has_capability("syspurpose"):
             print(
                 _(
-                    "Note: The currently configured entitlement server does not support System Purpose {attr}.".format(
-                        attr=attr
-                    )
+                    "Note: The currently configured entitlement server does "
+                    "not support System Purpose {attr}.".format(attr=attr)
                 )
             )
 

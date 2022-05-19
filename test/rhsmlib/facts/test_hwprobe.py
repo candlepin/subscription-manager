@@ -90,7 +90,7 @@ processes 66111
 procs_running 2
 procs_blocked 1
 softirq 40290891 49 19260365 9256 986071 674800 7 521934 11078954 0 7759455
-"""
+"""  # noqa: E501
 
 OS_RELEASE = """NAME="Awesome OS"
 VERSION="42 (Go4It)"
@@ -228,7 +228,7 @@ LSCPU_JSON_OUTPUT = b"""
          ]
       }
    ]
-}"""
+}"""  # noqa: E501
 
 LSCPU_JSON_EXPECTED = {
     "lscpu.architecture": "x86_64",

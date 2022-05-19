@@ -389,7 +389,10 @@ class HandleExceptionTests(unittest.TestCase):
     def test_he_socket_error(self):
         # these error messages are bare strings, so we need to update the tests
         # if those messages change
-        expected_msg = "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information."
+        expected_msg = (
+            "Network error, unable to connect to server. "
+            "Please see /var/log/rhsm/rhsm.log for more information."
+        )
         managercli.log.set_expected_msg(expected_msg)
         try:
             handle_exception(self.msg, socket.error())

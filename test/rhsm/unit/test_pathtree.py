@@ -96,13 +96,17 @@ class TestPathTree(unittest.TestCase):
         pt = PathTree(data)
         paths = []
         pt.build_path_list(paths)
+        expected_stubs = [
+            "/$releasever/$basearch/os",
+            "/$releasever/$basearch/optional/os",
+            "/$releasever/$basearch/rh-common/os",
+            "/$releasever/$basearch/rhn-tools/os",
+            "/7Server/$basearch/extras/os",
+            "/7Server/$basearch/sat-tools/6.3/os",
+        ]
         expected = [
-            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/os",
-            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/optional/os",
-            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/rh-common/os",
-            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/$releasever/$basearch/rhn-tools/os",
-            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/extras/os",
-            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7/7Server/$basearch/sat-tools/6.3/os",
+            "/DPS_Satellite/Library/WF-RHEL-7-CV-2018_33-OS/content/dist/rhel/server/7" + stub
+            for stub in expected_stubs
         ]
         # Assert the lists contain the same items regardless of order
         self.assertCountEqual(expected, paths)

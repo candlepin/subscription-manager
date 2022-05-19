@@ -260,7 +260,8 @@ class CliCommand(AbstractCLICommand):
             system_exit(
                 os.EX_CONFIG,
                 _(
-                    "subscription-manager is disabled when running inside a container. Please refer to your host system for subscription management.\n"
+                    "subscription-manager is disabled when running inside a container. "
+                    "Please refer to your host system for subscription management.\n"
                 ),
             )
 
@@ -424,7 +425,8 @@ class CliCommand(AbstractCLICommand):
                 system_exit(
                     os.EX_UNAVAILABLE,
                     _(
-                        'Consumer profile "{uuid}" has been deleted from the server. You can use command clean or unregister to remove local profile.'
+                        'Consumer profile "{uuid}" has been deleted from the server. '
+                        "You can use command clean or unregister to remove local profile."
                     ).format(uuid=self.identity.uuid),
                 )
             else:

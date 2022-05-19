@@ -127,8 +127,8 @@ class YumPluginManager(object):
             is_plugin_enabled = False
             if not plugin_config.has_section("main"):
                 log.warning(
-                    'Configuration file of %s plugin: "%s" does not include main section. Adding main section.'
-                    % (pkg_mgr_name, plugin_file_name)
+                    'Configuration file of %s plugin: "%s" does not include main section. '
+                    "Adding main section." % (pkg_mgr_name, plugin_file_name)
                 )
                 plugin_config.add_section("main")
             elif plugin_config.has_option("main", "enabled"):
@@ -141,8 +141,8 @@ class YumPluginManager(object):
                         is_plugin_enabled = plugin_config.getboolean("main", "enabled")
                     except ValueError:
                         log.warning(
-                            "File %s has wrong value of options: 'enabled' in section: 'main' (not a int nor boolean)"
-                            % plugin_file_name
+                            "File %s has wrong value of options: 'enabled' in section: "
+                            "'main' (not a int nor boolean)" % plugin_file_name
                         )
 
             if is_plugin_enabled == cls.PLUGIN_ENABLED:

@@ -737,8 +737,8 @@ class BaseRestLib(object):
     @staticmethod
     def _print_debug_info_about_response(result):
         """
-        This method can print result of HTTP request to stdout, when environment variable SUBMAN_DEBUG_PRINT_RESPONSE
-        is set.
+        This method can print result of HTTP request to stdout, when
+        environment variable SUBMAN_DEBUG_PRINT_RESPONSE is set.
         :param result: response from candlepin server
         :return: None
         """
@@ -1318,7 +1318,8 @@ class UEPConnection(BaseConnection):
             - RateLimitExceededException: This means that too many requests
             have been made in the given time period.
         """
-        # Return None early if the connected UEP does not support hypervisors_heartbeat or if there is no reporter_id provided.
+        # Return None early if the connected UEP does not support
+        # hypervisors_heartbeat or if there is no reporter_id provided.
         if not self.has_capability("hypervisors_heartbeat") or not (
             options and options.reporter_id and len(options.reporter_id) > 0
         ):
