@@ -694,7 +694,9 @@ def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
         raise ValueError('keyword argument "on_conflict" must be either "remote" or "local"')
 
     if on_change is None:
-        on_change = lambda change: change
+
+        def on_change(change):
+            return change
 
     all_keys = set(local.keys()) | set(base.keys()) | set(remote.keys())
 
