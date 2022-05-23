@@ -11,7 +11,7 @@
 #
 import logging
 
-import imp
+import importlib.util
 import rpm
 import os.path
 from rhsm import ourjson as json
@@ -34,11 +34,7 @@ try:
 except ImportError:
     yum = None
 
-try:
-    imp.find_module("zypp_plugin")
-    use_zypper = True
-except ImportError:
-    use_zypper = False
+use_zypper: bool = importlib.util.find_spec("zypp_plugin") is not None
 
 if use_zypper:
     REPOSITORY_PATH = "/etc/rhsm/zypper.repos.d/redhat.repo"
