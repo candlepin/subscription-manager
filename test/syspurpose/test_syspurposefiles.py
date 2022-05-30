@@ -704,13 +704,15 @@ class TestSyncedStore(unittest.TestCase):
     def test_remove_non_existent_value(self, mock_sync):
         """
         Test that removing non-existent value will not mark synced store as changed
+        and will print a warning to stdout.
         """
         utils.write_to_file_utf8(io.open(self.local_syspurpose_file, "w"), {"foo": ["bar"]})
-        with SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+        with Capture() as cap, SyncedStore(self.uep, consumer_uuid="something") as synced_store:
             self.assertFalse(synced_store.changed)
             synced_store.remove("foo", "boooo")
             self.assertFalse(synced_store.changed)
         mock_sync.assert_not_called()
+        self.assertIn("Warning: Value 'boooo' will not be removed from foo, it is not there.", cap.out)
 
     @mock.patch("syspurpose.files.SyncedStore.sync")
     def test_remove_non_existent_key(self, mock_sync):

@@ -532,6 +532,11 @@ class SyncedStore(object):
             else:
                 self.changed = False
                 log.debug("Will not remove value '%s' from key '%s'." % (value, key))
+                print(
+                    _("Warning: Value '{value}' will not be removed from {attr}, it is not there.").format(
+                        value=value, attr=key
+                    )
+                )
                 return self.changed
 
         except (AttributeError, KeyError, ValueError):
