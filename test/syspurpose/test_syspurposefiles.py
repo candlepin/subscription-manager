@@ -656,6 +656,20 @@ class TestSyncedStore(unittest.TestCase):
         self.assertEqual(local_result["foo"], ["boo"])
 
     @mock.patch("syspurpose.files.SyncedStore.sync")
+    def test_enter_exit_methods_add_duplicate(self, mock_sync):
+        """
+        Test that adding duplicate value will not mark syned store as changed
+        and will print a warning to stdout.
+        """
+        with Capture() as cap, SyncedStore(self.uep, consumer_uuid="something") as synced_store:
+            self.assertFalse(synced_store.changed)
+            synced_store.add("foo", "bar")
+            self.assertTrue(synced_store.changed)
+            synced_store.add("foo", "bar")
+            self.assertFalse(synced_store.changed)
+        self.assertIn("Warning: Value 'bar' will not be added to foo, it already exists.", cap.out)
+
+    @mock.patch("syspurpose.files.SyncedStore.sync")
     def test_enter_exit_methods_remove(self, mock_sync):
         """
         Test that synced store is automatically synced, when remove method is used

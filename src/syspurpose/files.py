@@ -488,6 +488,11 @@ class SyncedStore(object):
             else:
                 log.debug("Will not add value '%s' to key '%s'." % (value, key))
                 self.changed = False
+                print(
+                    _("Warning: Value '{value}' will not be added to {attr}, it already exists.").format(
+                        value=value, attr=key
+                    )
+                )
                 return self.changed
         except (AttributeError, KeyError):
             self.local_contents[key] = [value]
