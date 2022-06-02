@@ -97,7 +97,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.26
+Version: 1.29.28
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -743,6 +743,220 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Jun 02 2022 Christopher Snyder <csnyder@redhat.com> 1.29.28-1
+- Make keeping connection more reliable (jhnidek@redhat.com)
+- Small improvements of keep alive (jhnidek@redhat.com)
+- Keep TCP/TLS connection alive and close connection properly
+  (jhnidek@redhat.com)
+- ENT-4700: Switch away from 'imp' (mhorky@redhat.com)
+- ENT-4088: Fix flake8 error E731 (mhorky@redhat.com)
+- ENT-4048: Fix flake8 error E501 (mhorky@redhat.com)
+- ENT-240: Add --no-progress-messages CLI option (mhorky@redhat.com)
+- ENT-240: Use spinner to indicate that API communication is pending
+  (mhorky@redhat.com)
+- ENT-240: Make verbose messages translatable (mhorky@redhat.com)
+- ENT-240: Make subscription-manager more verbose (mhorky@redhat.com)
+- 2075455: enable sslverifystatus on repos if advertized by CP
+  (ptoscano@redhat.com)
+- RepoUpdateActionCommand: lazy load the consumer auth (ptoscano@redhat.com)
+- 2043331: Do not delete installed SCA cert during registration
+  (jhnidek@redhat.com)
+- Remove Group tag from .spec file for RHEL/Fedora (jhnidek@redhat.com)
+- 2073354: Print correct status, when access mode has changed
+  (jhnidek@redhat.com)
+- flake8: ignore the build directory (ptoscano@redhat.com)
+- Remove ownership of /etc/rhsm (csnyder@redhat.com)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Revert "build: pin flake8 to < 4" (ptoscano@redhat.com)
+- build: simplify flake8 run (ptoscano@redhat.com)
+- flake8: improve the config a bit (ptoscano@redhat.com)
+- jenkins: run stylish.sh with -e (ptoscano@redhat.com)
+- flake8: simplify/update config (ptoscano@redhat.com)
+- tests: remove unused exception variable (ptoscano@redhat.com)
+- Drop cockpit sources & related bits (ptoscano@redhat.com)
+- cockpit: test with split subscription-manager-cockpit (ptoscano@redhat.com)
+- Remove print statements from test suite (mhorky@redhat.com)
+- Run CI's pytest with verbose flag (mhorky@redhat.com)
+- Optimize rhsmlib DBus test strings (mhorky@redhat.com)
+- Change names of some directories in test/ (mhorky@redhat.com)
+- Reorder rhsmlib tests (mhorky@redhat.com)
+- refresh: clear also the release status (ptoscano@redhat.com)
+- 2074110: clear the release cache on release change (ptoscano@redhat.com)
+- Add gcp_license_codes to system facts. (jhnidek@redhat.com)
+- Pass version to make in debian/rules using 'pkg-info.mk' (reisner@atix.de)
+- Refactored rpm-version to pkg-version (reisner@atix.de)
+- Ignore black commit hashes (mhorky@redhat.com)
+- Add check to YumPluginManager.enable_pkg_plugins() if system is using yum/dnf
+  to prevent warnings on debian based systems (reisner@atix.de)
+- Extend HardwareCollector.get_distribution() to return ID and ID_LIKE
+  (reisner@atix.de)
+- Format code with black==22.3.0 (mhorky@redhat.com)
+- Add Black to CI (mhorky@redhat.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Fix few grammar mistakes in rhsm.conf and man page (jhnidek@redhat.com)
+- 2058662: Fix inaccurate module status in combined profile
+  (jhnidek@redhat.com)
+- Add file .git-blame-ignore-revs (mhorky@redhat.com)
+- Update configuration files for flake8 (mhorky@redhat.com)
+- Use double quotes for strings (mhorky@redhat.com)
+- Format the code with black (mhorky@redhat.com)
+- Custom facts should not influence unit tests of cloud-what
+  (jhnidek@redhat.com)
+- Drop redhat-uep.pem (ptoscano@redhat.com)
+- Move redhat-entitlement-authority.pem to container plugin
+  (ptoscano@redhat.com)
+- Drop subscription-manager-rhsm-certificates package (ptoscano@redhat.com)
+- spec: relax subscription-manager-rhsm-certificates requires
+  (ptoscano@redhat.com)
+- test: Rely on insights-client.service to succeed in testSubAndInAndFail
+  (mvollmer@redhat.com)
+- integration-tests: Run testSubAndInAndFail with "setenforce 0"
+  (mvollmer@redhat.com)
+- integration-test: Use custom TLS certs for mock-insights
+  (mvollmer@redhat.com)
+- Keep the user namespace from the host (csnyder@redhat.com)
+- tracking return values of tests (jmolet@redhat.com)
+- Adding containers for development and test (csnyder@redhat.com)
+- Drop old git-checkcommits bits (ptoscano@redhat.com)
+- tests: drop no more needed bits (ptoscano@redhat.com)
+- tests: switch away from SyspurposeTestBase (ptoscano@redhat.com)
+- Drop the rel-eng directory for old tito versions (ptoscano@redhat.com)
+- tests: switch away from SyspurposeTestBase.assertRaisesNothing()
+  (ptoscano@redhat.com)
+- tests: use write_to_file_utf8() from syspurpose.utils (ptoscano@redhat.com)
+- tests: directly use tempfile.TemporaryDirectory() (ptoscano@redhat.com)
+- tests: use Capture from the main sub-man fitxure module (ptoscano@redhat.com)
+- tests: switch from assert_equal_dict() to assertEqual() (ptoscano@redhat.com)
+- tests: switch from assert_string_equals() to assertEqual()
+  (ptoscano@redhat.com)
+- cockpit: bump API version to 264 (ptoscano@redhat.com)
+- cockpit: simplify skipUnlessDistroFamily() to properly skip tests
+  (ptoscano@redhat.com)
+- cockpit: drop rhel-atomic bits (ptoscano@redhat.com)
+- cockpit: bump candlepin minimum waiting time to 10 seconds
+  (ptoscano@redhat.com)
+- integration-test: Updates for newer insights-client (mvollmer@redhat.com)
+- 2018221: Cockpit use "Organization ID" in label (jhnidek@redhat.com)
+- 2059631: rhsm.conf: fix typo in comment (ptoscano@redhat.com)
+- 2057053: Improve API of detection of cloud-what (jhnidek@redhat.com)
+- 1935446: Revert "Revert "1935446: Use updated cert with SHA-256 algorithm""
+  (ptoscano@redhat.com)
+- cockpit: set $RPM_BUILD_ROOT w/ installing (ptoscano@redhat.com)
+- 2057053: Facts: do no use heuristics detection of cloud (jhnidek@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Improve azure determination method (suttner@atix.de)
+- 2056896: Handle all exceptions of gathering data properly
+  (jhnidek@redhat.com)
+
+* Thu Jun 02 2022 Christopher Snyder <csnyder@redhat.com>
+- Make keeping connection more reliable (jhnidek@redhat.com)
+- Small improvements of keep alive (jhnidek@redhat.com)
+- Keep TCP/TLS connection alive and close connection properly
+  (jhnidek@redhat.com)
+- ENT-4700: Switch away from 'imp' (mhorky@redhat.com)
+- ENT-4088: Fix flake8 error E731 (mhorky@redhat.com)
+- ENT-4048: Fix flake8 error E501 (mhorky@redhat.com)
+- ENT-240: Add --no-progress-messages CLI option (mhorky@redhat.com)
+- ENT-240: Use spinner to indicate that API communication is pending
+  (mhorky@redhat.com)
+- ENT-240: Make verbose messages translatable (mhorky@redhat.com)
+- ENT-240: Make subscription-manager more verbose (mhorky@redhat.com)
+- 2075455: enable sslverifystatus on repos if advertized by CP
+  (ptoscano@redhat.com)
+- RepoUpdateActionCommand: lazy load the consumer auth (ptoscano@redhat.com)
+- 2043331: Do not delete installed SCA cert during registration
+  (jhnidek@redhat.com)
+- Remove Group tag from .spec file for RHEL/Fedora (jhnidek@redhat.com)
+- 2073354: Print correct status, when access mode has changed
+  (jhnidek@redhat.com)
+- flake8: ignore the build directory (ptoscano@redhat.com)
+- Remove ownership of /etc/rhsm (csnyder@redhat.com)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Revert "build: pin flake8 to < 4" (ptoscano@redhat.com)
+- build: simplify flake8 run (ptoscano@redhat.com)
+- flake8: improve the config a bit (ptoscano@redhat.com)
+- jenkins: run stylish.sh with -e (ptoscano@redhat.com)
+- flake8: simplify/update config (ptoscano@redhat.com)
+- tests: remove unused exception variable (ptoscano@redhat.com)
+- Drop cockpit sources & related bits (ptoscano@redhat.com)
+- cockpit: test with split subscription-manager-cockpit (ptoscano@redhat.com)
+- Remove print statements from test suite (mhorky@redhat.com)
+- Run CI's pytest with verbose flag (mhorky@redhat.com)
+- Optimize rhsmlib DBus test strings (mhorky@redhat.com)
+- Change names of some directories in test/ (mhorky@redhat.com)
+- Reorder rhsmlib tests (mhorky@redhat.com)
+- refresh: clear also the release status (ptoscano@redhat.com)
+- 2074110: clear the release cache on release change (ptoscano@redhat.com)
+- Add gcp_license_codes to system facts. (jhnidek@redhat.com)
+- Pass version to make in debian/rules using 'pkg-info.mk' (reisner@atix.de)
+- Refactored rpm-version to pkg-version (reisner@atix.de)
+- Ignore black commit hashes (mhorky@redhat.com)
+- Add check to YumPluginManager.enable_pkg_plugins() if system is using yum/dnf
+  to prevent warnings on debian based systems (reisner@atix.de)
+- Extend HardwareCollector.get_distribution() to return ID and ID_LIKE
+  (reisner@atix.de)
+- Format code with black==22.3.0 (mhorky@redhat.com)
+- Add Black to CI (mhorky@redhat.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Fix few grammar mistakes in rhsm.conf and man page (jhnidek@redhat.com)
+- 2058662: Fix inaccurate module status in combined profile
+  (jhnidek@redhat.com)
+- Add file .git-blame-ignore-revs (mhorky@redhat.com)
+- Update configuration files for flake8 (mhorky@redhat.com)
+- Use double quotes for strings (mhorky@redhat.com)
+- Format the code with black (mhorky@redhat.com)
+- Custom facts should not influence unit tests of cloud-what
+  (jhnidek@redhat.com)
+- Drop redhat-uep.pem (ptoscano@redhat.com)
+- Move redhat-entitlement-authority.pem to container plugin
+  (ptoscano@redhat.com)
+- Drop subscription-manager-rhsm-certificates package (ptoscano@redhat.com)
+- spec: relax subscription-manager-rhsm-certificates requires
+  (ptoscano@redhat.com)
+- test: Rely on insights-client.service to succeed in testSubAndInAndFail
+  (mvollmer@redhat.com)
+- integration-tests: Run testSubAndInAndFail with "setenforce 0"
+  (mvollmer@redhat.com)
+- integration-test: Use custom TLS certs for mock-insights
+  (mvollmer@redhat.com)
+- Keep the user namespace from the host (csnyder@redhat.com)
+- tracking return values of tests (jmolet@redhat.com)
+- Adding containers for development and test (csnyder@redhat.com)
+- Drop old git-checkcommits bits (ptoscano@redhat.com)
+- tests: drop no more needed bits (ptoscano@redhat.com)
+- tests: switch away from SyspurposeTestBase (ptoscano@redhat.com)
+- Drop the rel-eng directory for old tito versions (ptoscano@redhat.com)
+- tests: switch away from SyspurposeTestBase.assertRaisesNothing()
+  (ptoscano@redhat.com)
+- tests: use write_to_file_utf8() from syspurpose.utils (ptoscano@redhat.com)
+- tests: directly use tempfile.TemporaryDirectory() (ptoscano@redhat.com)
+- tests: use Capture from the main sub-man fitxure module (ptoscano@redhat.com)
+- tests: switch from assert_equal_dict() to assertEqual() (ptoscano@redhat.com)
+- tests: switch from assert_string_equals() to assertEqual()
+  (ptoscano@redhat.com)
+- cockpit: bump API version to 264 (ptoscano@redhat.com)
+- cockpit: simplify skipUnlessDistroFamily() to properly skip tests
+  (ptoscano@redhat.com)
+- cockpit: drop rhel-atomic bits (ptoscano@redhat.com)
+- cockpit: bump candlepin minimum waiting time to 10 seconds
+  (ptoscano@redhat.com)
+- integration-test: Updates for newer insights-client (mvollmer@redhat.com)
+- 2018221: Cockpit use "Organization ID" in label (jhnidek@redhat.com)
+- 2059631: rhsm.conf: fix typo in comment (ptoscano@redhat.com)
+- 2057053: Improve API of detection of cloud-what (jhnidek@redhat.com)
+- 1935446: Revert "Revert "1935446: Use updated cert with SHA-256 algorithm""
+  (ptoscano@redhat.com)
+- cockpit: set $RPM_BUILD_ROOT w/ installing (ptoscano@redhat.com)
+- 2057053: Facts: do no use heuristics detection of cloud (jhnidek@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Improve azure determination method (suttner@atix.de)
+- 2056896: Handle all exceptions of gathering data properly
+  (jhnidek@redhat.com)
+
 * Tue Feb 15 2022 Christopher Snyder <csnyder@redhat.com> 1.29.26-1
 - Translated using Weblate (Korean) (simmon@nplob.com)
 - Translated using Weblate (German) (atalanttore@googlemail.com)
