@@ -123,6 +123,11 @@ class RegisterService(object):
                 usage=usage,
                 jwt_token=jwt_token,
             )
+            # When new consumer is created, then close all existing connections
+            # to be able to recreate new one
+            cp_provider = inj.require(inj.CP_PROVIDER)
+            cp_provider.close_all_connections()
+
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
         managerlib.persist_consumer_cert(consumer)

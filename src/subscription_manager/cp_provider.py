@@ -13,6 +13,7 @@
 #
 import base64
 import json
+import logging
 
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import utils
@@ -20,6 +21,8 @@ from subscription_manager import utils
 from rhsmlib.client_info import DBusSender
 
 import rhsm.connection as connection
+
+log = logging.getLogger(__name__)
 
 
 class TokenAuthUnsupportedException(Exception):
@@ -155,6 +158,24 @@ class CPProvider(object):
         else:
             return ""
 
+    def close_all_connections(self):
+        """
+        Try to close all connections to candlepin server, CDN, etc.
+        :return: None
+        """
+        if self.consumer_auth_cp is not None:
+            log.debug("Closing auth/consumer connection...")
+            self.consumer_auth_cp.conn.close_connection()
+        if self.no_auth_cp is not None:
+            log.debug("Closing no auth connection...")
+            self.no_auth_cp.conn.close_connection()
+        if self.basic_auth_cp is not None:
+            log.debug("Closing auth/basic connection...")
+            self.basic_auth_cp.conn.close_connection()
+        if self.keycloak_auth_cp is not None:
+            log.debug("Closing auth/keycloak connection...")
+            self.keycloak_auth_cp.conn.close_connestion()
+
     def get_consumer_auth_cp(self):
         if not self.consumer_auth_cp:
             self.consumer_auth_cp = connection.UEPConnection(
@@ -172,6 +193,7 @@ class CPProvider(object):
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
+                auth_type=connection.ConnectionType.CONSUMER_CERT_AUTH,
             )
         return self.consumer_auth_cp
 
@@ -215,6 +237,7 @@ class CPProvider(object):
             token=self.token,
             client_version=self.get_client_version(),
             dbus_sender=self.get_dbus_sender(),
+            auth_type=connection.ConnectionType.KEYCLOAK_AUTH,
         )
         return self.keycloak_auth_cp
 
@@ -235,6 +258,7 @@ class CPProvider(object):
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
+                auth_type=connection.ConnectionType.BASIC_AUTH,
             )
         return self.basic_auth_cp
 
@@ -253,6 +277,7 @@ class CPProvider(object):
                 restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
+                auth_type=connection.ConnectionType.NO_AUTH,
             )
         return self.no_auth_cp
 

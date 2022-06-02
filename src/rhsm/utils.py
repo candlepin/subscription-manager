@@ -320,6 +320,8 @@ class StatusMessage:
             self.quiet = True
         if not sys.stdout.isatty():
             self.quiet = True
+        if "SUBMAN_DEBUG_PRINT_REQUEST" in os.environ:
+            self.quiet = True
 
     def print(self):
         if self.quiet:

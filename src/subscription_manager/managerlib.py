@@ -68,6 +68,15 @@ def system_log(message, priority=syslog.LOG_NOTICE):
     utils.system_log(message, priority)
 
 
+def close_all_connections():
+    """
+    Close all connections
+    :return: None
+    """
+    cpp_provider = require(CP_PROVIDER)
+    cpp_provider.close_all_connections()
+
+
 # FIXME: move me to identity.py
 def persist_consumer_cert(consumerinfo):
     """
@@ -944,6 +953,9 @@ def clean_all_data(backup=True):
             os.remove(path)
 
     require(IDENTITY).reload()
+
+    # Close all connections, when consumer certificate was just removed
+    close_all_connections()
 
     # Delete all entitlement certs rather than the directory itself:
     ent_cert_dir = cfg.get("rhsm", "entitlementCertDir")

@@ -281,7 +281,7 @@ def get_server_versions(cp, exception_on_timeout=False):
 
     if cp:
         try:
-            supported_resources = get_supported_resources()
+            supported_resources = get_supported_resources(uep=cp)
             if "status" in supported_resources:
                 status = cp.getStatus()
                 cp_version = "-".join(
