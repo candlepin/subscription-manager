@@ -48,13 +48,30 @@ export function detect() {
     return cockpit.spawn([ "which", "insights-client" ], { err: "ignore" }).then(() => true, () => false);
 }
 
-export function catch_error(err) {
-    let msg = err.toString();
-    // The insights-client frequently dumps
-    // Python backtraces on us. Make them more
-    // readable by wrapping the text in <pre>.
+/*
+ * Simple helper to get the string representation of the error of
+ * cockpit.spawn(), to be used as catch() handler.
+ */
+function spawn_error_to_string(err, data) {
+    // a problem in starting/running the process: get its string representation
+    // from cockpit directly
+    if (err.problem) {
+        return cockpit.message(err);
+    }
+    // the process ran correctly, and exited with a non-zero code: get its
+    // combined stdout + stderr
+    return data;
+}
+
+export function catch_error(err, data) {
+    let msg = spawn_error_to_string(err, data);
+    // usually the output of insights-client contains more than a single
+    // line; hence, put each line in its own paragraph, so the error message
+    // is displayed in the same format of what insights-client outputs
     if (msg.indexOf("\n") > 0)
-        msg = <pre>{msg}</pre>;
+        msg = msg.split("\n").map(line => {
+            return <p>{line}</p>;
+        });
     subscriptionsClient.setError("error", msg);
 }
 
@@ -78,7 +95,7 @@ function ensure_installed(update_progress) {
 
 export function register(update_progress) {
     return ensure_installed(update_progress).then(() => {
-        const proc = cockpit.spawn([ "insights-client", "--register" ], { superuser: true, err: "message" });
+        const proc = cockpit.spawn([ "insights-client", "--register" ], { superuser: true, err: "out" });
         if (update_progress)
             update_progress(_("Connecting to Insights"), () => { proc.close() });
         return proc;
@@ -87,7 +104,7 @@ export function register(update_progress) {
 
 export function unregister() {
     if (insights_timer.enabled) {
-        return cockpit.spawn([ "insights-client", "--unregister" ], { superuser: true, err: "message" })
+        return cockpit.spawn([ "insights-client", "--unregister" ], { superuser: true, err: "out" })
                 .catch(catch_error);
     } else {
         return cockpit.resolve();
@@ -237,7 +254,23 @@ function show_connect_dialog() {
                     caption: _("Connect"),
                     style: "primary",
                     clicked: (update_progress) => {
-                        return PK.install_missing_packages(install_data, update_install_progress(update_progress)).then(() => register(update_progress));
+                        return PK.install_missing_packages(install_data, update_install_progress(update_progress)).then(() =>
+                            new Promise((resolve, reject) => {
+                                register(update_progress)
+                                        .then(() => resolve())
+                                        .catch((err, data) => {
+                                            let msg = spawn_error_to_string(err, data);
+                                            // create a fake error object good enough
+                                            // to be caught by the catch() handler of
+                                            // actions of cockpit.DialogFooter
+                                            let new_err = { };
+                                            new_err.message = msg;
+                                            new_err.toString = function() {
+                                                return this.message;
+                                            };
+                                            reject(new Error(new_err));
+                                        })
+                            }));
                     },
                     disabled: checking_install,
                 }

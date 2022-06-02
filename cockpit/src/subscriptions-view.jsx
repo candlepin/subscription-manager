@@ -534,7 +534,7 @@ class SubscriptionsView extends React.Component {
                 severity = "danger";
             error = (
                 <AlertGroup isToast>
-                    <Alert isLiveRegion variant={severity} title={this.props.error.msg.toString()}
+                    <Alert isLiveRegion variant={severity} title={this.props.error.msg}
                         actionClose={<AlertActionCloseButton onClose={this.props.dismissError} />} />
                 </AlertGroup>
             );
