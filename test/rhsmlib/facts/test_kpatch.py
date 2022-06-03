@@ -15,7 +15,6 @@ import unittest
 
 from mock import patch
 import tempfile
-import shutil
 import os
 
 from rhsmlib.facts import kpatch
@@ -23,16 +22,15 @@ from rhsmlib.facts import kpatch
 
 class TestKPatchCollector(unittest.TestCase):
     def setUp(self):
-        self.DIR_WITH_INSTALLED_KPATCH_MODULES = tempfile.mkdtemp()
+        self.dir_installed = tempfile.TemporaryDirectory()
+        self.DIR_WITH_INSTALLED_KPATCH_MODULES = self.dir_installed.name
         os.mkdir(os.path.join(self.DIR_WITH_INSTALLED_KPATCH_MODULES, "3.10.0-1062.el7.x86_64"))
         os.mkdir(os.path.join(self.DIR_WITH_INSTALLED_KPATCH_MODULES, "3.10.0-1062.1.1.el7.x86_64"))
         os.mkdir(os.path.join(self.DIR_WITH_INSTALLED_KPATCH_MODULES, "3.10.0-1062.1.2.el7.x86_64"))
-        self.DIRS_WITH_LOADED_MODULE = ["/path/to/not-existing-directory", tempfile.mkdtemp()]
-        os.mkdir(os.path.join(self.DIRS_WITH_LOADED_MODULE[1], "3.10.0-1062.el7.x86_64"))
 
-    def tearDown(self):
-        shutil.rmtree(self.DIRS_WITH_LOADED_MODULE[1])
-        shutil.rmtree(self.DIR_WITH_INSTALLED_KPATCH_MODULES)
+        self.dir_loaded = tempfile.TemporaryDirectory()
+        self.DIRS_WITH_LOADED_MODULE = ["/path/to/not-existing-directory", self.dir_loaded.name]
+        os.mkdir(os.path.join(self.DIRS_WITH_LOADED_MODULE[1], "3.10.0-1062.el7.x86_64"))
 
     @patch("shutil.which")
     def test_kpatch_is_not_installed(self, which):

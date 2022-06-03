@@ -3,7 +3,7 @@ import random
 from . import fixture
 from . import stubs
 
-from tempfile import mkdtemp
+import tempfile
 
 from mock import Mock, patch
 from rhsm.utils import (
@@ -856,8 +856,8 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
 
     def setUp(self):
         super(TestGetProcessNamesAndIsProcessRunning, self).setUp()
-        self.root_dir = mkdtemp()
-        self.proc_root = os.path.join(self.root_dir, "proc")
+        self.root_dir = tempfile.TemporaryDirectory()
+        self.proc_root = os.path.join(self.root_dir.name, "proc")
         os.mkdir(self.proc_root)
         # self.addCleanup(rmtree, self.root_dir)
         self.fake_pids = set()
@@ -918,7 +918,7 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         this would be the place to do it
         """
         mock_proc_dirs = os.listdir(self.proc_root)
-        new_open = self.redirect_open(self.root_dir)
+        new_open = self.redirect_open(self.root_dir.name)
         os_patch = patch("subscription_manager.utils.os.listdir")
         m = os_patch.start()
         m.return_value = mock_proc_dirs
@@ -979,7 +979,7 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         fake_process_name = "magic_process"
         self.create_fake_process_status(name=fake_process_name)
         ld = os.listdir(self.proc_root)
-        new_open = self.redirect_open(self.root_dir)
+        new_open = self.redirect_open(self.root_dir.name)
         os_patch = patch("subscription_manager.utils.os.listdir")
         m = os_patch.start()
         m.return_value = ld
@@ -1001,7 +1001,7 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         ld = os.listdir(self.proc_root)
         errors = {"1337": IOError("Cannot access bad_path"), "8675309": Exception("AHHHH")}
         ld.extend(errors.keys())
-        new_open = self.redirect_open(self.root_dir, path_to_error=errors)
+        new_open = self.redirect_open(self.root_dir.name, path_to_error=errors)
         os_patch = patch("subscription_manager.utils.os.listdir")
         m = os_patch.start()
         m.return_value = ld

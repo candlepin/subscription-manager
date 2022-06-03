@@ -3,7 +3,6 @@ import unittest
 import os
 import subprocess
 import sys
-import shutil
 import tempfile
 import threading
 import time
@@ -20,9 +19,8 @@ class TestLock(unittest.TestCase):
         self.other_process = None
 
     def _lock_path(self):
-        tmp_dir = tempfile.mkdtemp(suffix="-lock", prefix="subman-unit-tests-")
-        self.addCleanup(shutil.rmtree, tmp_dir, ignore_errors=True)
-        return os.path.join(tmp_dir, self.lf_name)
+        self.lock_directory = tempfile.TemporaryDirectory()
+        return os.path.join(self.lock_directory.name, self.lf_name)
 
     # For thread.Timer()
     def _kill_other_process(self, other_process):

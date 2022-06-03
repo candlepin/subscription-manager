@@ -11,6 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import os
 import unittest
 
 import io
@@ -21,7 +22,6 @@ from . import fixture
 from iniparse import RawConfigParser, SafeConfigParser
 from mock import Mock, patch, MagicMock, mock_open
 import tempfile
-import os
 from iniparse import ConfigParser
 
 import rhsm.connection
@@ -1283,35 +1283,31 @@ class TestYumPluginManager(unittest.TestCase):
     ORIGINAL_DNF_PLUGIN_DIR = YumPluginManager.DNF_PLUGIN_DIR
     ORIGINAL_PLUGINS = YumPluginManager.PLUGINS
 
-    def init_dnf_plugin_conf_files(self, conf_string):
+    def tearDown(self) -> None:
+        YumPluginManager.DNF_PLUGIN_DIR = self.ORIGINAL_DNF_PLUGIN_DIR
+        YumPluginManager.PLUGINS = self.ORIGINAL_PLUGINS
+
+        self.tempdir = None
+        self.file_01 = None
+        self.file_02 = None
+
+    def init_dnf_plugin_conf_files(self, conf_string: str):
         """
         Mock configuration files of plugins
         """
-        dnf_tmp_dir = tempfile.mkdtemp()
-        f, plug_file_name_01 = tempfile.mkstemp(prefix="", suffix=".conf", dir=dnf_tmp_dir, text=True)
-        f, plug_file_name_02 = tempfile.mkstemp(prefix="", suffix=".conf", dir=dnf_tmp_dir, text=True)
-        with open(plug_file_name_01, "w") as plug_file_01:
-            plug_file_01.write(conf_string)
-        with open(plug_file_name_02, "w") as plug_file_02:
-            plug_file_02.write(conf_string)
-        self.plug_file_name_01 = plug_file_name_01
-        self.plug_file_name_02 = plug_file_name_02
-        self.tmp_dir = dnf_tmp_dir
-        YumPluginManager.DNF_PLUGIN_DIR = dnf_tmp_dir
-        YumPluginManager.PLUGINS = [
-            plug_file_name_01.replace(dnf_tmp_dir, "").replace(".conf", ""),
-            plug_file_name_02.replace(dnf_tmp_dir, "").replace(".conf", ""),
-        ]
+        self.tempdir = tempfile.TemporaryDirectory()
+        self.file_01 = tempfile.mkstemp(suffix=".conf", dir=self.tempdir.name)
+        self.file_02 = tempfile.mkstemp(suffix=".conf", dir=self.tempdir.name)
+        os.write(self.file_01[0], conf_string.encode("utf-8"))
+        os.write(self.file_02[0], conf_string.encode("utf-8"))
+        os.close(self.file_01[0])
+        os.close(self.file_02[0])
 
-    def restore_dnf_plugin_conf_files(self):
-        """
-        Restore original constants in YumPluginManager
-        """
-        YumPluginManager.DNF_PLUGIN_DIR = self.ORIGINAL_DNF_PLUGIN_DIR
-        YumPluginManager.PLUGINS = self.ORIGINAL_PLUGINS
-        os.unlink(self.plug_file_name_01)
-        os.unlink(self.plug_file_name_02)
-        os.rmdir(self.tmp_dir)
+        YumPluginManager.DNF_PLUGIN_DIR = self.tempdir.name
+        YumPluginManager.PLUGINS = [
+            self.file_01[1].replace(self.tempdir.name + "/", "").replace(".conf", ""),
+            self.file_02[1].replace(self.tempdir.name + "/", "").replace(".conf", ""),
+        ]
 
     @patch(
         "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
@@ -1368,7 +1364,6 @@ class TestYumPluginManager(unittest.TestCase):
             self.assertGreater(len(result), 0)
             is_plugin_enabled = dnf_plugin_config.getint("main", "enabled")
             self.assertEqual(is_plugin_enabled, 1)
-        self.restore_dnf_plugin_conf_files()
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     @patch(
@@ -1390,7 +1385,6 @@ class TestYumPluginManager(unittest.TestCase):
             self.assertGreater(len(result), 0)
             is_plugin_enabled = yum_plugin_config.getint("main", "enabled")
             self.assertEqual(is_plugin_enabled, 1)
-        self.restore_dnf_plugin_conf_files()
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     @patch(
@@ -1413,7 +1407,6 @@ class TestYumPluginManager(unittest.TestCase):
             # The file was not modified. We have to read value with with getboolean()
             is_plugin_enabled = yum_plugin_config.getboolean("main", "enabled")
             self.assertEqual(is_plugin_enabled, True)
-        self.restore_dnf_plugin_conf_files()
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     @patch(
@@ -1435,7 +1428,6 @@ class TestYumPluginManager(unittest.TestCase):
             self.assertGreater(len(result), 0)
             is_plugin_enabled = yum_plugin_config.getint("main", "enabled")
             self.assertEqual(is_plugin_enabled, 1)
-        self.restore_dnf_plugin_conf_files()
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     @patch(
@@ -1457,7 +1449,6 @@ class TestYumPluginManager(unittest.TestCase):
             self.assertGreater(len(result), 0)
             is_plugin_enabled = yum_plugin_config.getint("main", "enabled")
             self.assertEqual(is_plugin_enabled, 1)
-        self.restore_dnf_plugin_conf_files()
 
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     @patch(
