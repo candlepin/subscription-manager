@@ -24,25 +24,14 @@ import urllib.parse
 import rhsm.config
 from rhsm.config import DEFAULT_PROXY_PORT
 
-try:
-    import subscription_manager.injection as inj
-except ImportError:
 
-    class inj:
-        """Fake injection used for progress messages.
+PROGRESS_MESSAGES: bool = True
+"""Enable or disable progress messages.
 
-        When subscription-manager is not installed, the import will fail.
-        This fallback solution disables the progress messages completely;
-        that feature is primarily targeted at subscription-manager, but has been
-        placed into rhsm package for technical reasons.
-        """
-
-        PROGRESS_MESSAGES: str = "PROGRESS_MESSAGES"
-        enabled: bool = False
-
-        @classmethod
-        def require(cls, *args, **kwargs) -> bool:
-            return cls.enabled
+Please note that they can be also disabled via rhsm.conf file or with
+environment variable (when debugging is turned on), this variable (working as
+module singleton) is used for turning it off dynamically via CLI option.
+"""
 
 
 def remove_scheme(uri):
@@ -335,7 +324,7 @@ class StatusMessage:
         config = rhsm.config.get_config_parser()
         if config.get("rhsm", "progress_messages") == "0":
             self.quiet = True
-        if not inj.require(inj.PROGRESS_MESSAGES):
+        if not PROGRESS_MESSAGES:
             self.quiet = True
         if not sys.stdout.isatty():
             self.quiet = True
