@@ -227,8 +227,8 @@ install-files: dbus-install install-conf install-plugins
 	# Set up rhsmcertd daemon.
 	install -d $(DESTDIR)/$(SYSTEMD_INST_DIR)
 	install -d $(DESTDIR)/$(PREFIX)/lib/tmpfiles.d
-	install etc-conf/rhsmcertd.service $(DESTDIR)/$(SYSTEMD_INST_DIR)
-	install etc-conf/subscription-manager.conf.tmpfiles \
+	install -m 644 etc-conf/rhsmcertd.service $(DESTDIR)/$(SYSTEMD_INST_DIR)
+	install -m 644 etc-conf/subscription-manager.conf.tmpfiles \
 		$(DESTDIR)/$(PREFIX)/lib/tmpfiles.d/subscription-manager.conf
 
 	# SUSE Linux does not make use of consolehelper
