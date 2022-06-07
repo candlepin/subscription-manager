@@ -19,12 +19,6 @@ pipeline {
     }
     stage('Test') {
       parallel {
-        stage('stylish') {
-          agent { label 'subman' }
-          steps {
-            sh('./jenkins/run.sh stylish jenkins/stylish.sh')
-          }
-        }
         stage('tito') {
           steps {
             sh('./jenkins/run.sh tito jenkins/tito.sh')
