@@ -94,7 +94,7 @@ class RpmLint(BaseCommand):
         files = files.decode().splitlines()
         files = [x for x in files if x.endswith(".spec")]
         for f in files:
-            spawn(['rpmlint', '--file=rpmlint.config', os.path.realpath(f)])
+            spawn(["rpmlint", os.path.realpath(f)])
 
 
 class FileLint(BaseCommand):
