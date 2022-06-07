@@ -1,0 +1,33 @@
+name: stylish
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  stylish:
+    name: "black & flake8"
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+
+    steps:
+    - name: Base setup
+      run: |
+        dnf --setopt install_weak_deps=False install -y \
+            git-core \
+            python3-flake8 \
+            python3-pip
+
+    - uses: actions/checkout@v3
+
+    - uses: psf/black@stable
+      with:
+        version: "22.3.0"
+
+    - name: Setup flake8 annotations
+      uses: rbialon/flake8-annotations@v1
+
+    - name: Run flake8
+      run: |
+        flake8

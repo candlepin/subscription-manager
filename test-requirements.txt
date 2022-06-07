@@ -5,6 +5,8 @@
 # immediately available.
 -e ./build_ext
 
+# the version of black is specified also in the stylish.yml github workflow;
+# please update the version there in case it is bumped here
 black==22.3.0
 flake8
 pytest<7
