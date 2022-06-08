@@ -25,6 +25,7 @@ import subscription_manager.injection as inj
 from rhsm.certificate import CertificateException
 from rhsm.connection import ProxyException
 from rhsm.https import ssl
+import rhsm.utils
 from rhsm.utils import cmd_name, ServerUrlParseError, remove_scheme
 
 from rhsmlib.services import config
@@ -101,7 +102,7 @@ class CliCommand(AbstractCLICommand):
         self.proxy_port = None
         self.no_proxy = None
         #
-        self.progress_messages = inj.require(inj.PROGRESS_MESSAGES)
+        self.progress_messages = rhsm.utils.PROGRESS_MESSAGES
 
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.product_dir = inj.require(inj.PROD_DIR)
@@ -286,7 +287,7 @@ class CliCommand(AbstractCLICommand):
             system_exit(os.EX_USAGE, message)
 
         if getattr(self.options, "progress_messages", None) is False:
-            inj.provide(inj.PROGRESS_MESSAGES, False)
+            rhsm.utils.PROGRESS_MESSAGES = False
 
         if hasattr(self.options, "insecure") and self.options.insecure:
             conf["server"]["insecure"] = "1"

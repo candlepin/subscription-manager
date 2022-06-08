@@ -559,7 +559,6 @@ class ConnectionTests(unittest.TestCase):
         self.assertEqual(expected_guestIds, resultGuestIds)
 
     def test_bad_ca_cert(self):
-        inj.provide(inj.PROGRESS_MESSAGES, False)
         with open(os.path.join(self.temp_ent_dir, "foo.pem"), "w+") as cert:
             cert.write("xxxxxx\n")
         with open(os.path.join(self.temp_ent_dir, "foo-key.pem"), "w+") as key:
