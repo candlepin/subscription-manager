@@ -485,27 +485,22 @@ class SubscriptionStatus extends React.Component {
  */
 class SubscriptionsView extends React.Component {
     /*
-     * This method has the following arguments: loaded, status and status_msg, because.
-     * Using properties is not safe here due to asynchronous changes. Using properties
-     * (this.props.status, etc.) for decision here could lead to invalid state.
+     * Render a "loading" view.
      */
-    renderCurtains(loaded, status, status_msg) {
-        let loading = false;
+    renderLoading() {
+        let message = _("Updating");
+        let description = _("Retrieving subscription status...");
+        return <EmptyStatePanel paragraph={description} loading title={message} />;
+    }
+
+    /*
+     * Render an error view representing an error status & message.
+     */
+    renderError(status, status_msg) {
         let description;
         let message;
 
-        if (!loaded &&
-            (status === undefined ||
-             status === 'valid' ||
-             status === 'invalid' ||
-             status === 'partial' ||
-             status === 'disabled' ||
-             status === 'unknown'))
-        {
-            loading = true;
-            message = _("Updating");
-            description = _("Retrieving subscription status...");
-        } else if (status === "service-unavailable") {
+        if (status === "service-unavailable") {
             message = _("The rhsm service is unavailable. Make sure subscription-manager is installed " +
                 "and try reloading the page. Additionally, make sure that you have checked the " +
                 "'Reuse my password for privileged tasks' checkbox on the login page.");
@@ -523,7 +518,7 @@ class SubscriptionsView extends React.Component {
             );
         }
 
-        return <EmptyStatePanel icon={loading ? null : ExclamationCircleIcon} paragraph={description} loading={loading} title={message} />;
+        return <EmptyStatePanel icon={ExclamationCircleIcon} paragraph={description} loading={false} title={message} />;
     }
 
     renderSubscriptions() {
@@ -557,12 +552,12 @@ class SubscriptionsView extends React.Component {
         let status = this.props.status;
         let status_msg = this.props.status_msg;
         let loaded = subscriptionsClient.config.loaded;
-        if (!loaded ||
-            status === undefined ||
-            status === 'not-found' ||
+        if (status === 'not-found' ||
             status === 'access-denied' ||
             status === 'service-unavailable') {
-            return this.renderCurtains(loaded, status, status_msg);
+            return this.renderError(status, status_msg);
+        } else if (!loaded || status === undefined) {
+            return this.renderLoading();
         } else {
             return this.renderSubscriptions();
         }
