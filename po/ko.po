@@ -7,13 +7,14 @@
 # simmon <simmon@nplob.com>, 2021, 2022.
 # Ludek Janda <ljanda@redhat.com>, 2021.
 # Kim InSoo <simmon@nplob.com>, 2022.
+# 김인수 <simmon@nplob.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-02 12:40+0100\n"
-"PO-Revision-Date: 2022-02-15 08:16+0000\n"
-"Last-Translator: Kim InSoo <simmon@nplob.com>\n"
+"PO-Revision-Date: 2022-06-12 07:18+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
 "Language: ko\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.12.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -438,15 +439,15 @@ msgstr "손상된 상태 포함 JSON"
 
 #: cockpit/src/subscriptions-register.jsx:55
 msgid "Proxy Location"
-msgstr "프록시 위치"
+msgstr "프락시 위치"
 
 #: cockpit/src/subscriptions-register.jsx:61
 msgid "Proxy Username"
-msgstr "프록시 사용자 이름"
+msgstr "프락시 사용자 이름"
 
 #: cockpit/src/subscriptions-register.jsx:67
 msgid "Proxy Password"
-msgstr "프록시 암호"
+msgstr "프락시 비밀번호"
 
 #: cockpit/src/subscriptions-register.jsx:87
 msgid "Connect this system to $0."
@@ -487,7 +488,7 @@ msgstr "URL"
 
 #: cockpit/src/subscriptions-register.jsx:155
 msgid "Use proxy server"
-msgstr "프록시 서버 사용"
+msgstr "프락시 서버 사용"
 
 #: cockpit/src/subscriptions-register.jsx:159
 msgid "Method"
@@ -1191,7 +1192,7 @@ msgstr "매니페스트를 추출할 디렉토리"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:319
 msgid "overwrite files which may exist"
-msgstr "덮어쓰기 파일이 존재할 수 있습니다"
+msgstr "존재 할 수 있는 파일 덮어쓰기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:328
@@ -2026,7 +2027,7 @@ msgstr "네트워크 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log를 확�
 
 #: src/subscription_manager/exceptions.py:31
 msgid "Proxy error, unable to connect to proxy server."
-msgstr "프록시 오류, 프록시 서버에 연결할 수 없습니다."
+msgstr "프락시 오류, 프락시 서버에 연결 할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:32
@@ -2456,7 +2457,7 @@ msgstr "활성키를 사용합니다(_K)"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/choose_server.glade:261
 msgid "If required, please configure your proxy before moving forward."
-msgstr "필요한 경우 다음 단계로 진행하기 전 프록시를 설정하십시오."
+msgstr "필요한 경우 다음 단계로 진행하기 전 프락시를 설정하세요."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/choose_server.glade:272
@@ -2464,7 +2465,7 @@ msgstr "필요한 경우 다음 단계로 진행하기 전 프록시를 설정�
 #: src/subscription_manager/gui/data/ui/choose_server.ui:250
 #: src/subscription_manager/gui/data/ui/mainwindow.ui:154
 msgid "Configure Pro_xy"
-msgstr "프록시 설정 (_X)"
+msgstr "프락시 설정"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/choose_server.glade:281
@@ -2914,13 +2915,13 @@ msgstr "제거"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:7
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:7
 msgid "Proxy Configuration"
-msgstr "프록시 설정"
+msgstr "프락시 구성"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:25
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:99
 msgid "<b>HTTP Proxy</b>"
-msgstr "<b>HTTP 프록시</b>"
+msgstr "<b>HTTP 프락시</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:44
@@ -2932,7 +2933,7 @@ msgstr "HTTP 프락시를 통해 연결하고자 합니다."
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:53
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:126
 msgid "Proxy Checkbox"
-msgstr "프록시 체크박스"
+msgstr "프락시 점검상자"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:91
@@ -2944,7 +2945,7 @@ msgstr "<small><b>예:</b> proxy.example.com:3128</small>"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:110
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:146
 msgid "_Proxy Location:"
-msgstr "프록시 위치(_P):"
+msgstr "프락시 위치:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:124
@@ -2956,13 +2957,13 @@ msgstr "hostname(:port) 형식으로 입력"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:128
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:165
 msgid "Proxy Location Text"
-msgstr "프록시 위치 텍스트"
+msgstr "프락시 위치 텍스트"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:151
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:223
 msgid "Use Au_thentication with HTTP Proxy:"
-msgstr "HTTP 프록시로 인증 사용(_T):"
+msgstr "HTTP 프락시로 인증 사용:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:160
@@ -2974,13 +2975,13 @@ msgstr "인증 체크 박스"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:185
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:253
 msgid "Proxy _Username:"
-msgstr "프록시 사용자 이름(_U):"
+msgstr "프락시 사용자 이름:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:198
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:267
 msgid "Proxy P_assword:"
-msgstr "프록시 암호(_A):"
+msgstr "프락시 비밀번호:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:217
@@ -3002,7 +3003,7 @@ msgstr "특정 호스트/도메인의 HTTP 프락시를 사용하지 않습니�
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:267
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:332
 msgid "Bypass Proxy Checkbox"
-msgstr "프록시 사용 안 함 확인란"
+msgstr "프락시 점검상자 우회"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:305
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:401
@@ -3652,7 +3653,7 @@ msgstr "지원 유형 텍스트"
 
 #: src/subscription_manager/gui/data/ui/choose_server.ui:236
 msgid "If required, please configure your proxy before moving forward. "
-msgstr "필요한 경우 다음 단계로 진행하기 전 프록시를 설정하십시오. "
+msgstr "필요한 경우 다음 단계로 진행하기 전 프락시를 설정하세요. "
 
 #: src/subscription_manager/gui/data/ui/credentials.ui:18
 msgid "<b>Please enter your Red Hat account information:</b>"
@@ -3903,12 +3904,11 @@ msgstr "브라우저가 발견되지 않았습니다. 문서 URL은 %s입니다.
 
 #: src/subscription_manager/gui/managergui.py:195
 msgid "Wrong proxy username or password, please check your settings."
-msgstr ""
-"프록시 사용자 이름 또는 비밀번호가 잘못 입력되었습니다. 설정을 확인하십시오."
+msgstr "프락시 사용자 이름 또는 비밀번호가 잘못 입력되었습니다. 설정을 확인하세요."
 
 #: src/subscription_manager/gui/managergui.py:197
 msgid "Proxy authentication required, please check your settings."
-msgstr "프록시 인증이 필요합니다. 설정을 확인하십시오."
+msgstr "프락시 인증이 필요합니다. 설정을 확인하세요."
 
 #: src/subscription_manager/gui/managergui.py:199
 #: src/subscription_manager/gui/registergui.py:1829
@@ -3917,7 +3917,7 @@ msgstr "프록시 인증이 필요합니다. 설정을 확인하십시오."
 #: src/subscription_manager/managercli.py:729
 #: src/subscription_manager/managercli.py:1726
 msgid "Proxy connection failed, please check your settings."
-msgstr "프록시 연결에 실패했습니다. 설정을 확인하십시오."
+msgstr "프락시 연결에 실패했습니다. 설정을 확인하세요."
 
 #: src/subscription_manager/gui/managergui.py:342
 msgid "Warning - subscription-manager plugins were automatically enabled"
@@ -4042,12 +4042,12 @@ msgstr "%s을 소유하고 있는지 확인합니다."
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/networkConfig.py:247
 msgid "Proxy connection succeeded"
-msgstr "프록시에 성공적으로 연결했습니다"
+msgstr "프락시에 성공적으로 연결했습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/networkConfig.py:249
 msgid "Proxy connection failed"
-msgstr "프록시 연결에 실패했습니다"
+msgstr "프락시 연결에 실패했습니다"
 
 #: src/subscription_manager/gui/networkConfig.py:350
 #: src/subscription_manager/gui/networkConfig.py:353
@@ -4699,16 +4699,16 @@ msgstr "hostname:port의 형식에서 프락시 URL"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:349
 msgid "user for HTTP proxy with basic authentication"
-msgstr "기본 인증을 갖는 HTTP 프록시 사용자"
+msgstr "기본 인증을 갖는 HTTP 프락시 사용자"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:351
 msgid "password for HTTP proxy with basic authentication"
-msgstr "기본 인증을 갖는 HTTP 프록시 암호"
+msgstr "기본 인증을 갖는 HTTP 프락시 비밀번호"
 
 #: src/subscription_manager/managercli.py:353
 msgid "host suffixes that should bypass HTTP proxy"
-msgstr "HTTP 프록시를 사용하지 않는 호스트 접미사"
+msgstr "HTTP 프락시를 사용하지 않는 호스트 접미사"
 
 #: src/subscription_manager/managercli.py:363
 msgid ""
@@ -6409,7 +6409,7 @@ msgstr "대상 사용자 이름: "
 
 #: src/subscription_manager/migrate/migrate.py:219
 msgid "Could not read legacy proxy settings.  "
-msgstr "기존 프록시 설정을 읽을 수 없습니다.  "
+msgstr "기존 프락시 설정을 읽을 수 없습니다.  "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/migrate/migrate.py:251
@@ -6536,7 +6536,7 @@ msgstr ""
 
 #: src/subscription_manager/migrate/migrate.py:628
 msgid "Could not remove system entitlement on legacy server.  "
-msgstr "이전 서버에서 시스템 인타이틀먼트를 제거할 수 없습니다.  "
+msgstr "기존 서버에서 시스템 자격을 제거 할 수 없습니다.  "
 
 #: src/subscription_manager/migrate/migrate.py:644
 #, python-format
@@ -6663,7 +6663,7 @@ msgstr "기존 꾸러미 삭제"
 
 #: src/subscription_manager/migrate/migrate.py:902
 msgid "don't use legacy proxy settings with destination server"
-msgstr "대상 서버로 기존 프록시 설정을 사용하지 마십시오"
+msgstr "대상 서버로 기존 프락시 설정을 사용하지 마세요"
 
 #: src/subscription_manager/migrate/migrate.py:910
 #, python-format
