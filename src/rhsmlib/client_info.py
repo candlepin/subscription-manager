@@ -20,18 +20,20 @@ attach, ...), dnf command, etc.
 import logging
 import dbus
 
-from rhsmlib.utils import Singleton, no_reinitialization
+import rhsm.utils
 from rhsmlib.dbus import dbus_utils
 
 log = logging.getLogger(__name__)
 
 
-class DBusSender(Singleton):
+@rhsm.utils.lock
+@rhsm.utils.singleton
+class DBusSender:
     """
     This class holds information about current sender of D-Bus method
     """
 
-    @no_reinitialization
+    @rhsm.utils.call_once
     def __init__(self):
         self._cmd_line = None
 
