@@ -8,13 +8,14 @@
 # simmon <simmon@nplob.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
 # Kim InSoo <simmon@nplob.com>, 2022.
+# 김인수 <simmon@nplob.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 08:21+0200\n"
-"PO-Revision-Date: 2022-02-15 08:16+0000\n"
-"Last-Translator: Kim InSoo <simmon@nplob.com>\n"
+"PO-Revision-Date: 2022-06-12 07:19+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
 "Language: ko\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.12.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -645,7 +646,7 @@ msgstr "매니페스트를 추출할 디렉토리"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:338
 msgid "overwrite files which may exist"
-msgstr "덮어쓰기 파일이 존재할 수 있습니다"
+msgstr "존재 할 수 있는 파일 덮어쓰기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:349
@@ -1430,7 +1431,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/cli.py:383
 #: src/subscription_manager/cli_command/service_level.py:155
 msgid "Proxy connection failed, please check your settings."
-msgstr "프록시 연결에 실패했습니다. 설정을 확인하십시오."
+msgstr "프락시 연결에 실패했습니다. 설정을 확인하세요."
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:253
@@ -1745,16 +1746,16 @@ msgstr "hostname:port의 형식에서 프락시 URL"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:172
 msgid "user for HTTP proxy with basic authentication"
-msgstr "기본 인증을 갖는 HTTP 프록시 사용자"
+msgstr "기본 인증을 갖는 HTTP 프락시 사용자"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:178
 msgid "password for HTTP proxy with basic authentication"
-msgstr "기본 인증을 갖는 HTTP 프록시 암호"
+msgstr "기본 인증을 갖는 HTTP 프락시 비밀번호"
 
 #: src/subscription_manager/cli_command/cli.py:184
 msgid "host suffixes that should bypass HTTP proxy"
-msgstr "HTTP 프록시를 사용하지 않는 호스트 접미사"
+msgstr "HTTP 프락시를 사용하지 않는 호스트 접미사"
 
 #: src/subscription_manager/cli_command/cli.py:196
 msgid ""
@@ -3421,7 +3422,7 @@ msgstr "네트워크 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log를 확�
 
 #: src/subscription_manager/exceptions.py:32
 msgid "Proxy error, unable to connect to proxy server."
-msgstr "프록시 오류, 프록시 서버에 연결할 수 없습니다."
+msgstr "프락시 오류, 프락시 서버에 연결 할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:33
