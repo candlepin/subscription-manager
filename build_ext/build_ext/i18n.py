@@ -190,7 +190,7 @@ class Gettext(BaseCommand):
             ('%s.c_files', self.find_c, 'C', ['-k_', '-kN_']),
             ('%s.py_files', self.find_py, 'Python', []),
             ('%s.glade_files', self.find_glade, 'Glade', []),
-            ('%s.js_files', self.find_js, 'JavaScript', []),
+            ('%s.js_files', self.find_js, 'C', ['-k_', '-kN_', '-kngettext:1,2,3t']),
         ]
 
         for manifest_template, search_func, language, other_options in trans_types:
