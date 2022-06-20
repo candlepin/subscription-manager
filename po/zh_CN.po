@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
 "PO-Revision-Date: 2023-05-10 05:38+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -1514,8 +1514,8 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"警告：\"{download_value}\" 的 {attr} 是最近由授权服务器管理员为这个系统设置"
-"的。\n"
+"警告：\"{download_value}\" 的 {attr} "
+"是最近由授权服务器管理员为这个系统设置的。\n"
 "{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
@@ -1755,8 +1755,7 @@ msgstr "错误：文件 \"{file}\" 不存在或不可读。"
 msgid ""
 "Ignoring the request to attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr ""
-"忽略附加请求。机构 \"{owner_id}\" 附加订阅已被禁用，因为启用了 Simple "
+msgstr "忽略附加请求。机构 \"{owner_id}\" 附加订阅已被禁用，因为启用了 Simple "
 "Content Access (SCA)。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -1852,8 +1851,7 @@ msgstr "已删除所有本地数据"
 msgid ""
 "Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr ""
-"忽略自动附加请求。机构 \"{owner_id}\" 附加订阅已被禁用，因为启用了 Simple "
+msgstr "忽略自动附加请求。机构 \"{owner_id}\" 附加订阅已被禁用，因为启用了 Simple "
 "Content Access (SCA)。"
 
 #: src/subscription_manager/cli_command/cli.py:152
@@ -1937,9 +1935,8 @@ msgstr "系统证书崩溃。请重新注册。"
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
-msgstr ""
-"已将消费者配置集 \"{uuid}\" 从服务器中删除。您可以使用 clean 或 unregister 命"
-"令删除本地配置集。"
+msgstr "已将消费者配置集 \"{uuid}\" 从服务器中删除。您可以使用 clean 或 unregister "
+"命令删除本地配置集。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:28
@@ -2523,8 +2520,7 @@ msgstr "和 --available 一起使用以确保返回所有订阅"
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
 "(example: {example})"
-msgstr ""
-"要搜索的日期，默认为当天日期，只能与 --available 一同使用（例如：{example}）"
+msgstr "要搜索的日期，默认为当天日期，只能与 --available 一同使用（例如：{example}）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:237
@@ -2570,8 +2566,7 @@ msgstr "只列出可用或者已消耗订阅的池 ID，只能与 --available �
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: {example})"
-msgstr ""
-"只列出在指定时间及以后激活的池，只能与 --available 合用（例如：{example}）"
+msgstr "只列出在指定时间及以后激活的池，只能与 --available 合用（例如：{example}）"
 
 #: src/subscription_manager/cli_command/list.py:310
 msgid "Error: --afterdate is only applicable with --available"
@@ -2644,8 +2639,7 @@ msgstr "消耗的订阅"
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
-msgstr ""
-"未找到符合表达式 \"{filter}\" 以及服务等级 \"{level}\" 的已消耗订阅池。"
+msgstr "未找到符合表达式 \"{filter}\" 以及服务等级 \"{level}\" 的已消耗订阅池。"
 
 #: src/subscription_manager/cli_command/list.py:541
 #, python-brace-format
@@ -3111,8 +3105,7 @@ msgstr "已取消发行版本属性设置"
 #, python-brace-format
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
-msgstr ""
-"没有与 '{release}' 匹配的发行版本。使用 'release --list' 查看完整列表。"
+msgstr "没有与 '{release}' 匹配的发行版本。使用 'release --list' 查看完整列表。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:113
