@@ -18,6 +18,7 @@
 %if (0%{?rhel} >= 7 || 0%{?fedora})
 %global dmidecode_version >= 3.12.2-2
 %endif
+%global dmidecode_arches %{ix86} x86_64
 
 # We use the tmpfiles_create macro from systemd-rpm-macros rpm.
 # Because of an incorrect version labelling of that rpm in SLES 12 which
@@ -746,8 +747,8 @@ subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugi
 Summary: Python package for detection of public cloud provider
 License: GPLv2
 Requires: python3-requests
-%ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
-Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
+%ifarch %{dmidecode_arches}
+Requires: dmidecode
 %endif
 
 %description -n python3-cloud-what
