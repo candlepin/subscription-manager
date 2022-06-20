@@ -10,9 +10,6 @@
 %global use_container_plugin 1
 %endif
 
-%if (0%{?rhel} || 0%{?fedora})
-%global dmidecode_version >= 3.12.2-2
-%endif
 %global dmidecode_arches %{ix86} x86_64
 
 %global completion_dir %{_datadir}/bash-completion/completions
@@ -139,6 +136,9 @@ Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what
 Requires:  %{rhsm_package_name} = %{version}
 Requires: subscription-manager-rhsm-certificates
+%ifarch %{dmidecode_arches}
+Requires: dmidecode
+%endif
 
 %if 0%{?suse_version}
 Requires: %{py_package_prefix}-python-dateutil
@@ -153,11 +153,6 @@ Requires: %{py_package_prefix}-dateutil
 Requires: %{py_package_prefix}-dbus
 Requires: usermode
 Requires: python3-gobject-base
-# There's no dmi to read on these arches, so don't pull in this dep.
-# Additionally, dmidecode isn't packaged at all on SUSE
-%ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
-Requires: %{py_package_prefix}-dmidecode %{?dmidecode_version}
-%endif
 %endif
 
 # rhel 8 has different naming for setuptools going forward

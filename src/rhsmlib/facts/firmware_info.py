@@ -120,13 +120,7 @@ def get_firmware_collector(arch, prefix=None, testing=None, collected_hw_info=No
         log.debug("Looking in file structure for UUID for arch '%s'" % arch)
         firmware_provider_class = UuidFirmwareInfoCollector
     else:
-        try:
-            import dmidecode  # noqa
-
-            firmware_provider_class = dmiinfo.DmiFirmwareInfoCollector
-        except ImportError as exc:
-            log.debug(f"Cannot import dmidecode: {exc}")
-            firmware_provider_class = NullFirmwareInfoCollector
+        firmware_provider_class = dmiinfo.DmidecodeFactCollector
 
     firmware_provider = firmware_provider_class(
         prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
