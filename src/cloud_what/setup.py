@@ -46,6 +46,6 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    install_requires=['dmidecode', 'requests'],
+    install_requires=['requests'],
 
 )
