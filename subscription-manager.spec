@@ -13,6 +13,7 @@
 %if (0%{?rhel} || 0%{?fedora})
 %global dmidecode_version >= 3.12.2-2
 %endif
+%global dmidecode_arches %{ix86} x86_64
 
 %global completion_dir %{_datadir}/bash-completion/completions
 
@@ -359,8 +360,8 @@ License: GPL-2.0
 License: GPLv2
 %endif
 Requires: python3-requests
-%ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
-Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
+%ifarch %{dmidecode_arches}
+Requires: dmidecode
 %endif
 
 %description -n python3-cloud-what
