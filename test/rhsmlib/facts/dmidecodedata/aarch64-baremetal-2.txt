@@ -1,0 +1,444 @@
+# dmidecode 3.3
+Getting SMBIOS data from sysfs.
+SMBIOS 3.0.0 present.
+Table at 0x83FF269000.
+
+Handle 0x0000, DMI type 0, 24 bytes
+BIOS Information
+	Vendor: American Megatrends Inc.
+	Version: ROD1002C
+	Release Date: 04/08/2016
+	Address: 0xF0000
+	Runtime Size: 64 kB
+	ROM Size: 1088 kB
+	Characteristics:
+		PCI is supported
+		BIOS is upgradeable
+		BIOS shadowing is allowed
+		Boot from CD is supported
+		Selectable boot is supported
+		BIOS ROM is socketed
+		EDD is supported
+		5.25"/1.2 MB floppy services are supported (int 13h)
+		3.5"/720 kB floppy services are supported (int 13h)
+		3.5"/2.88 MB floppy services are supported (int 13h)
+		Print screen service is supported (int 5h)
+		Serial services are supported (int 14h)
+		Printer services are supported (int 17h)
+		ACPI is supported
+		USB legacy is supported
+		BIOS boot specification is supported
+		Targeted content distribution is supported
+		UEFI is supported
+	BIOS Revision: 5.6
+
+Handle 0x0001, DMI type 1, 27 bytes
+System Information
+	Manufacturer: AMD
+	Product Name: PPPPPPPPPP
+	Version: To be filled by O.E.M.
+	Serial Number: SSSSSSSS
+	UUID: 11111111-2222-3333-4444-555555555555
+	Wake-up Type: Power Switch
+	SKU Number: To be filled by O.E.M.
+	Family: Seattle
+
+Handle 0x0002, DMI type 2, 15 bytes
+Base Board Information
+	Manufacturer: Default string
+	Product Name: Default string
+	Version: Default string
+	Serial Number: Default string
+	Asset Tag: Default string
+	Features:
+		Board is a hosting board
+		Board is removable
+		Board is replaceable
+	Location In Chassis: Default string
+	Chassis Handle: 0x0000
+	Type: Motherboard
+	Contained Object Handles: 0
+
+Handle 0x0003, DMI type 3, 22 bytes
+Chassis Information
+	Manufacturer: Default string
+	Type: Desktop
+	Lock: Not Present
+	Version: Default string
+	Serial Number: Default string
+	Asset Tag: Default string
+	Boot-up State: Safe
+	Power Supply State: Safe
+	Thermal State: Safe
+	Security Status: None
+	OEM Information: 0x00000000
+	Height: Unspecified
+	Number Of Power Cords: 1
+	Contained Elements: 0
+	SKU Number: Default string
+
+Handle 0x0004, DMI type 8, 9 bytes
+Port Connector Information
+	Internal Reference Designator: Default string
+	Internal Connector Type: None
+	External Reference Designator: Default string
+	External Connector Type: None
+	Port Type: None
+
+Handle 0x0005, DMI type 8, 9 bytes
+Port Connector Information
+	Internal Reference Designator: Default string
+	Internal Connector Type: None
+	External Reference Designator: Default string
+	External Connector Type: None
+	Port Type: None
+
+Handle 0x0006, DMI type 8, 9 bytes
+Port Connector Information
+	Internal Reference Designator: Default string
+	Internal Connector Type: None
+	External Reference Designator: Default string
+	External Connector Type: None
+	Port Type: None
+
+Handle 0x0007, DMI type 8, 9 bytes
+Port Connector Information
+	Internal Reference Designator: Default string
+	Internal Connector Type: None
+	External Reference Designator: Default string
+	External Connector Type: None
+	Port Type: None
+
+Handle 0x0008, DMI type 8, 9 bytes
+Port Connector Information
+	Internal Reference Designator: Default string
+	Internal Connector Type: None
+	External Reference Designator: Default string
+	External Connector Type: None
+	Port Type: None
+Handle 0x0009, DMI type 9, 17 bytes
+System Slot Information
+	Designation: Slot 1
+	Type: 32-bit PCI Express x1
+	Current Usage: Available
+	Length: Short
+	ID: 1
+	Characteristics:
+		3.3 V is provided
+		PME signal is supported
+	Bus Address: 0000:00:00.0
+
+Handle 0x000A, DMI type 7, 19 bytes
+Cache Information
+	Socket Designation: L1
+	Configuration: Enabled, Not Socketed, Level 1
+	Operational Mode: Write Back
+	Location: Internal
+	Installed Size: 80 kB
+	Maximum Size: 80 kB
+	Supported SRAM Types:
+		Synchronous
+	Installed SRAM Type: None
+	Speed: Unknown
+	Error Correction Type: Multi-bit ECC
+	System Type: Unified
+	Associativity: Fully Associative
+
+Handle 0x000B, DMI type 7, 19 bytes
+Cache Information
+	Socket Designation: L2
+	Configuration: Enabled, Not Socketed, Level 2
+	Operational Mode: Write Back
+	Location: Internal
+	Installed Size: 1 MB
+	Maximum Size: 1 MB
+	Supported SRAM Types:
+		Synchronous
+	Installed SRAM Type: None
+	Speed: Unknown
+	Error Correction Type: Multi-bit ECC
+	System Type: Unified
+	Associativity: 4-way Set-associative
+
+Handle 0x000C, DMI type 7, 19 bytes
+Cache Information
+	Socket Designation: L3
+	Configuration: Enabled, Not Socketed, Level 3
+	Operational Mode: Write Back
+	Location: Internal
+	Installed Size: 8000 kB
+	Maximum Size: 8000 kB
+	Supported SRAM Types:
+		Synchronous
+	Installed SRAM Type: None
+	Speed: Unknown
+	Error Correction Type: Multi-bit ECC
+	System Type: Unified
+	Associativity: 16-way Set-associative
+
+Handle 0x0010, DMI type 9, 17 bytes
+System Slot Information
+	Designation: Slot 1
+	Type: 32-bit PCI Express x1
+	Current Usage: Available
+	Length: Short
+	ID: 1
+	Characteristics:
+		3.3 V is provided
+		PME signal is supported
+	Bus Address: 0000:00:00.0
+
+Handle 0x0011, DMI type 9, 17 bytes
+System Slot Information
+	Designation: Slot 1
+	Type: 32-bit PCI Express x1
+	Current Usage: Available
+	Length: Short
+	ID: 1
+	Characteristics:
+		3.3 V is provided
+		PME signal is supported
+	Bus Address: 0000:00:00.0
+
+Handle 0x0012, DMI type 9, 17 bytes
+System Slot Information
+	Designation: Slot 1
+	Type: 32-bit PCI Express x1
+	Current Usage: Available
+	Length: Short
+	ID: 1
+	Characteristics:
+		3.3 V is provided
+		PME signal is supported
+	Bus Address: 0000:00:00.0
+
+Handle 0x0013, DMI type 9, 17 bytes
+System Slot Information
+	Designation: Slot 1
+	Type: 32-bit PCI Express x1
+	Current Usage: Available
+	Length: Short
+	ID: 1
+	Characteristics:
+		3.3 V is provided
+		PME signal is supported
+	Bus Address: 0000:00:00.0
+
+Handle 0x0014, DMI type 10, 6 bytes
+On Board Device Information
+	Type: Unknown
+	Status: Enabled
+	Description: Device 1
+
+Handle 0x0015, DMI type 11, 5 bytes
+OEM Strings
+	String 1: Default string
+
+Handle 0x0016, DMI type 12, 5 bytes
+System Configuration Options
+	Option 1: Default string
+
+Handle 0x0017, DMI type 13, 22 bytes
+BIOS Language Information
+	Language Description Format: Long
+	Installable Languages: 1
+		en|US|iso8859-1
+	Currently Installed Language: en|US|iso8859-1
+
+Handle 0x0028, DMI type 32, 11 bytes
+System Boot Information
+	Status: No errors detected
+
+Handle 0x0029, DMI type 41, 11 bytes
+Onboard Device
+	Reference Designation: Device 1
+	Type: Unknown
+	Status: Enabled
+	Type Instance: 1
+	Bus Address: 0000:00:00.0
+
+Handle 0x0030, DMI type 41, 11 bytes
+Onboard Device
+	Reference Designation: Device 2
+	Type: Unknown
+	Status: Enabled
+	Type Instance: 1
+	Bus Address: 0000:00:00.0
+
+Handle 0x0031, DMI type 41, 11 bytes
+Onboard Device
+	Reference Designation: Device 3
+	Type: Unknown
+	Status: Enabled
+	Type Instance: 1
+	Bus Address: 0000:00:00.0
+
+Handle 0x0035, DMI type 4, 48 bytes
+Processor Information
+	Socket Designation: P0
+	Type: Central Processor
+	Family: ARM
+	Manufacturer: AMD
+	ID: 00 00 00 00 10 00 2F 01
+	Version: N/A
+	Voltage: 1.0 V
+	External Clock: 100 MHz
+	Max Speed: 2000 MHz
+	Current Speed: 2000 MHz
+	Status: Populated, Enabled
+	Upgrade: Daughter Board
+	L1 Cache Handle: 0x000A
+	L2 Cache Handle: 0x000B
+	L3 Cache Handle: 0x000C
+	Serial Number: SSSSSSSS
+	Asset Tag: AssetTag Number
+	Part Number: Part Number
+	Core Count: 8
+	Core Enabled: 8
+	Thread Count: 8
+	Characteristics:
+		64-bit capable
+		Multi-Core
+		Execute Protection
+		Enhanced Virtualization
+
+Handle 0x0036, DMI type 16, 23 bytes
+Physical Memory Array
+	Location: System Board Or Motherboard
+	Use: System Memory
+	Error Correction Type: Multi-bit ECC
+	Maximum Capacity: 16 GB
+	Error Information Handle: Not Provided
+	Number Of Devices: 4
+
+Handle 0x0037, DMI type 19, 31 bytes
+Memory Array Mapped Address
+	Starting Address: 0x00000000000
+	Ending Address: 0x003FFFFFFFF
+	Range Size: 16 GB
+	Physical Array Handle: 0x0036
+	Partition Width: 255
+
+Handle 0x0038, DMI type 17, 40 bytes
+Memory Device
+	Array Handle: 0x0036
+	Error Information Handle: Not Provided
+	Total Width: Unknown
+	Data Width: Unknown
+	Size: No Module Installed
+	Form Factor: Unknown
+	Set: None
+	Locator: DIMM 0 
+	Bank Locator: CHANNEL A      
+	Type: DDR3
+	Type Detail: None
+
+Handle 0x0039, DMI type 17, 40 bytes
+Memory Device
+	Array Handle: 0x0036
+	Error Information Handle: Not Provided
+	Total Width: 72 bits
+	Data Width: 64 bits
+	Size: 8 GB
+	Form Factor: DIMM
+	Set: None
+	Locator: DIMM 1 
+	Bank Locator: CHANNEL A      
+	Type: DDR3
+	Type Detail: Synchronous Registered (Buffered)
+	Speed: 667 MT/s
+	Manufacturer: Micron
+	Serial Number: SSSSSSSS       
+	Asset Tag: A1_AssetTagNum1
+	Part Number: AAAAAAAAAAAAA-ZZ 
+	Rank: 2
+	Configured Memory Speed: 667 MT/s
+	Minimum Voltage: Unknown
+	Maximum Voltage: Unknown
+	Configured Voltage: 1.35 V
+
+Handle 0x003A, DMI type 17, 40 bytes
+Memory Device
+	Array Handle: 0x0036
+	Error Information Handle: Not Provided
+	Total Width: Unknown
+	Data Width: Unknown
+	Size: No Module Installed
+	Form Factor: Unknown
+	Set: None
+	Locator: DIMM 0 
+	Bank Locator: CHANNEL B      
+	Type: DDR3
+	Type Detail: None
+
+Handle 0x003B, DMI type 17, 40 bytes
+Memory Device
+	Array Handle: 0x0036
+	Error Information Handle: Not Provided
+	Total Width: 72 bits
+	Data Width: 64 bits
+	Size: 8 GB
+	Form Factor: DIMM
+	Set: None
+	Locator: DIMM 1 
+	Bank Locator: CHANNEL B      
+	Type: DDR3
+	Type Detail: Synchronous Registered (Buffered)
+	Speed: 667 MT/s
+	Manufacturer: Micron
+	Serial Number: SSSSSSSS       
+	Asset Tag: A1_AssetTagNum3
+	Part Number: AAAAAAAAAAAAA-ZZ 
+	Rank: 2
+	Configured Memory Speed: 667 MT/s
+	Minimum Voltage: Unknown
+	Maximum Voltage: Unknown
+	Configured Voltage: 1.35 V
+
+Handle 0x003C, DMI type 20, 35 bytes
+Memory Device Mapped Address
+	Starting Address: 0x00000000000
+	Ending Address: 0x000000003FF
+	Range Size: 1 kB
+	Physical Device Handle: 0x0000
+	Memory Array Mapped Address Handle: 0x0000
+	Partition Row Position: Unknown
+	Interleave Position: Unknown
+	Interleaved Data Depth: Unknown
+
+Handle 0x003D, DMI type 20, 35 bytes
+Memory Device Mapped Address
+	Starting Address: 0x00000000000
+	Ending Address: 0x001FFFFFFFF
+	Range Size: 8 GB
+	Physical Device Handle: 0x0039
+	Memory Array Mapped Address Handle: 0x0037
+	Partition Row Position: Unknown
+	Interleave Position: Unknown
+	Interleaved Data Depth: Unknown
+
+Handle 0x003E, DMI type 20, 35 bytes
+Memory Device Mapped Address
+	Starting Address: 0x00000000000
+	Ending Address: 0x000000003FF
+	Range Size: 1 kB
+	Physical Device Handle: 0x0000
+	Memory Array Mapped Address Handle: 0x0000
+	Partition Row Position: Unknown
+	Interleave Position: Unknown
+	Interleaved Data Depth: Unknown
+
+Handle 0x003F, DMI type 20, 35 bytes
+Memory Device Mapped Address
+	Starting Address: 0x00200000000
+	Ending Address: 0x003FFFFFFFF
+	Range Size: 8 GB
+	Physical Device Handle: 0x003B
+	Memory Array Mapped Address Handle: 0x0037
+	Partition Row Position: Unknown
+	Interleave Position: Unknown
+	Interleaved Data Depth: Unknown
+
+Handle 0x0046, DMI type 127, 4 bytes
+End Of Table
+
