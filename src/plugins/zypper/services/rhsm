@@ -229,11 +229,3 @@ if __name__ == '__main__':
         sys.stderr.write('\n')
 
     service.main()
-
-    # suppress python-dmidecode warnings
-    # TODO do this elsewhere?
-    try:
-        import dmidecode
-        dmidecode.clear_warnings()
-    except ImportError:
-        pass
