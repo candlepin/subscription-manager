@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
 "PO-Revision-Date: 2023-05-10 05:37+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ja/>\n"
 "Language: ja\n"
@@ -60,9 +60,8 @@ msgstr "'required' は、位置引数の無効な引数です"
 msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
-msgstr ""
-"無効なオプション文字列 %(option)r: 文字 %(prefix_chars)r で始まる必要がありま"
-"す"
+msgstr "無効なオプション文字列 %(option)r: 文字 %(prefix_chars)r "
+"で始まる必要があります"
 
 #: /usr/lib64/python3.9/argparse.py:1560
 #, python-format
@@ -152,8 +151,7 @@ msgstr[0] "%s 引数が必要です"
 #: /usr/lib64/python3.9/argparse.py:2217
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
-"あいまいなオプション: %(option)s は %(matches)s に一致する可能性があります"
+msgstr "あいまいなオプション: %(option)s は %(matches)s に一致する可能性があります"
 
 #: /usr/lib64/python3.9/argparse.py:2281
 #, python-format
@@ -898,8 +896,8 @@ msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
-"使用: subscription-manager config --logging.default_log_level=<Log Level> を"
-"使用して default_log_level を有効な値に設定してください。"
+"使用: subscription-manager config --logging.default_log_level=<Log Level> "
+"を使用して default_log_level を有効な値に設定してください。"
 
 #: src/rhsm/config.py:276
 #, python-brace-format
@@ -1602,9 +1600,8 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
-msgstr ""
-"エラー: リスト {attr} に、--username と --password を指定または登録する必要が"
-"あります"
+msgstr "エラー: リスト {attr} に、--username と --password "
+"を指定または登録する必要があります"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:173
 msgid ""
@@ -1722,8 +1719,7 @@ msgstr "割り当てるサブスクリプション数です。auto-attach では
 msgid ""
 "Automatically attach the best-matched compatible subscriptions to this "
 "system. This is the default action."
-msgstr ""
-"このシステムに、最適な互換性のあるサブスクリプションを自動的に割り当てます。"
+msgstr "このシステムに、最適な互換性のあるサブスクリプションを自動的に割り当てます。"
 "これはデフォルトの動作です。"
 
 #: src/subscription_manager/cli_command/attach.py:71
@@ -1798,8 +1794,9 @@ msgid ""
 "Ignoring the request to attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
-"割り当て要求を無視します。Simple Content Access (SCA) が有効化されているた"
-"め、組織 \"{owner_id}\" のサブスクリプションの割り当てが無効化されています。"
+"割り当て要求を無視します。Simple Content Access (SCA) "
+"が有効化されているため、組織 \"{owner_id}\" "
+"のサブスクリプションの割り当てが無効化されています。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/attach.py:201
@@ -1902,9 +1899,9 @@ msgid ""
 "Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
-"自動割り当ての要求を無視します。Simple Content Access (SCA) が有効化されてい"
-"るため、組織 \"{owner_id}\" のサブスクリプションの割り当てが無効化されていま"
-"す。"
+"自動割り当ての要求を無視します。Simple Content Access (SCA) "
+"が有効化されているため、組織 \"{owner_id}\" "
+"のサブスクリプションの割り当てが無効化されています。"
 
 #: src/subscription_manager/cli_command/cli.py:152
 msgid "server URL in the form of https://hostname:port/prefix"
@@ -1990,8 +1987,9 @@ msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr ""
-"コンシューマープロファイル \"{uuid}\" は、サーバーから削除されています。ロー"
-"カルのプロファイルは、clean または unregister コマンドを使って削除します。"
+"コンシューマープロファイル \"{uuid}\" "
+"は、サーバーから削除されています。ローカルのプロファイルは、clean または "
+"unregister コマンドを使って削除します。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/config.py:28
@@ -2281,8 +2279,7 @@ msgstr "証明書 {file} は正常にインポートされました"
 #: src/subscription_manager/cli_command/import_cert.py:81
 #, python-brace-format
 msgid "{file} is not a valid certificate file. Please use a valid certificate."
-msgstr ""
-"{file} は有効な証明書ファイルではありません。有効な証明書を使用してください。"
+msgstr "{file} は有効な証明書ファイルではありません。有効な証明書を使用してください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/cli_command/import_cert.py:90
@@ -2578,9 +2575,8 @@ msgstr "--available と併用すると、すべてのサブスクリプション
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
 "(example: {example})"
-msgstr ""
-"検索対象の日付。デフォルトは本日の日付です。--available と併用する場合のみ使"
-"用できます (例: {example})"
+msgstr "検索対象の日付。デフォルトは本日の日付です。--available "
+"と併用する場合のみ使用できます (例: {example})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:237
@@ -2635,8 +2631,7 @@ msgstr ""
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: {example})"
-msgstr ""
-"指定された日付以降にアクティブなプールを表示します ({example} など、--"
+msgstr "指定された日付以降にアクティブなプールを表示します ({example} など、--"
 "available と併用したものだけを表示)"
 
 #: src/subscription_manager/cli_command/list.py:310
@@ -2680,27 +2675,24 @@ msgstr "利用可能なサブスクリプション"
 msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
-msgstr ""
-"\"{filter}\" およびサービスレベル \"{level}\" に一致する、利用可能なサブスク"
-"リプションツールは見つかりませんでした。"
+msgstr "\"{filter}\" およびサービスレベル \"{level}\" "
+"に一致する、利用可能なサブスクリプションツールは見つかりませんでした。"
 
 #: src/subscription_manager/cli_command/list.py:478
 #, python-brace-format
 msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\"."
-msgstr ""
-"\"{filter}\" に一致する、利用可能なサブスクリプションツールは見つかりませんで"
-"した。"
+msgstr "\"{filter}\" "
+"に一致する、利用可能なサブスクリプションツールは見つかりませんでした。"
 
 #: src/subscription_manager/cli_command/list.py:484
 #, python-brace-format
 msgid ""
 "No available subscription pools were found matching the service level "
 "\"{level}\"."
-msgstr ""
-"サービスレベル \"{level}\" に一致する、利用可能なサブスクリプションツールは見"
-"つかりませんでした。"
+msgstr "サービスレベル \"{level}\" "
+"に一致する、利用可能なサブスクリプションツールは見つかりませんでした。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:488
@@ -2717,27 +2709,24 @@ msgstr "割り当て済みのサブスクリプション"
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
-msgstr ""
-"\"{filter}\" およびサービスレベル \"{level}\" に一致する、使用済みサブスクリ"
-"プションツールは見つかりませんでした。"
+msgstr "\"{filter}\" およびサービスレベル \"{level}\" "
+"に一致する、使用済みサブスクリプションツールは見つかりませんでした。"
 
 #: src/subscription_manager/cli_command/list.py:541
 #, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\"."
-msgstr ""
-"\"{filter}\" に一致する、使用済みサブスクリプションツールは見つかりませんでし"
-"た。"
+msgstr "\"{filter}\" "
+"に一致する、使用済みサブスクリプションツールは見つかりませんでした。"
 
 #: src/subscription_manager/cli_command/list.py:548
 #, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the service level "
 "\"{level}\"."
-msgstr ""
-"サービスレベル \"{level}\" に一致する、使用済みサブスクリプションツールは見つ"
-"かりませんでした。"
+msgstr "サービスレベル \"{level}\" "
+"に一致する、使用済みサブスクリプションツールは見つかりませんでした。"
 
 #: src/subscription_manager/cli_command/list.py:552
 msgid "No consumed subscription pools were found."
@@ -2848,8 +2837,7 @@ msgstr "このシステムに適用される、コンテンツの上書きはあ
 msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
-msgstr ""
-"現在、リポジトリー '{repo}' は存在しませんが、上書きが追加されています。"
+msgstr "現在、リポジトリー '{repo}' は存在しませんが、上書きが追加されています。"
 
 #: src/subscription_manager/cli_command/override.py:198
 #, python-brace-format
@@ -3186,9 +3174,8 @@ msgstr "リリースの詳細設定は解除されました"
 #, python-brace-format
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
-msgstr ""
-"どのリリースも '{release}' に一致しません。全一覧は、'release --list' で確認"
-"します。"
+msgstr "どのリリースも '{release}' に一致しません。全一覧は、'release --list' "
+"で確認します。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/cli_command/release.py:113
@@ -3301,9 +3288,8 @@ msgstr[0] "このシステムから {total} 件のサブスクリプションが
 #: src/subscription_manager/cli_command/remove.py:198
 #, python-brace-format
 msgid "Subscription with serial number {serial} removed from this system"
-msgstr ""
-"このシステムから、シリアル番号が {serial} のサブスクリプションが削除されまし"
-"た"
+msgstr "このシステムから、シリアル番号が {serial} "
+"のサブスクリプションが削除されました"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/repos.py:60
@@ -3450,8 +3436,7 @@ msgstr "このシステムのサブスクリプションと製品に関するス
 #, python-brace-format
 msgid ""
 "future date to check status on, defaults to today's date (example: {example})"
-msgstr ""
-"ステータス確認を行う未来の日付。デフォルトは本日の日付です (例: {example})"
+msgstr "ステータス確認を行う未来の日付。デフォルトは本日の日付です (例: {example})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/status.py:70
@@ -3641,8 +3626,7 @@ msgstr "不明なサーバー応答 (HTTP エラーコード {code}: {title})"
 #, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
-msgstr ""
-"プロキシーエラー: {hostname} に接続できません: {message} (エラーコード "
+msgstr "プロキシーエラー: {hostname} に接続できません: {message} (エラーコード "
 "{code})"
 
 #: src/subscription_manager/exceptions.py:41
@@ -3818,8 +3802,7 @@ msgstr "スタック "
 msgid ""
 "Error: More than one release product certificate installed. Certificate "
 "paths: %s"
-msgstr ""
-"エラー: リリースの製品証明書が 2 つ以上インストールされています。証明書パス: "
+msgstr "エラー: リリースの製品証明書が 2 つ以上インストールされています。証明書パス: "
 "%s"
 
 #: src/subscription_manager/repolib.py:94
@@ -3886,9 +3869,8 @@ msgstr "および"
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
-msgstr ""
-"警告: 指定された値 \"{val}\" は、属性 {attr} の有効な値のリストに含まれていま"
-"せん:"
+msgstr "警告: 指定された値 \"{val}\" は、属性 {attr} "
+"の有効な値のリストに含まれていません:"
 
 #: src/syspurpose/files.py:472
 #, python-brace-format
