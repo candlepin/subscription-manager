@@ -9,13 +9,14 @@
 # Sundeep Anand <suanand@redhat.com>, 2021.
 # Julien Humbert <julroy67@gmail.com>, 2022.
 # Jérôme Fenal <jfenal@free.fr>, 2022.
+# Transtats <suanand@redhat.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-14 12:24+0200\n"
-"PO-Revision-Date: 2022-02-09 14:16+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2022-06-20 11:18+0000\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
 "Language: fr\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.13\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -899,307 +900,232 @@ msgstr "Type de certificat inconnu"
 
 #: src/rhsm/connection.py:1303
 msgid "Fetching supported resources"
-msgstr ""
+msgstr "Extraire les ressources prises en charge"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1362
-#, fuzzy
-#| msgid "connectionStatusLabel"
 msgid "Checking connection status"
-msgstr "connectionStatusLabel"
+msgstr "Vérification de l'état de la connexion"
 
 #: src/rhsm/connection.py:1390
 msgid "Fetching cloud token"
-msgstr ""
+msgstr "Extraire le jeton cloud"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1461
-#, fuzzy
-#| msgid "Register System"
 msgid "Registering system"
-msgstr "Inscrire le système"
+msgstr "Système d'enregistrement"
 
 #: src/rhsm/connection.py:1489 src/rhsm/connection.py:1501
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
+"Mise à jour des machines virtuelles détectées fonctionnant sur un hôte donné"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1524
-#, fuzzy
-#| msgid "Print version information"
 msgid "Updating hypervisor information"
-msgstr "Imprimer les informations de version"
+msgstr "Mise à jour des informations sur l'hyperviseur"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1599
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Updating consumer information"
-msgstr "Informations sur les abonnements"
+msgstr "Mise à jour des informations relatives aux consommateurs"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1609
-#, fuzzy
-#| msgid "Print manifest information"
 msgid "Updating guest information"
-msgstr "Imprimer les informations du manifeste"
+msgstr "Mise à jour des informations sur les clients"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1613 src/rhsm/connection.py:1617
-#, fuzzy
-#| msgid "Print manifest information"
 msgid "Fetching guest information"
-msgstr "Imprimer les informations du manifeste"
+msgstr "Extraire les informations sur les clients"
 
 #: src/rhsm/connection.py:1621
-#, fuzzy
-#| msgid "Removing"
 msgid "Removing guests"
-msgstr "Suppression en cours"
+msgstr "Suppression des invités"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1644 src/rhsm/connection.py:1655
-#, fuzzy
-#| msgid "Print certificate information"
 msgid "Updating profile information"
-msgstr "Imprimer les informations du certificat"
+msgstr "Mise à jour des informations du profil"
 
 #: src/rhsm/connection.py:1663
 msgid "Fetching consumer keys"
-msgstr ""
+msgstr "Extraire les clés des consommateurs"
 
 #: src/rhsm/connection.py:1673
 msgid "Fetching consumers"
-msgstr ""
+msgstr "Extraire les consommateurs"
 
 #: src/rhsm/connection.py:1682
-#, fuzzy
-#| msgid "Checking installed software"
 msgid "Checking compliance status"
-msgstr "Vérification des logiciels installés"
+msgstr "Vérification du statut de conformité"
 
 #: src/rhsm/connection.py:1691
 msgid "Checking system purpose compliance status"
-msgstr ""
+msgstr "Vérification de l'état de conformité de l'objet du système"
 
 #: src/rhsm/connection.py:1698
-#, fuzzy
-#| msgid "Convenient module for managing all system purpose settings"
 msgid "Fetching available system purpose settings"
-msgstr "Module pratique pour gérer tous les paramètres de l'objet du système"
+msgstr "Extraire les paramètres disponibles de l'objectif du système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1705
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Creating organization"
-msgstr "spécifier une organisation"
+msgstr "Créer une organisation"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1712 src/rhsm/connection.py:1726
 #: src/rhsm/connection.py:1740
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Fetching organizations"
-msgstr "spécifier une organisation"
+msgstr "Extraire les organisations"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1719
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Removing organization"
-msgstr "spécifier une organisation"
+msgstr "Supprimer l'organisation"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1733
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching organization information"
-msgstr "Imprimer les informations de version"
+msgstr "Extraire les informations sur l'organisation"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1754
-#, fuzzy
-#| msgid "Fetching list of possible organizations"
 msgid "Fetching organization hypervisors"
-msgstr "Récupération de la liste des organisations possibles"
+msgstr "Extraire les hyperviseurs de l'organisation"
 
 #: src/rhsm/connection.py:1761
-#, fuzzy
-#| msgid "Unregistering"
 msgid "Unregistering system"
-msgstr "Désinscrire"
+msgstr "Annulation de l’enregistrement du système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1772
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Fetching certificates"
-msgstr "Certificat d'identité"
+msgstr "Extraire les certificats"
 
 #: src/rhsm/connection.py:1779
 msgid "Fetching certificate serial numbers"
-msgstr ""
+msgstr "Extraire les numéros de série des certificats"
 
 #: src/rhsm/connection.py:1795
 msgid "Fetching content for a certificate"
-msgstr ""
+msgstr "Extraire le contenu d'un certificat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1805 src/rhsm/connection.py:1815
 #: src/rhsm/connection.py:1830 src/rhsm/connection.py:2120
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
-msgstr "Attachement des abonnements en cours"
+msgstr "Mise à jour des abonnements"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1848
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Simulating subscribing"
-msgstr "Attachement des abonnements en cours"
+msgstr "Simulation de l'abonnement"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1852 src/rhsm/connection.py:1856
 #: src/rhsm/connection.py:1860
-#, fuzzy
-#| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
-msgstr "Erreur lors de l'abonnement : %s"
+msgstr "Désabonnement"
 
 #: src/rhsm/connection.py:1917
 msgid "Fetching pools"
-msgstr ""
+msgstr "Extraire les pools"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1924
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching pool information"
-msgstr "Imprimer les informations de version"
+msgstr "Extraire les informations sur les pools"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1928
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching product information"
-msgstr "Imprimer les informations de version"
+msgstr "Recherche d'informations sur les produits"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1932
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching release information"
-msgstr "Imprimer les informations de version"
+msgstr "Extraire les informations sur les dates de publication de versions"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1945
-#, fuzzy
-#| msgid "list available releases"
 msgid "Fetching available releases"
-msgstr "répertorier toutes les versions disponibles"
+msgstr "Extraire les versions disponibles"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1954
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
-msgstr "Récupération de la liste des environnements possibles"
+msgstr "Extraire les informations sur les droits d’accès"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1962
-#, fuzzy
-#| msgid "Using service level:"
 msgid "Fetching service levels"
-msgstr "Utiliser un niveau de service :"
+msgstr "Extraire les informations sur les niveaux de service"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1973
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
-msgstr "Récupération de la liste des environnements possibles"
+msgstr "Extraire les environnements"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:1991
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching environment information"
-msgstr "Imprimer les informations de version"
+msgstr "Extraire les informations sur l'environnement"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1998
-#, fuzzy
-#| msgid "Print certificate information"
 msgid "Fetching entitlement information"
-msgstr "Imprimer les informations du certificat"
+msgstr "Extraire les informations sur les droits d’accès"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:2002 src/rhsm/connection.py:2046
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Updating certificate"
-msgstr "Certificat d'identité"
+msgstr "Mise à jour du certificat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsm/connection.py:2017
-#, fuzzy
-#| msgid "Import Certificates"
 msgid "Updating certificates"
-msgstr "Importer les certificats"
+msgstr "Mise à jour des certificats"
 
 #: src/rhsm/connection.py:2061
-#, fuzzy
-#| msgid "Checking installed software"
 msgid "Checking server status"
-msgstr "Vérification des logiciels installés"
+msgstr "Vérification de l'état du serveur"
 
 #: src/rhsm/connection.py:2068
 msgid "Fetching content overrides"
-msgstr ""
+msgstr "Extraire les remplacements de contenu"
 
 #: src/rhsm/connection.py:2075
-#, fuzzy
-#| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
-msgstr "Mise à jour des substitutions de référentiel"
+msgstr "Mise à jour des remplacements de contenu"
 
 #: src/rhsm/connection.py:2084
-#, fuzzy
-#| msgid "Removing Repository Overrides"
 msgid "Removing content overrides"
-msgstr "Suppression des substitutions de référentiel"
+msgstr "Suppression des remplacements de contenu"
 
 #: src/rhsm/connection.py:2099
-#, fuzzy
-#| msgid "Activation Key"
 msgid "Activating"
-msgstr "Clé d'activation"
+msgstr "Activation de"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:2106
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Fetching subscriptions"
-msgstr "Attachement des abonnements en cours"
+msgstr "Extraire les abonnements"
 
 #: src/rhsm/connection.py:2129
 msgid "Fetching job"
-msgstr ""
+msgstr "Extraire job"
 
 #: src/rhsm/connection.py:2138
-#, fuzzy
-#| msgid "Updating status ..."
 msgid "Updating job status"
-msgstr "Mise à jour du statut..."
+msgstr "Mise à jour de l'état des jobs"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:2146
-#, fuzzy
-#| msgid "Cancel"
 msgid "Cancelling job"
-msgstr "Annuler"
+msgstr "Annulation d'un job"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_debug/debug_commands.py:39
@@ -2135,7 +2061,7 @@ msgstr "suffixes hôte qui doivent contourner le proxy HTTP"
 
 #: src/subscription_manager/cli_command/cli.py:197
 msgid "Do not display progress messages"
-msgstr ""
+msgstr "Ne pas afficher les messages de progression"
 
 #: src/subscription_manager/cli_command/cli.py:209
 msgid ""

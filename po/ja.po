@@ -6,13 +6,14 @@
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
+# Transtats <suanand@redhat.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-14 12:24+0200\n"
-"PO-Revision-Date: 2022-02-09 14:16+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2022-06-20 11:18+0000\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ja/>\n"
 "Language: ja\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.13\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -887,307 +888,231 @@ msgstr "不明な証明書タイプ"
 
 #: src/rhsm/connection.py:1303
 msgid "Fetching supported resources"
-msgstr ""
+msgstr "サポートされるリソースを取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:1362
-#, fuzzy
-#| msgid "connectionStatusLabel"
 msgid "Checking connection status"
-msgstr "connectionStatusLabel"
+msgstr "接続のステータスを確認中"
 
 #: src/rhsm/connection.py:1390
 msgid "Fetching cloud token"
-msgstr ""
+msgstr "クラウドトークンを取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1461
-#, fuzzy
-#| msgid "Register System"
 msgid "Registering system"
-msgstr "システムの登録"
+msgstr "システムを登録中"
 
 #: src/rhsm/connection.py:1489 src/rhsm/connection.py:1501
 msgid "Updating detected virtual machines running on given host"
-msgstr ""
+msgstr "指定のホスト上で実行中の検出された仮想マシンを更新中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:1524
-#, fuzzy
-#| msgid "Print version information"
 msgid "Updating hypervisor information"
-msgstr "バージョン情報を表示します"
+msgstr "ハイパーバイザー情報を更新中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:1599
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Updating consumer information"
-msgstr "サブスクリプション情報"
+msgstr "コンシューマー情報を更新中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rhsm/connection.py:1609
-#, fuzzy
-#| msgid "Print manifest information"
 msgid "Updating guest information"
-msgstr "マニフェスト情報の表示"
+msgstr "ゲストの情報を更新中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rhsm/connection.py:1613 src/rhsm/connection.py:1617
-#, fuzzy
-#| msgid "Print manifest information"
 msgid "Fetching guest information"
-msgstr "マニフェスト情報の表示"
+msgstr "ゲストの情報を取得中"
 
 #: src/rhsm/connection.py:1621
-#, fuzzy
-#| msgid "Removing"
 msgid "Removing guests"
-msgstr "削除中"
+msgstr "ゲストを削除中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1644 src/rhsm/connection.py:1655
-#, fuzzy
-#| msgid "Print certificate information"
 msgid "Updating profile information"
-msgstr "証明書の詳細を表示"
+msgstr "プロファイル情報を更新中"
 
 #: src/rhsm/connection.py:1663
 msgid "Fetching consumer keys"
-msgstr ""
+msgstr "コンシューマーキーを取得中"
 
 #: src/rhsm/connection.py:1673
 msgid "Fetching consumers"
-msgstr ""
+msgstr "コンシューマーを取得中"
 
 #: src/rhsm/connection.py:1682
-#, fuzzy
-#| msgid "Checking installed software"
 msgid "Checking compliance status"
-msgstr "インストールされたソフトウェアの確認中"
+msgstr "コンプライアンスのステータスを確認中"
 
 #: src/rhsm/connection.py:1691
 msgid "Checking system purpose compliance status"
-msgstr ""
+msgstr "システムの目的のコンプライアンスステータスを確認中"
 
 #: src/rhsm/connection.py:1698
-#, fuzzy
-#| msgid "Convenient module for managing all system purpose settings"
 msgid "Fetching available system purpose settings"
-msgstr "すべてのシステム目的の設定を管理する便利なモジュール"
+msgstr "利用可能なシステムの目的の設定を取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rhsm/connection.py:1705
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Creating organization"
-msgstr "組織を指定"
+msgstr "組織を作成中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rhsm/connection.py:1712 src/rhsm/connection.py:1726
 #: src/rhsm/connection.py:1740
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Fetching organizations"
-msgstr "組織を指定"
+msgstr "組織を取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rhsm/connection.py:1719
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Removing organization"
-msgstr "組織を指定"
+msgstr "組織を削除中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:1733
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching organization information"
-msgstr "バージョン情報を表示します"
+msgstr "組織の情報を取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:1754
-#, fuzzy
-#| msgid "Fetching list of possible organizations"
 msgid "Fetching organization hypervisors"
-msgstr "利用可能な組織一覧を取得中"
+msgstr "組織のハイパーバイザーを取得中"
 
 #: src/rhsm/connection.py:1761
-#, fuzzy
-#| msgid "Unregistering"
 msgid "Unregistering system"
-msgstr "登録の解除中"
+msgstr "システムの登録を解除中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1772
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Fetching certificates"
-msgstr "識別証明書"
+msgstr "証明書を取得中"
 
 #: src/rhsm/connection.py:1779
 msgid "Fetching certificate serial numbers"
-msgstr ""
+msgstr "証明書のシリアル番号を取得中"
 
 #: src/rhsm/connection.py:1795
 msgid "Fetching content for a certificate"
-msgstr ""
+msgstr "証明書のコンテンツを取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1805 src/rhsm/connection.py:1815
 #: src/rhsm/connection.py:1830 src/rhsm/connection.py:2120
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
-msgstr "サブスクリプションを割り当てています"
+msgstr "サブスクリプションを更新中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1848
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Simulating subscribing"
-msgstr "サブスクリプションを割り当てています"
+msgstr "サブスクライブをシミュレーション中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1852 src/rhsm/connection.py:1856
 #: src/rhsm/connection.py:1860
-#, fuzzy
-#| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
-msgstr "サブスクライブ時にエラー: %s"
+msgstr "サブスクリプションを解除中"
 
 #: src/rhsm/connection.py:1917
 msgid "Fetching pools"
-msgstr ""
+msgstr "プールを取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:1924
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching pool information"
-msgstr "バージョン情報を表示します"
+msgstr "プール情報を取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:1928
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching product information"
-msgstr "バージョン情報を表示します"
+msgstr "製品情報を取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:1932
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching release information"
-msgstr "バージョン情報を表示します"
+msgstr "リリース情報を取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1945
-#, fuzzy
-#| msgid "list available releases"
 msgid "Fetching available releases"
-msgstr "使用可能なリリースを表示します"
+msgstr "使用可能なリリースを取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:1954
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
-msgstr "利用可能な環境一覧を取得中"
+msgstr "エンタイトルメントを取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1962
-#, fuzzy
-#| msgid "Using service level:"
 msgid "Fetching service levels"
-msgstr "使用するサービスレベル:"
+msgstr "サービスレベルを取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:1973
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
-msgstr "利用可能な環境一覧を取得中"
+msgstr "環境を取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:1991
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching environment information"
-msgstr "バージョン情報を表示します"
+msgstr "環境の情報を取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1998
-#, fuzzy
-#| msgid "Print certificate information"
 msgid "Fetching entitlement information"
-msgstr "証明書の詳細を表示"
+msgstr "エンタイトルメント情報を取得中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:2002 src/rhsm/connection.py:2046
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Updating certificate"
-msgstr "識別証明書"
+msgstr "証明書を更新中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsm/connection.py:2017
-#, fuzzy
-#| msgid "Import Certificates"
 msgid "Updating certificates"
-msgstr "証明書のインポート"
+msgstr "証明書を更新中"
 
 #: src/rhsm/connection.py:2061
-#, fuzzy
-#| msgid "Checking installed software"
 msgid "Checking server status"
-msgstr "インストールされたソフトウェアの確認中"
+msgstr "サーバーのステータスを確認中"
 
 #: src/rhsm/connection.py:2068
 msgid "Fetching content overrides"
-msgstr ""
+msgstr "コンテンツのオーバーライドを取得中"
 
 #: src/rhsm/connection.py:2075
-#, fuzzy
-#| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
-msgstr "リポジトリーの上書きを更新中"
+msgstr "コンテンツのオーバーライドを更新中"
 
 #: src/rhsm/connection.py:2084
-#, fuzzy
-#| msgid "Removing Repository Overrides"
 msgid "Removing content overrides"
-msgstr "リポジトリーの上書きを削除中"
+msgstr "コンテンツのオーバーライドを削除中"
 
 #: src/rhsm/connection.py:2099
-#, fuzzy
-#| msgid "Activation Key"
 msgid "Activating"
-msgstr "アクティベーションキー"
+msgstr "アクティベート中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:2106
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Fetching subscriptions"
-msgstr "サブスクリプションを割り当てています"
+msgstr "サブスクリプションを取得中"
 
 #: src/rhsm/connection.py:2129
 msgid "Fetching job"
-msgstr ""
+msgstr "ジョブを取得中"
 
 #: src/rhsm/connection.py:2138
-#, fuzzy
-#| msgid "Updating status ..."
 msgid "Updating job status"
-msgstr "ステータスを更新中..."
+msgstr "ジョブのステータスを更新中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:2146
-#, fuzzy
-#| msgid "Cancel"
 msgid "Cancelling job"
-msgstr "取り消し"
+msgstr "ジョブを取り消し中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_debug/debug_commands.py:39
@@ -2086,7 +2011,7 @@ msgstr "HTTP プロキシーを迂回するホストのサフィックス"
 
 #: src/subscription_manager/cli_command/cli.py:197
 msgid "Do not display progress messages"
-msgstr ""
+msgstr "進捗のメッセージを表示しない"
 
 #: src/subscription_manager/cli_command/cli.py:209
 msgid ""

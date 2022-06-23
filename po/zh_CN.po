@@ -6,13 +6,14 @@
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
+# Transtats <suanand@redhat.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-14 12:24+0200\n"
-"PO-Revision-Date: 2022-02-21 11:16+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2022-06-20 06:26+0000\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.13\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -873,308 +874,232 @@ msgstr "未知证书类型"
 
 #: src/rhsm/connection.py:1303
 msgid "Fetching supported resources"
-msgstr ""
+msgstr "获取支持的资源"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1362
-#, fuzzy
-#| msgid "connectionStatusLabel"
 msgid "Checking connection status"
-msgstr "connectionStatusLabel"
+msgstr "检查连接状态"
 
 #: src/rhsm/connection.py:1390
 msgid "Fetching cloud token"
-msgstr ""
+msgstr "获取云令牌"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1461
-#, fuzzy
-#| msgid "Register System"
 msgid "Registering system"
 msgstr "注册系统"
 
 #: src/rhsm/connection.py:1489 src/rhsm/connection.py:1501
 msgid "Updating detected virtual machines running on given host"
-msgstr ""
+msgstr "更新运行在给定主机上的检测到的虚拟机"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1524
-#, fuzzy
-#| msgid "Print version information"
 msgid "Updating hypervisor information"
-msgstr "输出版本信息"
+msgstr "更新 hypervisor 信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1599
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Updating consumer information"
-msgstr "订阅信息"
+msgstr "更新消费者信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1609
-#, fuzzy
-#| msgid "Print manifest information"
 msgid "Updating guest information"
-msgstr "输出清单信息"
+msgstr "更新客户信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1613 src/rhsm/connection.py:1617
-#, fuzzy
-#| msgid "Print manifest information"
 msgid "Fetching guest information"
-msgstr "输出清单信息"
+msgstr "获取客户机信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1621
-#, fuzzy
-#| msgid "Removing"
 msgid "Removing guests"
-msgstr "删除中"
+msgstr "删除客户机"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1644 src/rhsm/connection.py:1655
-#, fuzzy
-#| msgid "Print certificate information"
 msgid "Updating profile information"
-msgstr "输出证书信息"
+msgstr "更新配置文件信息"
 
 #: src/rhsm/connection.py:1663
 msgid "Fetching consumer keys"
-msgstr ""
+msgstr "获取消费者密钥"
 
 #: src/rhsm/connection.py:1673
 msgid "Fetching consumers"
-msgstr ""
+msgstr "获取消费者"
 
 #: src/rhsm/connection.py:1682
-#, fuzzy
-#| msgid "Checking installed software"
 msgid "Checking compliance status"
-msgstr "检查安装的软件"
+msgstr "检查合规性状态"
 
 #: src/rhsm/connection.py:1691
 msgid "Checking system purpose compliance status"
-msgstr ""
+msgstr "检查系统用途合规性状态"
 
 #: src/rhsm/connection.py:1698
-#, fuzzy
-#| msgid "Convenient module for managing all system purpose settings"
 msgid "Fetching available system purpose settings"
-msgstr "用于管理所有系统目的设置的方便模块"
+msgstr "获取可用的系统用途设置"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1705
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Creating organization"
-msgstr "指定机构"
+msgstr "创建机构"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1712 src/rhsm/connection.py:1726
 #: src/rhsm/connection.py:1740
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Fetching organizations"
-msgstr "指定机构"
+msgstr "获取机构"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1719
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Removing organization"
-msgstr "指定机构"
+msgstr "删除机构"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1733
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching organization information"
-msgstr "输出版本信息"
+msgstr "获取机构信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1754
-#, fuzzy
-#| msgid "Fetching list of possible organizations"
 msgid "Fetching organization hypervisors"
-msgstr "附加可能的机构列表"
+msgstr "获取机构 hypervisor"
 
 #: src/rhsm/connection.py:1761
-#, fuzzy
-#| msgid "Unregistering"
 msgid "Unregistering system"
-msgstr "正在取消注册"
+msgstr "取消系统注册"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1772
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Fetching certificates"
-msgstr "身份识别证书"
+msgstr "获取证书"
 
 #: src/rhsm/connection.py:1779
 msgid "Fetching certificate serial numbers"
-msgstr ""
+msgstr "获取证书序列号"
 
 #: src/rhsm/connection.py:1795
 msgid "Fetching content for a certificate"
-msgstr ""
+msgstr "获取证书的内容"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1805 src/rhsm/connection.py:1815
 #: src/rhsm/connection.py:1830 src/rhsm/connection.py:2120
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
-msgstr "正在附加订阅"
+msgstr "更新订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1848
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Simulating subscribing"
-msgstr "正在附加订阅"
+msgstr "模拟订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1852 src/rhsm/connection.py:1856
 #: src/rhsm/connection.py:1860
-#, fuzzy
-#| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
-msgstr "订阅错误：%s"
+msgstr "取消订阅"
 
 #: src/rhsm/connection.py:1917
 msgid "Fetching pools"
-msgstr ""
+msgstr "获取池"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1924
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching pool information"
-msgstr "输出版本信息"
+msgstr "获取池信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1928
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching product information"
-msgstr "输出版本信息"
+msgstr "获取产品信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1932
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching release information"
-msgstr "输出版本信息"
+msgstr "获取版本信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1945
-#, fuzzy
-#| msgid "list available releases"
 msgid "Fetching available releases"
-msgstr "列出可用发行版本"
+msgstr "获取可用的版本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1954
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
-msgstr "附加可能的环境列表"
+msgstr "获取授权"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1962
-#, fuzzy
-#| msgid "Using service level:"
 msgid "Fetching service levels"
-msgstr "使用服务等级："
+msgstr "获取服务等级"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1973
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
-msgstr "附加可能的环境列表"
+msgstr "获取环境"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1991
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching environment information"
-msgstr "输出版本信息"
+msgstr "获取环境信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1998
-#, fuzzy
-#| msgid "Print certificate information"
 msgid "Fetching entitlement information"
-msgstr "输出证书信息"
+msgstr "获取授权信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2002 src/rhsm/connection.py:2046
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Updating certificate"
-msgstr "身份识别证书"
+msgstr "更新证书"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2017
-#, fuzzy
-#| msgid "Import Certificates"
 msgid "Updating certificates"
-msgstr "导入证书"
+msgstr "更新证书"
 
 #: src/rhsm/connection.py:2061
-#, fuzzy
-#| msgid "Checking installed software"
 msgid "Checking server status"
-msgstr "检查安装的软件"
+msgstr "检查服务器状态"
 
 #: src/rhsm/connection.py:2068
 msgid "Fetching content overrides"
-msgstr ""
+msgstr "获取内容覆盖"
 
 #: src/rhsm/connection.py:2075
-#, fuzzy
-#| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
-msgstr "正在更新软件仓库覆盖"
+msgstr "更新内容覆盖"
 
 #: src/rhsm/connection.py:2084
-#, fuzzy
-#| msgid "Removing Repository Overrides"
 msgid "Removing content overrides"
-msgstr "正在删除软件仓库覆盖"
+msgstr "删除内容覆盖"
 
 #: src/rhsm/connection.py:2099
-#, fuzzy
-#| msgid "Activation Key"
 msgid "Activating"
-msgstr "激活码"
+msgstr "激活"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2106
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Fetching subscriptions"
-msgstr "正在附加订阅"
+msgstr "获取订阅"
 
 #: src/rhsm/connection.py:2129
 msgid "Fetching job"
-msgstr ""
+msgstr "获取作业"
 
 #: src/rhsm/connection.py:2138
-#, fuzzy
-#| msgid "Updating status ..."
 msgid "Updating job status"
-msgstr "更新状态 ..."
+msgstr "更新作业状态"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2146
-#, fuzzy
-#| msgid "Cancel"
 msgid "Cancelling job"
-msgstr "取消"
+msgstr "取消作业"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:39
@@ -1639,8 +1564,8 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
-"警告：\"{download_value}\" 的 {attr} 当前已由权利服务器管理员为这个系统设"
-"置。\n"
+"警告：\"{download_value}\" 的 {attr} "
+"是最近由授权服务器管理员为这个系统设置的。\n"
 "{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:39
@@ -2019,7 +1944,7 @@ msgstr "跳过 HTTP 代理的主机后缀"
 
 #: src/subscription_manager/cli_command/cli.py:197
 msgid "Do not display progress messages"
-msgstr ""
+msgstr "不显示进度消息"
 
 #: src/subscription_manager/cli_command/cli.py:209
 msgid ""
