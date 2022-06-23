@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-20 11:31+0200\n"
-"PO-Revision-Date: 2022-06-12 07:18+0000\n"
+"PO-Revision-Date: 2022-06-23 13:18+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.13\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -477,10 +477,8 @@ msgstr "활성키"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-register.jsx:132
-#, fuzzy
-#| msgid "Organization: "
 msgid "Organization ID"
-msgstr "조직: "
+msgstr "조직 ID"
 
 #: cockpit/src/subscriptions-register.jsx:142
 msgid "Default"
@@ -719,16 +717,12 @@ msgid "Unable to connect"
 msgstr "연결할 수 없습니다"
 
 #: cockpit/src/subscriptions-view.jsx:514
-#, fuzzy
-#| msgid ""
-#| "Couldn't get system subscription status. Please ensure subscription-"
-#| "manager is installed."
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed. Reported status: $0 ($1)"
 msgstr ""
-"시스템 서브스크립션 상태를 가져올 수 없습니다. subscription-manager가 설치되"
-"어 있는지 확인하십시오."
+"시스템 서브스크립션 상태를 가져올 수 없습니다. subscription-manager가 "
+"설치되어 있는지 확인하세요. 보고된 상태: $0 ($1)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:92
@@ -5016,10 +5010,9 @@ msgstr "인증서 다시 만들기를 강제합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1273
-#, fuzzy, python-brace-format
-#| msgid "Unable to perform refresh due to the following exception: %s"
+#, python-brace-format
 msgid "Unable to perform refresh due to the following exception: {e}"
-msgstr "다음과 같은 예외 사항이 발생하면 새로 고침을 실행할 수 없습니다: %s"
+msgstr "다음과 같은 예외 사항이 발생하면 새로 고침을 실행 할 수 없습니다: {e}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1276
@@ -6373,22 +6366,18 @@ msgstr ""
 "크립션 상태에 관계없이 컨텐츠에 접근 할 수 있습니다.\n"
 
 #: src/subscription_manager/managercli.py:3706
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Overall Status: %s\n"
-#| "%s"
+#, python-brace-format
 msgid ""
 "Overall Status: {status}\n"
 "{message}"
 msgstr ""
-"전체 상태: %s\n"
-"%s"
+"전체 상태: {status}\n"
+"{message}"
 
 #: src/subscription_manager/managercli.py:3740
-#, fuzzy, python-brace-format
-#| msgid "System Purpose Status: %s"
+#, python-brace-format
 msgid "System Purpose Status: {status}"
-msgstr "시스템 목적 상태: %s"
+msgstr "시스템 목적 상태: {status}"
 
 #: src/subscription_manager/migrate/migrate.py:53
 #: src/subscription_manager/migrate/migrate.py:55
