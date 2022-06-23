@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-14 12:24+0200\n"
-"PO-Revision-Date: 2022-06-12 07:19+0000\n"
+"PO-Revision-Date: 2022-06-23 13:18+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.13\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -880,308 +880,232 @@ msgstr "알 수 없는 인증서 유형"
 
 #: src/rhsm/connection.py:1303
 msgid "Fetching supported resources"
-msgstr ""
+msgstr "지원되는 자원 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1362
-#, fuzzy
-#| msgid "connectionStatusLabel"
 msgid "Checking connection status"
-msgstr "연결 상태 레이블"
+msgstr "연결 상태 점검하기"
 
 #: src/rhsm/connection.py:1390
 msgid "Fetching cloud token"
-msgstr ""
+msgstr "클라우드 토큰 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1461
-#, fuzzy
-#| msgid "Register System"
 msgid "Registering system"
-msgstr "시스템 등록"
+msgstr "시스템 등록하기"
 
 #: src/rhsm/connection.py:1489 src/rhsm/connection.py:1501
 msgid "Updating detected virtual machines running on given host"
-msgstr ""
+msgstr "제공된 호스트에서 실행 중에 감지된 가상화 장비 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1524
-#, fuzzy
-#| msgid "Print version information"
 msgid "Updating hypervisor information"
-msgstr "버전 정보 표시"
+msgstr "하이퍼바이저 정보 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1599
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Updating consumer information"
-msgstr "서브스크립션 정보"
+msgstr "고객 정보 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1609
-#, fuzzy
-#| msgid "Print manifest information"
 msgid "Updating guest information"
-msgstr "매니페스트 정보 출력"
+msgstr "게스트 정보 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1613 src/rhsm/connection.py:1617
-#, fuzzy
-#| msgid "Print manifest information"
 msgid "Fetching guest information"
-msgstr "매니페스트 정보 출력"
+msgstr "게스트 정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1621
-#, fuzzy
-#| msgid "Removing"
 msgid "Removing guests"
-msgstr "삭제 중"
+msgstr "게스트 제거 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1644 src/rhsm/connection.py:1655
-#, fuzzy
-#| msgid "Print certificate information"
 msgid "Updating profile information"
-msgstr "인증서 정보 출력"
+msgstr "프로파일 정보 최신화하기"
 
 #: src/rhsm/connection.py:1663
 msgid "Fetching consumer keys"
-msgstr ""
+msgstr "고객 키 가져오기"
 
 #: src/rhsm/connection.py:1673
 msgid "Fetching consumers"
-msgstr ""
+msgstr "고객 가져오기"
 
 #: src/rhsm/connection.py:1682
-#, fuzzy
-#| msgid "Checking installed software"
 msgid "Checking compliance status"
-msgstr "설치된 소프트웨어 확인 중"
+msgstr "준수 상태 점검 중"
 
 #: src/rhsm/connection.py:1691
 msgid "Checking system purpose compliance status"
-msgstr ""
+msgstr "시스템 목적 준수 상태 점검 중"
 
 #: src/rhsm/connection.py:1698
-#, fuzzy
-#| msgid "Convenient module for managing all system purpose settings"
 msgid "Fetching available system purpose settings"
-msgstr "모든 시스템 목적 설정을 관리 할 수 있는 편리한 모듈"
+msgstr "사용 가능한 시스템 목적 설정 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1705
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Creating organization"
-msgstr "조직을 지정합니다"
+msgstr "조직 생성 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1712 src/rhsm/connection.py:1726
 #: src/rhsm/connection.py:1740
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Fetching organizations"
-msgstr "조직을 지정합니다"
+msgstr "조직 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1719
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Removing organization"
-msgstr "조직을 지정합니다"
+msgstr "조직 제거 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1733
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching organization information"
-msgstr "버전 정보 표시"
+msgstr "조직 정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1754
-#, fuzzy
-#| msgid "Fetching list of possible organizations"
 msgid "Fetching organization hypervisors"
-msgstr "가능한 조직 목록 가져오기"
+msgstr "조직 하이퍼바이저 가져오기"
 
 #: src/rhsm/connection.py:1761
-#, fuzzy
-#| msgid "Unregistering"
 msgid "Unregistering system"
-msgstr "등록 해제 중"
+msgstr "시스템 등록 해제 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1772
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Fetching certificates"
-msgstr "ID 인증서"
+msgstr "인증서 가져오기"
 
 #: src/rhsm/connection.py:1779
 msgid "Fetching certificate serial numbers"
-msgstr ""
+msgstr "인증서 일련 번호 가져오기"
 
 #: src/rhsm/connection.py:1795
 msgid "Fetching content for a certificate"
-msgstr ""
+msgstr "인증서를 위해 내용 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1805 src/rhsm/connection.py:1815
 #: src/rhsm/connection.py:1830 src/rhsm/connection.py:2120
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
-msgstr "서브스크립션 첨부"
+msgstr "서브스크립션 초신화 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1848
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Simulating subscribing"
-msgstr "서브스크립션 첨부"
+msgstr "구독 시뮬레이션"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1852 src/rhsm/connection.py:1856
 #: src/rhsm/connection.py:1860
-#, fuzzy
-#| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
-msgstr "등록 도중 오류 발생: %s"
+msgstr "구독"
 
 #: src/rhsm/connection.py:1917
 msgid "Fetching pools"
-msgstr ""
+msgstr "풀 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1924
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching pool information"
-msgstr "버전 정보 표시"
+msgstr "풀 정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1928
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching product information"
-msgstr "버전 정보 표시"
+msgstr "제품 정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1932
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching release information"
-msgstr "버전 정보 표시"
+msgstr "출시 정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1945
-#, fuzzy
-#| msgid "list available releases"
 msgid "Fetching available releases"
-msgstr "사용 가능한 릴리즈 목록 나열"
+msgstr "사용 가능한 출시정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1954
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
-msgstr "가능한 환경 목록 가져오기"
+msgstr "자격 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1962
-#, fuzzy
-#| msgid "Using service level:"
 msgid "Fetching service levels"
-msgstr "서비스 레벨 사용:"
+msgstr "서비스 수준 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1973
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
-msgstr "가능한 환경 목록 가져오기"
+msgstr "환경 목록 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1991
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching environment information"
-msgstr "버전 정보 표시"
+msgstr "환경 정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1998
-#, fuzzy
-#| msgid "Print certificate information"
 msgid "Fetching entitlement information"
-msgstr "인증서 정보 출력"
+msgstr "자격 정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2002 src/rhsm/connection.py:2046
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Updating certificate"
-msgstr "ID 인증서"
+msgstr "인증서 최신화 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2017
-#, fuzzy
-#| msgid "Import Certificates"
 msgid "Updating certificates"
-msgstr "인증서 불러오기"
+msgstr "인증서 최신화 중"
 
 #: src/rhsm/connection.py:2061
-#, fuzzy
-#| msgid "Checking installed software"
 msgid "Checking server status"
-msgstr "설치된 소프트웨어 확인 중"
+msgstr "서버 상태 확인 중"
 
 #: src/rhsm/connection.py:2068
 msgid "Fetching content overrides"
-msgstr ""
+msgstr "내용 재정의 가져오기"
 
 #: src/rhsm/connection.py:2075
-#, fuzzy
-#| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
-msgstr "레포지터리 덮어쓰기 업데이트 중"
+msgstr "내용 재정의 최신화 중"
 
 #: src/rhsm/connection.py:2084
-#, fuzzy
-#| msgid "Removing Repository Overrides"
 msgid "Removing content overrides"
-msgstr "레포지터리 덮어쓰기 삭제 중"
+msgstr "내용 재정의 제거 중"
 
 #: src/rhsm/connection.py:2099
-#, fuzzy
-#| msgid "Activation Key"
 msgid "Activating"
-msgstr "활성키"
+msgstr "활성화"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2106
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Fetching subscriptions"
-msgstr "서브스크립션 첨부"
+msgstr "서브스크립션 가져오기"
 
 #: src/rhsm/connection.py:2129
 msgid "Fetching job"
-msgstr ""
+msgstr "작업 가져오기"
 
 #: src/rhsm/connection.py:2138
-#, fuzzy
-#| msgid "Updating status ..."
 msgid "Updating job status"
-msgstr "상태 업데이트 중 ..."
+msgstr "작업 상태 최신화 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2146
-#, fuzzy
-#| msgid "Cancel"
 msgid "Cancelling job"
-msgstr "취소"
+msgstr "작업 취소 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:39
@@ -2064,7 +1988,7 @@ msgstr "HTTP 프락시를 사용하지 않는 호스트 접미사"
 
 #: src/subscription_manager/cli_command/cli.py:197
 msgid "Do not display progress messages"
-msgstr ""
+msgstr "진행 중인 메시지를 표시하지 않습니다"
 
 #: src/subscription_manager/cli_command/cli.py:209
 msgid ""
@@ -3101,7 +3025,7 @@ msgstr "인증서 다시 만들기를 강제합니다"
 #: src/subscription_manager/cli_command/refresh.py:48
 #, python-brace-format
 msgid "Unable to perform refresh due to the following exception: {e}"
-msgstr "다음과 같은 예외 사항이 발생하면 새로 고침을 실행할 수 없습니다: {e}"
+msgstr "다음과 같은 예외 사항이 발생하면 새로 고침을 실행 할 수 없습니다: {e}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:51
