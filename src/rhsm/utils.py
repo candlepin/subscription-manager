@@ -12,12 +12,13 @@
 # in this software or its documentation.
 #
 
+import functools
 import os
 import re
 import sys
 import time
 import threading
-from typing import Optional, List
+from typing import Callable, List, Optional
 
 import urllib.parse
 
@@ -295,6 +296,123 @@ def suppress_output(func):
             devnull.close()
 
     return wrapper
+
+
+def singleton(cls: type) -> type:
+    """Decorate a class to make it singleton.
+
+    This decorator is inherited: subclasses will be singletons as well,
+    but they won't be the same singleton as their parent.
+    """
+
+    __orig_new__: Callable = cls.__new__
+    cls._instance = None
+
+    def __new__(kls, *args, **kwargs):
+        if not isinstance(kls._instance, kls):
+            if __orig_new__ is object.__new__:
+                # Default __new__ only takes the class as an argument
+                kls._instance = __orig_new__(kls)
+            else:
+                kls._instance = __orig_new__(kls, *args, **kwargs)
+        return kls._instance
+
+    cls.__new__ = __new__
+    return cls
+
+
+def call_once(fn: Callable) -> Callable:
+    """Decorate a function to make it callable just once.
+
+    All further calls do not do anything and return None.
+    """
+    fn._call_once_lock = threading.RLock()
+    fn._called = False
+
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        locked: bool = fn._call_once_lock.acquire(blocking=True, timeout=1.0)
+        if not locked:
+            raise RuntimeError(f"Could not acquire call_once lock for function {fn.__name__}.")
+
+        try:
+            if fn._called:
+                return None
+            # We want to allow running the function once even if it raises exception.
+            fn._called = True
+            fn_result = fn(*args, **kwargs)
+            return fn_result
+        finally:
+            fn._call_once_lock.release()
+
+    def _reset():
+        """Reset function state to allow another call to it.
+
+        This is used for testing purposes, there is no need to call this in
+        production code itself.
+        """
+        locked: bool = fn._call_once_lock.acquire(blocking=True, timeout=1.0)
+        if not locked:
+            raise RuntimeError(f"Could not acquire call_once lock for function {fn.__name__}.")
+
+        try:
+            fn._called = False
+        finally:
+            fn._call_once_lock.release()
+
+    wrapper._reset = _reset
+
+    return wrapper
+
+
+def lock(cls: type) -> type:
+    """Decorate a class to make it thread-safe lock.
+
+    It will provide read-only 'locked' attribute, functions lock() and unlock()
+    and __enter__/__exit__ methods for context manager functionality.
+    """
+
+    cls._lock = threading.RLock()
+    """Actual lock providing locking functionality."""
+    cls._locked = False
+    """Even though _lock._is_owned() would work better,
+    it is not part of public API, and it should not be used in production.
+    """
+
+    cls.locked = property(fget=lambda self: self._locked)
+
+    def lock(self) -> None:
+        """Lock using RLock.
+
+        One thread can acquire the lock multiple times, but other threads cannot
+        until the lock is completely unlocked.
+        """
+        self._lock.acquire()
+        self._locked = True
+
+    def unlock(self) -> None:
+        """Unlock the lock."""
+        try:
+            self._lock.release()
+        except RuntimeError:
+            # This exception is raised when the lock was not acquired
+            pass
+        finally:
+            self._locked = False
+
+    def __enter__(self) -> cls:
+        self.lock()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        self.unlock()
+
+    cls.lock = lock
+    cls.unlock = unlock
+    cls.__enter__ = __enter__
+    cls.__exit__ = __exit__
+
+    return cls
 
 
 class StatusMessage:
