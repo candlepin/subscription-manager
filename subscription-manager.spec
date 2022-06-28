@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.30
+Version: 1.28.31
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1483,6 +1483,33 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Jun 28 2022 Christopher Snyder <csnyder@redhat.com> 1.28.31-1
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Update translation files (noreply@weblate.org)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- 2043331: Do not delete installed SCA cert during registration
+  (jhnidek@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- build: fix extraction of cockpit messages (ptoscano@redhat.com)
+- cockpit: Fix continuation lines for gettext strings (ptoscano@redhat.com)
+- 1822242: cockpit: fix/simplify the loading/error view checks
+  (ptoscano@redhat.com)
+- 2076522: enable sslverifystatus on repos if advertized by CP
+  (ptoscano@redhat.com)
+- RepoUpdateActionCommand: lazy load the consumer auth (ptoscano@redhat.com)
+- 2071622: Updated redhat-uep.pem to not use SHA-1 algorithm
+  (jhnidek@redhat.com)
+- cockpit: insights: properly show error message in Insights dialog
+  (ptoscano@redhat.com)
+- cockpit: insights: fix formatting of multiline insights-client output
+  (ptoscano@redhat.com)
+- cockpit: insights: improve handling of registration/unregistration errors
+  (ptoscano@redhat.com)
+- cockpit: insights: merge insights-client stderr with stdout
+  (ptoscano@redhat.com)
+- cockpit: Remove extra toString() call (ptoscano@redhat.com)
+
 * Mon May 16 2022 Christopher Snyder <csnyder@redhat.com> 1.28.30-1
 - Add 8.7 tito releaser (csnyder@redhat.com)
 - spec: relax subscription-manager-rhsm-certificates requires
