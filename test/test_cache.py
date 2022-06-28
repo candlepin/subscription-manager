@@ -207,8 +207,10 @@ class TestCurrentOwnerCache(unittest.TestCase):
         self.assertEqual(owner, {"key": "foo_owner"})
 
 
-class TestProfileManager(unittest.TestCase):
+class TestProfileManager(SubManFixture):
     def setUp(self):
+        super().setUp()
+
         current_pkgs = [
             Package(name="package1", version="1.0.0", release=1, arch="x86_64"),
             Package(name="package2", version="2.0.0", release=2, arch="x86_64"),
