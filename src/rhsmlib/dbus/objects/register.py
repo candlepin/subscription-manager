@@ -221,6 +221,13 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             log.debug("Auto-attaching due to enable_content option")
             attach_service = AttachService(cp)
             enabled_content = attach_service.attach_auto()
+            if len(enabled_content) > 0:
+                log.debug("Updating entitlement certificates")
+                # FIXME: The enabled_content contains all data necessary for generating entitlement
+                # certificate and private key. Thus we could save few REST API calls, when the data was used.
+                EntCertActionInvoker().update()
+            else:
+                log.debug("Skipping updating entitlement certificates, because no content was enabled")
         elif content_access_mode == "org_environment":
             log.debug("Refreshing due to enabled_content option and simple content access mode")
             entitlement_service = EntitlementService(cp)
