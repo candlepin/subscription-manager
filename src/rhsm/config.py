@@ -99,13 +99,28 @@ DEFAULTS = {
 }
 
 
+def _strtobool(val):
+    """Convert a string representation of truth to true (1) or false (0).
+    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
+    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
+    'val' is anything else.
+    """
+    val = val.lower()
+    if val in ('y', 'yes', 't', 'true', 'on', '1'):
+        return True
+    elif val in ('n', 'no', 'f', 'false', 'off', '0'):
+        return False
+    else:
+        raise ValueError("invalid truth value %r" % (val,))
+
+
 def in_container():
     """
     Are we running in a docker container or not?
     """
     # For development in containers we must be able to turn container detection
     # off
-    if os.environ.get("SMDEV_CONTAINER_OFF", False):
+    if _strtobool(os.getenv("SMDEV_CONTAINER_OFF", "False")):
         return False
     # Known locations to check for as an easy way to detect whether
     # we are running in a container
