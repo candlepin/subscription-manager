@@ -24,6 +24,7 @@ import tempfile
 import os
 from iniparse import ConfigParser
 
+import rhsm.connection
 from subscription_manager import repofile
 # repofile must be patched and reloaded to import AptRepofile, otherwise
 # the class is not defined in the first place
@@ -699,6 +700,30 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
         c1 = self._find_content(content, "c1")
         self.assertEqual("1", c1["sslverifystatus"])
+
+    @patch.object(RepoUpdateActionCommand, "get_consumer_auth_cp")
+    def test_with_ssl_verify_ConnectionException(self, mock_get_consumer_auth_cp):
+        """Test that network exception is handled and does not use SSL verification."""
+        mock_cp = Mock()
+        mock_cp.has_capability = Mock(side_effect=rhsm.connection.ConnectionException)
+        mock_get_consumer_auth_cp.return_value = mock_cp
+
+        update_action = RepoUpdateActionCommand()
+        content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
+        c1 = self._find_content(content, "c1")
+        self.assertIsNone(c1["sslverifystatus"])
+
+    @patch.object(RepoUpdateActionCommand, "get_consumer_auth_cp")
+    def test_with_ssl_verify_ProxyException(self, mock_get_consumer_auth_cp):
+        """Test that proxy exception is handled and does not use SSL verification."""
+        mock_cp = Mock()
+        mock_cp.has_capability = Mock(side_effect=rhsm.connection.ProxyException)
+        mock_get_consumer_auth_cp.return_value = mock_cp
+
+        update_action = RepoUpdateActionCommand()
+        content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
+        c1 = self._find_content(content, "c1")
+        self.assertIsNone(c1["sslverifystatus"])
 
 
 class TidyWriterTests(unittest.TestCase):
