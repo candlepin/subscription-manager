@@ -17,9 +17,6 @@
 from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
-import socket
-
-from rhsm.connection import ConnectionException, ProxyException
 
 import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
@@ -30,7 +27,6 @@ from subscription_manager.repofile import YumRepoFile
 from subscription_manager.utils import get_supported_resources
 
 from rhsm.config import get_config_parser, in_container
-from rhsm import connection
 import configparser
 from rhsmlib.facts.hwprobe import HardwareCollector
 
@@ -368,10 +364,11 @@ class RepoUpdateActionCommand(object):
             self.override_supported = "content_overrides" in get_supported_resources(
                 uep=None, identity=self.identity
             )
-        except (socket.error, connection.ConnectionException) as e:
-            # swallow the error to fix bz 1298327
-            log.exception(e)
-            pass
+        except Exception as exc:
+            # Multiple errors can occur here: socket.error (mainly rhsmcertd),
+            # Connection-, Proxy-, TokenAuthException, ...
+            # This except fixes BZ 1298327.
+            log.error(f"{type(exc).__name__}: {exc}")
 
         self.written_overrides = WrittenOverrideCache()
 
@@ -521,10 +518,11 @@ class RepoUpdateActionCommand(object):
         # query whether OCSP stapling is advertized by CP for the repositories
         try:
             has_ssl_verify_status = self.get_consumer_auth_cp().has_capability("ssl_verify_status")
-        except (ConnectionException, ProxyException) as exc:
-            # Ensure we can update the repositories even if we are not able to
-            # connect to the server. Fixes ENT-5215.
-            log.exception(exc)
+        except Exception as exc:
+            # Multiple errors can occur here: socket.error (mainly rhsmcertd),
+            # Connection-, Proxy-, TokenAuthException, ...
+            # This except fixes ENT-5215.
+            log.error(f"{type(exc).__name__}: {exc}")
             has_ssl_verify_status = False
 
         for content in matching_content:
