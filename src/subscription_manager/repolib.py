@@ -18,6 +18,9 @@ from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
 import socket
+
+from rhsm.connection import ConnectionException, ProxyException
+
 import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import model
@@ -516,7 +519,13 @@ class RepoUpdateActionCommand(object):
         release_source = YumReleaseverSource()
 
         # query whether OCSP stapling is advertized by CP for the repositories
-        has_ssl_verify_status = self.get_consumer_auth_cp().has_capability("ssl_verify_status")
+        try:
+            has_ssl_verify_status = self.get_consumer_auth_cp().has_capability("ssl_verify_status")
+        except (ConnectionException, ProxyException) as exc:
+            # Ensure we can update the repositories even if we are not able to
+            # connect to the server. Fixes ENT-5215.
+            log.exception(exc)
+            has_ssl_verify_status = False
 
         for content in matching_content:
             repo = Repo.from_ent_cert_content(content, baseurl, ca_cert, release_source)
