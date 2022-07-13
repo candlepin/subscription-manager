@@ -38,6 +38,7 @@ from subscription_manager.repolib import RepoActionInvoker, \
         RepoUpdateActionCommand, YumReleaseverSource, YumPluginManager
 from subscription_manager.repofile import Repo, TidyWriter, YumRepoFile
 from subscription_manager import injection as inj
+import rhsm.connection
 from rhsm.config import RhsmConfigParser
 from rhsmlib.services import config
 
@@ -696,6 +697,30 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
         c1 = self._find_content(content, "c1")
         self.assertEqual("1", c1["sslverifystatus"])
+
+    @patch.object(RepoUpdateActionCommand, "get_consumer_auth_cp")
+    def test_with_ssl_verify_ConnectionException(self, mock_get_consumer_auth_cp):
+        """Test that network exception is handled and does not use SSL verification."""
+        mock_cp = Mock()
+        mock_cp.has_capability = Mock(side_effect=rhsm.connection.ConnectionException)
+        mock_get_consumer_auth_cp.return_value = mock_cp
+
+        update_action = RepoUpdateActionCommand()
+        content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
+        c1 = self._find_content(content, "c1")
+        self.assertIsNone(c1["sslverifystatus"])
+
+    @patch.object(RepoUpdateActionCommand, "get_consumer_auth_cp")
+    def test_with_ssl_verify_ProxyException(self, mock_get_consumer_auth_cp):
+        """Test that proxy exception is handled and does not use SSL verification."""
+        mock_cp = Mock()
+        mock_cp.has_capability = Mock(side_effect=rhsm.connection.ProxyException)
+        mock_get_consumer_auth_cp.return_value = mock_cp
+
+        update_action = RepoUpdateActionCommand()
+        content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
+        c1 = self._find_content(content, "c1")
+        self.assertIsNone(c1["sslverifystatus"])
 
 
 class TidyWriterTests(unittest.TestCase):
