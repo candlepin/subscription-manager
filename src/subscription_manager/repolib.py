@@ -17,7 +17,7 @@
 from iniparse import RawConfigParser as ConfigParser
 import logging
 import os
-import socket
+
 import subscription_manager.injection as inj
 from subscription_manager.cache import OverrideStatusCache, WrittenOverrideCache
 from subscription_manager import model
@@ -27,7 +27,6 @@ from subscription_manager.repofile import YumRepoFile
 from subscription_manager.utils import get_supported_resources
 
 from rhsm.config import get_config_parser, in_container
-from rhsm import connection
 import configparser
 
 # FIXME: local imports
@@ -349,11 +348,14 @@ class RepoUpdateActionCommand(object):
         self.override_supported = False
 
         try:
-            self.override_supported = 'content_overrides' in get_supported_resources(uep=None, identity=self.identity)
-        except (socket.error, connection.ConnectionException) as e:
-            # swallow the error to fix bz 1298327
-            log.exception(e)
-            pass
+            self.override_supported = "content_overrides" in get_supported_resources(
+                uep=None, identity=self.identity
+            )
+        except Exception as exc:
+            # Multiple errors can occur here: socket.error (mainly rhsmcertd),
+            # Connection-, Proxy-, TokenAuthException, ...
+            # This except fixes BZ 1298327.
+            log.error(f"{type(exc).__name__}: {exc}")
 
         self.written_overrides = WrittenOverrideCache()
 
@@ -503,7 +505,14 @@ class RepoUpdateActionCommand(object):
         release_source = YumReleaseverSource()
 
         # query whether OCSP stapling is advertized by CP for the repositories
-        has_ssl_verify_status = self.get_consumer_auth_cp().has_capability("ssl_verify_status")
+        try:
+            has_ssl_verify_status = self.get_consumer_auth_cp().has_capability("ssl_verify_status")
+        except Exception as exc:
+            # Multiple errors can occur here: socket.error (mainly rhsmcertd),
+            # Connection-, Proxy-, TokenAuthException, ...
+            # This except fixes ENT-5215.
+            log.error(f"{type(exc).__name__}: {exc}")
+            has_ssl_verify_status = False
 
         for content in matching_content:
             repo = Repo.from_ent_cert_content(content, baseurl, ca_cert,
