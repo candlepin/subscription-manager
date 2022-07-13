@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.28
+Version: 1.29.29
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -739,6 +739,36 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Jul 13 2022 Pino Toscano <ptoscano@redhat.com> 1.29.29-1
+- Translated using Weblate (Japanese) (suanand@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Update translation files (noreply@weblate.org)
+- ENT-5215: Handle all exceptions caused by network problems
+  (mhorky@redhat.com)
+- ENT-5215: Handle errors raised in DNF plugin (mhorky@redhat.com)
+- Make TestProfileManager subclass of SubManFixture (mhorky@redhat.com)
+- ENT-5054: Drop singleton implementation in rhsmlib/utils.py
+  (mhorky@redhat.com)
+- Rename test file for rhsm/utils.py (mhorky@redhat.com)
+- ENT-5054: Create singleton decorators in rhsm/utils.py (mhorky@redhat.com)
+- zypper: drop dead python-dmidecode usage (ptoscano@redhat.com)
+- facts: drop DmiFirmwareInfoCollector (ptoscano@redhat.com)
+- facts: switch to DmidecodeFactCollector for DMI facts (ptoscano@redhat.com)
+- facts: add dmidecode parser and facts collector (ptoscano@redhat.com)
+- cloud-what: switch MiniHostCollector to dmidecode(1) (ptoscano@redhat.com)
+- 2096446: Make 'rhsm-debug' autocomplete --no-progress-messages
+  (mhorky@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- 2092014: Do not use injections in rhsm (mhorky@redhat.com)
+- ci: run rpmlint as part of stylish (ptoscano@redhat.com)
+- build: switch rpmlint check to rpmlint 2.x (ptoscano@redhat.com)
+- ci: drop stylish job from Jenkins (ptoscano@redhat.com)
+- ci: add black & flake8 check using GitHub Actions (ptoscano@redhat.com)
+- build: install files without exec permissions (ptoscano@redhat.com)
+- 2092014: Disable progress messages when sub-man RPM is not installed
+  (mhorky@redhat.com)
+
 * Thu Jun 02 2022 Christopher Snyder <csnyder@redhat.com> 1.29.28-1
 - Make keeping connection more reliable (jhnidek@redhat.com)
 - Small improvements of keep alive (jhnidek@redhat.com)
