@@ -32,6 +32,7 @@ from subscription_manager.utils import get_supported_resources
 
 from rhsm.config import get_config_parser, in_container
 from rhsm import connection
+from rhsm.connection import ConnectionException, ProxyException
 import six
 from six.moves import configparser
 
@@ -507,7 +508,13 @@ class RepoUpdateActionCommand(object):
         release_source = YumReleaseverSource()
 
         # query whether OCSP stapling is advertized by CP for the repositories
-        has_ssl_verify_status = self.get_consumer_auth_cp().has_capability("ssl_verify_status")
+        try:
+            has_ssl_verify_status = self.get_consumer_auth_cp().has_capability("ssl_verify_status")
+        except (ConnectionException, ProxyException) as exc:
+            # Ensure we can update the repositories even if we are not able to
+            # connect to the server. Fixes ENT-5215.
+            log.exception(exc)
+            has_ssl_verify_status = False
 
         for content in matching_content:
             repo = Repo.from_ent_cert_content(content, baseurl, ca_cert,
