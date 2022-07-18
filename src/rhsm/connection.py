@@ -2143,7 +2143,7 @@ class UEPConnection(BaseConnection):
         Given a job id representing a candlepin JobStatus, cancel it.
         """
         method = "/jobs/%s" % (job_id)
-        results = self.conn.request_delete(method, description=_("Cancelling job"))
+        results = self.conn.request_delete(method, description=_("Canceling job"))
         return results
 
     def sanitize(self, url_param, plus=False):
