@@ -107,8 +107,8 @@
 %global use_rhsm_icons 0%{use_cockpit}
 
 Name: subscription-manager
-Version: 1.29.26
-Release: 3%{?dist}
+Version: 1.29.26.1
+Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
 Group:   Productivity/Networking/System
@@ -862,6 +862,21 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Mon Jul 18 2022 Christopher Snyder <csnyder@redhat.com> 1.29.26.1-1
+- ENT-5215: Handle all exceptions caused by network problems
+  (mhorky@redhat.com)
+- ENT-5215: Handle errors raised in DNF plugin (mhorky@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- zypper: drop dead python-dmidecode usage (ptoscano@redhat.com)
+- facts: drop DmiFirmwareInfoCollector (ptoscano@redhat.com)
+- facts: switch to DmidecodeFactCollector for DMI facts (ptoscano@redhat.com)
+- facts: add dmidecode parser and facts collector (ptoscano@redhat.com)
+- cloud-what: switch MiniHostCollector to dmidecode(1) (ptoscano@redhat.com)
+- 2095301: enable sslverifystatus on repos if advertized by CP
+  (ptoscano@redhat.com)
+- RepoUpdateActionCommand: lazy load the consumer auth (ptoscano@redhat.com)
+
 * Wed Apr 13 2022 Christopher Snyder <csnyder@redhat.com> 1.29.26-3
 - refresh: clear also the release status (ptoscano@redhat.com)
 - 2073551: clear the release cache on release change (ptoscano@redhat.com)
