@@ -15,7 +15,7 @@
 %global use_container_plugin 1
 %endif
 
-%global dmidecode_arches %{ix86} x86_64
+%global dmidecode_arches %{ix86} x86_64 aarch64
 
 # We use the tmpfiles_create macro from systemd-rpm-macros rpm.
 # Because of an incorrect version labelling of that rpm in SLES 12 which

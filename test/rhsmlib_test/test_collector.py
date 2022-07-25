@@ -20,10 +20,9 @@ except ImportError:
 
 import platform
 import mock
-from test.fixture import open_mock, OPEN_FUNCTION
+from test.fixture import open_mock
 
 from rhsmlib.facts import collector, firmware_info
-from rhsmlib.facts.firmware_info import UuidFirmwareInfoCollector
 
 
 class GetArchTest(unittest.TestCase):
@@ -44,23 +43,3 @@ class GetArchTest(unittest.TestCase):
     def test_get_platform_specific_info_provider(self):
         info_provider = firmware_info.get_firmware_collector(arch=platform.machine())
         self.assertTrue(info_provider is not None)
-
-
-class GetNonDmiUuid(unittest.TestCase):
-    def test_get_aarch64_firmware_collector(self):
-        firmware_provider_class = firmware_info.get_firmware_collector(arch='aarch64')
-        self.assertTrue(isinstance(firmware_provider_class, UuidFirmwareInfoCollector))
-
-    @mock.patch(OPEN_FUNCTION, mock.mock_open(read_data="356B6CCC-30C4-11B2-A85C-BBB0CCD29F36"))
-    def test_get_aarch64_uuid_collection(self):
-        firmware_provider_class = firmware_info.get_firmware_collector(arch='aarch64')
-        firmware_provider_class.arch = 'aarch64'
-        result = firmware_provider_class.get_all()
-        self.assertTrue(result['dmi.system.uuid'] == '356B6CCC-30C4-11B2-A85C-BBB0CCD29F36')
-
-    @mock.patch(OPEN_FUNCTION, mock.MagicMock(side_effect=IOError()))
-    def test_get_aarch64_uuid_collection_no_file(self):
-        firmware_provider_class = firmware_info.get_firmware_collector(arch='aarch64')
-        firmware_provider_class.arch = 'aarch64'
-        result = firmware_provider_class.get_all()
-        self.assertTrue('dmi.system.uuid' not in result)
