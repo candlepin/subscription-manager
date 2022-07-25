@@ -165,6 +165,10 @@ password=foobar
         m.execute("systemctl start cockpit")
         m.spawn("/var/tmp/mock-insights", "mock-insights")
 
+        # HACK: older c-ws versions always log an assertion; https://github.com/cockpit-project/cockpit/pull/16765
+        if m.image == "rhel-8-5":
+            self.allow_journal_messages("json_object_get_string_member: assertion 'node != NULL' failed")
+
     def wait_subscription(self, product, is_subscribed):
         b = self.browser
         product_selector = ".list-group-item-heading:contains('%s')" % product["name"]
@@ -324,7 +328,7 @@ class TestSubscriptions(SubscriptionsCase):
         self.machine.execute("useradd junior; echo junior:foobar | chpasswd")
         self.login_and_go("/subscriptions", user="junior")
         self.browser.wait_in_text(".curtains-ct h1", "current user isn't allowed to access system subscription")
-        self.allow_authorize_journal_messages()
+        self.allow_journal_messages("junior is not in the sudoers file.  This incident will be reported.")
 
     def testInsights(self):
         m = self.machine
