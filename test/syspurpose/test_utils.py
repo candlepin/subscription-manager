@@ -28,6 +28,7 @@ class UtilsTests(unittest.TestCase):
     def tearDown(self):
         utils.HOST_CONFIG_DIR = "/etc/rhsm-host/"
 
+    @unittest.skipIf(os.getuid() == 0, "Test cannot be run under root.")
     def test_create_dir(self):
         """
         Verify that the create_dir utility method creates directories as we expect.
