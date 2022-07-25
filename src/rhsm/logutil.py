@@ -68,7 +68,7 @@ class SubmanDebugLoggingFilter(object):
 
     def __init__(self, name):
         self.name = name
-        self.on = "SUBMAN_DEBUG" in os.environ
+        self.on = os.environ.get("SUBMAN_DEBUG", "") != ""
 
     def filter(self, record):
         return self.on

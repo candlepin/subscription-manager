@@ -446,7 +446,7 @@ class StatusMessage:
             self.quiet = True
         if not sys.stdout.isatty():
             self.quiet = True
-        if "SUBMAN_DEBUG_PRINT_REQUEST" in os.environ:
+        if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST", ""):
             self.quiet = True
 
     def print(self):

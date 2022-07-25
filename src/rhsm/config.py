@@ -105,7 +105,7 @@ def in_container():
     """
     # For development in containers we must be able to turn container detection
     # off
-    if os.environ.get("SMDEV_CONTAINER_OFF", False):
+    if os.environ.get("SMDEV_CONTAINER_OFF", ""):
         return False
     # Known locations to check for as an easy way to detect whether
     # we are running in a container

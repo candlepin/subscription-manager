@@ -133,7 +133,7 @@ class BaseCloudProvider(object):
 
         # HTTP Session
         self._session = requests.Session()
-        if "SUBMAN_DEBUG_PRINT_RESPONSE" in os.environ:
+        if os.environ.get("SUBMAN_DEBUG_PRINT_RESPONSE", ""):
             self._session.hooks["response"].append(self._cb_debug_print_http_response)
 
         # In-memory cache of token. The token is simple string
@@ -351,10 +351,10 @@ class BaseCloudProvider(object):
         end_col = "\033[0m"
         msg = blue_col + "Making request: " + end_col
         msg += red_col + request.method + " " + request.url + end_col
-        if "SUBMAN_DEBUG_PRINT_REQUEST_HEADER" in os.environ:
+        if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_HEADER", ""):
             headers = ", ".join("{}: {}".format(k, v) for k, v in request.headers.items())
             msg += blue_col + " {{{headers}}}".format(headers=headers) + end_col
-        if "SUBMAN_DEBUG_PRINT_REQUEST_BODY" in os.environ and request.body is not None:
+        if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_BODY", "") and request.body is not None:
             msg += yellow_col + f" {request.body}" + end_col
         print()
         print(msg)
@@ -396,7 +396,7 @@ class BaseCloudProvider(object):
         http_req = requests.Request(method="GET", url=url, headers=headers)
         prepared_http_req = self._session.prepare_request(http_req)
 
-        if "SUBMAN_DEBUG_PRINT_REQUEST" in os.environ:
+        if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST", ""):
             self._debug_print_http_request(prepared_http_req)
 
         try:

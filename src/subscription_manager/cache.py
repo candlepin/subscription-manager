@@ -441,9 +441,7 @@ class ProfileManager(CacheManager):
         # If profile reporting is disabled from the environment, that overrides the setting in the conf file
         # If the environment variable is 0, defer to the setting in the conf file; likewise if the environment
         # variable is completely unset.
-        if "SUBMAN_DISABLE_PROFILE_REPORTING" in os.environ and os.environ[
-            "SUBMAN_DISABLE_PROFILE_REPORTING"
-        ].lower() in ["true", "1", "yes", "on"]:
+        if os.environ.get("SUBMAN_DISABLE_PROFILE_REPORTING", "").lower() in ["true", "1", "yes", "on"]:
             return False
         return conf["rhsm"].get_int("report_package_profile") == 1
 
