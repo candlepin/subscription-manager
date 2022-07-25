@@ -165,6 +165,10 @@ password=foobar
         m.execute("systemctl start cockpit")
         m.spawn("/var/tmp/mock-insights", "mock-insights")
 
+        # HACK: older c-ws versions always log an assertion; https://github.com/cockpit-project/cockpit/pull/16765
+        if m.image == "rhel-8-5":
+            self.allow_journal_messages("json_object_get_string_member: assertion 'node != NULL' failed")
+
     def wait_subscription(self, product, is_subscribed):
         b = self.browser
         product_selector = ".list-group-item-heading:contains('%s')" % product["name"]
