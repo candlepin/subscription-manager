@@ -298,6 +298,21 @@ def suppress_output(func):
     return wrapper
 
 
+def parse_bool(string: str) -> bool:
+    """Parse a string into True or False.
+
+    Recognized boolean pairs are 1/0, true/false, yes/no, on/off, case insensitive.
+
+    :raises: ValueError if the string is not recognized.
+    """
+    string = string.lower()
+    if string in ("1", "true", "yes", "on"):
+        return True
+    if string in ("0", "false", "no", "off"):
+        return False
+    raise ValueError(f"Value {string} is not recognized boolean value.")
+
+
 def singleton(cls: type) -> type:
     """Decorate a class to make it singleton.
 
@@ -446,7 +461,7 @@ class StatusMessage:
             self.quiet = True
         if not sys.stdout.isatty():
             self.quiet = True
-        if "SUBMAN_DEBUG_PRINT_REQUEST" in os.environ:
+        if parse_bool(os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST", "0")):
             self.quiet = True
 
     def print(self):

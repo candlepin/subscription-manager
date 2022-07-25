@@ -16,6 +16,7 @@ import logging.config
 import os
 import sys
 import rhsm.config
+from rhsm.utils import parse_bool
 
 LOGFILE_DIR = "/var/log/rhsm/"
 LOGFILE_PATH = os.path.join(LOGFILE_DIR, "rhsm.log")
@@ -68,7 +69,7 @@ class SubmanDebugLoggingFilter(object):
 
     def __init__(self, name):
         self.name = name
-        self.on = "SUBMAN_DEBUG" in os.environ
+        self.on: bool = parse_bool(os.environ.get("SUBMAN_DEBUG", "0"))
 
     def filter(self, record):
         return self.on

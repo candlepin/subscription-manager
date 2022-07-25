@@ -14,6 +14,7 @@ from rhsm.utils import (
     has_bad_scheme,
     has_good_scheme,
     parse_url,
+    parse_bool,
     cmd_name,
     singleton,
     call_once,
@@ -395,6 +396,38 @@ class TestCmdName(unittest.TestCase):
     def test_virt_who(self):
         argv = ["/usr/share/virt-who/virtwho.py"]
         self.assertEqual("virtwho.py", cmd_name(argv))
+
+
+class TestParseBool(unittest.TestCase):
+    def test_true(self):
+        self.assertTrue(parse_bool("1"))
+        self.assertTrue(parse_bool("true"))
+        self.assertTrue(parse_bool("True"))
+        self.assertTrue(parse_bool("TRUE"))
+        self.assertTrue(parse_bool("yes"))
+        self.assertTrue(parse_bool("Yes"))
+        self.assertTrue(parse_bool("YES"))
+        self.assertTrue(parse_bool("on"))
+        self.assertTrue(parse_bool("On"))
+        self.assertTrue(parse_bool("ON"))
+
+    def test_false(self):
+        self.assertFalse(parse_bool("0"))
+        self.assertFalse(parse_bool("false"))
+        self.assertFalse(parse_bool("False"))
+        self.assertFalse(parse_bool("FALSE"))
+        self.assertFalse(parse_bool("no"))
+        self.assertFalse(parse_bool("No"))
+        self.assertFalse(parse_bool("NO"))
+        self.assertFalse(parse_bool("off"))
+        self.assertFalse(parse_bool("Off"))
+        self.assertFalse(parse_bool("OFF"))
+
+    def test_exception(self):
+        self.assertRaises(ValueError, parse_bool, "foo")
+        # These values could also be read as boolean, but we do not support them
+        self.assertRaises(ValueError, parse_bool, "enabled")
+        self.assertRaises(ValueError, parse_bool, "disabled")
 
 
 class TestSingletonize(unittest.TestCase):

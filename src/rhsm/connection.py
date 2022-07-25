@@ -772,7 +772,7 @@ class BaseRestLib(object):
         :return: None
         """
 
-        if "SUBMAN_DEBUG_PRINT_REQUEST" in os.environ:
+        if utils.parse_bool(os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST", "0")):
             yellow_col = "\033[93m"
             blue_col = "\033[94m"
             green_col = "\033[92m"
@@ -793,7 +793,7 @@ class BaseRestLib(object):
                 auth = "undefined auth"
 
             if (
-                "SUBMAN_DEBUG_TCP_IP" in os.environ
+                utils.parse_bool(os.environ.get("SUBMAN_DEBUG_TCP_IP", "0"))
                 and self.__conn is not None
                 and self.__conn.sock is not None
             ):
@@ -812,14 +812,14 @@ class BaseRestLib(object):
                     + f"{self.proxy_hostname}:{self.proxy_port}"
                     + end_col
                 )
-            if "SUBMAN_DEBUG_PRINT_REQUEST_HEADER" in os.environ:
+            if utils.parse_bool(os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_HEADER", "0")):
                 msg += blue_col + " %s" % final_headers + end_col
-            if "SUBMAN_DEBUG_PRINT_REQUEST_BODY" in os.environ and body is not None:
+            if utils.parse_bool(os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_BODY", "0")) and body is not None:
                 msg += yellow_col + " %s" % body + end_col
             print()
             print(msg)
             print()
-            if "SUBMAN_DEBUG_SAVE_TRACEBACKS" in os.environ:
+            if utils.parse_bool(os.environ.get("SUBMAN_DEBUG_SAVE_TRACEBACKS", "0")):
                 debug_dir = Path("/tmp/rhsm/")
                 debug_dir.mkdir(exist_ok=True)
 
@@ -849,7 +849,7 @@ class BaseRestLib(object):
         :return: None
         """
 
-        if "SUBMAN_DEBUG_PRINT_RESPONSE" in os.environ:
+        if utils.parse_bool(os.environ.get("SUBMAN_DEBUG_PRINT_RESPONSE", "0")):
             print("%s %s" % (result["status"], result["headers"]))
             print(result["content"])
             print()

@@ -25,7 +25,7 @@ import os
 from typing import Union, Any
 
 from cloud_what._base_provider import BaseCloudProvider
-
+from rhsm.utils import parse_bool
 
 log = logging.getLogger(__name__)
 
@@ -195,7 +195,7 @@ class AWSCloudProvider(BaseCloudProvider):
 
         http_req = requests.Request(method="PUT", url=self.CLOUD_PROVIDER_TOKEN_URL, headers=headers)
         prepared_http_req = self._session.prepare_request(http_req)
-        if "SUBMAN_DEBUG_PRINT_REQUEST" in os.environ:
+        if parse_bool(os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST", "0")):
             self._debug_print_http_request(prepared_http_req)
 
         try:
