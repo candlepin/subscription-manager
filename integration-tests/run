@@ -28,7 +28,7 @@ SMBEXT_TAR=$(CURDIR)/dist/subscription-manager-build-extra.tar.gz
 TEST_NODE_MODULES = node_modules/chrome-remote-interface node_modules/sizzle
 
 check: prepare
-	integration-tests/common/run-tests --test-dir integration-tests
+	integration-tests/common/run-tests --test-dir integration-tests --track-naughties
 
 reset:
 	rm -f $(COCKPIT_TAR) $(SUBMAN_TAR) $(SMBEXT_TAR) $(VM_IMAGE)
