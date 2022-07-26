@@ -22,6 +22,8 @@ from iniparse.compat import NoOptionError, InterpolationMissingOptionError, NoSe
 import re
 import tempfile
 
+from rhsm.utils import parse_bool
+
 CONFIG_ENV_VAR = "RHSM_CONFIG"
 
 DEFAULT_CONFIG_DIR = "/etc/rhsm/"
@@ -105,7 +107,7 @@ def in_container():
     """
     # For development in containers we must be able to turn container detection
     # off
-    if os.environ.get("SMDEV_CONTAINER_OFF", ""):
+    if parse_bool(os.environ.get("SMDEV_CONTAINER_OFF", "0")):
         return False
     # Known locations to check for as an easy way to detect whether
     # we are running in a container

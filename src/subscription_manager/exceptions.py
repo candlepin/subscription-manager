@@ -14,9 +14,10 @@
 #
 import inspect
 from socket import error as socket_error
+
 from rhsm.https import ssl, httplib
 
-from rhsm import connection, utils
+from rhsm import connection, url_utils
 
 from subscription_manager.cp_provider import TokenAuthUnsupportedException
 from subscription_manager.entcertlib import Disconnected
@@ -68,11 +69,11 @@ class ExceptionMapper(object):
             connection.RemoteServerException: (REMOTE_SERVER_MESSAGE, self.format_using_template),
             connection.BadCertificateException: (BAD_CA_CERT_MESSAGE, self.format_bad_ca_cert_exception),
             connection.ExpiredIdentityCertException: (EXPIRED_ID_CERT_MESSAGE, self.format_using_template),
-            utils.ServerUrlParseErrorEmpty: (PERROR_EMPTY_MESSAGE, self.format_using_template),
-            utils.ServerUrlParseErrorJustScheme: (PERROR_JUST_SCHEME_MESSAGE, self.format_using_template),
-            utils.ServerUrlParseErrorNone: (PERROR_NONE_MESSAGE, self.format_using_template),
-            utils.ServerUrlParseErrorPort: (PERROR_PORT_MESSAGE, self.format_using_template),
-            utils.ServerUrlParseErrorScheme: (PERROR_SCHEME_MESSAGE, self.format_using_template),
+            url_utils.ServerUrlParseErrorEmpty: (PERROR_EMPTY_MESSAGE, self.format_using_template),
+            url_utils.ServerUrlParseErrorJustScheme: (PERROR_JUST_SCHEME_MESSAGE, self.format_using_template),
+            url_utils.ServerUrlParseErrorNone: (PERROR_NONE_MESSAGE, self.format_using_template),
+            url_utils.ServerUrlParseErrorPort: (PERROR_PORT_MESSAGE, self.format_using_template),
+            url_utils.ServerUrlParseErrorScheme: (PERROR_SCHEME_MESSAGE, self.format_using_template),
             ssl.SSLError: (SSL_MESSAGE, self.format_ssl_error),
             # The message template will always be none since the RestlibException's
             # message is already translated server-side.

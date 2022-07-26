@@ -15,6 +15,8 @@
 #
 
 import base64
+
+import rhsm.url_utils
 from rhsm import certificate
 import datetime
 import dateutil.parser
@@ -208,7 +210,7 @@ class BaseConnection(object):
             self.proxy_user = None
             self.proxy_password = None
         else:
-            info = utils.get_env_proxy_info()
+            info = rhsm.url_utils.get_env_proxy_info()
 
             if proxy_hostname is not None:
                 self.proxy_hostname = proxy_hostname

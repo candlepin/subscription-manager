@@ -36,7 +36,7 @@ from subscription_manager import injection as inj
 # we moved quite a bit of code from this module to rhsm.
 # we may want to import some of the other items for
 # compatibility.
-from rhsm.utils import parse_url
+from rhsm.url_utils import parse_url
 from rhsm.connection import ProxyException
 
 import subscription_manager.version
