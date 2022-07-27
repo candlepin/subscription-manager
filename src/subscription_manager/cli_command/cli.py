@@ -26,7 +26,8 @@ from rhsm.certificate import CertificateException
 from rhsm.connection import ProxyException
 from rhsm.https import ssl
 import rhsm.utils
-from rhsm.utils import cmd_name, ServerUrlParseError, remove_scheme
+from rhsm.utils import cmd_name
+from rhsm.url_utils import ServerUrlParseError, remove_scheme
 
 from rhsmlib.services import config
 

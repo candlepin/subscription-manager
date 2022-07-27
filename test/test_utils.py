@@ -6,7 +6,7 @@ from . import stubs
 from tempfile import mkdtemp
 
 from mock import Mock, patch
-from rhsm.utils import (
+from rhsm.url_utils import (
     ServerUrlParseErrorEmpty,
     ServerUrlParseErrorNone,
     ServerUrlParseErrorPort,

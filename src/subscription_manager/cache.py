@@ -27,6 +27,7 @@ from rhsm.https import ssl
 from rhsm.config import get_config_parser
 import rhsm.connection as connection
 from rhsm.profile import get_profile
+from rhsm.utils import parse_bool
 import subscription_manager.injection as inj
 from subscription_manager.jsonwrapper import PoolWrapper
 from rhsm import ourjson as json
@@ -441,9 +442,7 @@ class ProfileManager(CacheManager):
         # If profile reporting is disabled from the environment, that overrides the setting in the conf file
         # If the environment variable is 0, defer to the setting in the conf file; likewise if the environment
         # variable is completely unset.
-        if "SUBMAN_DISABLE_PROFILE_REPORTING" in os.environ and os.environ[
-            "SUBMAN_DISABLE_PROFILE_REPORTING"
-        ].lower() in ["true", "1", "yes", "on"]:
+        if parse_bool(os.environ.get("SUBMAN_DISABLE_PROFILE_REPORTING", "0")) is True:
             return False
         return conf["rhsm"].get_int("report_package_profile") == 1
 
