@@ -10,7 +10,7 @@
 %global use_container_plugin 1
 %endif
 
-%global dmidecode_arches %{ix86} x86_64
+%global dmidecode_arches %{ix86} x86_64 aarch64
 
 %global completion_dir %{_datadir}/bash-completion/completions
 
