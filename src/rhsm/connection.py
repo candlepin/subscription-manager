@@ -887,7 +887,7 @@ class BaseRestLib(object):
         keep_alive_timeout = None
         max_requests_num = None
         # Regular expression pattern represents: key=number
-        pattern = re.compile(r"^(.*)=(\d+)$")
+        pattern = re.compile(r"^(.*)=(\d+)[,;]*$")
 
         items = keep_alive_header.split()
 
@@ -1061,13 +1061,13 @@ class BaseRestLib(object):
         response_log = '%s, request="%s %s"' % (response_log, request_type, handler)
         log.debug(response_log)
 
-        connection_http_header = response.getheader("Connection")
+        connection_http_header = response.getheader("Connection", default="").lower()
         if connection_http_header == "keep-alive":
             log.debug("Server wants to keep connection")
         elif connection_http_header == "close":
             log.debug("Server wants to close connection. Closing HTTP connection")
             self.close_connection()
-        elif connection_http_header is None:
+        elif connection_http_header == "":
             log.debug("HTTP header 'Connection' not included in response")
         else:
             log.debug(f"Unsupported value of HTTP header 'Connection': {connection_http_header}")
