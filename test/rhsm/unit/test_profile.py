@@ -32,6 +32,11 @@ class TestModulesProfile(unittest.TestCase):
         libdnf_patcher = patch("rhsm.profile.libdnf")
         self.libdnf_mock = libdnf_patcher.start()
         self.addCleanup(libdnf_patcher.stop)
+        # Mock cloud provider
+        cloud_provider_patcher = patch("rhsm.profile.provider")
+        self.cloud_provider_mock = cloud_provider_patcher.start()
+        self.cloud_provider_mock.get_cloud_provider = mock.Mock(return_value=None)
+        self.addCleanup(cloud_provider_patcher.stop)
 
     def test_default_status(self) -> None:
         """
