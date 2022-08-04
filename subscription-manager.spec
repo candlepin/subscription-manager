@@ -350,9 +350,6 @@ entitlements, certificates, and access to content.
 Summary: Python package for detection of public cloud provider
 %if 0%{?suse_version}
 Group: Productivity/Networking/System
-License: GPL-2.0
-%else
-License: GPLv2
 %endif
 Requires: python3-requests
 %ifarch %{dmidecode_arches}
