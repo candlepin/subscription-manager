@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.31
+Version: 1.28.32
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1483,6 +1483,16 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Aug 04 2022 Christopher Snyder <csnyder@redhat.com> 1.28.32-1
+- cockpit: Allow unexpected message from RHEL 8.5 version of cockpit-ws
+  (martin@piware.de)
+- test: use --track-naughties option (martin@piware.de)
+- Bump cockpit test API to 273 + run-tests scheduler fix (martin@piware.de)
+- ENT-5215: Handle all exceptions caused by network problems
+  (mhorky@redhat.com)
+- ENT-5215: Handle errors raised in DNF plugin (mhorky@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (ljanda@redhat.com)
+
 * Tue Jun 28 2022 Christopher Snyder <csnyder@redhat.com> 1.28.31-1
 - Translated using Weblate (Korean) (simmon@nplob.com)
 - Update translation files (noreply@weblate.org)
