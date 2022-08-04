@@ -81,18 +81,42 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn = Mock()
         # The first call will return the proper_status, the second, the improper
         # status
-        original_getStatus = self.cp.getStatus
+        original_get_status = self.cp.getStatus
         self.cp.getStatus = Mock(side_effect=[proper_status, improper_status])
         actual_capabilities = self.cp._load_manager_capabilities()
         self.assertEqual(sorted(actual_capabilities), sorted(expected_capabilities))
         self.assertEqual([], self.cp._load_manager_capabilities())
-        self.cp.getStatus = original_getStatus
+        self.cp.getStatus = original_get_status
 
     def test_parsing_keep_alive_http_header(self):
         """
-        Testing of valid HTTP header Keep-Alive received from server
+        Test validation of HTTP header Keep-Alive received from server
         """
         keep_alive_http_header = "timeout=60 max=1000"
+        timeout, max_requests = self.cp.conn.parse_keep_alive_header(keep_alive_http_header)
+        self.assertIsNotNone(timeout)
+        self.assertEqual(timeout, 60)
+        self.assertIsNotNone(max_requests)
+        self.assertEqual(max_requests, 1000)
+
+    def test_parsing_apache_keep_alive_http_header(self):
+        """
+        Test validation of Apache HTTP header Keep-Alive received from server.
+        Note: Apache does not care about specification too much
+        """
+        keep_alive_http_header = "timeout=60, max=1000"
+        timeout, max_requests = self.cp.conn.parse_keep_alive_header(keep_alive_http_header)
+        self.assertIsNotNone(timeout)
+        self.assertEqual(timeout, 60)
+        self.assertIsNotNone(max_requests)
+        self.assertEqual(max_requests, 1000)
+
+    def test_parsing_strange_keep_alive_http_header(self):
+        """
+        Test validation of strange HTTP header Keep-Alive received from server.
+        Some server can be much more crazy, and add ';' between timeout and max
+        """
+        keep_alive_http_header = "timeout=60; max=1000"
         timeout, max_requests = self.cp.conn.parse_keep_alive_header(keep_alive_http_header)
         self.assertIsNotNone(timeout)
         self.assertEqual(timeout, 60)
@@ -137,6 +161,8 @@ class ConnectionTests(unittest.TestCase):
         """
         wrong_keep_alive_header_values = [
             ("Timeout without value", "timeout="),
+            ("Timeout with string", "timeout=foo"),
+            ("Max with string", "max=foo"),
             ("Timeout with two equal signs", "timeout=123=456"),
             ("White space after equal sign", "timeout= 123"),
             ("White space before equal sign", "timeout =123"),
