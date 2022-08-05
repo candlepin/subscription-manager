@@ -19,6 +19,8 @@ import threading
 
 from rhsmlib.dbus import constants
 
+from rhsm import connection
+
 from gi.repository import GLib
 from functools import partial
 from rhsmlib.services import config
@@ -64,6 +66,12 @@ class Server(object):
         The object_classes argument is a list.  The list can contain either a class or a tuple consisting
         of a class and a dictionary of arguments to send that class's constructor.
         """
+
+        # Do not allow reusing connection, because server uses multiple threads. If reusing connection
+        # was used, then two threads could try to use the connection in the almost same time.
+        # It means that one thread could send request and the second one could send second request
+        # before the first thread received response. This could lead to raising exception CannotSendRequest.
+        connection.REUSE_CONNECTION = False
 
         init_logger(parser)
 

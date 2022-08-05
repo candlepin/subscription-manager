@@ -59,6 +59,8 @@ except ImportError:
 config = get_config_parser()
 MULTI_ENV = "multi_environment"
 
+REUSE_CONNECTION = True
+
 
 def safe_int(value, safe_value=None):
     try:
@@ -753,7 +755,10 @@ class BaseRestLib(object):
         # Do TCP and TLS handshake here before we make any request
         conn.connect()
         log.debug(f"Created connection: {conn.sock}")
-        self.__conn = conn
+
+        # Store connection object only in the case, when it is not forbidden
+        if REUSE_CONNECTION is True:
+            self.__conn = conn
 
         return conn
 
