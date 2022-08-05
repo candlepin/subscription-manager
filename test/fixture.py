@@ -206,6 +206,7 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.RELEASE_STATUS_CACHE, stubs.StubReleaseStatusCache())
         inj.provide(inj.AVAILABLE_ENTITLEMENT_CACHE, stubs.StubAvailableEntitlementsCache())
         inj.provide(inj.PROFILE_MANAGER, stubs.StubProfileManager())
+        inj.provide(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, stubs.StubSyspurposeComplianceStatusCache())
         # By default set up an empty stub entitlement and product dir.
         # Tests need to modify or create their own but nothing should hit
         # the system.
