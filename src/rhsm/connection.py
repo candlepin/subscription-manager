@@ -1078,7 +1078,9 @@ class BaseRestLib(object):
             log.debug(f"Unsupported value of HTTP header 'Connection': {connection_http_header}")
 
         keep_alive_http_header = response.getheader("Keep-Alive")
-        if keep_alive_http_header is not None:
+        # When connection is shared between HTTP requests, then try to parse HTTP header
+        # and store the latest value in object representing connection
+        if self.__conn is not None and keep_alive_http_header is not None:
             keep_alive_timeout, max_requests_num = self.parse_keep_alive_header(keep_alive_http_header)
             if keep_alive_timeout is not None:
                 self.__conn.keep_alive_timeout = keep_alive_timeout
