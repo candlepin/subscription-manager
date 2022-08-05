@@ -12,32 +12,30 @@ from mock import patch
 # Test Attach and Subscribe are the same
 class TestAttachCommand(TestCliProxyCommand):
     command_class = managercli.AttachCommand
+    tempdir = None
+    tempfiles = []
 
     @classmethod
     def setUpClass(cls):
         # Create temp file(s) for processing pool IDs
-        cls.tempfiles = [tempfile.mkstemp(), tempfile.mkstemp(), tempfile.mkstemp()]
+        cls.tempdir = tempfile.TemporaryDirectory()
+        cls.tempfiles = [
+            tempfile.mkstemp(dir=cls.tempdir.name),
+            tempfile.mkstemp(dir=cls.tempdir.name),
+            tempfile.mkstemp(dir=cls.tempdir.name),
+        ]
 
-        os.write(
-            cls.tempfiles[0][0],
-            "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode("utf-8"),
-        )
+        os.write(cls.tempfiles[0][0], b"pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n")
         os.close(cls.tempfiles[0][0])
-
-        os.write(
-            cls.tempfiles[1][0],
-            "pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n".encode("utf-8"),
-        )
+        os.write(cls.tempfiles[1][0], b"pool1 pool2   pool3 \npool4\npool5\r\npool6\t\tpool7\n  pool8\n\n\n")
         os.close(cls.tempfiles[1][0])
-
-        # The third temp file syspurposeionally left empty for testing empty sets of data.
+        # The third temp file intentionally left empty for testing empty sets of data
         os.close(cls.tempfiles[2][0])
 
     @classmethod
     def tearDownClass(cls):
-        # Unlink temp files
-        for f in cls.tempfiles:
-            os.unlink(f[1])
+        cls.tempdir = None
+        cls.tempfiles = []
 
     def setUp(self):
         super(TestAttachCommand, self).setUp()

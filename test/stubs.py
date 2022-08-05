@@ -17,7 +17,6 @@ from datetime import datetime, timedelta
 import io
 import mock
 import random
-import tempfile
 
 from rhsm import config
 from subscription_manager.cert_sorter import CertSorter
@@ -36,7 +35,6 @@ from subscription_manager.cache import (
     ContentAccessModeCache,
 )
 from subscription_manager.facts import Facts
-from subscription_manager.lock import ActionLock
 from rhsm.certificate import GMT
 from rhsm.certificate2 import Version
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
@@ -138,10 +136,6 @@ config.CFG = StubConfig()
 
 # we are not actually reading test/rhsm.conf, it's just a placeholder
 config.CFG.read("test/rhsm.conf")
-
-
-class MockActionLock(ActionLock):
-    PATH = tempfile.mkstemp()[1]
 
 
 class StubProduct(Product):

@@ -16,7 +16,6 @@ import unittest
 import errno
 import mock
 import os
-import shutil
 import io
 import tempfile
 import zipfile
@@ -81,19 +80,17 @@ class RCTManifestCommandTests(SubManFixture):
         self.assertEqual(manifestdata.correct_manifest_output, cap.out)
 
     def test_extract_manifest(self):
-        tmp_dir = tempfile.mkdtemp()
+        tmp_dir = tempfile.TemporaryDirectory()
         mancommand = RCTManifestCommand()
         mancommand.args = [_build_valid_manifest()]
-        mancommand._extract_manifest(tmp_dir)
+        mancommand._extract_manifest(tmp_dir.name)
 
-        self.assertTrue(os.path.exists(os.path.join(tmp_dir, "export")))
-
-        shutil.rmtree(tmp_dir)
+        self.assertTrue(os.path.exists(os.path.join(tmp_dir.name, "export")))
 
     def test_dump_manifest_current(self):
         original_directory = os.getcwd()
-        new_directory = tempfile.mkdtemp()
-        os.chdir(new_directory)
+        new_directory = tempfile.TemporaryDirectory()
+        os.chdir(new_directory.name)
         mancommand = DumpManifestCommand()
         mancommand.args = [_build_valid_manifest()]
 
@@ -103,71 +100,67 @@ class RCTManifestCommandTests(SubManFixture):
         mancommand.overwrite_files = False
 
         mancommand._do_command()
-        self.assertTrue(os.path.exists(os.path.join(new_directory, "export")))
+        self.assertTrue(os.path.exists(os.path.join(new_directory.name, "export")))
         os.chdir(original_directory)
-        shutil.rmtree(new_directory)
 
     def test_dump_manifest_directory(self):
-        new_directory = tempfile.mkdtemp()
+        new_directory = tempfile.TemporaryDirectory()
         mancommand = DumpManifestCommand()
         mancommand.args = [_build_valid_manifest()]
 
         # This makes sure the temp directory is referenced at 'self.options.destination'
         mancommand.options = mancommand
-        mancommand.destination = new_directory
+        mancommand.destination = new_directory.name
         mancommand.overwrite_files = False
 
         mancommand._do_command()
-        self.assertTrue(os.path.exists(os.path.join(new_directory, "export")))
-        shutil.rmtree(new_directory)
+        self.assertTrue(os.path.exists(os.path.join(new_directory.name, "export")))
 
     def test_dump_manifest_directory_twice(self):
-        new_directory = tempfile.mkdtemp()
+        new_directory = tempfile.TemporaryDirectory()
         mancommand = DumpManifestCommand()
         mancommand.args = [_build_valid_manifest()]
 
         # This makes sure the temp directory is referenced at 'self.options.destination'
         mancommand.options = mancommand
-        mancommand.destination = new_directory
+        mancommand.destination = new_directory.name
         mancommand.overwrite_files = True
 
         mancommand._do_command()
         mancommand._do_command()
-        self.assertTrue(os.path.exists(os.path.join(new_directory, "export")))
-        shutil.rmtree(new_directory)
+        self.assertTrue(os.path.exists(os.path.join(new_directory.name, "export")))
 
     @mock.patch("rct.manifest_commands.ZipExtractAll._write_file")
     def test_dump_manifest_directory_no_perms(self, mock_write_file):
-        new_directory = tempfile.mkdtemp()
+        new_directory = tempfile.TemporaryDirectory()
         mancommand = DumpManifestCommand()
         mancommand.args = [_build_valid_manifest()]
 
         # This makes sure the temp directory is referenced at 'self.options.destination'
         mancommand.options = mancommand
-        mancommand.destination = new_directory
+        mancommand.destination = new_directory.name
         mancommand.overwrite_files = True
 
-        mock_write_file.side_effect = IOError(errno.EACCES, "permission denied", new_directory)
+        mock_write_file.side_effect = IOError(errno.EACCES, "permission denied", new_directory.name)
         mancommand._do_command()
         # we fail to extract manifest in this case
-        self.assertFalse(os.path.exists(os.path.join(new_directory, "export")))
+        self.assertFalse(os.path.exists(os.path.join(new_directory.name, "export")))
 
     @mock.patch("rct.manifest_commands.ZipExtractAll._write_file")
     def test_dump_manifest_directory_exists(self, mock_write_file):
-        new_directory = tempfile.mkdtemp()
-
+        new_directory = tempfile.TemporaryDirectory()
         mancommand = DumpManifestCommand()
         mancommand.args = [_build_valid_manifest()]
 
         # This makes sure the temp directory is referenced at 'self.options.destination'
         mancommand.options = mancommand
-        mancommand.destination = new_directory
+        mancommand.destination = new_directory.name
         mancommand.overwrite_files = True
 
-        mock_write_file.side_effect = OSError(errno.EEXIST, "file exists", new_directory)
+        mock_write_file.side_effect = OSError(errno.EEXIST, "file exists", new_directory.name)
         mancommand._do_command()
         # we fail to extract manifest in this case
-        self.assertFalse(os.path.exists(os.path.join(new_directory, "export")))
+        self.assertFalse(os.path.exists(os.path.join(new_directory.name, "export")))
 
 
 class RCTManifestExtractTests(unittest.TestCase):
@@ -176,10 +169,9 @@ class RCTManifestExtractTests(unittest.TestCase):
         archive = ZipExtractAll(zip_file_object, "w", compression=zipfile.ZIP_STORED)
         archive.writestr("../../../../wat", "this is weird")
 
-        tmp_dir = tempfile.mkdtemp()
-        self.assertRaises(Exception, archive.extractall, (tmp_dir))
+        tmp_dir = tempfile.TemporaryDirectory()
+        self.assertRaises(Exception, archive.extractall, (tmp_dir.name,))
         archive.close()
-        shutil.rmtree(tmp_dir)
 
     def test_extractall_net_path(self):
         zip_file_object = io.BytesIO()
@@ -189,13 +181,11 @@ class RCTManifestExtractTests(unittest.TestCase):
         archive.close()
         archive = ZipExtractAll(zip_file_object, "r", compression=zipfile.ZIP_STORED)
 
-        tmp_dir = tempfile.mkdtemp()
-        archive.extractall(tmp_dir)
+        tmp_dir = tempfile.TemporaryDirectory()
+        archive.extractall(tmp_dir.name)
         archive.close()
 
-        self.assertTrue(os.path.exists(os.path.join(tmp_dir, "\\\\nethost\\share\\whatever")))
-
-        shutil.rmtree(tmp_dir)
+        self.assertTrue(os.path.exists(os.path.join(tmp_dir.name, "\\\\nethost\\share\\whatever")))
 
     def test_extractall_local(self):
         zip_file_object = io.BytesIO()
@@ -205,11 +195,10 @@ class RCTManifestExtractTests(unittest.TestCase):
         archive.close()
         archive = ZipExtractAll(zip_file_object, "r", compression=zipfile.ZIP_STORED)
 
-        tmp_dir = tempfile.mkdtemp()
-        archive.extractall(tmp_dir)
-        self.assertTrue(os.path.exists(os.path.join(tmp_dir, "./some/path")))
+        tmp_dir = tempfile.TemporaryDirectory()
+        archive.extractall(tmp_dir.name)
+        self.assertTrue(os.path.exists(os.path.join(tmp_dir.name, "./some/path")))
         archive.close()
-        shutil.rmtree(tmp_dir)
 
     @mock.patch("sys.exit")
     def test_extractall_nonzip(self, mock_exit):

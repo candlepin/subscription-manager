@@ -13,10 +13,9 @@
 #
 import locale
 import unittest
-import shutil
 import os
 import ssl
-from tempfile import mkdtemp
+import tempfile
 
 from rhsm import connection
 from rhsm.connection import (
@@ -62,10 +61,7 @@ class ConnectionTests(unittest.TestCase):
         # is to mock the actual server responses and just test logic in the
         # UEPConnection:
         self.cp = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
-        self.temp_ent_dir = mkdtemp()
-
-    def tearDown(self):
-        shutil.rmtree(self.temp_ent_dir)
+        self.temp_ent_dir = tempfile.TemporaryDirectory()
 
     def test_accepts_a_timeout(self):
         self.cp = UEPConnection(
@@ -585,17 +581,21 @@ class ConnectionTests(unittest.TestCase):
         self.assertEqual(expected_guestIds, resultGuestIds)
 
     def test_bad_ca_cert(self):
-        with open(os.path.join(self.temp_ent_dir, "foo.pem"), "w+") as cert:
+        with open(os.path.join(self.temp_ent_dir.name, "foo.pem"), "w+") as cert:
             cert.write("xxxxxx\n")
-        with open(os.path.join(self.temp_ent_dir, "foo-key.pem"), "w+") as key:
+        with open(os.path.join(self.temp_ent_dir.name, "foo-key.pem"), "w+") as key:
             key.write("xxxxxx\n")
         with self.assertRaises(NoValidEntitlement):
             cont_conn = ContentConnection(
-                host="foobar", username="dummy", password="dummy", insecure=True, cert_dir=self.temp_ent_dir
+                host="foobar",
+                username="dummy",
+                password="dummy",
+                insecure=True,
+                cert_dir=self.temp_ent_dir.name,
             )
             cont_conn.get_versions("/")
         restlib = Restlib("somehost", "123", "somehandler")
-        restlib.ca_dir = self.temp_ent_dir
+        restlib.ca_dir = self.temp_ent_dir.name
         with self.assertRaises(BadCertificateException):
             restlib._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
 

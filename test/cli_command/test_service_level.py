@@ -1,5 +1,4 @@
 import os
-import shutil
 import tempfile
 
 from ..test_managercli import TestCliProxyCommand
@@ -87,9 +86,8 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         mock_syspurpose.read.return_value = Mock()
         mock_syspurpose.return_value = self.mock_sp_store()
 
-        mock_etc_rhsm_dir = tempfile.mkdtemp()
-        self.addCleanup(shutil.rmtree, mock_etc_rhsm_dir)
-        mock_syspurpose_file = os.path.join(mock_etc_rhsm_dir, "syspurpose/syspurpose.json")
+        mock_etc_rhsm_dir = tempfile.TemporaryDirectory()
+        mock_syspurpose_file = os.path.join(mock_etc_rhsm_dir.name, "syspurpose/syspurpose.json")
         syspurposelib.USER_SYSPURPOSE = mock_syspurpose_file
 
         self.cc.store = self.mock_sp_store()
