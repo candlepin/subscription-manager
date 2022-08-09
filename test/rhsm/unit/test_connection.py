@@ -26,7 +26,7 @@ from rhsm.connection import (
     BadCertificateException,
     RestlibException,
     GoneException,
-    NetworkException,
+    UnknownContentException,
     RemoteServerException,
     drift_check,
     ExpiredIdentityCertException,
@@ -654,7 +654,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             response["headers"] = headers
         self.restlib.validateResponse(response, self.request_type, self.handler)
 
-    # All empty responses that aren't 200/204 raise a NetworkException
+    # All empty responses that aren't 200/204 raise a UnknownContentException
     def test_200_empty(self):
         # this should just not raise any exceptions
         self.vr("200", "")
@@ -690,12 +690,12 @@ class RestlibValidateResponseTests(unittest.TestCase):
     #     self.vr("301", "")
 
     def test_400_empty(self):
-        # FIXME: not sure 400 makes sense as "NetworkException"
-        #        we check for NetworkException in several places in
+        # FIXME: not sure 400 makes sense as "UnknownContentException"
+        #        we check for UnknownContentException in several places in
         #        addition to RestlibException and RemoteServerException
         #        I think maybe a 400 ("Bad Request") should be a
         #        RemoteServerException
-        self.assertRaises(NetworkException, self.vr, "400", "")
+        self.assertRaises(UnknownContentException, self.vr, "400", "")
 
     def test_401_empty(self):
         try:
@@ -874,7 +874,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.fail("RemoteServerException expected")
 
     def test_599_empty(self):
-        self.assertRaises(NetworkException, self.vr, "599", "")
+        self.assertRaises(UnknownContentException, self.vr, "599", "")
 
 
 class RestlibTests(unittest.TestCase):

@@ -425,7 +425,7 @@ class GoneException(RestlibException):
         self.deleted_id = deleted_id
 
 
-class NetworkException(ConnectionException):
+class UnknownContentException(ConnectionException):
     """
     Thrown when the response of a request has no valid json content
     and the http status code is anything other than the following:
@@ -1235,7 +1235,7 @@ class BaseRestLib(object):
 
                 else:
                     # unexpected with no valid content
-                    raise NetworkException(response["status"])
+                    raise UnknownContentException(response["status"])
 
     @staticmethod
     def _parse_msg_from_error_response_body(body: dict) -> str:
