@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.29
+Version: 1.29.30
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -736,6 +736,27 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Tue Aug 09 2022 Christopher Snyder <csnyder@redhat.com> 1.29.30-1
+- Fix issue, when connection is not shared (jhnidek@redhat.com)
+- Unit tests: Add stub class for SyspurposeComplianceStatusCache
+  (jhnidek@redhat.com)
+- ENT-4664: Ensure tests clean up after themselves (mhorky@redhat.com)
+- Refactoring of cloud-what unit tests (jhnidek@redhat.com)
+- 2111035: Do not allow reusing TCP connection for rhsm.service
+  (jhnidek@redhat.com)
+- spec: remove redundant License from python3-cloud-what (ptoscano@redhat.com)
+- Ensure tests don't fail when run under root (mhorky@redhat.com)
+- Fix issue with unit tests (jhnidek@redhat.com)
+- 2111757: Make parsing of HTTP headers more reliable (jhnidek@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (ljanda@redhat.com)
+- Update translation files (noreply@weblate.org)
+- ENT-5286: Unify environment variable evaluation (mhorky@redhat.com)
+- Use dmidecode on aarch64 (jhnidek@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Increase security level for zypper repos managed by sub-man (suttner@atix.de)
+- ENT-5271: Fix spelling of Candlepin API endpoint description
+  (mhorky@redhat.com)
+
 * Wed Jul 13 2022 Pino Toscano <ptoscano@redhat.com> 1.29.29-1
 - Translated using Weblate (Japanese) (suanand@redhat.com)
 - Translated using Weblate (Korean) (simmon@nplob.com)
