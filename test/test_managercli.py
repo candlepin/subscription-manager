@@ -2678,8 +2678,8 @@ class HandleExceptionTests(unittest.TestCase):
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
-    def test_he_network_exception(self):
-        e = connection.NetworkException(1337)
+    def test_he_unknowncontent_exception(self):
+        e = connection.UnknownContentException(1337)
         try:
             managercli.handle_exception("huh", e)
         except SystemExit as e:

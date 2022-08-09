@@ -64,7 +64,7 @@ class ExceptionMapper(object):
             ConnectionError: (CONNECTION_MESSAGE, self.format_generic_oserror),
             Disconnected: (SOCKET_MESSAGE, self.format_using_template),
             connection.ProxyException: (None, self.format_proxy_exception),
-            connection.NetworkException: (NETWORK_MESSAGE, self.format_using_template),
+            connection.UnknownContentException: (NETWORK_MESSAGE, self.format_using_template),
             connection.UnauthorizedException: (UNAUTHORIZED_MESSAGE, self.format_using_template),
             connection.ForbiddenException: (FORBIDDEN_MESSAGE, self.format_using_template),
             connection.RemoteServerException: (REMOTE_SERVER_MESSAGE, self.format_using_template),
