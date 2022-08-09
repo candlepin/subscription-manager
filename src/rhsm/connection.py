@@ -372,12 +372,23 @@ class UnknownContentException(ConnectionException):
     [200, 202, 204, 401, 403, 410, 429, 500, 502, 503, 504]
     """
 
-    def __init__(self, code):
+    def __init__(self, code: int, content_type: Optional[str] = None, content: Optional[str] = None):
         self.code = code
+        self.content_type = content_type
+        self.content = content
+
+    @property
+    def title(self) -> str:
+        return httplib.responses.get(self.code, "Unknown")
 
     def __str__(self):
-        error_title = httplib.responses.get(self.code, "Unknown")
-        return "HTTP error (%s - %s)" % (self.code, error_title)
+        s = f"Unknown content error (HTTP {self.code} - {self.title}"
+        if self.content_type is not None:
+            s += f", type {self.content_type}"
+        if self.content is not None:
+            s += f", len {len(self.content)}"
+        s += ")"
+        return s
 
 
 class RemoteServerException(ConnectionException):
@@ -934,7 +945,11 @@ class BaseRestLib(object):
 
                 else:
                     # unexpected with no valid content
-                    raise UnknownContentException(response['status'])
+                    raise UnknownContentException(
+                        response['status'],
+                        response.get("headers", {}).get("Content-Type"),
+                        response.get("content"),
+                    )
 
     def _parse_msg_from_error_response_body(self, body):
 
