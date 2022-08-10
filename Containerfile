@@ -20,7 +20,6 @@ RUN dnf install -y \
     glibc-langpack-ja \
     json-c-devel \
     libdnf-devel \
-    libnotify-devel \
     make \
     openssl \
     openssl-devel \
