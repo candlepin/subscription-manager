@@ -22,15 +22,15 @@ from subscription_manager.cp_provider import TokenAuthUnsupportedException
 from subscription_manager.entcertlib import Disconnected
 
 from subscription_manager.i18n import ugettext as _
+from subscription_manager.utils import terminal_printable_content
 
 SOCKET_MESSAGE = _(
     "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm.log for more information."
 )
 GAI_MESSAGE = _("Network error: {message} (error code {code})")
 CONNECTION_MESSAGE = _("Connection error: {message} (error code {code})")
-NETWORK_MESSAGE = _(
-    "Network error. Please check the connection details, or see /var/log/rhsm/rhsm.log for more information."
-)
+UNKNOWN_CONTENT_MESSAGE_CONTENT = _("Unknown server reply (HTTP error code {code}: {title}):\n{content}")
+UNKNOWN_CONTENT_MESSAGE = _("Unknown server reply (HTTP error code {code}: {title})")
 PROXY_ADDRESS_REASON_OSERROR_MESSAGE = _(
     "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
 )
@@ -70,7 +70,7 @@ class ExceptionMapper(object):
             ConnectionError: (CONNECTION_MESSAGE, self.format_generic_oserror),
             Disconnected: (SOCKET_MESSAGE, self.format_using_template),
             connection.ProxyException: (None, self.format_proxy_exception),
-            connection.UnknownContentException: (NETWORK_MESSAGE, self.format_using_template),
+            connection.UnknownContentException: (None, self.format_unknown_content),
             connection.UnauthorizedException: (UNAUTHORIZED_MESSAGE, self.format_using_template),
             connection.ForbiddenException: (FORBIDDEN_MESSAGE, self.format_using_template),
             connection.RemoteServerException: (REMOTE_SERVER_MESSAGE, self.format_using_template),
@@ -116,6 +116,14 @@ class ExceptionMapper(object):
                 message=exc.exc,
             )
         return PROXY_ADDRESS_MESSAGE.format(hostname=proxy_address)
+
+    def format_unknown_content(self, exc: connection.UnknownContentException, _: str) -> str:
+        content = exc.content
+        if content is not None:
+            return UNKNOWN_CONTENT_MESSAGE_CONTENT.format(
+                code=exc.code, title=exc.title, content=terminal_printable_content(content)
+            )
+        return UNKNOWN_CONTENT_MESSAGE.format(code=exc.code, title=exc.title)
 
     def format_bad_ca_cert_exception(
         self, bad_ca_cert_error: connection.BadCertificateException, message_template: str

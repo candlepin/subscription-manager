@@ -14,8 +14,8 @@ import socket
 import unittest
 
 from subscription_manager.exceptions import ExceptionMapper
-from rhsm.connection import RestlibException, BadCertificateException, ProxyException
-from rhsm.https import ssl
+from rhsm.connection import RestlibException, BadCertificateException, ProxyException, UnknownContentException
+from rhsm.https import httplib, ssl
 
 
 class MyRuntimeErrorBase(RuntimeError):
@@ -166,5 +166,31 @@ class TestExceptionMapper(unittest.TestCase):
         err = ProxyException(expected_hostname, expected_port)
         self.assertEqual(
             f"Proxy error: unable to connect to {expected_hostname}:{expected_port}",
+            mapper.get_message(err),
+        )
+
+    def test_unknowncontentexception_with_content(self):
+        expected_http_code = 404
+        expected_http_string = httplib.responses[expected_http_code]
+        expected_content_type = "text/plain"
+        expected_content_original = "\033[92mExpected GREEN MESSAGE\033[0m"
+        expected_content_escaped = "<27>[92mExpected GREEN MESSAGE<27>[0m"
+        mapper = ExceptionMapper()
+
+        err = UnknownContentException(expected_http_code, expected_content_type, expected_content_original)
+        self.assertEqual(
+            f"Unknown server reply (HTTP error code {expected_http_code}: "
+            f"{expected_http_string}):\n{expected_content_escaped}",
+            mapper.get_message(err),
+        )
+
+    def test_unknowncontentexception_without_content(self):
+        expected_http_code = 404
+        expected_http_string = httplib.responses[expected_http_code]
+        mapper = ExceptionMapper()
+
+        err = UnknownContentException(expected_http_code)
+        self.assertEqual(
+            f"Unknown server reply (HTTP error code {expected_http_code}: {expected_http_string})",
             mapper.get_message(err),
         )
