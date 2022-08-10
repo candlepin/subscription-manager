@@ -60,18 +60,31 @@ function spawn_error_to_string(err, data) {
     }
     // the process ran correctly, and exited with a non-zero code: get its
     // combined stdout + stderr
-    return data;
+    if (data) {
+        return data;
+    }
+    // When err contains only string then return this string
+    if (err) {
+        return err;
+    }
+
+    console.debug(">>>> returning undefined");
 }
 
 export function catch_error(err, data) {
     let msg = spawn_error_to_string(err, data);
-    // usually the output of insights-client contains more than a single
-    // line; hence, put each line in its own paragraph, so the error message
-    // is displayed in the same format of what insights-client outputs
-    if (msg.indexOf("\n") > 0)
-        msg = msg.split("\n").map(line => {
-            return <p>{line}</p>;
-        });
+    if (msg) {
+        // usually the output of insights-client contains more than a single
+        // line; hence, put each line in its own paragraph, so the error message
+        // is displayed in the same format of what insights-client outputs
+        if (msg.indexOf("\n") > 0) {
+            msg = msg.split("\n").map(line => {
+                return <p>{line}</p>;
+            });
+        }
+    } else {
+        msg = "Unable to get any error message."
+    }
     subscriptionsClient.setError("error", msg);
 }
 
