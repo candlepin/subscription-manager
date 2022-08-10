@@ -21,6 +21,7 @@ import json
 import os
 import errno
 import io
+from typing import Callable, Union
 
 from syspurpose.utils import create_dir, create_file, write_to_file_utf8
 from subscription_manager.i18n import ugettext as _
@@ -52,7 +53,7 @@ UNSUPPORTED = "unsupported"
 log = logging.getLogger(__name__)
 
 
-def post_process_received_data(data):
+def post_process_received_data(data: dict) -> dict:
     """
     Try to solve conflicts in keys
      - Server returns key "roles", but it should be "role"
@@ -77,12 +78,12 @@ class SyspurposeStore(object):
     Represents and maintains a json syspurpose file
     """
 
-    def __init__(self, path, raise_on_error=False):
+    def __init__(self, path: str, raise_on_error: bool = False) -> None:
         self.path = path
         self.contents = {}
         self.raise_on_error = raise_on_error
 
-    def read_file(self):
+    def read_file(self) -> None:
         """
         Opens & reads the contents of the store's file based on the 'path' provided to the constructor,
         and stores them on this object. If the user doesn't have access rights to the file, the program exits.
@@ -107,7 +108,7 @@ class SyspurposeStore(object):
             if self.raise_on_error:
                 raise e
 
-    def create(self):
+    def create(self) -> bool:
         """
         Create the files necessary for this store
         :return: True if changes were made, false otherwise
@@ -118,7 +119,7 @@ class SyspurposeStore(object):
             or create_file(self.path, self.contents)
         )
 
-    def add(self, key, value):
+    def add(self, key: str, value: str) -> bool:
         """
         Add a value to a list of values specified by key. If the current value
         specified by the key is scalar/non-list, it is not overridden, but
@@ -143,7 +144,7 @@ class SyspurposeStore(object):
             self.contents[key] = [value]
         return True
 
-    def remove(self, key, value):
+    def remove(self, key: str, value: str) -> bool:
         """
         Remove a value from a list specified by key.
         If the current value specified by the key is not a list, unset the value.
@@ -165,7 +166,7 @@ class SyspurposeStore(object):
         except (AttributeError, KeyError, ValueError):
             return False
 
-    def unset(self, key):
+    def unset(self, key: str) -> bool:
         """
         Unsets a key
         :param key: The key to unset
@@ -181,22 +182,20 @@ class SyspurposeStore(object):
 
         return value is not None
 
-    def set(self, key, value):
+    def set(self, key: str, value: str) -> bool:
         """
         Set a key (syspurpose parameter) to value
         :param key: The parameter of the syspurpose file to set
-        :type key: str
-
         :param value: The value to set that parameter to
         :return: Whether any change was made
         """
-        org = self.contents.get(key, None)
+        existing_value: str = self.contents.get(key, None)
         self.contents[key] = value
-        return org != value or org is None
+        return existing_value != value or existing_value is None
 
-    def write(self, fp=None):
+    def write(self, fp: str = None) -> None:
         """
-        Write the current contents to the file at self.path
+        Write the current contents to the file at "self.path"
         """
         if not fp:
             with io.open(self.path, "w", encoding="utf-8") as f:
@@ -206,9 +205,9 @@ class SyspurposeStore(object):
             write_to_file_utf8(fp, self.contents)
 
     @classmethod
-    def read(cls, path, raise_on_error=False):
+    def read(cls, path: str, raise_on_error: bool = False) -> "SyspurposeStore":
         """
-        Read the file represented by path. If the file does not exist it is created.
+        Read the file represented by path. If the file does not exist it is created
         :param path: The path on the file system to read, should be a json file
         :param raise_on_error: When it is set to True, then exceptions are raised as expected.
         :return: new SyspurposeStore with the contents read in
@@ -244,7 +243,9 @@ class SyncedStore(object):
     PATH = USER_SYSPURPOSE
     CACHE_PATH = CACHED_SYSPURPOSE
 
-    def __init__(self, uep, on_changed=None, consumer_uuid=None, use_valid_fields=False):
+    def __init__(
+        self, uep, on_changed: Callable = None, consumer_uuid: str = None, use_valid_fields: bool = False
+    ) -> None:
         """
         Initialization of SyncedStore
         :param uep: object representing connection to candlepin server
@@ -268,21 +269,20 @@ class SyncedStore(object):
         else:
             self.valid_fields = None
 
-    def __enter__(self):
+    def __enter__(self) -> "SyncedStore":
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         self.finish()
 
-    def finish(self):
+    def finish(self) -> None:
         """
         When local content was changed, then try to synchronize local content with remote server
-        :return:
         """
         if self.changed:
             self.sync()
 
-    def sync(self):
+    def sync(self) -> SyncResult:
         """
         Try to synchronize local content with remote server
         :return: instance of SyncResult holding result of synchronization
@@ -304,7 +304,9 @@ class SyncedStore(object):
 
         local_result = {key: result[key] for key in result if result[key]}
 
-        sync_result = SyncResult(
+        # FIXME: methods like update_local(), update_cache(), etc. should return something. Otherwise, this
+        # SyncResult is absolutely useless
+        sync_result: SyncResult = SyncResult(
             result,
             (remote_contents == result) or self.update_remote(result),
             self.update_local(local_result),
@@ -318,22 +320,28 @@ class SyncedStore(object):
 
         return sync_result
 
-    def _sync_local_only(self):
+    def _sync_local_only(self) -> SyncResult:
+        """
+        This method synchronize try to read data from file. When it wasn't possible,
+        then empty dictionary is used. Finally, write the data back to this same file.
+        :return: Instance of SyncResult
+        """
+        # FIXME: update_local() returns None and this method is not useful too much
         local_updated = self.update_local(self.get_local_contents())
         return SyncResult(self.local_contents, False, local_updated, False)
 
-    def merge(self, local=None, remote=None, base=None):
+    def merge(self, local: dict = None, remote: dict = None, base: dict = None) -> dict:
         """
         Do three-way merge
-        :param local: dictionary with local values (syspyrpose.json)
+        :param local: dictionary with local values
         :param remote: dictionary with values from server
-        :param base:
-        :return:
+        :param base: dictionary witch cached values
+        :return: dictionary from three-way merge
         """
         result = three_way_merge(local=local, base=base, remote=remote, on_change=self.on_changed)
         return result
 
-    def get_local_contents(self):
+    def get_local_contents(self) -> dict:
         """
         Try to load local content from file
         :return: dictionary with system purpose values
@@ -346,7 +354,7 @@ class SyncedStore(object):
             self.local_contents = {}
         return self.local_contents
 
-    def get_remote_contents(self):
+    def get_remote_contents(self) -> dict:
         """
         Try to get remote content from server
         :return: dictionary with system purpose values
@@ -372,7 +380,7 @@ class SyncedStore(object):
 
         return result
 
-    def get_cached_contents(self):
+    def get_cached_contents(self) -> dict:
         """
         Try to load cached server response from the file
         :return: dictionary with system purpose values
@@ -386,7 +394,7 @@ class SyncedStore(object):
             self.update_cache({})
         return self.cache_contents
 
-    def update_local(self, data):
+    def update_local(self, data: dict) -> None:
         """
         Rewrite local content with new data and write data to file syspurpose.json
         :param data: new dictionary with local data
@@ -395,25 +403,30 @@ class SyncedStore(object):
         self.local_contents = data
         self._write_local()
 
-    def _write_local(self):
+    def _write_local(self) -> None:
         """
         Write local data to the file
         :return: None
         """
         self._update_file(self.path, self.local_contents)
 
-    def update_cache(self, data):
+    def update_cache(self, data: dict) -> None:
         self.cache_contents = data
         self._write_cache()
 
-    def _write_cache(self):
+    def _write_cache(self) -> None:
         """
         Write cache to file
         :return: None
         """
         self._update_file(self.cache_path, self.cache_contents)
 
-    def update_remote(self, data):
+    def update_remote(self, data: dict) -> bool:
+        """
+        Send data to candlepin server
+        :param data: dictionary with syspurpose values
+        :return: True, when it was possible to update syspurpose values. Otherwise, return False.
+        """
         if self.uep is None or self.consumer_uuid is None:
             log.debug(
                 "Failed to update remote syspurpose on the server: no available connection, "
@@ -422,6 +435,8 @@ class SyncedStore(object):
             return False
 
         addons = data.get(ADDONS)
+        # FIXME: We do not check returned value of updateConsumer() method. When it is not possible
+        # to send data to server, then we return True
         self.uep.updateConsumer(
             self.consumer_uuid,
             role=data.get(ROLE) or "",
@@ -432,7 +447,7 @@ class SyncedStore(object):
         log.debug("Successfully updated remote syspurpose on the server.")
         return True
 
-    def _check_key_value_validity(self, key, value):
+    def _check_key_value_validity(self, key: str, value: str) -> None:
         """
         Check validity of provided key and value of it is included in valid fields
         :param key: provided key
@@ -461,7 +476,7 @@ class SyncedStore(object):
                 for valid_key in self.valid_fields.keys():
                     print(" - %s" % valid_key)
 
-    def add(self, key, value):
+    def add(self, key: str, value: str) -> bool:
         """
         Add a value to a list of values specified by key. If the current value
         specified by the key is scalar/non-list, it is not overridden, but
@@ -503,7 +518,7 @@ class SyncedStore(object):
 
         return self.changed
 
-    def remove(self, key, value):
+    def remove(self, key: str, value: str) -> bool:
         """
         Remove a value from a list specified by key.
         If the current value specified by the key is not a list, unset the value.
@@ -539,7 +554,7 @@ class SyncedStore(object):
 
         return self.changed
 
-    def unset(self, key):
+    def unset(self, key: str) -> bool:
         """
         Unsets a key
         :param key: The key to unset
@@ -566,12 +581,11 @@ class SyncedStore(object):
 
         return self.changed
 
-    def set(self, key, value):
+    def set(self, key: str, value: str) -> bool:
         """
         Set a key (syspurpose parameter) to value
         :param key: The parameter of the syspurpose file to set
         :type key: str
-
         :param value: The value to set that parameter to
         :return: Whether any change was made
         """
@@ -595,7 +609,7 @@ class SyncedStore(object):
         return self.changed
 
     @staticmethod
-    def _create_missing_dir(dir_path):
+    def _create_missing_dir(dir_path: str) -> None:
         """
         Try to create missing directory
         :param dir_path: path to directory
@@ -610,7 +624,7 @@ class SyncedStore(object):
                 log.warning("Unable to create directory: %s, error: %s" % (dir_path, err))
 
     @classmethod
-    def _update_file(cls, path, data):
+    def _update_file(cls, path: str, data: dict) -> None:
         """
         Write the contents of data to file in the first mode we can (effectively to create or update
         the file)
@@ -637,7 +651,7 @@ class SyncedStore(object):
             log.debug("Successfully updated syspurpose values at '%s'." % path)
         log.debug("Failed to update syspurpose values at '%s'." % path)
 
-    def get_valid_fields(self):
+    def get_valid_fields(self) -> Union[dict, None]:
         """
         Try to get valid fields from server using current owner (organization)
         :return: Dictionary with valid fields
@@ -667,15 +681,17 @@ DiffChange = collections.namedtuple(
 )
 
 
-def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
+def three_way_merge(
+    local: dict, base: dict, remote: dict, on_conflict: str = "remote", on_change: Callable = None
+) -> dict:
     """
-    Performs a three-way merge on the local and remote dictionaries with a given base.
+    Performs a three-way merge on the local and remote dictionaries with a given base
     :param local: The dictionary of the current local values
     :param base: The dictionary with the values we've last seen
     :param remote: The dictionary with "their" values
     :param on_conflict: Either "remote" or "local" or None. If "remote", the remote changes
                                will win any conflict. If "local", the local changes will win any
-                               conflict. If anything else, an error will be thrown.
+                               conflict. If anything else, an error will be thrown
     :param on_change: This is an optional function which will be given each change as it is
                       detected.
     :return: The dictionary of values as merged between the three provided dictionaries.
@@ -742,9 +758,9 @@ def three_way_merge(local, base, remote, on_conflict="remote", on_change=None):
     return result
 
 
-def detect_changed(base, other, key, source="server"):
+def detect_changed(base: dict, other: dict, key: str, source: str = "server") -> bool:
     """
-    Detect the type of change that has occurred between base and other for a given key.
+    Detect the type of change that has occurred between base and other for a given key
     :param base: The dictionary of values we are starting with
     :param other: The dictionary of now current values
     :param key: The key that we are interested in knowing how it changed
@@ -752,11 +768,11 @@ def detect_changed(base, other, key, source="server"):
                    make decisions which are one sided. (i.e. only applicable for changes from the
                    server side).
     :return: True if there was a change, false if there was no change
-    :rtype: bool
     """
     base = base or {}
     other = other or {}
     if key not in other and source != "local":
+        # FIXME: this method should return bool not str
         return UNSUPPORTED
 
     base_val = base.get(key)
