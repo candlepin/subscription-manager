@@ -8,7 +8,7 @@
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
 
-from typing import Optional, Tuple, Union
+from typing import Optional, Tuple, Union, List
 
 import logging
 import logging.handlers
@@ -30,9 +30,9 @@ LOG_FORMAT = (
     "%(threadName)s @%(filename)s:%(lineno)d - %(message)s"
 )
 
-_rhsm_log_handler = None
-_subman_debug_handler = None
-log = None
+_rhsm_log_handler: Optional["RHSMLogHandler"] = None
+_subman_debug_handler: Optional["SubmanDebugHandler"] = None
+log: Optional[logging.Logger] = None
 ROOT_NAMESPACES = [
     "subscription_manager",
     "rhsm",
@@ -44,16 +44,16 @@ ROOT_NAMESPACES = [
 
 
 # Don't need this for syslog
-class ContextLoggingFilter(object):
+class ContextLoggingFilter(logging.Filter):
     """Find the name of the process as 'cmd_name'"""
 
-    current_cmd = os.path.basename(sys.argv[0])
-    cmd_line = " ".join(sys.argv)
+    current_cmd: str = os.path.basename(sys.argv[0])
+    cmd_line: str = " ".join(sys.argv)
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, name: str):
+        super().__init__(name)
 
-    def filter(self, record):
+    def filter(self, record) -> bool:
         record.cmd_name = self.current_cmd
         record.cmd_line = self.cmd_line
 
@@ -61,16 +61,17 @@ class ContextLoggingFilter(object):
         return True
 
 
-class SubmanDebugLoggingFilter(object):
+class SubmanDebugLoggingFilter(logging.Filter):
     """Filter all log records unless env SUBMAN_DEBUG exists
 
-    Used to turn on stdout logging for cli debugging."""
+    Used to turn on stdout logging for cli debugging.
+    """
 
-    def __init__(self, name):
-        self.name = name
-        self.on = os.environ.get("SUBMAN_DEBUG", "") != ""
+    def __init__(self, name: str):
+        super().__init__(name)
+        self.on: bool = os.environ.get("SUBMAN_DEBUG", "") != ""
 
-    def filter(self, record):
+    def filter(self, record) -> bool:
         return self.on
 
 
@@ -116,16 +117,16 @@ class SubmanDebugHandler(logging.StreamHandler, object):
 # Note: this only does anything for python 2.6+, if the
 # logging module has 'captureWarnings'. Otherwise it will not
 # be triggered.
-class PyWarningsLoggingFilter(object):
+class PyWarningsLoggingFilter(logging.Filter):
     """Add a prefix to the messages from py.warnings.
 
-    To help distinquish log messages from python and pygtk 'warnings',
+    To help distinguish log messages from python and pygtk 'warnings',
     while avoiding changing the log format."""
 
-    label = "py.warnings:"
+    label: str = "py.warnings:"
 
     def __init__(self, name):
-        self.name = name
+        super().__init__(name)
 
     def filter(self, record):
         record.msg = "%s %s" % (self.label, record.msg)
@@ -135,7 +136,7 @@ class PyWarningsLoggingFilter(object):
 class PyWarningsLogger(logging.getLoggerClass()):
     """Logger for py.warnings for use in file based logging config."""
 
-    level = logging.WARNING
+    level: int = logging.WARNING
 
     def __init__(self, name):
         super(PyWarningsLogger, self).__init__(name)
@@ -146,7 +147,7 @@ class PyWarningsLogger(logging.getLoggerClass()):
 
 def _get_default_rhsm_log_handler():
     global _rhsm_log_handler
-    error = None
+    error: Optional[Exception] = None
     if not _rhsm_log_handler:
         _rhsm_log_handler, error = RHSMLogHandler(LOGFILE_PATH, USER_LOGFILE_PATH)
         _rhsm_log_handler.setFormatter(logging.Formatter(LOG_FORMAT))
@@ -161,10 +162,11 @@ def _get_default_subman_debug_handler():
     return _subman_debug_handler
 
 
-def init_logger(config=None):
+def init_logger(config: Optional[rhsm.config.RhsmConfigParser] = None):
     """Load logging config file and setup logging.
 
-    Only needs to be called once per process."""
+    Only needs to be called once per process.
+    """
 
     global log
     if log:
@@ -173,11 +175,11 @@ def init_logger(config=None):
     if config is None:
         config = rhsm.config.get_config_parser()
 
-    # This is little bit hackish, because it will probably work only for subscription-manager,
+    # This is a bit hackish, because it will probably work only for subscription-manager,
     # because only subscription-manager can set default_log_level using CLI option. If any
     # other CLI will want to set default_log_level, then it has to use same CLI option as
     # subscription-manager does (--logging.default_log_level)
-    default_log_level = None
+    default_log_level: Optional[str] = None
     for arg in sys.argv:
         if arg.startswith("--logging.default_log_level"):
             # It is possible to use --logging.default_log_level=VALUE and
@@ -188,7 +190,7 @@ def init_logger(config=None):
 
             if len(option_value) == 2:
                 default_log_level = option_value[1]
-                # When not valid value is provided, then set default_log_level to None
+                # When invalid value is provided, then set default_log_level to None
                 # Warning message will be printed later, when not valid value will be
                 # saved to config file
                 if config.is_log_level_valid(default_log_level, print_warning=False) is False:
@@ -200,7 +202,7 @@ def init_logger(config=None):
             # This is not a valid logging level, set to INFO
             default_log_level = "INFO"
 
-    pending_error_messages = []
+    pending_error_messages: List[Exception] = []
 
     for root_namespace in ROOT_NAMESPACES:
         logger = logging.getLogger(root_namespace)

@@ -23,11 +23,12 @@ automatically create the correct object for any given certificate.
 Eventually the deprecated classes below will be removed, and the new classes
 will be relocated into this module.
 """
+from typing import List, Any, Callable, Optional, Union, Tuple, Dict
+
 import dateutil
 import os
 import re
-from datetime import datetime as dt
-from datetime import tzinfo, timedelta
+import datetime
 from rhsm import _certificate
 import logging
 import warnings
@@ -49,47 +50,53 @@ VALUE_PATTERN = re.compile(r".*prim:\s(\w*)\s*:*(.*)")
 # we're using two modules for the time being. Eventually the certificate2 code
 # should be moved here.
 def create_from_file(path):
+    """
+    :return: rhsm.certificate2.Certificate
+    """
     from rhsm.certificate2 import _CertFactory  # prevent circular deps
 
     return _CertFactory().create_from_file(path)
 
 
 def create_from_pem(pem):
+    """
+    :return: rhsm.certificate2.Certificate
+    """
     from rhsm.certificate2 import _CertFactory  # prevent circular deps
 
     return _CertFactory().create_from_pem(pem)
 
 
-def parse_tags(tag_str):
+def parse_tags(tag_str: str) -> List[str]:
     """
     Split a comma separated list of tags from a certificate into a list.
     """
-    tags = []
+    tags: List[str] = []
     if tag_str:
         tags = tag_str.split(",")
     return tags
 
 
-class UTC(tzinfo):
+class UTC(datetime.tzinfo):
     """UTC"""
 
-    _ZERO = timedelta(0)
+    _ZERO = datetime.timedelta(0)
 
-    def utcoffset(self, dt):
+    def utcoffset(self, dt: Any) -> datetime.timedelta:
         return self._ZERO
 
-    def tzname(self, dt):
+    def tzname(self, dt: Any) -> str:
         return "UTC"
 
-    def dst(self, dt):
+    def dst(self, dt: Any) -> datetime.timedelta:
         return self._ZERO
 
 
-def get_datetime_from_x509(date):
+def get_datetime_from_x509(date: Any):
     return dateutil.parser.parse(date)
 
 
-def deprecated(func):
+def deprecated(func: Callable) -> Callable:
     """
     A decorator that marks a function as deprecated. This will cause a
     warning to be emitted any time that function is used by a caller.
@@ -188,7 +195,7 @@ class Certificate(object):
         :rtype: boolean
         """
         valid_range = self.validRange()
-        gmt = dt.utcnow()
+        gmt = datetime.datetime.utcnow()
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
@@ -202,7 +209,7 @@ class Certificate(object):
         :rtype: boolean
         """
         valid_range = self.validRange()
-        gmt = dt.utcnow()
+        gmt = datetime.datetime.utcnow()
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
@@ -521,29 +528,27 @@ class Key(object):
     """
 
     @classmethod
-    def read(cls, pem_path):
+    def read(cls, pem_path: str) -> "Key":
         """
         Read the key.
 
         :param pem_path: The path to the .pem file.
-        :type pem_path: str
         """
         f = open(pem_path)
-        content = f.read()
+        content: str = f.read()
         f.close()
         key = Key(content)
         key.path = pem_path
         return key
 
-    def __init__(self, content):
+    def __init__(self, content: str):
         """
         :param content: The PEM encoded key.
-        :type content: str
         """
-        self.content = content
-        self.path = None
+        self.content: str = content
+        self.path: Optional[str] = None
 
-    def bogus(self):
+    def bogus(self) -> List[str]:
         bogus = []
         if self.content:
             # TODO handle public keys too? class docstring seems to indicate so
@@ -555,13 +560,11 @@ class Key(object):
 
         return bogus
 
-    def write(self, pem_path):
+    def write(self, pem_path: str) -> "Key":
         """
         Write the key.
 
         :param pem_path: The path to the .pem file.
-        :type pem_path: str
-        :return: self
         """
         f = open(pem_path, "w")
         f.write(self.content)
@@ -570,7 +573,7 @@ class Key(object):
         os.chmod(pem_path, 0o644)
         return self
 
-    def delete(self):
+    def delete(self) -> None:
         """
         Delete the file associated with this key.
         """
@@ -579,7 +582,7 @@ class Key(object):
         else:
             raise Exception("no path, not deleted")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.content
 
 
@@ -587,59 +590,51 @@ class DateRange(object):
     """
     Date range object.
 
-    :ivar begin_date: The begining date
-    :type begin_date: :class:`datetime`
+    :ivar begin_date: The beginning date
     :ivar end_date: The ending date
-    :type end_date: :class:`datetime`
     """
 
-    def __init__(self, begin_date, end_date):
+    def __init__(self, begin_date: datetime.datetime, end_date: datetime.datetime):
         self._begin = self._convert_to_utc(begin_date)
         self._end = self._convert_to_utc(end_date)
 
-    def _convert_to_utc(self, timestamp):
+    def _convert_to_utc(self, timestamp: datetime.datetime) -> datetime.datetime:
         if timestamp.tzinfo is None:
             return timestamp.replace(tzinfo=GMT())
         else:
             return timestamp.astimezone(GMT())
 
-    def begin(self):
+    def begin(self) -> datetime.datetime:
         """
         Get range beginning.
 
         :return: The beginning date in UTC.
-        :rtype: :class:`datatime.datetime`
         """
         return self._begin
 
-    def end(self):
+    def end(self) -> datetime.datetime:
         """
         Get range end.
 
         :return: The end date in UTC.
-        :rtype: :class:`datetime.datetime`
         """
         return self._end
 
-    def has_now(self):
+    def has_now(self) -> bool:
         """
         Get whether the certificate is valid based on the date now.
 
         :return: True if valid.
-        :rtype: boolean
         """
-        gmt = dt.utcnow()
+        gmt: datetime.datetime = datetime.datetime.utcnow()
         gmt = gmt.replace(tzinfo=GMT())
         return self.has_date(gmt)
 
-    def has_date(self, date):
+    def has_date(self, date: datetime.datetime) -> bool:
         """
         Get whether the certificate is valid based on the date.
 
-        :param: date
-        :type: :class:`datetime.datetime`
         :return: True if valid.
-        :rtype: boolean
         """
         return date >= self.begin() and date <= self.end()
 
@@ -651,21 +646,21 @@ class DateRange(object):
     def hasNow(self):
         return self.has_now()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "\n\t%s\n\t%s" % (self._begin, self._end)
 
 
-class GMT(tzinfo):
+class GMT(datetime.tzinfo):
     """GMT"""
 
-    def utcoffset(self, date_time):
-        return timedelta(seconds=0)
+    def utcoffset(self, dt: Any) -> datetime.timedelta:
+        return datetime.timedelta(seconds=0)
 
-    def tzname(self, date_time):
+    def tzname(self, dt: Any) -> str:
         return "GMT"
 
-    def dst(self, date_time):
-        return timedelta(seconds=0)
+    def dst(self, dt: Any):
+        return datetime.timedelta(seconds=0)
 
 
 class Extensions(dict):
@@ -673,40 +668,33 @@ class Extensions(dict):
     Represents x.509 (v3) custom extensions.
     """
 
-    def __init__(self, x509):
-        """
-        :param x509: An :module:`rhsm._certificate` :class:`X509` object or dict.
-        :type x509: :obj:`X509`
-        """
+    def __init__(self, x509: Union[dict, _certificate.X509]):
         if isinstance(x509, dict):
             self.update(x509)
         else:
             self._parse(x509)
 
-    def ltrim(self, n):
+    def ltrim(self, n: int) -> "Extensions":
         """
         Left trim *n* parts.
 
-        :param n: The number of parts to trim.
-        :type n: int
+        :param n: The number of parts to trim
         :return: The trimmed OID
-        :rtype: :class:`Extensions`
         """
         d = {}
         for oid, v in list(self.items()):
             d[oid.ltrim(n)] = v
         return Extensions(d)
 
-    def get(self, oid, default=None):
+    def get(self, oid: Union[str, "OID"], default: Optional[str] = None) -> str:
         """
         Get the value of an extension by *oid*.
 
         Note: The *oid* may contain (*) wildcards.
 
         :param oid: An `OID` that may contain (*) wildcards.
-        :type oid: str|`OID`
+        :param default: Default value.
         :return: The value of the first extension matched.
-        :rtype: str
         """
         ext = self.find(oid, 1, True)
         if ext:
@@ -714,28 +702,30 @@ class Extensions(dict):
         else:
             return default
 
-    def find(self, oid, limit=0, ignoreOrder=False):
+    def find(
+        self,
+        oid: Union["OID", str],
+        limit: int = 0,
+        ignoreOrder: bool = False,
+    ) -> List[Tuple["OID", str]]:
         """
         Find all extensions matching the oid.
 
         Note: The oid may contain (*) wildcards.
 
         :param oid: An OID that may contain (*) wildcards.
-        :type oid: str|`OID`
         :param limit: Limit the number returned, 0=unlimited
-        :type limit: int
-        :param ignoreOrder Should oids be ordered
-        :type ignoreOrder: bool
+        :param ignoreOrder: Should OIDs be ordered
         :return: A list of matching items.
-        :rtype: (`OID`, value)
         :see: OID.match()
         """
-        ext = []
-        found = 0
+        ext: List[Tuple["OID", str]] = []
+        found: int = 0
         if isinstance(oid, str):
             oid = OID(oid)
 
-        # Only order the keys if we want more than a singel return avalue
+        # Only order the keys if we want more than a single return value
+        keyset: List["OID"]
         if ignoreOrder:
             keyset = list(self.keys())
         else:
@@ -743,138 +733,124 @@ class Extensions(dict):
 
         for k in keyset:
             if k.match(oid):
-                v = self[k]
+                v: str = self[k]
                 ext.append((k, v))
                 found = found + 1
             if limit and found == limit:
                 break
         return ext
 
-    def branch(self, root):
+    def branch(self, root: Union["OID", str]) -> "Extensions":
         """
         Find a subtree by matching the oid.
 
         :param root: An `OID` that may contain (*) wildcards.
-        :type root: str|`OID`
         :return: A subtree.
-        :rtype: :class:`Extensions`
         """
-        d = {}
+        d: Dict["OID", str] = {}
         if isinstance(root, str):
             root = OID(root)
         if root[-1]:
             root = root.append("")
-        ln = len(root) - 1
+        ln: int = len(root) - 1
         for oid, v in self.find(root):
             trimmed = oid.ltrim(ln)
             d[trimmed] = v
         return Extensions(d)
 
-    def _parse(self, x509):
+    def _parse(self, x509: _certificate.X509) -> None:
         """
-        Parse the extensions. Expects an :module:`rhsm._certificate` :class:`X509` object.
+        Parse the extensions.
         """
         for oid, value in list(x509.get_all_extensions().items()):
             oid = OID(oid)
             self[oid] = value
 
-    def __str__(self):
+    def __str__(self) -> str:
         s = []
         for item in list(self.items()):
             s.append('%s = "%s"' % item)
         return "\n".join(s)
 
 
-class OID(object):
+class OID:
     """
     The Object Identifier object.
 
     :ivar part: The oid parts.
-    :type part: [str,]
     :cvar WILDCARD: The wildcard character.
-    :type WILDCARD: str
     """
 
-    WILDCARD = "*"
+    WILDCARD: str = "*"
 
     @classmethod
-    def join(cls, *oid):
+    def join(cls, *oid) -> str:
         return ".".join(oid)
 
     @classmethod
-    def split(cls, s):
+    def split(cls, s: str) -> List[str]:
         """
         Split an OID string.
 
         :param s: An OID string Eg: (1.2.3)
-        :type s: str
         :return: A list of OID parts.
-        :rtype: [str,]
         """
         return s.split(".")
 
-    def __init__(self, oid):
+    def __init__(self, oid: Union[str, List[str]]):
         """
         :param oid: The OID value.
-        :type oid: str|[str,]
         """
         if isinstance(oid, str):
             self.part = self.split(oid)
         else:
             self.part = oid
 
-        self._len = None
-        self._str = None
-        self._hash = None
+        self._len: Optional[int] = None
+        self._str: Optional[str] = None
+        self._hash: Optional[str] = None
 
-    def parent(self):
+    def parent(self) -> Optional["OID"]:
         """
         Get the parent OID.
 
         :return: The parent OID.
-        :rtype: L{OID}
         """
-        p = self.part[:-1]
+        p: List[str] = self.part[:-1]
         if p:
             return OID(p)
 
-    def ltrim(self, n):
+    def ltrim(self, n: int) -> "OID":
         """
         Left trim I{n} parts.
 
         :param n: The number of parts to trim.
-        :type n: int
         :return: The trimmed OID
-        :rtype: :class:`OID`
         """
         return OID(self.part[n:])
 
-    def rtrim(self, n):
+    def rtrim(self, n: int) -> "OID":
         """
         Right trim I{n} parts.
 
         :param n: The number of parts to trim.
-        :type n: int
         :return: The trimmed OID
-        :rtype: :class:`OID`
         """
         return OID(self.part[:-n])
 
-    def append(self, oid):
+    def append(self, oid: Union["OID", str]) -> "OID":
         """
         Append the specified OID fragment.
 
         :param oid: An OID fragment.
-        :type oid: str|`OID`
         :return: The concatenated OID.
-        "rtype: :class:`OID`
         """
         if isinstance(oid, str):
             oid = OID(oid)
-        part = self.part + oid.part
+        part: List[str] = self.part + oid.part
         return OID(part)
 
-    def match(self, oid):
+    def match(self, oid: "OID") -> bool:
         """
         Match the specified OID considering wildcards.
 
@@ -885,11 +861,9 @@ class OID(object):
           - 1.4.*.6.*  (wildcard pattern)
 
         :param oid: An OID string or object.
-        :type oid: `OID`
         :return: True if matched
-        :rtype: boolean
         """
-        i = 0
+        i: int = 0
 
         # Matching the end
         if not oid[0]:
@@ -908,7 +882,7 @@ class OID(object):
             return False
 
         for x in parts:
-            val = oid[i]
+            val: str = oid[i]
             if x == val or val == self.WILDCARD:
                 i += 1
             else:
@@ -916,31 +890,31 @@ class OID(object):
 
         return True
 
-    def __len__(self):
+    def __len__(self) -> str:
         if not self._len:
             self._len = len(self.part)
 
         return self._len
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> str:
         return self.part[index]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self)
 
-    def __hash__(self):
+    def __hash__(self) -> str:
         if not self._hash:
             self._hash = hash(str(self))
 
         return self._hash
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return str(self) == str(other)
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         return str(self) < str(other)
 
-    def __str__(self):
+    def __str__(self) -> str:
         if not self._str:
             self._str = ".".join(self.part)
 
@@ -1090,60 +1064,60 @@ class Product(object):
         return str(self)
 
 
-class Entitlement(object):
-    def __init__(self, ext):
-        self.ext = ext
+class Entitlement:
+    def __init__(self, ext: Extensions):
+        self.ext: Extensions = ext
 
 
 class Content(Entitlement):
-    def __init__(self, ext):
+    def __init__(self, ext: Extensions):
         Entitlement.__init__(self, ext)
-        self.name = self.ext.get("1")
-        self.label = self.ext.get("2")
-        self.quantity = self.ext.get("3")
-        self.flex_quantity = self.ext.get("4")
-        self.vendor = self.ext.get("5")
-        self.url = self.ext.get("6")
-        self.gpg = self.ext.get("7")
-        self.enabled = self.ext.get("8")
-        self.metadata_expire = self.ext.get("9")
-        self.required_tags = parse_tags(self.ext.get("10"))
+        self.name: str = self.ext.get("1")
+        self.label: str = self.ext.get("2")
+        self.quantity: str = self.ext.get("3")
+        self.flex_quantity: str = self.ext.get("4")
+        self.vendor: str = self.ext.get("5")
+        self.url: str = self.ext.get("6")
+        self.gpg: str = self.ext.get("7")
+        self.enabled: str = self.ext.get("8")
+        self.metadata_expire: str = self.ext.get("9")
+        self.required_tags: List[str] = parse_tags(self.ext.get("10"))
 
-    def getName(self):
+    def getName(self) -> str:
         return self.name
 
-    def getLabel(self):
+    def getLabel(self) -> str:
         return self.label
 
-    def getQuantity(self):
+    def getQuantity(self) -> str:
         return self.quantity
 
-    def getFlexQuantity(self):
+    def getFlexQuantity(self) -> str:
         return self.flex_quantity
 
-    def getVendor(self):
+    def getVendor(self) -> str:
         return self.vendor
 
-    def getUrl(self):
+    def getUrl(self) -> str:
         return self.url
 
-    def getGpg(self):
+    def getGpg(self) -> str:
         return self.gpg
 
-    def getEnabled(self):
+    def getEnabled(self) -> str:
         return self.enabled
 
-    def getMetadataExpire(self):
+    def getMetadataExpire(self) -> str:
         return self.metadata_expire
 
-    def getRequiredTags(self):
+    def getRequiredTags(self) -> List[str]:
         return self.required_tags
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: "Content") -> bool:
         return isinstance(rhs, self.__class__) and (self.label == rhs.label)
 
-    def __str__(self):
-        s = []
+    def __str__(self) -> str:
+        s: List[str] = []
         s.append("Entitlement (content) {")
         s.append("\tName .......... = %s" % self.getName())
         s.append("\tLabel ......... = %s" % self.getLabel())
@@ -1158,24 +1132,24 @@ class Content(Entitlement):
         s.append("}")
         return "\n".join(s)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.label)
 
 
 class Role(Entitlement):
-    def getName(self):
+    def getName(self) -> str:
         return self.ext.get("1")
 
-    def getDescription(self):
+    def getDescription(self) -> str:
         return self.ext.get("2")
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs: "Role") -> bool:
         return self.getName() == rhs.getName()
 
-    def __str__(self):
+    def __str__(self) -> str:
         s = []
         s.append("Entitlement (role) {")
         s.append("\tName ......... = %s" % self.getName())
@@ -1183,7 +1157,7 @@ class Role(Entitlement):
         s.append("}")
         return "\n".join(s)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self)
 
 

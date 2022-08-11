@@ -39,7 +39,7 @@ _SSL_CONTEXT_REQUIRED_FEATURES = [
     "verify_mode",
 ]
 
-using_stdlibs = True
+using_stdlibs: bool = True
 for _feature in _SSL_REQUIRED_FEATURES:
     if not hasattr(_ssl, _feature):
         using_stdlibs = False

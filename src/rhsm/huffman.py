@@ -13,25 +13,29 @@
 
 import heapq
 import itertools
+from typing import Optional, List, Tuple
 
 
-class HuffmanNode(object):
+class HuffmanNode:
     """
     Represents a node in a Huffman tree.
     """
 
-    def __init__(self, weight, value=None, left=None, right=None, parent=None):
+    def __init__(
+        self,
+        weight: int,
+        value: Optional[int] = None,
+        left: Optional["HuffmanNode"] = None,
+        right: Optional["HuffmanNode"] = None,
+        parent: Optional["HuffmanNode"] = None,
+    ):
         """
         :param weight:  number representing the weight/priority of this node
-        :type  weight:  int
         :param value:   any value carried by this node, such as a symbol to be
-                        used in reconstructing (uncompressing) some data.
+                        used in reconstructing (decompressing) some data.
         :param left:    child node on the left, should have weight <= right
-        :type  left:    rhsm.huffman.HuffmanNode
         :param right:   child node on the right, should have weight >= left
-        :type  right:   rhsm.huffman.HuffmanNode
         :param parent:  parent node
-        :type  parent:  rhsm.huffman.HuffmanNode
         """
         self.weight = weight
         self.value = value
@@ -40,7 +44,7 @@ class HuffmanNode(object):
         self.parent = parent
 
     @classmethod
-    def combine(cls, left, right):
+    def combine(cls, left: "HuffmanNode", right: "HuffmanNode") -> "HuffmanNode":
         """
         Combine two nodes according to Huffman's tree-building algorithm. The
         weight of the left node should be <= that of the right node. If weights
@@ -48,31 +52,26 @@ class HuffmanNode(object):
         creates a new node and sets it as the parent attribute of each child.
 
         :param left:    child node on the left, should have weight <= right
-        :type  left:    rhsm.huffman.HuffmanNode
         :param right:   child node on the right, should have weight >= left
-        :type  right:   rhsm.huffman.HuffmanNode
 
         :return:        new node that is the combination of left and right
-        :rtype:         rhsm.huffman.HuffmanNode
         """
-        node = cls(left.weight + right.weight, None, left, right)
+        node: "HuffmanNode" = cls(left.weight + right.weight, None, left, right)
         left.parent = node
         right.parent = node
         return node
 
     @property
-    def is_leaf(self):
+    def is_leaf(self) -> bool:
         """
         :return:    True iff left and right are None, else False
-        :rtype:     bool
         """
         return self.right is None and self.left is None
 
     @property
-    def direction_from_parent(self):
+    def direction_from_parent(self) -> str:
         """
         :return:    '0' if self is left of its parent, or '1' if right of parent.
-        :rtype:     str
         """
         if self.parent is None:
             raise AttributeError
@@ -82,15 +81,14 @@ class HuffmanNode(object):
             return "1"
 
     @property
-    def code(self):
+    def code(self) -> str:
         """
         :return:    Huffman code for this node as a series of characters '0' and '1'
-        :rtype:     str
         """
         if not self.is_leaf:
             raise AttributeError("node is not a leaf")
-        turns = []
-        next_node = self
+        turns: List[str] = []
+        next_node: "HuffmanNode" = self
         while next_node is not None:
             if next_node.parent is not None:
                 turns.insert(0, next_node.direction_from_parent)
@@ -98,21 +96,22 @@ class HuffmanNode(object):
         return "".join(turns)
 
     @classmethod
-    def build_tree(cls, nodes):
+    def build_tree(cls, nodes: List["HuffmanNode"]) -> "HuffmanNode":
         """
         :param nodes:   list of HuffmanNode instances that will become leaves
                         in a Huffman tree.
-        :type  nodes:   list
         :return:        HuffmanNode instance that is the root node of the tree
-        :rtype:         rhsm.huffman.HuffmanNode
         """
         # the counter makes sure that when nodes of equal weight are compared,
         # the one most recently added gets chosen
         counter = itertools.count()
         # We use the heapq module to make a min priority queue
-        queue = [(node, next(counter)) for node in nodes]
+        queue: List[Tuple["HuffmanNode", int]] = [(node, next(counter)) for node in nodes]
         heapq.heapify(queue)
         while True:
+            left: "HuffmanNode"
+            right: "HuffmanNode"
+            count: int
             left, count = heapq.heappop(queue)
             try:
                 right, count = heapq.heappop(queue)
@@ -121,30 +120,30 @@ class HuffmanNode(object):
                 return left
             heapq.heappush(queue, (cls.combine(left, right), next(counter)))
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         return self.weight < other.weight
 
-    def __le__(self, other):
+    def __le__(self, other) -> bool:
         return self.weight <= other.weight
 
-    def __gt__(self, other):
+    def __gt__(self, other) -> bool:
         return self.weight > other.weight
 
-    def __ge__(self, other):
+    def __ge__(self, other) -> bool:
         return self.weight >= other.weight
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if not hasattr(other, "weight"):
             return False
         return self.weight == other.weight
 
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         if not hasattr(other, "weight"):
             return True
         return self.weight != other.weight
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return self.value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'HuffmanNode(%d, "%s")' % (self.weight, self.value)

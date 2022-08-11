@@ -21,6 +21,7 @@ from iniparse import SafeConfigParser
 from iniparse.compat import NoOptionError, InterpolationMissingOptionError, NoSectionError
 import re
 import tempfile
+from typing import Dict, List, Optional, Tuple
 
 CONFIG_ENV_VAR = "RHSM_CONFIG"
 
@@ -99,7 +100,7 @@ DEFAULTS = {
 }
 
 
-def in_container():
+def in_container() -> bool:
     """
     Are we running in a docker container or not?
     """
@@ -109,7 +110,7 @@ def in_container():
         return False
     # Known locations to check for as an easy way to detect whether
     # we are running in a container
-    locations = [
+    locations: List[str] = [
         # podman:
         # https://github.com/containers/podman/issues/6192
         # https://github.com/containers/podman/issues/3586#issuecomment-661918679
@@ -131,33 +132,37 @@ class RhsmConfigParser(SafeConfigParser):
     """Config file parser for rhsm configuration."""
 
     # defaults unused but kept to preserve compatibility
-    def __init__(self, config_file=None, defaults=None):
-        self.config_file = config_file
+    def __init__(self, config_file: Optional[str] = None, defaults=None):
+        self.config_file: str = config_file
         SafeConfigParser.__init__(self)
         self.read(self.config_file)
 
-    def read(self, file_names=None):
+    def read(self, file_names: Optional[List[str]] = None) -> List[str]:
         """
         Read configuration files. When configuration files are not specified, then read self.config_file
         :param file_names: list of configuration files
         :return: number of configuration files read
         """
+        # FIXME Instead of optional list, we can set default to [] instead
         if file_names is None:
             return super(RhsmConfigParser, self).read(self.config_file)
         else:
             return super(RhsmConfigParser, self).read(file_names)
 
-    def save(self, config_file=None):
+    def save(self, config_file: Optional[str] = None):
         """Writes config file to storage."""
-        rhsm_conf_dir = os.path.dirname(self.config_file)
+        # FIXME config_file is not used
+        rhsm_conf_dir: str = os.path.dirname(self.config_file)
 
         # When /etc/rhsm does not exist, then try to create it
         if os.path.isdir(rhsm_conf_dir) is False:
             os.makedirs(rhsm_conf_dir)
 
+        # FIXME Stop using tempfile like that
         with tempfile.NamedTemporaryFile(mode="w", dir=rhsm_conf_dir, delete=False) as fo:
             self.write(fo)
             fo.flush()
+            mode: int
             try:
                 mode = os.stat(self.config_file).st_mode
             except IOError:
@@ -165,26 +170,22 @@ class RhsmConfigParser(SafeConfigParser):
             os.rename(fo.name, self.config_file)
             os.chmod(self.config_file, mode)
 
-    def get(self, section, prop):
+    def get(self, section: str, prop: str) -> str:
         """Get a value from rhsm config.
 
         :param section: config file section
-        :type section: str
-        :param prop: what config propery to find, the config item name
-        :type prop: str
+        :param prop: what config property to find, the config item name
         :return: The string value of the config item.
-        :rtype: str
 
-        If config item exists, but is not set,
-        an empty string is return.
+        If config item exists, but is not set, an empty string is returned.
         """
         try:
             return SafeConfigParser.get(self, section, prop)
         except InterpolationMissingOptionError:
             # if there is an interpolation error, resolve it
-            raw_val = super(RhsmConfigParser, self).get(section, prop, True)
-            interpolations = re.findall(r"%\((.*?)\)s", raw_val)
-            changed = False
+            raw_val: str = super(RhsmConfigParser, self).get(section, prop, True)
+            interpolations: List[str] = re.findall(r"%\((.*?)\)s", raw_val)
+            changed: bool = False
             for interp in interpolations:
                 # Defaults aren't interpolated by default, so bake them in as necessary
                 # has_option throws an exception if the section doesn't exist,
@@ -204,7 +205,7 @@ class RhsmConfigParser(SafeConfigParser):
                 # re-raise the NoOptionError, not the key error
                 raise er
 
-    def set(self, section, name, value):
+    def set(self, section: str, name: str, value: str) -> None:
         try:
             # If the value doesn't exist, or isn't equal, write it
             if self.get(section, name) != value:
@@ -216,15 +217,16 @@ class RhsmConfigParser(SafeConfigParser):
         if section == "logging" and name == "default_log_level":
             self.is_log_level_valid(value)
 
-    def is_log_level_valid(self, value, print_warning=True):
+    def is_log_level_valid(self, value: str, print_warning: bool = True) -> bool:
         """
         Check if provided default_log_level value is valid or not
         :param value: value of default_log_level
         :param print_warning: print warning, when provided value is not valid
         :return: True, when value is valid. Otherwise return False
         """
-        valid = ["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]
+        valid: List[str] = ["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]
         if value not in valid + ["NOTSET"]:
+            # FIXME These strings are not being translated
             if print_warning is True:
                 print(
                     "Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value),
@@ -240,21 +242,18 @@ class RhsmConfigParser(SafeConfigParser):
             return False
         return True
 
-    def get_int(self, section, prop):
-        """Get a int value from the config.
+    def get_int(self, section: str, prop: str) -> Optional[int]:
+        """Get an int value from the config.
 
         :param section: the config section
-        :type section: str
         :param prop: the config item name
-        :type prop: str
-        :return: An int cast from the string read from
-            the config. If config item is unset,
-            return None
-        :rtype: int or None
-        :raises ValueError: if the config value found
-                        can not be coerced into an int
+        :return:
+            An int cast from the string read from.
+            If config item is unset, return None.
+        :raises ValueError:
+            If the config value found can not be coerced into an int
         """
-        value_string = self.get(section, prop)
+        value_string: str = self.get(section, prop)
         if value_string == "":
             return None
         try:
@@ -267,38 +266,38 @@ class RhsmConfigParser(SafeConfigParser):
 
     # Overriding this method to address
     # http://code.google.com/p/iniparse/issues/detail?id=9
-    def defaults(self):
-        result = []
+    def defaults(self) -> Dict[str, str]:
+        result: List[Tuple[str, str]] = []
         for section in DEFAULTS:
             result += [(key, value) for (key, value) in list(DEFAULTS[section].items())]
         return dict(result)
 
-    def sections(self):
-        result = super(RhsmConfigParser, self).sections()
+    def sections(self) -> List[str]:
+        result: List[str] = super(RhsmConfigParser, self).sections()
         for section in DEFAULTS:
             if section not in result:
                 result.append(section)
         return result
 
-    def has_option(self, section, prop):
+    def has_option(self, section: str, prop: str) -> bool:
         try:
             self.get(section, prop)
             return True
         except NoOptionError:
             return False
 
-    def items(self, section):
-        result = {}
+    def items(self, section: str) -> List[Tuple[str, str]]:
+        result: Dict[str, str] = {}
         for key in DEFAULTS.get(section, {}):
             result[key] = DEFAULTS[section][key]
         if self.has_section(section):
-            super_result = super(RhsmConfigParser, self).options(section)
+            super_result: List[str] = super(RhsmConfigParser, self).options(section)
             for key in super_result:
                 if self.get(section, key) and len(self.get(section, key).strip()) > 0:
                     result[key] = self.get(section, key)
         return list(result.items())
 
-    def options(self, section):
+    def options(self, section: str) -> List[str]:
         # This is necessary because with the way we handle defaults, parser.has_section('xyz')
         # will return True if 'xyz' exists only in the defaults but parser.options('xyz')
         #  will throw an exception.
@@ -310,15 +309,15 @@ class RhsmConfigParser(SafeConfigParser):
             items.update(super_result)
         return list(items)
 
-    def is_default(self, section, prop, value):
+    def is_default(self, section: str, prop: str, value: str) -> bool:
         if self.get_default(section, prop) == value:
             return True
         return False
 
-    def has_default(self, section, prop):
+    def has_default(self, section: str, prop: str) -> bool:
         return section in DEFAULTS and prop.lower() in DEFAULTS[section]
 
-    def get_default(self, section, prop):
+    def get_default(self, section: str, prop: str) -> Optional[str]:
         if self.has_default(section, prop.lower()):
             return DEFAULTS[section][prop.lower()]
         return None
@@ -340,12 +339,13 @@ class RhsmHostConfigParser(RhsmConfigParser):
     present.
     """
 
-    def __init__(self, config_file=None, defaults=None):
+    def __init__(self, config_file: Optional[str] = None, defaults=None):
+        # FIXME Use super() instead
         RhsmConfigParser.__init__(self, config_file, defaults)
 
         # Override the ca_cert_dir and repo_ca_cert if necessary:
-        ca_cert_dir = self.get("rhsm", "ca_cert_dir")
-        repo_ca_cert = self.get("rhsm", "repo_ca_cert")
+        ca_cert_dir: str = self.get("rhsm", "ca_cert_dir")
+        repo_ca_cert: str = self.get("rhsm", "repo_ca_cert")
 
         ca_cert_dir = ca_cert_dir.replace(DEFAULT_CONFIG_DIR, HOST_CONFIG_DIR)
         repo_ca_cert = repo_ca_cert.replace(DEFAULT_CONFIG_DIR, HOST_CONFIG_DIR)
@@ -363,7 +363,10 @@ class RhsmHostConfigParser(RhsmConfigParser):
             self.set("rhsm", "entitlementcertdir", ent_cert_dir)
 
 
-def get_config_parser():
+CFG: Optional[RhsmConfigParser] = None
+
+
+def get_config_parser() -> RhsmConfigParser:
     """
     Get an :class:`RhsmConfig` instance
 
