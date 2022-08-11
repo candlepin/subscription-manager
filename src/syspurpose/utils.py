@@ -24,7 +24,7 @@ import logging
 log = logging.getLogger(__name__)
 
 
-def create_dir(path):
+def create_dir(path: str) -> bool:
     """
     Attempts to create the path given (less any file)
     :param path: path
@@ -41,7 +41,7 @@ def create_dir(path):
     return True
 
 
-def create_file(path, contents):
+def create_file(path: str, contents: dict) -> bool:
     """
     Attempts to create a file, with the given contents
     :param path: The desired path to the file
@@ -64,10 +64,10 @@ def create_file(path, contents):
     return True
 
 
-def write_to_file_utf8(file, data):
+def write_to_file_utf8(file, data: dict) -> None:
     """
     Writes out the provided data to the specified file, with user-friendly indentation,
-    and in utf-8 encoding.
+    and in utf-8 encoding
     :param file: The file to write to
     :param data: The data to be written
     :return:
