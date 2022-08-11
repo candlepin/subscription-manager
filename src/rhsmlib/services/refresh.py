@@ -18,6 +18,8 @@ This module provides service for refreshing entitlement certificates
 
 import logging
 
+from rhsm.connection import UEPConnection
+
 import subscription_manager.injection as inj
 from subscription_manager.entcertlib import EntCertActionInvoker
 
@@ -29,7 +31,7 @@ class Refresh(object):
     Class used for refreshing entitlement certificates
     """
 
-    def __init__(self, cp=None, ent_cert_lib=None):
+    def __init__(self, cp: UEPConnection = None, ent_cert_lib: EntCertActionInvoker = None) -> None:
         """
         Initialize Refresh object
         """
@@ -43,7 +45,7 @@ class Refresh(object):
         else:
             self.ent_cert_lib = EntCertActionInvoker()
 
-    def refresh(self, force=False):
+    def refresh(self, force: bool = False) -> None:
         """
         Try to refresh entitlement certificates installed on the system. This method
         can raise some exceptions, when it wasn't possible to refresh entitlement

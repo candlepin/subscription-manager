@@ -20,13 +20,14 @@ from subscription_manager import injection as inj
 
 
 class Consumer(object):
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialization of Consumer instance.
         """
         pass
 
-    def get_consumer_uuid(self):
+    @staticmethod
+    def get_consumer_uuid() -> str:
         """
         Method for getting UUID of consumer
         :return: string representing UUID

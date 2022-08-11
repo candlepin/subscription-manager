@@ -10,8 +10,12 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+
 import logging
 import socket
+from typing import Callable
+
+from rhsm.connection import UEPConnection
 
 from rhsmlib.services import exceptions
 
@@ -24,29 +28,31 @@ log = logging.getLogger(__name__)
 
 
 class RegisterService(object):
-    def __init__(self, cp):
+    def __init__(self, cp: UEPConnection) -> None:
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
         self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
         self.facts = inj.require(inj.FACTS)
         self.identity = inj.require(inj.IDENTITY)
         self.cp = cp
 
+    # FIXME: Some default arguments should be False, not None. The argument name should be renamed from
+    # type to something else, because it conflicts with built-in type
     def register(
         self,
-        org,
-        activation_keys=None,
-        environments=None,
-        force=None,
-        name=None,
-        consumerid=None,
-        type=None,
-        role=None,
-        addons=None,
-        service_level=None,
-        usage=None,
-        jwt_token=None,
-        **kwargs
-    ):
+        org: str,
+        activation_keys: list = None,
+        environments: list = None,
+        force: bool = None,
+        name: str = None,
+        consumerid: str = None,
+        type: str = None,
+        role: str = None,
+        addons: list = None,
+        service_level: str = None,
+        usage: str = None,
+        jwt_token: str = None,
+        **kwargs: dict
+    ) -> dict:
         # We accept a kwargs argument so that the DBus object can pass the options dictionary it
         # receives transparently to the service via dictionary unpacking.  This strategy allows the
         # DBus object to be more independent of the service implementation.
@@ -177,7 +183,12 @@ class RegisterService(object):
 
         return consumer
 
-    def validate_options(self, options):
+    def validate_options(self, options: dict) -> None:
+        """
+        Validate (not only) CLI options
+        :param options: Dictionary containing options
+        :return: None
+        """
         if self.identity.is_valid() and options["force"] is not True:
             raise exceptions.ValidationError(
                 _("This system is already registered. Add force to options to " "override.")
@@ -215,11 +226,11 @@ class RegisterService(object):
             if not getattr(self.cp, "token", None):
                 raise exceptions.ValidationError(_("Error: Missing username or password."))
 
-    def determine_owner_key(self, username, get_owner_cb, no_owner_cb):
+    def determine_owner_key(self, username: str, get_owner_cb: Callable, no_owner_cb: Callable) -> str:
         """
         Method used for specification of owner key during registration. When there is more than
-        one owners and it is necessary to specify one, then get_owner_cb is called with the list
-        of owners as the argument. When user is not member of any group, then no_owner_cb is called.
+        one owner, and it is necessary to specify one, then get_owner_cb is called with the list
+        of owners as the argument. When user is not member of any group, then no_owner_cb is called
         :param username: Username
         :param get_owner_cb: Callback method called, when it is necessary determine wanted owner (org)
         :param no_owner_cb: Callback method called, when user is not member of any owner (org)

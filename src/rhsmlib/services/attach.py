@@ -13,17 +13,28 @@
 import logging
 
 from subscription_manager import injection as inj
+from rhsm.connection import UEPConnection
 
 log = logging.getLogger(__name__)
 
 
 class AttachService(object):
-    def __init__(self, cp):
+    """
+    Service using for attach pools by ID or auto-attaching
+    """
+
+    def __init__(self, cp: UEPConnection) -> None:
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
         self.identity = inj.require(inj.IDENTITY)
         self.cp = cp
 
-    def attach_auto(self, service_level=None):
+    def attach_auto(self, service_level: str = None) -> dict:
+        """
+        Try to perform auto-attach. Candlepin server tries to attach pool according
+        installed product certificates and other attributes (service_level, syspurpose, etc.)
+        :param service_level: String with requested service level
+        :return: Dictionary with result of REST-API call
+        """
 
         # FIXME: First check if current service_level is the same as provided in
         # argument and if not then try to set something new. Otherwise it is useless
@@ -47,7 +58,13 @@ class AttachService(object):
 
         return resp
 
-    def attach_pool(self, pool, quantity):
+    def attach_pool(self, pool: str, quantity: int) -> dict:
+        """
+        Try to attach pool
+        :param pool: String with pool ID
+        :param quantity: Quantity of subscriptions user wants to consume
+        :return: Dictionary with result of REST-API call
+        """
 
         # If quantity is None, server will assume 1. pre_subscribe will
         # report the same.
