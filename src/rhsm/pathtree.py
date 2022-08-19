@@ -227,11 +227,7 @@ class PathTree(object):
 
     @classmethod
     def _generate_path_tree(
-            cls,
-            path_dict: dict,
-            path_leaves: List[HuffmanNode],
-            word_dict: dict,
-            bitstream: GhettoBitStream
+        cls, path_dict: dict, path_leaves: List[HuffmanNode], word_dict: dict, bitstream: GhettoBitStream
     ) -> dict:
         """
         Once huffman trees have been generated for the words and for the path

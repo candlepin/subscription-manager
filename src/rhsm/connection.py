@@ -117,6 +117,7 @@ log = logging.getLogger(__name__)
 
 class NoValidEntitlement(Exception):
     """Throw when there is no valid entitlement certificate for accessing CDN"""
+
     pass
 
 
@@ -765,11 +766,7 @@ class BaseRestLib(object):
         return conn
 
     def _print_debug_info_about_request(
-            self,
-            request_type: str,
-            handler: str,
-            final_headers: dict,
-            body: Union[dict, Any]
+        self, request_type: str, handler: str, final_headers: dict, body: Union[dict, Any]
     ) -> None:
         """
         This method can print debug information about sent http request. We do not use
@@ -1136,12 +1133,7 @@ class BaseRestLib(object):
     # FIXME: The name of response is confusing, because it looks like that it is HTTPResponse, but it
     # is not true. It is dictionary and it should be renamed to result (see e.g. _request method using
     # validateResponse method)
-    def validateResponse(
-            self,
-            response: dict,
-            request_type: str = None,
-            handler: str = None
-    ) -> None:
+    def validateResponse(self, response: dict, request_type: str = None, handler: str = None) -> None:
         """
         Try to validate result of HTTP request. Raise exception, when validation of
         result failed
@@ -1247,48 +1239,31 @@ class BaseRestLib(object):
             return body["error_description"]
 
     def request_get(
-            self,
-            method: str,
-            headers: dict = None,
-            cert_key_pairs: List[Tuple[str, str]] = None,
-            description: Optional[str] = None
+        self,
+        method: str,
+        headers: dict = None,
+        cert_key_pairs: List[Tuple[str, str]] = None,
+        description: Optional[str] = None,
     ) -> Any:
         return self._request(
             "GET", method, headers=headers, cert_key_pairs=cert_key_pairs, description=description
         )
 
     def request_post(
-            self,
-            method: str,
-            params: Any = None,
-            headers: dict = None,
-            description: Optional[str] = None
+        self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
     ) -> Any:
         return self._request("POST", method, params, headers=headers, description=description)
 
-    def request_head(
-            self,
-            method: str,
-            headers: dict = None,
-            description: Optional[str] = None
-    ) -> Any:
+    def request_head(self, method: str, headers: dict = None, description: Optional[str] = None) -> Any:
         return self._request("HEAD", method, headers=headers, description=description)
 
     def request_put(
-            self,
-            method: str,
-            params: Any = None,
-            headers: dict = None,
-            description: Optional[str] = None
+        self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
     ) -> Any:
         return self._request("PUT", method, params, headers=headers, description=description)
 
     def request_delete(
-            self,
-            method: str,
-            params: Any = None,
-            headers: dict = None,
-            description: Optional[str] = None
+        self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
     ) -> Any:
         return self._request("DELETE", method, params, headers=headers, description=description)
 
@@ -1314,7 +1289,7 @@ class Restlib(BaseRestLib):
         method: str,
         info: Any = None,
         headers: dict = None,
-        cert_key_pairs:  List[Tuple[str, str]] = None,
+        cert_key_pairs: List[Tuple[str, str]] = None,
         description: Optional[str] = None,
     ) -> Any:
         """
@@ -1547,13 +1522,7 @@ class UEPConnection(BaseConnection):
 
     # FIXME: the options argument is some object with some attributes. It is not defined anywhere
     # virt-who uses some dummy object and add some attributes to this object
-    def hypervisorCheckIn(
-            self,
-            owner: str,
-            env: str,
-            host_guest_mapping: dict,
-            options: Any = None
-    ) -> dict:
+    def hypervisorCheckIn(self, owner: str, env: str, host_guest_mapping: dict, options: Any = None) -> dict:
         """
         Sends a mapping of hostIds to list of guestIds to candlepin
         to be registered/updated.
@@ -1908,11 +1877,7 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s/certificates/serials" % self.sanitize(consumerId)
         return self.conn.request_get(method, description=_("Fetching certificate serial numbers"))
 
-    def getAccessibleContent(
-            self,
-            consumerId: str,
-            if_modified_since: datetime.datetime = None
-    ) -> dict:
+    def getAccessibleContent(self, consumerId: str, if_modified_since: datetime.datetime = None) -> dict:
         """
         Get the content of the accessible content cert for a given consumer. This method works only in the
         case, when simple content access is used by current owner (organization)
@@ -2225,10 +2190,7 @@ class UEPConnection(BaseConnection):
 
     # FIXME: no client tool use this method
     def regenEntitlementCertificate(
-            self,
-            consumer_id: str,
-            entitlement_id: str,
-            lazy_regen: bool = True
+        self, consumer_id: str, entitlement_id: str, lazy_regen: bool = True
     ) -> bool:
         """
         Regenerates the specified entitlement for the given consumer

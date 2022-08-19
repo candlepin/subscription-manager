@@ -76,8 +76,7 @@ class SubmanDebugLoggingFilter(logging.Filter):
 
 
 def RHSMLogHandler(
-        root_log_file: str,
-        user_log_file: str
+    root_log_file: str, user_log_file: str
 ) -> Tuple[Union[logging.handlers.RotatingFileHandler, logging.StreamHandler], Optional[str]]:
     """Factory for the file logging handler.
 
