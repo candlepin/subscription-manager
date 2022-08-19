@@ -19,9 +19,8 @@ import re
 import zlib
 
 import datetime
-from typing import Optional, Any, List, Dict, Union, Tuple
+from typing import Optional, List, Dict, Union, Tuple
 
-import rhsm.pathtree
 from rhsm import _certificate
 
 from rhsm.connection import safe_int

@@ -32,7 +32,6 @@ import datetime
 from rhsm import _certificate
 import logging
 import warnings
-from typing import Union
 
 log = logging.getLogger(__name__)
 
