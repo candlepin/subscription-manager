@@ -53,7 +53,7 @@ class ContextLoggingFilter(logging.Filter):
     def __init__(self, name: str):
         super().__init__(name)
 
-    def filter(self, record) -> bool:
+    def filter(self, record: logging.LogRecord) -> bool:
         record.cmd_name = self.current_cmd
         record.cmd_line = self.cmd_line
 
@@ -67,16 +67,17 @@ class SubmanDebugLoggingFilter(logging.Filter):
     Used to turn on stdout logging for cli debugging.
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         super().__init__(name)
         self.on: bool = os.environ.get("SUBMAN_DEBUG", "") != ""
 
-    def filter(self, record) -> bool:
+    def filter(self, record: logging.LogRecord) -> bool:
         return self.on
 
 
 def RHSMLogHandler(
-    root_log_file: str, user_log_file: str
+        root_log_file: str,
+        user_log_file: str
 ) -> Tuple[Union[logging.handlers.RotatingFileHandler, logging.StreamHandler], Optional[str]]:
     """Factory for the file logging handler.
 
@@ -125,10 +126,10 @@ class PyWarningsLoggingFilter(logging.Filter):
 
     label: str = "py.warnings:"
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         super().__init__(name)
 
-    def filter(self, record):
+    def filter(self, record: logging.LogRecord) -> bool:
         record.msg = "%s %s" % (self.label, record.msg)
         return True
 
@@ -138,14 +139,16 @@ class PyWarningsLogger(logging.getLoggerClass()):
 
     level: int = logging.WARNING
 
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         super(PyWarningsLogger, self).__init__(name)
 
         self.setLevel(self.level)
         self.addFilter(PyWarningsLoggingFilter(name="py.warnings"))
 
 
-def _get_default_rhsm_log_handler():
+def _get_default_rhsm_log_handler() -> Tuple[
+    Union[logging.handlers.RotatingFileHandler, logging.StreamHandler], Optional[str]
+]:
     global _rhsm_log_handler
     error: Optional[Exception] = None
     if not _rhsm_log_handler:
@@ -154,7 +157,7 @@ def _get_default_rhsm_log_handler():
     return _rhsm_log_handler, error
 
 
-def _get_default_subman_debug_handler():
+def _get_default_subman_debug_handler() -> Union[None, "SubmanDebugHandler"]:
     global _subman_debug_handler
     if not _subman_debug_handler:
         _subman_debug_handler = SubmanDebugHandler()
@@ -162,7 +165,7 @@ def _get_default_subman_debug_handler():
     return _subman_debug_handler
 
 
-def init_logger(config: Optional[rhsm.config.RhsmConfigParser] = None):
+def init_logger(config: Optional[rhsm.config.RhsmConfigParser] = None) -> None:
     """Load logging config file and setup logging.
 
     Only needs to be called once per process.
@@ -239,7 +242,7 @@ def init_logger(config: Optional[rhsm.config.RhsmConfigParser] = None):
         log.error(error_message)
 
 
-def init_logger_for_yum():
+def init_logger_for_yum() -> None:
     init_logger()
 
     # Don't send log records up to yum/yum plugin conduit loggers

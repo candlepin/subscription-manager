@@ -11,7 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 from collections import deque
-from typing import List
+from typing import List, Union
 
 
 class GhettoBitStream:
@@ -23,20 +23,20 @@ class GhettoBitStream:
 
     Data is converted into the '0' and '1' characters one byte at a time, since
     that operation multiplies the size of the data by a factor of 8, and it may
-    not be desirable to inflate all of the data at once.
+    not be desirable to inflate all the data at once.
     """
 
-    def __init__(self, data: str):
+    def __init__(self, data: Union[bytes, str]) -> None:
         """
         :param data:    binary data in a string
         """
         self.bytes = deque(bytearray(data))
         self._bit_buffer = deque()
 
-    def __iter__(self):
+    def __iter__(self) -> "GhettoBitStream":
         return self
 
-    def __next__(self):
+    def __next__(self) -> str:
         """
         converts one byte at a time into a bit representation, waiting until
         those bits have been consumed before converting another byte

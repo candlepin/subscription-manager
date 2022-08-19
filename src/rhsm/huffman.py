@@ -13,7 +13,7 @@
 
 import heapq
 import itertools
-from typing import Optional, List, Tuple
+from typing import Optional, List, Union
 
 
 class HuffmanNode:
@@ -24,11 +24,11 @@ class HuffmanNode:
     def __init__(
         self,
         weight: int,
-        value: Optional[int] = None,
+        value: Union[int, str, dict] = None,
         left: Optional["HuffmanNode"] = None,
         right: Optional["HuffmanNode"] = None,
         parent: Optional["HuffmanNode"] = None,
-    ):
+    ) -> None:
         """
         :param weight:  number representing the weight/priority of this node
         :param value:   any value carried by this node, such as a symbol to be
@@ -120,24 +120,24 @@ class HuffmanNode:
                 return left
             heapq.heappush(queue, (cls.combine(left, right), next(counter)))
 
-    def __lt__(self, other) -> bool:
+    def __lt__(self, other: "HuffmanNode") -> bool:
         return self.weight < other.weight
 
-    def __le__(self, other) -> bool:
+    def __le__(self, other: "HuffmanNode") -> bool:
         return self.weight <= other.weight
 
-    def __gt__(self, other) -> bool:
+    def __gt__(self, other: "HuffmanNode") -> bool:
         return self.weight > other.weight
 
-    def __ge__(self, other) -> bool:
+    def __ge__(self, other: "HuffmanNode") -> bool:
         return self.weight >= other.weight
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: "HuffmanNode") -> bool:
         if not hasattr(other, "weight"):
             return False
         return self.weight == other.weight
 
-    def __ne__(self, other) -> bool:
+    def __ne__(self, other: "HuffmanNode") -> bool:
         if not hasattr(other, "weight"):
             return True
         return self.weight != other.weight

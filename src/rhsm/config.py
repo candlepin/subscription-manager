@@ -149,7 +149,7 @@ class RhsmConfigParser(SafeConfigParser):
         else:
             return super(RhsmConfigParser, self).read(file_names)
 
-    def save(self, config_file: Optional[str] = None):
+    def save(self, config_file: Optional[str] = None) -> None:
         """Writes config file to storage."""
         # FIXME config_file is not used
         rhsm_conf_dir: str = os.path.dirname(self.config_file)
@@ -339,7 +339,7 @@ class RhsmHostConfigParser(RhsmConfigParser):
     present.
     """
 
-    def __init__(self, config_file: Optional[str] = None, defaults=None):
+    def __init__(self, config_file: Optional[str] = None, defaults=None) -> None:
         # FIXME Use super() instead
         RhsmConfigParser.__init__(self, config_file, defaults)
 

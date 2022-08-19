@@ -13,6 +13,7 @@
 
 import itertools
 import zlib
+from typing import Tuple, List, Any
 
 from rhsm.bitstream import GhettoBitStream
 from rhsm.huffman import HuffmanNode
@@ -42,10 +43,9 @@ class PathTree(object):
         value is a list of other nodes.
     """
 
-    def __init__(self, data):
+    def __init__(self, data: bytes) -> None:
         """
         Uncompresses data into a tree that can be traversed for matching paths
-
         :param data:    binary data as read from a file or pulled directly out
                         of a certificate extension. Data should be compressed
                         with huffman coding as described for v3 entitlement
@@ -61,38 +61,31 @@ class PathTree(object):
         path_dict = dict((node.code, node) for node in path_leaves)
         self.path_tree = self._generate_path_tree(path_dict, path_leaves, word_dict, bitstream)
 
-    def match_path(self, path):
+    def match_path(self, path: str) -> bool:
         """
         Given an absolute path, determines if the path tree contains any
         complete paths that exactly equal the beginning of this path. Thus,
         The tree is traversed from its root, and as long as the provided path
         does not hit its end before hitting the end of a tree path, this will
-        return True.
-
+        return True
         :param path:    absolute path to match against the tree
-        :type  path:    str
         :return:        True iff there is a match, else False
-        :rtype:         bool
         """
         if not path.startswith("/"):
             raise ValueError('path must start with "/"')
         return self._traverse_tree(self.path_tree, path.strip("/").split("/"))
 
-    def __str__(self):
+    def __str__(self) -> str:
         paths = []
         self.build_path_list(paths)
         return "\n".join(sorted(paths))
 
-    def build_path_list(self, acc, tree=None, curr_path=None):
+    def build_path_list(self, acc: list, tree: dict = None, curr_path: str = None) -> None:
         """
-        Expand the Huffman tree into a list of paths.
-
-        :param tree:      A dict representing a node in the greater path tree.
-        :type  tree:      dict
-        :param acc:       an accumulator that stores the expanded paths. Callers should provide an empty list.
-        :type  acc:       list
-        :param curr_path: A string representing a path that is added to as nodes are visited.
-        :type  curr_path: str
+        Expand the Huffman tree into a list of paths
+        :param acc:       an accumulator that stores the expanded paths. Callers should provide an empty list
+        :param tree:      A dict representing a node in the greater path tree
+        :param curr_path: A string representing a path that is added to as nodes are visited
         """
         if curr_path is None:
             curr_path = ""
@@ -110,18 +103,14 @@ class PathTree(object):
                     self.build_path_list(acc, tree=v, curr_path="%s/%s" % (curr_path, k))
 
     @classmethod
-    def _traverse_tree(cls, tree, words):
+    def _traverse_tree(cls, tree: dict, words: list) -> bool:
         """
-        Helper method for match_path that does recursive matching.
-
-        :param tree:    A dict representing a node in the greater path tree.
-        :type  tree:    dict
+        Helper method for match_path that does recursive matching
+        :param tree:    A dict representing a node in the greater path tree
         :param words:   list of words to match, the result of spliting a path
                         by the "/" separator. Words must be sorted with the
                         next word to match being at words[0]
-        :param words:   list
         :return:        True iff there is a match, else False
-        :rtype:         bool
         """
         if PATH_END in tree:
             # we hit the end of a path in the tree, so the match was successful
@@ -148,17 +137,15 @@ class PathTree(object):
         return False
 
     @staticmethod
-    def _unpack_data(data):
+    def _unpack_data(data: bytes) -> Tuple[list, bytes]:
         """
         :param data:    binary data as read from a file or pulled directly out
                         of a certificate extension. Data should be compressed
                         with huffman coding as described for v3 entitlement
                         certificates
-        :type  data:    binary string
         :return:        tuple: (list of HuffmanNode instances not yet in a
                         tree, binary string of leftover bits that were not
                         part of the zlib-compressed word list
-        :rtype:         tuple(list, binary string)
         """
         decompress = zlib.decompressobj()
         decompressed_data = decompress.decompress(data)
@@ -174,7 +161,7 @@ class PathTree(object):
         return nodes, decompress.unused_data
 
     @staticmethod
-    def _get_node_count(bitstream):
+    def _get_node_count(bitstream: GhettoBitStream) -> int:
         """
         Determine the total number of nodes in the uncompressed tree. The
         algorithm for doing so is described in the v3 entitlement cert
@@ -184,10 +171,8 @@ class PathTree(object):
                             word list. As defined in the v3 entitlement cert
                             format, the beginning of this stream defines how
                             many total nodes exist. This method retrieves that
-                            value.
-        :type  bitstream:   rhsm.bitstream.GhettoBitStream
+                            value
         :return:            number of nodes
-        :rtype:             int
         """
         first_byte = bitstream.pop_byte()
         # less than 128 nodes, so only the first byte is used to define the
@@ -203,18 +188,16 @@ class PathTree(object):
             return node_count
 
     @classmethod
-    def _generate_path_leaves(cls, bitstream):
+    def _generate_path_leaves(cls, bitstream: GhettoBitStream) -> List[HuffmanNode]:
         """
         Given the remaining bits after decompressing the word list, this
         generates HuffmanNode objects to represent each node (besides root)
-        that will end up in the path tree.
+        that will end up in the path tree
 
         :param bitstream:   stream of bits remaining after decompressing the
                             word list
-        :type  bitstream:   rhsm.bitstream.GhettoBitStream
         :return:            list of HuffmanNode objects that can be used to
                             build a path tree
-        :rtype:             list of HuffmanNode objects
         """
         node_count = cls._get_node_count(bitstream)
         nodes = []
@@ -226,17 +209,14 @@ class PathTree(object):
         return nodes
 
     @staticmethod
-    def _get_leaf_from_dict(code_dict, bitstream):
+    def _get_leaf_from_dict(code_dict: dict, bitstream: GhettoBitStream) -> Any:
         """
         Given a bit stream and dictionary where keys are huffman codes, return
         the value from that dictionary that corresponds to the next huffman
         code in the stream. This is a substitute for actually traversing the
-        tree, and this likely performs better in large data sets.
-
+        tree, and this likely performs better in large data sets
         :param code_dict:   any dictionary where keys are huffman codes
-        :type  code_dict:   dict
         :param bitstream:   bit stream with a huffman code as the next value
-        :type  bitstream:   rhsm.bitstream.GhettoBitStream
         :return:            value from the dict
         """
         code = ""
@@ -246,27 +226,28 @@ class PathTree(object):
                 return code_dict[code]
 
     @classmethod
-    def _generate_path_tree(cls, path_dict, path_leaves, word_dict, bitstream):
+    def _generate_path_tree(
+            cls,
+            path_dict: dict,
+            path_leaves: List[HuffmanNode],
+            word_dict: dict,
+            bitstream: GhettoBitStream
+    ) -> dict:
         """
         Once huffman trees have been generated for the words and for the path
         nodes, this method uses them and the bit stream to create the path tree
-        that can be traversed to match potentially authorized paths.
-
+        that can be traversed to match potentially authorized paths
         :param path_dict:   dictionary where keys are huffman codes and values
-                            are path nodes.
-        :type  path_dict:   dict
+                            are path nodes
         :param path_leaves: leaf nodes from the huffman tree of path nodes. the
                             values will be constructed into a new tree that can
-                            be traversed to match actual paths.
-        :type  path_leaves: list of HuffmanNode instances
+                            be traversed to match actual paths
         :param word_dict:   dict where keys are huffman codes and values are
-                            words from the zlib-compressed word list.
-        :type  word_dict:   dict
+                            words from the zlib-compressed word list
         :param bitstream:   bit stream where the rest of the bits describe
                             how to use words as references between nodes in
                             the path tree. This format is described in detail
-                            in the v3 entitlement certificate docs.
-        :type  bitstream:   rhsm.bitstream.GhettoBitStream
+                            in the v3 entitlement certificate docs
         """
         values = [leaf.value for leaf in path_leaves]
         root = {}

@@ -22,9 +22,10 @@ try:
 except ImportError:
     from json import *  # NOQA
 import datetime
+from typing import Union
 
 
-def encode(obj):
+def encode(obj: Union[datetime.datetime, set]) -> Union[str, list]:
     if isinstance(obj, datetime.datetime):
         return obj.__str__()
     if isinstance(obj, set):

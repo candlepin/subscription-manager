@@ -9,11 +9,14 @@
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
+import _io
 import logging
 
 import importlib.util
 import rpm
 import os.path
+from typing import List, Any, Union
+
 from rhsm import ourjson as json
 from rhsm.utils import suppress_output
 from iniparse import SafeConfigParser, ConfigParser
@@ -53,17 +56,22 @@ class InvalidProfileType(Exception):
 
 
 class ModulesProfile(object):
-    def __init__(self):
-        self.content = self.__generate()
+    def __init__(self) -> None:
+        self.content: List[dict] = self.__generate()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.content)
 
-    def __eq__(self, other):
+    def __eq__(self, other: "ModulesProfile") -> bool:
         return self.content == other.content
 
     @staticmethod
-    def _uniquify(module_list):
+    def _uniquify(module_list: list) -> list:
+        """
+        Try to uniquify list of modules, when there are duplicated repositories
+        :param module_list: list of modules
+        :return: List of modules without duplicity
+        """
         ret = {}
         for module in module_list:
             key = (module["name"], module["stream"], module["version"], module["context"], module["arch"])
@@ -78,7 +86,7 @@ class ModulesProfile(object):
         return list(ret.values())
 
     @staticmethod
-    def fix_aws_rhui_repos(base) -> None:
+    def fix_aws_rhui_repos(base: dnf.Base) -> None:
         """
         Try to fix RHUI repos on AWS systems. When the system is running on AWS, then we have
         to fix repository URL. See: https://bugzilla.redhat.com/show_bug.cgi?id=1924126
@@ -118,10 +126,10 @@ class ModulesProfile(object):
                 log.debug("Unable to fix RHUI URL: {error}".format(error=error))
 
     @suppress_output
-    def __generate(self):
+    def __generate(self) -> List[dict]:
         module_list = []
         if dnf is not None and libdnf is not None:
-            base = dnf.Base()
+            base: dnf.Base = dnf.Base()
 
             # Read yum/dnf variables from <install_root>/etc/yum/vars and <install_root>/etc/dnf/vars
             # See: https://bugzilla.redhat.com/show_bug.cgi?id=1863039
@@ -174,7 +182,7 @@ class ModulesProfile(object):
 
         return ModulesProfile._uniquify(module_list)
 
-    def collect(self):
+    def collect(self) -> List[dict]:
         """
         Gather list of modules reported to candlepin server
         :return: List of modules
@@ -183,7 +191,7 @@ class ModulesProfile(object):
 
 
 class EnabledRepos(object):
-    def __generate(self):
+    def __generate(self) -> List[dict]:
         if not os.path.exists(self.repofile):
             return []
 
@@ -210,28 +218,26 @@ class EnabledRepos(object):
                 break
         return enabled_repos
 
-    def __init__(self, repo_file):
+    def __init__(self, repo_file: str) -> None:
         """
-        :param path: A .repo file path used to filter the report.
-        :type path: str
+        Initialize EnabledRepos
+        :param repo_file: A repo file path used to filter the report.
         """
         if dnf is not None:
             self.db = dnf.dnf.Base()
         elif yum is not None:
             self.yb = yum.YumBase()
 
-        self.repofile = repo_file
-        self.content = self.__generate()
+        self.repofile: str = repo_file
+        self.content: List[dict] = self.__generate()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.content)
 
-    def _format_baseurl(self, repo_url):
+    def _format_baseurl(self, repo_url: str) -> str:
         """
-        returns a well formatted baseurl string
-
+        Returns a well formatted baseurl string
         :param repo_url: a repo URL that you want to format
-        :type path: str
         """
         if use_zypper:
             return self._cut_question_mark(repo_url)
@@ -241,17 +247,15 @@ class EnabledRepos(object):
                 "$basearch", mappings["basearch"]
             )
 
-    def _cut_question_mark(self, repo_url):
+    def _cut_question_mark(self, repo_url) -> str:
         """
-        returns a string where everything after the first occurence of ? is truncated
-
+        Returns a string where everything after the first occurrence of '?' is truncated
         :param repo_url: a repo URL that you want to modify
-        :type path: str
         """
         return repo_url[: repo_url.find("?")]
 
     @suppress_output
-    def _obtain_mappings(self):
+    def _obtain_mappings(self) -> dict:
         """
         returns a hash with "basearch" and "releasever" set. This will try dnf first, and them yum if dnf is
         not installed.
@@ -264,13 +268,13 @@ class EnabledRepos(object):
             log.error("Unable to load module for any supported package manager (dnf, yum).")
             raise ImportError
 
-    def _obtain_mappings_dnf(self):
+    def _obtain_mappings_dnf(self) -> dict:
         return {
             "releasever": self.db.conf.substitutions["releasever"],
             "basearch": self.db.conf.substitutions["basearch"],
         }
 
-    def _obtain_mappings_yum(self):
+    def _obtain_mappings_yum(self) -> dict:
         return {"releasever": self.yb.conf.yumvar["releasever"], "basearch": self.yb.conf.yumvar["basearch"]}
 
 
@@ -279,13 +283,13 @@ class EnabledReposProfile(object):
     Collect information about enabled repositories
     """
 
-    def __init__(self, repo_file=REPOSITORY_PATH):
-        self._enabled_repos = EnabledRepos(repo_file)
+    def __init__(self, repo_file: str = REPOSITORY_PATH) -> None:
+        self._enabled_repos: EnabledRepos = EnabledRepos(repo_file)
 
-    def __eq__(self, other):
+    def __eq__(self, other: "EnabledReposProfile") -> bool:
         return self._enabled_repos.content == other._enabled_repos.content
 
-    def collect(self):
+    def collect(self) -> List[dict]:
         """
         Gather list of enabled repositories
         :return: List of enabled repositories
@@ -298,7 +302,8 @@ class Package(object):
     Represents a package installed on the system.
     """
 
-    def __init__(self, name, version, release, arch, epoch=0, vendor=None):
+    # FIXME: epoch should be probably string (not int)
+    def __init__(self, name: str, version: str, release: str, arch: str, epoch: int = 0, vendor: str = None):
         self.name = name
         self.version = version
         self.release = release
@@ -306,8 +311,9 @@ class Package(object):
         self.epoch = epoch
         self.vendor = vendor
 
-    def to_dict(self):
-        """Returns a dict representation of this packages info."""
+    # FIXME: in the case, when epoch is really int, then it is not necessary to normalize it
+    def to_dict(self) -> dict:
+        """Returns a dict representation of this package info."""
         return {
             "name": self._normalize_string(self.name),
             "version": self._normalize_string(self.version),
@@ -317,7 +323,7 @@ class Package(object):
             "vendor": self._normalize_string(self.vendor),  # bz1519512 handle vendors that aren't utf-8
         }
 
-    def __eq__(self, other):
+    def __eq__(self, other: "Package") -> bool:
         """
         Compare one profile to another to determine if anything has changed.
         """
@@ -336,19 +342,20 @@ class Package(object):
 
         return False
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "<Package: %s %s %s>" % (self.name, self.version, self.release)
 
+    # FIXME: the type of value should not be any, but it should be Union[str, bytes]
     # added in support of bz1519512, bz1543639
     @staticmethod
-    def _normalize_string(value):
+    def _normalize_string(value: Any):
         if type(value) is bytes:
             return value.decode("utf-8", "replace")
         return value
 
 
 class RPMProfile(object):
-    def __init__(self, from_file=None):
+    def __init__(self, from_file: _io.TextIOWrapper = None) -> None:
         """
         Load the RPM package profile from a given file, or from rpm itself.
 
@@ -378,13 +385,11 @@ class RPMProfile(object):
             self.packages = self._accumulate_profile(installed)
 
     @staticmethod
-    def _accumulate_profile(rpm_header_list):
+    def _accumulate_profile(rpm_header_list: List[dict]) -> List[Package]:
         """
         Accumulates list of installed rpm info
         @param rpm_header_list: list of rpm headers
-        @type rpm_header_list: list
         @return: list of package info dicts
-        @rtype: list
         """
 
         pkg_list = []
@@ -406,7 +411,7 @@ class RPMProfile(object):
             )
         return pkg_list
 
-    def collect(self):
+    def collect(self) -> List[dict]:
         """
         Returns a list of dicts containing the package info.
 
@@ -420,7 +425,7 @@ class RPMProfile(object):
             pkg_dicts.append(pkg.to_dict())
         return pkg_dicts
 
-    def __eq__(self, other):
+    def __eq__(self, other: "RPMProfile") -> bool:
         """
         Compare one profile to another to determine if anything has changed.
         """
@@ -439,11 +444,10 @@ class RPMProfile(object):
         return True
 
 
-def get_profile(profile_type):
+def get_profile(profile_type: str) -> Union[RPMProfile, EnabledRepos, ModulesProfile]:
     """
     Returns an instance of a Profile object
     @param profile_type: profile type
-    @type profile_type: string
     Returns an instance of a Profile object
     """
     if profile_type not in PROFILE_MAP:
@@ -453,7 +457,7 @@ def get_profile(profile_type):
 
 
 # Profile types we support:
-PROFILE_MAP = {
+PROFILE_MAP: dict = {
     "rpm": RPMProfile,
     "enabled_repos": EnabledReposProfile,
     "modulemd": ModulesProfile,

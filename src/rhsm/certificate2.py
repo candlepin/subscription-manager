@@ -68,7 +68,7 @@ class _CertFactory:
     certificate.py instead of this class.
     """
 
-    def create_from_file(self, path: str):
+    def create_from_file(self, path: str) -> "EntitlementCertificate":
         """
         Create appropriate certificate object from a PEM file on disk.
         """
@@ -86,7 +86,7 @@ class _CertFactory:
             raise CertificateException("Empty certificate")
         return self._read_x509(_certificate.load(pem=pem), path, pem)
 
-    def _read_x509(self, x509: _certificate.X509, path: str, pem: str):
+    def _read_x509(self, x509: _certificate.X509, path: str, pem: str) -> "EntitlementCertificate":
         if not x509:
             if path is not None:
                 raise CertificateException("Error loading certificate: %s" % path)
@@ -506,14 +506,14 @@ class Certificate:
         self.issuer: Optional[str] = issuer
 
     def is_valid(self, on_date: Optional[datetime.datetime] = None):
-        gmt = datetime.utcnow()
+        gmt = datetime.datetime.utcnow()
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
         return self.valid_range.has_date(gmt)
 
     def is_expired(self, on_date: Optional[datetime.datetime] = None):
-        gmt = datetime.utcnow()
+        gmt = datetime.datetime.utcnow()
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
@@ -630,7 +630,7 @@ class EntitlementCertificate(ProductCertificate):
         return paths
 
     def is_expiring(self, on_date=None):
-        gmt = datetime.utcnow()
+        gmt = datetime.datetime.utcnow()
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
@@ -754,7 +754,7 @@ class Product:
         self.name: Optional[str] = name
         self.version: Optional[str] = version
 
-        self.architectures: List[str]
+        self.architectures: List[str] = architectures
         # If this is sent in as a string split it, as the field
         # can technically be multi-valued:
         if isinstance(architectures, str):

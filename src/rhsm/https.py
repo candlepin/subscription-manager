@@ -45,7 +45,7 @@ for _feature in _SSL_REQUIRED_FEATURES:
         using_stdlibs = False
 
 if using_stdlibs:
-    _SslContext = _ssl.SSLContext
+    _SslContext: _ssl.SSLContext = _ssl.SSLContext
     for _feature in _SSL_CONTEXT_REQUIRED_FEATURES:
         if not hasattr(_SslContext, _feature):
             using_stdlibs = False

@@ -32,6 +32,7 @@ import datetime
 from rhsm import _certificate
 import logging
 import warnings
+from typing import Union
 
 log = logging.getLogger(__name__)
 
@@ -49,8 +50,10 @@ VALUE_PATTERN = re.compile(r".*prim:\s(\w*)\s*:*(.*)")
 # the certificate2 module. They are placed here to abstract the fact that
 # we're using two modules for the time being. Eventually the certificate2 code
 # should be moved here.
-def create_from_file(path):
+def create_from_file(path: str) -> "EntitlementCertificate":
     """
+    Try to create certificate object from path to certificate
+    :param path: String with path to certificate
     :return: rhsm.certificate2.Certificate
     """
     from rhsm.certificate2 import _CertFactory  # prevent circular deps
@@ -58,9 +61,11 @@ def create_from_file(path):
     return _CertFactory().create_from_file(path)
 
 
-def create_from_pem(pem):
+def create_from_pem(pem: str) -> "EntitlementCertificate":
     """
-    :return: rhsm.certificate2.Certificate
+    Try to create certificate object from PEM string
+    :param pem: String with PEM
+    :return: Instance of rhsm.certificate2.Certificate
     """
     from rhsm.certificate2 import _CertFactory  # prevent circular deps
 
@@ -92,7 +97,7 @@ class UTC(datetime.tzinfo):
         return self._ZERO
 
 
-def get_datetime_from_x509(date: Any):
+def get_datetime_from_x509(date: Any) -> datetime.datetime:
     return dateutil.parser.parse(date)
 
 
@@ -123,39 +128,37 @@ class Certificate(object):
     """
 
     @deprecated
-    def __init__(self, content=None):
+    def __init__(self, content: str = None):
         """
-        :param content: The (optional) PEM encoded content.
-        :type content: str
+        :param content: The (optional) PEM encoded content
         """
         self._update(content)
         self.path = None
 
-    def _update(self, content):
+    def _update(self, content: str) -> None:
         if content:
             x509 = _certificate.load(pem=content)
             if x509 is None:
                 raise CertificateException("Error loading certificate")
         else:
             x509 = _certificate.X509()
-        self.__ext = Extensions(x509)
-        self.x509 = x509
+        self.__ext: Extensions = Extensions(x509)
+        self.x509: _certificate.X509 = x509
 
-        self.subj = self.x509.get_subject()
-        self.serial = self.x509.get_serial_number()
+        self.subj: dict = self.x509.get_subject()
+        self.serial: int = self.x509.get_serial_number()
 
-        self.altName = x509.get_extension(name="subjectAltName")
+        self.altName: str = x509.get_extension(name="subjectAltName")
 
-    def serialNumber(self):
+    def serialNumber(self) -> int:
         """
         Get the serial number
 
         :return: The x.509 serial number
-        :rtype:  str
         """
         return self.serial
 
-    def subject(self):
+    def subject(self) -> dict:
         """
         Get the certificate subject.
 
@@ -166,33 +169,30 @@ class Certificate(object):
         """
         return self.subj
 
-    def alternateName(self):
+    def alternateName(self) -> str:
         """
         Return the alternate name of the certificate.
 
         :return: A string representation of the alternate name
-        :rtype: str
         """
         return self.altName
 
-    def validRange(self):
+    def validRange(self) -> "DateRange":
         """
         Get the valid date range.
 
         :return: The valid date range.
-        :rtype: :class:`DateRange`
         """
         return DateRange(
             get_datetime_from_x509(self.x509.get_not_before()),
             get_datetime_from_x509(self.x509.get_not_after()),
         )
 
-    def valid(self, on_date=None):
+    def valid(self, on_date: datetime.datetime = None) -> bool:
         """
         Get whether the certificate is valid based on date.
 
         :return: True if valid.
-        :rtype: boolean
         """
         valid_range = self.validRange()
         gmt = datetime.datetime.utcnow()
@@ -201,12 +201,11 @@ class Certificate(object):
         gmt = gmt.replace(tzinfo=GMT())
         return valid_range.has_date(gmt)
 
-    def expired(self, on_date=None):
+    def expired(self, on_date: datetime.datetime = None) -> bool:
         """
         Get whether the certificate is expired based on date.
 
         :return: True if valid.
-        :rtype: boolean
         """
         valid_range = self.validRange()
         gmt = datetime.datetime.utcnow()
@@ -215,18 +214,17 @@ class Certificate(object):
         gmt = gmt.replace(tzinfo=GMT())
         return valid_range.end() < gmt
 
-    def bogus(self):
+    def bogus(self) -> list:
         """
         Get whether the certificate contains bogus data or is otherwise unsuitable.
 
         The certificate may be valid but still be considered bogus.
 
         :return: List of reasons if bogus
-        :rtype: list
         """
         return []
 
-    def extensions(self):
+    def extensions(self) -> "Extensions":
         """
         Get custom extensions.
 
@@ -235,15 +233,11 @@ class Certificate(object):
         """
         return self.__ext
 
-    # TODO: This looks like it should be in the c-tor:
-    def read(self, pem_path):
+    # FIXME: following methods should be consistent. Method should return self or None
+    def read(self, pem_path: str) -> None:
         """
-        Read a certificate file.
-
+        Read a certificate file
         :param pem_path: The path to a .pem file.
-        :type pem_path: str
-        :return: A certificate
-        :rtype: :class:`Certificate`
         """
         f = open(pem_path)
         content = f.read()
@@ -253,14 +247,12 @@ class Certificate(object):
             f.close()
         self.path = pem_path
 
-    def write(self, pem_path):
+    def write(self, pem_path: str) -> "Certificate":
         """
         Write the certificate.
 
         :param pem_path: The path to the .pem file.
-        :type pem_path: str
         :return: self
-        :rtype :class:`Certificate`
         """
         f = open(pem_path, "w")
         f.write(self.toPEM())
@@ -268,7 +260,7 @@ class Certificate(object):
         f.close()
         return self
 
-    def delete(self):
+    def delete(self) -> None:
         """
         Delete the file associated with this certificate.
         """
@@ -277,26 +269,25 @@ class Certificate(object):
         else:
             raise Exception("no path, not deleted")
 
-    def toPEM(self):
+    def toPEM(self) -> str:
         """
         Get PEM representation of the certificate.
 
         :return: A PEM string
-        :rtype: str
         """
         return self.x509.as_pem()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.x509.as_text()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         sn = self.serialNumber()
         cert_path = None
         if hasattr(self, "path"):
             cert_path = self.path
         return '[sn: %d, path: "%s"]' % (sn, cert_path)
 
-    def __cmp__(self, other):
+    def __cmp__(self, other: "Certificate") -> int:
         valid_range = self.validRange()
         exp1 = valid_range.end()
         other_valid_range = other.validRange()
@@ -310,36 +301,37 @@ class Certificate(object):
 
 class RedhatCertificate(Certificate):
     """
-    Represents a Red Hat certificate.
-
-    :cvar REDHAT: The Red Hat base OID.
-    :type REDHAT: str
+    Represents a Red Hat certificate
+    :cvar REDHAT: The Red Hat base OID
     """
 
-    REDHAT = "1.3.6.1.4.1.2312.9"
+    REDHAT: str = "1.3.6.1.4.1.2312.9"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super(RedhatCertificate, self).__init__(*args, **kwargs)
         self._extract_redhat_extensions()
 
-    def _extract_redhat_extensions(self):
-        self.__redhat = self.extensions().branch(self.REDHAT)
+    def _extract_redhat_extensions(self) -> None:
+        self.__redhat: Extensions = self.extensions().branch(self.REDHAT)
 
-    def _update(self, content):
+    def _update(self, content: str) -> None:
         Certificate._update(self, content)
         self._extract_redhat_extensions()
 
-    def redhat(self):
+    def redhat(self) -> "Extensions":
         """
         Get the extension subtree for the `redhat` namespace.
 
         :return: The extensions with the Red Hat namespace trimmed.
-        :rtype: :class:`Extensions`
         """
         return self.__redhat
 
-    def bogus(self):
-        bogus = Certificate.bogus(self)
+    def bogus(self) -> list[str]:
+        """
+        Return list of reason, why the certificate is bogus
+        :return: List of strings with reasons.
+        """
+        bogus: list = Certificate.bogus(self)
         if self.serialNumber() < 1:
             bogus.append("Serial number must be > 0")
         cn = self.subject().get("CN")
@@ -356,12 +348,11 @@ class ProductCertificate(RedhatCertificate):
     get product information.
     """
 
-    def getProduct(self):
+    def getProduct(self) -> Union["Product", None]:
         """
         Get the product defined in the certificate.
 
         :return: A product object.
-        :rtype: :class:`Product`
         """
         rhns = self.redhat()
         products = rhns.find("1.*.1", 1)
@@ -373,12 +364,11 @@ class ProductCertificate(RedhatCertificate):
             ext = rhns.branch(root)
             return Product(product_id, ext)
 
-    def getProducts(self):
+    def getProducts(self) -> list["Product"]:
         """
         Get a list products defined in the certificate.
 
         :return: A list of product objects.
-        :rtype: list of :class:`Product`
         """
         lst = []
         rhns = self.redhat()
@@ -390,11 +380,11 @@ class ProductCertificate(RedhatCertificate):
             lst.append(Product(product_id, ext))
         return lst
 
-    def bogus(self):
+    def bogus(self) -> list[str]:
         bogus = RedhatCertificate.bogus(self)
         return bogus
 
-    def __str__(self):
+    def __str__(self) -> str:
         s = []
         s.append("RAW:")
         s.append("===================================")
@@ -413,7 +403,7 @@ class EntitlementCertificate(ProductCertificate):
     Represents an entitlement certificate.
     """
 
-    def _update(self, content):
+    def _update(self, content: str) -> None:
         ProductCertificate._update(self, content)
 
         rhns = self.redhat()
@@ -427,7 +417,7 @@ class EntitlementCertificate(ProductCertificate):
         else:
             self.order = None
 
-    def delete(self):
+    def delete(self) -> None:
         """
         Delete the file associated with this certificate.
         """
@@ -441,32 +431,29 @@ class EntitlementCertificate(ProductCertificate):
         else:
             raise Exception("no path, not deleted")
 
-    def getOrder(self):
+    def getOrder(self) -> "Order":
         """
         Get the :obj:`order` object defined in the certificate.
 
         :return: An order object.
-        :rtype: :class:`Order`
         """
         return self.order
 
-    def getEntitlements(self):
+    def getEntitlements(self) -> list["Entitlement"]:
         """
         Get all entitlements defined in the certificate.
 
         :return: A list of entitlement object.
-        :rtype: List of :class:`Entitlement`
         """
         return self.getContentEntitlements() + self.getRoleEntitlements()
 
     # TODO: Not a great name, this is just getting content, self is
     # the entitlement.
-    def getContentEntitlements(self):
+    def getContentEntitlements(self) -> list["Entitlement"]:
         """
         Get the B{content} entitlements defined in the certificate.
 
         :return: A list of entitlement object.
-        :rtype: [:obj:`Content`,..]
         """
         lst = []
         rhns = self.redhat()
@@ -478,7 +465,7 @@ class EntitlementCertificate(ProductCertificate):
             lst.append(Content(ext))
         return lst
 
-    def getRoleEntitlements(self):
+    def getRoleEntitlements(self) -> list["Role"]:
         """
         Get the *role* entitlements defined in the certificate.
 
@@ -503,13 +490,13 @@ class EntitlementCertificate(ProductCertificate):
     def validWithGracePeriod(self):
         return self.validRangeWithGracePeriod().has_now()
 
-    def bogus(self):
+    def bogus(self) -> list[str]:
         bogus = ProductCertificate.bogus(self)
         if self.getOrder() is None:
             bogus.append("No order infomation")
         return bogus
 
-    def __str__(self):
+    def __str__(self) -> str:
         s = []
         order = self.getOrder()
         s.append(ProductCertificate.__str__(self))
@@ -775,10 +762,9 @@ class Extensions(dict):
 
 class OID:
     """
-    The Object Identifier object.
-
-    :ivar part: The oid parts.
-    :cvar WILDCARD: The wildcard character.
+    The Object Identifier object
+    :ivar part: The oid parts
+    :cvar WILDCARD: The wildcard character
     """
 
     WILDCARD: str = "*"
@@ -890,7 +876,7 @@ class OID:
 
         return True
 
-    def __len__(self) -> str:
+    def __len__(self) -> int:
         if not self._len:
             self._len = len(self.part)
 
@@ -1013,7 +999,7 @@ class Order(object):
 
 class Product(object):
     @deprecated
-    def __init__(self, p_hash, ext):
+    def __init__(self, p_hash: str, ext: Extensions) -> None:
         self.hash = p_hash
         self.ext = ext
         self.name = self.ext.get("1")
@@ -1023,31 +1009,31 @@ class Product(object):
         self.brand_type = self.ext.get("5")
         self.brand_name = self.ext.get("6")
 
-    def getHash(self):
+    def getHash(self) -> str:
         return self.hash
 
-    def getName(self):
+    def getName(self) -> str:
         return self.name
 
-    def getArch(self):
+    def getArch(self) -> str:
         return self.arch
 
-    def getVersion(self):
+    def getVersion(self) -> str:
         return self.version
 
-    def getProvidedTags(self):
+    def getProvidedTags(self) -> List[str]:
         return self.provided_tags
 
-    def getBrandType(self):
+    def getBrandType(self) -> str:
         return self.brand_type
 
-    def getBrandName(self):
+    def getBrandName(self) -> str:
         return self.brand_name
 
-    def __eq__(self, rhs):
+    def __eq__(self, rhs) -> bool:
         return self.getHash() == rhs.getHash()
 
-    def __str__(self):
+    def __str__(self) -> str:
         s = []
         s.append("Product {")
         s.append("\tHash ......... = %s" % self.getHash())
