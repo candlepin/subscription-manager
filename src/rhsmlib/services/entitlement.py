@@ -15,6 +15,7 @@ import collections
 import datetime
 import logging
 import time
+from typing import Union, Callable
 
 from subscription_manager import injection as inj
 from subscription_manager.i18n import ugettext as _
@@ -29,7 +30,7 @@ log = logging.getLogger(__name__)
 
 
 class EntitlementService(object):
-    def __init__(self, cp=None):
+    def __init__(self, cp: connection.UEPConnection = None) -> None:
         self.cp = cp
         self.identity = inj.require(inj.IDENTITY)
         self.product_dir = inj.require(inj.PROD_DIR)
@@ -37,11 +38,11 @@ class EntitlementService(object):
         self.entcertlib = EntCertActionInvoker()
 
     @classmethod
-    def parse_date(cls, on_date):
+    def parse_date(cls, on_date: str) -> datetime.datetime:
         """
         Return new datetime parsed from date
         :param on_date: String representing date
-        :return It returns datetime.datime structure representing date
+        :return It returns datetime.datetime structure representing date
         """
         try:
             on_date = datetime.datetime.strptime(on_date, "%Y-%m-%d")
@@ -55,7 +56,7 @@ class EntitlementService(object):
             raise ValueError(_("Past dates are not allowed"))
         return on_date
 
-    def get_status(self, on_date=None, force=False):
+    def get_status(self, on_date: str = None, force: bool = False) -> dict:
         sorter = inj.require(inj.CERT_SORTER, on_date)
         # When singleton CertSorter was created with different argument on_date, then
         # it is necessary to update corresponding attribute in object (dependency
@@ -98,22 +99,24 @@ class EntitlementService(object):
         log.debug("entitlement status: %s" % str(status))
         return status
 
+    # FIXME: Many None default values are suspicious. It looks like that type of e.g. show_all
+    # pool_only, match_installed, etc. is bool and default value should be False (not None).
     def get_pools(
         self,
-        pool_subsets=None,
-        matches=None,
-        pool_only=None,
-        match_installed=None,
-        no_overlap=None,
-        service_level=None,
-        show_all=None,
-        on_date=None,
-        future=None,
-        after_date=None,
-        page=0,
-        items_per_page=0,
-        **kwargs
-    ):
+        pool_subsets: Union[str, list] = None,
+        matches: str = None,
+        pool_only: bool = None,
+        match_installed: bool = None,
+        no_overlap: bool = None,
+        service_level: str = None,
+        show_all: bool = None,
+        on_date: datetime.datetime = None,
+        future: str = None,
+        after_date: datetime.datetime = None,
+        page: int = 0,
+        items_per_page: int = 0,
+        **kwargs: dict
+    ) -> dict:
         # We accept a **kwargs argument so that the DBus object can pass whatever dictionary it receives
         # via keyword expansion.
         if kwargs:
@@ -172,7 +175,9 @@ class EntitlementService(object):
 
         return results
 
-    def get_consumed_product_pools(self, service_level=None, matches=None, iso_dates=False):
+    def get_consumed_product_pools(
+        self, service_level: str = None, matches: str = None, iso_dates: bool = False
+    ) -> list:
         # Use a named tuple so that the result can be unpacked into other functions
         OldConsumedStatus = collections.namedtuple(
             "OldConsumedStatus",
@@ -365,20 +370,22 @@ class EntitlementService(object):
                 )
         return consumed_statuses
 
+    # FIXME: Many None default values are suspicious. Type of some arguments is probably bool. Thus
+    # default value should be False, not None.
+    @staticmethod
     def get_available_pools(
-        self,
-        show_all=None,
-        on_date=None,
-        no_overlap=None,
-        match_installed=None,
-        matches=None,
-        service_level=None,
-        future=None,
-        after_date=None,
-        page=0,
-        items_per_page=0,
-        iso_dates=False,
-    ):
+        show_all: bool = None,
+        on_date: datetime.datetime = None,
+        no_overlap: bool = None,
+        match_installed: bool = None,
+        matches: str = None,
+        service_level: str = None,
+        future: str = None,
+        after_date: datetime.datetime = None,
+        page: int = 0,
+        items_per_page: int = 0,
+        iso_dates: bool = False,
+    ) -> dict:
         """
         Get list of available pools
         :param show_all:
@@ -450,7 +457,7 @@ class EntitlementService(object):
             cache.available_entitlements = data
             cache.write_cache()
 
-        def filter_pool_by_service_level(pool_data):
+        def filter_pool_by_service_level(pool_data: dict) -> bool:
             pool_level = ""
             if pool_data["service_level"]:
                 pool_level = pool_data["service_level"]
@@ -477,7 +484,7 @@ class EntitlementService(object):
 
         return available_pools
 
-    def validate_options(self, options):
+    def validate_options(self, options: dict) -> None:
         if not set(["installed", "consumed", "available"]).issuperset(options["pool_subsets"]):
             raise exceptions.ValidationError(
                 _(
@@ -510,7 +517,7 @@ class EntitlementService(object):
         elif not self.identity.is_valid() and "available" in options["pool_subsets"]:
             raise exceptions.ValidationError(_("Error: this system is not registered"))
 
-    def _unbind_ids(self, unbind_method, consumer_uuid, ids):
+    def _unbind_ids(self, unbind_method: Callable, consumer_uuid: str, ids: list) -> tuple:
         """
         Method for unbinding entitlements
         :param unbind_method: unbindByPoolId or unbindBySerial
@@ -531,9 +538,9 @@ class EntitlementService(object):
                 log.error(re)
         return success, failure
 
-    def remove_all_entitlements(self):
+    def remove_all_entitlements(self) -> dict:
         """
-        Try to remove all entilements
+        Try to remove all entitlements
         :return: Result of REST API call
         """
 
@@ -542,7 +549,7 @@ class EntitlementService(object):
 
         return response
 
-    def remove_entilements_by_pool_ids(self, pool_ids):
+    def remove_entilements_by_pool_ids(self, pool_ids: list) -> tuple:
         """
         Try to remove entitlements by pool IDs
         :param pool_ids: List of pool IDs
@@ -565,11 +572,12 @@ class EntitlementService(object):
 
         return removed_pools, unremoved_pools, removed_serials
 
-    def remove_entitlements_by_serials(self, serials):
+    def remove_entitlements_by_serials(self, serials: list) -> tuple:
         """
         Try to remove pools by Serial numbers
         :param serials: List of serial numbers
-        :return: List of serial numbers of already removed subscriptions
+        :return: Tuple of two items: list of serial numbers of already removed subscriptions and list
+            of not removed serials
         """
 
         _serials = utils.unique_list_items(serials)  # Don't allow duplicates
@@ -580,11 +588,11 @@ class EntitlementService(object):
 
         return removed_serials, unremoved_serials
 
-    def reload(self):
+    @staticmethod
+    def reload() -> None:
         """
         This callback function is called, when there is detected any change in directory with entitlement
         certificates (e.g. certificate is installed or removed)
-        :return:
         """
         sorter = inj.require(inj.CERT_SORTER, on_date=None)
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
@@ -592,7 +600,7 @@ class EntitlementService(object):
         status_cache.server_status = None
         sorter.load()
 
-    def refresh(self, remove_cache=False, force=False):
+    def refresh(self, remove_cache: bool = False, force: bool = False) -> None:
         """
         Try to refresh entitlement certificate(s) from candlepin server
         :return: Report of EntCertActionInvoker
@@ -614,4 +622,5 @@ class EntitlementService(object):
             if not self.cp.regenEntitlementCertificates(self.identity.uuid, True):
                 log.debug("Warning: Unable to refresh entitlement certificates; service likely unavailable")
 
+        # FIXME: It looks like that the method update() always return None
         return self.entcertlib.update()

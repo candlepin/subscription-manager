@@ -19,6 +19,8 @@ server.
 
 import logging
 
+from rhsm.connection import UEPConnection
+
 from subscription_manager import injection as inj
 from subscription_manager import managerlib
 from rhsm import connection
@@ -33,7 +35,7 @@ class UnregisterService(object):
     Candlepin server.
     """
 
-    def __init__(self, uep):
+    def __init__(self, uep: UEPConnection) -> None:
         """
         Initialization of Unregister instance
         """
@@ -41,7 +43,7 @@ class UnregisterService(object):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.uep = uep
 
-    def unregister(self):
+    def unregister(self) -> None:
         """
         Try to unregister the system from candlepin server
         :return: None

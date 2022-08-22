@@ -17,6 +17,8 @@ This module provides service for system purpose
 
 import logging
 
+from rhsm.connection import UEPConnection
+
 from subscription_manager import injection as inj
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.syspurposelib import (
@@ -32,14 +34,14 @@ log = logging.getLogger(__name__)
 
 
 class Syspurpose(object):
-    def __init__(self, cp):
+    def __init__(self, cp: UEPConnection) -> None:
         self.cp = cp
         self.identity = inj.require(inj.IDENTITY)
         self.purpose_status = {"status": "unknown"}
         self.owner = None
         self.valid_fields = None
 
-    def get_syspurpose_status(self, on_date=None):
+    def get_syspurpose_status(self, on_date: str = None) -> str:
         """
         Get syspurpose status from candlepin server
         :param on_date: Date of the status
@@ -49,7 +51,7 @@ class Syspurpose(object):
             self.purpose_status = self.cp.getSyspurposeCompliance(self.identity.uuid, on_date)
         return self.purpose_status
 
-    def get_owner_syspurpose_valid_fields(self):
+    def get_owner_syspurpose_valid_fields(self) -> dict:
         """
         Get valid syspurpose fields from candlepin server for current owner
         :return: Dictionary with valid syspurpose fields
@@ -60,7 +62,7 @@ class Syspurpose(object):
             self.valid_fields = cache.read_data(uep=self.cp, identity=self.identity)
         return self.valid_fields
 
-    def set_syspurpose_values(self, syspurpose_values):
+    def set_syspurpose_values(self, syspurpose_values: dict) -> dict:
         """
         Try to set system purpose values
         :param syspurpose_values: Dictionary with system purpose values
@@ -84,7 +86,7 @@ class Syspurpose(object):
         return result
 
     @staticmethod
-    def get_overall_status(status):
+    def get_overall_status(status: str) -> str:
         """
         Return translated string representation syspurpose status
         :param status: syspurpose status

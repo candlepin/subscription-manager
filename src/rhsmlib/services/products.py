@@ -12,25 +12,31 @@
 # in this software or its documentation.
 import collections
 
+from rhsm.connection import UEPConnection
+
 from subscription_manager import injection as inj
 from subscription_manager import utils
 from subscription_manager import managerlib
 
 
 class InstalledProducts(object):
-    def __init__(self, cp):
+    """
+    Class for listing installed products
+    """
+
+    def __init__(self, cp: UEPConnection) -> None:
         """
-        Initialization of InstalledProduct instance.
+        Initialization of InstalledProduct instance
         :param cp: instance of connection?
         """
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
         self.cp = cp
 
-    def list(self, filter_string=None, iso_dates=False):
+    def list(self, filter_string: str = None, iso_dates: bool = False) -> list:
         """
-        Method for listening installed products in the system.
-        :param filter_string: String for filtering out products.
-        :param iso_dates: Whether output dates in ISO 8601 format.
+        Method for listening installed products in the system
+        :param filter_string: String for filtering out products
+        :param iso_dates: Whether output dates in ISO 8601 format
         :return: List of installed products.
         """
         product_status = []
