@@ -1,7 +1,5 @@
 # TESTING
 
-- [subscription-manager](#subscription-manager)
-
 ## subscription-manager
 
 ```bash
@@ -38,6 +36,12 @@ pytest -k cache
 pytest -k cache --no-summary
 ```
 
+To run tests in virtual machine or container without GUI, where DBus is not running, you can start it on-demand:
+
+```bash
+dbus-run-session pytest
+```
+
 ### Plugins
 
 - To disable pytest-randomly plugin, run
@@ -67,27 +71,10 @@ coverage html
 coverage xml
 ```
 
----
+## Further reading
 
-Following text may not be up to date.
+### Candlepin server
 
-# Testing of the game
-
-- [System testing](#system-testing)
-
-
-## System testing
-
-If you want to test subscription-manager in real life
-there is a few players in this game:
-
-- [candlepin server](#candlepin-server)
-- [tested machine](#tested-vm)
-- [proxy server](#proxy-server)
-- [RHSM services](#rhsm-services)
-
-### Initialization
-#### Candlepin server
 It is necessary to clone `candlepin` repo.
 
 ```shell
@@ -98,71 +85,6 @@ export CANDLEPIN_VAGRANT_NO_NFS=1
 export CANDLEPIN_DEPLOY_ARGS="-gTa"
 vagrant up
 ```
-See `README.md` in the repo for more details.
+
+See `README.md` in the repo or [their documentation](https://www.candlepinproject.org/docs/candlepin/developer_deployment.html) for more details.
 An URL of this server is `candlepin.example.com` by default.
-
-#### tested VM
-There is an env variable `SUBMAN_WITH_SYSTEM_TESTS` that enables system tests when a VM is provisioned.
-
-```shell
-cd ~/src/subscription-manager
-export SUBMAN_WITH_SYSTEM_TESTS=1
-vagrant up
-```
-An URL of this VM is `centos7.subman.example.com` by default.
-
-#### Proxy server
-This is an optional player. If you want to run test cases when a proxy is used it is necessary to use some proxy server.
-There is a vagrant box in Vagrantfile to make VM with squid auth proxy server.
-See in `vagrant/roles/proxy-server/default/main.yml` for username, password and more details.
-
-An URL of this server is `proxy-server.subman.example.com` and `squid` is listening on a port `3128`.
-
-```shell
-cd ~/src/subscription-manager
-vagrant up proxy-server
-```
-
-#### RHSM services
-
-RHSM services is a bunch of websocket services that offers a way to perfom some task inside a tested machine.
-The service is provisioned once you set a variable `SUBMAN_WITH_SYSTEM_TESTS=1` for `vagrant up`. 
-See [previous comment](#tested-vm).
-
-A base URL of the services is `ws:/centos7.subman.example.com:9091`. 
-
-There are a few services at the moment implemented:
-
-
-
-- a monitor of file changes
-
-  | what?      | that's it!                                                                                   |
-  |------------|----------------------------------------------------------------------------------------------|
-  | base url   | `ws://centos7.subman.example.com:9091/monitor/`                                              |
-  | an example | `ws://centos7.subman.example.com:9091/monitor//etc/rhsm/rhsm.conf`                           |
-  |            | `ws://centos7.subman.example.com:9091/monitor/etc/rhsm/rhsm.conf`                            |
-
-  > if you send something back to the connection it gives you back an actual content of the file
-
-- an execution of some command
-
-  | what?      | that's it!                                                                   |
-  |------------|------------------------------------------------------------------------------|
-  | base url   | `ws://centos7.subman.example.com:9091/execute/`                              |
-  | an example | `ws://centos7.subman.example.com:9091/execute//usr/bin/subscription-manager` |
-  |            | `ws://centos7.subman.example.com:9091/execute/usr/bin/subscription-manager`  |
-
-  > it is necessary to send args of the command after a connection is openned to execute the command 
-  
-  > for example: `register --username TEST --password PSWD --auto-attach`
-
-##### It is a systemd service
-
-See `/etc/systemd/system/rhsm-services` for more details.
-
-You can see a status of the services:
-
-```shell
-systemctl status rhsm-services
-```
