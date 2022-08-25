@@ -175,7 +175,7 @@ class AttachCommand(CliCommand):
         #
         if is_simple_content_access(uep=self.cp, identity=self.identity):
             if self.auto_attach is True:
-                self._print_ignore_auto_attach_mesage()
+                self._print_ignore_auto_attach_message()
             else:
                 self._print_ignore_attach_message()
             return 0

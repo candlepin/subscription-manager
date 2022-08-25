@@ -187,7 +187,7 @@ class RegisterCommand(UserPassCommand):
         # Do not try to do auto-attach, when simple content access mode is used
         # Only print info message to stdout
         if is_simple_content_access(uep=self.cp, identity=self.identity):
-            self._print_ignore_auto_attach_mesage()
+            self._print_ignore_auto_attach_message()
             return
 
         if "serviceLevel" not in consumer and self.options.service_level:
