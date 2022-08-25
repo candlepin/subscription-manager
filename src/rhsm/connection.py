@@ -25,7 +25,7 @@ import socket
 import sys
 import time
 import traceback
-from typing import Optional, Any, Union, List, Tuple
+from typing import Optional, Any, Union, List, Dict, Tuple
 from pathlib import Path
 import re
 import enum
@@ -928,7 +928,7 @@ class BaseRestLib(object):
         body: str,
         cert_key_pairs: List[Tuple[str, str]],
         description: Optional[str] = None,
-    ) -> Tuple[Union[dict[str, Any], None], Union[httplib.HTTPResponse, None]]:
+    ) -> Tuple[Union[Dict[str, Any], None], Union[httplib.HTTPResponse, None]]:
         """
         Try to do HTTP request
         :param request_type: string representing request type
@@ -1012,7 +1012,7 @@ class BaseRestLib(object):
         headers: dict = None,
         cert_key_pairs: Optional[List[Tuple[str, str]]] = None,
         description: Optional[str] = None,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         Make HTTP request to candlepin server
         :param request_type: string representing request type

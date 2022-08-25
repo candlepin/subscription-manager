@@ -325,7 +325,7 @@ class RedhatCertificate(Certificate):
         """
         return self.__redhat
 
-    def bogus(self) -> list[str]:
+    def bogus(self) -> List[str]:
         """
         Return list of reason, why the certificate is bogus
         :return: List of strings with reasons.
@@ -363,7 +363,7 @@ class ProductCertificate(RedhatCertificate):
             ext = rhns.branch(root)
             return Product(product_id, ext)
 
-    def getProducts(self) -> list["Product"]:
+    def getProducts(self) -> List["Product"]:
         """
         Get a list products defined in the certificate.
 
@@ -379,7 +379,7 @@ class ProductCertificate(RedhatCertificate):
             lst.append(Product(product_id, ext))
         return lst
 
-    def bogus(self) -> list[str]:
+    def bogus(self) -> List[str]:
         bogus = RedhatCertificate.bogus(self)
         return bogus
 
@@ -438,7 +438,7 @@ class EntitlementCertificate(ProductCertificate):
         """
         return self.order
 
-    def getEntitlements(self) -> list["Entitlement"]:
+    def getEntitlements(self) -> List["Entitlement"]:
         """
         Get all entitlements defined in the certificate.
 
@@ -448,7 +448,7 @@ class EntitlementCertificate(ProductCertificate):
 
     # TODO: Not a great name, this is just getting content, self is
     # the entitlement.
-    def getContentEntitlements(self) -> list["Entitlement"]:
+    def getContentEntitlements(self) -> List["Entitlement"]:
         """
         Get the B{content} entitlements defined in the certificate.
 
@@ -464,7 +464,7 @@ class EntitlementCertificate(ProductCertificate):
             lst.append(Content(ext))
         return lst
 
-    def getRoleEntitlements(self) -> list["Role"]:
+    def getRoleEntitlements(self) -> List["Role"]:
         """
         Get the *role* entitlements defined in the certificate.
 
@@ -489,9 +489,10 @@ class EntitlementCertificate(ProductCertificate):
     def validWithGracePeriod(self):
         return self.validRangeWithGracePeriod().has_now()
 
-    def bogus(self) -> list[str]:
+    def bogus(self) -> List[str]:
         bogus = ProductCertificate.bogus(self)
         if self.getOrder() is None:
+            # FIXME: fix typo
             bogus.append("No order infomation")
         return bogus
 
