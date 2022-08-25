@@ -18,7 +18,8 @@ import posixpath
 import re
 import zlib
 
-from datetime import datetime, timedelta
+import datetime
+from typing import Optional, List, Dict, Union, Tuple
 
 from rhsm import _certificate
 
@@ -53,7 +54,7 @@ IDENTITY_CERT = 3
 CONTENT_ACCESS_CERT_TYPE = "OrgLevel"
 
 
-class _CertFactory(object):
+class _CertFactory:
     """
     Factory for creating certificate objects.
 
@@ -66,17 +67,17 @@ class _CertFactory(object):
     certificate.py instead of this class.
     """
 
-    def create_from_file(self, path):
+    def create_from_file(self, path: str) -> "EntitlementCertificate":
         """
         Create appropriate certificate object from a PEM file on disk.
         """
         try:
-            pem = open(path, "r").read()
+            pem: str = open(path, "r").read()
         except IOError as err:
             raise CertificateException("Error loading certificate: %s" % err)
         return self._read_x509(_certificate.load(path), path, pem)
 
-    def create_from_pem(self, pem, path=None):
+    def create_from_pem(self, pem: str, path: Optional[str] = None):
         """
         Create appropriate certificate object from a PEM string.
         """
@@ -84,7 +85,7 @@ class _CertFactory(object):
             raise CertificateException("Empty certificate")
         return self._read_x509(_certificate.load(pem=pem), path, pem)
 
-    def _read_x509(self, x509, path, pem):
+    def _read_x509(self, x509: _certificate.X509, path: str, pem: str) -> "EntitlementCertificate":
         if not x509:
             if path is not None:
                 raise CertificateException("Error loading certificate: %s" % path)
@@ -126,9 +127,9 @@ class _CertFactory(object):
         elif cert_type == PRODUCT_CERT:
             return self._create_v1_prod_cert(version, extensions, x509, path)
 
-    def _read_alt_name(self, x509):
+    def _read_alt_name(self, x509) -> str:
         """Try to read subjectAltName from certificate"""
-        alt_name = x509.get_extension(name="subjectAltName")
+        alt_name: Optional[bytes] = x509.get_extension(name="subjectAltName")
         # When certificate does not include subjectAltName, then
         # return emtpy string
         if alt_name is None:
@@ -136,13 +137,15 @@ class _CertFactory(object):
         else:
             return alt_name.decode("utf-8")
 
-    def _read_issuer(self, x509):
+    def _read_issuer(self, x509: _certificate.X509) -> str:
         return x509.get_issuer()
 
-    def _read_subject(self, x509):
+    def _read_subject(self, x509: _certificate.X509) -> str:
         return x509.get_subject()
 
-    def _create_identity_cert(self, version, extensions, x509, path):
+    def _create_identity_cert(
+        self, version: int, extensions: Extensions, x509: _certificate.X509, path: str
+    ) -> "IdentityCertificate":
         cert = IdentityCertificate(
             x509=x509,
             path=path,
@@ -156,7 +159,9 @@ class _CertFactory(object):
         )
         return cert
 
-    def _create_v1_prod_cert(self, version, extensions, x509, path):
+    def _create_v1_prod_cert(
+        self, version: int, extensions: Extensions, x509: _certificate.X509, path: str
+    ) -> "ProductCertificate":
         products = self._parse_v1_products(extensions)
         cert = ProductCertificate(
             x509=x509,
@@ -171,10 +176,12 @@ class _CertFactory(object):
         )
         return cert
 
-    def _create_v1_ent_cert(self, version, extensions, x509, path):
-        order = self._parse_v1_order(extensions)
-        content = self._parse_v1_content(extensions)
-        products = self._parse_v1_products(extensions)
+    def _create_v1_ent_cert(
+        self, version: int, extensions: Extensions, x509: _certificate.X509, path: str
+    ) -> "EntitlementCertificate":
+        order: Order = self._parse_v1_order(extensions)
+        content: List[Content] = self._parse_v1_content(extensions)
+        products: List[Product] = self._parse_v1_products(extensions)
 
         cert = EntitlementCertificate(
             x509=x509,
@@ -192,18 +199,18 @@ class _CertFactory(object):
         )
         return cert
 
-    def _parse_v1_products(self, extensions):
+    def _parse_v1_products(self, extensions: Extensions) -> List["Product"]:
         """
         Returns an ordered list of all the product data in the
         certificate.
         """
-        products = []
+        products: List[Product] = []
         for prod_namespace in extensions.find("1.*.1"):
-            oid = prod_namespace[0]
-            root = oid.rtrim(1)
-            product_id = oid[1]
-            ext = extensions.branch(root)
-            product_data = {
+            oid: OID = prod_namespace[0]
+            root: OID = oid.rtrim(1)
+            product_id: str = oid[1]
+            ext: Extensions = extensions.branch(root)
+            product_data: Dict[str, Union[str, List[str]]] = {
                 "name": ext.get("1"),
                 "version": ext.get("2"),
                 "architectures": ext.get("3"),
@@ -220,10 +227,10 @@ class _CertFactory(object):
             products.append(Product(id=product_id, **product_data))
         return products
 
-    def _parse_v1_order(self, extensions):
-        order_extensions = extensions.branch(ORDER_NAMESPACE)
+    def _parse_v1_order(self, extensions: Extensions) -> "Order":
+        order_extensions: Extensions = extensions.branch(ORDER_NAMESPACE)
         # TODO: implement reading syspurpose attributes: usage, roles and addons, when they are implemented
-        order_data = {
+        order_data: Dict[str, Union[str, List[str]]] = {
             "name": order_extensions.get("1"),
             "number": order_extensions.get("2"),
             "sku": order_extensions.get("3"),
@@ -247,9 +254,9 @@ class _CertFactory(object):
         order = Order(**order_data)
         return order
 
-    def _parse_v1_content(self, extensions):
+    def _parse_v1_content(self, extensions: Extensions) -> List["Content"]:
         content = []
-        ents = extensions.find("2.*.*.1")
+        ents: List[Tuple[OID, str]] = extensions.find("2.*.*.1")
         for ent in ents:
             oid = ent[0].rtrim(1)
             content_ext = extensions.branch(oid)
@@ -271,7 +278,7 @@ class _CertFactory(object):
             content.append(Content(**content_data))
         return content
 
-    def _get_v1_cert_type(self, extensions):
+    def _get_v1_cert_type(self, extensions: Extensions) -> int:
         # Assume if there is an order name, it must be an entitlement cert:
         if EXT_ORDER_NAME in extensions:
             return ENTITLEMENT_CERT
@@ -282,8 +289,11 @@ class _CertFactory(object):
         else:
             return IDENTITY_CERT
 
-    def _create_v3_cert(self, version, extensions, x509, path, pem):
+    def _create_v3_cert(
+        self, version: int, extensions: Extensions, x509: _certificate.X509, path: str, pem: str
+    ) -> "EntitlementCertificate":
         # At this time, we only support v3 entitlement certificates
+        entitlement_data: Optional[str]
         try:
             # this is only expected to be available on the client side
             entitlement_data = pem.split("-----BEGIN ENTITLEMENT DATA-----")[1]
@@ -291,8 +301,12 @@ class _CertFactory(object):
         except IndexError:
             entitlement_data = None
 
+        order: Optional[Order]
+        content: Optional[List[Content]]
+        products: Optional[List[Product]]
+        pool: Optional[Pool]
         if entitlement_data:
-            payload = self._decompress_payload(base64.b64decode(entitlement_data))
+            payload: dict = self._decompress_payload(base64.b64decode(entitlement_data))
             order = self._parse_v3_order(payload)
             content = self._parse_v3_content(payload)
             products = self._parse_v3_products(payload)
@@ -321,12 +335,12 @@ class _CertFactory(object):
         )
         return cert
 
-    def _parse_v3_order(self, payload):
-        sub = payload["subscription"]
-        order = payload["order"]
+    def _parse_v3_order(self, payload: dict) -> "Order":
+        sub: dict = payload["subscription"]
+        order: dict = payload["order"]
 
-        service_level = None
-        service_type = None
+        service_level: Optional[str] = None
+        service_type: Optional[str] = None
         if "service" in sub:
             service_level = sub["service"].get("level", None)
             service_type = sub["service"].get("type", None)
@@ -353,15 +367,14 @@ class _CertFactory(object):
             addons=sub.get("addons", None),
         )
 
-    def _parse_v3_products(self, payload):
+    def _parse_v3_products(self, payload: dict) -> List["Product"]:
         """
         Returns an ordered list of all the product data in the
         certificate.
         """
-        product_payload = payload["products"]
-        products = []
+        product_payload: str = payload["products"]
+        products: List[Product] = []
         for product in product_payload:
-
             products.append(
                 Product(
                     id=product["id"],
@@ -377,8 +390,8 @@ class _CertFactory(object):
             # tags can exist.
         return products
 
-    def _parse_v3_content(self, payload):
-        content = []
+    def _parse_v3_content(self, payload: dict) -> List["Content"]:
+        content: List[Content] = []
         for product in payload["products"]:
             for c in product["content"]:
                 content.append(
@@ -397,13 +410,13 @@ class _CertFactory(object):
                 )
         return content
 
-    def _parse_v3_pool(self, payload):
-        pool = payload.get("pool", None)
+    def _parse_v3_pool(self, payload: dict) -> Optional["Pool"]:
+        pool: Optional[dict] = payload.get("pool", None)
         if pool:
             return Pool(id=pool["id"])
         return None
 
-    def _decompress_payload(self, payload):
+    def _decompress_payload(self, payload: bytes) -> dict:
         """
         Certificate payloads arrive in zlib compressed strings
         of JSON.
@@ -411,121 +424,122 @@ class _CertFactory(object):
         resulting dict.
         """
         try:
-            decompressed = zlib.decompress(payload).decode("utf-8")
+            decompressed: str = zlib.decompress(payload).decode("utf-8")
             return json.loads(decompressed)
         except Exception as e:
             log.exception(e)
-            raise CertificateException("Error decompressing/parsing " "certificate payload.")
+            raise CertificateException("Error decompressing/parsing certificate payload.")
 
 
-class Version(object):
+class Version:
     """Small wrapper for version string comparisons."""
 
-    def __init__(self, version_str):
-        self.version_str = version_str
-        self.segments = version_str.split(".")
+    def __init__(self, version_str: str):
+        self.version_str: str = version_str
+        self.segments: List[str] = version_str.split(".")
+
         for i in range(len(self.segments)):
             self.segments[i] = int(self.segments[i])
+        self.segments: List[int]
 
-        self.major = self.segments[0]
-        self.minor = 0
+        self.major: int = self.segments[0]
+        self.minor: int = 0
         if len(self.segments) > 1:
             self.minor = self.segments[1]
 
     # TODO: comparator might be useful someday
-    def __str__(self):
+    def __str__(self) -> str:
         return self.version_str
 
 
 class _Extensions2(Extensions):
-    def _parse(self, x509):
+    def _parse(self, x509: _certificate.X509) -> None:
         """
         Override parent method for an X509 object from the new C wrapper.
         """
-        extensions = x509.get_all_extensions()
+        extensions: Dict[str, int] = x509.get_all_extensions()
         for (key, value) in list(extensions.items()):
             oid = OID(key)
             self[oid] = value
 
 
-class Certificate(object):
+class Certificate:
     """Parent class of all x509 certificate types."""
 
     def __init__(
         self,
-        x509=None,
-        path=None,
-        version=None,
-        serial=None,
-        start=None,
-        end=None,
-        subject=None,
-        pem=None,
-        issuer=None,
+        x509: Optional[_certificate.X509] = None,
+        path: Optional[str] = None,
+        version: Optional[int] = None,
+        serial: Optional[int] = None,
+        start: Optional[datetime.datetime] = None,
+        end: Optional[datetime.datetime] = None,
+        subject: Optional[str] = None,
+        pem: Optional[str] = None,
+        issuer: Optional[str] = None,
     ):
-
         # The rhsm._certificate X509 object for this certificate.
         # WARNING: May be None in tests
-        self.x509 = x509
+        self.x509: Optional[_certificate.X509] = x509
 
         # Full file path to the certificate on disk. May be None if the cert
         # hasn't yet been written to disk.
-        self.path = path
+        self.path: Optional[str] = path
 
         # Version of the certificate sent by Candlepin:
-        self.version = version
+        self.version: Optional[int] = version
 
         if serial is None:
             raise CertificateException("Certificate has no serial")
 
-        self.serial = serial
+        self.serial: Optional[int] = serial
 
         # Certificate start/end datetimes:
-        self.start = start
-        self.end = end
+        self.start: Optional[datetime.datetime] = start
+        self.end: Optional[datetime.datetime] = end
 
         self.valid_range = DateRange(self.start, self.end)
-        self.pem = pem
+        self.pem: Optional[str] = pem
 
-        self.subject = subject
-        self.issuer = issuer
+        self.subject: Optional[str] = subject
+        self.issuer: Optional[str] = issuer
 
-    def is_valid(self, on_date=None):
-        gmt = datetime.utcnow()
+    def is_valid(self, on_date: Optional[datetime.datetime] = None):
+        gmt = datetime.datetime.utcnow()
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
         return self.valid_range.has_date(gmt)
 
-    def is_expired(self, on_date=None):
-        gmt = datetime.utcnow()
+    def is_expired(self, on_date: Optional[datetime.datetime] = None):
+        gmt = datetime.datetime.utcnow()
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
         return self.valid_range.end() < gmt
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         return self.end < other.end
 
-    def __le__(self, other):
+    def __le__(self, other) -> bool:
         return self.end < other.end
 
-    def __gt__(self, other):
+    def __gt__(self, other) -> bool:
         return self.end > other.end
 
-    def __ge__(self, other):
+    def __ge__(self, other) -> bool:
         return self.end > other.end
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return hasattr(other, "serial") and self.serial == other.serial
 
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         return not hasattr(other, "serial") or self.serial != other.serial
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return self.serial
 
-    def write(self, path):
+    def write(self, path: str) -> None:
         """
         Write the certificate to disk.
         """
@@ -540,7 +554,7 @@ class Certificate(object):
         os.chmod(path, 0o644)
         self.path = path
 
-    def delete(self):
+    def delete(self) -> None:
         """
         Delete the file associated with this certificate.
         """
@@ -551,43 +565,49 @@ class Certificate(object):
 
 
 class IdentityCertificate(Certificate):
-    def __init__(self, alt_name=None, **kwargs):
+    def __init__(self, alt_name: Optional[str] = None, **kwargs):
         Certificate.__init__(self, **kwargs)
-        self.alt_name = alt_name
+        self.alt_name: Optional[str] = alt_name
 
 
 class ProductCertificate(Certificate):
-    def __init__(self, products=None, **kwargs):
+    def __init__(self, products: List["Product"] = None, **kwargs):
         Certificate.__init__(self, **kwargs)
 
         # The products in this certificate. The first is treated as the
         # primary or "marketing" product.
         if products is None:
             products = []
-        self.products = products
+        self.products: List[Product] = products
 
 
 class EntitlementCertificate(ProductCertificate):
-    def __init__(self, order=None, content=None, pool=None, extensions=None, **kwargs):
+    def __init__(
+        self,
+        order: Optional["Order"] = None,
+        content: Optional["Content"] = None,
+        pool: Optional["Pool"] = None,
+        extensions: Optional[Extensions] = None,
+        **kwargs
+    ):
         ProductCertificate.__init__(self, **kwargs)
-        self.order = order
-        self.content = content
-        self.pool = pool
-        self.extensions = extensions
+        self.order: Optional[Order] = order
+        self.content: Optional[Content] = content
+        self.pool: Optional[Pool] = pool
+        self.extensions: Optional[Extensions] = extensions
         self._path_tree_object = None
 
     @property
-    def entitlement_type(self):
+    def entitlement_type(self) -> str:
         if self.extensions.get(EXT_ENT_TYPE):
             return self.extensions.get(EXT_ENT_TYPE).decode("utf-8")
         else:
             return "Basic"
 
     @property
-    def _path_tree(self):
+    def _path_tree(self) -> PathTree:
         """
         :return:    PathTree object built from this cert's extensions
-        :rtype:     rhsm.pathtree.PathTree
 
         :raise: AttributeError if self.version.major < 3
         """
@@ -596,7 +616,7 @@ class EntitlementCertificate(ProductCertificate):
             raise AttributeError("path tree not used for v%d certs" % self.version.major)
         if not self._path_tree_object:
             # generate and cache the tree
-            data = self.extensions[EXT_ENT_PAYLOAD]
+            data: Extensions = self.extensions[EXT_ENT_PAYLOAD]
             if not data:
                 raise AttributeError("Certificate has empty entitlement data extension")
             self._path_tree_object = PathTree(data)
@@ -609,11 +629,11 @@ class EntitlementCertificate(ProductCertificate):
         return paths
 
     def is_expiring(self, on_date=None):
-        gmt = datetime.utcnow()
+        gmt = datetime.datetime.utcnow()
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
-        warning_time = timedelta(days=int(self.order.warning_period))
+        warning_time = datetime.timedelta(days=int(self.order.warning_period))
         return self.valid_range.end() - warning_time < gmt
 
     def check_path(self, path):
@@ -639,17 +659,15 @@ class EntitlementCertificate(ProductCertificate):
         else:
             return self._path_tree.match_path(path)
 
-    def _check_v1_path(self, path):
+    def _check_v1_path(self, path: str) -> bool:
         """
         Check the requested path against a v1 certificate
 
         :param path:    requested path
-        :type  path:    basestring
         :return:    True iff the path matches, else False
-        :rtype:     bool
         """
         path = path.strip("/")
-        valid = False
+        valid: bool = False
         for ext_oid, oid_url in list(self.extensions.items()):
             oid_url = oid_url.decode("utf-8")
             # if this is a download URL
@@ -660,7 +678,7 @@ class EntitlementCertificate(ProductCertificate):
         return valid
 
     @staticmethod
-    def _validate_v1_url(oid_url, dest):
+    def _validate_v1_url(oid_url, dest: str) -> bool:
         """
         Determines if the destination URL matches the OID's URL.
 
@@ -673,19 +691,16 @@ class EntitlementCertificate(ProductCertificate):
 
         :param oid_url: path associated with an entitlement OID, as pulled from
                         the cert's extensions.
-        :type  oid_url: basestring
         :param dest:    path requested by a client
-        :type  dest:    basestring
 
         :return: True iff the OID permits the destination else False
-        :rtype:  bool
         """
         # Remove initial and trailing '/', and substitute the $variables for
         # equivalent regular expressions in oid_url.
         oid_re = re.sub(r"\$[^/]+(/|$)", "[^/]+/", oid_url.strip("/"))
         return re.match(oid_re, dest) is not None
 
-    def delete(self):
+    def delete(self) -> None:
         """
         Override parent to also delete certificate key.
         """
@@ -696,13 +711,13 @@ class EntitlementCertificate(ProductCertificate):
         key_path = self.key_path()
         os.unlink(key_path)
 
-    def key_path(self):
+    def key_path(self) -> str:
         """
         Returns the full path to the cert key's pem.
         """
         dir_path, cert_filename = os.path.split(self.path)
         try:
-            key_filename = "%s-key.%s" % tuple(cert_filename.rsplit(".", 1))
+            key_filename: str = "%s-key.%s" % tuple(cert_filename.rsplit(".", 1))
         except TypeError as e:
             log.exception(e)
             raise CertificateException(
@@ -714,51 +729,50 @@ class EntitlementCertificate(ProductCertificate):
         return key_path
 
 
-class Product(object):
+class Product:
     """
     Represents the product information from a certificate.
     """
 
     def __init__(
         self,
-        id=None,
-        name=None,
-        version=None,
-        architectures=None,
-        provided_tags=None,
-        brand_type=None,
-        brand_name=None,
+        id: Optional[str] = None,
+        name: Optional[str] = None,
+        version: Optional[str] = None,
+        architectures: Optional[str] = None,
+        provided_tags: Optional[List[str]] = None,
+        brand_type: Optional[str] = None,
+        brand_name: Optional[str] = None,
     ):
-
         if name is None:
             raise CertificateException("Product missing name")
         if id is None:
             raise CertificateException("Product missing ID")
 
-        self.id = id
-        self.name = name
-        self.version = version
+        self.id: Optional[str] = id
+        self.name: Optional[str] = name
+        self.version: Optional[str] = version
 
-        self.architectures = architectures
+        self.architectures: List[str] = architectures
         # If this is sent in as a string split it, as the field
         # can technically be multi-valued:
-        if isinstance(self.architectures, str):
-            self.architectures = parse_tags(self.architectures)
+        if isinstance(architectures, str):
+            self.architectures = parse_tags(architectures)
         if self.architectures is None:
             self.architectures = []
 
-        self.provided_tags = provided_tags
+        self.provided_tags: List[str] = provided_tags
         if self.provided_tags is None:
             self.provided_tags = []
 
-        self.brand_type = brand_type
-        self.brand_name = brand_name
+        self.brand_type: Optional[str] = brand_type
+        self.brand_name: Optional[str] = brand_name
 
-    def __eq__(self, other):
+    def __eq__(self, other: "Product") -> bool:
         return self.id == other.id
 
 
-class Order(object):
+class Order:
     """
     Represents the order information for the subscription an entitlement
     originated from.

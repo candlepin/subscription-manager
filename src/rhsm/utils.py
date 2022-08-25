@@ -18,7 +18,7 @@ import re
 import sys
 import time
 import threading
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Tuple, Union, Generator
 
 import urllib.parse
 
@@ -35,13 +35,13 @@ module singleton) is used for turning it off dynamically via CLI option.
 """
 
 
-def remove_scheme(uri):
+def remove_scheme(uri: str) -> str:
     """Remove the scheme component from a URI."""
     return re.sub("^[A-Za-z][A-Za-z0-9+-.]*://", "", uri)
 
 
 class ServerUrlParseError(Exception):
-    def __init__(self, serverurl, msg=None):
+    def __init__(self, serverurl: str, msg: str = None):
         self.serverurl = serverurl
         self.msg = msg
 
@@ -79,15 +79,13 @@ class UnsupportedOperationException(Exception):
     pass
 
 
-def has_bad_scheme(url):
+def has_bad_scheme(url: str) -> bool:
     """Check a url for an invalid or unuseful schema.
 
     Don't allow urls to start with :/ http/ https/ non http/httpsm or http(s) with single /
 
     :params url: URL string to check
-    :type url: str
-    :returns: True if the url schme is "bad"
-    :rtype: boolean
+    :returns: True if the url scheme is "bad"
     """
     match_bad = r"(https?[:/])|(:/)|(\S+://)"
     match_good = r"https?://"
@@ -99,7 +97,7 @@ def has_bad_scheme(url):
     return False
 
 
-def has_good_scheme(url):
+def has_good_scheme(url: str) -> bool:
     match = re.match(r"https?://(\S+)?", url)
     if not match:
         return False
@@ -110,24 +108,22 @@ def has_good_scheme(url):
 
 
 def parse_url(
-    local_server_entry,
-    default_hostname=None,
-    default_port=None,
-    default_prefix=None,
-    default_username=None,
-    default_password=None,
-):
+    local_server_entry: str,
+    default_hostname: str = None,
+    default_port: str = None,
+    default_prefix: str = None,
+    default_username: str = None,
+    default_password: str = None,
+) -> Tuple[str, str, str, str, str]:
     """
     Parse hostname, port, and webapp prefix from the string a user entered.
-
     Expected format: username:password@hostname:port/prefix
-
-    Username, password, port and prefix are optional.
-
     :param local_server_entry: URL of a candlepin server
-    :type: str
-    :param default_hostname: default_hostname
-    :param default_port: default_port
+    :param default_hostname: default hostname
+    :param default_port: default port
+    :param default_prefix: default prefix (e.g. /candlepin)
+    :param default_username: not encrypted default username
+    :param default_password: not encrypted dfault password
     :return: a tuple of (username, password, hostname, port, path)
     """
     # Adding http:// onto the front of the hostname
@@ -136,11 +132,12 @@ def parse_url(
         raise ServerUrlParseErrorEmpty(local_server_entry)
 
     if local_server_entry is None:
+        # FIXME: Raise exception with some useful message like: "No server entry provided", not None
         raise ServerUrlParseErrorNone(local_server_entry)
 
     # good_url in this case meaning a schema we support, and
     # _something_ else. This is to make urlparse happy
-    good_url = None
+    good_url: Union[str, None] = None
 
     # handle any known or troublesome or bogus typo's, etc
     if has_bad_scheme(local_server_entry):
@@ -159,8 +156,8 @@ def parse_url(
     # FIXME: need a try except here? docs
     # don't seem to indicate any expected exceptions
     result = urllib.parse.urlparse(good_url)
-    username = default_username
-    password = default_password
+    username: Union[None, str] = default_username
+    password: Union[None, str] = default_password
 
     # to support username and password, let's split on @
     # since the format will be username:password@hostname:port
@@ -187,7 +184,7 @@ def parse_url(
     # So maybe check result.port/path/hostname for None, and
     # throw an exception in those cases.
     # adding the schem seems to avoid this though
-    port = default_port
+    port: str = default_port
     if len(netloc) > 1:
         if netloc[1] != "":
             port = str(netloc[1])
@@ -213,10 +210,10 @@ def parse_url(
     except ValueError:
         raise ServerUrlParseErrorPort(local_server_entry)
 
-    return (username, password, hostname, port, prefix)
+    return username, password, hostname, port, prefix
 
 
-def get_env_proxy_info():
+def get_env_proxy_info() -> dict:
     the_proxy = {
         "proxy_username": "",
         "proxy_hostname": "",
@@ -251,7 +248,7 @@ def get_env_proxy_info():
     return the_proxy
 
 
-def cmd_name(argv):
+def cmd_name(argv: List[str]) -> str:
     """Attempt to get a meaningful command name from argv.
 
     This handles cases where argv[0] isn't helpful (for
@@ -261,7 +258,7 @@ def cmd_name(argv):
     return cmd_name_string
 
 
-def fix_no_proxy():
+def fix_no_proxy() -> None:
     """
     This fixes no_proxy/NO_PROXY environment to not include leading
     asterisk, because there is some imperfection in proxy_bypass_environment.
@@ -281,7 +278,7 @@ def fix_no_proxy():
             os.environ["NO_PROXY"] = no_proxy
 
 
-def suppress_output(func):
+def suppress_output(func: Callable) -> Callable:
     def wrapper(*args, **kwargs):
         try:
             devnull = open(os.devnull, "w")
@@ -291,6 +288,7 @@ def suppress_output(func):
             sys.stderr = devnull
             return func(*args, **kwargs)
         finally:
+            # FIXME: stdout, stderr and devnull might be referenced before assigment
             sys.stdout = stdout
             sys.stderr = stderr
             devnull.close()
@@ -449,20 +447,20 @@ class StatusMessage:
         if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST", ""):
             self.quiet = True
 
-    def print(self):
+    def print(self) -> None:
         if self.quiet:
             return
         print(self.text, end="\r")
 
-    def clean(self):
+    def clean(self) -> None:
         if self.quiet:
             return
         print(" " * len(self.text), end="\r")
 
-    def __enter__(self):
+    def __enter__(self) -> None:
         self.print()
 
-    def __exit__(self, error_type, error_value, traceback):
+    def __exit__(self, error_type, error_value, traceback) -> None:
         self.clean()
         if error_type:
             raise
@@ -483,6 +481,7 @@ class StatusSpinnerStyle:
       all TTYs, not just rich terminal emulators in GUI).
     """
 
+    # FIXME: There is not reason to have following variables mutable. Convert it to tuples
     LINE: List[str] = ["|", "/", "-", "\\"]
     BRAILLE: List[str] = ["⠋", "⠙", "⠸", "⠴", "⠦", "⠇"]
     WIDE_BRAILLE: List[str] = ["⠧ ", "⠏ ", "⠋⠁", "⠉⠉", "⠈⠙", " ⠹", " ⠼", "⠠⠴", "⠤⠤", "⠦⠄"]
@@ -514,7 +513,7 @@ class LiveStatusMessage(StatusMessage):
         style: List[str] = StatusSpinnerStyle.LINE,
         placement: str = "BEFORE",
         speed: float = 0.15,
-    ):
+    ) -> None:
         super().__init__(description)
 
         # Do not use cursive if there is a spinner. When the message is
@@ -526,18 +525,18 @@ class LiveStatusMessage(StatusMessage):
 
         self.busy: bool = False
         self._loops: int = 0
-        self._thread: threading.Thread = None
+        self._thread: Union[threading.Thread, None] = None
         self._cursor: bool = True
 
-        self.frames: str = style
+        self.frames: List[str] = style
         self.delay: float = speed
         if placement not in ("BEFORE", "AFTER"):
             raise ValueError(f"String {placement} is not valid spinner placement.")
         self.placement: str = placement
 
     @property
-    def spinner_frame(self):
-        """Get next frame of the spinner annimation."""
+    def spinner_frame(self) -> Generator[str, None, None]:
+        """Get next frame of the spinner animation."""
         while True:
             yield self.frames[self._loops % len(self.frames)]
 
@@ -556,7 +555,7 @@ class LiveStatusMessage(StatusMessage):
         return self._cursor
 
     @cursor.setter
-    def cursor(self, enable: bool):
+    def cursor(self, enable: bool) -> None:
         """Enable or disable cursor.
 
         For more information on these rarely used shell escape codes, see
@@ -571,7 +570,7 @@ class LiveStatusMessage(StatusMessage):
             print("\033[?25l", end="")
             self._cursor = False
 
-    def __enter__(self):
+    def __enter__(self) -> None:
         self.busy = True
         if self.quiet:
             return
@@ -579,7 +578,7 @@ class LiveStatusMessage(StatusMessage):
         self._thread = threading.Thread(target=self.loop)
         self._thread.start()
 
-    def __exit__(self, error_type, error_value, traceback):
+    def __exit__(self, error_type, error_value, traceback) -> None:
         self.busy = False
         if self.quiet:
             if error_type:
@@ -590,7 +589,7 @@ class LiveStatusMessage(StatusMessage):
         if error_type:
             raise
 
-    def print(self):
+    def print(self) -> None:
         if self.quiet:
             return
         frame: str = next(self.spinner_frame)
@@ -601,12 +600,12 @@ class LiveStatusMessage(StatusMessage):
             line = self.text + " " + frame
         print(line, end="\r")
 
-    def clean(self):
+    def clean(self) -> None:
         if self.quiet:
             return
         print(" " * self.max_text_width, end="\r")
 
-    def loop(self):
+    def loop(self) -> None:
         """Show pretty animation while we fetch data."""
         while self.busy:
             self.print()

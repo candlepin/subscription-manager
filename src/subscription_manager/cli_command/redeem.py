@@ -72,6 +72,8 @@ class RedeemCommand(CliCommand):
             response = self.cp.activateMachine(self.identity.uuid, self.options.email, self.options.locale)
             if response and response.get("displayMessage"):
                 system_exit(0, response.get("displayMessage"))
+            # FIXME: when response is None, then probably redeem was not successful and some info/warning
+            # message should be displayed. Otherwise it looks like that the process was successful
         except connection.GoneException as ge:
             raise ge
         except connection.RestlibException as e:
