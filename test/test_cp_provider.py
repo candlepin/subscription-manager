@@ -13,7 +13,7 @@
 #
 import unittest
 
-from mock import patch
+from mock import patch, mock
 
 from subscription_manager.cp_provider import CPProvider
 
@@ -54,6 +54,19 @@ class CPProviderTests(unittest.TestCase):
         connection = self.cp_provider.get_consumer_auth_cp()
         self.assertIsNotNone(connection)
 
+    def test_close_consumer_auth_cp(self):
+        """
+        Test that consumer connection is closed properly
+        """
+        # Create consumer connection first
+        connection = self.cp_provider.get_consumer_auth_cp()
+        connection.conn._create_connection()
+        self.assertIsNotNone(self.cp_provider.consumer_auth_cp.conn._BaseRestLib__conn)
+        # Close all connections
+        self.cp_provider.close_all_connections()
+        # Cached connection should be None ATM
+        self.assertIsNone(self.cp_provider.consumer_auth_cp.conn._BaseRestLib__conn)
+
     @patch("subscription_manager.cp_provider.utils.get_client_versions")
     def test_consumer_auth_setting_user_agent_version(self, mock_client_version):
         mock_client_version.return_value = {"subscription-manager": "1.23.45"}
@@ -67,6 +80,19 @@ class CPProviderTests(unittest.TestCase):
         self.cp_provider.set_user_pass(username="admin", password="admin")
         connection = self.cp_provider.get_basic_auth_cp()
         self.assertIsNotNone(connection)
+
+    def test_close_basic_auth_cp(self):
+        """
+        Test that basic connection is closed properly
+        """
+        # Create consumer connection first
+        connection = self.cp_provider.get_basic_auth_cp()
+        connection.conn._create_connection()
+        self.assertIsNotNone(self.cp_provider.basic_auth_cp.conn._BaseRestLib__conn)
+        # Close all connections
+        self.cp_provider.close_all_connections()
+        # Cached connection should be None ATM
+        self.assertIsNone(self.cp_provider.basic_auth_cp.conn._BaseRestLib__conn)
 
     @patch("subscription_manager.cp_provider.utils.get_client_versions")
     def test_basic_auth_setting_user_agent_version(self, mock_client_version):
@@ -82,11 +108,57 @@ class CPProviderTests(unittest.TestCase):
         connection = self.cp_provider.get_no_auth_cp()
         self.assertIsNotNone(connection)
 
+    def test_close_no_auth_cp(self):
+        """
+        Test that no-auth connection is closed properly
+        """
+        # Create no-auth connection first
+        connection = self.cp_provider.get_no_auth_cp()
+        connection.conn._create_connection()
+        self.assertIsNotNone(self.cp_provider.no_auth_cp.conn._BaseRestLib__conn)
+        # Close all connections
+        self.cp_provider.close_all_connections()
+        # Cached connection should be None ATM
+        self.assertIsNone(self.cp_provider.no_auth_cp.conn._BaseRestLib__conn)
+
     @patch("subscription_manager.cp_provider.utils.get_client_versions")
     def test_no_auth_setting_user_agent_version(self, mock_client_version):
         mock_client_version.return_value = {"subscription-manager": "1.23.45"}
         connection = self.cp_provider.get_no_auth_cp()
         self.assertTrue("subscription-manager/1.23.45" in connection.conn.user_agent)
+
+    def test_get_keycloack_auth_cp(self):
+        """
+        Test of getting connection to candlepin server using keycloack authentication
+        """
+        no_auth_connection = self.cp_provider.get_no_auth_cp()
+        no_auth_connection.has_capability = mock.Mock(return_value=True)
+        # TOKEN is base64 encoded following json document
+        # {"typ":"bearer", "preferred_username": "foo"}
+        connection = self.cp_provider.get_keycloak_auth_cp(
+            "HEADER.eyJ0eXAiOiJiZWFyZXIiLCAicHJlZmVycmVkX3VzZXJuYW1lIjogImZvbyJ9.SIGNATURE"
+        )
+        self.assertIsNotNone(connection)
+
+    def test_close_keycloak_cp(self):
+        """
+        Test that keycloak connection is closed properly
+        """
+        # Create no auth connection and fake getting capabilities
+        no_auth_connection = self.cp_provider.get_no_auth_cp()
+        no_auth_connection.has_capability = mock.Mock(return_value=True)
+        # Then try to create keycloak connection
+        # TOKEN is base64 encoded following json document
+        # {"typ":"bearer", "preferred_username": "foo"}
+        connection = self.cp_provider.get_keycloak_auth_cp(
+            "HEADER.eyJ0eXAiOiJiZWFyZXIiLCAicHJlZmVycmVkX3VzZXJuYW1lIjogImZvbyJ9.SIGNATURE"
+        )
+        connection.conn._create_connection()
+        self.assertIsNotNone(self.cp_provider.keycloak_auth_cp.conn._BaseRestLib__conn)
+        # Close all connections
+        self.cp_provider.close_all_connections()
+        # Cached connection should be None ATM
+        self.assertIsNone(self.cp_provider.keycloak_auth_cp.conn._BaseRestLib__conn)
 
     def test_get_content_conn(self):
         """
