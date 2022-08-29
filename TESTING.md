@@ -22,6 +22,12 @@ or, to disable DBus tests, run
 pytest -m "not dbus"
 ```
 
+When debugging, you may want to add `--failed-first` argument, so previously failed tests are run first:
+
+```bash
+pytest --ff
+```
+
 To test specific class or function, use `::` as separator:
 
 ```bash
