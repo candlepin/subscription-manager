@@ -314,7 +314,7 @@ class CliCommand(AbstractCLICommand):
 
         self.correlation_id = generate_correlation_id()
 
-    def _print_ignore_auto_attach_mesage(self):
+    def _print_ignore_auto_attach_message(self):
         """
         This message is shared by attach command and register command, because
         both commands can do auto-attach.
@@ -327,8 +327,9 @@ class CliCommand(AbstractCLICommand):
         owner_id = owner['key']
         print(
             _(
-                'Ignoring request to auto-attach. '
-                'It is disabled for org "{owner_id}" because of the content access mode setting.'
+                "Ignoring request to auto-attach. "
+                'Attaching subscriptions is disabled for organization "{owner_id}" '
+                "because of the content access mode setting."
             ).format(owner_id=owner_id)
         )
 
@@ -1337,7 +1338,7 @@ class RegisterCommand(UserPassCommand):
         # Do not try to do auto-attach, when simple content access mode is used
         # Only print info message to stdout
         if is_simple_content_access(uep=self.cp, identity=self.identity):
-            self._print_ignore_auto_attach_mesage()
+            self._print_ignore_auto_attach_message()
             return
 
         if 'serviceLevel' not in consumer and self.options.service_level:
@@ -1894,7 +1895,7 @@ class AttachCommand(CliCommand):
         #
         if is_simple_content_access(uep=self.cp, identity=self.identity):
             if self.auto_attach is True:
-                self._print_ignore_auto_attach_mesage()
+                self._print_ignore_auto_attach_message()
             else:
                 self._print_ignore_attach_message()
             return 0
