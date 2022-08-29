@@ -240,3 +240,31 @@ class TestGCPCloudProvider(unittest.TestCase):
 
         self.assertIsNone(jose_header_str)
         self.assertIsNone(metadata_str)
+
+    def test_get_token_ttl(self):
+        """
+        Test getting/computing token TTL
+        """
+        gcp_provider = gcp.GCPCloudProvider({})
+        metadata = json.loads(GCP_METADATA)
+        ttl = gcp_provider._get_ttl_from_metadata(metadata, 1616596223.00)
+        expected_ttl = gcp.GCPCloudProvider.CLOUD_PROVIDER_METADATA_TTL - gcp.GCPCloudProvider.THRESHOLD
+        self.assertEqual(ttl, expected_ttl)
+
+    def test_get_token_ttl_no_exp_time(self):
+        """
+        Test getting/computing token TTL, when metadata does not contain information about expiration
+        """
+        gcp_provider = gcp.GCPCloudProvider({})
+        ttl = gcp_provider._get_ttl_from_metadata({}, 1616596223.00)
+        self.assertEqual(ttl, gcp.GCPCloudProvider.CLOUD_PROVIDER_METADATA_TTL)
+
+    def test_get_token_ttl_no_iat_time(self):
+        """
+        Test getting/computing token TTL, when metadata does not contain information about expiration
+        """
+        gcp_provider = gcp.GCPCloudProvider({})
+        ttl = gcp_provider._get_ttl_from_metadata({"exp": 1616599823}, 1616596223.00)
+        expected_ttl = gcp.GCPCloudProvider.CLOUD_PROVIDER_METADATA_TTL - gcp.GCPCloudProvider.THRESHOLD
+        # We could also check here that some warning was printed
+        self.assertEqual(ttl, expected_ttl)

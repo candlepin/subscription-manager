@@ -20,6 +20,7 @@ running on Google Cloud Platform.
 import logging
 import time
 import base64
+import json
 
 from typing import Union
 
@@ -56,8 +57,12 @@ class GCPCloudProvider(BaseCloudProvider):
         "?audience={audience}&format=full&licenses=TRUE"
     )
 
-    # Token (metadata) expires within one hour. Thus it is save to cache the token.
+    # Token (metadata) expires usually within one hour. This is default value. Real value
+    # is computed from expiration time contained in the JWT token.
     CLOUD_PROVIDER_METADATA_TTL = 3600
+
+    # Threshold time in seconds
+    THRESHOLD = 10
 
     CLOUD_PROVIDER_TOKEN_TTL = CLOUD_PROVIDER_METADATA_TTL
 
@@ -159,17 +164,74 @@ class GCPCloudProvider(BaseCloudProvider):
         """
         return super(GCPCloudProvider, self)._get_data_from_server(data_type, url, headers)
 
-    def _get_metadata_from_server(self) -> Union[str, None]:
+    def _get_ttl_from_metadata(self, metadata: dict, ctime: float) -> Union[None, float]:
+        """
+        Try to compute TTL from information provided in token metadata
+        :param metadata: Dictionary with metadata
+        :param ctime: Current time
+        :return: TTL of token (time is in seconds from begin of epoch)
+        """
+
+        ttl = self.CLOUD_PROVIDER_TOKEN_TTL
+        exp_time = None
+        iat_time = None
+
+        # Try to get expiration time from token
+        if metadata is not None and "exp" in metadata:
+            exp_time = metadata["exp"]
+            # Decrease the ttl of value of threshold to expire token little sooner to be
+            # sure that we do not use outdated token from cache
+            ttl = exp_time - ctime - self.THRESHOLD
+        else:
+            log.debug(
+                "GCP JWT token does not contain exp time, "
+                f"using default TTL: {self.CLOUD_PROVIDER_TOKEN_TTL}"
+            )
+
+        # Try to get "ait" time (time, when the token was created)
+        if metadata is not None and "iat" in metadata:
+            # We try to test if there is not too big difference between creation time of JWT
+            # token and current time (more than 10 seconds), because it would be strange,
+            # and it could cause some other issues. Such situation could be caused e.g. by
+            # wrong or missing NTP server, too big delay on connection, etc.
+            iat_time = metadata["iat"]
+            if abs(ctime - iat_time) > self.THRESHOLD:
+                log.warning(f"Too big diff between ctime: {ctime} and GCP JWT token iat: {iat_time}")
+        else:
+            log.debug("GCP JWT token does not contain iat time")
+
+        log.debug(f"GCP JWT token, exp: {exp_time}, iat: {iat_time}, TTL: {ttl}")
+
+        return ttl
+
+    def _get_metadata_from_server(self, headers: dict = None) -> Union[str, None]:
         """
         GCP metadata server returns only one file called token
         :return: String with token or None
         """
-        token = self._get_data_from_server(data_type="token", url=self.CLOUD_PROVIDER_METADATA_URL)
+        token = self._get_data_from_server(
+            data_type="token", url=self.CLOUD_PROVIDER_METADATA_URL, headers=headers
+        )
+
         if token is not None:
+            ttl = self.CLOUD_PROVIDER_TOKEN_TTL
+            ctime: float = time.time()
+
+            # Try to get expiration time from JWT token and the time, when the token was created
+            jose_header, metadata, encoded_signature = self.decode_jwt(token)
+            if metadata is not None:
+                try:
+                    metadata = json.loads(metadata)
+                except json.JSONDecodeError as err:
+                    log.error(f"Unable to decode metadata from GCP JWT token: {err}")
+                else:
+                    ttl = self._get_ttl_from_metadata(metadata, ctime)
+
             self._token = token
-            self._token_ctime = time.time()
-            self._token_ttl = self.CLOUD_PROVIDER_TOKEN_TTL
+            self._token_ctime = ctime
+            self._token_ttl = ttl
             self._write_token_to_cache_file()
+
         return token
 
     def _get_signature_from_server(self) -> None:
