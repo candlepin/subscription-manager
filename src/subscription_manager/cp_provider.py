@@ -14,6 +14,7 @@
 import base64
 import json
 import logging
+from typing import Optional
 
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import utils
@@ -43,14 +44,16 @@ class CPProvider(object):
     content_connection: ent cert based auth connection to cdn
     """
 
-    consumer_auth_cp = None
-    basic_auth_cp = None
-    no_auth_cp = None
-    content_connection = None
-    keycloak_auth_cp = None
+    consumer_auth_cp: Optional[connection.UEPConnection] = None
+    basic_auth_cp: Optional[connection.UEPConnection] = None
+    no_auth_cp: Optional[connection.UEPConnection] = None
+    content_connection: Optional[connection.ContentConnection] = None
+    keycloak_auth_cp: Optional[connection.UEPConnection] = None
 
     # Initialize with default connection info from the config file
     def __init__(self):
+        # FIXME: This does not make much sense to call this method and then rewrite almost everything
+        # with None
         self.set_connection_info()
         self.correlation_id = None
         self.username = None
@@ -111,12 +114,14 @@ class CPProvider(object):
         self.basic_auth_cp = None
 
     def _parse_token(self, token):
+        # FIXME: make this more reliable
         _header, payload, _signature = token.split(".")
         payload += "=" * (4 - (len(payload) % 4))  # pad to the appropriate length
         return json.loads(base64.b64decode(payload))
 
     def set_token(self, token=None):
         self.token = token
+        # FIXME: make this more reliable
         if token:
             self.token_username = self._parse_token(token)["preferred_username"]
         else:
@@ -139,7 +144,8 @@ class CPProvider(object):
         self.no_auth_cp = None
         self.keycloak_auth_cp = None
 
-    def get_client_version(self):
+    @staticmethod
+    def get_client_version() -> str:
         """
         Try to get version of subscription manager
         :return: string with version of subscription-manager
@@ -158,7 +164,7 @@ class CPProvider(object):
         else:
             return ""
 
-    def close_all_connections(self):
+    def close_all_connections(self) -> None:
         """
         Try to close all connections to candlepin server, CDN, etc.
         :return: None
@@ -174,9 +180,9 @@ class CPProvider(object):
             self.basic_auth_cp.conn.close_connection()
         if self.keycloak_auth_cp is not None:
             log.debug("Closing auth/keycloak connection...")
-            self.keycloak_auth_cp.conn.close_connestion()
+            self.keycloak_auth_cp.conn.close_connection()
 
-    def get_consumer_auth_cp(self):
+    def get_consumer_auth_cp(self) -> connection.UEPConnection:
         if not self.consumer_auth_cp:
             self.consumer_auth_cp = connection.UEPConnection(
                 host=self.server_hostname,
@@ -197,7 +203,7 @@ class CPProvider(object):
             )
         return self.consumer_auth_cp
 
-    def get_keycloak_auth_cp(self, token):
+    def get_keycloak_auth_cp(self, token) -> connection.UEPConnection:
         if self.keycloak_auth_cp:
             return self.keycloak_auth_cp
 
@@ -206,7 +212,7 @@ class CPProvider(object):
         if not uep.has_capability("keycloak_auth"):
             raise TokenAuthUnsupportedException
 
-        # check type
+        # FIXME: make this more reliable
         token_type = self._parse_token(token)["typ"]
         if token_type.lower() == "bearer":
             access_token = token
@@ -241,7 +247,7 @@ class CPProvider(object):
         )
         return self.keycloak_auth_cp
 
-    def get_basic_auth_cp(self):
+    def get_basic_auth_cp(self) -> connection.UEPConnection:
         if not self.basic_auth_cp:
             self.basic_auth_cp = connection.UEPConnection(
                 host=self.server_hostname,
@@ -262,7 +268,7 @@ class CPProvider(object):
             )
         return self.basic_auth_cp
 
-    def get_no_auth_cp(self):
+    def get_no_auth_cp(self) -> connection.UEPConnection:
         if not self.no_auth_cp:
             self.no_auth_cp = connection.UEPConnection(
                 host=self.server_hostname,
@@ -281,7 +287,7 @@ class CPProvider(object):
             )
         return self.no_auth_cp
 
-    def get_content_connection(self):
+    def get_content_connection(self) -> connection.ContentConnection:
         if not self.content_connection:
             self.content_connection = connection.ContentConnection(
                 host=self.cdn_hostname,
