@@ -48,18 +48,10 @@ To run tests in virtual machine or container without GUI, where DBus is not runn
 dbus-run-session pytest
 ```
 
-### Plugins
-
-- To disable pytest-randomly plugin, run
+To disable pytest-randomly plugin, run
 
 ```bash
 pytest -p no:randomly test/
-```
-
-- If you install `pytest-xdist` the tests can be run in parallel. The following runs in 9.67s instead of 22.41s:
-
-```bash
-pytest -n 4 --no-summary -p no:randomly -v test/
 ```
 
 After all the tests are run, a warnings summary is displayed with the list of deprecations. It can be disabled with `--disable-warnings`. Whole summary can be disabled with `--no-summary`.
