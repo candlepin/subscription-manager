@@ -17,6 +17,8 @@ import unittest
 
 import os
 import sys
+from typing import Any, Dict, Optional
+
 import dbus
 import dbus.lowlevel
 import dbus.bus
@@ -28,6 +30,8 @@ import threading
 import time
 
 import queue
+
+import rhsmlib.dbus.base_object
 from rhsmlib.dbus import constants, server
 from subscription_manager.identity import Identity
 
@@ -66,6 +70,64 @@ class InjectionMockingTest(unittest.TestCase):
         Override this method to control what the injector returns
         """
         raise NotImplementedError("Subclasses should define injected objects")
+
+
+class DBusServerStubProvider(unittest.TestCase):
+    """Special class used start a DBus server.
+
+    All rhsmlib.objects.*.*DbusObject classes need a connection, object path
+    and a bus name to be instantiated. The functions they expose over DBus API
+    are converted to via decorators to special methods the dbus-python library
+    can use, but we can use `__wrapped__` attribute of these methods to obtain
+    original Python functions.
+
+    This will allow us to test just our implementation, without full
+    communication over DBus.
+    """
+
+    LOCALE: str = "C.UTF-8"
+    """Locale that is passed to DBus functions."""
+
+    dbus_class: type = NotImplemented
+    """DBus RHSM API class, subclass of `BaseObject`."""
+
+    dbus_class_kwargs: Dict[str, Any] = {}
+    """Extra arguments to pass to the DBus RHSM API class."""
+
+    obj: Optional[rhsmlib.dbus.base_object.BaseObject] = None
+    """DBus class instance used for testing."""
+
+    patches: Dict[str, mock.Mock] = {}
+    """Dictionary containing patch objects."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        get_cmd_line_patch = mock.patch(
+            "rhsmlib.client_info.DBusSender.get_cmd_line",
+            autospec=True,
+        )
+        cls.patches["get_cmd_line"] = get_cmd_line_patch.start().return_value
+        cls.patches["get_cmd_line"].return_value = "unit-test"
+        cls.addClassCleanup(get_cmd_line_patch.stop)
+
+        cls.obj = cls.dbus_class(
+            conn=None,
+            object_path=cls.dbus_class.default_dbus_path,
+            bus_name=dbus.service.BusName(constants.BUS_NAME, bus=dbus.SessionBus()),
+            **cls.dbus_class_kwargs,
+        )
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        # Unload current DBus class
+        cls.obj = None
+
+        # Stop patching
+        for patch in cls.patches.values():
+            try:
+                patch.stop()
+            except AttributeError as exc:
+                raise RuntimeError(f"Object {patch} cannot be stopped.") from exc
 
 
 class DBusObjectTest(unittest.TestCase):
