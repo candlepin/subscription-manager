@@ -133,7 +133,7 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
         Test of D-Bus object for removing entitlements by pool IDs
         """
         removed_unremoved_pools_serials = (["4028fa7a5dea087d015dea0b025003f6"], [], ["6219625278114868779"])
-        self.mock_entitlement.remove_entilements_by_pool_ids = mock.Mock(
+        self.mock_entitlement.remove_entitlements_by_pool_ids = mock.Mock(
             return_value=removed_unremoved_pools_serials
         )
 

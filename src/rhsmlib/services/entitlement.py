@@ -506,7 +506,7 @@ class EntitlementService(object):
 
         return response
 
-    def remove_entilements_by_pool_ids(self, pool_ids):
+    def remove_entitlements_by_pool_ids(self, pool_ids: list) -> tuple:
         """
         Try to remove entitlements by pool IDs
         :param pool_ids: List of pool IDs
