@@ -186,7 +186,7 @@ class EntitlementDBusObject(base_object.BaseObject):
 
         cp = self.build_uep(proxy_options, proxy_only=True)
         entitlement_service = EntitlementService(cp)
-        removed_pools, unremoved_pools, removed_serials = entitlement_service.remove_entilements_by_pool_ids(
+        removed_pools, unremoved_pools, removed_serials = entitlement_service.remove_entitlements_by_pool_ids(
             pool_ids
         )
 
