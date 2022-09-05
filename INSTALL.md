@@ -28,8 +28,8 @@ Other Fedora versions or distributions may require some adaptation.
    ***NOTE**: Installing `subscription-manager` package is strictly not necessary, but it will pull down all dependencies and create all the files used by subscription-manager.*
 
    ```bash
-   sudo dnf install subscription-manager dbus-daemon \
-       glibc-langpacks-de glibc-langpacks-ja
+   sudo dnf install --setopt install_weak_deps=False subscription-manager \
+       dbus-daemon glibc-langpack-en glibc-langpack-de glibc-langpack-ja
    ```
 
 3. Install Python packages in virtual environment to prevent polluting userspace:
