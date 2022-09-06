@@ -26,8 +26,10 @@ SUBMAN_TAR=$(CURDIR)/dist/subscription-manager.tar.gz
 SMBEXT_TAR=$(CURDIR)/dist/subscription-manager-build-extra.tar.gz
 
 check: prepare
-	# make sure CWD is the cockpit source dir
-	cd $(SUB_MAN_COCKPIT) && test/common/run-tests
+	# make sure CWD is the cockpit source dir;
+	# set the reference branch to empty (i.e. none), otherwise run-tests
+	# will try to use the currently tested sub-man branch in sub-man-cockpit
+	cd $(SUB_MAN_COCKPIT) && test/common/run-tests --base ''
 
 reset:
 	rm -f $(SUBMAN_TAR) $(SMBEXT_TAR)
