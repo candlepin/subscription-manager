@@ -149,20 +149,20 @@ class SubscriptionsCase(MachineCase):
         # Wait for the web service to be accessible
         machine_python(self.machine, WAIT_SCRIPT, CANDLEPIN_URL)
 
+        hostname = m.execute("hostname").rstrip()
+
         m.write("/etc/insights-client/insights-client.conf",
-"""
+f"""
 [insights-client]
-gpg=False
 auto_config=False
-base_url=localhost:8888/r/insights
-cert_verify=False
+auto_update=False
+base_url={hostname}:8443/r/insights
+cert_verify=/var/lib/insights/mock-certs/ca.crt
 username=admin
 password=foobar
 """)
 
         m.upload(["files/mock-insights"], "/var/tmp")
-        # this re-uses cockpit ws certificate, so ensure that it exists
-        m.execute("systemctl start cockpit")
         m.spawn("/var/tmp/mock-insights", "mock-insights")
 
         # HACK: older c-ws versions always log an assertion; https://github.com/cockpit-project/cockpit/pull/16765
@@ -359,9 +359,6 @@ class TestSubscriptions(SubscriptionsCase):
         with b.wait_timeout(360):
             b.wait_not_present('.pf-c-modal-box')
 
-        # HACK - this should eventually not be necessary
-        m.execute("insights-client --check-results")
-
         b.wait_visible("#overview a[href='http://cloud.redhat.com/insights/inventory/123-nice-id']")
         b.wait_visible("#overview a:contains('3 hits, including important')")
 
@@ -385,6 +382,14 @@ class TestSubscriptions(SubscriptionsCase):
     def testSubAndInAndFail(self):
         m = self.machine
         b = self.browser
+
+        # HACK - https://bugzilla.redhat.com/show_bug.cgi?id=2062136
+        #
+        # We rely on insights-client.service to be working, let's not
+        # get distracted by SELinux.  Denials will still be logged and
+        # tracked as known issues even when not enforcing.
+        #
+        m.execute("setenforce 0")
 
         self.login_and_go("/subscriptions")
 
@@ -419,11 +424,7 @@ class TestSubscriptions(SubscriptionsCase):
         m.execute("systemctl start insights-client; while systemctl --quiet is-active insights-client; do sleep 1; done",
                   timeout=360)
 
-        # We can't rely on the insights-client actually succeeding.
-        # It seems to randomly run out of its TasksMax=20 limit, for
-        # example.
-        if m.execute("systemctl is-failed insights-client || true").strip() != "failed":
-            b.wait_not_present("button .pf-c-button__icon svg[fill='orange']")
+        b.wait_not_present("button .pf-c-button__icon svg[fill='orange']")
 
         b.click("button:contains('Unregister')")
         b.wait_not_in_text("#overview", "Insights")
