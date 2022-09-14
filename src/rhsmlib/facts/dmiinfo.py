@@ -16,6 +16,7 @@
 """
 import contextlib
 import logging
+from typing import Dict, List, Union
 
 from rhsmlib.facts import collector
 from rhsmlib.facts.dmidecodeparser import DmidecodeParser
@@ -24,17 +25,22 @@ log = logging.getLogger(__name__)
 
 
 class DmidecodeFactCollector(collector.FactsCollector):
-    def __init__(self, prefix=None, testing=None, collected_hw_info=None):
+    def __init__(
+        self,
+        prefix: str = None,
+        testing: bool = None,
+        collected_hw_info: Dict[str, Union[str, int, bool, None]] = None,
+    ):
         super(DmidecodeFactCollector, self).__init__(
             prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
         )
 
-        self._dmidecode_output = None
+        self._dmidecode_output: str = None
 
-    def set_dmidecode_output(self, filename):
+    def set_dmidecode_output(self, filename: str):
         self._dmidecode_output = filename
 
-    def get_all(self):
+    def get_all(self) -> Dict[str, str]:
         """
         Collect facts from the dmidecode output, if available.
 
@@ -52,8 +58,7 @@ class DmidecodeFactCollector(collector.FactsCollector):
             log.exception(exc)
             return {}
 
-        dmiinfo = {}
-        socket_designations = 0
+        dmiinfo: Dict[str, str] = {}
         # map the various DMI types to the various subtags of "dmi" facts;
         # there can be multiple types for the same subtag, as python-dmidecode
         # aggregated them
@@ -70,12 +75,15 @@ class DmidecodeFactCollector(collector.FactsCollector):
             DmidecodeParser.DmiTypes.PHYSICAL_MEMORY_ARRAY: "dmi.memory.",
             DmidecodeParser.DmiTypes.PORT_CONNECTOR_INFORMATION: "dmi.connector.",
         }
+        dmi_type: str
+        facts_tag: str
+        sections: List[Dict[str, Union[str, List[str]]]]
         for dmi_type, facts_tag in tags.items():
             try:
                 sections = parser.get_sections(dmi_type)
             except KeyError:
                 continue
-            # quirk: use the last handle (likely the one with an higher value)
+            # quirk: use the last handle (likely the one with a higher value)
             # in a similar way to what python-dmidecode did
             section = sections[-1]
             for key, value in section.items():
@@ -83,8 +91,8 @@ class DmidecodeFactCollector(collector.FactsCollector):
                     # we are skipping lists
                     continue
 
-                nkey = "".join([facts_tag, key.lower()]).replace(" ", "_")
-                nvalue = value
+                nkey: str = "".join([facts_tag, key.lower()]).replace(" ", "_")
+                nvalue: Union[str, List[str]] = value
                 if nvalue.startswith("0x"):
                     # quirk: hex value, lowercase it like python-dmidecode did
                     nvalue = value.lower()
@@ -98,7 +106,7 @@ class DmidecodeFactCollector(collector.FactsCollector):
         except KeyError:
             pass
         else:
-            socket_designations = sum(1 for s in sections for k in s.keys() if k == "Socket Designation")
+            socket_designations: int = sum(1 for s in sections for k in s.keys() if k == "Socket Designation")
             # Populate how many socket descriptions we have in a faux-fact,
             # so we can use it to munge lscpu info later if needed.
             if socket_designations > 0:

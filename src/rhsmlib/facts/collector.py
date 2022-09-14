@@ -14,13 +14,14 @@
 import logging
 import os
 import platform
+from typing import Callable, Dict, List, Union
 
 from rhsmlib.facts import collection
 
 log = logging.getLogger(__name__)
 
 
-def get_arch(prefix=None):
+def get_arch(prefix: str = None) -> str:
     """Get the systems architecture.
 
     This relies on portable means, like uname to determine
@@ -43,7 +44,7 @@ def get_arch(prefix=None):
     if prefix == DEFAULT_PREFIX:
         return platform.machine()
 
-    arch_file = os.path.join(prefix, ARCH_FILE_NAME)
+    arch_file: str = os.path.join(prefix, ARCH_FILE_NAME)
     try:
         with open(arch_file, "r") as arch_fd:
             return arch_fd.read().strip()
@@ -58,7 +59,14 @@ def get_arch(prefix=None):
 
 
 class FactsCollector(object):
-    def __init__(self, arch=None, prefix=None, testing=None, hardware_methods=None, collected_hw_info=None):
+    def __init__(
+        self,
+        arch: str = None,
+        prefix: str = None,
+        testing: bool = None,
+        hardware_methods: List[Callable] = None,
+        collected_hw_info: Dict[str, Union[str, int, bool, None]] = None,
+    ):
         """Base class for facts collecting classes.
 
         self._collected_hw_info will reference the passed collected_hw_info
@@ -67,30 +75,30 @@ class FactsCollector(object):
         based on facts collector from other modules/classes.
         self._collected_hw_info isn't meant to be altered as a side effect, but
         no promises."""
-        self.allhw = {}
-        self.prefix = prefix or ""
-        self.testing = testing or False
+        self.allhw: Dict[str, Union[str, int, bool, None]] = {}
+        self.prefix: str = prefix or ""
+        self.testing: bool = testing or False
 
-        self._collected_hw_info = collected_hw_info
+        self._collected_hw_info: Dict[str, Union[str, int, bool, None]] = collected_hw_info
         # we need this so we can decide which of the
         # arch specific code bases to follow
-        self.arch = arch or get_arch(prefix=self.prefix)
+        self.arch: str = arch or get_arch(prefix=self.prefix)
 
-        self.hardware_methods = hardware_methods or []
+        self.hardware_methods: List[Callable] = hardware_methods or []
 
-    def collect(self):
+    def collect(self) -> collection.FactsCollection:
         """Return a FactsCollection iterable."""
         facts_dict = collection.FactsDict()
         facts_dict.update(self.get_all())
         facts_collection = collection.FactsCollection(facts_dict=facts_dict)
         return facts_collection
 
-    def get_all(self):
+    def get_all(self) -> Dict[str, Union[str, int, bool, None]]:
         # try each hardware method, and try/except around, since
         # these tend to be fragile
-        all_hw_info = {}
+        all_hw_info: Dict[str, Union[str, int, bool, None]] = {}
         for hardware_method in self.hardware_methods:
-            info_dict = {}
+            info_dict: Dict[str, Union[str, int, bool, None]] = {}
             try:
                 info_dict = hardware_method()
             except Exception as e:
@@ -102,12 +110,12 @@ class FactsCollector(object):
 
 
 class StaticFactsCollector(FactsCollector):
-    def __init__(self, static_facts=None, **kwargs):
+    def __init__(self, static_facts: Dict[str, str] = None, **kwargs):
         super(StaticFactsCollector, self).__init__(**kwargs)
         if static_facts is None:
-            static_facts = {}
+            static_facts: Dict[str, str] = {}
         self.static_facts = static_facts
         self.static_facts.setdefault("system.certificate_version", "3.2")
 
-    def get_all(self):
+    def get_all(self) -> Dict[str, str]:
         return self.static_facts

@@ -14,6 +14,7 @@
 import os
 import glob
 import logging
+from typing import Any, Dict, Generator, Iterator, Union
 
 import rhsm.config
 
@@ -24,16 +25,17 @@ log = logging.getLogger(__name__)
 
 
 class CustomFacts(object):
-    def __init__(self, data=None):
-        self.data = data
+    def __init__(self, data: Dict[str, Any] = None):
+        self.data: Dict[str, Any] = data
 
     @classmethod
-    def from_json(cls, json_blob):
-        custom_facts = cls
+    def from_json(cls, json_blob: str) -> "CustomFacts":
+        # FIXME We should make an instance, instead of using the class itself
+        custom_facts: CustomFacts = cls
 
         # Default to no facts collected
         # See BZ#1435771
-        data = {}
+        data: Dict[str, Union[str, int, bool, None]] = {}
         try:
             data = ourjson.loads(json_blob)
         except ValueError:
@@ -42,7 +44,7 @@ class CustomFacts(object):
         custom_facts.data = data
         return custom_facts
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator:
         return iter(list(self.data.items()))
 
 
@@ -51,11 +53,11 @@ class CustomFactsFileError(Exception):
 
 
 class CustomFactsFile(object):
-    def __init__(self, path=None):
-        self.path = path
+    def __init__(self, path: str = None):
+        self.path: str = path
         self.buf = None
 
-    def _open_and_read(self):
+    def _open_and_read(self) -> str:
         try:
             with open(self.path, "r") as fd:
                 return fd.read()
@@ -63,44 +65,52 @@ class CustomFactsFile(object):
             log.warn("Unable to open custom facts file: %s" % self.path)
             raise
 
-    def read(self):
+    def read(self) -> str:
         custom_facts_data = self._open_and_read()
         return custom_facts_data
 
-    def close(self):
+    def close(self) -> None:
         pass
 
 
 class CustomFactsDirectory(object):
-    def __init__(self, path=None, glob_pattern=None):
-        self.path = path
-        self.glob_pattern = glob_pattern
+    def __init__(self, path: str = None, glob_pattern: str = None):
+        self.path: str = path
+        self.glob_pattern: str = glob_pattern
 
-    def fact_file_path_iterator(self):
+    def fact_file_path_iterator(self) -> Iterator[str]:
         facts_file_glob = os.path.join(self.path, self.glob_pattern)
         return glob.iglob(facts_file_glob)
 
-    def fact_file_iterator(self, fact_file_path_iterator):
+    def fact_file_iterator(
+        self, fact_file_path_iterator: Iterator[str]
+    ) -> Generator[CustomFactsFile, None, None]:
         for fact_file_path in fact_file_path_iterator:
             log.debug("Loading custom facts from: %s" % fact_file_path)
             yield CustomFactsFile(fact_file_path)
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[CustomFacts, None, None]:
         for fact_file in self.fact_file_iterator(self.fact_file_path_iterator()):
             yield CustomFacts.from_json(fact_file.read())
 
 
 class CustomFactsDirectories(object):
-    def __init__(self, path_and_globs):
-        self.path_and_globs = path_and_globs
+    def __init__(self, path_and_globs: Dict[str, str]):
+        self.path_and_globs: Dict[str, str] = path_and_globs
 
-    def __iter__(self):
+    def __iter__(self) -> Generator[CustomFactsDirectory, None, None]:
         for path, glob_pattern in self.path_and_globs:
             yield CustomFactsDirectory(path, glob_pattern)
 
 
 class CustomFactsCollector(FactsCollector):
-    def __init__(self, prefix=None, testing=None, collected_hw_info=None, path_and_globs=None):
+    def __init__(
+        self,
+        prefix: str = None,
+        testing: bool = None,
+        collected_hw_info: Dict[str, Union[str, int, bool, None]] = None,
+        path_and_globs: Dict[str, str] = None,
+    ):
         super(CustomFactsCollector, self).__init__(
             prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
         )
@@ -109,8 +119,8 @@ class CustomFactsCollector(FactsCollector):
             self.path_and_globs = [(os.path.join(rhsm.config.DEFAULT_CONFIG_DIR, "facts"), "*.facts")]
         self.facts_directories = CustomFactsDirectories(self.path_and_globs)
 
-    def get_all(self):
-        facts_dict = {}
+    def get_all(self) -> Dict[str, Union[str, int, bool, None]]:
+        facts_dict: Dict[str, Union[str, int, bool, None]] = {}
         for facts_dir in self.facts_directories:
             for custom_facts in facts_dir:
                 facts_dict.update(custom_facts.data)

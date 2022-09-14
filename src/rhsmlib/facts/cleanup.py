@@ -12,6 +12,7 @@
 # in this software or its documentation.
 #
 import logging
+from typing import Dict
 
 from rhsmlib.facts import collector
 
@@ -19,14 +20,14 @@ log = logging.getLogger(__name__)
 
 
 class CleanupCollector(collector.FactsCollector):
-    def get_all(self):
-        cleanup_facts = {}
+    def get_all(self) -> Dict[str, int]:
+        cleanup_facts: Dict[str, int] = {}
         dmi_socket_info = self.replace_socket_count_with_dmi()
         cleanup_facts.update(dmi_socket_info)
         return cleanup_facts
 
-    def replace_socket_count_with_dmi(self):
-        cleanup_info = {}
+    def replace_socket_count_with_dmi(self) -> Dict[str, int]:
+        cleanup_info: Dict[str, int] = {}
         # cpu topology reporting on xen dom0 machines is wrong. So
         # if we are a xen dom0, and we found socket info in dmiinfo,
         # replace our normal cpu socket calculation with the dmiinfo one
@@ -53,5 +54,5 @@ class CleanupCollector(collector.FactsCollector):
 
         return cleanup_info
 
-    def _host_is_xen_dom0(self):
+    def _host_is_xen_dom0(self) -> bool:
         return self._collected_hw_info["virt.host_type"].find("dom0") > -1

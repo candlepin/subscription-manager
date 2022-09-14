@@ -13,6 +13,7 @@
 #
 
 import logging
+from typing import Callable, Dict, List
 
 from rhsmlib.facts import collector
 
@@ -29,20 +30,26 @@ class InsightsCollector(collector.FactsCollector):
     Class used for collecting facts related to Red Hat Access Insights
     """
 
-    def __init__(self, arch=None, prefix=None, testing=None, collected_hw_info=None):
+    def __init__(
+        self,
+        arch: str = None,
+        prefix: str = None,
+        testing: bool = None,
+        collected_hw_info: Dict[str, str] = None,
+    ):
         super(InsightsCollector, self).__init__(
             arch=arch, prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
         )
 
-        self.hardware_methods = [self.get_insights_machine_id]
+        self.hardware_methods: List[Callable] = [self.get_insights_machine_id]
 
-    def get_insights_machine_id(self):
+    def get_insights_machine_id(self) -> Dict[str, str]:
         """
         Try to return content of insights machine_id (UUID)
         :return: dictionary containing insights_id, when machine_id file exist.
         Otherwise empty dictionary is returned.
         """
-        insights_id = {}
+        insights_id: Dict[str, str] = {}
         paths_to_check = [
             "/etc/insights-client/machine-id",  # should be the current known location
             "/etc/redhat-access-insights/machine-id",  # location prior to 3.0.13 of insights-client
@@ -53,7 +60,7 @@ class InsightsCollector(collector.FactsCollector):
         for filepath in paths_to_check:
             try:
                 with open(filepath, "r") as fd:
-                    machine_id = fd.read()
+                    machine_id: str = fd.read()
             except IOError as err:
                 log.debug("Unable to read insights machine_id file: %s, error: %s" % (filepath, err))
             else:

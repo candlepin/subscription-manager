@@ -14,6 +14,7 @@
 # in this software or its documentation.
 #
 import logging
+from typing import Dict, Union
 
 from rhsmlib.facts import dmiinfo
 from rhsmlib.facts import collector
@@ -31,36 +32,42 @@ class NullFirmwareInfoCollector(object):
     ie, all platforms except those with DMI (ie, intel platforms)"""
 
     def __init__(self, *args, **kwargs):
-        self.info = {}
+        self.info: Dict = {}
 
-    def get_all(self):
+    def get_all(self) -> Dict[str, str]:
         return self.info
 
 
 class FirmwareCollector(collector.FactsCollector):
-    def __init__(self, prefix=None, testing=None, collected_hw_info=None):
+    def __init__(
+        self,
+        prefix: str = None,
+        testing: bool = None,
+        collected_hw_info: Dict[str, Union[str, int, bool, None]] = None,
+    ):
         super(FirmwareCollector, self).__init__(
             prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
         )
 
-    def get_firmware_info(self):
+    def get_firmware_info(self) -> Dict[str, str]:
         """Read and parse data that comes from platform specific interfaces.
 
         This is only dmi/smbios data for now (which isn't on ppc/s390).
         """
+        firmware_info_collector: Union[NullFirmwareInfoCollector, dmiinfo.DmidecodeFactCollector]
         firmware_info_collector = get_firmware_collector(
             arch=self.arch, prefix=self.prefix, testing=self.testing
         )
 
         # Pass in collected hardware so DMI etc can potentially override it
-        firmware_info_dict = firmware_info_collector.get_all()
+        firmware_info_dict: Dict[str, str] = firmware_info_collector.get_all()
         # This can potentially clobber facts that already existed in self.allhw
         # (and is supposed to).
         return firmware_info_dict
 
-    def get_all(self):
-        virt_info = {}
-        firmware_info = self.get_firmware_info()
+    def get_all(self) -> Dict[str, str]:
+        virt_info: Dict[str, str] = {}
+        firmware_info: Dict[str, str] = self.get_firmware_info()
 
         virt_info.update(firmware_info)
         return virt_info
@@ -71,7 +78,12 @@ class FirmwareCollector(collector.FactsCollector):
 #             version of dmidecode (> 3.0), most of the dmi info is readable
 #             by a user. However, the system-uuid is not readable by a user,
 #             and that is pretty much the only thing from DMI we care about,
-def get_firmware_collector(arch, prefix=None, testing=None, collected_hw_info=None):
+def get_firmware_collector(
+    arch,
+    prefix: str = None,
+    testing: bool = None,
+    collected_hw_info: Dict[str, Union[str, int, bool, None]] = None,
+) -> Union[NullFirmwareInfoCollector, dmiinfo.DmidecodeFactCollector]:
     """
     Return a class that can be used to get firmware info specific to
     this systems platform.
@@ -88,6 +100,7 @@ def get_firmware_collector(arch, prefix=None, testing=None, collected_hw_info=No
     else:
         firmware_provider_class = dmiinfo.DmidecodeFactCollector
 
+    firmware_provider: Union[NullFirmwareInfoCollector, dmiinfo.DmidecodeFactCollector]
     firmware_provider = firmware_provider_class(
         prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
     )

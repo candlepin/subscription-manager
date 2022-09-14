@@ -14,6 +14,7 @@
 
 import locale
 import logging
+from typing import Dict, Union
 
 from rhsmlib.facts import cleanup
 from rhsmlib.facts import virt
@@ -34,23 +35,22 @@ class HostCollector(collector.FactsCollector):
     a non-linux hypervisor, etc.
 
     This in turns runs:
-        hwprobe.HardwareCollector()      [regular hardware facts]
-        virt.VirtCollector()    [virt facts, results from virt-what etc]
+        hwprobe.HardwareCollector()        [regular hardware facts]
+        virt.VirtCollector()               [virt facts, results from virt-what etc.]
         firmware_info.FirmwareCollector()  [dmiinfo, devicetree, etc]
-        cleanup.CleanupCollector()  [Collapse redundant facts, alter any
-                                     facts that depend on output of other facts, etc]
-
+        cleanup.CleanupCollector()         [Collapse redundant facts, alter any
+                                           facts that depend on output of other facts, etc.]
 
     Facts collected include DMI info and virt status and virt.uuid."""
 
-    def get_all(self):
+    def get_all(self) -> Dict[str, Union[str, int, bool, None]]:
         host_facts = {}
 
         firmware_collector = firmware_info.FirmwareCollector(
             prefix=self.prefix,
             testing=self.testing,
         )
-        firmware_info_dict = firmware_collector.get_all()
+        firmware_info_dict: Dict[str, str] = firmware_collector.get_all()
 
         virt_collector = virt.VirtCollector(
             prefix=self.prefix, testing=self.testing, collected_hw_info=firmware_info_dict

@@ -14,6 +14,9 @@
 
 import logging
 import json
+from typing import Any, Dict, Callable, List, Optional, Union
+
+from cloud_what._base_provider import BaseCloudProvider
 
 from cloud_what.provider import get_cloud_provider, DetectionMethod
 from rhsmlib.facts import collector
@@ -27,7 +30,13 @@ class CloudFactsCollector(collector.FactsCollector):
     Class used for collecting facts related to Cloud instances
     """
 
-    def __init__(self, arch=None, prefix=None, testing=None, collected_hw_info=None):
+    def __init__(
+        self,
+        arch: str = None,
+        prefix: str = None,
+        testing: bool = None,
+        collected_hw_info: Dict[str, Union[str, None]] = None,
+    ):
         super(CloudFactsCollector, self).__init__(
             arch=arch,
             prefix=prefix,
@@ -35,26 +44,28 @@ class CloudFactsCollector(collector.FactsCollector):
             collected_hw_info=collected_hw_info,
         )
 
-        self.hardware_methods = []
+        self.hardware_methods: List[Callable] = []
 
         # Try to detect cloud provider using only strong method
-        self.cloud_provider = get_cloud_provider(
+        self.cloud_provider: Optional[BaseCloudProvider] = get_cloud_provider(
             facts=self._collected_hw_info,
             methods=DetectionMethod.STRONG,
         )
 
         if self.cloud_provider is not None:
             # Create dispatcher for supported cloud providers
-            cloud_provider_dispatcher = {
+            cloud_provider_dispatcher: Dict[str, Callable] = {
                 "aws": self.get_aws_facts,
                 "azure": self.get_azure_facts,
                 "gcp": self.get_gcp_facts,
             }
             # Set method according detected cloud provider
             if self.cloud_provider.CLOUD_PROVIDER_ID in cloud_provider_dispatcher:
-                self.hardware_methods = [cloud_provider_dispatcher[self.cloud_provider.CLOUD_PROVIDER_ID]]
+                self.hardware_methods: List[Callable] = [
+                    cloud_provider_dispatcher[self.cloud_provider.CLOUD_PROVIDER_ID]
+                ]
 
-    def get_aws_facts(self):
+    def get_aws_facts(self) -> Dict[str, Union[str, None]]:
         """
         Try to get AWS facts (only instance ID ATM) of machine running on AWS public cloud
         :return:
@@ -63,11 +74,11 @@ class CloudFactsCollector(collector.FactsCollector):
             otherwise returns empty dictionary {}
         """
 
-        metadata_str = self.cloud_provider.get_metadata()
+        metadata_str: str = self.cloud_provider.get_metadata()
 
-        facts = {}
+        facts: Dict[str, Union[str, None]] = {}
         if metadata_str is not None:
-            values = self.parse_json_content(metadata_str)
+            values: dict[str, Union[str, None]] = self.parse_json_content(metadata_str)
 
             # Add these three attributes to system facts
             if "instanceId" in values:
@@ -80,7 +91,7 @@ class CloudFactsCollector(collector.FactsCollector):
             # when RHEL is used. When the subscription-manager is used by some other Linux distribution,
             # then there could be different codes or it could be null
             if "billingProducts" in values:
-                billing_products = values["billingProducts"]
+                billing_products: Optional[List[str]] = values["billingProducts"]
                 if isinstance(billing_products, list):
                     facts["aws_billing_products"] = " ".join(billing_products)
                 elif billing_products is None:
@@ -99,7 +110,7 @@ class CloudFactsCollector(collector.FactsCollector):
 
         return facts
 
-    def get_azure_facts(self):
+    def get_azure_facts(self) -> Dict[str, str]:
         """
         Try to get facts of VM running on Azure public cloud. Returned dictionary has following format:
             {
@@ -111,11 +122,11 @@ class CloudFactsCollector(collector.FactsCollector):
             from Azure cloud provider; otherwise returns empty dictionary {}
         """
 
-        metadata_str = self.cloud_provider.get_metadata()
+        metadata_str: str = self.cloud_provider.get_metadata()
 
-        facts = {}
+        facts: Dict[str, str] = {}
         if metadata_str is not None:
-            values = self.parse_json_content(metadata_str)
+            values: Dict[str, Any] = self.parse_json_content(metadata_str)
             if "compute" in values:
                 if "vmId" in values["compute"]:
                     facts["azure_instance_id"] = values["compute"]["vmId"]
@@ -125,20 +136,20 @@ class CloudFactsCollector(collector.FactsCollector):
                     facts["azure_offer"] = values["compute"]["offer"]
         return facts
 
-    def get_gcp_facts(self):
+    def get_gcp_facts(self) -> Dict[str, str]:
         """
         Try to get facts of VM running on GCP public cloud. Only instance_id is reported ATM.
         :return: dictionary containing GCP facts, when the machine is able to gather metadata
             from GCP cloud provider; otherwise returns empty dictionary {}
         """
 
-        encoded_jwt_token = self.cloud_provider.get_metadata()
+        encoded_jwt_token: str = self.cloud_provider.get_metadata()
 
-        facts = {}
+        facts: Dict[str, str] = {}
         if encoded_jwt_token is not None:
             jose_header, metadata, signature = self.cloud_provider.decode_jwt(encoded_jwt_token)
             if metadata is not None:
-                values = self.parse_json_content(metadata)
+                values: Dict[str, Any] = self.parse_json_content(metadata)
                 if "google" in values and "compute_engine" in values["google"]:
                     # ID of instance
                     if "instance_id" in values["google"]["compute_engine"]:
@@ -156,7 +167,7 @@ class CloudFactsCollector(collector.FactsCollector):
         return facts
 
     @staticmethod
-    def parse_json_content(content):
+    def parse_json_content(content: str) -> Dict[str, Any]:
         """
         Parse content returned from AWS metadata provider
         :param content: string of JSON document
