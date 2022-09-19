@@ -21,7 +21,8 @@ from distutils.spawn import spawn
 from distutils.text_file import TextFile
 
 from build_ext.utils import Utils, BaseCommand, memoize
-
+import os
+import subprocess
 # These dependencies aren't available in build environments.  We won't need any
 # linting functionality there though, so just create a dummy class so we can proceed.
 try:
@@ -88,8 +89,12 @@ class RpmLint(BaseCommand):
     description = "run rpmlint on spec files"
 
     def run(self):
-        for f in Utils.find_files_of_type('.', '*.spec'):
-            spawn(['rpmlint', '--file=rpmlint.config', f])
+        files = subprocess.run(['git', 'ls-files', '--full-name'],
+                               capture_output=True).stdout
+        files = files.decode().splitlines()
+        files = [x for x in files if x.endswith(".spec")]
+        for f in files:
+            spawn(["rpmlint", os.path.realpath(f)])
 
 
 class FileLint(BaseCommand):
