@@ -151,7 +151,7 @@ class DmidecodeParser:
             IN_RECORD = enum.auto()  # within a record of a section
             IN_BLOCK = enum.auto()  # within a block of a record
 
-        def is_value_specified(v):
+        def is_value_specified(possible_value: str) -> bool:
             """
             Is a value actually specified/available?
 
@@ -160,10 +160,10 @@ class DmidecodeParser:
             (le sigh).
             """
             return (
-                value != "Not Specified"
-                and value != "Not Available"
-                and value != "Unknown"
-                and value != "Unspecified"
+                possible_value != "Not Specified"
+                and possible_value != "Not Available"
+                and possible_value != "Unknown"
+                and possible_value != "Unspecified"
             )
 
         state = ParsingState.NONE
