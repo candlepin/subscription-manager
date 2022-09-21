@@ -10,40 +10,35 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-import dbus
-import dbus.exceptions
+import mock
 
 from rhsmlib.dbus.facts.base import AllFacts
-from rhsmlib.dbus.facts import constants
 
-from test.rhsmlib.base import DBusObjectTest
-
-from test import subman_marker_dbus
+from test.rhsmlib.base import DBusServerStubProvider
 
 
-@subman_marker_dbus
-class TestFactsDBusObject(DBusObjectTest):
-    def setUp(self):
-        super(TestFactsDBusObject, self).setUp()
-        self.proxy = self.proxy_for(AllFacts.default_dbus_path)
-        self.interface = dbus.Interface(self.proxy, constants.FACTS_DBUS_INTERFACE)
+class TestFactsDBusObject(DBusServerStubProvider):
+    dbus_class = AllFacts
+    dbus_class_kwargs = {}
 
-    def dbus_objects(self):
-        return [AllFacts]
+    @classmethod
+    def setUpClass(cls) -> None:
+        # Do not try to use system virt-what
+        get_virt_info_patch = mock.patch(
+            "rhsmlib.facts.virt.VirtWhatCollector.get_virt_info",
+            name="get_virt_info",
+        )
+        cls.patches["get_virt_info"] = get_virt_info_patch.start()
+        cls.addClassCleanup(get_virt_info_patch.stop)
 
-    def bus_name(self):
-        return constants.FACTS_DBUS_NAME
+        super().setUpClass()
 
-    def test_get_facts(self):
-        def assertions(*args):
-            result = args[0]
-            self.assertIn("uname.machine", result)
+    def setUp(self) -> None:
+        self.patches["get_virt_info"].return_value = {"virt.is_guest": "Unknown"}
 
-        self.dbus_request(assertions, self.interface.GetFacts)
+        super().setUp()
 
-    def test_missing_method(self):
-        def assertions(*args):
-            pass
-
-        with self.assertRaises(dbus.exceptions.DBusException):
-            self.dbus_request(assertions, self.interface.MissingMethod)
+    def test_GetFacts(self):
+        expected = "uname.machine"
+        result = self.obj.GetFacts.__wrapped__(self.obj)
+        self.assertIn(expected, result)

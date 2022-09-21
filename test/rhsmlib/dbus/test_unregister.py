@@ -10,52 +10,31 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
-
 import dbus
 import mock
 
-from test.rhsmlib.base import DBusObjectTest, InjectionMockingTest
-
-from subscription_manager import injection as inj
-from subscription_manager.cp_provider import CPProvider
-
 from rhsmlib.dbus.objects import UnregisterDBusObject
-from rhsmlib.dbus import constants
 
-from test import subman_marker_dbus
+from test.rhsmlib.base import DBusServerStubProvider
 
 
-@subman_marker_dbus
-class TestUnregisterDBusObject(DBusObjectTest, InjectionMockingTest):
-    def setUp(self):
-        super(TestUnregisterDBusObject, self).setUp()
-        self.proxy = self.proxy_for(UnregisterDBusObject.default_dbus_path)
-        self.interface = dbus.Interface(self.proxy, constants.UNREGISTER_INTERFACE)
+class TestUnregisterDBusObject_(DBusServerStubProvider):
+    dbus_class = UnregisterDBusObject
+    dbus_class_kwargs = {}
 
-        unregister_patcher = mock.patch("rhsmlib.dbus.objects.unregister.UnregisterService")
-        self.unregister = unregister_patcher.start().return_value
-        self.addCleanup(unregister_patcher.stop)
+    @classmethod
+    def setUpClass(cls) -> None:
+        is_registered_patch = mock.patch(
+            "rhsmlib.dbus.base_object.BaseObject.is_registered",
+            name="is_registered",
+        )
+        cls.patches["is_registered"] = is_registered_patch.start()
+        cls.addClassCleanup(is_registered_patch.stop)
 
-        self.mock_identity.is_valid.return_value = True
-        self.mock_identity.uuid = "7a002098-c167-41f2-91b3-d0c71e808142"
+        super().setUpClass()
 
-        self.mock_provider = mock.Mock(spec=CPProvider, name="CPProvider")
-        self.mock_provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
+    def test_Unregister__must_be_registered(self):
+        self.patches["is_registered"].return_value = False
 
-    def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.CP_PROVIDER:
-            return self.mock_provider
-        else:
-            return None
-
-    def dbus_objects(self):
-        return [UnregisterDBusObject]
-
-    def test_must_be_registered_unregister(self):
-        self.mock_identity.is_valid.return_value = False
-        unregister_method_args = [{}, ""]
         with self.assertRaisesRegex(dbus.DBusException, r"requires the consumer to be registered.*"):
-            self.dbus_request(None, self.interface.Unregister, unregister_method_args)
+            self.obj.Unregister.__wrapped__(self.obj, {}, self.LOCALE)

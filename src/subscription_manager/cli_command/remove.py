@@ -140,7 +140,7 @@ class RemoveCommand(CliCommand):
                             removed_pools,
                             unremoved_pools,
                             removed_serials,
-                        ) = ent_service.remove_entilements_by_pool_ids(self.options.pool_ids)
+                        ) = ent_service.remove_entitlements_by_pool_ids(self.options.pool_ids)
                         if not removed_pools:
                             return_code = 1
                         self._print_unbind_ids_result(removed_pools, unremoved_pools, "pools")
