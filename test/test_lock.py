@@ -1,3 +1,4 @@
+import stat
 import unittest
 
 import os
@@ -6,6 +7,7 @@ import sys
 import tempfile
 import threading
 import time
+from typing import Union
 
 from subscription_manager import lock
 
@@ -17,9 +19,21 @@ class TestLock(unittest.TestCase):
 
     def setUp(self):
         self.other_process = None
+        self.lock_directory: Union[None, tempfile.TemporaryDirectory] = None
+
+    def tearDown(self) -> None:
+        # If temporary directory was created, then remove it
+        if self.lock_directory is not None:
+            self.lock_directory.cleanup()
 
     def _lock_path(self):
         self.lock_directory = tempfile.TemporaryDirectory()
+        return os.path.join(self.lock_directory.name, self.lf_name)
+
+    def _lock_read_only_path(self):
+        self.lock_directory = tempfile.TemporaryDirectory()
+        # Make directory read only for owner
+        os.chmod(self.lock_directory.name, stat.S_IRUSR)
         return os.path.join(self.lock_directory.name, self.lf_name)
 
     # For thread.Timer()
@@ -125,6 +139,12 @@ class TestLock(unittest.TestCase):
         self.assertEqual(lf.path, lock_path)
         self.assertEqual(lf.depth, 0)
 
+    @unittest.skipIf(os.getuid() == 0, "Test cannot be run under root.")
+    def test_file_lock_readonly(self):
+        lock_path = self._lock_read_only_path()
+        lock_file = lock.LockFile(lock_path)
+        self.assertRaises(PermissionError, lock_file.open)
+
     def test_lock_acquire(self):
         lock_path = self._lock_path()
         lf = lock.Lock(lock_path)
@@ -153,6 +173,39 @@ class TestLock(unittest.TestCase):
         lf = lock.Lock(lock_path)
         lf.acquire()
         lf.release()
+
+    def test_lock_action(self):
+        original_path = lock.ActionLock.PATH
+        lock.ActionLock.PATH = self._lock_path()
+        lock_action = lock.ActionLock()
+        self.assertEqual(lock_action.path, lock.ActionLock.PATH)
+        # Restore original path in ActionLock
+        lock.ActionLock.PATH = original_path
+
+    @unittest.skipIf(os.getuid() == 0, "Test cannot be run under root.")
+    def test_lock_action_read_only(self):
+        """
+        Test the case, when it is not possible to create lock file in /run/rhsm/cert.pid.
+        In that case lock directory should be created in user runtime directory.
+        """
+        old_xdg_runtime_dir = None
+        if "XDG_RUNTIME_DIR" in os.environ:
+            old_xdg_runtime_dir = os.environ["XDG_RUNTIME_DIR"]
+        temp_dir = tempfile.TemporaryDirectory()
+        os.environ["XDG_RUNTIME_DIR"] = temp_dir.name
+        expected_user_dir = f"{temp_dir.name}/rhsm"
+        expected_path = expected_user_dir + "/cert.pid"
+
+        lock_action = lock.ActionLock()
+
+        self.assertTrue(
+            os.path.exists(expected_user_dir), msg=f"The rhsm directory {expected_user_dir} was not created"
+        )
+        self.assertEqual(lock_action.path, expected_path)
+
+        # Restore original environment variable
+        if old_xdg_runtime_dir is not None:
+            os.environ["XDG_RUNTIME_DIR"] = old_xdg_runtime_dir
 
     def _stale_lock(self):
         lock_path = self._lock_path()
