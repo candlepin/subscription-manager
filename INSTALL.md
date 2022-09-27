@@ -63,12 +63,35 @@ Other Fedora versions or distributions may require some adaptation.
    ```bash
    sudo PYTHONPATH=./src python3 -m subscription_manager.scripts.subscription_manager
    ```
+   
+   ***NOTE**: Adjust the path accordingly.*
 
    You can setup an alias in `.bashrc` (or equivalent), so you can run it more easily:
 
    ```bash
    alias subscription-manager="sudo \
        PYTHONPATH=/path/to/subscription-manager/src \
-       ~/.venvs/subscription-manager/bin/python3 \
+       $(which python3) \
        -m subscription_manager.scripts.subscription_manager"
+   ```
+
+7. You can also set up aliases for rhsm.service and rhsmcertd.service.
+
+   ***NOTE**: Adjust the paths accordingly.*
+
+   ```bash
+   alias rhsm-service="sudo \
+       PYTHONPATH=/path/to/subscription-manager/src \
+       $(which python3) \
+       -m subscription_manager.scripts.rhsm_service --verbose"
+   alias rhsmcertd="sudo \
+       PYTHONPATH=/path/to/subscription-manager/src \
+       $(which python3) \
+       -m subscription_manager.scripts.rhsmcertd_worker --autoheal"
+   ```
+
+   Before you run rhsm service manually, ensure you have disabled the system service first:
+
+   ```bash
+   sudo systemctl stop rhsm.service
    ```
