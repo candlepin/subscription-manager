@@ -930,6 +930,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %attr(755,root,root) %{_bindir}/rhsmcertd
 
 %attr(755,root,root) %{_libexecdir}/rhsmcertd-worker
+%attr(755,root,root) %{_libexecdir}/rhsm-package-profile-uploader
 
 
 # our config dirs and files

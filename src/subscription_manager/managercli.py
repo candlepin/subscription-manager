@@ -27,6 +27,7 @@ from argparse import SUPPRESS
 import os
 import re
 import readline
+import signal
 import six.moves
 import sys
 import json
@@ -60,7 +61,7 @@ from subscription_manager.utils import parse_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width, print_error, unique_list_items, \
         is_simple_content_access, get_supported_resources, get_current_owner, \
-        generate_correlation_id, friendly_join, is_interactive
+        generate_correlation_id, friendly_join, is_interactive, is_process_running
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
@@ -1903,6 +1904,51 @@ class RegisterCommand(UserPassCommand):
             log.exception("Auto-attach failed")
             raise
 
+    def _upload_profile_blocking(self, consumer: dict) -> None:
+        """
+        Try to upload DNF profile to server
+        """
+        try:
+            profile_mgr = inj.require(inj.PROFILE_MANAGER)
+            # 767265: always force an upload of the packages when registering
+            profile_mgr.update_check(self.cp, consumer["uuid"], True)
+        except RemoteServerException as err:
+            # When it is not possible to upload profile ATM, then print only error about this
+            # to rhsm.log. The rhsmcertd will try to upload it next time.
+            log.error("Unable to upload profile: {err!s}".format(err=err))
+
+    def _upload_profile(self, consumer: dict) -> None:
+        """
+        Try to upload DNF profile to server, when it is supported by server. This method
+        tries to "outsource" this activity to rhsmcertd first. When it is not possible due to
+        various reasons, then we try to do it ourselves in blocking way.
+        """
+        # First try to get PID of rhsmcertd from lock file
+        try:
+            with open("/var/lock/subsys/rhsmcertd", "r") as lock_file:
+                rhsmcertd_pid = int(lock_file.readline())
+        except (IOError, ValueError) as err:
+            log.info(f"Unable to read rhsmcertd lock file: {err}")
+        else:
+            if is_process_running("rhsmcertd", rhsmcertd_pid) is True:
+                # This will only send SIGUSR1 signal, which triggers gathering and uploading
+                # of DNF profile by rhsmcertd. We try to "outsource" this activity to rhsmcertd
+                # server to not block registration process
+                log.debug("Sending SIGUSR1 signal to rhsmcertd process")
+                try:
+                    os.kill(rhsmcertd_pid, signal.SIGUSR1)
+                except ProcessLookupError as err:
+                    # When rhsmcertd process was terminated between calling is_process_running()
+                    # and sending signal using kill(), then fallback to uploading profile from
+                    # current process
+                    log.debug(f"Unable to send signal SIGUSR1 to rhsmcertd process {rhsmcertd_pid}: {err}")
+                    self._upload_profile_blocking(consumer)
+            else:
+                # When rhsmcertd process is not running, then fallback to uploading profile from
+                # current process
+                log.info(f"rhsmcertd process with given PID: {rhsmcertd_pid} is not running")
+                self._upload_profile_blocking(consumer)
+
     def _do_command(self):
         """
         Executes the command.
@@ -2046,18 +2092,11 @@ class RegisterCommand(UserPassCommand):
             # FIXME: aside from the overhead, should this be cert_action_client.update?
             self.entcertlib.update()
 
-        try:
-            profile_mgr = inj.require(inj.PROFILE_MANAGER)
-            # 767265: always force an upload of the packages when registering
-            profile_mgr.update_check(self.cp, consumer['uuid'], True)
-        except RemoteServerException as err:
-            # When it is not possible to upload profile ATM, then print only error about this
-            # to rhsm.log. The rhsmcertd will try to upload it next time.
-            log.error("Unable to upload profile: %s" % str(err))
+        self._upload_profile(consumer)
 
         subscribed = 0
         if self.options.activation_keys or self.autoattach:
-            # update with latest cert info
+            # update with the latest cert info
             self.sorter = inj.require(inj.CERT_SORTER)
             self.sorter.force_cert_check()
             subscribed = show_autosubscribe_output(self.cp, self.identity)

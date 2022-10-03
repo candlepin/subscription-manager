@@ -632,19 +632,25 @@ def get_process_names():
             match = re.search(proc_name_expr, lines)
             if match:
                 proc_name = match.groupdict().get('proc_name')
+                proc_id = int(subdir)
                 if proc_name:
-                    yield proc_name
+                    yield proc_name, proc_id
 
 
-def is_process_running(process_to_find):
+def is_process_running(process_to_find: str, process_id_to_find: int = None) -> bool:
     """
     Check if process with given name is running
     :param process_to_find: string with process name
+    :param process_id_to_find: int with process ID
     :return: True, when at least one process is running; Otherwise returns False
     """
-    for process_name in get_process_names():
+    for process_name, process_id in get_process_names():
         if process_to_find == process_name:
-            return True
+            if process_id_to_find is None:
+                return True
+            else:
+                if process_id_to_find == process_id:
+                    return True
     return False
 
 
