@@ -140,6 +140,7 @@ class ModulesProfile(object):
             self.fix_aws_rhui_repos(base)
 
             try:
+                log.debug("Trying to fill dnf sack object...")
                 base.fill_sack()
             except dnf.exceptions.RepoError as err:
                 log.error("Unable to create sack object: %s" % str(err))

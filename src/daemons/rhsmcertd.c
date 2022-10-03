@@ -29,6 +29,7 @@
 #include <time.h>
 #include <wait.h>
 #include <glib.h>
+#include <glib-unix.h>
 #include <stdbool.h>
 #include <string.h>
 #include <errno.h>
@@ -50,6 +51,8 @@ typedef enum {
 #define NEXT_AUTO_REGISTER_UPDATE_FILE "/run/rhsm/next_auto_register_update"
 #define WORKER LIBEXECDIR"/rhsmcertd-worker"
 #define WORKER_NAME WORKER
+#define PACKAGE_PROFILE_UPLOADER LIBEXECDIR"/rhsm-package-profile-uploader"
+#define PACKAGE_PROFILE_UPLOADER_NAME PACKAGE_PROFILE_UPLOADER
 #define INITIAL_DELAY_SECONDS 120
 #define DEFAULT_AUTO_REG_INTERVAL_SECONDS 3600 /* 1 hour */
 #define DEFAULT_CERT_INTERVAL_SECONDS 14400    /* 4 hours */
@@ -244,21 +247,134 @@ long long gen_random(long long max) {
     return random_num % true_max;
 }
 
-/* Handle program signals */
-void
-signal_handler(int signo) {
-    if (signo == SIGTERM) {
-        /* Close lock file and release lock on this file */
-        if (fd_lock != -1) {
-            close(fd_lock);
-            fd_lock = -1;
-        }
-        info ("rhsmcertd is shutting down...");
-        signal (signo, SIG_DFL);
-        raise (signo);
+/**
+ * Try to run Python script package-profile-uploader. This script tries to upload DNF profile
+ * to server, when server supports profile. New process is spawned in blocking way.
+ * @return Return true, when uploading was successful. Otherwise, return false.
+ */
+static gboolean
+upload_package_profile ()
+{
+    gboolean ret;
+    const char * argv[] = {PACKAGE_PROFILE_UPLOADER, NULL};
+    gchar *standard_output = NULL;
+    gchar *standard_error = NULL;
+    gint wait_status = 0;
+    GError *error = NULL;
+
+    debug ("Spawning new process of uploading package profile...");
+
+    // Following function will block until process is finished. Other signals
+    // are queued and will be processed, when following process is finished.
+    // It means other signals (SIGTERM) are blocked too. systemd can resolve
+    // this issue. When sending SIGTERM does not terminate daemon, then it
+    // sends SIGKILL signal after some timeout.
+    ret = g_spawn_sync(
+            "/",                // Working directory
+            (gchar**)argv,      // Executable with arguments
+            NULL,               // List of environments is read from parent process
+            G_SPAWN_DEFAULT,    // Default flags
+            NULL,               // No function running before spawning process
+            NULL,               // No argument for such function is needed as well
+            &standard_output,   // stdout if any
+            &standard_error,    // stderr if any
+            &wait_status,       // status if any
+            &error);            // Error if any
+
+    debug ("Spawning of uploading package profile finished: %d", ret);
+
+    // Print stdout/stderr to log file only in the case, when stdout/stderr are not empty strings
+    if (standard_output != NULL && standard_output[0] != 0) {
+        debug ("stdout of uploading package profile: %s", standard_output);
+        g_free(standard_output);
+        standard_output = NULL;
     }
+    if (standard_error != NULL && standard_error[0] != 0) {
+        debug ("stderr of uploading package profile: %s", standard_error);
+        g_free(standard_error);
+        standard_error = NULL;
+    }
+
+    // Error is usually not NULL, when it wasn't possible to span child process
+    // for some reason (e.g. file does not exist)
+    if (error != NULL) {
+        error ("Spawning of child process (uploading profile) failed: %s", error->message);
+        g_error_free(error);
+        error = NULL;
+        return false;
+    }
+
+#if GLIB_MAJOR_VERSION >= 2 && GLIB_MINOR_VERSION >= 70
+    // Following function is available since Fedora 35 (not RHEL7, RHEL8, RHEL9)
+    ret = g_spawn_check_wait_status(wait_status, &error);
+#else
+    // Following function is available on RHEL7, RHEL8, RHEL9 (not RHEL6),
+    // and it was deprecated on Fedora 35
+    ret = g_spawn_check_exit_status(wait_status, &error);
+#endif
+
+    if (error != NULL) {
+        error ("Child process exited abnormally: %s", error->message);
+        g_error_free(error);
+        error = NULL;
+        return false;
+    }
+
+    info ("Uploading of package profile performed successfully");
+
+    return ret;
 }
 
+/**
+ * Callback function for SIGUSR1 signal
+ * @return Always returns G_SOURCE_CONTINUE
+ */
+gboolean
+sigusr1_callback(void) {
+    debug ("Received SIGUSR1 signal");
+    upload_package_profile();
+    // Return this value to signal that this callback function
+    // should remain in main loop
+    return G_SOURCE_CONTINUE;
+}
+
+/**
+ * Callback function for SIGTERM signal
+ * @return Always returns G_SOURCE_REMOVE
+ */
+gboolean
+sigterm_callback(void) {
+    int ret;
+    info ("rhsmcertd is shutting down...");
+    /* Close lock file and release lock on this file */
+    if (fd_lock != -1) {
+        /* Truncate lock file to zero value (delete PID before unlinking),
+         * because unlinking could fail for several reasons. Thus, it should not
+         * contain at least non-valid value of PID. */
+        ret = ftruncate(fd_lock, 0);
+        if (ret == -1) {
+            warn ("Unable to truncate lock file: %s, %s", LOCKFILE, strerror (errno));
+        }
+        close(fd_lock);
+        fd_lock = -1;
+    }
+    /* Try to delete lock file */
+    ret = unlink(LOCKFILE);
+    if (ret == -1) {
+        error ("Unable to unlink lock file: %s, %s", LOCKFILE, strerror(errno));
+    }
+    // Set handler to SIGTERM to default
+    signal (SIGTERM, SIG_DFL);
+    // Raise the signal once again to terminate this process
+    raise (SIGTERM);
+    return G_SOURCE_REMOVE;
+}
+
+/**
+ * Try to lock file /var/lock/subsys/rhsmcertd and write current PID to this file
+ * @return Return 0, when it was possible lock file and write PID to lock file.
+ *         Otherwise, return non-zero value.
+ */
 int
 get_lock ()
 {
@@ -266,12 +382,24 @@ get_lock ()
     int ret = 0;
 
     if (fd_lock == -1) {
+        error ("Unable to open file: %s, %s", LOCKFILE, strerror(errno));
         ret = 1;
     } else {
         if (flock (fd_lock, LOCK_EX | LOCK_NB) == -1) {
+            debug ("Unable to lock file: %s, %s", LOCKFILE, strerror(errno));
             close (fd_lock);
             fd_lock = -1;
-            ret = 1;
+            ret = 2;
+        } else {
+            pid_t pid = getpid ();
+            debug ("Writing PID: %d to lock file: %s", pid, LOCKFILE);
+            /* Lock file in /var/lock should use HDB UUCP lock file format. More details could be found here:
+             * https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch05s09.html */
+            int num = dprintf (fd_lock, "%10d\n", pid);
+            if (num < 0) {
+                error ("Unable to write PID to lock file: %s, %s", LOCKFILE, strerror (errno));
+                ret = 3;
+            }
         }
     }
 
@@ -725,9 +853,6 @@ parse_cli_args (int *argc, char *argv[])
 int
 main (int argc, char *argv[])
 {
-    if (signal(SIGTERM, signal_handler) == SIG_ERR) {
-        warn ("Unable to catch SIGTERM\n");
-    }
     setlocale (LC_ALL, "");
     bindtextdomain ("rhsm", "/usr/share/locale");
     textdomain ("rhsm");
@@ -748,9 +873,27 @@ main (int argc, char *argv[])
         return EXIT_FAILURE;
 
     if (get_lock () != 0) {
-        error ("unable to get lock, exiting");
+        error ("Unable to get lock, exiting");
         return EXIT_FAILURE;
     }
+
+    // NOTE: it is important to create callback function for signals after calling daemon()
+    // Create main context for main loop
+    GMainContext *main_context;
+    main_context = g_main_context_default ();
+
+    // Create sources for handling SIGUSR1 and SIGTERM signal
+    GSource *sigusr1_source, *sigterm_source;
+    sigusr1_source = g_unix_signal_source_new (SIGUSR1);
+    sigterm_source = g_unix_signal_source_new (SIGTERM);
+
+    // Attach callback function to the source. We don't pass any data to callback functions
+    g_source_set_callback (sigusr1_source, G_SOURCE_FUNC(sigusr1_callback), NULL, NULL);
+    g_source_set_callback (sigterm_source, G_SOURCE_FUNC(sigterm_callback), NULL, NULL);
+
+    // Attach signal sources to the main_context
+    g_source_attach (sigusr1_source, main_context);
+    g_source_attach (sigterm_source, main_context);
 
     info ("Starting rhsmcertd...");
     if (auto_reg_enabled) {
@@ -867,7 +1010,7 @@ main (int argc, char *argv[])
     log_update (cert_check_initial_delay, NEXT_CERT_UPDATE_FILE);
     log_update (auto_attach_initial_delay, NEXT_AUTO_ATTACH_UPDATE_FILE);
 
-    GMainLoop *main_loop = g_main_loop_new (NULL, FALSE);
+    GMainLoop *main_loop = g_main_loop_new (main_context, FALSE);
     g_main_loop_run (main_loop);
     // we will never get past here
 

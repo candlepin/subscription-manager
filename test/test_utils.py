@@ -889,6 +889,8 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
             process_status_contents = "\n".join(process_status_contents)
             status.write(process_status_contents.format(name=name))
 
+        return fake_pid
+
     @staticmethod
     def redirect_open(new_root, path_to_error=None):
         """
@@ -978,7 +980,7 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         Test getting list of processes
         """
         fake_process_name = "magic_process"
-        self.create_fake_process_status(name=fake_process_name)
+        fake_pid = self.create_fake_process_status(name=fake_process_name)
         ld = os.listdir(self.proc_root)
         new_open = self.redirect_open(self.root_dir.name)
         os_patch = patch("subscription_manager.utils.os.listdir")
@@ -989,8 +991,9 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         mopen.side_effect = new_open
         res = get_process_names()
         res = list(res)
+        expected_result = [(fake_process_name, fake_pid)]
         self.assertEqual(
-            res, [fake_process_name], "Expected a list containing '%s', Actual: %s" % (fake_process_name, res)
+            res, expected_result, "Expected a list containing '%s', Actual: %s" % (fake_process_name, res)
         )
 
     def test_get_process_names_ioerror(self):
@@ -998,7 +1001,7 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         Test getting list of processes when unable to read one or more of the files
         """
         fake_process_name = "magic_process"
-        self.create_fake_process_status(name=fake_process_name)
+        fake_pid = self.create_fake_process_status(name=fake_process_name)
         ld = os.listdir(self.proc_root)
         errors = {"1337": IOError("Cannot access bad_path"), "8675309": Exception("AHHHH")}
         ld.extend(errors.keys())
@@ -1011,7 +1014,8 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         mopen.side_effect = new_open
         res = get_process_names()
         res = list(res)
-        self.assertEqual(res, [fake_process_name], "Expected an empty list, Actual: %s" % res)
+        expected_result = [(fake_process_name, fake_pid)]
+        self.assertEqual(res, expected_result, "Expected an empty list, Actual: %s" % res)
 
 
 class TestTerminalPrintableContent(fixture.SubManFixture):

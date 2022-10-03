@@ -282,6 +282,7 @@ setup(
             "rhsm-facts-service = subscription_manager.scripts.rhsm_facts_service:main",
             "rhsm-service = subscription_manager.scripts.rhsm_service:main",
             "rhsmcertd-worker = subscription_manager.scripts.rhsmcertd_worker:main",
+            "rhsm-package-profile-uploader = subscription_manager.scripts.package_profile_upload:main",
         ],
     },
     data_files=[
