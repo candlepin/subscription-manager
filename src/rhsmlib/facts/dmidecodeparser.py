@@ -24,7 +24,7 @@ import os
 import re
 import shutil
 import subprocess
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Optional
 
 log = logging.getLogger(__name__)
 
@@ -101,19 +101,19 @@ class DmidecodeParser:
         self._data: Dict[int, Dict[str, Union[str, List[str]]]] = {}
         self._dmi_types = collections.defaultdict(dict)
 
-    def parse(self):
+    def parse(self) -> None:
         """
         Run `dmidecode` and parses its output.
 
         In case `dmidecode` is not available, cannot be executed, or it exits
         with failure, a warning is logged.
         """
-        path = shutil.which("dmidecode")
+        path: Optional[str] = shutil.which("dmidecode")
         if path is None:
             log.warning("'dmidecode' is not available. No DMI info will be collected.")
             return
 
-        env = dict(os.environ)
+        env: Dict[str, str] = dict(os.environ)
         env.update({"LANGUAGE": "en_US.UTF-8"})
 
         try:
@@ -122,10 +122,10 @@ class DmidecodeParser:
             )
             self._parse_lines(proc.stdout)
         except subprocess.SubprocessError:
-            error = proc.stderr.read()
+            error: str = proc.stderr.read()
             log.warning(f"Error with dmidecode subprocess: {error}")
 
-    def parse_file(self, filename):
+    def parse_file(self, filename: str) -> None:
         """
         Parse the output of `dmidecode` previously saved into the specified
         file.
@@ -133,7 +133,7 @@ class DmidecodeParser:
         with open(filename, "r") as f:
             self._parse_lines(f)
 
-    def _parse_lines(self, fd):
+    def _parse_lines(self, fd) -> None:
         """
         The actual parsing of the `dmidecode` output.
 
@@ -166,19 +166,20 @@ class DmidecodeParser:
                 and possible_value != "Unspecified"
             )
 
-        state = ParsingState.NONE
-        current_handle = None
-        current_key = None
+        state: ParsingState = ParsingState.NONE
+        current_handle: int = None
+        current_key: str = None
+        value: str
         # regex to parse the start of a section in the output; example:
         #   Handle 0x0000, DMI type 222, 14 bytes
-        re_handle = re.compile(r"^Handle\s+([^,]+),\s+DMI\s+type\s+(\d+),\s+(\d+)\s+bytes$")
+        re_handle: re.Pattern = re.compile(r"^Handle\s+([^,]+),\s+DMI\s+type\s+(\d+),\s+(\d+)\s+bytes$")
 
         while True:
             # the output of dmidecode is read and parsed line by line;
             # this is done to avoid reading & keeping in memory the whole
             # output, as it can be big (depending on the available hardware,
             # usually)
-            line = fd.readline()
+            line: str = fd.readline()
             if not line:
                 break
 
@@ -194,7 +195,7 @@ class DmidecodeParser:
 
             # this may be the start of a section
             if line.startswith("Handle "):
-                m = re_handle.fullmatch(line)
+                m: re.Match = re_handle.fullmatch(line)
                 if m:
                     # it really is a section, so get the various details,
                     # and prepare the internal structures for it
@@ -276,5 +277,5 @@ class DmidecodeParser:
         KeyError is raisen if there is no section of the specified DMI type,
         or that section does not have the specified key.
         """
-        values = self.get_sections(dmi_type)
+        values: List[Dict[str, Union[str, List[str]]]] = self.get_sections(dmi_type)
         return values[0][key]

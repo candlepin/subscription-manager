@@ -13,6 +13,7 @@
 #
 import logging
 import subprocess
+from typing import Dict, List, Union
 
 from rhsmlib.facts import collector
 
@@ -24,30 +25,36 @@ class SupportedArchesCollector(collector.FactsCollector):
     Class used for collecting packages architectures of a host
     """
 
-    DEBIAN_DISTRIBUTIONS = ["debian", "ubuntu"]
+    DEBIAN_DISTRIBUTIONS: List[str] = ["debian", "ubuntu"]
 
-    def __init__(self, arch=None, prefix=None, testing=None, collected_hw_info=None):
+    def __init__(
+        self,
+        arch: str = None,
+        prefix: str = None,
+        testing: bool = None,
+        collected_hw_info: Dict[str, Union[str, int, bool, None]] = None,
+    ):
         super(SupportedArchesCollector, self).__init__(
             arch=arch, prefix=prefix, testing=testing, collected_hw_info=collected_hw_info
         )
 
-    def get_arches_on_debian(self):
+    def get_arches_on_debian(self) -> Dict[str, str]:
         """
         Try to return content of all supported packages architectures
         :return: dictionary containing architectures
         Otherwise, a dictionary with an empty string for 'supported_architectures' is returned.
         """
-        arches = []
+        arches: List[str] = []
 
         try:
-            arch = subprocess.check_output(["dpkg", "--print-architecture"]).decode("UTF-8")
+            arch: str = subprocess.check_output(["dpkg", "--print-architecture"]).decode("UTF-8")
             if arch != "":
                 arches.append(arch.rstrip("\n"))
         except Exception as e:
             log.error("Error getting dpkg main architecture: %s", e)
 
         try:
-            arch = subprocess.check_output(["dpkg", "--print-foreign-architectures"]).decode("UTF-8")
+            arch: str = subprocess.check_output(["dpkg", "--print-foreign-architectures"]).decode("UTF-8")
             if arch != "":
                 arches.append(arch.rstrip("\n"))
         except Exception as e:
@@ -55,14 +62,14 @@ class SupportedArchesCollector(collector.FactsCollector):
 
         return {"supported_architectures": ",".join(arches)}
 
-    def get_all(self):
+    def get_all(self) -> Dict[str, str]:
         """
         Get all architectures of a debian / ubuntu host
         :return: dictionary containing architectures
         """
-        arch_info = {}
+        arch_info: Dict[str, str] = {}
 
-        dist_name = self._collected_hw_info["distribution.name"].lower()
+        dist_name: str = self._collected_hw_info["distribution.name"].lower()
         if any(os in dist_name for os in self.DEBIAN_DISTRIBUTIONS):
             arch_info = self.get_arches_on_debian()
 

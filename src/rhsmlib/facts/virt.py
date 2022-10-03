@@ -17,6 +17,7 @@ import logging
 import string
 import subprocess
 import os
+from typing import Dict, List, TextIO, Optional, Union
 
 from rhsmlib.facts import collector
 
@@ -24,12 +25,12 @@ log = logging.getLogger(__name__)
 
 
 class VirtWhatCollector(collector.FactsCollector):
-    def get_all(self):
+    def get_all(self) -> Dict[str, Union[str, bool]]:
         return self.get_virt_info()
 
-    # NOTE/TODO/FIXME: Not all platforms require admin privs to determine virt type or uuid
-    def get_virt_info(self):
-        virt_dict = {}
+    # NOTE/TODO/FIXME: Not all platforms require admin privileges to determine virt type or uuid
+    def get_virt_info(self) -> Dict[str, Union[str, bool]]:
+        virt_dict: Dict[str, Union[str, bool]] = {}
 
         try:
             host_type_raw: bytes = subprocess.check_output("/usr/sbin/virt-what")
@@ -69,15 +70,15 @@ class VirtUuidCollector(collector.FactsCollector):
     # available to non-root users on ppc64*
     # ppc64 LPAR has it's virt.uuid in /proc/devicetree
     # so parts of this don't need to be in AdminHardware
-    devicetree_vm_uuid_arches = ["ppc64", "ppc64le"]
+    devicetree_vm_uuid_arches: List[str] = ["ppc64", "ppc64le"]
 
     # No virt.uuid equiv is available for guests on these hypervisors
-    no_uuid_platforms = ["powervm_lx86", "xen-dom0", "ibm_systemz"]
+    no_uuid_platforms: List[str] = ["powervm_lx86", "xen-dom0", "ibm_systemz"]
 
-    def get_all(self):
+    def get_all(self) -> Dict[str, str]:
         return self.get_virt_uuid()
 
-    def get_virt_uuid(self):
+    def get_virt_uuid(self) -> Dict[str, str]:
         """
         Given a populated fact list, add on a virt.uuid fact if appropriate.
         Partially adapted from Spacewalk's rhnreg.py, example hardware reporting
@@ -85,14 +86,14 @@ class VirtUuidCollector(collector.FactsCollector):
         """
 
         # For 99% of uses, virt.uuid will actually be from dmi info
-        virt_uuid_dict = {}
+        virt_uuid_dict: Dict[str, str] = {}
 
         if self._collected_hw_info and "dmi.system.uuid" in self._collected_hw_info:
             virt_uuid_dict["virt.uuid"] = self._collected_hw_info["dmi.system.uuid"]
 
         # ie, ppc64/ppc64le
         if self.arch in self.devicetree_vm_uuid_arches:
-            uuid = self._get_devicetree_uuid()
+            uuid: Optional[str] = self._get_devicetree_uuid()
             if uuid is not None:
                 virt_uuid_dict["virt.uuid"] = uuid
 
@@ -100,7 +101,7 @@ class VirtUuidCollector(collector.FactsCollector):
         # what is on the file system (xen para-virt)
         # Does this need root access?
         try:
-            uuid_file = open("/sys/hypervisor/uuid", "r")
+            uuid_file: TextIO = open("/sys/hypervisor/uuid", "r")
             uuid = uuid_file.read()
             uuid_file.close()
             virt_uuid_dict["virt.uuid"] = uuid.rstrip("\r\n")
@@ -109,7 +110,7 @@ class VirtUuidCollector(collector.FactsCollector):
 
         return virt_uuid_dict
 
-    def _get_devicetree_uuid(self):
+    def _get_devicetree_uuid(self) -> Optional[str]:
         """
         Collect the virt.uuid fact from device-tree.
 
@@ -122,7 +123,7 @@ class VirtUuidCollector(collector.FactsCollector):
         (In contrast to use of DMI on x86_64).
         """
 
-        uuid_paths = [
+        uuid_paths: List[str] = [
             f"{self.prefix}/proc/device-tree/vm,uuid",
             f"{self.prefix}/proc/device-tree/ibm,partition-uuid",
         ]
@@ -135,7 +136,7 @@ class VirtUuidCollector(collector.FactsCollector):
                     contents = fo.read()
                     # Apparently ppc64 can report a virt uuid with a null byte at the end.
                     # See BZ 1405125.
-                    vm_uuid = contents.strip(string.whitespace + "\0")
+                    vm_uuid: str = contents.strip(string.whitespace + "\0")
                     return vm_uuid
             except IOError as e:
                 log.warn("Tried to read %s but there was an error: %s", uuid_path, e)
@@ -145,11 +146,11 @@ class VirtUuidCollector(collector.FactsCollector):
 
 
 class VirtCollector(collector.FactsCollector):
-    def get_all(self):
-        virt_info = {}
+    def get_all(self) -> Dict[str, Union[str, bool]]:
+        virt_info: Dict[str, Union[str, bool]] = {}
 
         virt_what_collector = VirtWhatCollector(prefix=self.prefix, testing=self.testing)
-        virt_what_info = virt_what_collector.get_all()
+        virt_what_info: Dict[str, Union[str, bool]] = virt_what_collector.get_all()
         virt_info.update(virt_what_info)
 
         # Ensure we do not gather the virt.uuid fact for host_types we cannot

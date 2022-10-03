@@ -29,7 +29,7 @@ from datetime import datetime, timedelta
 from rhsmlib.facts import cpuinfo
 from rhsmlib.facts import collector
 
-from typing import Optional
+from typing import Callable, Dict, Optional, List, TextIO, Tuple, Union
 
 log = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ except ImportError:
 
 
 class ClassicCheck(object):
-    def is_registered_with_classic(self):
+    def is_registered_with_classic(self) -> bool:
         try:
             sys.path.append("/usr/share/rhn")
             from up2date_client import up2dateAuth
@@ -55,8 +55,8 @@ class ClassicCheck(object):
 # take a string like '1-4' and returns a list of
 # ints like [1,2,3,4]
 # 31-37 return [31,32,33,34,35,36,37]
-def parse_range(range_str):
-    range_list = range_str.split("-")
+def parse_range(range_str: str) -> List[int]:
+    range_list: List[str] = range_str.split("-")
     start = int(range_list[0])
     end = int(range_list[-1])
 
@@ -70,17 +70,18 @@ def parse_range(range_str):
 #  1,2,3,4
 #  1-2, 4-6, 8-10, 12-14
 #
-def gather_entries(entries_string):
-    entries = []
-    entry_parts = entries_string.split(",")
+def gather_entries(entries_string: str) -> List[int]:
+    entries: List[int] = []
+    entry_parts: List[str] = entries_string.split(",")
     for entry_part in entry_parts:
         # return a list of enumerated items
-        entry_range = parse_range(entry_part)
+        entry_range: List[int] = parse_range(entry_part)
         for entry in entry_range:
             entries.append(entry)
     return entries
 
 
+# FIXME This class does not seem to be used anywhere
 class GenericPlatformSpecificInfoProvider(object):
     """Default provider for platform without a specific platform info provider.
     ie, all platforms except those with DMI (ie, intel platforms)"""
@@ -94,14 +95,20 @@ class GenericPlatformSpecificInfoProvider(object):
 
 
 class HardwareCollector(collector.FactsCollector):
-    LSCPU_CMD = "/usr/bin/lscpu"
+    LSCPU_CMD: str = "/usr/bin/lscpu"
 
-    def __init__(self, arch=None, prefix=None, testing=None, collected_hw_info=None):
+    def __init__(
+        self,
+        arch: str = None,
+        prefix: str = None,
+        testing: bool = None,
+        collected_hw_info: Dict[str, Union[str, int, bool, None]] = None,
+    ):
         super(HardwareCollector, self).__init__(
             arch=arch, prefix=prefix, testing=testing, collected_hw_info=None
         )
 
-        self.hardware_methods = [
+        self.hardware_methods: List[Callable] = [
             self.get_uname_info,
             self.get_release_info,
             self.get_mem_info,
@@ -114,22 +121,21 @@ class HardwareCollector(collector.FactsCollector):
             self.get_network_interfaces,
         ]
 
-    def get_uname_info(self):
-        uname_info = {}
-        uname_data = os.uname()
-        uname_keys = (
+    def get_uname_info(self) -> Dict[str, str]:
+        uname_data: os.uname_result = os.uname()
+        uname_keys: Tuple[str, ...] = (
             "uname.sysname",
             "uname.nodename",
             "uname.release",
             "uname.version",
             "uname.machine",
         )
-        uname_info = dict(list(zip(uname_keys, uname_data)))
+        uname_info: Dict[str, str] = dict(list(zip(uname_keys, uname_data)))
         return uname_info
 
-    def get_release_info(self):
-        distro_info = self.get_distribution()
-        release_info = {
+    def get_release_info(self) -> Dict[str, str]:
+        distro_info: tuple = self.get_distribution()
+        release_info: Dict[str, str] = {
             "distribution.name": distro_info[0],
             "distribution.version": distro_info[1],
             "distribution.id": distro_info[2],
@@ -137,24 +143,23 @@ class HardwareCollector(collector.FactsCollector):
         }
         return release_info
 
-    def _open_release(self, filename):
+    def _open_release(self, filename: str) -> TextIO:
         return open(filename, "r")
 
     # this version os very RHEL/Fedora specific...
-    def get_distribution(self):
-
-        version = "Unknown"
-        distname = "Unknown"
-        dist_id = "Unknown"
-        id = "Unknown"
-        id_like = [""]
-        version_modifier = ""
+    def get_distribution(self) -> Tuple[str, str, str, str, str, List[str]]:
+        version: str = "Unknown"
+        distname: str = "Unknown"
+        dist_id: str = "Unknown"
+        id: str = "Unknown"
+        id_like: List[str] = [""]
+        version_modifier: str = ""
 
         if os.path.exists("/etc/os-release"):
-            f = open("/etc/os-release", "r")
-            os_release = f.readlines()
+            f: TextIO = open("/etc/os-release", "r")
+            os_release: List[str] = f.readlines()
             f.close()
-            data = {
+            data: Dict[str, str] = {
                 "PRETTY_NAME": "Unknown",
                 "NAME": distname,
                 "ID": id,
@@ -164,7 +169,7 @@ class HardwareCollector(collector.FactsCollector):
                 "CPE_NAME": "Unknown",
             }
             for line in os_release:
-                split = [piece.strip('"\n ') for piece in line.split("=")]
+                split: List[str] = [piece.strip('"\n ') for piece in line.split("=")]
                 if len(split) != 2:
                     continue
                 data[split[0]] = split[1]
@@ -172,23 +177,25 @@ class HardwareCollector(collector.FactsCollector):
             version = data["VERSION_ID"]
             distname = data["NAME"]
             dist_id = data["VERSION"]
-            dist_id_search = re.search(r"\((.*?)\)", dist_id)
+            dist_id_search: Optional[re.Match] = re.search(r"\((.*?)\)", dist_id)
             if dist_id_search:
-                dist_id = dist_id_search.group(1)
+                dist_id: str = dist_id_search.group(1)
             id_like = data["ID_LIKE"].split()
             id = data["ID"]
             # Split on ':' that is not preceded by '\'
-            vers_mod_data = re.split(r"(?<!\\):", data["CPE_NAME"])
+            vers_mod_data: List[str] = re.split(r"(?<!\\):", data["CPE_NAME"])
             if len(vers_mod_data) >= 6:
                 version_modifier = vers_mod_data[5].lower().replace("\\:", ":")
         elif os.path.exists("/etc/redhat-release"):
             # from platform.py from python2.
-            _lsb_release_version = re.compile(r"(.+) release ([\d.]+)\s*(?!\()(\S*)\s*[^(]*(?:\((.+)\))?")
-            f = self._open_release("/etc/redhat-release")
-            firstline = f.readline()
+            _lsb_release_version: re.Pattern = re.compile(
+                r"(.+) release ([\d.]+)\s*(?!\()(\S*)\s*[^(]*(?:\((.+)\))?"
+            )
+            f: TextIO = self._open_release("/etc/redhat-release")
+            firstline: str = f.readline()
             f.close()
 
-            m = _lsb_release_version.match(firstline)
+            m: re.Match = _lsb_release_version.match(firstline)
 
             if m is not None:
                 (distname, version, tmp_modifier, dist_id) = tuple(m.groups())
@@ -199,33 +206,34 @@ class HardwareCollector(collector.FactsCollector):
             (distname, version, dist_id) = platform.linux_distribution()
             version_modifier = "Unknown"
 
+        # FIXME Return collections.namedtuple instead?
         return distname, version, dist_id, version_modifier, id, id_like
 
-    def get_mem_info(self):
-        meminfo = {}
+    def get_mem_info(self) -> Dict[str, str]:
+        meminfo: Dict[str, str] = {}
 
-        # most of this mem info changes constantly, which makes decding
+        # most of this mem info changes constantly, which makes deciding
         # when to update facts painful, so lets try to just collect the
         # useful bits
 
-        useful = ["MemTotal", "SwapTotal"]
+        useful: List[str] = ["MemTotal", "SwapTotal"]
         try:
-            parser = re.compile(r"^(?P<key>\S*):\s*(?P<value>\d*)\s*kB")
-            memdata = open("/proc/meminfo")
+            parser: re.Pattern = re.compile(r"^(?P<key>\S*):\s*(?P<value>\d*)\s*kB")
+            memdata: TextIO = open("/proc/meminfo")
             for info in memdata:
-                match = parser.match(info)
+                match: Optional[re.Match] = parser.match(info)
                 if not match:
                     continue
                 key, value = match.groups(["key", "value"])
                 if key in useful:
-                    nkey = ".".join(["memory", key.lower()])
+                    nkey: str = ".".join(["memory", key.lower()])
                     meminfo[nkey] = "%s" % int(value)
         except Exception as e:
             log.warning("Error reading system memory information: %s", e)
         return meminfo
 
-    def get_last_boot(self):
-        last_boot = "unknown"
+    def get_last_boot(self) -> Dict[str, str]:
+        last_boot: str = "unknown"
 
         # Use a date for uptime instead of the actual uptime since that
         # would force a refresh for every run. This was inspired by the
@@ -235,34 +243,34 @@ class HardwareCollector(collector.FactsCollector):
             uptime = float(open("/proc/uptime", "r").read().split()[0])
             uptime_delta = timedelta(seconds=uptime)
             now = datetime.utcnow()
-            last_boot_date = now - uptime_delta
-            last_boot = last_boot_date.strftime("%Y-%m-%d %H:%M:%S") + " UTC"
+            last_boot_date: datetime = now - uptime_delta
+            last_boot: str = last_boot_date.strftime("%Y-%m-%d %H:%M:%S") + " UTC"
         except Exception as e:
             log.warning("Error reading uptime information %s", e)
         return {"last_boot": last_boot}
 
-    def count_cpumask_entries(self, cpu, field):
+    def count_cpumask_entries(self, cpu: str, field: str) -> Optional[int]:
         try:
-            f = open("%s/topology/%s" % (cpu, field), "r")
+            f: TextIO = open("%s/topology/%s" % (cpu, field), "r")
         except IOError:
             return None
 
         # ia64 entries seem to be null padded, or perhaps
         # that's a collection error
         # FIXME
-        entries = f.read().rstrip("\n\x00")
+        entries: str = f.read().rstrip("\n\x00")
         f.close()
         # these fields can exist, but be empty. For example,
         # thread_siblings_list from s390x-rhel64-zvm-2cpu-has-topo
         # test data
 
         if len(entries):
-            cpumask_entries = gather_entries(entries)
+            cpumask_entries: List[int] = gather_entries(entries)
             return len(cpumask_entries)
         # that field was empty
         return None
 
-    def is_a64fx(self):
+    def is_a64fx(self) -> bool:
         if self.arch != "aarch64":
             return False
         try:
@@ -270,11 +278,11 @@ class HardwareCollector(collector.FactsCollector):
             # MIDR_EL1 of A64FX is as follows:
             # FX700:  0x00000000461f0010
             # FX1000: 0x00000000460f0010
-            f = open("/sys/devices/system/cpu/cpu0/regs/identification/midr_el1", "r")
+            f: TextIO = open("/sys/devices/system/cpu/cpu0/regs/identification/midr_el1", "r")
         except IOError:
             return False
 
-        midr = f.read().rstrip("\n")
+        midr: str = f.read().rstrip("\n")
         f.close()
         if midr == "0x00000000461f0010" or midr == "0x00000000460f0010":
             return True
@@ -282,7 +290,8 @@ class HardwareCollector(collector.FactsCollector):
         return False
 
     # replace/add with getting CPU Totals for s390x
-    def _parse_s390x_sysinfo_topology(self, cpu_count, sysinfo):
+    # FIXME cpu_count is not used
+    def _parse_s390x_sysinfo_topology(self, cpu_count: int, sysinfo: List[str]) -> Optional[Dict[str, int]]:
         # to quote lscpu.c:
         # CPU Topology SW:      0 0 0 4 6 4
         # /* s390 detects its cpu topology via /proc/sysinfo, if present.
@@ -295,9 +304,9 @@ class HardwareCollector(collector.FactsCollector):
         # */
         for line in sysinfo:
             if line.startswith("CPU Topology SW:"):
-                parts = line.split(":", 1)
-                s390_topo_str = parts[1]
-                topo_parts = s390_topo_str.split()
+                parts: List[str] = line.split(":", 1)
+                s390_topo_str: str = parts[1]
+                topo_parts: List[str] = s390_topo_str.split()
 
                 # indexes 3/4/5 being books/sockets_per_book,
                 # and cores_per_socket based on lscpu.c
@@ -305,8 +314,8 @@ class HardwareCollector(collector.FactsCollector):
                 sockets_per_book = int(topo_parts[4])
                 cores_per_socket = int(topo_parts[5])
 
-                socket_count = book_count * sockets_per_book
-                cores_count = socket_count * cores_per_socket
+                socket_count: int = book_count * sockets_per_book
+                cores_count: int = socket_count * cores_per_socket
 
                 return {
                     "socket_count": socket_count,
@@ -318,13 +327,14 @@ class HardwareCollector(collector.FactsCollector):
         log.debug("Looking for 'CPU Topology SW' in sysinfo, but it was not found")
         return None
 
-    def has_s390x_sysinfo(self, proc_sysinfo):
+    def has_s390x_sysinfo(self, proc_sysinfo: str) -> bool:
         return os.access(proc_sysinfo, os.R_OK)
 
-    def read_s390x_sysinfo(self, cpu_count, proc_sysinfo):
-        lines = []
+    # FIXME cpu_count is not used
+    def read_s390x_sysinfo(self, cpu_count, proc_sysinfo: str) -> List[str]:
+        lines: List[str] = []
         try:
-            f = open(proc_sysinfo, "r")
+            f: TextIO = open(proc_sysinfo, "r")
         except IOError:
             return lines
 
@@ -332,18 +342,17 @@ class HardwareCollector(collector.FactsCollector):
         f.close()
         return lines
 
-    def read_physical_id(self, cpu_file):
+    def read_physical_id(self, cpu_file: str) -> Optional[str]:
         try:
-            f = open("%s/physical_id" % cpu_file, "r")
+            f: TextIO = open("%s/physical_id" % cpu_file, "r")
         except IOError:
             return None
 
-        buf = f.read().strip()
+        buf: str = f.read().strip()
         f.close()
         return buf
 
-    def _ppc64_fallback(self, cpu_files):
-
+    def _ppc64_fallback(self, cpu_files: List[str]) -> Optional[int]:
         # ppc64, particular POWER5/POWER6 machines, show almost
         # no cpu information on rhel5. There is a "physical_id"
         # associated with each cpu that seems to map to a
@@ -352,7 +361,7 @@ class HardwareCollector(collector.FactsCollector):
         # try to find cpuN/physical_id
         physical_ids = set()
         for cpu_file in cpu_files:
-            physical_id = self.read_physical_id(cpu_file)
+            physical_id: Optional[str] = self.read_physical_id(cpu_file)
             # offline cpu's show physical id of -1. Normally
             # we count all present cpu's even if offline, but
             # in this case, we can't get any cpu info from the
@@ -363,19 +372,19 @@ class HardwareCollector(collector.FactsCollector):
         if physical_ids:
             # For rhel6 or newer, we have more cpu topology info
             # exposed by the kernel which will override this
-            socket_count = len(physical_ids)
+            socket_count: int = len(physical_ids)
             # add marker here so we know we fail back to this
             log.debug("Using /sys/devices/system/cpu/cpu*/physical_id for cpu info on ppc64")
             return socket_count
 
         return None
 
-    def check_for_cpu_topo(self, cpu_topo_dir):
+    def check_for_cpu_topo(self, cpu_topo_dir: str) -> bool:
         return os.access(cpu_topo_dir, os.R_OK)
 
-    def get_proc_cpuinfo(self):
-        proc_cpuinfo = {}
-        fact_namespace = "proc_cpuinfo"
+    def get_proc_cpuinfo(self) -> Dict[str, str]:
+        proc_cpuinfo: Dict[str, str] = {}
+        fact_namespace: str = "proc_cpuinfo"
 
         proc_cpuinfo_source = cpuinfo.SystemCpuInfoFactory.from_uname_machine(self.arch, prefix=self.prefix)
 
@@ -391,16 +400,16 @@ class HardwareCollector(collector.FactsCollector):
         # value, but that is a lot of fact table entries
         return proc_cpuinfo
 
-    def get_proc_stat(self):
-        proc_stat = {}
-        fact_namespace = "proc_stat"
-        proc_stat_path = "/proc/stat"
+    def get_proc_stat(self) -> Dict[str, str]:
+        proc_stat: Dict[str, str] = {}
+        fact_namespace: str = "proc_stat"
+        proc_stat_path: str = "/proc/stat"
 
-        btime_re = r"btime\W*([0-9]+)\W*$"
+        btime_re: str = r"btime\W*([0-9]+)\W*$"
         try:
             with open(proc_stat_path, "r") as proc_stat_file:
                 for line in proc_stat_file.readlines():
-                    match = re.match(btime_re, line.strip())
+                    match: re.Match = re.match(btime_re, line.strip())
                     if match:
                         proc_stat["%s.btime" % (fact_namespace)] = match.group(1)
                         break  # We presently only care about the btime fact
@@ -409,16 +418,16 @@ class HardwareCollector(collector.FactsCollector):
             log.debug("Could not gather proc_stat facts: %s", e)
         return proc_stat
 
-    def get_cpu_info(self):
-        cpu_info = {}
-        # we also have cpufreq, etc in this dir, so match just the numbs
-        cpu_re = r"cpu([0-9]+$)"
+    def get_cpu_info(self) -> Dict[str, Union[str, int]]:
+        cpu_info: Dict[str, Union[str, int]] = {}
+        # we also have cpufreq, etc. in this dir, so match just the numbers
+        cpu_re: str = r"cpu([0-9]+$)"
 
-        cpu_files = []
-        sys_cpu_path = self.prefix + "/sys/devices/system/cpu/"
+        cpu_files: List[str] = []
+        sys_cpu_path: str = self.prefix + "/sys/devices/system/cpu/"
         for cpu in os.listdir(sys_cpu_path):
             if re.match(cpu_re, cpu):
-                cpu_topo_dir = os.path.join(sys_cpu_path, cpu, "topology")
+                cpu_topo_dir: str = os.path.join(sys_cpu_path, cpu, "topology")
 
                 # see rhbz#1070908
                 # ppc64 machines running on LPARs will add
@@ -440,17 +449,19 @@ class HardwareCollector(collector.FactsCollector):
         if not cpu_files:
             return cpu_info
 
-        cpu_count = len(cpu_files)
+        cpu_count: int = len(cpu_files)
 
         # see if we have a /proc/sysinfo ala s390, if so
         # prefer that info
-        proc_sysinfo = self.prefix + "/proc/sysinfo"
-        has_sysinfo = self.has_s390x_sysinfo(proc_sysinfo)
+        proc_sysinfo: str = self.prefix + "/proc/sysinfo"
+        has_sysinfo: bool = self.has_s390x_sysinfo(proc_sysinfo)
 
         # s390x can have cpu 'books'
-        books = False
+        books: bool = False
 
-        cores_per_socket = None
+        socket_count: int
+        cores_per_socket: int
+        cores_per_cpu: int
 
         # assume each socket has the same number of cores, and
         # each core has the same number of threads.
@@ -458,7 +469,7 @@ class HardwareCollector(collector.FactsCollector):
         # This is not actually true sometimes... *cough*s390x*cough*
         # but lscpu makes the same assumption
 
-        threads_per_core = self.count_cpumask_entries(cpu_files[0], "thread_siblings_list")
+        threads_per_core: int = self.count_cpumask_entries(cpu_files[0], "thread_siblings_list")
         if self.is_a64fx():
             # core_siblings_list of A64FX shows the cpu mask which is in a same CMG,
             # not the socket. A64FX has always 4 CMGs on the socket.
@@ -479,7 +490,7 @@ class HardwareCollector(collector.FactsCollector):
                 # for s390x on lpar, try to see if /proc/sysinfo has any
                 # topo info
                 log.debug("/proc/sysinfo found, attempting to gather cpu topology info")
-                sysinfo_lines = self.read_s390x_sysinfo(cpu_count, proc_sysinfo)
+                sysinfo_lines: List[str] = self.read_s390x_sysinfo(cpu_count, proc_sysinfo)
                 if sysinfo_lines:
                     sysinfo = self._parse_s390x_sysinfo_topology(cpu_count, sysinfo_lines)
 
@@ -547,7 +558,7 @@ class HardwareCollector(collector.FactsCollector):
         # cpu topology info with lpar
         #
         # if we got book info from sysinfo, prefer it
-        book_siblings_per_cpu = None
+        book_siblings_per_cpu: int = None
         if not books:
             book_siblings_per_cpu = self.count_cpumask_entries(cpu_files[0], "book_siblings_list")
             if book_siblings_per_cpu:
@@ -576,14 +587,14 @@ class HardwareCollector(collector.FactsCollector):
 
         return cpu_info
 
-    def get_ls_cpu_info(self):
+    def get_ls_cpu_info(self) -> Dict:
         # if we have `lscpu`, let's use it for facts as well, under
         # the `lscpu` name space
         if not os.access(self.LSCPU_CMD, os.R_OK):
             return {}
 
         # copy of parent process environment
-        lscpu_env = dict(os.environ)
+        lscpu_env: Dict[str, str] = dict(os.environ)
 
         # # LANGUAGE trumps LC_ALL, LC_CTYPE, LANG. See rhbz#1225435, rhbz#1450210
         lscpu_env.update({"LANGUAGE": "en_US.UTF-8"})
@@ -593,26 +604,26 @@ class HardwareCollector(collector.FactsCollector):
 
         return self._parse_lscpu_human_readable_output(lscpu_env)
 
-    def _check_lscpu_json(self, lscpu_env):
-        lscpu_cmd = [self.LSCPU_CMD, "--help"]
+    def _check_lscpu_json(self, lscpu_env: Dict[str, str]) -> bool:
+        lscpu_cmd: List[str] = [self.LSCPU_CMD, "--help"]
 
         try:
-            output = subprocess.check_output(lscpu_cmd, env=lscpu_env)
+            output: bytes = subprocess.check_output(lscpu_cmd, env=lscpu_env)
         except subprocess.CalledProcessError as e:
             log.warning("Failed to run 'lscpu --help': %s", e)
             return False
 
         return b"--json" in output
 
-    def _parse_lscpu_human_readable_output(self, lscpu_env):
-        lscpu_info = {}
-        lscpu_cmd = [self.LSCPU_CMD]
+    def _parse_lscpu_human_readable_output(self, lscpu_env: Dict[str, str]) -> Dict[str, str]:
+        lscpu_info: Dict[str, str] = {}
+        lscpu_cmd: List[str] = [self.LSCPU_CMD]
 
         if self.testing:
             lscpu_cmd += ["-s", self.prefix]
 
         # For display/message only
-        lscpu_cmd_string = " ".join(lscpu_cmd)
+        lscpu_cmd_string: str = " ".join(lscpu_cmd)
 
         try:
             lscpu_out_raw: bytes = subprocess.check_output(lscpu_cmd, env=lscpu_env)
@@ -622,13 +633,13 @@ class HardwareCollector(collector.FactsCollector):
             log.warning("Error with lscpu (%s) subprocess: %s", lscpu_cmd_string, e)
             return lscpu_info
 
-        errors = []
+        errors: List[Exception] = []
         try:
-            cpu_data = lscpu_out.strip().split("\n")
+            cpu_data: List[str] = lscpu_out.strip().split("\n")
             for info in cpu_data:
                 try:
                     key, value = info.split(":")
-                    nkey = ".".join(["lscpu", key.lower().strip().replace(" ", "_")])
+                    nkey: str = ".".join(["lscpu", key.lower().strip().replace(" ", "_")])
                     lscpu_info[nkey] = "%s" % value.strip()
                 except ValueError as e:
                     # sometimes lscpu outputs weird things. Or fails.
@@ -642,13 +653,13 @@ class HardwareCollector(collector.FactsCollector):
 
         return lscpu_info
 
-    def _parse_lscpu_json_output(self, lscpu_env):
-        lscpu_cmd = [self.LSCPU_CMD, "--json"]
+    def _parse_lscpu_json_output(self, lscpu_env: Dict[str, str]) -> Dict[str, str]:
+        lscpu_cmd: List[str] = [self.LSCPU_CMD, "--json"]
         if self.testing:
             lscpu_cmd += ["-s", self.prefix]
 
         try:
-            output = subprocess.check_output(lscpu_cmd, env=lscpu_env)
+            output: bytes = subprocess.check_output(lscpu_cmd, env=lscpu_env)
         except subprocess.CalledProcessError as e:
             log.warning("Failed to run 'lscpu --json': %s", e)
             return {}
@@ -656,20 +667,20 @@ class HardwareCollector(collector.FactsCollector):
         log.debug("Parsing lscpu JSON: %s", output)
 
         try:
-            output_json = json.loads(output)
+            output_json: dict = json.loads(output)
         except json.JSONDecodeError as e:
             log.warning("Failed to load the lscpu JSON: %s", e)
             return {}
 
         try:
-            main_object = output_json["lscpu"]
+            main_object: dict = output_json["lscpu"]
         except KeyError:
             log.warning("Failed to load the lscpu JSON: missing 'lscpu' " "root object")
             return {}
 
-        lscpu_info = {}
+        lscpu_info: Dict[str, str] = {}
 
-        def parse_item(obj):
+        def parse_item(obj: dict) -> None:
             try:
                 # get 'field' and 'data', considering them mandatory, and thus
                 # ignoring this element and all its children if they are
@@ -686,7 +697,7 @@ class HardwareCollector(collector.FactsCollector):
             if value is not None:
                 if key.endswith(":"):
                     key = key[:-1]
-                nkey = ".".join(["lscpu", key.lower().strip().replace(" ", "_")])
+                nkey: str = ".".join(["lscpu", key.lower().strip().replace(" ", "_")])
                 lscpu_info[nkey] = value.strip()
             try:
                 children = obj["children"]
@@ -695,7 +706,7 @@ class HardwareCollector(collector.FactsCollector):
                 # no 'children' field available, which is OK
                 pass
 
-        def parse_list(json_list):
+        def parse_list(json_list) -> None:
             for list_item in json_list:
                 parse_item(list_item)
 
@@ -703,15 +714,15 @@ class HardwareCollector(collector.FactsCollector):
 
         return lscpu_info
 
-    def _get_ipv4_addr_list(self):
+    def _get_ipv4_addr_list(self) -> List[str]:
         """
         When DNS record is not configured properly for the system, then try to
         get list of all IPv4 addresses from all devices. Return 127.0.0.1 only
         in situation when there is only loopback device.
         :return: list of IPv4 addresses
         """
-        addr_list = []
-        interface_info = ethtool.get_interfaces_info(ethtool.get_devices())
+        addr_list: List[str] = []
+        interface_info: List[ethtool.etherinfo] = ethtool.get_interfaces_info(ethtool.get_devices())
         for info in interface_info:
             for addr in info.get_ipv4_addresses():
                 if addr.address != "127.0.0.1":
@@ -720,15 +731,15 @@ class HardwareCollector(collector.FactsCollector):
             addr_list = ["127.0.0.1"]
         return addr_list
 
-    def _get_ipv6_addr_list(self):
+    def _get_ipv6_addr_list(self) -> List[str]:
         """
         When DNS record is not configured properly for the system, then try to
         get list of all IPv6 addresses from all devices. Return ::1 only
         in situation when there no device with valid global IPv6 address.
         :return: list of IPv6 addresses
         """
-        addr_list = []
-        interface_info = ethtool.get_interfaces_info(ethtool.get_devices())
+        addr_list: List[str] = []
+        interface_info: List[ethtool.etherinfo] = ethtool.get_interfaces_info(ethtool.get_devices())
         for info in interface_info:
             for addr in info.get_ipv6_addresses():
                 if addr.scope == "universe":
@@ -737,20 +748,20 @@ class HardwareCollector(collector.FactsCollector):
             addr_list = ["::1"]
         return addr_list
 
-    def get_network_info(self):
+    def get_network_info(self) -> Dict[str, str]:
         """
         Try to get information about network: hostname, FQDN, IPv4, IPv6 addresses
         """
-        net_info = {}
+        net_info: Dict[str, str] = {}
         try:
-            hostname = socket.gethostname()
+            hostname: str = socket.gethostname()
             net_info["network.hostname"] = hostname
 
             try:
                 # We do not use socket.getfqdn(), because we need
                 # to mimic behaviour of 'hostname -f' command and be
                 # compatible with puppet and katello
-                infolist = socket.getaddrinfo(
+                infolist: List[tuple] = socket.getaddrinfo(
                     hostname,  # (host) hostname
                     None,  # (port) no need to specify port
                     socket.AF_UNSPEC,  # (family) IPv4/IPv6
@@ -772,7 +783,7 @@ class HardwareCollector(collector.FactsCollector):
                     net_info["network.fqdn"] = hostname
 
             try:
-                info = socket.getaddrinfo(hostname, None, socket.AF_INET, socket.SOCK_STREAM)
+                info: List[tuple] = socket.getaddrinfo(hostname, None, socket.AF_INET, socket.SOCK_STREAM)
                 ip_list = set([x[4][0] for x in info])
                 net_info["network.ipv4_address"] = ", ".join(ip_list)
             except Exception as err:
@@ -780,7 +791,7 @@ class HardwareCollector(collector.FactsCollector):
                 net_info["network.ipv4_address"] = ", ".join(self._get_ipv4_addr_list())
 
             try:
-                info = socket.getaddrinfo(hostname, None, socket.AF_INET6, socket.SOCK_STREAM)
+                info: List[tuple] = socket.getaddrinfo(hostname, None, socket.AF_INET6, socket.SOCK_STREAM)
                 ip_list = set([x[4][0] for x in info])
                 net_info["network.ipv6_address"] = ", ".join(ip_list)
             except Exception as err:
@@ -792,34 +803,34 @@ class HardwareCollector(collector.FactsCollector):
 
         return net_info
 
-    def _should_get_mac_address(self, device):
+    def _should_get_mac_address(self, device: str) -> bool:
         return not (device.startswith("sit") or device.startswith("lo"))
 
-    def get_network_interfaces(self):
-        netinfdict = {}
-        old_ipv4_metakeys = ["ipv4_address", "ipv4_netmask", "ipv4_broadcast"]
-        ipv4_metakeys = ["address", "netmask", "broadcast"]
-        ipv6_metakeys = ["address", "netmask"]
+    def get_network_interfaces(self) -> Dict[str, str]:
+        netinfdict: Dict[str, str] = {}
+        old_ipv4_metakeys: List[str] = ["ipv4_address", "ipv4_netmask", "ipv4_broadcast"]
+        ipv4_metakeys: List[str] = ["address", "netmask", "broadcast"]
+        ipv6_metakeys: List[str] = ["address", "netmask"]
         try:
-            interfaces_info = ethtool.get_interfaces_info(ethtool.get_devices())
+            interfaces_info: List[ethtool.etherinfo] = ethtool.get_interfaces_info(ethtool.get_devices())
             for info in interfaces_info:
-                mac_address = info.mac_address
-                device = info.device
+                mac_address: str = info.mac_address
+                device: str = info.device
                 # Omit mac addresses for sit and lo device types. See BZ838123
                 # mac address are per interface, not per address
                 if self._should_get_mac_address(device):
-                    key = ".".join(["net.interface", device, "mac_address"])
+                    key: str = ".".join(["net.interface", device, "mac_address"])
                     netinfdict[key] = mac_address
 
                 # collect the IPv6 information by device, and by scope
-                ipv6_values = defaultdict(lambda: defaultdict(list))
+                ipv6_values: Dict[str, Dict[str, List[str]]] = defaultdict(lambda: defaultdict(list))
                 # all of our supported versions of python-ethtool support
                 # get_ipv6_addresses
                 for addr in info.get_ipv6_addresses():
                     # ethtool returns a different scope for "public" IPv6 addresses
                     # on different versions of RHEL.  EL5 is "global", while EL6 is
                     # "universe".  Make them consistent.
-                    scope = addr.scope
+                    scope: str = addr.scope
                     if scope == "universe":
                         scope = "global"
 
@@ -830,7 +841,7 @@ class HardwareCollector(collector.FactsCollector):
                         ipv6_values[mkey][scope].append(str(attr))
                 for meta_key, mapping_values in ipv6_values.items():
                     for scope, values in mapping_values.items():
-                        key = "net.interface.{device}.ipv6_{key}.{scope}".format(
+                        key: str = "net.interface.{device}.ipv6_{key}.{scope}".format(
                             device=info.device, key=meta_key, scope=scope
                         )
                         list_key = key + "_list"
@@ -854,16 +865,18 @@ class HardwareCollector(collector.FactsCollector):
                 # accomdate the finer grained info, the api changed...
                 if hasattr(info, "get_ipv4_addresses"):
                     # collect the IPv4 information by device
-                    ipv4_values = defaultdict(list)
+                    ipv4_values: Dict[str, List[str]] = defaultdict(list)
                     for addr in info.get_ipv4_addresses():
                         for mkey in ipv4_metakeys:
-                            attr = getattr(addr, mkey) or "Unknown"
+                            attr: str = getattr(addr, mkey) or "Unknown"
                             ipv4_values[mkey].append(str(attr))
                     for meta_key, values in ipv4_values.items():
                         # append 'ipv4_' to match the older interface and keeps facts
                         # consistent
-                        key = "net.interface.{device}.ipv4_{key}".format(device=info.device, key=meta_key)
-                        list_key = key + "_list"
+                        key: str = "net.interface.{device}.ipv4_{key}".format(
+                            device=info.device, key=meta_key
+                        )
+                        list_key: str = key + "_list"
                         netinfdict[key] = values[0]
                         netinfdict[list_key] = ", ".join(values)
                 # check to see if we are actually an ipv4 interface
@@ -905,7 +918,7 @@ class HardwareCollector(collector.FactsCollector):
     def _get_permanent_hardware_address(self, bond_interface: str, seeked_interface: str) -> str:
         address: str = ""
         try:
-            bond_interface_file: str = open("/proc/net/bonding/%s" % bond_interface, "r")
+            bond_interface_file: TextIO = open("/proc/net/bonding/%s" % bond_interface, "r")
         except OSError:
             return address
 
@@ -951,7 +964,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     # verify the cpu socket info collection we use for rhel5 matches lscpu
-    cpu_items = [
+    cpu_items: List[Tuple[str, str]] = [
         ("cpu.core(s)_per_socket", "lscpu.core(s)_per_socket"),
         ("cpu.cpu(s)", "lscpu.cpu(s)"),
         # NOTE: the substring is different for these two folks...
@@ -961,8 +974,8 @@ if __name__ == "__main__":
         ("cpu.thread(s)_per_core", "lscpu.thread(s)_per_core"),
         ("cpu.socket(s)_per_book", "lscpu.socket(s)_per_book"),
     ]
-    failed = False
-    failed_list = []
+    failed: bool = False
+    failed_list: List[Tuple[str, str, int, int]] = []
     for cpu_item in cpu_items:
         value_0 = int(hw_dict.get(cpu_item[0], -1))
         value_1 = int(hw_dict.get(cpu_item[1], -1))

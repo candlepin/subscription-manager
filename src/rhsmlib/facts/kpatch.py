@@ -15,6 +15,7 @@
 import logging
 import os
 import shutil
+from typing import Dict, List
 
 from rhsmlib.facts import collector
 
@@ -26,7 +27,7 @@ class KPatchCollector(collector.FactsCollector):
     Class used for collecting facts related to installed and loaded liver kernel patches (kpatch)
     """
 
-    DIR_WITH_INSTALLED_KPATCH_MODULES = "/var/lib/kpatch"
+    DIR_WITH_INSTALLED_KPATCH_MODULES: str = "/var/lib/kpatch"
 
     # Current kpatch module can be in several directories according version of kpatch
     DIRS_WITH_LOADED_MODULE = [
@@ -35,15 +36,15 @@ class KPatchCollector(collector.FactsCollector):
         "/sys/kernel/kpatch",
     ]
 
-    def get_all(self):
+    def get_all(self) -> Dict[str, str]:
         return self.get_kpatch_info()
 
-    def get_kpatch_info(self):
+    def get_kpatch_info(self) -> Dict[str, str]:
         """
         Get all information about kpatch on current system
         :return: dictionary with kpatch information
         """
-        kpatch_info = {}
+        kpatch_info: Dict[str, str] = {}
 
         if self._is_kpatch_installed():
             kpatch_info["kpatch.installed"] = self._get_installed_live_kernel_patches()
@@ -52,42 +53,42 @@ class KPatchCollector(collector.FactsCollector):
         return kpatch_info
 
     @staticmethod
-    def _is_kpatch_installed():
+    def _is_kpatch_installed() -> bool:
         """
         Check if kpatch is installed
         :return: Return true, when kpatch CLI tool is installed. Otherwise return False
         """
         return shutil.which("kpatch") is not None
 
-    def _get_installed_live_kernel_patches(self):
+    def _get_installed_live_kernel_patches(self) -> str:
         """
         Return list of installed live kernel patches
         :return: list of strings with live kernel patches
         """
-        installed_kpatches = []
+        installed_kpatches: List[str] = []
 
         # Directory with installed kpatches contains several directories
         # Each directory should contain installed kpatch
         if os.path.isdir(self.DIR_WITH_INSTALLED_KPATCH_MODULES):
-            files = os.listdir(self.DIR_WITH_INSTALLED_KPATCH_MODULES)
+            files: List[str] = os.listdir(self.DIR_WITH_INSTALLED_KPATCH_MODULES)
             for kpatch in files:
                 if os.path.isdir(os.path.join(self.DIR_WITH_INSTALLED_KPATCH_MODULES, kpatch)):
                     installed_kpatches.append(kpatch)
 
         return " ".join(installed_kpatches)
 
-    def _get_loaded_live_kernel_patch(self):
+    def _get_loaded_live_kernel_patch(self) -> str:
         """
         Get currently used kpatch
         :return: String with current kpach
         """
-        current_kpatch = ""
+        current_kpatch: str = ""
 
         # Installed kpatches can be installed in several directories.
         # Use first existing directory from the list
         for kpatch_dir in self.DIRS_WITH_LOADED_MODULE:
             if os.path.isdir(kpatch_dir):
-                files = os.listdir(kpatch_dir)
+                files: List[str] = os.listdir(kpatch_dir)
                 for kpatch in files:
                     if os.path.isdir(os.path.join(kpatch_dir, kpatch)):
                         current_kpatch = kpatch
