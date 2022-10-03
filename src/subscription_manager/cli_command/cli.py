@@ -129,9 +129,9 @@ class CliCommand(AbstractCLICommand):
         owner_id = owner["key"]
         print(
             _(
-                "Ignoring request to auto-attach. "
+                "Ignoring the request to auto-attach. "
                 'Attaching subscriptions is disabled for organization "{owner_id}" '
-                "because of the content access mode setting."
+                "because Simple Content Access (SCA) is enabled."
             ).format(owner_id=owner_id)
         )
 
