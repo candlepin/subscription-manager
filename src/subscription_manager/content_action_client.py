@@ -13,6 +13,7 @@
 #
 
 import logging
+from typing import Generator, Set, TYPE_CHECKING
 
 from subscription_manager import base_action_client
 from subscription_manager import certlib
@@ -21,11 +22,15 @@ from subscription_manager.model.ent_cert import EntitlementDirEntitlementSource
 
 import subscription_manager.injection as inj
 
+if TYPE_CHECKING:
+    from subscription_manager.certlib import ActionReport
+    from subscription_manager.plugins import PluginHookRunner, PluginManager
+
 log = logging.getLogger(__name__)
 
 
 class ContentPluginActionReport(certlib.ActionReport):
-    """Aggragate the info reported by each content plugin.
+    """Aggregate the info reported by each content plugin.
 
     Just a set of reports that include info about the content
     plugin that created it.
@@ -35,9 +40,9 @@ class ContentPluginActionReport(certlib.ActionReport):
 
     def __init__(self):
         super(ContentPluginActionReport, self).__init__()
-        self.reports = set()
+        self.reports: Set[ActionReport] = set()
 
-    def add(self, report):
+    def add(self, report: "ActionReport"):
         # report should include info about what plugin generated it
         self.reports.add(report)
 
@@ -53,10 +58,10 @@ class ContentPluginActionCommand(object):
       that PluginHookRunner.run() adds to the content plugin conduit.
     """
 
-    def __init__(self, content_plugin_runner):
-        self.runner = content_plugin_runner
+    def __init__(self, content_plugin_runner: "PluginHookRunner"):
+        self.runner: PluginHookRunner = content_plugin_runner
 
-    def perform(self):
+    def perform(self) -> "ContentPluginActionReport":
         self.runner.run()
         # Actually a set of reports...
         return self.runner.conduit.reports
@@ -65,7 +70,7 @@ class ContentPluginActionCommand(object):
 class ContentPluginActionInvoker(certlib.BaseActionInvoker):
     """ActionInvoker for ContentPluginActionCommands."""
 
-    def __init__(self, content_plugin_runner):
+    def __init__(self, content_plugin_runner: "PluginHookRunner"):
         """Create a ContentPluginActionInvoker to wrap content plugin PluginHookRunner.
 
         Pass a PluginHookRunner to ContentPluginActionCommand. Do the
@@ -76,24 +81,24 @@ class ContentPluginActionInvoker(certlib.BaseActionInvoker):
               PluginManager.runiter('content_update').runiter()
         """
         super(ContentPluginActionInvoker, self).__init__()
-        self.runner = content_plugin_runner
+        self.runner: PluginHookRunner = content_plugin_runner
 
-    def _do_update(self):
+    def _do_update(self) -> "ContentPluginActionReport":
         action = ContentPluginActionCommand(self.runner)
         return action.perform()
 
 
 class ContentActionClient(base_action_client.BaseActionClient):
-    def _get_libset(self):
+    def _get_libset(self) -> Generator[certlib.BaseActionInvoker, None, None]:
         """Return a generator that creates a ContentPluginAction* for each update_content plugin.
 
-        The iterable return includes the yum repo action invoker, and a ContentPluginActionInvoker
+        The iterable return includes the DNF repo action invoker, and a ContentPluginActionInvoker
         for each plugin hook mapped to the 'update_content_hook' slot.
         """
 
         yield repolib.RepoActionInvoker()
 
-        plugin_manager = inj.require(inj.PLUGIN_MANAGER)
+        plugin_manager: PluginManager = inj.require(inj.PLUGIN_MANAGER)
 
         content_plugins_reports = ContentPluginActionReport()
 

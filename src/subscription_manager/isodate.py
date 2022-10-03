@@ -12,8 +12,6 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
-
 
 import datetime
 import dateutil.parser
@@ -22,9 +20,9 @@ import logging
 log = logging.getLogger(__name__)
 
 
-def _parse_date_dateutil(date):
+def _parse_date_dateutil(date: str) -> datetime.datetime:
     try:
-        dt = dateutil.parser.parse(date)
+        dt: datetime.datetime = dateutil.parser.parse(date)
         # the datetime.datetime objects returned by dateutil use the own
         # dateutil.tz.tzutc object for UTC, rather than the datetime own;
         # switch the tzinfo object of UTC dates to datetime.timezone.utc:

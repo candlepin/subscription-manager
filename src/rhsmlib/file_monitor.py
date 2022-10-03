@@ -11,6 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import threading
+from typing import Dict
 
 from rhsm.config import get_config_parser
 from rhsmlib.services import config
@@ -55,14 +56,14 @@ class FilesystemWatcher(object):
     # Timeout of loop in milliseconds
     TIMEOUT = 2000
 
-    def __init__(self, dir_watches):
+    def __init__(self, dir_watches: Dict[str, "DirectoryWatch"]):
         """
         :param dir_watches: dictionary of directories to watch (see DirectoryWatch class below)
         """
-        self.dir_watches = dir_watches
-        self.should_stop = False
+        self.dir_watches: Dict[str, DirectoryWatch] = dir_watches
+        self.should_stop: bool = False
 
-    def stop(self):
+    def stop(self) -> None:
         """
         Calling this method stops infinity loop of FileSystemWatcher
         """

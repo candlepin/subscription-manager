@@ -16,6 +16,7 @@ This module provides service for system purpose
 """
 
 import logging
+from typing import Dict
 
 from rhsm.connection import UEPConnection
 
@@ -41,7 +42,7 @@ class Syspurpose(object):
         self.owner = None
         self.valid_fields = None
 
-    def get_syspurpose_status(self, on_date: str = None) -> str:
+    def get_syspurpose_status(self, on_date: str = None) -> Dict:
         """
         Get syspurpose status from candlepin server
         :param on_date: Date of the status

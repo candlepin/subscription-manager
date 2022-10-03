@@ -10,24 +10,25 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
+
+from typing import List, Optional
 
 
 class ListingFile(object):
-    def __init__(self, data=None):
-        self.data = data
-        self.releases = []
+    def __init__(self, data: Optional[str] = None):
+        self.data: Optional[str] = data
+        self.releases: List[str] = []
 
         self.parse()
 
-    def get_releases(self):
+    def get_releases(self) -> List[str]:
         return self.releases
 
-    def parse(self):
+    def parse(self) -> None:
         if not self.data:
             return
 
-        lines = self.data.split("\n")
+        lines: List[str] = self.data.split("\n")
 
         for line in lines:
             line = line.strip()

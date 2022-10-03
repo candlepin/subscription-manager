@@ -13,23 +13,30 @@
 #
 
 import logging
+from typing import Optional, TYPE_CHECKING
 
 from rhsm.certificate import DateRange
 import subscription_manager.injection as inj
 from subscription_manager.isodate import parse_date
 
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
+
+    from subscription_manager.cache import ProductStatusCache
+    from subscription_manager.identity import Identity
+
 log = logging.getLogger(__name__)
 
 
 class ValidProductDateRangeCalculator(object):
-    def __init__(self, uep=None):
+    def __init__(self, uep: Optional["UEPConnection"] = None):
         uep = uep or inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity: Identity = inj.require(inj.IDENTITY)
         if self.identity.is_valid():
-            self.prod_status_cache = inj.require(inj.PROD_STATUS_CACHE)
-            self.prod_status = self.prod_status_cache.load_status(uep, self.identity.uuid)
+            self.prod_status_cache: ProductStatusCache = inj.require(inj.PROD_STATUS_CACHE)
+            self.prod_status: dict = self.prod_status_cache.load_status(uep, self.identity.uuid)
 
-    def calculate(self, product_hash):
+    def calculate(self, product_hash: str) -> Optional[DateRange]:
         """
         Calculate the valid date range for the specified product based on
         today's date.

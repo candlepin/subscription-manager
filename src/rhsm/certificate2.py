@@ -167,10 +167,10 @@ class _CertFactory:
         else:
             return alt_name.decode("utf-8")
 
-    def _read_issuer(self, x509: _certificate.X509) -> str:
+    def _read_issuer(self, x509: _certificate.X509) -> dict:
         return x509.get_issuer()
 
-    def _read_subject(self, x509: _certificate.X509) -> str:
+    def _read_subject(self, x509: _certificate.X509) -> dict:
         return x509.get_subject()
 
     def _create_identity_cert(
@@ -504,9 +504,9 @@ class Certificate:
         serial: Optional[int] = None,
         start: Optional[datetime.datetime] = None,
         end: Optional[datetime.datetime] = None,
-        subject: Optional[str] = None,
+        subject: Optional[str] = dict,
         pem: Optional[str] = None,
-        issuer: Optional[str] = None,
+        issuer: Optional[str] = dict,
     ):
         # The rhsm._certificate X509 object for this certificate.
         # WARNING: May be None in tests
@@ -531,8 +531,8 @@ class Certificate:
         self.valid_range = DateRange(self.start, self.end)
         self.pem: Optional[str] = pem
 
-        self.subject: Optional[str] = subject
-        self.issuer: Optional[str] = issuer
+        self.subject: Optional[dict] = subject
+        self.issuer: Optional[dict] = issuer
 
     def is_valid(self, on_date: Optional[datetime.datetime] = None):
         gmt = datetime.datetime.utcnow()
@@ -615,14 +615,14 @@ class EntitlementCertificate(ProductCertificate):
     def __init__(
         self,
         order: Optional["Order"] = None,
-        content: Optional["Content"] = None,
+        content: Optional[List["Content"]] = None,
         pool: Optional["Pool"] = None,
         extensions: Optional[Extensions] = None,
         **kwargs,
     ):
         ProductCertificate.__init__(self, **kwargs)
         self.order: Optional[Order] = order
-        self.content: Optional[Content] = content
+        self.content: Optional[List[Content]] = content
         self.pool: Optional[Pool] = pool
         self.extensions: Optional[Extensions] = extensions
         self._path_tree_object = None

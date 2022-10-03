@@ -1,31 +1,36 @@
 import logging
+from typing import Any, Callable, Optional, List, Union, TYPE_CHECKING
 
 from subscription_manager import injection as inj
+
+if TYPE_CHECKING:
+    from subscription_manager.lock import ActionLock
 
 log = logging.getLogger(__name__)
 
 
 class Locker(object):
     def __init__(self):
-        self.lock = self._get_lock()
+        self.lock: ActionLock = self._get_lock()
 
-    def run(self, action):
+    def run(self, action: Callable) -> Any:
         self.lock.acquire()
         try:
             return action()
         finally:
             self.lock.release()
 
-    def _get_lock(self):
+    def _get_lock(self) -> "ActionLock":
         return inj.require(inj.ACTION_LOCK)
 
 
 class BaseActionInvoker(object):
-    def __init__(self, locker=None):
+    def __init__(self, locker: Optional[Locker] = None):
         self.locker = locker or Locker()
-        self.report = None
+        self.report: Any = None
+        """Output of the callable"""
 
-    def update(self):
+    def update(self) -> Any:
         self.report = self.locker.run(self._do_update)
         return self.report
 
@@ -37,32 +42,32 @@ class BaseActionInvoker(object):
 class ActionReport(object):
     """Base class for cert lib and action reports"""
 
-    name = "Report"
+    name: str = "Report"
 
     def __init__(self):
-        self._status = None
-        self._exceptions = []
-        self._updates = []
+        self._status: Optional[str] = None
+        self._exceptions: List[Union[Exception, str]] = []
+        self._updates: List[str] = []
 
-    def log_entry(self):
+    def log_entry(self) -> None:
         """log report entries"""
 
         # assuming a useful repr
         log.debug(self)
 
-    def format_exceptions(self):
-        buf = ""
+    def format_exceptions(self) -> str:
+        buf: str = ""
         for e in self._exceptions:
             buf += str(e).split("-", maxsplit=1)[-1].strip()
             buf += "\n"
         return buf
 
-    def print_exceptions(self):
+    def print_exceptions(self) -> None:
         if self._exceptions:
             print(self.format_exceptions())
 
-    def __str__(self):
-        template = """%(report_name)s
+    def __str__(self) -> str:
+        template: str = """%(report_name)s
         status: %(status)s
         updates: %(updates)s
         exceptions: %(exceptions)s

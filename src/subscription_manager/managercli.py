@@ -16,6 +16,11 @@
 import logging
 import sys
 
+from typing import List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from subscription_manager.cli_command.cli import CliCommand
+
 from subscription_manager import managerlib
 from subscription_manager.cli import CLI
 from subscription_manager.cli_command.addons import AddonsCommand
@@ -52,7 +57,7 @@ log = logging.getLogger(__name__)
 
 class ManagerCLI(CLI):
     def __init__(self):
-        commands = [
+        commands: List[CliCommand] = [
             RegisterCommand,
             UnRegisterCommand,
             AddonsCommand,
@@ -82,11 +87,11 @@ class ManagerCLI(CLI):
         ]
         CLI.__init__(self, command_classes=commands)
 
-    def main(self):
+    def main(self) -> Optional[int]:
         managerlib.check_identity_cert_perms()
-        ret = CLI.main(self)
+        ret: Optional[int] = CLI.main(self)
         # Try to enable all yum plugins (subscription-manager and plugin-id)
-        enabled_yum_plugins = YumPluginManager.enable_pkg_plugins()
+        enabled_yum_plugins: List[str] = YumPluginManager.enable_pkg_plugins()
         if len(enabled_yum_plugins) > 0:
             print("\n" + _("WARNING") + "\n\n" + YumPluginManager.warning_message(enabled_yum_plugins) + "\n")
         # Try to close all connections

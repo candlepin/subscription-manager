@@ -17,6 +17,8 @@ from gzip import GzipFile
 import logging
 import os
 
+from typing import Callable, Dict, List, Literal, Optional, Union
+
 # for labelCompare
 import rpm
 
@@ -46,6 +48,7 @@ class DatabaseDirectory(Directory):
 class ProductIdRepoMap(utils.DefaultDict):
     def __init__(self, *args, **kwargs):
         self.default_factory = list
+        # FIXME Missing super() call
 
 
 class ProductDatabase(object):
@@ -54,24 +57,24 @@ class ProductDatabase(object):
         self.content = ProductIdRepoMap()
         self.create()
 
-    def add(self, product, repo):
+    def add(self, product: str, repo: str) -> None:
         self.content[product].append(repo)
 
     # TODO: need way to delete one prod->repo map
-    def delete(self, product):
+    def delete(self, product: str) -> None:
         try:
             del self.content[product]
         except Exception:
             pass
 
-    def find_repos(self, product):
+    def find_repos(self, product) -> Optional[str]:
         return self.content.get(product, None)
 
-    def create(self):
+    def create(self) -> None:
         if not os.path.exists(self.__fn()):
             self.write()
 
-    def read(self):
+    def read(self) -> None:
         f = open(self.__fn())
         try:
             d = json.load(f)
@@ -81,7 +84,7 @@ class ProductDatabase(object):
             pass
         f.close()
 
-    def populate_content(self, db_dict):
+    def populate_content(self, db_dict: Dict[str, str]):
         """Populate map with info from a productid -> [repoids] map.
 
         Note this needs to support the old form of
@@ -93,7 +96,7 @@ class ProductDatabase(object):
             else:
                 self.content[productid] = repo_data
 
-    def write(self):
+    def write(self) -> None:
         f = open(self.__fn(), "w")
         try:
             json.dump(self.content, f, indent=2, default=json.encode)
@@ -101,14 +104,16 @@ class ProductDatabase(object):
             pass
         f.close()
 
-    def __fn(self):
+    def __fn(self) -> str:
         return self.dir.abspath("productid.js")
 
 
 class ComparableMixin(object):
     """Needs compare_keys to be implemented."""
 
-    def _compare(self, keys, method):
+    # FIXME self.compare_keys should be defined here, raising NotImplementedError
+
+    def _compare(self, keys: List, method: Callable) -> Union[Literal[NotImplemented], bool]:
         return method(keys[0], keys[1]) if keys else NotImplemented
 
     def __eq__(self, other):

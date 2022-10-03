@@ -24,8 +24,10 @@ import signal
 import socket
 import syslog
 import uuid
+from typing import Callable, Dict, Iterable, Iterator, Optional, Tuple, TYPE_CHECKING
 
 import urllib
+
 from rhsm.https import ssl
 
 from subscription_manager.branding import get_branding
@@ -52,6 +54,15 @@ from rhsm.config import (
 
 from subscription_manager.i18n import ugettext as _
 
+if TYPE_CHECKING:
+    from rhsm.certificate2 import EntitlementCertificate
+    from rhsm.connection import UEPConnection
+
+    from rhsmlib.services import config as rhsmlib_config
+
+    from subscription_manager.cache import CurrentOwnerCache, SupportedResourcesCache
+    from subscription_manager.identity import Identity
+    from subscription_manager.cp_provider import CPProvider
 
 log = logging.getLogger(__name__)
 
@@ -62,14 +73,16 @@ VIRT_WHO_PID_FILES = ["/var/run/virt-who.pid", "/run/virt-who.pid"]
 class DefaultDict(collections.defaultdict):
     """defaultdict wrapper that pretty prints"""
 
-    def as_dict(self):
+    def as_dict(self) -> dict:
         return dict(self)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return pprint.pformat(self.as_dict())
 
 
-def parse_server_info(local_server_entry, config=None):
+def parse_server_info(
+    local_server_entry: str, config: Optional["rhsmlib_config.Config"] = None
+) -> Tuple[str, str, str]:
     hostname = ""
     port = ""
     prefix = ""
@@ -85,7 +98,7 @@ def parse_server_info(local_server_entry, config=None):
     )[2:]
 
 
-def parse_baseurl_info(local_server_entry):
+def parse_baseurl_info(local_server_entry: str) -> Tuple[str, str, str]:
     return parse_url(
         local_server_entry,
         DEFAULT_CDN_HOSTNAME,
@@ -94,7 +107,7 @@ def parse_baseurl_info(local_server_entry):
     )[2:]
 
 
-def format_baseurl(hostname, port, prefix):
+def format_baseurl(hostname: str, port: str, prefix: str) -> str:
     # just to avoid double slashs. cosmetic
     if prefix and prefix[0] != "/":
         prefix = "/%s" % prefix
@@ -112,11 +125,11 @@ def format_baseurl(hostname, port, prefix):
     return "https://%s:%s%s" % (hostname, port, prefix)
 
 
-def url_base_join(base, url):
+def url_base_join(base: str, url: str) -> str:
     """Join a baseurl (hostname) and url (full or relpath).
 
     If url is a full url, just return it. Otherwise combine
-    it with base, skipping redundant seperators if needed."""
+    it with base, skipping redundant separators if needed."""
 
     # I don't really understand this. Why does joining something
     # potentially non-empty and "" return ""? -akl
@@ -136,7 +149,7 @@ class MissingCaCertException(Exception):
     pass
 
 
-def is_valid_server_info(conn):
+def is_valid_server_info(conn: "UEPConnection") -> bool:
     """
     Check if we can communicate with a subscription service at the given
     location.
@@ -168,7 +181,9 @@ def is_valid_server_info(conn):
         return False
 
 
-def is_simple_content_access(uep=None, identity=None):
+def is_simple_content_access(
+    uep: Optional["UEPConnection"] = None, identity: Optional["Identity"] = None
+) -> bool:
     """
     This function returns True, when current owner uses contentAccessMode equal to Simple Content Access.
     This function has three optional arguments that can be reused for getting required information.
@@ -186,7 +201,7 @@ def is_simple_content_access(uep=None, identity=None):
     return content_access_mode == "org_environment"
 
 
-def get_current_owner(uep=None, identity=None):
+def get_current_owner(uep: Optional["UEPConnection"] = None, identity: "Identity" = None) -> dict:
     """
     This function tries to get information about current owner. It uses cache file.
     :param uep: connection to candlepin server
@@ -194,13 +209,15 @@ def get_current_owner(uep=None, identity=None):
     :return: information about current owner
     """
 
-    cache = inj.require(inj.CURRENT_OWNER_CACHE)
+    cache: CurrentOwnerCache = inj.require(inj.CURRENT_OWNER_CACHE)
     return cache.read_data(uep, identity)
 
 
-def get_supported_resources(uep=None, identity=None):
+def get_supported_resources(
+    uep: Optional["UEPConnection"] = None, identity: Optional["Identity"] = None
+) -> dict:
     """
-    This function tries to get list of supported resources. It tries to uses cache file.
+    This function tries to get list of supported resources. It tries to use cache file.
     When the system is not registered, then it tries to get version directly using REST API.
     It is preferred to use this function instead of connection.get_supported_resources.
     :param uep: connection of candlepin server
@@ -210,16 +227,16 @@ def get_supported_resources(uep=None, identity=None):
 
     # Try to read supported resources from cache file
     if identity is not None:
-        cache = inj.require(inj.SUPPORTED_RESOURCES_CACHE)
+        cache: SupportedResourcesCache = inj.require(inj.SUPPORTED_RESOURCES_CACHE)
         return cache.read_data(uep, identity)
     else:
         if uep is None:
-            cp_provider = inj.require(inj.CP_PROVIDER)
-            uep = cp_provider.get_consumer_auth_cp()
+            cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+            uep: UEPConnection = cp_provider.get_consumer_auth_cp()
         return uep.get_supported_resources()
 
 
-def get_version(versions, package_name):
+def get_version(versions, package_name: str) -> str:
     """
     Return a string containing the version (and release if available).
     """
@@ -231,7 +248,7 @@ def get_version(versions, package_name):
     return "%s%s" % (package_version, package_release)
 
 
-def get_terminal_width():
+def get_terminal_width() -> Optional[int]:
     """
     Attempt to determine the current terminal size.
     """
@@ -245,7 +262,7 @@ def get_terminal_width():
         return 1000
 
 
-def get_client_versions():
+def get_client_versions() -> Dict[str, str]:
     # It's possible (though unlikely, and kind of broken) to have more
     # than one version of subscription-manager installed.
     # This will return whatever version we are using.
@@ -264,7 +281,7 @@ def get_client_versions():
     return {"subscription-manager": sm_version}
 
 
-def get_server_versions(cp, exception_on_timeout=False):
+def get_server_versions(cp: "UEPConnection", exception_on_timeout: bool = False) -> Dict[str, str]:
     cp_version = _("Unknown")
     server_type = _("This system is currently not registered.")
     rules_version = _("Unknown")
@@ -313,7 +330,7 @@ def get_server_versions(cp, exception_on_timeout=False):
     return {"candlepin": cp_version, "server-type": server_type, "rules-version": rules_version}
 
 
-def restart_virt_who():
+def restart_virt_who() -> None:
     """
     Send a SIGHUP signal to virt-who if it is running on the same machine.
     """
@@ -346,7 +363,7 @@ def restart_virt_who():
             log.error("The virt-who pid file references a non-existent pid: %s", pid)
 
 
-def friendly_join(items):
+def friendly_join(items: Iterable[str]) -> str:
     if items is None:
         return ""
 
@@ -369,17 +386,17 @@ def friendly_join(items):
     return first_string + " %s " % _("and") + last
 
 
-def is_true_value(test_string):
+def is_true_value(test_string) -> bool:
     val = str(test_string).lower()
     return val == "1" or val == "true" or val == "yes"
 
 
-def system_log(message, priority=syslog.LOG_NOTICE):
+def system_log(message: str, priority: int = syslog.LOG_NOTICE):
     syslog.openlog("subscription-manager")
     syslog.syslog(priority, message)
 
 
-def chroot(dirname):
+def chroot(dirname: str) -> None:
     """
     Change root of all paths.
     """
@@ -387,7 +404,7 @@ def chroot(dirname):
 
 
 class CertificateFilter(object):
-    def match(self, cert):
+    def match(self, cert: "EntitlementCertificate"):
         """
         Checks if the specified certificate matches this filter's restrictions.
         Returns True if the specified certificate matches this filter's restrictions ; False
@@ -405,7 +422,7 @@ class ProductCertificateFilter(CertificateFilter):
         if filter_string is not None:
             self.set_filter_string(filter_string)
 
-    def set_filter_string(self, filter_string):
+    def set_filter_string(self, filter_string: Optional[str]) -> bool:
         """
         Sets this filter's filter string to the specified string. The filter string may use ? or *
         for wildcards, representing one or any characters, respectively.
@@ -464,7 +481,7 @@ class ProductCertificateFilter(CertificateFilter):
 
         return output
 
-    def match(self, cert):
+    def match(self, cert: "EntitlementCertificate") -> bool:
         """
         Checks if the specified certificate matches this filter's restrictions.
         Returns True if the specified certificate matches this filter's restrictions ; False
@@ -483,7 +500,7 @@ class ProductCertificateFilter(CertificateFilter):
 
 
 class EntitlementCertificateFilter(ProductCertificateFilter):
-    def __init__(self, filter_string=None, service_level=None):
+    def __init__(self, filter_string: Optional[str] = None, service_level: Optional[str] = None):
         super(EntitlementCertificateFilter, self).__init__(filter_string=filter_string)
 
         self._sl_filter = None
@@ -541,7 +558,7 @@ class EntitlementCertificateFilter(ProductCertificateFilter):
         return sl_check and fs_check and (self._sl_filter is not None or self._fs_regex is not None)
 
 
-def print_error(message):
+def print_error(message: str) -> None:
     """
     Prints the specified message to stderr
     """
@@ -549,7 +566,7 @@ def print_error(message):
     sys.stderr.write("\n")
 
 
-def unique_list_items(items, hash_function=lambda x: x):
+def unique_list_items(items: Iterable, hash_function: Callable = lambda x: x) -> list:
     """
     Accepts a list of items.
     Returns a list of the unique items in the input.
@@ -567,11 +584,11 @@ def unique_list_items(items, hash_function=lambda x: x):
     return unique_items
 
 
-def generate_correlation_id():
+def generate_correlation_id() -> str:
     return str(uuid.uuid4()).replace("-", "")  # FIXME cp should accept -
 
 
-def get_process_names():
+def get_process_names() -> Iterator[str]:
     """
     Returns a list of "Name" values for all processes running on the system.
     This assumes an accessible and standard procfs at "/proc/".

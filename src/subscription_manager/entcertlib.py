@@ -10,7 +10,8 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
+from typing import Dict, List, Optional, Tuple, TYPE_CHECKING
+
 import logging
 import socket
 
@@ -27,6 +28,16 @@ import subscription_manager.injection as inj
 
 from subscription_manager.i18n import ungettext, ugettext as _
 
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
+    from rhsm.certificate2 import Product
+
+    from subscription_manager.cache import ContentAccessCache
+    from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.identity import Identity
+    from subscription_manager.certdirectory import EntitlementCertificate, EntitlementDirectory
+
+
 log = logging.getLogger(__name__)
 
 CONTENT_ACCESS_CERT_CAPABILITY = "org_level_content_access"
@@ -35,11 +46,13 @@ CONTENT_ACCESS_CERT_CAPABILITY = "org_level_content_access"
 class EntCertActionInvoker(certlib.BaseActionInvoker):
     """Invoker for entitlement certificate updating actions."""
 
-    def _do_update(self):
+    def _do_update(self) -> "EntCertUpdateReport":
         action = EntCertUpdateAction()
         return action.perform()
 
 
+# FIXME These Delete classes are not being used
+#  and it is not clear what the usage and type hints should be
 # this guy is an oddball
 # NOTE: this lib and EntCertDeleteAction are currently
 # unused. Intention is to replace managerlib.clean_all_data
@@ -103,30 +116,30 @@ class EntCertUpdateAction(object):
     """
 
     def __init__(self, report=None):
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
-        self.ent_dir = inj.require(inj.ENT_DIR)
-        self.identity = require(IDENTITY)
+        self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+        self.uep: UEPConnection = self.cp_provider.get_consumer_auth_cp()
+        self.ent_dir: EntitlementDirectory = inj.require(inj.ENT_DIR)
+        self.identity: Identity = require(IDENTITY)
         self.report = EntCertUpdateReport()
-        self.content_access_cache = inj.require(inj.CONTENT_ACCESS_CACHE)
+        self.content_access_cache: ContentAccessCache = inj.require(inj.CONTENT_ACCESS_CACHE)
 
     # NOTE: this is slightly at odds with the manual cert import
-    #       path, manual import certs wont get a 'report', etc
-    def perform(self):
-        local = self._get_local_serials()
+    #       path, manual import certs won't get a 'report', etc
+    def perform(self) -> "EntCertUpdateReport":
+        local: Dict[int, EntitlementCertificate] = self._get_local_serials()
         try:
-            expected = self._get_expected_serials()
+            expected: List[int] = self._get_expected_serials()
         except socket.error as ex:
             log.exception(ex)
             log.error("Cannot modify subscriptions while disconnected")
             raise Disconnected()
 
-        cert_changed = False
-        missing_serials = self._find_missing_serials(local, expected)
-        rogue_serials = self._find_rogue_serials(local, expected)
+        cert_changed: bool = False
+        missing_serials: List[int] = self._find_missing_serials(local, expected)
+        rogue_serials: List[EntitlementCertificate] = self._find_rogue_serials(local, expected)
 
         self.delete(rogue_serials)
-        installed_serials = self.install(missing_serials)
+        installed_serials: List[int] = self.install(missing_serials)
 
         log.info("certs updated:\n%s", self.report)
         self.syslog_results()
@@ -141,10 +154,10 @@ class EntCertUpdateAction(object):
             cert_changed = True
 
         if self.uep.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
-            content_access_certs = self._find_content_access_certs()
+            content_access_certs: List[EntitlementCertificate] = self._find_content_access_certs()
             if len(content_access_certs) > 0:
                 # This addresses BZs: 1448855, 1450862
-                obsolete_certs = []
+                obsolete_certs: List[EntitlementCertificate] = []
                 for cont_access_cert in content_access_certs:
                     if cont_access_cert.serial in installed_serials:
                         continue
@@ -153,7 +166,7 @@ class EntCertUpdateAction(object):
                 if len(obsolete_certs) > 0:
                     log.info("Deleting obsolete content access certificate")
                     self.delete(obsolete_certs)
-            update_data = self.content_access_hook()
+            update_data: Optional[Dict] = self.content_access_hook()
             if update_data is not None:
                 cert_changed = True
 
@@ -173,7 +186,7 @@ class EntCertUpdateAction(object):
         # of *Lib.update
         return self.report
 
-    def install(self, missing_serials):
+    def install(self, missing_serials) -> List[int]:
         """Install any missing entitlement certificates."""
 
         cert_bundles = self.get_certificates_by_serial_list(missing_serials)
@@ -181,15 +194,15 @@ class EntCertUpdateAction(object):
         ent_cert_bundles_installer = EntitlementCertBundlesInstaller(self.report)
         return ent_cert_bundles_installer.install(cert_bundles)
 
-    def _find_content_access_certs(self):
-        certs = self.ent_dir.list_with_content_access()
+    def _find_content_access_certs(self) -> List["EntitlementCertificate"]:
+        certs: List[EntitlementCertificate] = self.ent_dir.list_with_content_access()
         return [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
 
-    def content_access_hook(self):
+    def content_access_hook(self) -> Optional[Dict]:
         if not self.uep.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
             return  # do nothing if we cannot check for content access cert updates
-        content_access_certs = self._find_content_access_certs()
-        update_data = None
+        content_access_certs: List[EntitlementCertificate] = self._find_content_access_certs()
+        update_data: Optional[Dict] = None
         if len(content_access_certs) > 0:
             update_data = self.content_access_cache.check_for_update()
         for content_access_cert in content_access_certs:
@@ -200,14 +213,14 @@ class EntCertUpdateAction(object):
             self.ent_dir.refresh()
         return update_data
 
-    def branding_hook(self):
+    def branding_hook(self) -> None:
         """Update branding info based on entitlement cert changes."""
 
         # RHELBrandsInstaller will use latest ent_dir contents
         brands_installer = rhelentbranding.RHELBrandsInstaller()
         brands_installer.install()
 
-    def repo_hook(self):
+    def repo_hook(self) -> None:
         """Update content repos."""
         log.debug("entcerlibaction.repo_hook")
         try:
@@ -218,17 +231,21 @@ class EntCertUpdateAction(object):
             log.debug(e)
             log.debug("Failed to update repos")
 
-    def _find_missing_serials(self, local, expected):
+    def _find_missing_serials(
+        self, local: Dict[int, "EntitlementCertificate"], expected: List[int]
+    ) -> List[int]:
         """Find serials from the server we do not have locally."""
         missing = [sn for sn in expected if sn not in local]
         return missing
 
-    def _find_rogue_serials(self, local, expected):
+    def _find_rogue_serials(
+        self, local: Dict[int, "EntitlementCertificate"], expected: List[int]
+    ) -> List["EntitlementCertificate"]:
         """Find serials we have locally but are not on the server."""
         rogue = [local[sn] for sn in local if sn not in expected]
         return rogue
 
-    def syslog_results(self):
+    def syslog_results(self) -> None:
         """Write generated EntCertUpdateReport info to syslog."""
         for cert in self.report.added:
             utils.system_log(
@@ -243,59 +260,61 @@ class EntCertUpdateAction(object):
             for product in cert.products:
                 utils.system_log("Removed subscription for product '%s'" % (product.name))
 
-    def _get_local_serials(self):
-        local = {}
+    def _get_local_serials(self) -> Dict[int, "EntitlementCertificate"]:
+        local: Dict[int, EntitlementCertificate] = {}
         # certificates in grace period were being renamed everytime.
         # this makes sure we don't try to re-write certificates in
         # grace period
         # XXX since we don't use grace period, this might not be needed
         self.ent_dir.refresh()
-        ent_certs = self.ent_dir.list() + self.ent_dir.list_with_content_access()
+        ent_certs: List[EntitlementCertificate] = (
+            self.ent_dir.list() + self.ent_dir.list_with_content_access()
+        )
         ent_certs = list(set(ent_certs))
         for valid in ent_certs:
-            sn = valid.serial
+            sn: int = valid.serial
             self.report.valid.append(sn)
             local[sn] = valid
         return local
 
-    def get_certificate_serials_list(self):
+    def get_certificate_serials_list(self) -> List[int]:
         """Query RHSM API for list of expected ent cert serial numbers."""
-        results = []
+        results: List[int] = []
         # if there is no UEP object, short circuit
         if self.uep is None:
             return results
 
-        identity = inj.require(inj.IDENTITY)
+        identity: Identity = inj.require(inj.IDENTITY)
         if not identity.is_valid():
             # We can get here on unregister, with no id or ent certs or repos,
             # but don't want to raise an exception that would be logged. So
             # empty result set is returned.
             return results
 
-        reply = self.uep.getCertificateSerials(identity.uuid)
+        reply: List[Dict] = self.uep.getCertificateSerials(identity.uuid)
         for d in reply:
-            sn = d["serial"]
+            sn: int = d["serial"]
             results.append(sn)
         return results
 
-    def get_certificates_by_serial_list(self, sn_list):
+    def get_certificates_by_serial_list(self, sn_list: List[int]) -> List[Dict]:
         """Fetch a list of entitlement certificates specified by a list of serial numbers."""
-        result = []
+        result: List[Dict] = []
         if sn_list:
             sn_list = [str(sn) for sn in sn_list]
             # NOTE: use injected IDENTITY, need to validate this
             # handles disconnected errors properly
-            reply = self.uep.getCertificates(self.identity.uuid, serials=sn_list)
+            reply: List[Dict] = self.uep.getCertificates(self.identity.uuid, serials=sn_list)
             for cert in reply:
                 result.append(cert)
         return result
 
-    def _get_expected_serials(self):
-        exp = self.get_certificate_serials_list()
+    def _get_expected_serials(self) -> List[int]:
+        exp: List[int] = self.get_certificate_serials_list()
         self.report.expected = exp
         return exp
 
-    def delete(self, rogue):
+    def delete(self, rogue: List["EntitlementCertificate"]):
         for cert in rogue:
             try:
                 cert.delete()
@@ -306,7 +325,7 @@ class EntCertUpdateAction(object):
 
         # If we just deleted certs, we need to refresh the now stale
         # entitlement directory before we go to delete expired certs.
-        rogue_count = len(self.report.rogue)
+        rogue_count: int = len(self.report.rogue)
         if rogue_count > 0:
             print(
                 ungettext(
@@ -327,37 +346,37 @@ class EntitlementCertBundlesInstaller(object):
     all of the ent cert bundles are installed.
     """
 
-    def __init__(self, report):
-        self.exceptions = []
-        self.report = report
+    def __init__(self, report: "EntCertUpdateReport"):
+        self.exceptions: List[Exception] = []
+        self.report: EntCertUpdateReport = report
 
     def install(self, cert_bundles):
         """Fetch entitliement certs, install them, and update the report."""
         bundle_installer = EntitlementCertBundleInstaller(self.report)
-        installed_serials = []
+        installed_serials: List[int] = []
         for cert_bundle in cert_bundles:
-            cert_serial = bundle_installer.install(cert_bundle)
+            cert_serial: Optional[int] = bundle_installer.install(cert_bundle)
             if cert_serial is not None:
                 installed_serials.append(cert_serial)
         self.exceptions = bundle_installer.exceptions
         self.post_install()
         return installed_serials
 
-    # TODO: add subman plugin slot,conduit,hooks
-    def pre_install(self):
+    # TODO: add subman plugin slot, conduit, hooks
+    def pre_install(self) -> None:
         """Hook called before any ent cert bundles are installed."""
         log.debug("cert bundles pre_install")
 
-    def post_install(self):
+    def post_install(self) -> None:
         """Hook called after all cert bundles have been installed."""
         for installed in self._get_installed():
             log.debug("cert bundles post_install: %s" % installed)
 
-    def get_installed(self):
+    def get_installed(self) -> List["EntitlementCertificate"]:
         """Return a list of the ent cert bundles that were installed."""
         return self._get_installed()
 
-    def _get_installed(self):
+    def _get_installed(self) -> List["EntitlementCertificate"]:
         """Return the bundles installed based on this impl's EntCertUpdateReport."""
         return self.report.added
 
@@ -375,16 +394,16 @@ class EntitlementCertBundleInstaller(object):
     bundles, while this is pre/post each ent cert bundle.
     """
 
-    def __init__(self, report):
-        self.exceptions = []
-        self.report = report
+    def __init__(self, report: "EntCertUpdateReport"):
+        self.exceptions: List[EntitlementCertificate] = []
+        self.report: EntCertUpdateReport = report
 
-    def install(self, bundle):
+    def install(self, bundle: Dict):
         """Persist an ent cert and it's key after splitting it from the bundle."""
         self.pre_install(bundle)
 
         cert_bundle_writer = Writer()
-        cert_serial = None
+        cert_serial: int = None
         try:
             key, cert = self.build_cert(bundle)
             cert_bundle_writer.write(key, cert)
@@ -398,29 +417,29 @@ class EntitlementCertBundleInstaller(object):
         return cert_serial
 
     # TODO: add subman plugin, slot, and conduit
-    def pre_install(self, bundle):
+    def pre_install(self, bundle: Dict):
         """Hook called before an ent cert bundle is installed."""
         log.debug("Ent cert bundle pre_install")
 
     # should probably be in python-rhsm/certificate
-    def build_cert(self, bundle):
+    def build_cert(self, bundle: Dict) -> Tuple[Key, "EntitlementCertificate"]:
         """Split a cert bundle into a EntitlementCertificate and a Key."""
-        keypem = bundle["key"]
-        crtpem = bundle["cert"]
+        keypem: str = bundle["key"]
+        crtpem: str = bundle["cert"]
 
         key = Key(keypem)
-        cert = create_from_pem(crtpem)
+        cert: EntitlementCertificate = create_from_pem(crtpem)
 
         return (key, cert)
 
-    def install_exception(self, bundle, exception):
+    def install_exception(self, bundle: Dict, exception: Exception) -> None:
         """Log exceptions and add them to the EntCertUpdateReport."""
         log.exception(exception)
         log.error("Bundle not loaded:\n%s\n%s", bundle, exception)
 
         self.report._exceptions.append(exception)
 
-    def post_install(self, bundle):
+    def post_install(self, bundle: Dict) -> None:
         """Hook called after an ent cert bundle is installed."""
         log.debug("ent cert bundle post_install")
 
@@ -435,28 +454,28 @@ class EntCertUpdateReport(certlib.ActionReport):
     name = "Entitlement Cert Updates"
 
     def __init__(self):
-        self.valid = []
-        self.expected = []
-        self.added = []
-        self.rogue = []
-        self._exceptions = []
+        self.valid: List[EntitlementCertificate] = []
+        self.expected: List[EntitlementCertificate] = []
+        self.added: List[EntitlementCertificate] = []
+        self.rogue: List[EntitlementCertificate] = []
+        self._exceptions: List[Exception] = []
 
-    def updates(self):
+    def updates(self) -> int:
         """Total number of ent certs installed and deleted."""
         return len(self.added) + len(self.rogue)
 
     # need an ExceptionsReport?
     # FIXME: needs to be properties
-    def exceptions(self):
+    def exceptions(self) -> List[Exception]:
         return self._exceptions
 
-    def write(self, s, title, certificates):
+    def write(self, s: List[str], title: str, certificates: List["EntitlementCertificate"]) -> None:
         """Generate a report stanza for a list of certs."""
-        indent = "  "
+        indent: str = "  "
         s.append(title)
         if certificates:
             for c in certificates:
-                products = c.products
+                products: List[Product] = c.products
                 if not products:
                     s.append("%s[sn:%d (%s) @ %s]" % (indent, c.serial, c.order.name, c.path))
                 for product in products:
@@ -464,7 +483,7 @@ class EntCertUpdateReport(certlib.ActionReport):
         else:
             s.append("%s<NONE>" % indent)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """__str__ of report. Used in rhsm and rhsmcertd logging."""
         s = []
         s.append(_("Total updates: %d") % self.updates())

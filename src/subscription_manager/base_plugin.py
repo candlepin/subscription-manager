@@ -11,6 +11,10 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from typing import Optional, Set, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from subscription_manager.plugins import PluginConfig
 
 
 class SubManPlugin(object):
@@ -19,25 +23,24 @@ class SubManPlugin(object):
     Plugins need to subclass SubManPlugin() to be found
     """
 
-    name = None
-    conf = None
+    name: str = None
+    conf: "PluginConfig" = None
     # if all_slots is set, the plugin will get registered to all slots
     # it is up to the plugin to handle providing callables
-    all_slots = None
+    all_slots: Set[str] = None
 
-    # did we have hooks that match provided slots? aka
-    # is this plugin going to be used
-    found_slots_for_hooks = False
+    # did we have hooks that match provided slots? aka is this plugin going to be used
+    found_slots_for_hooks: bool = False
 
-    def __init__(self, conf=None):
+    def __init__(self, conf: Optional["PluginConfig"] = None):
         if conf:
             self.conf = conf
         if self.conf is None:
             raise TypeError("SubManPlugin can not be constructed with conf=None")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name or self.__class__.__name__
 
     @classmethod
-    def get_plugin_key(cls):
+    def get_plugin_key(cls) -> str:
         return ".".join([cls.__module__, cls.__name__])

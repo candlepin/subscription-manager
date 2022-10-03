@@ -14,6 +14,12 @@
 # in this software or its documentation.
 #
 import logging
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
+    from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.facts import Facts
 
 from .certlib import Locker, ActionReport
 from subscription_manager import injection as inj
@@ -33,10 +39,10 @@ class FactsActionInvoker(object):
     def __init__(self):
         self.locker = Locker()
 
-    def update(self):
+    def update(self) -> "FactsActionReport":
         return self.locker.run(self._do_update)
 
-    def _do_update(self):
+    def _do_update(self) -> "FactsActionReport":
         action = FactsActionCommand()
         return action.perform()
 
@@ -56,7 +62,7 @@ class FactsActionReport(ActionReport):
         self._updates = []
         self._status = None
 
-    def updates(self):
+    def updates(self) -> int:
         """How many facts were updated."""
         return len(self.fact_updates)
 
@@ -75,13 +81,13 @@ class FactsActionCommand(object):
     """
 
     def __init__(self):
-        cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = cp_provider.get_consumer_auth_cp()
+        cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+        self.uep: UEPConnection = cp_provider.get_consumer_auth_cp()
         self.report = FactsActionReport()
-        self.facts = inj.require(inj.FACTS)
-        self.facts_client = inj.require(inj.FACTS)
+        self.facts: Facts = inj.require(inj.FACTS)
+        self.facts_client: Facts = inj.require(inj.FACTS)
 
-    def perform(self):
+    def perform(self) -> "FactsActionReport":
         # figure out the diff between latest facts and
         # report that as updates
 

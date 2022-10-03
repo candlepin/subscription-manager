@@ -76,7 +76,10 @@ have the same width so we need helper functions for displaying them.
 
 
 # Renamed but still pretty much JA's port of MK's code
-def _interval_bisearch(value, table):
+from typing import Sequence, Tuple
+
+
+def _interval_bisearch(value: int, table: Sequence[Tuple[int, int]]) -> bool:
     """Binary search in an interval table.
 
     :arg value: numeric value to search for
@@ -192,7 +195,7 @@ _COMBINING = (
 # Handling of control chars rewritten.  Rest is JA's port of MK's C code.
 # -Toshio Kuratomi
 # NOTE: Removed unused functionality (see note in docstring) - subscription-manager developers
-def _ucp_width(ucs):
+def _ucp_width(ucs: int) -> int:
     """Get the :term:`textual width` of a ucs character
 
     :arg ucs: integer representing a single unicode :term:`code point`
@@ -238,7 +241,7 @@ def _ucp_width(ucs):
 
 # Wholly rewritten by me (LGPLv2+) -Toshio Kuratomi
 # NOTE: Removed unused functionality (see note in docstring) - subscription-manager developers
-def textual_width(msg):
+def textual_width(msg: str) -> int:
     """Get the :term:`textual width` of a string
 
     :arg msg: :class:`str` string or byte :class:`bytes` to get the width of

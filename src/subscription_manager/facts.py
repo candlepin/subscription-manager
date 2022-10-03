@@ -12,12 +12,17 @@
 from datetime import datetime
 import logging
 import os
+from typing import Dict, List, Optional, TYPE_CHECKING
 
 from subscription_manager.injection import PLUGIN_MANAGER, require
 from subscription_manager.cache import CacheManager
 from rhsm import ourjson as json
 
 from rhsmlib.facts.all import AllFactsCollector
+
+if TYPE_CHECKING:
+    from subscription_manager.plugins import PluginManager
+
 
 log = logging.getLogger(__name__)
 
@@ -41,18 +46,18 @@ class Facts(CacheManager):
         # can change constantly on laptops, it makes for a lot of
         # fact churn, so we report it, but ignore it as an indicator
         # that we need to update
-        self.graylist = ["cpu.cpu_mhz", "lscpu.cpu_mhz"]
+        self.graylist: List[str] = ["cpu.cpu_mhz", "lscpu.cpu_mhz"]
 
         # plugin manager so we can add custom facts via plugin
-        self.plugin_manager = require(PLUGIN_MANAGER)
+        self.plugin_manager: PluginManager = require(PLUGIN_MANAGER)
 
-    def get_last_update(self):
+    def get_last_update(self) -> Optional[datetime]:
         try:
             return datetime.fromtimestamp(os.stat(self.CACHE_FILE).st_mtime)
         except Exception:
             return None
 
-    def has_changed(self):
+    def has_changed(self) -> bool:
         """
         return a dict of any key/values that have changed
         including new keys or deleted keys
@@ -61,7 +66,7 @@ class Facts(CacheManager):
             log.debug("Cache %s does not exit" % self.CACHE_FILE)
             return True
 
-        cached_facts = self.read_cache_only() or {}
+        cached_facts: Dict = self.read_cache_only() or {}
         # In order to accurately check for changes, we must refresh local data
         self.facts = self.get_facts(True)
 
@@ -70,7 +75,7 @@ class Facts(CacheManager):
                 return True
         return False
 
-    def get_facts(self, refresh=False):
+    def get_facts(self, refresh: bool = False):
         if len(self.facts) == 0 or refresh:
             collector = AllFactsCollector()
             facts = collector.get_all()

@@ -16,6 +16,7 @@
 This module is an interface to syspurpose's SyncedStore class from subscription-manager.
 It contains methods for accessing/manipulating the local syspurpose.json metadata file through SyncedStore.
 """
+from typing import Optional, Tuple, Union, TYPE_CHECKING
 
 from rhsm.connection import ConnectionException, GoneException
 from subscription_manager import certlib
@@ -26,13 +27,22 @@ import logging
 import json
 import os
 
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
+
+    from subscription_manager.cache import SyspurposeValidFieldsCache
+    from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.identity import Identity
+
+    from syspurpose.files import DiffChange
+
 log = logging.getLogger(__name__)
 
 store = None
 syspurpose = None
 
 
-def save_sla_to_syspurpose_metadata(uep, consumer_uuid, service_level):
+def save_sla_to_syspurpose_metadata(uep: "UEPConnection", consumer_uuid: str, service_level: str):
     """
     Saves the provided service-level value to the local Syspurpose Metadata (syspurpose.json) file.
     If the service level provided is null or empty, the sla value to the local syspurpose file is set to null.
@@ -41,7 +51,6 @@ def save_sla_to_syspurpose_metadata(uep, consumer_uuid, service_level):
     :param uep: The object with uep connection (connection to candlepin server)
     :param consumer_uuid: Consumer UUID
     :param service_level: The service-level value to be saved in the syspurpose file.
-    :type service_level: str
     """
 
     if "SyncedStore" in globals() and SyncedStore is not None:
@@ -58,7 +67,7 @@ def save_sla_to_syspurpose_metadata(uep, consumer_uuid, service_level):
         log.error("SyspurposeStore could not be imported. Syspurpose SLA value not saved locally.")
 
 
-def get_sys_purpose_store():
+def get_sys_purpose_store() -> Optional[SyncedStore]:
     """
     :return: Returns a singleton instance of the syspurpose store if it was imported.
              Otherwise None.
@@ -73,7 +82,7 @@ def get_sys_purpose_store():
     return store
 
 
-def read_syspurpose(synced_store=None, raise_on_error=False):
+def read_syspurpose(synced_store: Optional[SyncedStore] = None, raise_on_error: bool = False) -> dict:
     """
     Reads the system purpose from the correct location on the file system.
     Makes an attempt to use a SyspurposeStore if available falls back to reading the json directly.
@@ -97,7 +106,7 @@ def read_syspurpose(synced_store=None, raise_on_error=False):
     return content
 
 
-def write_syspurpose(values):
+def write_syspurpose(values: dict) -> bool:
     """
     Write the syspurpose to the file system.
     :param values:
@@ -116,7 +125,7 @@ def write_syspurpose(values):
     return True
 
 
-def write_syspurpose_cache(values):
+def write_syspurpose_cache(values: dict) -> bool:
     """
     Write to the syspurpose cache on the file system.
     :param values:
@@ -130,7 +139,7 @@ def write_syspurpose_cache(values):
     return True
 
 
-def get_syspurpose_valid_fields(uep=None, identity=None):
+def get_syspurpose_valid_fields(uep: "UEPConnection" = None, identity: "Identity" = None) -> dict:
     """
     Try to get valid syspurpose fields provided by candlepin server
     :param uep: connection of candlepin server
@@ -138,14 +147,20 @@ def get_syspurpose_valid_fields(uep=None, identity=None):
     :return: dictionary with valid fields
     """
     valid_fields = {}
-    cache = inj.require(inj.SYSPURPOSE_VALID_FIELDS_CACHE)
+    cache: SyspurposeValidFieldsCache = inj.require(inj.SYSPURPOSE_VALID_FIELDS_CACHE)
     syspurpose_valid_fields = cache.read_data(uep, identity)
     if "systemPurposeAttributes" in syspurpose_valid_fields:
         valid_fields = syspurpose_valid_fields["systemPurposeAttributes"]
     return valid_fields
 
 
-def merge_syspurpose_values(local=None, remote=None, base=None, uep=None, consumer_uuid=None):
+def merge_syspurpose_values(
+    local: Optional[dict] = None,
+    remote: Optional[dict] = None,
+    base: Optional[dict] = None,
+    uep: Optional["UEPConnection"] = None,
+    consumer_uuid: Optional[str] = None,
+) -> dict:
     """
     Try to do three-way merge of local, remote and base dictionaries.
     Note: when remote is None, then this method will call REST API.
@@ -180,7 +195,7 @@ class SyspurposeSyncActionInvoker(certlib.BaseActionInvoker):
     Used by rhsmcertd to sync the syspurpose values locally with those from the Server.
     """
 
-    def _do_update(self):
+    def _do_update(self) -> Union["SyspurposeSyncActionReport", Tuple["SyspurposeSyncActionReport", dict]]:
         action = SyspurposeSyncActionCommand()
         return action.perform()
 
@@ -188,11 +203,10 @@ class SyspurposeSyncActionInvoker(certlib.BaseActionInvoker):
 class SyspurposeSyncActionReport(certlib.ActionReport):
     name = "Syspurpose Sync"
 
-    def record_change(self, change):
+    def record_change(self, change: "DiffChange") -> None:
         """
         Records the change detected by the three_way_merge function into a record in the report.
         :param change: A util.DiffChange object containing the recorded changes.
-        :return: None
         """
         if change.source == "remote":
             source = "Entitlement Server"
@@ -220,7 +234,7 @@ class SyspurposeSyncActionReport(certlib.ActionReport):
     BZ #1789457
     """
 
-    def format_exceptions(self):
+    def format_exceptions(self) -> str:
         buf = ""
         for e in self._exceptions:
             buf += str(e).strip()
@@ -238,10 +252,12 @@ class SyspurposeSyncActionCommand(object):
 
     def __init__(self):
         self.report = SyspurposeSyncActionReport()
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
+        self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+        self.uep: UEPConnection = self.cp_provider.get_consumer_auth_cp()
 
-    def perform(self, include_result=False, passthrough_gone=False):
+    def perform(
+        self, include_result: bool = False, passthrough_gone: bool = False
+    ) -> Union[SyspurposeSyncActionReport, Tuple[SyspurposeSyncActionReport, dict]]:
         """
         Perform the action that this Command represents.
         :return:
@@ -265,6 +281,7 @@ class SyspurposeSyncActionCommand(object):
         self.report._updates = "\n\t\t ".join(self.report._updates)
         log.debug("Syspurpose updated: %s" % self.report)
         if not include_result:
+            # FIXME Return None or {} as second argument
             return self.report
         else:
             return self.report, result

@@ -19,19 +19,20 @@ from threading import RLock as Mutex
 import time
 
 import logging
+from typing import Optional, TextIO
 
 log = logging.getLogger(__name__)
 
 # how long to sleep before rechecking if we can
 # acquire the lock.
-LOCK_WAIT_DURATION = 0.5
+LOCK_WAIT_DURATION: float = 0.5
 
 
 class LockFile(object):
-    def __init__(self, path):
-        self.path = path
-        self.pid = None
-        self.fp = None
+    def __init__(self, path: str):
+        self.path: str = path
+        self.pid: Optional[int] = None
+        self.fp: Optional[TextIO] = None
 
     def open(self):
         if self.notcreated():
@@ -39,27 +40,27 @@ class LockFile(object):
             self.setpid()
             self.close()
         self.fp = open(self.path, "r+")
-        fd = self.fp.fileno()
+        fd: int = self.fp.fileno()
         fcntl.flock(fd, fcntl.LOCK_EX)
 
-    def getpid(self):
+    def getpid(self) -> int:
         if self.pid is None:
-            content = self.fp.read().strip()
+            content: str = self.fp.read().strip()
             if content:
                 self.pid = int(content)
         return self.pid
 
-    def setpid(self):
+    def setpid(self) -> None:
         self.fp.seek(0)
         content = str(os.getpid())
         self.fp.write(content)
         self.fp.flush()
 
-    def mypid(self):
+    def mypid(self) -> bool:
         return os.getpid() == self.getpid()
 
-    def valid(self):
-        status = False
+    def valid(self) -> bool:
+        status: bool = False
         try:
             os.kill(self.getpid(), 0)
             status = True
@@ -67,14 +68,14 @@ class LockFile(object):
             pass
         return status
 
-    def delete(self):
+    def delete(self) -> None:
         if self.mypid() or not self.valid():
             self.close()
             os.unlink(self.path)
 
-    def close(self):
+    def close(self) -> None:
         try:
-            fd = self.fp.fileno()
+            fd: int = self.fp.fileno()
             fcntl.flock(fd, fcntl.LOCK_UN)
             self.fp.close()
         except Exception:
@@ -82,10 +83,10 @@ class LockFile(object):
         self.pid = None
         self.fp = None
 
-    def notcreated(self):
+    def notcreated(self) -> bool:
         return not os.path.exists(self.path)
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.close()
 
 
@@ -93,11 +94,11 @@ class Lock(object):
 
     mutex = Mutex()
 
-    def __init__(self, path):
-        self.depth = 0
-        self.path = path
-        self.lockdir = None
-        self.blocking = None
+    def __init__(self, path: str):
+        self.depth: int = 0
+        self.path: str = path
+        self.lockdir: Optional[str] = None
+        self.blocking: Optional[bool] = None
 
         lock_dir, _fn = os.path.split(self.path)
         try:
@@ -107,7 +108,7 @@ class Lock(object):
         except Exception:
             self.lockdir = None
 
-    def acquire(self, blocking=None):
+    def acquire(self, blocking: Optional[bool] = None) -> Optional[bool]:
         """Behaviour here is modeled after threading.RLock.acquire.
 
         If 'blocking' is False, we return True if we didn't need to block and we acquired the lock.
@@ -117,11 +118,10 @@ class Lock(object):
         if 'blocking' is None, we return None when we acquire the lock, otherwise block until we do.
 
         if 'blocking' is True, we behave the same as with blocking=None, except we return True.
-
         """
 
         if self.lockdir is None:
-            return
+            return None
         f = LockFile(self.path)
         try:
             try:
@@ -147,6 +147,7 @@ class Lock(object):
                 f.setpid()
             except OSError as e:
                 log.exception(e)
+                # FIXME Stop printing this
                 print("could not create lock")
         finally:
             f.close()
@@ -156,7 +157,7 @@ class Lock(object):
             return True
         return None
 
-    def release(self):
+    def release(self) -> None:
         if self.lockdir is None:
             return
         if not self.acquired():
@@ -171,7 +172,7 @@ class Lock(object):
         finally:
             f.close()
 
-    def acquired(self):
+    def acquired(self) -> Optional[bool]:
         if self.lockdir is None:
             return
         mutex = self.mutex
@@ -182,7 +183,7 @@ class Lock(object):
             mutex.release()
 
     # P
-    def wait(self):
+    def wait(self) -> "Lock":
         mutex = self.mutex
         mutex.acquire()
         try:
@@ -194,7 +195,7 @@ class Lock(object):
     P = wait
 
     # V
-    def signal(self):
+    def signal(self) -> None:
         mutex = self.mutex
         mutex.acquire()
         try:
@@ -205,7 +206,7 @@ class Lock(object):
 
     V = signal
 
-    def __del__(self):
+    def __del__(self) -> None:
         try:
             self.release()
         except Exception:
