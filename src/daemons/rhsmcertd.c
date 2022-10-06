@@ -36,6 +36,13 @@
 #include <libintl.h>
 #include <locale.h>
 
+typedef enum {
+    LOG_LEVEL_ERROR = 0,
+    LOG_LEVEL_WARNING = 1,
+    LOG_LEVEL_INFO = 2,
+    LOG_LEVEL_DEBUG = 3
+} LOG_LEVEL;
+
 #define LOGDIR "/var/log/rhsm"
 #define LOGFILE LOGDIR"/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
@@ -52,6 +59,8 @@
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400    /* 24 hours */
 #define DEFAULT_SPLAY_ENABLED true
 #define DEFAULT_AUTO_REGISTRATION false
+#define DEFAULT_LOG_LEVEL LOG_LEVEL_INFO
+#define DEFAULT_LOG_LEVEL_NAME "INFO"
 #define BUF_MAX 256
 #define RHSM_CONFIG_FILE "/etc/rhsm/rhsm.conf"
 
@@ -80,6 +89,7 @@
 # endif
 #endif
 
+static LOG_LEVEL log_level = DEFAULT_LOG_LEVEL;
 static gboolean show_debug = FALSE;
 static gboolean run_now = FALSE;
 static gint arg_cert_interval_minutes = -1;
@@ -191,10 +201,10 @@ r_log (const char *level, const char *message, ...)
     va_end(argp);
 }
 
-#define info(msg, ...) r_log ("INFO", msg, ##__VA_ARGS__)
-#define warn(msg, ...) r_log ("WARN", msg, ##__VA_ARGS__)
-#define error(msg, ...) r_log ("ERROR", msg, ##__VA_ARGS__)
-#define debug(msg, ...) if (show_debug) r_log ("DEBUG", msg, ##__VA_ARGS__)
+#define error(msg, ...) if (log_level >= LOG_LEVEL_ERROR) r_log ("ERROR", msg, ##__VA_ARGS__)
+#define warn(msg, ...) if (log_level >= LOG_LEVEL_WARNING) r_log ("WARN", msg, ##__VA_ARGS__)
+#define info(msg, ...) if (log_level >= LOG_LEVEL_INFO) r_log ("INFO", msg, ##__VA_ARGS__)
+#define debug(msg, ...) if (log_level >= LOG_LEVEL_DEBUG) r_log ("DEBUG", msg, ##__VA_ARGS__)
 
 static gboolean
 log_update (int delay, char *path_to_file)
@@ -455,8 +465,10 @@ cert_check (gboolean heal)
     }
     if (pid == 0) {
         if (heal) {
+            debug ("(Auto-attach) executing: %s --autoheal", WORKER);
             execl (WORKER, WORKER_NAME, "--autoheal", NULL);
         } else {
+            debug ("(Cert check) executing: %s", WORKER);
             execl (WORKER, WORKER_NAME, NULL);
         }
         _exit (errno);
@@ -532,6 +544,7 @@ get_int_from_config_file (GKeyFile * key_file, const char *group, const char *ke
     int value = g_key_file_get_integer (key_file, group, key, &error);
     // If key does not exist in config file, return CONFIG_KEY_NOT_FOUND, aka 0
     if (error != NULL && error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND) {
+        debug ("Key %s does not exists in the group %s", key, group);
         value = CONFIG_KEY_NOT_FOUND;
     }
     // Get the integer value from the config file. If value is 0 (due
@@ -553,13 +566,29 @@ get_int_from_config_file (GKeyFile * key_file, const char *group, const char *ke
 
 // Similar to the above,
 bool
-get_bool_from_config_file (GKeyFile * key_file, const char *group, const char *key, bool default_value)
+get_bool_from_config_file (GKeyFile *key_file, const char *group, const char *key, bool default_value)
 {
     GError *error = NULL;
     bool value = g_key_file_get_boolean (key_file, group, key, &error);
-        // If key does not exist in config file, return the default_value given
+    // If key does not exist in config file, return the default_value given
     if (error != NULL && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND || error->code == G_KEY_FILE_ERROR_INVALID_VALUE)) {
+        debug ("Key %s does not exists in the group %s. Using default value: %d", key, group, default_value);
         value = default_value;
+    }
+    return value;
+}
+
+gchar *
+get_string_from_config_file (GKeyFile *key_file, const char *group, const char *key)
+{
+    GError *error = NULL;
+    gchar *value = g_key_file_get_string (key_file, group, key, &error);
+    if (error != NULL) {
+        if (error->code == G_KEY_FILE_ERROR_GROUP_NOT_FOUND) {
+            debug ("Group %s does not exist", group);
+        } else if (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND) {
+            debug ("Key %s does not exists in the group %s", key, group);
+        }
     }
     return value;
 }
@@ -585,6 +614,32 @@ print_argument_error (const char *message, ...)
     vprintf(message, argp);
     printf(N_("For more information run: rhsmcertd --help\n"));
     va_end(argp);
+}
+
+void
+set_log_level (const gchar *conf_log_level, const char *conf_option_name)
+{
+    bool using_default_log_level = false;
+    if (g_strcmp0(conf_log_level, "DEBUG") == 0) {
+        log_level = LOG_LEVEL_DEBUG;
+    } else if (g_strcmp0(conf_log_level, "INFO") == 0) {
+        log_level = LOG_LEVEL_INFO;
+    } else if (g_strcmp0(conf_log_level, "WARN") == 0) {
+        log_level = LOG_LEVEL_WARNING;
+    } else if (g_strcmp0(conf_log_level, "ERROR") == 0) {
+        log_level = LOG_LEVEL_ERROR;
+    } else {
+        warn ("Unsupported log level: %s of configuration option: %s in file: %s",
+              conf_log_level, conf_option_name, RHSM_CONFIG_FILE);
+        log_level = DEFAULT_LOG_LEVEL;
+        using_default_log_level = true;
+    }
+    if (using_default_log_level == false) {
+        debug ("Using log level: %s of configuration option: %s in file: %s",
+               conf_log_level, conf_option_name, RHSM_CONFIG_FILE);
+    } else {
+        info ("Using default log level: %s", DEFAULT_LOG_LEVEL_NAME);
+    }
 }
 
 void
@@ -636,6 +691,37 @@ key_file_init_config (Config * config, GKeyFile * key_file)
             DEFAULT_AUTO_REGISTRATION
             );
     config->auto_registration = auto_registration_enabled;
+
+    gchar *default_log_level = get_string_from_config_file(
+            key_file,
+            "logging",
+            "default_log_level"
+    );
+
+    gchar *rhsmcertd_log_level = get_string_from_config_file(
+            key_file,
+            "logging",
+            "rhsmcertd"
+    );
+
+    if (show_debug) {
+        // When --debug CLI option is used, then ignore configuration options related to logging, and
+        // print debug log about it
+        if (rhsmcertd_log_level != NULL) {
+            debug("Ignoring logging.rhsmcertd configuration option, because --debug CLI option was used");
+        } else if (default_log_level != NULL) {
+            debug("Ignoring logging.default_log_level configuration option, because --debug CLI option was used");
+        }
+    } else {
+        if (rhsmcertd_log_level != NULL) {
+            set_log_level(rhsmcertd_log_level, "logging.rhsmcertd");
+        } else if (default_log_level != NULL) {
+            set_log_level(default_log_level, "logging.default_log_level");
+        }
+    }
+
+    g_free(default_log_level);
+    g_free(rhsmcertd_log_level);
 }
 
 void
@@ -709,7 +795,7 @@ get_config (int argc, char *argv[])
     }
     g_key_file_free (key_file);
 
-    // Set any values provided from the options parser.
+    // Set any values provided from the option parser.
     bool options_provided = opt_parse_init_config (config);
 
     // If there are any args that were ignored by opt_parse, we assume
@@ -758,6 +844,13 @@ parse_cli_args (int *argc, char *argv[])
                 argv[i]);
             exit (EXIT_FAILURE);
         }
+    }
+
+    // When --debug CLI option is set, then set log_level to DEBUG now, because
+    // 1. we want to override configuration options from rhsm.conf
+    // 2. we want to see debug messages during parsing of configuration file
+    if (show_debug) {
+        log_level = LOG_LEVEL_DEBUG;
     }
 }
 
