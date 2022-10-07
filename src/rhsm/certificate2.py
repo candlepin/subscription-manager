@@ -54,6 +54,33 @@ IDENTITY_CERT = 3
 CONTENT_ACCESS_CERT_TYPE = "OrgLevel"
 
 
+class CertificateLoadingError(Exception):
+    """
+    A certificate loading failure from OpenSSL.
+    """
+
+    def __init__(self, liberr: str, reasonerr: str, path: Optional[str] = None, pem: Optional[str] = None):
+        """
+        :param liberr: string representing the OpenSSL library where the failure
+               occurred
+        :param reasonerr: string representing the OpenSSL failure string
+        :param path: string representing the file being loaded
+        :param pem: string representing the PEM data being loaded
+        """
+        self.liberr = liberr
+        self.reasonerr = reasonerr
+        self.path = path
+        self.pem = pem
+
+    def __str__(self) -> str:
+        err = f"{self.liberr}: {self.reasonerr}"
+        if self.path:
+            err += f": {self.path}"
+        elif self.pem:
+            err += f": {self.pem}"
+        return err
+
+
 class _CertFactory:
     """
     Factory for creating certificate objects.
@@ -75,7 +102,12 @@ class _CertFactory:
             pem: str = open(path, "r").read()
         except IOError as err:
             raise CertificateException("Error loading certificate: %s" % err)
-        return self._read_x509(_certificate.load(path), path, pem)
+        try:
+            cert = _certificate.load(path)
+        except _certificate.OpenSSLCertificateLoadingError as exc:
+            raise CertificateLoadingError(exc.args[0], exc.args[1], path=path)
+        else:
+            return self._read_x509(cert, path, pem)
 
     def create_from_pem(self, pem: str, path: Optional[str] = None):
         """
@@ -83,16 +115,14 @@ class _CertFactory:
         """
         if not pem:
             raise CertificateException("Empty certificate")
-        return self._read_x509(_certificate.load(pem=pem), path, pem)
+        try:
+            cert = _certificate.load(pem=pem)
+        except _certificate.OpenSSLCertificateLoadingError as exc:
+            raise CertificateLoadingError(exc.args[0], exc.args[1], pem=pem)
+        else:
+            return self._read_x509(cert, path, pem)
 
     def _read_x509(self, x509: _certificate.X509, path: str, pem: str) -> "EntitlementCertificate":
-        if not x509:
-            if path is not None:
-                raise CertificateException("Error loading certificate: %s" % path)
-            elif pem is not None:
-                raise CertificateException("Error loading certificate from string: %s" % pem)
-            else:
-                raise CertificateException("Error: none certificate data offered")
         # Load the X509 extensions so we can determine what we're dealing with:
         try:
             extensions = _Extensions2(x509)
@@ -588,7 +618,7 @@ class EntitlementCertificate(ProductCertificate):
         content: Optional["Content"] = None,
         pool: Optional["Pool"] = None,
         extensions: Optional[Extensions] = None,
-        **kwargs
+        **kwargs,
     ):
         ProductCertificate.__init__(self, **kwargs)
         self.order: Optional[Order] = order

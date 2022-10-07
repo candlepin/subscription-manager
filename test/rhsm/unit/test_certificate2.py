@@ -23,6 +23,7 @@ from rhsm.certificate2 import (
     IdentityCertificate,
     Product,
     ProductCertificate,
+    CertificateLoadingError,
 )
 
 from mock import patch
@@ -85,7 +86,7 @@ class V1EntCertTests(unittest.TestCase):
         self.assertRaises(CertificateException, create_from_pem, "")
 
     def test_junk_contents_throws_exception(self):
-        self.assertRaises(CertificateException, create_from_pem, "DOESTHISLOOKLIKEACERTTOYOU?")
+        self.assertRaises(CertificateLoadingError, create_from_pem, "DOESTHISLOOKLIKEACERTTOYOU?")
 
     def test_factory_method_on_ent_cert(self):
         self.assertEqual("1.0", str(self.ent_cert.version))

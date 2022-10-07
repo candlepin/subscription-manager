@@ -23,6 +23,7 @@ import rhsm.connection as connection
 import subscription_manager.injection as inj
 
 from rhsm.certificate import CertificateException
+from rhsm.certificate2 import CertificateLoadingError
 from rhsm.connection import ProxyException
 from rhsm.https import ssl
 import rhsm.utils
@@ -415,7 +416,7 @@ class CliCommand(AbstractCLICommand):
 
             if return_code is not None:
                 return return_code
-        except (CertificateException, ssl.SSLError) as e:
+        except (CertificateException, CertificateLoadingError, ssl.SSLError) as e:
             log.error(e)
             system_exit(os.EX_SOFTWARE, _("System certificates corrupted. Please reregister."))
         except connection.GoneException as ge:
