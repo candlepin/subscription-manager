@@ -154,8 +154,9 @@ class AttachCommand(CliCommand):
         owner_id = owner["key"]
         print(
             _(
-                "Ignoring request to attach. "
-                'It is disabled for org "{owner_id}" because of the content access mode setting.'
+                "Ignoring the request to attach. "
+                'Attaching subscriptions is disabled for organization "{owner_id}" '
+                "because Simple Content Access (SCA) is enabled."
             ).format(owner_id=owner_id)
         )
 
