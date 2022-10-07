@@ -16,6 +16,7 @@ from __future__ import print_function, division, absolute_import
 #
 
 import collections
+import io
 import logging
 import os
 import pprint
@@ -634,3 +635,18 @@ def is_interactive() -> bool:
     :return: True, when the process is running in an interactive session; Otherwise returns False
     """
     return sys.stdin and sys.stdin.isatty()
+
+
+def terminal_printable_content(content: str) -> str:
+    """
+    Get the content of the reply in a way suitable to print on terminal;
+    in particular, this means that any non-printable character
+    (excluding new lines and tabs) is replaced with "<$code>".
+    """
+    buf = io.StringIO()
+    for c in content:
+        if c.isprintable() or c == "\n" or c == "\t":
+            buf.write(c)
+        else:
+            buf.write(f"<{ord(c)}>")
+    return buf.getvalue()

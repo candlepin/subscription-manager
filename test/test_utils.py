@@ -16,7 +16,8 @@ from subscription_manager.utils import parse_server_info, \
     get_version, get_client_versions, unique_list_items, \
     get_server_versions, friendly_join, is_true_value, url_base_join, \
     ProductCertificateFilter, EntitlementCertificateFilter, \
-    is_simple_content_access, is_process_running, get_process_names
+    is_simple_content_access, is_process_running, get_process_names, \
+    terminal_printable_content
 from .stubs import StubProductCertificate, StubProduct, StubEntitlementCertificate
 from .fixture import SubManFixture
 
@@ -994,3 +995,22 @@ class TestGetProcessNamesAndIsProcessRunning(fixture.SubManFixture):
         res = get_process_names()
         res = list(res)
         self.assertEquals(res, [fake_process_name], "Expected an empty list, Actual: %s" % res)
+
+
+class TestTerminalPrintableContent(fixture.SubManFixture):
+    TEST_DATA = [
+        # empty string
+        ("", ""),
+        ("foo", "foo"),
+        ("foo\nbar", "foo\nbar"),
+        ("foo καινούργιο", "foo καινούργιο"),
+        ("foo 😃", "foo 😃"),
+        ("foo\tbar", "foo\tbar"),
+        # no terminal escape codes, please
+        ("\033[93mfoo\033[0m", "<27>[93mfoo<27>[0m"),
+    ]
+
+    def test_data(self):
+        for data in self.TEST_DATA:
+            with self.subTest(data=data):
+                self.assertEqual(data[1], terminal_printable_content(data[0]))
