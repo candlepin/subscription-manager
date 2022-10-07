@@ -20,7 +20,9 @@ from socket import error as socket_error, gaierror as socket_gaierror
 from rhsm.https import ssl, httplib
 
 from rhsm import connection, utils
+from rhsm.certificate2 import CertificateLoadingError
 
+from subscription_manager.certdirectory import DEFAULT_PRODUCT_CERT_DIR
 from subscription_manager.cp_provider import TokenAuthUnsupportedException
 from subscription_manager.entcertlib import Disconnected
 
@@ -51,6 +53,10 @@ PERROR_PORT_MESSAGE = _("Server URL port should be numeric")
 PERROR_SCHEME_MESSAGE = _("Server URL has an invalid scheme. http:// and https:// are supported")
 RATE_LIMIT_MESSAGE = _("The server rate limit has been exceeded, please try again later.")
 RATE_LIMIT_EXPIRATION = _("The server rate limit has been exceeded, please try again later. (Expires in %s seconds)")
+PRODUCT_CERTIFICATE_LOADING_PATH_ERROR = _("Bad product certificate: {file}: [{library}] {message}")
+CERTIFICATE_LOADING_PATH_ERROR = _("Bad certificate: {file}: [{library}] {message}")
+CERTIFICATE_LOADING_PEM_ERROR = _("Bad certificate: [{library}] {message}\n{data}")
+CERTIFICATE_LOADING_ERROR = _("Bad certificate: [{library}] {message}")
 
 # TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 # (the part before the opening bracket originates on the server)
@@ -84,6 +90,7 @@ class ExceptionMapper(object):
             connection.RateLimitExceededException: (None, self.format_rate_limit_exception),
             httplib.BadStatusLine: (REMOTE_SERVER_MESSAGE, self.format_using_template),
             TokenAuthUnsupportedException: (TOKEN_AUTH_UNSUPPORTED_MESSAGE, self.format_using_template),
+            CertificateLoadingError: (None, self.format_cert_loading_error),
         }
 
     def format_using_template(self, _: Exception, message: str) -> str:
@@ -143,6 +150,23 @@ class ExceptionMapper(object):
             return RATE_LIMIT_EXPIRATION % str(rate_limit_exception.retry_after)
         else:
             return RATE_LIMIT_MESSAGE
+
+    def format_cert_loading_error(self, exc: CertificateLoadingError, _: str):
+        fmtargs = {
+            "library": exc.liberr,
+            "message": exc.reasonerr,
+        }
+        if exc.path is not None:
+            fmtargs["file"] = exc.path
+        if exc.pem is not None:
+            fmtargs["data"] = terminal_printable_content(exc.pem)
+        if exc.path is not None:
+            if exc.path.startswith(DEFAULT_PRODUCT_CERT_DIR):
+                return PRODUCT_CERTIFICATE_LOADING_PATH_ERROR.format(**fmtargs)
+            return CERTIFICATE_LOADING_PATH_ERROR.format(**fmtargs)
+        if exc.pem is not None:
+            return CERTIFICATE_LOADING_PEM_ERROR.format(**fmtargs)
+        return CERTIFICATE_LOADING_ERROR.format(**fmtargs)
 
     def get_message(self, exception) -> str:
         """Get string representation of an exception.

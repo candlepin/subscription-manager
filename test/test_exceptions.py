@@ -20,8 +20,10 @@ except ImportError:
     import unittest
 
 from subscription_manager.exceptions import ExceptionMapper
+from subscription_manager.certdirectory import DEFAULT_PRODUCT_CERT_DIR
 from rhsm.connection import RestlibException, BadCertificateException, ProxyException, UnknownContentException
 from rhsm.https import httplib, ssl
+from rhsm.certificate2 import CertificateLoadingError
 
 
 class MyRuntimeErrorBase(RuntimeError):
@@ -199,5 +201,52 @@ class TestExceptionMapper(unittest.TestCase):
         err = UnknownContentException(expected_http_code)
         self.assertEqual(
             f"Unknown server reply (HTTP error code {expected_http_code}: {expected_http_string})",
+            mapper.get_message(err),
+        )
+
+    def test_certificateloadingerror_product_certificate(self):
+        expected_library = "X509"
+        expected_reason = "Expected MESSAGE"
+        expected_path = f"{DEFAULT_PRODUCT_CERT_DIR}/foo.pem"
+        mapper = ExceptionMapper()
+
+        err = CertificateLoadingError(expected_library, expected_reason, path=expected_path)
+        self.assertEqual(
+            f"Bad product certificate: {expected_path}: [{expected_library}] {expected_reason}",
+            mapper.get_message(err),
+        )
+
+    def test_certificateloadingerror_other_certificate(self):
+        expected_library = "X509"
+        expected_reason = "Expected MESSAGE"
+        expected_path = "/tmp/foo.pem"
+        mapper = ExceptionMapper()
+
+        err = CertificateLoadingError(expected_library, expected_reason, path=expected_path)
+        self.assertEqual(
+            f"Bad certificate: {expected_path}: [{expected_library}] {expected_reason}",
+            mapper.get_message(err),
+        )
+
+    def test_certificateloadingerror_pem_data(self):
+        expected_library = "X509"
+        expected_reason = "Expected MESSAGE"
+        expected_data = "DOESTHISLOOKLIKEACERT?"
+        mapper = ExceptionMapper()
+
+        err = CertificateLoadingError(expected_library, expected_reason, pem=expected_data)
+        self.assertEqual(
+            f"Bad certificate: [{expected_library}] {expected_reason}\n{expected_data}",
+            mapper.get_message(err),
+        )
+
+    def test_certificateloadingerror_unknown(self):
+        expected_library = "X509"
+        expected_reason = "Expected MESSAGE"
+        mapper = ExceptionMapper()
+
+        err = CertificateLoadingError(expected_library, expected_reason)
+        self.assertEqual(
+            f"Bad certificate: [{expected_library}] {expected_reason}",
             mapper.get_message(err),
         )
