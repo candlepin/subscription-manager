@@ -416,7 +416,9 @@ class CliCommand(AbstractCLICommand):
 
             if return_code is not None:
                 return return_code
-        except (CertificateException, CertificateLoadingError, ssl.SSLError) as e:
+        except CertificateLoadingError as exc:
+            system_exit(os.EX_SOFTWARE, exc)
+        except (CertificateException, ssl.SSLError) as e:
             log.error(e)
             system_exit(os.EX_SOFTWARE, _("System certificates corrupted. Please reregister."))
         except connection.GoneException as ge:
