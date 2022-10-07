@@ -45,6 +45,7 @@
 
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
+#include <openssl/err.h>
 #include <openssl/opensslv.h>
 #include <openssl/pem.h>
 #include <openssl/x509.h>
@@ -79,6 +80,8 @@ typedef struct {
 	EVP_PKEY *key;
 } private_key;
 
+static PyObject *OpenSSLCertificateLoadingError;
+
 static void
 certificate_x509_dealloc (certificate_x509 *self)
 {
@@ -91,6 +94,26 @@ private_key_dealloc (private_key *self)
 {
 	EVP_PKEY_free (self->key);
 	Py_TYPE(self)->tp_free ((PyObject *) self);
+}
+
+/*
+ * Raises OpenSSLCertificateLoadingError, or any other error in case of other
+ * failures; because of this, it always returns NULL to signal that to Python.
+ */
+static PyObject *
+raise_openssl_certificate_loading_error (void)
+{
+	unsigned long e = ERR_peek_error ();
+	PyObject *exc_data = NULL;
+
+	exc_data = PyTuple_New (2);
+	if (exc_data == NULL) {
+		return NULL;
+	}
+	PyTuple_SetItem (exc_data, 0, PyUnicode_FromString (ERR_lib_error_string (e)));
+	PyTuple_SetItem (exc_data, 1, PyUnicode_FromString (ERR_reason_error_string (e)));
+	PyErr_SetObject (OpenSSLCertificateLoadingError, exc_data);
+	return NULL;
 }
 
 static PyObject *get_not_before (certificate_x509 *self, PyObject *varargs);
@@ -304,8 +327,7 @@ load_cert (PyObject *self, PyObject *args, PyObject *keywords)
 	BIO_free (bio);
 
 	if (x509 == NULL) {
-		Py_INCREF (Py_None);
-		return Py_None;
+		return raise_openssl_certificate_loading_error ();
 	}
 
 	certificate_x509 *py_x509 =
@@ -633,6 +655,14 @@ init_certificate (void)
 	Py_INCREF (&private_key_type);
 	PyModule_AddObject (module, "PrivateKey",
 			    (PyObject *) & private_key_type);
+
+	/* create OpenSSLCertificateLoadingError that derives from Exception
+	   (first NULL), with no extra methods/variables (second NULL) */
+	OpenSSLCertificateLoadingError = PyErr_NewException ("_certificate.OpenSSLCertificateLoadingError",
+							     NULL, NULL);
+	PyModule_AddObject (module, "OpenSSLCertificateLoadingError",
+			    OpenSSLCertificateLoadingError);
+
 	#if PY_MAJOR_VERSION >= 3
 	return module;
 	#endif

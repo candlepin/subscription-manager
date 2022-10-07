@@ -33,7 +33,7 @@ import json
 from time import localtime, strftime, strptime
 
 from rhsm.certificate import CertificateException
-from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
+from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE, CertificateLoadingError
 from rhsm.https import ssl
 
 import rhsm.config
@@ -550,7 +550,7 @@ class CliCommand(AbstractCLICommand):
 
             if return_code is not None:
                 return return_code
-        except (CertificateException, ssl.SSLError) as e:
+        except (CertificateException, CertificateLoadingError, ssl.SSLError) as e:
             log.error(e)
             system_exit(os.EX_SOFTWARE, _('System certificates corrupted. Please reregister.'))
         except connection.GoneException as ge:
