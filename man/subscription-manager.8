@@ -58,6 +58,18 @@ command.
 .B subscription-manager
 has specific options available for each command, depending on what operation is being performed. Subscription Manager commands are related to the different subscription operations:
 
+.PP
+.B Note:
+Please note that using commands that require providing a username using 
+.B --username
+, a password using 
+.B --password 
+, an organization using 
+.B --org 
+, or environments using 
+.B --environments 
+must be passed as system arguments in a non-interactive session.
+
 .IP
 1. register
 
@@ -161,6 +173,17 @@ Disables progress messages that are being displayed when waiting for server resp
 The
 .B register
 command registers a new system to the subscription management service.
+.PP
+.B Note:
+Please note that using commands that require providing a username using 
+.B --username
+, a password using 
+.B --password 
+, an organization using 
+.B --org 
+, or environments using 
+.B --environments 
+must be passed as system arguments in a non-interactive session.
 
 .TP
 .B --username=USERNAME

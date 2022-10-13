@@ -44,6 +44,7 @@ from subscription_manager.utils import (
     print_error,
     get_supported_resources,
     is_simple_content_access,
+    is_interactive,
 )
 from subscription_manager.cli_command.environments import check_set_environment_names
 
@@ -387,6 +388,12 @@ class RegisterCommand(UserPassCommand):
         """
         By breaking this code out, we can write cleaner tests
         """
+        if not is_interactive():
+            system_exit(
+                os.EX_USAGE,
+                _("Error: --environments is a required parameter in non-interactive mode."),
+            )
+
         if self.cp.has_capability(MULTI_ENV):
             environment = input(_("Environments: ")).replace(" ", "")
         else:
@@ -462,7 +469,13 @@ class RegisterCommand(UserPassCommand):
             )
         )
 
-        # Read the owner key from stdin
+        # Read the owner key from stdin or raise a system error if in a non-interactive session.
+        if not is_interactive():
+            system_exit(
+                os.EX_USAGE,
+                _("Error: --org is a required parameter in non-interactive mode."),
+            )
+
         owner_key = None
         while not owner_key:
             owner_key = input(_("Organization: "))

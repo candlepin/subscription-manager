@@ -622,3 +622,11 @@ def is_process_running(process_to_find):
         if process_to_find == process_name:
             return True
     return False
+
+
+def is_interactive() -> bool:
+    """
+    Check if the process is running in an interactive session.
+    :return: True, when the process is running in an interactive session; Otherwise returns False
+    """
+    return sys.stdin and sys.stdin.isatty()
