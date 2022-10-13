@@ -82,9 +82,9 @@ class SubscriptionManager(dnf.Plugin):
             if os.getuid() == 0:
                 # Try to update entitlement certificates and redhat.repo file
                 self._update(cache_only)
+                self._warn_or_give_usage_message()
             else:
                 logger.info(_("Not root, Subscription Management repositories not updated"))
-            self._warn_or_give_usage_message()
             self._warn_expired()
         except Exception as e:
             log.error(str(e))
