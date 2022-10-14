@@ -196,7 +196,7 @@ class TestOstreeRemotes(fixture.SubManFixture):
         osr = model.OstreeRemotes()
         self.assertTrue(hasattr(osr, "data"))
 
-    def test_add_emtpty_ostree_remote(self):
+    def test_add_empty_ostree_remote(self):
         remote = model.OstreeRemote()
         remotes = model.OstreeRemotes()
         remotes.add(remote)
