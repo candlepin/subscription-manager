@@ -823,7 +823,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
         else:
             self.fail("RestlibException expected")
 
-    def test_410_emtpy(self):
+    def test_410_empty(self):
         try:
             self.vr("410", "")
         except RemoteServerException as e:
@@ -873,7 +873,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
         else:
             self.fail("RemoteServerException expected")
 
-    def test_599_emtpty(self):
+    def test_599_empty(self):
         self.assertRaises(NetworkException, self.vr, "599", "")
 
 
