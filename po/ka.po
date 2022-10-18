@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-25 11:27+0200\n"
-"PO-Revision-Date: 2022-03-11 11:26+0000\n"
+"PO-Revision-Date: 2022-08-31 13:22+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -24,17 +24,17 @@ msgstr "გამოყენება: "
 
 #: /usr/lib64/python3.9/argparse.py:861
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() აღწერილი არაა"
 
 #: /usr/lib64/python3.9/argparse.py:1204
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "უცნობი დამმუშავებელი: %(parser_name)r (არჩევანი: %(choices)s)"
 
 #: /usr/lib64/python3.9/argparse.py:1264
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "არგუმენტი \"-\" რეჟიმით %r"
 
 #: /usr/lib64/python3.9/argparse.py:1273
 #, python-format
@@ -44,7 +44,7 @@ msgstr ""
 #: /usr/lib64/python3.9/argparse.py:1482
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "ქმედებების შერწმის შეცდომა - ორი ჯგუფის სახელია %r"
 
 #: /usr/lib64/python3.9/argparse.py:1520
 msgid "'required' is an invalid argument for positionals"
@@ -752,8 +752,6 @@ msgid "Fetching cloud token"
 msgstr ""
 
 #: src/rhsm/connection.py:1461
-#, fuzzy
-#| msgid "Register System"
 msgid "Registering system"
 msgstr "სისტემის რეგისტრაცია"
 
@@ -762,40 +760,28 @@ msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 #: src/rhsm/connection.py:1524
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Updating hypervisor information"
-msgstr "ინფორმაცია გამოწერების შესახებ"
+msgstr "ჰაიპერვაიზორის ინფორმაციის განახლება"
 
 #: src/rhsm/connection.py:1599
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Updating consumer information"
-msgstr "ინფორმაცია გამოწერების შესახებ"
+msgstr "მომხმარებლის შესახებ ინფორმაციის განახლება"
 
 #: src/rhsm/connection.py:1609
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Updating guest information"
-msgstr "ინფორმაცია გამოწერების შესახებ"
+msgstr "სტუმრის შესახებ ინფორმაციის განახლება"
 
 #: src/rhsm/connection.py:1613 src/rhsm/connection.py:1617
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Fetching guest information"
-msgstr "ინფორმაცია გამოწერების შესახებ"
+msgstr "სტუმრის შესახებ ინფორმაციის გამოთხოვა"
 
 #: src/rhsm/connection.py:1621
-#, fuzzy
-#| msgid "Removing $0"
 msgid "Removing guests"
-msgstr "$0-ის წაშლა"
+msgstr "სტუმრების წაშლა"
 
 #: src/rhsm/connection.py:1644 src/rhsm/connection.py:1655
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Updating profile information"
-msgstr "ინფორმაცია გამოწერების შესახებ"
+msgstr "პროფილის ინფორმაციის განახლება"
 
 #: src/rhsm/connection.py:1663
 msgid "Fetching consumer keys"
@@ -814,51 +800,37 @@ msgid "Checking system purpose compliance status"
 msgstr ""
 
 #: src/rhsm/connection.py:1698
-#, fuzzy
-#| msgid "Available {syspurpose_attr}"
 msgid "Fetching available system purpose settings"
-msgstr "{syspurpose_attr} ხელმისაწვდომია"
+msgstr "სისტემის დანიშნულების ხელმისაწვდომი პარამეტრების გამოთხოვა"
 
 #: src/rhsm/connection.py:1705
-#, fuzzy
-#| msgid "Organization"
 msgid "Creating organization"
-msgstr "ორგანიზაცია"
+msgstr "ორგანიზაციის შექმნა"
 
 #: src/rhsm/connection.py:1712 src/rhsm/connection.py:1726
 #: src/rhsm/connection.py:1740
-#, fuzzy
-#| msgid "Organizations"
 msgid "Fetching organizations"
-msgstr "ორგანიზაციები"
+msgstr "ორგანიზაციების გამოთხოვა"
 
 #: src/rhsm/connection.py:1719
-#, fuzzy
-#| msgid "Organization"
 msgid "Removing organization"
-msgstr "ორგანიზაცია"
+msgstr "ორგანიზაციის წაშლა"
 
 #: src/rhsm/connection.py:1733
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Fetching organization information"
-msgstr "ინფორმაცია გამოწერების შესახებ"
+msgstr "ორგანიზაციის ინფორმაციის გამოთხოვა"
 
 #: src/rhsm/connection.py:1754
 msgid "Fetching organization hypervisors"
 msgstr ""
 
 #: src/rhsm/connection.py:1761
-#, fuzzy
-#| msgid "Unregistering"
 msgid "Unregistering system"
-msgstr "რეგისტრაციის მოხსნა"
+msgstr "სისტემის რეგისტრაციის მოხსნა"
 
 #: src/rhsm/connection.py:1772
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Fetching certificates"
-msgstr "პირადობის სერტიფიკატი"
+msgstr "სერტიფიკატის გამოთხოვა"
 
 #: src/rhsm/connection.py:1779
 msgid "Fetching certificate serial numbers"
@@ -870,10 +842,8 @@ msgstr ""
 
 #: src/rhsm/connection.py:1805 src/rhsm/connection.py:1815
 #: src/rhsm/connection.py:1830 src/rhsm/connection.py:2120
-#, fuzzy
-#| msgid "Subscriptions"
 msgid "Updating subscriptions"
-msgstr "გამოწერები"
+msgstr "გამოწერების განახლება"
 
 #: src/rhsm/connection.py:1848
 msgid "Simulating subscribing"
@@ -881,54 +851,40 @@ msgstr ""
 
 #: src/rhsm/connection.py:1852 src/rhsm/connection.py:1856
 #: src/rhsm/connection.py:1860
-#, fuzzy
-#| msgid "Subscription:"
 msgid "Unsubscribing"
-msgstr "გამოწერა:"
+msgstr "გამოწერის გაუქმება"
 
 #: src/rhsm/connection.py:1917
 msgid "Fetching pools"
 msgstr ""
 
 #: src/rhsm/connection.py:1924
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Fetching pool information"
-msgstr "ინფორმაცია გამოწერების შესახებ"
+msgstr "პულის ინფორმაციის გამოთხოვა"
 
 #: src/rhsm/connection.py:1928
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Fetching product information"
-msgstr "ინფორმაცია გამოწერების შესახებ"
+msgstr "პროდუქტის შესახებ ინფორმაციის გამოთხოვა"
 
 #: src/rhsm/connection.py:1932
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Fetching release information"
-msgstr "ინფორმაცია გამოწერების შესახებ"
+msgstr "რელიზის შესახებ ინფორმაციის გამოთხოვა"
 
 #: src/rhsm/connection.py:1945
-#, fuzzy
-#| msgid "Available Releases"
 msgid "Fetching available releases"
-msgstr "ხელმისაწვდომი რელიზები"
+msgstr "ხელმისაწვდომი რელიზების გამოთხოვა"
 
 #: src/rhsm/connection.py:1954
 msgid "Fetching entitlements"
 msgstr ""
 
 #: src/rhsm/connection.py:1962
-#, fuzzy
-#| msgid "Service level"
 msgid "Fetching service levels"
-msgstr "სერვისის დონე"
+msgstr "სერვისის დონეების გამოთხოვა"
 
 #: src/rhsm/connection.py:1973
-#, fuzzy
-#| msgid "Environments"
 msgid "Fetching environments"
-msgstr "გარემოები"
+msgstr "გარემოების გამოთხოვა"
 
 #: src/rhsm/connection.py:1991
 msgid "Fetching environment information"
@@ -939,16 +895,12 @@ msgid "Fetching entitlement information"
 msgstr ""
 
 #: src/rhsm/connection.py:2002 src/rhsm/connection.py:2046
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Updating certificate"
-msgstr "პირადობის სერტიფიკატი"
+msgstr "სერტიფიკატის განახლება"
 
 #: src/rhsm/connection.py:2017
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Updating certificates"
-msgstr "პირადობის სერტიფიკატი"
+msgstr "სერტიფიკატების განახლება"
 
 #: src/rhsm/connection.py:2061
 msgid "Checking server status"
@@ -967,32 +919,24 @@ msgid "Removing content overrides"
 msgstr ""
 
 #: src/rhsm/connection.py:2099
-#, fuzzy
-#| msgid "Activation Key"
 msgid "Activating"
-msgstr "აქტივაციის გასაღები"
+msgstr "აქტივაცია"
 
 #: src/rhsm/connection.py:2106
-#, fuzzy
-#| msgid "Subscriptions"
 msgid "Fetching subscriptions"
-msgstr "გამოწერები"
+msgstr "გამოწერების გამოთხოვა"
 
 #: src/rhsm/connection.py:2129
 msgid "Fetching job"
 msgstr ""
 
 #: src/rhsm/connection.py:2138
-#, fuzzy
-#| msgid "Unknown status"
 msgid "Updating job status"
-msgstr "უცნობი სტატუსი"
+msgstr "დავალების სტატუსის განახლება"
 
 #: src/rhsm/connection.py:2146
-#, fuzzy
-#| msgid "Cancel"
 msgid "Canceling job"
-msgstr "გაუქმება"
+msgstr "დავალების გაუქმება"
 
 #: src/rhsm_debug/debug_commands.py:39
 #: src/subscription_manager/cli_command/cli.py:50
@@ -1313,7 +1257,6 @@ msgid ""
 msgstr ""
 
 #: src/subscription_manager/branding/redhat_branding.py:28
-#, fuzzy
 msgid "RHN Classic"
 msgstr "RHN Classic"
 
