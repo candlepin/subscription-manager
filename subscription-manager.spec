@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.30
+Version: 1.29.31
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,52 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Oct 19 2022 Christopher Snyder <csnyder@redhat.com> 1.29.31-1
+- warning: refname 'subscription-manager-1.29.30-1' is ambiguous.
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- tests: fix typos in test method names (ptoscano@redhat.com)
+- 2125227: Fixed incorrect registration warning with yum/dnf
+  (jajerome@redhat.com)
+- 2094942: Fixed expected message for manual attach case (jajerome@redhat.com)
+- ENT-5102: Type-hint rhsmlib/facts (mhorky@redhat.com)
+- 2094942: Improve warning message (auto-attach in SCA mode)
+  (jhnidek@redhat.com)
+- Update INSTALL.md (mhorky@redhat.com)
+- Remove unused classes of DBus tests (mhorky@redhat.com)
+- ENT-5317: Update DBus tests of Unregister objects (mhorky@redhat.com)
+- ENT-5317: Update DBus tests of Register objects (mhorky@redhat.com)
+- ENT-5317: Update DBus tests of Products object (mhorky@redhat.com)
+- ENT-5317: Update DBus tests of AllFacts object (mhorky@redhat.com)
+- ENT-5317: Update DBus tests of Entitlement object (mhorky@redhat.com)
+- Fix typo in method name of EntitlementService (mhorky@redhat.com)
+- ENT-5317: Update DBus tests of Consumer object (mhorky@redhat.com)
+- ENT-5317: Update DBus tests of Attach object (mhorky@redhat.com)
+- Fix possible parsing issues of dmidecode output (mhorky@redhat.com)
+- ENT-5317: New way to test DBus methods, starting with Config
+  (mhorky@redhat.com)
+- cockpit: disable the reference branch for sub-man-cockpit
+  (ptoscano@redhat.com)
+- TESTING.md: Remove mention of pytest-xdist (mhorky@redhat.com)
+- INSTALL.md: Update list of packages to be installed (mhorky@redhat.com)
+- Stop calling pytest with --failed-first (mhorky@redhat.com)
+- GCP: Better computing of cached token TTL (jhnidek@redhat.com)
+- 2101510: Fix D-Bus Register() and update entitlement certs
+  (jhnidek@redhat.com)
+- 2120744: Close keycloak connection properly (jhnidek@redhat.com)
+- 2094942: [RFE] Improve the message, when  SCA is enabled (jhnidek@redhat.com)
+- Replaced list[] with List[] and dict[] with Dict[]. (jhnidek@redhat.com)
+- Update TESTING.md (mhorky@redhat.com)
+- Update README.md (mhorky@redhat.com)
+- Add INSTALL.md (mhorky@redhat.com)
+- Added type hints to package rhsmlib.service (jhnidek@redhat.com)
+- Added some missing imports. (jhnidek@redhat.com)
+- Reformated using black. (jhnidek@redhat.com)
+- Added one FIXME to redeem.py (jhnidek@redhat.com)
+- Added type hints and FIXMEs to rhsm package. (jhnidek@redhat.com)
+- [wip] ENT-5100: Type hint rhsm (mhorky@redhat.com)
+- Added type hints to syspurpose package (jhnidek@redhat.com)
+- Drop libnotify-devel usage (ptoscano@redhat.com)
+
 * Tue Aug 09 2022 Christopher Snyder <csnyder@redhat.com> 1.29.30-1
 - Fix issue, when connection is not shared (jhnidek@redhat.com)
 - Unit tests: Add stub class for SyspurposeComplianceStatusCache
