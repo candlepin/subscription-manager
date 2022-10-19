@@ -2,6 +2,7 @@ import unittest
 
 import os
 import subprocess
+from multiprocessing import Process
 import sys
 import tempfile
 import threading
@@ -89,7 +90,7 @@ class TestLock(unittest.TestCase):
         self.fail("timeoutsdfsdf")
 
     @pytest.mark.skip("This test is unreliable.")
-    def test_two_pids_blocking_none_blocks(self):
+    def test_BAD_two_pids_blocking_none_blocks(self):
         # This test will either fail occasionally, or have to wait an
         # unreasonable time period, which just slows down the test suite.
         # Left in code since it is a useful test if changing lock behavior,
@@ -104,7 +105,7 @@ class TestLock(unittest.TestCase):
         res = b.acquire()
         self.assertTrue(res is None)
 
-    def test_two_pids_blocking_none(self):
+    def test_BAD_two_pids_blocking_default(self):
         lock_path = self._lock_path()
         # start a different proc that holds the lock, that times out after 3
         self._grab_lock_from_other_pid(lock_path, 0.2, 1.0)
@@ -112,9 +113,9 @@ class TestLock(unittest.TestCase):
         b = lock.Lock(lock_path)
         res = b.acquire()
         self.assertTrue(b.acquired())
-        self.assertTrue(res is None)
+        self.assertTrue(res)
 
-    def test_two_pids_blocking_true(self):
+    def test_BAD_two_pids_blocking_true(self):
         lock_path = self._lock_path()
         # start a different proc that holds the lock, that times out after 3
         self._grab_lock_from_other_pid(lock_path, 0.2, 1.0)
@@ -123,7 +124,76 @@ class TestLock(unittest.TestCase):
         self.assertTrue(b.acquired())
         self.assertTrue(res)
 
-    def test_two_pids_blocking_false(self):
+    def test_two_processes_blocking_true(self):
+        """
+        Try to create two processes and each process tries to lock the lock
+        """
+
+        def lock_file_proc(_lock_path: str, delay: float):
+            my_lock = lock.Lock(_lock_path)
+            res = my_lock.acquire(blocking=True)
+            self.assertTrue(my_lock.acquired())
+            self.assertTrue(res)
+            time.sleep(delay)
+            my_lock.release()
+
+        lock_path = self._lock_path()
+        proc1 = Process(target=lock_file_proc, args=(lock_path, 0.1))
+        proc2 = Process(target=lock_file_proc, args=(lock_path, 0.0))
+        proc1.start()
+        time.sleep(0.05)
+        proc2.start()
+        proc1.join()
+        proc2.join()
+
+    def test_two_processes_blocking_false(self):
+        """
+        Try to create two processes and each process tries to lock the lock
+        """
+
+        def lock_file_proc1(_lock_path: str, delay: float):
+            """
+            First process tries to lock unlocked lock file
+            """
+            my_lock = lock.Lock(_lock_path)
+            res = my_lock.acquire(blocking=False)
+            self.assertTrue(my_lock.acquired())
+            self.assertTrue(res)
+            time.sleep(delay)
+            my_lock.release()
+
+        def lock_file_proc2(_lock_path: str, delay: int):
+            """
+            Second process tries to lock locked file
+            """
+            my_lock = lock.Lock(_lock_path)
+            # 1 (time ~ 0.05)
+            res = my_lock.acquire(blocking=False)
+            self.assertFalse(my_lock.acquired())
+            self.assertFalse(res)
+            time.sleep(delay)
+            # 2 (time ~ 0.35)
+            res = my_lock.acquire(blocking=False)
+            self.assertFalse(my_lock.acquired())
+            self.assertFalse(res)
+            time.sleep(delay)
+            # 2 (time ~ 0.65)
+            res = my_lock.acquire(blocking=False)
+            self.assertTrue(my_lock.acquired())
+            self.assertTrue(res)
+            time.sleep(delay)
+            my_lock.release()
+
+        lock_path = self._lock_path()
+        proc1 = Process(target=lock_file_proc1, args=(lock_path, 0.5))
+        proc2 = Process(target=lock_file_proc2, args=(lock_path, 0.3))
+        proc1.start()
+        time.sleep(0.05)
+        proc2.start()
+        proc1.join()
+        proc2.join()
+
+    def test_BAD_two_pids_blocking_false(self):
         lock_path = self._lock_path()
         self._grab_lock_from_other_pid(lock_path, 0.2, 1.0)
         b = lock.Lock(lock_path)
@@ -138,17 +208,18 @@ class TestLock(unittest.TestCase):
         self.assertEqual(lf.path, lock_path)
         self.assertEqual(lf.depth, 0)
 
+    @unittest.skipIf(os.getuid() == 0, "Test cannot be run under root.")
     def test_file_lock_readonly(self):
         lock_path = self._lock_read_only_path()
         lock_file = lock.LockFile(lock_path)
         self.assertRaises(PermissionError, lock_file.open)
 
-    def test_lock_acquire(self):
+    def test_lock_acquire_default(self):
         lock_path = self._lock_path()
         lf = lock.Lock(lock_path)
         res = lf.acquire()
-        # given no args, acquire() blocks or returns None
-        self.assertEqual(res, None)
+        # given no args, acquire() blocks or returns True
+        self.assertTrue(res)
 
     def test_lock_acquire_blocking_true(self):
         lock_path = self._lock_path()

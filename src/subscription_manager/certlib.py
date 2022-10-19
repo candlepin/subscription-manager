@@ -10,6 +10,8 @@ class Locker(object):
         self.lock = self._get_lock()
 
     def run(self, action):
+        # Note: lock.acquire is blocking operation. It means that action cannot be triggered
+        # until other process release file lock of /run/rhsm/cert.pid
         self.lock.acquire()
         try:
             return action()
