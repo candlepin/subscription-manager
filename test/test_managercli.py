@@ -299,7 +299,7 @@ class TestCliProxyCommand(TestCliCommand):
 
 class TestSystemExit(unittest.TestCase):
     def test_a_msg(self):
-        msg = "some message"
+        msg: str = "some message"
         with Capture() as cap:
             try:
                 system_exit(1, msg)
@@ -307,62 +307,33 @@ class TestSystemExit(unittest.TestCase):
                 pass
         self.assertEqual("%s\n" % msg, cap.err)
 
-    def test_msgs(self):
-        msgs = ["a", "b", "c"]
-        with Capture() as cap:
-            try:
-                system_exit(1, msgs)
-            except SystemExit:
-                pass
-        self.assertEqual("%s\n" % ("\n".join(msgs)), cap.err)
-
-    def test_msg_and_exception(self):
-        msgs = ["a", ValueError()]
-        with Capture() as cap:
-            try:
-                system_exit(1, msgs)
-            except SystemExit:
-                pass
-        self.assertEqual("%s\n\n" % msgs[0], cap.err)
-
-    def test_msg_and_exception_no_str(self):
-        class NoStrException(Exception):
-            pass
-
-        msgs = ["a", NoStrException()]
-        with Capture() as cap:
-            try:
-                system_exit(1, msgs)
-            except SystemExit:
-                pass
-        self.assertEqual("%s\n\n" % msgs[0], cap.err)
-
     def test_msg_unicode(self):
-        msgs = ["\u2620 \u2603 \u203D"]
+        msg: str = "\u2620 \u2603 \u203D"
         with Capture() as cap:
             try:
-                system_exit(1, msgs)
+                system_exit(1, msg)
             except SystemExit:
                 pass
-        captured = cap.err
-        self.assertEqual("%s\n" % msgs[0], captured)
+        captured: str = cap.err
+        self.assertEqual("%s\n" % msg, captured)
 
-    def test_msg_and_exception_str(self):
-        class StrException(Exception):
-            def __init__(self, msg):
-                self.msg = msg
-
-            def __str__(self):
-                return self.msg
-
-        msg = "bar"
-        msgs = ["a", StrException(msg)]
+    def test_only_exception(self):
+        ex: ValueError = ValueError("test message")
         with Capture() as cap:
             try:
-                system_exit(1, msgs)
+                system_exit(1, ex)
             except SystemExit:
                 pass
-        self.assertEqual("%s\n%s\n" % ("a", msg), cap.err)
+        self.assertEqual("%s\n" % str(ex), cap.err)
+
+    def test_only_exception_unicode(self):
+        ex: ValueError = ValueError("\u2620 \u2603 \u203D")
+        with Capture() as cap:
+            try:
+                system_exit(1, ex)
+            except SystemExit:
+                pass
+        self.assertEqual("%s\n" % str(ex), cap.err)
 
 
 class HandleExceptionTests(unittest.TestCase):

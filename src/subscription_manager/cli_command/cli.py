@@ -32,7 +32,6 @@ from rhsmlib.services import config
 
 from subscription_manager.cli import AbstractCLICommand, InvalidCLIOptionError, system_exit
 from subscription_manager.entcertlib import EntCertActionInvoker
-from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.utils import (
     generate_correlation_id,
@@ -70,10 +69,8 @@ def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
 
-    exception_mapper = ExceptionMapper()
-
-    mapped_message: str = exception_mapper.get_message(ex)
-    system_exit(os.EX_SOFTWARE, mapped_message)
+    # Directly pass the exception to system_exit for exception message formatting and exit.
+    system_exit(os.EX_SOFTWARE, ex)
 
 
 class CliCommand(AbstractCLICommand):

@@ -27,7 +27,6 @@ from subscription_manager.cli_command.cli import (
 )
 from subscription_manager.cli_command.org import OrgCommand
 from subscription_manager.cli_command.list import ENVIRONMENT_LIST
-from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.i18n import ungettext
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
@@ -107,8 +106,7 @@ class EnvironmentsCommand(OrgCommand):
             log.exception(re)
             log.error("Error: Unable to retrieve environment list from server: {re}".format(re=re))
 
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 

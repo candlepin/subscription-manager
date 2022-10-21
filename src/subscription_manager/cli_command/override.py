@@ -20,7 +20,6 @@ import rhsm.connection as connection
 
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand
-from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
@@ -159,8 +158,7 @@ class OverrideCommand(CliCommand):
                 if ex.code == 400:
                     # blocklisted overrides specified.
                     # Print message and return a less severe code.
-                    mapped_message: str = ExceptionMapper().get_message(ex)
-                    system_exit(1, mapped_message)
+                    system_exit(1, ex)
                 else:
                     raise ex
 

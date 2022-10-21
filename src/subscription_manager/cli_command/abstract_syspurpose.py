@@ -23,7 +23,6 @@ from rhsm.connection import ProxyException
 from subscription_manager import syspurposelib
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand, ERR_NOT_REGISTERED_CODE, ERR_NOT_REGISTERED_MSG
-from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ungettext, ugettext as _
 from subscription_manager.syspurposelib import get_syspurpose_valid_fields
 from subscription_manager.utils import friendly_join
@@ -199,8 +198,7 @@ class AbstractSyspurposeCommand(CliCommand):
                 log.warning(
                     "Unable to get list of valid fields using REST API: {rest_err}".format(rest_err=rest_err)
                 )
-                mapped_message: str = ExceptionMapper().get_message(rest_err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, rest_err)
             except ProxyException:
                 system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
             else:
@@ -448,8 +446,7 @@ class AbstractSyspurposeCommand(CliCommand):
                 log.error(
                     "Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err)
                 )
-                mapped_message: str = ExceptionMapper().get_message(err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, err)
             else:
                 log.debug(
                     "Error: Unable to retrieve {attr} from server: {err}".format(attr=self.attr, err=err)
@@ -507,6 +504,6 @@ class AbstractSyspurposeCommand(CliCommand):
             advice = SP_ADVICE.format(command=command)
             value = result[attr]
             msg = _(SP_CONFLICT_MESSAGE.format(attr=attr, download_value=value, advice=advice))
-            system_exit(os.EX_SOFTWARE, msgs=msg)
+            system_exit(os.EX_SOFTWARE, msg)
         else:
             print(success_msg)

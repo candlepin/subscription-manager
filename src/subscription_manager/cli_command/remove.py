@@ -23,7 +23,6 @@ from rhsmlib.services import entitlement
 
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand, handle_exception
-from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ungettext, ugettext as _
 from subscription_manager.utils import unique_list_items
 
@@ -165,8 +164,7 @@ class RemoveCommand(CliCommand):
             except connection.RestlibException as err:
                 log.error(err)
 
-                mapped_message: str = ExceptionMapper().get_message(err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, err)
             except Exception as e:
                 handle_exception(
                     _("Unable to perform remove due to the following exception: {e}").format(e=e), e

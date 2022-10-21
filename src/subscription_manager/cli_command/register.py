@@ -37,7 +37,6 @@ from subscription_manager.cli_command.environments import MULTI_ENV
 from subscription_manager.cli_command.list import show_autosubscribe_output
 from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_CAPABILITY
-from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.utils import (
     restart_virt_who,
@@ -204,8 +203,7 @@ class RegisterCommand(UserPassCommand):
             # set during service.register() call
             attach.AttachService(self.cp).attach_auto(service_level=None)
         except connection.RestlibException as rest_lib_err:
-            mapped_message: str = ExceptionMapper().get_message(rest_lib_err)
-            print_error(mapped_message)
+            print_error(rest_lib_err)
         except Exception:
             log.exception("Auto-attach failed")
             raise
@@ -308,8 +306,7 @@ class RegisterCommand(UserPassCommand):
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
 
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error during registration: {e}").format(e=e), e)
         else:
