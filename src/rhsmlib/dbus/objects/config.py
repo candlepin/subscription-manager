@@ -61,7 +61,7 @@ class ConfigDBusObject(base_object.BaseObject):
     def Set(self, property_name, new_value, locale, sender=None):
         """
         Method used for setting only one value. When more than one value is going to be set, then it is
-        strongly recomended to use method SetAll(), because configuration is saved to the configuration
+        strongly recommended to use method SetAll(), because configuration is saved to the configuration
         file at the end of method Set()
         :param property_name: string with property e.g. server.hostname
         :param new_value: string with new value
@@ -86,21 +86,29 @@ class ConfigDBusObject(base_object.BaseObject):
         else:
             logging_changed = False
 
-        # Try to temporary disable dir watcher, because 'self.config.persist()' writes configuration
-        # file and it would trigger file system monitor callback function and saved values would be
+        # Try to temporarily disable dir watcher, because 'self.config.persist()' writes configuration
+        # file, and it would trigger file system monitor callback function and saved values would be
         # read again. It can cause race conditions, when Set() is called multiple times
         Server.temporary_disable_dir_watchers({CONFIG_WATCHER})
 
         # Write new config value to configuration file
         self.config.persist()
 
-        Server.enable_dir_watchers({CONFIG_WATCHER})
-
-        # When anything in logging section was just chnaged, then we have to re-initialize logger
+        # When anything in logging section was just changed, then we have to re-initialize logger
         if logging_changed is True:
             parser = rhsm.config.get_config_parser()
             self.config = Config(parser)
-            rhsm.logutil.init_logger(parser)
+            # The iniparse is not thread-safe and some unexpected exceptions can happen due to
+            # race conditions. This is very rare. For this reason we try to catch all exceptions here,
+            # because it is not critical.
+            # See BZ: 2076948, 2093883
+            try:
+                rhsm.logutil.init_logger(parser)
+            except Exception as err:
+                log.warning(f"Re-initialization of logger failed: {err}")
+
+        # Enable watchers after re-initialization of logger to minimize race conditions
+        Server.enable_dir_watchers({CONFIG_WATCHER})
 
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
@@ -134,21 +142,29 @@ class ConfigDBusObject(base_object.BaseObject):
             if section_name == 'logging':
                 logging_changed = True
 
-        # Try to temporary disable dir watcher, because 'self.config.persist()' writes configuration
-        # file and it would trigger file system monitor callback function and saved values would be
+        # Try to temporarily disable dir watcher, because 'self.config.persist()' writes configuration
+        # file, and it would trigger file system monitor callback function and saved values would be
         # read again. It can cause race conditions, when SetAll() is called multiple times
         Server.temporary_disable_dir_watchers({CONFIG_WATCHER})
 
         # Write new config value to configuration file
         self.config.persist()
 
-        Server.enable_dir_watchers({CONFIG_WATCHER})
-
         # When anything in logging section was just changed, then we have to re-initialize logger
         if logging_changed is True:
             parser = rhsm.config.get_config_parser()
             self.config = Config(parser)
-            rhsm.logutil.init_logger(parser)
+            # The iniparse is not thread-safe and some unexpected exceptions can happen due to
+            # race conditions. This is very rare. For this reason we try to catch all exceptions here,
+            # because it is not critical.
+            # See BZ: 2076948, 2093883
+            try:
+                rhsm.logutil.init_logger(parser)
+            except Exception as err:
+                log.warning(f"Re-initialization of logger failed: {err}")
+
+        # Enable watchers after re-initialization of logger to minimize race conditions
+        Server.enable_dir_watchers({CONFIG_WATCHER})
 
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
@@ -199,7 +215,7 @@ class ConfigDBusObject(base_object.BaseObject):
     def reload(self):
         """
         This callback method is called, when i-notify or periodical directory polling detects
-        any change of rhsm.conf file. Thus configuration file is reloaded and new values are used.
+        any change of rhsm.conf file. Thus, configuration file is reloaded and new values are used.
         """
         parser = rhsm.config.get_config_parser()
 
