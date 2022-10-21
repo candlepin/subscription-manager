@@ -229,10 +229,8 @@ def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
 
-    exception_mapper = ExceptionMapper()
-
-    mapped_message: str = exception_mapper.get_message(ex)
-    system_exit(os.EX_SOFTWARE, mapped_message)
+    # Directly pass the exception to system_exit for exception message formatting and exit.
+    system_exit(os.EX_SOFTWARE, ex)
 
 
 def show_autosubscribe_output(uep, identity):
@@ -723,8 +721,7 @@ class AbstractSyspurposeCommand(CliCommand):
                 server_response = self.cp.getOwnerSyspurposeValidFields(org_key)
             except connection.RestlibException as rest_err:
                 log.warning("Unable to get list of valid fields using REST API: %s" % rest_err)
-                mapped_message: str = ExceptionMapper().get_message(rest_err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, rest_err)
             except ProxyException:
                 system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
             else:
@@ -949,8 +946,7 @@ class AbstractSyspurposeCommand(CliCommand):
             log.exception(re)
             if getattr(self.options, 'list', None):
                 log.error("Error: Unable to retrieve %s from server: %s" % (self.attr, err))
-                mapped_message: str = ExceptionMapper().get_message(err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, err)
             else:
                 log.debug("Error: Unable to retrieve %s from server: %s" % (self.attr, err))
         except Exception as err:
@@ -1000,7 +996,7 @@ class AbstractSyspurposeCommand(CliCommand):
             advice = SP_ADVICE.format(command=command)
             value = result[attr]
             msg = _(SP_CONFLICT_MESSAGE.format(attr=attr, download_value=value, advice=advice))
-            system_exit(os.EX_SOFTWARE, msgs=msg)
+            system_exit(os.EX_SOFTWARE, msg)
         else:
             print(success_msg)
 
@@ -1274,8 +1270,7 @@ class RefreshCommand(CliCommand):
             refresh_service.refresh(force=self.options.force)
         except connection.RestlibException as re_err:
             log.error(re_err)
-            mapped_message: str = ExceptionMapper().get_message(re_err)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re_err)
         except Exception as e:
             handle_exception(
                 _("Unable to perform refresh due to the following exception: {e}").format(e=e), e
@@ -1374,8 +1369,7 @@ class IdentityCommand(UserPassCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)
 
@@ -1414,8 +1408,7 @@ class OwnersCommand(UserPassCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve org list from server: %s" % re)
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve org list from server"), e)
 
@@ -1472,8 +1465,7 @@ class EnvironmentsCommand(OrgCommand):
             log.exception(re)
             log.error(u"Error: Unable to retrieve environment list from server: %s" % re)
 
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
@@ -1693,8 +1685,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve service levels: %s" % re)
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
         else:
@@ -1716,8 +1707,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             except connection.RestlibException as re_err:
                 log.exception(re_err)
                 log.error(u"Error: Unable to retrieve service levels: %s" % re_err)
-                mapped_message: str = ExceptionMapper().get_message(re_err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, re_err)
             except ProxyException:
                 system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
 
@@ -1785,8 +1775,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             if e.code == 404 and e.msg.find('/servicelevels') > 0:
                 system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
             elif e.code == 404:
-                mapped_message: str = ExceptionMapper().get_message(e)
-                system_exit(os.EX_DATAERR, mapped_message)
+                system_exit(os.EX_DATAERR, e)
             else:
                 raise e
 
@@ -1906,8 +1895,7 @@ class RegisterCommand(UserPassCommand):
             # set during service.register() call
             attach.AttachService(self.cp).attach_auto(service_level=None)
         except connection.RestlibException as rest_lib_err:
-            mapped_message: str = ExceptionMapper().get_message(rest_lib_err)
-            print_error(mapped_message)
+            print_error(rest_lib_err)
         except Exception:
             log.exception("Auto-attach failed")
             raise
@@ -2001,8 +1989,7 @@ class RegisterCommand(UserPassCommand):
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error during registration: %s") % e, e)
         else:
@@ -2705,8 +2692,7 @@ class RemoveCommand(CliCommand):
                 raise ge
             except connection.RestlibException as err:
                 log.error(err)
-                mapped_message: str = ExceptionMapper().get_message(err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, err)
             except Exception as e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
         else:
@@ -2796,8 +2782,7 @@ class FactsCommand(CliCommand):
                 raise ge
             except connection.RestlibException as re:
                 log.exception(re)
-                mapped_message: str = ExceptionMapper().get_message(re)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, re)
             log.debug("Succesfully updated the system facts.")
             print(_("Successfully updated the system facts."))
 
@@ -3574,8 +3559,7 @@ class OverrideCommand(CliCommand):
                 if ex.code == 400:
                     # black listed overrides specified.
                     # Print message and return a less severe code.
-                    mapped_message: str = ExceptionMapper().get_message(ex)
-                    system_exit(1, mapped_message)
+                    system_exit(1, ex)
                 else:
                     raise ex
 
