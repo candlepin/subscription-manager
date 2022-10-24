@@ -16,9 +16,12 @@
 #
 import getpass
 import readline
+import os
 
 from subscription_manager.cli_command.cli import CliCommand
+from subscription_manager.cli import system_exit
 from subscription_manager.i18n import ugettext as _
+from subscription_manager.utils import is_interactive
 
 
 class UserPassCommand(CliCommand):
@@ -52,8 +55,20 @@ class UserPassCommand(CliCommand):
         """
         Safely get a username and password from the tty, without echoing.
         if either username or password are provided as arguments, they will
-        not be prompted for.
+        not be prompted for. In a non-interactive session, the system exits with an error.
         """
+        if not is_interactive():
+            if not username:
+                system_exit(
+                    os.EX_USAGE,
+                    _("Error: --username is a required parameter in non-interactive mode."),
+                )
+            if not password:
+                system_exit(
+                    os.EX_USAGE,
+                    _("Error: --password is a required parameter in non-interactive mode."),
+                )
+
         while not username:
             username = input(_("Username: "))
             readline.clear_history()
