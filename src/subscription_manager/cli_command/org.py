@@ -20,6 +20,7 @@ import readline
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.i18n import ugettext as _
+from subscription_manager.utils import is_interactive
 
 
 class OrgCommand(UserPassCommand):
@@ -41,6 +42,8 @@ class OrgCommand(UserPassCommand):
 
     @staticmethod
     def _get_org(org):
+        if not is_interactive():
+            system_exit(os.EX_USAGE, _("Error: --org is a required parameter in non-interactive mode."))
         while not org:
             org = input(_("Organization: "))
             readline.clear_history()
