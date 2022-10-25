@@ -60,7 +60,7 @@ from subscription_manager.utils import parse_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width, print_error, unique_list_items, \
         is_simple_content_access, get_supported_resources, get_current_owner, \
-        generate_correlation_id, friendly_join
+        generate_correlation_id, friendly_join, is_interactive
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
@@ -1027,8 +1027,13 @@ class UserPassCommand(CliCommand):
         """
         Safely get a username and password from the tty, without echoing.
         if either username or password are provided as arguments, they will
-        not be prompted for.
+        not be prompted for. In a non-interactive session, the system exits with an error.
         """
+        if not is_interactive():
+            if not username:
+                system_exit(os.EX_USAGE, _("Error: --username is a required parameter in non-interactive mode."))
+            if not password:
+                system_exit(os.EX_USAGE, _("Error: --password is a required parameter in non-interactive mode."))
         while not username:
             username = six.moves.input(_("Username: "))
             readline.clear_history()
@@ -1075,6 +1080,8 @@ class OrgCommand(UserPassCommand):
 
     @staticmethod
     def _get_org(org):
+        if not is_interactive():
+            system_exit(os.EX_USAGE, _("Error: --org is a required parameter in non-interactive mode."))
         while not org:
             org = six.moves.input(_("Organization: "))
             readline.clear_history()
@@ -2072,6 +2079,8 @@ class RegisterCommand(UserPassCommand):
         """
         By breaking this code out, we can write cleaner tests
         """
+        if not is_interactive():
+            system_exit(os.EX_USAGE, _("Error: --environments is a required parameter in non-interactive mode."))
         if self.cp.has_capability(MULTI_ENV):
             environment = six.moves.input(_("Environments: ")).replace(" ", "")
         else:
@@ -2139,7 +2148,10 @@ class RegisterCommand(UserPassCommand):
         print(_('Hint: User "%s" is member of following organizations: %s') %
               (self.username, ', '.join(org_keys)))
 
-        # Read the owner key from stdin
+        # Read the owner key from stdin or raise a system error if in a non-interactive session.
+        if not is_interactive():
+            system_exit(os.EX_USAGE, _("Error: --org is a required parameter in non-interactive mode."))
+
         owner_key = None
         while not owner_key:
             owner_key = six.moves.input(_("Organization: "))
