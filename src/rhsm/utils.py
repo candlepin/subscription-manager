@@ -455,7 +455,7 @@ class StatusMessage:
     def clean(self) -> None:
         if self.quiet:
             return
-        print(" " * len(self.text), end="\r")
+        print("\033[0K", end="\r")
 
     def __enter__(self) -> None:
         self.print()
@@ -541,15 +541,6 @@ class LiveStatusMessage(StatusMessage):
             yield self.frames[self._loops % len(self.frames)]
 
     @property
-    def max_text_width(self) -> int:
-        """Get the length of the longest line possible.
-
-        This is used so we can properly clean the console when we exit.
-        """
-        max_frame_length: int = len(max(self.frames, key=len))
-        return len(self.text) + max_frame_length + 1
-
-    @property
     def cursor(self) -> bool:
         """Get cursor visibility state."""
         return self._cursor
@@ -603,7 +594,7 @@ class LiveStatusMessage(StatusMessage):
     def clean(self) -> None:
         if self.quiet:
             return
-        print(" " * self.max_text_width, end="\r")
+        print("\033[0K", end="\r")
 
     def loop(self) -> None:
         """Show pretty animation while we fetch data."""
