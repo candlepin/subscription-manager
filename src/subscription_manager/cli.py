@@ -14,7 +14,9 @@
 import os
 import sys
 import logging
+from typing import Union
 
+from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
 from subscription_manager.i18n_argparse import ArgumentParser
 from subscription_manager.utils import print_error
@@ -190,28 +192,19 @@ class CLI(object):
             print(error)
 
 
-def system_exit(code, msgs=None):
+def system_exit(code: int, msg: Union[str, Exception, None] = None) -> None:
     """
-    Exit with a code and optional message(s). Saved a few lines of code.
+    Exits the process with an exit code and optional message(s).
+
+    :param code: A unix-style system exit code.
+    :param msg: A system exit message, a single exception, or none. This parameter defaults to None.
     """
 
-    if msgs:
-        if type(msgs) not in [type([]), type(())]:
-            msgs = (msgs,)
-        for msg in msgs:
-            # see bz #590094 and #744536
-            # most of our errors are just str types, but error's returned
-            # from rhsm.connection are unicode type. This method didn't
-            # really expect that, so make sure msg is unicode, then
-            # try to encode it as utf-8.
-
-            # if we get an exception passed in, and it doesn't
-            # have a str repr, just ignore it. This is to
-            # preserve existing behaviour. see bz#747024
-            if isinstance(msg, Exception):
-                msg = "%s" % msg
-
-            print_error(msg)
+    if msg:
+        if isinstance(msg, Exception):
+            exception_mapper: ExceptionMapper = ExceptionMapper()
+            msg = exception_mapper.get_message(msg)
+        print_error(msg)
 
     # Try to flush all outputs, see BZ: 1350402
     flush_stdout_stderr()

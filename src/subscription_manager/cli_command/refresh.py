@@ -22,7 +22,6 @@ import rhsm.connection as connection
 
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand, handle_exception
-from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
@@ -41,8 +40,7 @@ class RefreshCommand(CliCommand):
             refresh_service.refresh(force=self.options.force)
         except connection.RestlibException as re:
             log.error(re)
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(
                 _("Unable to perform refresh due to the following exception: {e}").format(e=e), e

@@ -30,7 +30,6 @@ from subscription_manager.cli_command.cli import (
     handle_exception,
 )
 from subscription_manager.cli_command.org import OrgCommand
-from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.i18n import ugettext as _
 
 from syspurpose.files import SyncedStore
@@ -124,8 +123,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             log.exception(re)
             log.error("Error: Unable to retrieve service levels: {re}".format(re=re))
 
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
         else:
@@ -148,8 +146,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                 log.exception(re_err)
                 log.error("Error: Unable to retrieve service levels: {err}".format(err=re_err))
 
-                mapped_message: str = ExceptionMapper().get_message(re_err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, re_err)
             except ProxyException:
                 system_exit(
                     os.EX_UNAVAILABLE,
@@ -237,7 +234,6 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
                     os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server.")
                 )
             elif e.code == 404:
-                mapped_message: str = ExceptionMapper().get_message(e)
-                system_exit(os.EX_DATAERR, mapped_message)
+                system_exit(os.EX_DATAERR, e)
             else:
                 raise e
