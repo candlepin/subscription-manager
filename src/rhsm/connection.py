@@ -671,11 +671,8 @@ class BaseRestLib(object):
             for cert_file in os.listdir(self.ca_dir):
                 if cert_file.endswith(".pem"):
                     cert_path = os.path.join(self.ca_dir, cert_file)
-                    # FIXME: method load_verify_locations() does not return anything
-                    res = context.load_verify_locations(cert_path)
+                    context.load_verify_locations(cert_path)
                     loaded_ca_certs.append(cert_file)
-                    if res == 0:
-                        raise BadCertificateException(cert_path)
         except ssl.SSLError:
             raise BadCertificateException(cert_path)
         except OSError as e:
