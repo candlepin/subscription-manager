@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.32
+Version: 1.28.33
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1483,6 +1483,30 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Oct 31 2022 Christopher Snyder <csnyder@redhat.com> 1.28.33-1
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- 2096852: [1.28] Fixed script hang in non-interactive execution
+  (jajerome@redhat.com)
+- 2134165: Fixed incorrect registration warning with yum/dnf
+  (jajerome@redhat.com)
+- 2097672: Fixed expected message for manual attach case (jajerome@redhat.com)
+- 2097672: [1.28] Improve warning message (auto-attach in SCA mode)
+  (jhnidek@redhat.com)
+- build: switch rpmlint check to rpmlint 2.x (ptoscano@redhat.com)
+- Only rpmlint our specfiles (csnyder@redhat.com)
+- integration-test: Use custom TLS certs for mock-insights
+  (mvollmer@redhat.com)
+- integration-test: Updates for newer insights-client (mvollmer@redhat.com)
+- test: Rely on insights-client.service to succeed in testSubAndInAndFail
+  (mvollmer@redhat.com)
+- integration-tests: Run testSubAndInAndFail with "setenforce 0"
+  (mvollmer@redhat.com)
+- 2101510: [1.28] Fix D-Bus Register() and update entitlement certs
+  (jhnidek@redhat.com)
+- 2097672: [RFE][1.28] Improve the message, when SCA is enabled
+  (jhnidek@redhat.com)
+
 * Thu Aug 04 2022 Christopher Snyder <csnyder@redhat.com> 1.28.32-1
 - cockpit: Allow unexpected message from RHEL 8.5 version of cockpit-ws
   (martin@piware.de)
