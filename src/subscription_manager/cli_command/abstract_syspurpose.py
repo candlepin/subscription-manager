@@ -185,8 +185,8 @@ class AbstractSyspurposeCommand(CliCommand):
             # When system is registered, then try to get valid fields from cache file
             try:
                 valid_fields = get_syspurpose_valid_fields(uep=self.cp, identity=self.identity)
-            except ProxyException:
-                system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+            except ProxyException as exc:
+                system_exit(os.EX_UNAVAILABLE, exc)
         elif self.options.username and self.options.password and self.cp is not None:
             # Try to get current organization key. It is property of OrgCommand.
             # Every Syspurpose command has to be subclass of OrgCommand too
@@ -199,8 +199,8 @@ class AbstractSyspurposeCommand(CliCommand):
                     "Unable to get list of valid fields using REST API: {rest_err}".format(rest_err=rest_err)
                 )
                 system_exit(os.EX_SOFTWARE, rest_err)
-            except ProxyException:
-                system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+            except ProxyException as exc:
+                system_exit(os.EX_UNAVAILABLE, exc)
             else:
                 if "systemPurposeAttributes" in server_response:
                     server_response = post_process_received_data(server_response)

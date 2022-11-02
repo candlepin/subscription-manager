@@ -23,6 +23,7 @@ import rhsm.connection as connection
 import subscription_manager.injection as inj
 
 from rhsm.certificate import CertificateException
+from rhsm.certificate2 import CertificateLoadingError
 from rhsm.connection import ProxyException
 from rhsm.https import ssl
 import rhsm.utils
@@ -398,8 +399,8 @@ class CliCommand(AbstractCLICommand):
                         os.EX_CONFIG,
                         _("Error: CA certificate for subscription service has not been installed."),
                     )
-                except ProxyException:
-                    system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+                except ProxyException as exc:
+                    system_exit(os.EX_UNAVAILABLE, exc)
 
         else:
             self.cp = None
@@ -415,6 +416,8 @@ class CliCommand(AbstractCLICommand):
 
             if return_code is not None:
                 return return_code
+        except CertificateLoadingError as exc:
+            system_exit(os.EX_SOFTWARE, exc)
         except (CertificateException, ssl.SSLError) as e:
             log.error(e)
             system_exit(os.EX_SOFTWARE, _("System certificates corrupted. Please reregister."))

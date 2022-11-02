@@ -9,10 +9,15 @@
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
+import errno
+import socket
 import unittest
 
 from subscription_manager.exceptions import ExceptionMapper
-from rhsm.connection import RestlibException
+from subscription_manager.certdirectory import DEFAULT_PRODUCT_CERT_DIR
+from rhsm.connection import RestlibException, BadCertificateException, ProxyException, UnknownContentException
+from rhsm.https import httplib, ssl
+from rhsm.certificate2 import CertificateLoadingError
 
 
 class MyRuntimeErrorBase(RuntimeError):
@@ -96,3 +101,145 @@ class TestExceptionMapper(unittest.TestCase):
 
         err = OldStyleClass()
         self.assertEqual(expected_message, mapper.get_message(err))
+
+    def test_bad_certificate_exception(self):
+        expected_message = "Expected MESSAGE"
+        mapper = ExceptionMapper()
+
+        sslerr = ssl.SSLError(5, expected_message)
+        err = BadCertificateException("foo.pem", sslerr)
+        self.assertEqual(f"Bad CA certificate: foo.pem: {expected_message}", mapper.get_message(err))
+
+    def test_connectionerror(self):
+        expected_message = "Expected MESSAGE"
+        expected_errno = errno.ECONNREFUSED
+        mapper = ExceptionMapper()
+
+        err = ConnectionRefusedError(expected_errno, expected_message)
+        self.assertEqual(
+            f"Connection error: {expected_message} (error code {expected_errno})",
+            mapper.get_message(err),
+        )
+
+    def test_socket_gaierror(self):
+        expected_message = "Expected MESSAGE"
+        expected_errno = socket.EAI_NONAME
+        mapper = ExceptionMapper()
+
+        err = socket.gaierror(expected_errno, expected_message)
+        self.assertEqual(
+            f"Network error: {expected_message} (error code {expected_errno})",
+            mapper.get_message(err),
+        )
+
+    def test_proxyexception_with_exception_oserror(self):
+        expected_message = "Expected MESSAGE"
+        expected_errno = errno.ECONNREFUSED
+        expected_hostname = "hostname"
+        expected_port = 1234
+        mapper = ExceptionMapper()
+
+        oserr = ConnectionRefusedError(expected_errno, expected_message)
+        err = ProxyException(expected_hostname, expected_port, oserr)
+        self.assertEqual(
+            f"Proxy error: unable to connect to {expected_hostname}:{expected_port}: "
+            f"{expected_message} (error code {expected_errno})",
+            mapper.get_message(err),
+        )
+
+    def test_proxyexception_with_exception_non_oserror(self):
+        expected_message = "Expected MESSAGE"
+        expected_hostname = "hostname"
+        expected_port = 1234
+        mapper = ExceptionMapper()
+
+        genericerr = Exception(expected_message)
+        err = ProxyException(expected_hostname, expected_port, genericerr)
+        self.assertEqual(
+            f"Proxy error: unable to connect to {expected_hostname}:{expected_port}: {expected_message}",
+            mapper.get_message(err),
+        )
+
+    def test_proxyexception_without_exception(self):
+        expected_hostname = "hostname"
+        expected_port = 1234
+        mapper = ExceptionMapper()
+
+        err = ProxyException(expected_hostname, expected_port)
+        self.assertEqual(
+            f"Proxy error: unable to connect to {expected_hostname}:{expected_port}",
+            mapper.get_message(err),
+        )
+
+    def test_unknowncontentexception_with_content(self):
+        expected_http_code = 404
+        expected_http_string = httplib.responses[expected_http_code]
+        expected_content_type = "text/plain"
+        expected_content_original = "\033[92mExpected GREEN MESSAGE\033[0m"
+        expected_content_escaped = "<27>[92mExpected GREEN MESSAGE<27>[0m"
+        mapper = ExceptionMapper()
+
+        err = UnknownContentException(expected_http_code, expected_content_type, expected_content_original)
+        self.assertEqual(
+            f"Unknown server reply (HTTP error code {expected_http_code}: "
+            f"{expected_http_string}):\n{expected_content_escaped}",
+            mapper.get_message(err),
+        )
+
+    def test_unknowncontentexception_without_content(self):
+        expected_http_code = 404
+        expected_http_string = httplib.responses[expected_http_code]
+        mapper = ExceptionMapper()
+
+        err = UnknownContentException(expected_http_code)
+        self.assertEqual(
+            f"Unknown server reply (HTTP error code {expected_http_code}: {expected_http_string})",
+            mapper.get_message(err),
+        )
+
+    def test_certificateloadingerror_product_certificate(self):
+        expected_library = "X509"
+        expected_reason = "Expected MESSAGE"
+        expected_path = f"{DEFAULT_PRODUCT_CERT_DIR}/foo.pem"
+        mapper = ExceptionMapper()
+
+        err = CertificateLoadingError(expected_library, expected_reason, path=expected_path)
+        self.assertEqual(
+            f"Bad product certificate: {expected_path}: [{expected_library}] {expected_reason}",
+            mapper.get_message(err),
+        )
+
+    def test_certificateloadingerror_other_certificate(self):
+        expected_library = "X509"
+        expected_reason = "Expected MESSAGE"
+        expected_path = "/tmp/foo.pem"
+        mapper = ExceptionMapper()
+
+        err = CertificateLoadingError(expected_library, expected_reason, path=expected_path)
+        self.assertEqual(
+            f"Bad certificate: {expected_path}: [{expected_library}] {expected_reason}",
+            mapper.get_message(err),
+        )
+
+    def test_certificateloadingerror_pem_data(self):
+        expected_library = "X509"
+        expected_reason = "Expected MESSAGE"
+        expected_data = "DOESTHISLOOKLIKEACERT?"
+        mapper = ExceptionMapper()
+
+        err = CertificateLoadingError(expected_library, expected_reason, pem=expected_data)
+        self.assertEqual(
+            f"Bad certificate: [{expected_library}] {expected_reason}\n{expected_data}",
+            mapper.get_message(err),
+        )
+
+    def test_certificateloadingerror_unknown(self):
+        expected_library = "X509"
+        expected_reason = "Expected MESSAGE"
+        mapper = ExceptionMapper()
+
+        err = CertificateLoadingError(expected_library, expected_reason)
+        self.assertEqual(
+            f"Bad certificate: [{expected_library}] {expected_reason}",
+            mapper.get_message(err),
+        )

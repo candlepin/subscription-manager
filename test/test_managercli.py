@@ -388,7 +388,8 @@ class HandleExceptionTests(unittest.TestCase):
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
     def test_he_bad_certificate(self):
-        e = connection.BadCertificateException("/road/to/nowhwere")
+        sslerr = ssl.SSLError(5, "some ssl error")
+        e = connection.BadCertificateException("/road/to/nowhwere", sslerr)
         try:
             handle_exception("huh", e)
         except SystemExit as e:
@@ -401,8 +402,8 @@ class HandleExceptionTests(unittest.TestCase):
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
-    def test_he_network_exception(self):
-        e = connection.NetworkException(1337)
+    def test_he_unknowncontent_exception(self):
+        e = connection.UnknownContentException(1337)
         try:
             handle_exception("huh", e)
         except SystemExit as e:
