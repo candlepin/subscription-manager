@@ -29,7 +29,6 @@ echo "Using container name: $TAG"
 if [ -d $WORKSPACE@tmp ]; then
     podman run -it \
       -u $JUID:$JGID \
-      -v /run/user/$JUID/bus:/tmp/bus \
       -w $WORKSPACE \
       -v $WORKSPACE:$WORKSPACE:rw,z \
       -v $WORKSPACE@tmp:$WORKSPACE@tmp:rw,z \
@@ -42,7 +41,6 @@ if [ -d $WORKSPACE@tmp ]; then
 else
     podman run -it \
       -u $JUID:$JGID \
-      -v /run/user/$JUID/bus:/tmp/bus \
       -w $WORKSPACE \
       -v $WORKSPACE:$WORKSPACE:rw,z \
       --name "$TAG" \
