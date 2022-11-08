@@ -1895,7 +1895,8 @@ class RegisterCommand(UserPassCommand):
             # set during service.register() call
             attach.AttachService(self.cp).attach_auto(service_level=None)
         except connection.RestlibException as rest_lib_err:
-            print_error(rest_lib_err)
+            mapped_message: str = ExceptionMapper().get_message(rest_lib_err)
+            print_error(mapped_message)
         except Exception:
             log.exception("Auto-attach failed")
             raise
