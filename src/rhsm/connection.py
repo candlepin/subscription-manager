@@ -1467,8 +1467,7 @@ class UEPConnection(BaseConnection):
             self.capabilities = self._load_manager_capabilities()
         return capability in self.capabilities
 
-    # FIXME: username and password are not used. Replace it with *args and **kwargs
-    def ping(self, username=None, password=None) -> Any:
+    def ping(self, *args, **kwargs) -> Any:
         return self.conn.request_get("/status/", description=_("Checking connection status"))
 
     def getJWToken(self, cloud_id: str, metadata: str, signature: str) -> Any:
