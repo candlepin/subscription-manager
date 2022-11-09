@@ -1499,12 +1499,11 @@ class UEPConnection(BaseConnection):
             description=_("Fetching cloud token"),
         )
 
-    # FIXME: default value of facts should be None (not mutable {})
     def registerConsumer(
         self,
         name: str = "unknown",
         consumer_type: str = "system",
-        facts: dict = {},
+        facts: dict = None,
         owner: str = None,
         environments: str = None,
         keys: str = None,
@@ -1524,7 +1523,7 @@ class UEPConnection(BaseConnection):
         params = {
             "type": consumer_type,
             "name": name,
-            "facts": facts,
+            "facts": facts or {},
         }
         if installed_products:
             params["installedProducts"] = installed_products
