@@ -151,8 +151,10 @@ class RhsmConfigParser(SafeConfigParser):
 
     def save(self, config_file: Optional[str] = None) -> None:
         """Writes config file to storage."""
-        # FIXME config_file is not used
-        rhsm_conf_dir: str = os.path.dirname(self.config_file)
+        # Use self.config_file if config_file is not provided in method arguments.
+        config_file: str = config_file or self.config_file
+
+        rhsm_conf_dir: str = os.path.dirname(config_file)
 
         # When /etc/rhsm does not exist, then try to create it
         if os.path.isdir(rhsm_conf_dir) is False:
@@ -164,11 +166,11 @@ class RhsmConfigParser(SafeConfigParser):
             fo.flush()
             mode: int
             try:
-                mode = os.stat(self.config_file).st_mode
+                mode = os.stat(config_file).st_mode
             except IOError:
                 mode = 0o644
-            os.rename(fo.name, self.config_file)
-            os.chmod(self.config_file, mode)
+            os.rename(fo.name, config_file)
+            os.chmod(config_file, mode)
 
     def get(self, section: str, prop: str) -> str:
         """Get a value from rhsm config.
