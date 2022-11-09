@@ -481,13 +481,21 @@ class StatusSpinnerStyle:
       all TTYs, not just rich terminal emulators in GUI).
     """
 
-    # FIXME: There is not reason to have following variables mutable. Convert it to tuples
-    LINE: List[str] = ["|", "/", "-", "\\"]
-    BRAILLE: List[str] = ["⠋", "⠙", "⠸", "⠴", "⠦", "⠇"]
-    WIDE_BRAILLE: List[str] = ["⠧ ", "⠏ ", "⠋⠁", "⠉⠉", "⠈⠙", " ⠹", " ⠼", "⠠⠴", "⠤⠤", "⠦⠄"]
-    BAR_FORWARD: List[str] = ["[    ]", "[=   ]", "[==  ]", "[=== ]", "[====]", "[ ===]", "[  ==]", "[   =]"]
-    BAR_BACKWARD: List[str] = ["[    ]", "[   =]", "[  ==]", "[ ===]", "[====]", "[=== ]", "[==  ]", "[=   ]"]
-    BAR_BOUNCE: List[str] = BAR_FORWARD + BAR_BACKWARD
+    LINE: Tuple[str] = ("|", "/", "-", "\\")
+    BRAILLE: Tuple[str] = ("⠋", "⠙", "⠸", "⠴", "⠦", "⠇")
+    WIDE_BRAILLE: Tuple[str] = ("⠧ ", "⠏ ", "⠋⠁", "⠉⠉", "⠈⠙", " ⠹", " ⠼", "⠠⠴", "⠤⠤", "⠦⠄")
+    BAR_FORWARD: Tuple[str] = ("[    ]", "[=   ]", "[==  ]", "[=== ]", "[====]", "[ ===]", "[  ==]", "[   =]")
+    BAR_BACKWARD: Tuple[str] = (
+        "[    ]",
+        "[   =]",
+        "[  ==]",
+        "[ ===]",
+        "[====]",
+        "[=== ]",
+        "[==  ]",
+        "[=   ]",
+    )
+    BAR_BOUNCE: Tuple[str] = BAR_FORWARD + BAR_BACKWARD
 
 
 class LiveStatusMessage(StatusMessage):
