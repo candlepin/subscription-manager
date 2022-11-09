@@ -152,8 +152,9 @@ def parse_url(
     if not good_url:
         good_url = "https://%s" % local_server_entry
 
-    # FIXME: need a try except here? docs
-    # don't seem to indicate any expected exceptions
+    # No need to do error-checking here since urlparse
+    # always returns a 6-length named tuple -- only consideration
+    # to note is that the urlparse input is a valid string.
     result = urllib.parse.urlparse(good_url)
     username: Union[None, str] = default_username
     password: Union[None, str] = default_password
