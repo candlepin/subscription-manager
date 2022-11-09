@@ -122,7 +122,7 @@ class RegisterService(object):
                 keys=options.get("activation_keys"),
                 installed_products=self.installed_mgr.format_for_server(),
                 content_tags=self.installed_mgr.tags,
-                type=type,
+                consumer_type=type,
                 role=role,
                 addons=addons,
                 service_level=service_level,

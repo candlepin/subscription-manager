@@ -1499,12 +1499,11 @@ class UEPConnection(BaseConnection):
             description=_("Fetching cloud token"),
         )
 
-    # FIXME: rename argument type to something else, because it shadows built-in 'type'
     # FIXME: default value of facts should be None (not mutable {})
     def registerConsumer(
         self,
         name: str = "unknown",
-        type: str = "system",
+        consumer_type: str = "system",
         facts: dict = {},
         owner: str = None,
         environments: str = None,
@@ -1523,7 +1522,7 @@ class UEPConnection(BaseConnection):
         Creates a consumer on candlepin server
         """
         params = {
-            "type": type,
+            "type": consumer_type,
             "name": name,
             "facts": facts,
         }
