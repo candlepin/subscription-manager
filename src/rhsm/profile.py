@@ -346,10 +346,9 @@ class Package(object):
     def __str__(self) -> str:
         return "<Package: %s %s %s>" % (self.name, self.version, self.release)
 
-    # FIXME: the type of value should not be any, but it should be Union[str, bytes]
     # added in support of bz1519512, bz1543639
     @staticmethod
-    def _normalize_string(value: Any):
+    def _normalize_string(value: Union[str, bytes]) -> str:
         if type(value) is bytes:
             return value.decode("utf-8", "replace")
         return value
