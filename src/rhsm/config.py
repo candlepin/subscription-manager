@@ -20,7 +20,6 @@ import os
 from iniparse import SafeConfigParser
 from iniparse.compat import NoOptionError, InterpolationMissingOptionError, NoSectionError
 import re
-import tempfile
 from typing import Dict, List, Optional, Tuple
 
 CONFIG_ENV_VAR = "RHSM_CONFIG"
@@ -160,8 +159,7 @@ class RhsmConfigParser(SafeConfigParser):
         if os.path.isdir(rhsm_conf_dir) is False:
             os.makedirs(rhsm_conf_dir)
 
-        # FIXME Stop using tempfile like that
-        with tempfile.NamedTemporaryFile(mode="w", dir=rhsm_conf_dir, delete=False) as fo:
+        with open(config_file, mode="w") as fo:
             self.write(fo)
             fo.flush()
             mode: int
@@ -169,7 +167,6 @@ class RhsmConfigParser(SafeConfigParser):
                 mode = os.stat(config_file).st_mode
             except IOError:
                 mode = 0o644
-            os.rename(fo.name, config_file)
             os.chmod(config_file, mode)
 
     def get(self, section: str, prop: str) -> str:
