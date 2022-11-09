@@ -232,8 +232,7 @@ class Certificate(object):
         """
         return self.__ext
 
-    # FIXME: following methods should be consistent. Method should return self or None
-    def read(self, pem_path: str) -> None:
+    def read(self, pem_path: str) -> "Certificate":
         """
         Read a certificate file
         :param pem_path: The path to a .pem file.
@@ -245,6 +244,7 @@ class Certificate(object):
         finally:
             f.close()
         self.path = pem_path
+        return self
 
     def write(self, pem_path: str) -> "Certificate":
         """
