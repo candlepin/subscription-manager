@@ -21,6 +21,7 @@ from iniparse import SafeConfigParser
 from iniparse.compat import NoOptionError, InterpolationMissingOptionError, NoSectionError
 import re
 from typing import Dict, List, Optional, Tuple
+from subscription_manager.i18n import ugettext as _
 
 CONFIG_ENV_VAR = "RHSM_CONFIG"
 
@@ -225,19 +226,20 @@ class RhsmConfigParser(SafeConfigParser):
         """
         valid: List[str] = ["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]
         if value not in valid + ["NOTSET"]:
-            # FIXME These strings are not being translated
             if print_warning is True:
                 print(
-                    "Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value),
+                    _("Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value)),
                     file=sys.stderr,
                 )
                 print(
-                    "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set "
-                    "the default_log_level to a valid value.",
+                    _(
+                        "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set "
+                        "the default_log_level to a valid value."
+                    ),
                     file=sys.stderr,
                 )
                 valid_str = ", ".join(valid)
-                print("Valid Values: {valid_str}".format(valid_str=valid_str), file=sys.stderr)
+                print(_("Valid Values: {valid_str}".format(valid_str=valid_str)), file=sys.stderr)
             return False
         return True
 
