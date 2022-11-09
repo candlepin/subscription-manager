@@ -492,8 +492,7 @@ class EntitlementCertificate(ProductCertificate):
     def bogus(self) -> List[str]:
         bogus = ProductCertificate.bogus(self)
         if self.getOrder() is None:
-            # FIXME: fix typo
-            bogus.append("No order infomation")
+            bogus.append("No order information")
         return bogus
 
     def __str__(self) -> str:
