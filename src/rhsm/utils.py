@@ -129,11 +129,10 @@ def parse_url(
     # Adding http:// onto the front of the hostname
 
     if local_server_entry == "":
-        raise ServerUrlParseErrorEmpty(local_server_entry)
+        raise ServerUrlParseErrorEmpty(local_server_entry, "Server entry is empty")
 
     if local_server_entry is None:
-        # FIXME: Raise exception with some useful message like: "No server entry provided", not None
-        raise ServerUrlParseErrorNone(local_server_entry)
+        raise ServerUrlParseErrorNone(local_server_entry, "No server entry provided")
 
     # good_url in this case meaning a schema we support, and
     # _something_ else. This is to make urlparse happy
