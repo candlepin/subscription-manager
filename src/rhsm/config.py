@@ -143,8 +143,8 @@ class RhsmConfigParser(SafeConfigParser):
         :param file_names: list of configuration files
         :return: number of configuration files read
         """
-        # FIXME Instead of optional list, we can set default to [] instead
-        if file_names is None:
+        file_names: list = file_names or []
+        if not file_names:
             return super(RhsmConfigParser, self).read(self.config_file)
         else:
             return super(RhsmConfigParser, self).read(file_names)
