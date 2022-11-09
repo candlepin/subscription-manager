@@ -341,8 +341,7 @@ class RhsmHostConfigParser(RhsmConfigParser):
     """
 
     def __init__(self, config_file: Optional[str] = None, defaults=None) -> None:
-        # FIXME Use super() instead
-        RhsmConfigParser.__init__(self, config_file, defaults)
+        super(RhsmHostConfigParser, self).__init__(config_file, defaults)
 
         # Override the ca_cert_dir and repo_ca_cert if necessary:
         ca_cert_dir: str = self.get("rhsm", "ca_cert_dir")
