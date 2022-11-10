@@ -1711,17 +1711,6 @@ class UEPConnection(BaseConnection):
         ret = self.conn.request_put(method, params, description=_("Updating consumer information"))
         return ret
 
-    # FIXME: It is not used by any client tool
-    def addOrUpdateGuestId(self, uuid: str, guestId: Union[str, dict]) -> dict:
-        if isinstance(guestId, str):
-            guest_uuid = guestId
-            guestId = {}
-        else:
-            # FIXME: replace with get(). This is not safe.
-            guest_uuid = guestId["guestId"]
-        method = "/consumers/%s/guestids/%s" % (self.sanitize(uuid), self.sanitize(guest_uuid))
-        return self.conn.request_put(method, guestId, description=_("Updating guest information"))
-
     def getGuestIds(self, uuid: str) -> dict:
         method = "/consumers/%s/guestids" % self.sanitize(uuid)
         return self.conn.request_get(method, description=_("Fetching guest information"))
@@ -1778,18 +1767,6 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s" % self.sanitize(uuid)
         return self.conn.request_get(method, description=_("Fetching consumer keys"))
 
-    # FIXME: It is not used by any client tool
-    def getConsumers(self, owner: str = None) -> List[dict]:
-        """
-        Returns a list of consumers. This method requires admin connection and authenticated
-        using username/password
-        """
-        method = "/consumers/"
-        if owner:
-            method = "%s?owner=%s" % (method, owner)
-
-        return self.conn.request_get(method, description=_("Fetching consumers"))
-
     def getCompliance(self, uuid: str, on_date: datetime.datetime = None) -> dict:
         """
         Returns a compliance object with compliance status information
@@ -1815,57 +1792,12 @@ class UEPConnection(BaseConnection):
         method = "/owners/%s/system_purpose" % self.sanitize(owner_key)
         return self.conn.request_get(method, description=_("Fetching available system purpose settings"))
 
-    # FIXME: it is not possible to specify content access mode
-    # FIXME: It is not used by any client tool
-    def createOwner(self, ownerKey: str, ownerDisplayName: str = None) -> dict:
-        """
-        Creates new owner (organization). This method requires admin connection and authenticated
-        using username/password
-        :param ownerKey: new ID of new owner (organization)
-        :param ownerDisplayName: new display name of owner (organization)
-        :return: Dictionary representing new oner (organization)
-        """
-        params = {"key": ownerKey}
-        if ownerDisplayName:
-            params["displayName"] = ownerDisplayName
-        method = "/owners/"
-        return self.conn.request_post(method, params, description=_("Creating organization"))
-
     def getOwner(self, uuid: str) -> dict:
         """
         Returns an owner object with pem/key for existing consumers
         """
         method = "/consumers/%s/owner" % self.sanitize(uuid)
         return self.conn.request_get(method, description=_("Fetching organizations"))
-
-    # FIXME: It is not used by any client tool
-    def deleteOwner(self, key: str) -> None:
-        """
-        Deletes an owner. This method requires admin connection and authenticated
-        using username/password
-        :param key: owner ID
-        """
-        method = "/owners/%s" % self.sanitize(key)
-        return self.conn.request_delete(method, description=_("Removing organization"))
-
-    # FIXME: It is not used by any client tool
-    def getOwners(self) -> List[dict]:
-        """
-        Returns a list of all owners. This method requires admin connection and authenticated
-        using username/password
-        """
-        method = "/owners"
-        return self.conn.request_get(method, description=_("Fetching organizations"))
-
-    # FIXME: It is not used by any client tool
-    def getOwnerInfo(self, owner: str) -> dict:
-        """
-        Returns an owner info. This method requires admin connection and authenticated
-        using username/password
-        :param owner: owner ID (organization ID)
-        """
-        method = "/owners/%s/info" % self.sanitize(owner)
-        return self.conn.request_get(method, description=_("Fetching organization information"))
 
     def getOwnerList(self, username: str) -> List[dict]:
         """
@@ -1879,19 +1811,6 @@ class UEPConnection(BaseConnection):
         # Ensures the value is the same for a simple None value
         owners = [x for x in (owners or []) if x is not None]
         return owners
-
-    # FIXME: It is not used by any client tool (neither virt-who)
-    def getOwnerHypervisors(self, owner_key: str, hypervisor_ids: List[str] = None) -> List[dict]:
-        """
-        If hypervisor_ids is populated, only hypervisors with those ids will be returned. This method
-        requires admin connection and authenticated using username/password
-        :param owner_key: owner ID (organization ID)
-        :param hypervisor_ids: list of string with hypervisor UUIDs
-        """
-        method = "/owners/%s/hypervisors?" % owner_key
-        for hypervisor_id in hypervisor_ids or []:
-            method += "&hypervisor_id=%s" % self.sanitize(hypervisor_id)
-        return self.conn.request_get(method, description=_("Fetching organization hypervisors"))
 
     # FIXME: this method should return result of REST API call. Candlepin server response with
     # code 204 and no content is specified. If code 204 is returned, then True should be returned
@@ -1955,20 +1874,6 @@ class UEPConnection(BaseConnection):
             method = "%s&quantity=%s" % (method, quantity)
         return self.conn.request_post(method, description=_("Updating subscriptions"))
 
-    # FIXME: It is not used by any client tool (auto-attach use bind() method)
-    def bindByProduct(self, consumerId: str, products: List[str]) -> List[dict]:
-        """
-        Subscribe consumer directly to one or more products by their ID.
-        This will cause the UEP to look for one or more pools which provide
-        access to the given product
-        :param consumerId: consumer UUID
-        :param products: List of product IDs
-        """
-        # FIXME: we should use self.sanitize() for replacing white spaces
-        args = "&".join(["product=" + product.replace(" ", "%20") for product in products])
-        method = "/consumers/%s/entitlements?%s" % (str(consumerId), args)
-        return self.conn.request_post(method, description=_("Updating subscriptions"))
-
     def bind(self, consumerId: str, entitle_date: datetime.datetime = None) -> List[dict]:
         """
         Same as bindByProduct, but assume the server has a list of the
@@ -1985,25 +1890,6 @@ class UEPConnection(BaseConnection):
             method = "%s?entitle_date=%s" % (method, self.sanitize(entitle_date.isoformat(), plus=True))
 
         return self.conn.request_post(method, description=_("Updating subscriptions"))
-
-    # FIXME: No client tool use this method
-    def dryRunBind(self, consumer_uuid: str, service_level: str) -> List[dict]:
-        """
-        Performs a dry-run autobind on the server and returns the results of
-        what we would get. Callers can use this information to determine if
-        they wish to perform the autobind, and to explicitly grab entitlements
-        from each pool returned.
-
-        Return will be a dict containing a "quantity" and a "pool".
-        """
-        if service_level is None:
-            method = "/consumers/%s/entitlements/dry-run" % self.sanitize(consumer_uuid)
-        else:
-            method = "/consumers/%s/entitlements/dry-run?service_level=%s" % (
-                self.sanitize(consumer_uuid),
-                self.sanitize(service_level),
-            )
-        return self.conn.request_get(method, description=_("Simulating subscribing"))
 
     # FIXME: This method should return True, when it was successful, not None
     def unbindBySerial(self, consumerId: str, serial: str) -> None:
@@ -2034,15 +1920,6 @@ class UEPConnection(BaseConnection):
         """
         method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
         return self.conn.request_delete(method, description=_("Unsubscribing"))
-
-    # FIXME: this should be really removed, because it is not used by any client tool, but it is not
-    # supported by candlepin server
-    def checkin(self, consumerId: str, checkin_date: datetime.datetime = None) -> Any:
-        method = "/consumers/%s/checkin" % self.sanitize(consumerId)
-        # add the optional date to the url
-        if checkin_date:
-            method = "%s?checkin_date=%s" % (method, self.sanitize(checkin_date.isoformat(), plus=True))
-        return self.conn.request_put(method)
 
     def getPoolsList(
         self,
@@ -2093,24 +1970,6 @@ class UEPConnection(BaseConnection):
 
         results = self.conn.request_get(method, description=_("Fetching pools"))
         return results
-
-    # FIXME: no client tool use this method
-    def getPool(self, poolId: str, consumerId: str = None) -> dict:
-        """
-        Try to get information about given pool
-        :param poolId: pool ID
-        :param consumerId: Consumer UUID
-        :return:
-        """
-        method = "/pools/%s" % self.sanitize(poolId)
-        if consumerId:
-            method = "%s?consumer=%s" % (method, self.sanitize(consumerId))
-        return self.conn.request_get(method, description=_("Fetching pool information"))
-
-    # FIXME: no client tool use this method
-    def getProduct(self, product_uuid: str) -> Any:
-        method = "/products/%s" % self.sanitize(product_uuid)
-        return self.conn.request_get(method, description=_("Fetching product information"))
 
     def getRelease(self, consumerId: str) -> dict:
         """
@@ -2172,32 +2031,6 @@ class UEPConnection(BaseConnection):
         results = self.conn.request_get(method, description=_("Fetching environments"))
         return results
 
-    # FIXME: no client tool use this method
-    def getEnvironment(self, owner_key: str = None, name: str = None) -> Optional[dict]:
-        """
-        Fetch an environment for an owner.
-
-        If querying by name, owner is required as environment names are only
-        unique within the context of an owner.
-
-        TODO: Add support for querying by ID, this will likely hit an entirely
-        different URL.
-        """
-        if name and not owner_key:
-            raise Exception("Must specify owner key to query environment " "by name")
-
-        query_param = urlencode({"name": name})
-        url = "/owners/%s/environments?%s" % (self.sanitize(owner_key), query_param)
-        results = self.conn.request_get(url, description=_("Fetching environment information"))
-        if len(results) == 0:
-            return None
-        return results[0]
-
-    # FIXME: no client tool use this method
-    def getEntitlement(self, entId: str) -> dict:
-        method = "/entitlements/%s" % self.sanitize(entId)
-        return self.conn.request_get(method, description=_("Fetching entitlement information"))
-
     def regenIdCertificate(self, consumerId: str) -> dict:
         """
         Try to regenerate consumer certificate
@@ -2233,38 +2066,6 @@ class UEPConnection(BaseConnection):
                 log.debug(e)
             else:
                 # Something else happened that we should probably raise
-                raise e
-
-        return result
-
-    # FIXME: no client tool use this method
-    def regenEntitlementCertificate(
-        self, consumer_id: str, entitlement_id: str, lazy_regen: bool = True
-    ) -> bool:
-        """
-        Regenerates the specified entitlement for the given consumer
-        """
-
-        method = "/consumers/%s/certificates?entitlement=%s" % (
-            self.sanitize(consumer_id),
-            self.sanitize(entitlement_id),
-        )
-
-        if lazy_regen:
-            method += "&lazy_regen=true"
-
-        result = False
-
-        try:
-            self.conn.request_put(method, description=_("Updating certificate"))
-            result = True
-        except (RemoteServerException, httplib.BadStatusLine, RestlibException) as e:
-            # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
-            if isinstance(e, httplib.BadStatusLine) or str(e.code) == "404":
-                log.debug("Unable to refresh entitlement certificates: Service currently unsupported.")
-                log.debug(e)
-            else:
-                # Something else happened that we should probabaly raise
                 raise e
 
         return result
@@ -2329,59 +2130,6 @@ class UEPConnection(BaseConnection):
             if lang:
                 method += "&email_locale=%s" % lang
         return self.conn.request_post(method, description=_("Activating"))
-
-    # FIXME: no client tool use this method
-    def getSubscriptionList(self, owner_key: str) -> Any:
-        """
-        List the subscriptions for a particular owner.
-        """
-        method = "/owners/%s/subscriptions" % self.sanitize(owner_key)
-        results = self.conn.request_get(method, description=_("Fetching subscriptions"))
-        return results
-
-    # FIXME: no client tool use this method. BTW: some parts of this method coule never work.
-    def updateSubscriptionList(self, owner_key, auto_create_owner=None, lazy_regen=None):
-        """
-        Update subscriptions for a particular owner.
-        """
-        method = "/owners/%s/subscriptions?" % self.sanitize(owner_key)
-
-        if auto_create_owner is not None:
-            method += "&auto_create_owner=%s" % bool(auto_create_owner).lower()
-        if lazy_regen is not None:
-            method += "&lazy_regen=%s" % bool(lazy_regen).lower()
-
-        results = self.conn.request_put(method, description=_("Updating subscriptions"))
-        return results
-
-    # FIXME: no client tool use this method
-    def getJob(self, job_id):
-        """
-        Returns the status of a candlepin job.
-        """
-        query_params = urlencode({"result_data": True})
-        method = "/jobs/%s?%s" % (job_id, query_params)
-        results = self.conn.request_get(method, description=_("Fetching job"))
-        return results
-
-    # FIXME: no client tool use this method
-    def updateJobStatus(self, job_status):
-        """
-        Given a dict representing a candlepin JobStatus, check it's status.
-        """
-        # let key error bubble up
-        method = job_status["statusPath"]
-        results = self.conn.request_get(method, description=_("Updating job status"))
-        return results
-
-    # FIXME: no client tool use this method
-    def cancelJob(self, job_id):
-        """
-        Given a job id representing a candlepin JobStatus, cancel it.
-        """
-        method = "/jobs/%s" % (job_id)
-        results = self.conn.request_delete(method, description=_("Canceling job"))
-        return results
 
     def sanitize(self, url_param: str, plus: bool = False) -> str:
         """

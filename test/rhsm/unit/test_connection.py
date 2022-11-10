@@ -186,9 +186,6 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn._update_smoothed_response_time(1.5)
         self.assertEqual(self.cp.conn.smoothed_rt, 1.05)
 
-    def test_get_environment_by_name_requires_owner(self):
-        self.assertRaises(Exception, self.cp.getEnvironment, None, {"name": "env name"})
-
     @patch("locale.getlocale")
     def test_has_proper_language_header_utf8(self, mock_locale):
         # First test it with Japanese
@@ -209,15 +206,6 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.headers = {}
         self.cp.conn._set_accept_language_in_header()
         self.assertEqual(self.cp.conn.headers["Accept-Language"], "ja-jp")
-
-    def test_get_environment_urlencoding(self):
-        self.cp.conn = Mock()
-        self.cp.conn.request_get = Mock(return_value=[])
-        self.cp.getEnvironment(owner_key="myorg", name="env name__++=*&")
-        self.cp.conn.request_get.assert_called_with(
-            "/owners/myorg/environments?name=env+name__%2B%2B%3D%2A%26",
-            description="Fetching environment information",
-        )
 
     def test_entitle_date(self):
         self.cp.conn = Mock()

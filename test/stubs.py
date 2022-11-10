@@ -526,9 +526,6 @@ class StubUEP(object):
     def updatePackageProfile(self, uuid, pkg_dicts):
         pass
 
-    def getProduct(self):
-        return {}
-
     def getRelease(self, consumerId):
         return {"releaseVer": ""}
 
@@ -594,9 +591,6 @@ class StubUEP(object):
 
     def getPoolsList(self, uuid, listAll, active_on, owner):
         return [{"id": "pool1"}, {"id": "pool2"}]
-
-    def getSubscriptionList(self, owner):
-        return [{"id": "sub1"}, {"id": "sub2"}]
 
     def getContentOverrides(self, uuid):
         return []
