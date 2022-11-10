@@ -18,7 +18,7 @@ import re
 import sys
 import time
 import threading
-from typing import Callable, List, Optional, Tuple, Union, Generator
+from typing import Callable, List, Optional, TextIO, Tuple, Union, Generator
 
 import urllib.parse
 
@@ -280,6 +280,9 @@ def fix_no_proxy() -> None:
 
 def suppress_output(func: Callable) -> Callable:
     def wrapper(*args, **kwargs):
+        devnull: TextIO = None
+        stdout: TextIO = None
+        stderr: TextIO = None
         try:
             devnull = open(os.devnull, "w")
             stdout = sys.stdout
@@ -288,10 +291,12 @@ def suppress_output(func: Callable) -> Callable:
             sys.stderr = devnull
             return func(*args, **kwargs)
         finally:
-            # FIXME: stdout, stderr and devnull might be referenced before assigment
-            sys.stdout = stdout
-            sys.stderr = stderr
-            devnull.close()
+            if stdout is not None:
+                sys.stdout = stdout
+            if stderr is not None:
+                sys.stderr = stderr
+            if devnull is not None:
+                devnull.close()
 
     return wrapper
 
