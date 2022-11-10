@@ -1721,16 +1721,22 @@ class UEPConnection(BaseConnection):
     def sanitizeGuestIds(self, guestIds: Union[List[str], List[dict]]) -> Union[List[str], List[dict]]:
         return [self.sanitizeGuestId(guestId) for guestId in guestIds or []]
 
-    # FIXME: it looks like that this method can return None
     def sanitizeGuestId(self, guestId: Union[str, dict]) -> Union[str, dict]:
+        """
+        Sanitizes one or more provided guest Ids.
+        :param guestId: One or more guest Ids.
+        """
         if isinstance(guestId, str):
             return guestId
-        elif isinstance(guestId, dict) and "guestId" in list(guestId.keys()):
-            if self.supports_resource("guestids"):
-                # Upload full json
-                return guestId
-            # Does not support the full guestId json, use the id string
-            return guestId["guestId"]
+        elif isinstance(guestId, dict):
+            if "guestId" in list(guestId.keys()):
+                if self.supports_resource("guestids"):
+                    # Upload full json
+                    return guestId
+                # Does not support the full guestId json, use the id string
+                return guestId["guestId"]
+            raise Exception("Error: A guest Id was not found in the provided guest Id dictionary.")
+        raise Exception("Error: Only a string or dictionary data type can be sanitized.")
 
     def updatePackageProfile(self, consumer_uuid: str, pkg_dicts: dict) -> dict:
         """
