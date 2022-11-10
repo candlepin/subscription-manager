@@ -1050,13 +1050,11 @@ class BaseRestLib(object):
                     )
         return result, response
 
-    # FIXME: the name of info argument is confusing. Rename it to something consistent with other methods
-    # using _request() method (request_post, request_put, etc.). Suggestion: info -> params, data
     def _request(
         self,
         request_type: str,
         method: str,
-        info: Any = None,
+        params: Any = None,
         headers: dict = None,
         cert_key_pairs: Optional[List[Tuple[str, str]]] = None,
         description: Optional[str] = None,
@@ -1087,9 +1085,9 @@ class BaseRestLib(object):
             and "Content-type" in headers
             and headers["Content-type"] == "application/x-www-form-urlencoded"
         ):
-            body = urlencode(info).encode("utf-8")
-        elif info is not None:
-            body = json.dumps(info, default=json.encode)
+            body = urlencode(params).encode("utf-8")
+        elif params is not None:
+            body = json.dumps(params, default=json.encode)
         else:
             body = None
 
@@ -1357,7 +1355,7 @@ class Restlib(BaseRestLib):
         result = super(Restlib, self)._request(
             request_type,
             method,
-            info=info,
+            params=info,
             headers=headers,
             cert_key_pairs=cert_key_pairs,
             description=description,
