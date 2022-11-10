@@ -2109,9 +2109,8 @@ class UEPConnection(BaseConnection):
             params = []
         return self.conn.request_delete(method, params, description=_("Removing content overrides"))
 
-    # FIXME: email cannot be None
     # FIXME: is it still supported? Do third-party vendors sell systems with preinstalled RHELs?
-    def activateMachine(self, consumerId: str, email: str = None, lang: str = None) -> Union[dict, None]:
+    def activateMachine(self, consumerId: str, email: str, lang: str = None) -> Union[dict, None]:
         """
         Activate a subscription by machine, information is located in the consumer facts
         :param consumerId: consumer UUID
@@ -2120,14 +2119,13 @@ class UEPConnection(BaseConnection):
         :return When activation was successful, then dictionary is returned. Otherwise, None is returned.
         """
         method = "/subscriptions?consumer_uuid=%s" % consumerId
-        if email:
-            # FIXME: sanitize email
-            method += "&email=%s" % email
-            if (not lang) and (locale.getdefaultlocale()[0] is not None):
-                lang = locale.getdefaultlocale()[0].lower().replace("_", "-")
-            # FIXME: sanitize lang
-            if lang:
-                method += "&email_locale=%s" % lang
+        # FIXME: sanitize email
+        method += "&email=%s" % email
+        if (not lang) and (locale.getdefaultlocale()[0] is not None):
+            lang = locale.getdefaultlocale()[0].lower().replace("_", "-")
+        # FIXME: sanitize lang
+        if lang:
+            method += "&email_locale=%s" % lang
         return self.conn.request_post(method, description=_("Activating"))
 
     def sanitize(self, url_param: str, plus: bool = False) -> str:
