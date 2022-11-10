@@ -70,10 +70,10 @@ class RedeemCommand(CliCommand):
 
             # BZ 1248833 Ensure we print out the display message if we get any back
             response = self.cp.activateMachine(self.identity.uuid, self.options.email, self.options.locale)
-            if response and response.get("displayMessage"):
+            if response is None:
+                system_exit(os.EX_SOFTWARE, _("Error: Unable to redeem subscription for this system."))
+            if response.get("displayMessage"):
                 system_exit(0, response.get("displayMessage"))
-            # FIXME: when response is None, then probably redeem was not successful and some info/warning
-            # message should be displayed. Otherwise it looks like that the process was successful
         except connection.GoneException as ge:
             raise ge
         except connection.RestlibException as e:
