@@ -1759,8 +1759,7 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s/profiles" % self.sanitize(consumer_uuid)
         return self.conn.request_put(method, profile, description=_("Updating profile information"))
 
-    # FIXME: username and password not used here, remove it
-    def getConsumer(self, uuid: str, username=None, password=None) -> dict:
+    def getConsumer(self, uuid: str) -> dict:
         """
         Returns a consumer object with pem/key for existing consumers
         :param uuid: UUID of consumer (part of installed consumer cert, when system is registered)
