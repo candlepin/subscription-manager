@@ -303,16 +303,14 @@ class Package(object):
     Represents a package installed on the system.
     """
 
-    # FIXME: epoch should be probably string (not int)
-    def __init__(self, name: str, version: str, release: str, arch: str, epoch: int = 0, vendor: str = None):
-        self.name = name
-        self.version = version
-        self.release = release
-        self.arch = arch
-        self.epoch = epoch
-        self.vendor = vendor
+    def __init__(self, name: str, version: str, release: str, arch: str, epoch: str = "0", vendor: str = None) -> None:
+        self.name: str = name
+        self.version: str = version
+        self.release: str = release
+        self.arch: str = arch
+        self.epoch: str = epoch
+        self.vendor: str = vendor
 
-    # FIXME: in the case, when epoch is really int, then it is not necessary to normalize it
     def to_dict(self) -> dict:
         """Returns a dict representation of this package info."""
         return {
@@ -405,7 +403,7 @@ class RPMProfile(object):
                     version=h["version"],
                     release=h["release"],
                     arch=h["arch"],
-                    epoch=h["epoch"] or 0,
+                    epoch=h["epoch"] or "0",
                     vendor=h["vendor"] or None,
                 )
             )
