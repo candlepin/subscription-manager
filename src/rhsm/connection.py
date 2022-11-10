@@ -2119,13 +2119,11 @@ class UEPConnection(BaseConnection):
         :return When activation was successful, then dictionary is returned. Otherwise, None is returned.
         """
         method = "/subscriptions?consumer_uuid=%s" % consumerId
-        # FIXME: sanitize email
-        method += "&email=%s" % email
+        method += "&email=%s" % self.sanitize(email)
         if (not lang) and (locale.getdefaultlocale()[0] is not None):
             lang = locale.getdefaultlocale()[0].lower().replace("_", "-")
-        # FIXME: sanitize lang
         if lang:
-            method += "&email_locale=%s" % lang
+            method += "&email_locale=%s" % self.sanitize(lang)
         return self.conn.request_post(method, description=_("Activating"))
 
     def sanitize(self, url_param: str, plus: bool = False) -> str:
