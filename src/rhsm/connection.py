@@ -1176,10 +1176,7 @@ class BaseRestLib(object):
             self.smoothed_rt = (self.ALPHA * self.smoothed_rt) + ((1 - self.ALPHA) * response_time)
         log.debug("Response time: %s, Smoothed response time: %s" % (response_time, self.smoothed_rt))
 
-    # FIXME: The name of response is confusing, because it looks like that it is HTTPResponse, but it
-    # is not true. It is dictionary and it should be renamed to result (see e.g. _request method using
-    # validateResponse method)
-    def validateResponse(self, response: dict, request_type: str = None, handler: str = None) -> None:
+    def validateResponse(self, result: dict, request_type: str = None, handler: str = None) -> None:
         """
         Try to validate result of HTTP request. Raise exception, when validation of
         result failed
@@ -1189,19 +1186,19 @@ class BaseRestLib(object):
         """
 
         # FIXME: what are we supposed to do with a 204?
-        if str(response["status"]) not in ["200", "202", "204", "304"]:
+        if str(result["status"]) not in ["200", "202", "204", "304"]:
             parsed = {}
-            if not response.get("content"):
+            if not result.get("content"):
                 parsed = {}
             else:
                 # try vaguely to see if it had a json parseable body
                 try:
-                    parsed = json.loads(response["content"])
+                    parsed = json.loads(result["content"])
                 except ValueError as e:
-                    log.error("Response: %s" % response["status"])
+                    log.error("Response: %s" % result["status"])
                     log.error("JSON parsing error: %s" % e)
                 except Exception as e:
-                    log.error("Response: %s" % response["status"])
+                    log.error("Response: %s" % result["status"])
                     log.exception(e)
 
             if parsed:
@@ -1211,10 +1208,10 @@ class BaseRestLib(object):
                 # NOTE: a 410 with an unparseable content will raise
                 # RemoteServerException and will not cause the client
                 # to delete the consumer cert.
-                if str(response["status"]) == "410":
-                    raise GoneException(response["status"], parsed["displayMessage"], parsed["deletedId"])
+                if str(result["status"]) == "410":
+                    raise GoneException(result["status"], parsed["displayMessage"], parsed["deletedId"])
 
-                elif str(response["status"]) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
+                elif str(result["status"]) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
                     raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port)
 
                 # I guess this is where we would have an exception mapper if we
@@ -1222,12 +1219,12 @@ class BaseRestLib(object):
                 # the server that means something.
 
                 error_msg = self._parse_msg_from_error_response_body(parsed)
-                if str(response["status"]) in ["429"]:
+                if str(result["status"]) in ["429"]:
                     raise RateLimitExceededException(
-                        response["status"], error_msg, headers=response.get("headers")
+                        result["status"], error_msg, headers=result.get("headers")
                     )
 
-                if str(response["status"]) in ["401"]:
+                if str(result["status"]) in ["401"]:
                     # If the proxy is not configured correctly
                     # it connects to the server without the identity cert
                     # even if the cert is valid
@@ -1236,41 +1233,41 @@ class BaseRestLib(object):
                             id_cert = certificate.create_from_file(self.cert_file)
                             if id_cert.is_valid():
                                 raise RestlibException(
-                                    response["status"],
+                                    result["status"],
                                     (
                                         "Unable to make a connection using SSL client certificate. "
                                         "Please review proxy configuration and connectivity."
                                     ),
-                                    response.get("headers"),
+                                    result.get("headers"),
                                 )
 
                 # FIXME: we can get here with a valid json response that
                 # could be anything, we don't verify it anymore
-                raise RestlibException(response["status"], error_msg, response.get("headers"))
+                raise RestlibException(result["status"], error_msg, result.get("headers"))
             else:
                 # This really needs an exception mapper too...
-                if str(response["status"]) in ["404", "410", "500", "502", "503", "504"]:
+                if str(result["status"]) in ["404", "410", "500", "502", "503", "504"]:
                     raise RemoteServerException(
-                        response["status"], request_type=request_type, handler=handler
+                        result["status"], request_type=request_type, handler=handler
                     )
-                elif str(response["status"]) in ["401"]:
+                elif str(result["status"]) in ["401"]:
                     raise UnauthorizedException(
-                        response["status"], request_type=request_type, handler=handler
+                        result["status"], request_type=request_type, handler=handler
                     )
-                elif str(response["status"]) in ["403"]:
-                    raise ForbiddenException(response["status"], request_type=request_type, handler=handler)
-                elif str(response["status"]) in ["429"]:
-                    raise RateLimitExceededException(response["status"], headers=response.get("headers"))
+                elif str(result["status"]) in ["403"]:
+                    raise ForbiddenException(result["status"], request_type=request_type, handler=handler)
+                elif str(result["status"]) in ["429"]:
+                    raise RateLimitExceededException(result["status"], headers=result.get("headers"))
 
-                elif str(response["status"]) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
+                elif str(result["status"]) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
                     raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port)
 
                 else:
                     # unexpected with no valid content
                     raise UnknownContentException(
-                        response["status"],
-                        response.get("headers", {}).get("Content-Type"),
-                        response.get("content"),
+                        result["status"],
+                        result.get("headers", {}).get("Content-Type"),
+                        result.get("content"),
                     )
 
     @staticmethod
