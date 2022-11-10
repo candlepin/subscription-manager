@@ -1822,8 +1822,7 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s" % self.sanitize(consumerId)
         return self.conn.request_delete(method, description=_("Unregistering system"))
 
-    # FIXME: default value of serials should not be list
-    def getCertificates(self, consumer_uuid: str, serials: list = []) -> List[dict]:
+    def getCertificates(self, consumer_uuid: str, serials: list = None) -> List[dict]:
         """
         Fetch all entitlement certificates for this consumer. Specify a list of serial numbers to
         filter if desired
@@ -1831,7 +1830,7 @@ class UEPConnection(BaseConnection):
         :param serials: list of entitlement serial numbers
         """
         method = "/consumers/%s/certificates" % (self.sanitize(consumer_uuid))
-        if len(serials) > 0:
+        if serials:
             serials_str = ",".join(serials)
             method = "%s?serials=%s" % (method, serials_str)
         return self.conn.request_get(method, description=_("Fetching certificates"))
