@@ -23,6 +23,7 @@ from subscription_manager.certdirectory import Path
 
 from rhsmlib.services import config
 from rhsm.certificate import CertificateException
+from rhsm.certificate2 import CertificateLoadingError
 
 conf = config.Config(get_config_parser())
 log = logging.getLogger(__name__)
@@ -137,7 +138,7 @@ class Identity(object):
                 self.consumer = self._get_consumer_identity()
             # XXX shouldn't catch the global exception here, but that's what
             # existsAndValid did, so this is better.
-            except (CertificateException, IOError) as err:
+            except (CertificateException, CertificateLoadingError, IOError) as err:
                 self.consumer = None
                 err_msg = err
                 msg = "Reload of consumer identity cert %s raised an exception with msg: %s" % (
