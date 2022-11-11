@@ -1811,15 +1811,17 @@ class UEPConnection(BaseConnection):
         owners = [x for x in (owners or []) if x is not None]
         return owners
 
-    # FIXME: this method should return result of REST API call. Candlepin server response with
-    # code 204 and no content is specified. If code 204 is returned, then True should be returned
-    def unregisterConsumer(self, consumerId: str) -> None:
+    def unregisterConsumer(self, consumerId: str) -> bool:
         """
         Deletes a consumer from candlepin server
         :param consumerId: consumer UUID (it could be found in consumer cert, when system is registered)
         """
         method = "/consumers/%s" % self.sanitize(consumerId)
-        return self.conn.request_delete(method, description=_("Unregistering system"))
+        result = self.conn.request_delete(method, description=_("Unregistering system"))
+        if result is not None:
+            status = result.get("status")
+            return status == 204
+        return False
 
     def getCertificates(self, consumer_uuid: str, serials: list = None) -> List[dict]:
         """
