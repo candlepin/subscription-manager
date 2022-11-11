@@ -1889,18 +1889,16 @@ class UEPConnection(BaseConnection):
 
         return self.conn.request_post(method, description=_("Updating subscriptions"))
 
-    # FIXME: This method should return True, when it was successful, not None
-    def unbindBySerial(self, consumerId: str, serial: str) -> None:
+    def unbindBySerial(self, consumerId: str, serial: str) -> bool:
         """
         Try to remove consumed pool by serial number
         :param consumerId: consumer UUID
         :param serial: serial number of consumed pool
         """
         method = "/consumers/%s/certificates/%s" % (self.sanitize(consumerId), self.sanitize(str(serial)))
-        return self.conn.request_delete(method, description=_("Unsubscribing"))
+        return self.conn.request_delete(method, description=_("Unsubscribing")) is not None
 
-    # FIXME: This method should return True, when it was successful, not None
-    def unbindByPoolId(self, consumer_uuid: str, pool_id: str) -> None:
+    def unbindByPoolId(self, consumer_uuid: str, pool_id: str) -> bool:
         """
         Try to remove consumed pool by pool ID
         :param consumer_uuid: consumer UUID
@@ -1908,7 +1906,7 @@ class UEPConnection(BaseConnection):
         :return: None
         """
         method = "/consumers/%s/entitlements/pool/%s" % (self.sanitize(consumer_uuid), self.sanitize(pool_id))
-        return self.conn.request_delete(method, description=_("Unsubscribing"))
+        return self.conn.request_delete(method, description=_("Unsubscribing")) is not None
 
     def unbindAll(self, consumerId: str) -> dict:
         """
