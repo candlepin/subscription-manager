@@ -10,13 +10,14 @@
 # Julien Humbert <julroy67@gmail.com>, 2022.
 # Jérôme Fenal <jfenal@free.fr>, 2022.
 # Transtats <suanand@redhat.com>, 2022.
+# blutch112 <vincent.lefebvre59@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-25 11:27+0200\n"
-"PO-Revision-Date: 2022-07-26 13:17+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2022-11-06 13:19+0000\n"
+"Last-Translator: blutch112 <vincent.lefebvre59@gmail.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
 "Language: fr\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -1910,8 +1911,8 @@ msgid ""
 "Ignoring request to attach. It is disabled for org \"{owner_id}\" because of "
 "the content access mode setting."
 msgstr ""
-"Ignorer la demande d'attachement. Il est désactivé pour l'org \"{owner_id}\" "
-"en raison du paramétrage du mode d'accès au contenu."
+"Ignorer la demande d'attachement. Il est désactivé pour l'organisation \""
+"{owner_id}\" en raison du paramétrage du mode d'accès au contenu."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/attach.py:200
@@ -2286,7 +2287,7 @@ msgstr ""
 msgid "No such environment: {names}"
 msgid_plural "No such environments: {names}"
 msgstr[0] "Cet environnement n'existe pas : {names}"
-msgstr[1] "Aucun environnement de ce type : {names}"
+msgstr[1] "Ces environnements n'existe pas : {names}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/facts.py:33
@@ -3481,7 +3482,7 @@ msgstr "{total} abonnements supprimés de ce système."
 #, python-brace-format
 msgid "Subscription with serial number {serial} removed from this system"
 msgstr ""
-"L'abonnement dont le numéro de série est {serial} est supprimé de ce système"
+"L'abonnement avec le numéro de série {serial} a été supprimé de ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/repos.py:60
