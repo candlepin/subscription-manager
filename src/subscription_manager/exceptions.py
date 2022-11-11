@@ -106,8 +106,10 @@ class ExceptionMapper(object):
 
     def format_proxy_exception(self, exc: connection.ProxyException, _: str) -> str:
         proxy_address = exc.address
-        # catches gaierror and socket.error
-        if isinstance(exc.exc, OSError):
+        # catches gaierror and socket.error;
+        # the check for errno is done as some socket errors (typically related
+        # to proxies) are not the results of failed system calls
+        if isinstance(exc.exc, OSError) and exc.exc.errno is not None:
             return PROXY_ADDRESS_REASON_OSERROR_MESSAGE.format(
                 hostname=proxy_address,
                 message=exc.exc.strerror,

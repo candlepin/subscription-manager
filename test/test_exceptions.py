@@ -154,6 +154,19 @@ class TestExceptionMapper(unittest.TestCase):
             mapper.get_message(err),
         )
 
+    def test_proxyexception_with_exception_oserror_no_errno(self):
+        expected_message = "Expected MESSAGE"
+        expected_hostname = "hostname"
+        expected_port = 1234
+        mapper = ExceptionMapper()
+
+        oserr = OSError(expected_message)
+        err = ProxyException(expected_hostname, expected_port, oserr)
+        self.assertEqual(
+            f"Proxy error: unable to connect to {expected_hostname}:{expected_port}: {expected_message}",
+            mapper.get_message(err),
+        )
+
     def test_proxyexception_with_exception_non_oserror(self):
         expected_message = "Expected MESSAGE"
         expected_hostname = "hostname"
