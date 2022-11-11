@@ -1629,8 +1629,7 @@ class UEPConnection(BaseConnection):
         url = "/hypervisors/%s/heartbeat?%s" % (owner, query_params)
         return self.conn.request_put(url, description=_("Updating hypervisor information"))
 
-    # FIXME: default value of facts should not be dictionary
-    def updateConsumerFacts(self, consumer_uuid: str, facts: dict = {}) -> dict:
+    def updateConsumerFacts(self, consumer_uuid: str, facts: dict = None) -> dict:
         """
         Update a consumers facts on candlepin server
         """
