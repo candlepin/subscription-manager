@@ -351,7 +351,7 @@ class RegisterCommand(UserPassCommand):
                     environments=environment_ids,
                     force=self.options.force,
                     name=self.options.consumername,
-                    type=self.options.consumertype,
+                    consumer_type=self.options.consumertype,
                     service_level=self.options.service_level,
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:

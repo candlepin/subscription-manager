@@ -35,17 +35,15 @@ class RegisterService(object):
         self.identity = inj.require(inj.IDENTITY)
         self.cp = cp
 
-    # FIXME: Some default arguments should be False, not None. The argument name should be renamed from
-    # type to something else, because it conflicts with built-in type
     def register(
         self,
         org: str,
         activation_keys: list = None,
         environments: list = None,
-        force: bool = None,
+        force: bool = False,
         name: str = None,
         consumerid: str = None,
-        type: str = None,
+        consumer_type: str = None,
         role: str = None,
         addons: list = None,
         service_level: str = None,
@@ -86,7 +84,7 @@ class RegisterService(object):
         usage = syspurpose.get("usage", "")
         service_level = syspurpose.get("service_level_agreement", "")
 
-        type = type or "system"
+        consumer_type = consumer_type or "system"
 
         options = {
             "activation_keys": activation_keys,
@@ -94,7 +92,7 @@ class RegisterService(object):
             "force": force,
             "name": name,
             "consumerid": consumerid,
-            "type": type,
+            "type": consumer_type,
             "jwt_token": jwt_token,
         }
         self.validate_options(options)
@@ -122,7 +120,7 @@ class RegisterService(object):
                 keys=options.get("activation_keys"),
                 installed_products=self.installed_mgr.format_for_server(),
                 content_tags=self.installed_mgr.tags,
-                consumer_type=type,
+                consumer_type=consumer_type,
                 role=role,
                 addons=addons,
                 service_level=service_level,
