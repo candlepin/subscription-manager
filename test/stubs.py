@@ -481,7 +481,6 @@ class StubUEP(object):
         proxy_password=None,
         cert_file=None,
         key_file=None,
-        restlib_class=None,
     ):
         self.registered_consumer_info = {"uuid": "dummy-consumer-uuid"}
         self.environment_list = []
@@ -710,7 +709,6 @@ class StubCPProvider(object):
         proxy_password_arg=None,
         no_proxy_arg=None,
         correlation_id=None,
-        restlib_class=None,
     ):
         pass
 

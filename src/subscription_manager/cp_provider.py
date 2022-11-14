@@ -30,7 +30,7 @@ class TokenAuthUnsupportedException(Exception):
     pass
 
 
-class CPProvider(object):
+class CPProvider:
     """
     CPProvider provides candlepin connections of varying authentication levels
     in order to avoid creating more than we need, and reuse the ones we have.
@@ -72,7 +72,6 @@ class CPProvider(object):
         self.proxy_user = None
         self.proxy_password = None
         self.no_proxy = None
-        self.restlib_class = None
 
     # Reread the config file and prefer arguments over config values
     # then recreate connections
@@ -88,7 +87,6 @@ class CPProvider(object):
         proxy_user_arg=None,
         proxy_password_arg=None,
         no_proxy_arg=None,
-        restlib_class=connection.Restlib,
     ):
         self.cert_file = ConsumerIdentity.certpath()
         self.key_file = ConsumerIdentity.keypath()
@@ -103,7 +101,6 @@ class CPProvider(object):
         self.proxy_user = proxy_user_arg
         self.proxy_password = proxy_password_arg
         self.no_proxy = no_proxy_arg
-        self.restlib_class = restlib_class
         self.clean()
 
     # Set username and password used for basic_auth without
@@ -196,7 +193,6 @@ class CPProvider(object):
                 key_file=self.key_file,
                 correlation_id=self.correlation_id,
                 no_proxy=self.no_proxy,
-                restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
                 auth_type=connection.ConnectionType.CONSUMER_CERT_AUTH,
@@ -239,7 +235,6 @@ class CPProvider(object):
             password=None,
             correlation_id=self.correlation_id,
             no_proxy=self.no_proxy,
-            restlib_class=self.restlib_class,
             token=self.token,
             client_version=self.get_client_version(),
             dbus_sender=self.get_dbus_sender(),
@@ -261,7 +256,6 @@ class CPProvider(object):
                 password=self.password,
                 correlation_id=self.correlation_id,
                 no_proxy=self.no_proxy,
-                restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
                 auth_type=connection.ConnectionType.BASIC_AUTH,
@@ -280,7 +274,6 @@ class CPProvider(object):
                 proxy_password=self.proxy_password,
                 correlation_id=self.correlation_id,
                 no_proxy=self.no_proxy,
-                restlib_class=self.restlib_class,
                 client_version=self.get_client_version(),
                 dbus_sender=self.get_dbus_sender(),
                 auth_type=connection.ConnectionType.NO_AUTH,

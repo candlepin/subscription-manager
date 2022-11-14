@@ -201,10 +201,9 @@ class ConnectionType(enum.Enum):
 
 # FIXME: this concept with reslib_class is horrible. The _request() method can return anything.
 # It does not have much benefit and it is easy to introduce new bug.
-class BaseConnection(object):
+class BaseConnection:
     def __init__(
         self,
-        restlib_class=None,
         host: Optional[str] = None,
         ssl_port: Optional[int] = None,
         handler: Optional[str] = None,
@@ -228,7 +227,6 @@ class BaseConnection(object):
         **kwargs,
     ) -> None:
 
-        restlib_class = restlib_class or Restlib
         self.host = host or config.get("server", "hostname")
         self.handler = handler or config.get("server", "prefix")
         self.ssl_port = ssl_port or safe_int(config.get("server", "port"))
@@ -322,7 +320,7 @@ class BaseConnection(object):
                 safe_int(self.proxy_port),
             )
         # initialize connection
-        self.conn = restlib_class(
+        self.conn: BaseRestLib = BaseRestLib(
             self.host,
             self.ssl_port,
             self.handler,
@@ -586,7 +584,7 @@ def _get_locale() -> Union[None, str]:
     return None
 
 
-class BaseRestLib(object):
+class BaseRestLib:
     """
     A low-level wrapper around httplib
     to make rest calls easy and expose the details of
@@ -1162,7 +1160,15 @@ class BaseRestLib(object):
 
         self.validateResponse(result, request_type, handler)
 
-        return result
+        # Handle 204s
+        if not len(result["content"]):
+            return None
+        try:
+            return json.loads(result["content"])
+        except json.JSONDecodeError:
+            # This is primarily intended for getting releases from CDN, because
+            # the file containing releases is plaintext and not json.
+            return result["content"]
 
     def _update_smoothed_response_time(self, response_time: float):
         """
@@ -1320,54 +1326,6 @@ class BaseRestLib(object):
         Format a datetime to HTTP-date as described by RFC 7231.
         """
         return format_datetime(dt, usegmt=True)
-
-
-# FIXME: Remove this and use only BaseRestLib
-class Restlib(BaseRestLib):
-    """
-    A wrapper around httplib to make rest calls easier
-    See validateResponse() to learn when exceptions are raised as a result
-    of communication with the server.
-    """
-
-    def _request(
-        self,
-        request_type: str,
-        method: str,
-        info: Any = None,
-        headers: dict = None,
-        cert_key_pairs: List[Tuple[str, str]] = None,
-        description: Optional[str] = None,
-    ) -> Any:
-        """
-        Try to do HTTP request. This method returns only content (body) of response if any or None
-        :param request_type: GET/POST/PUT/etc.
-        :param method: REST API endpoint
-        :param info: Data (usually dictionary) of request if any
-        :param headers: Dictionary with HTTP headers
-        :param cert_key_pairs: List of tuples. Tuple contain cert and key
-        :param description: Description of request
-        :return: Content or response or None
-        """
-        result = super(Restlib, self)._request(
-            request_type,
-            method,
-            params=info,
-            headers=headers,
-            cert_key_pairs=cert_key_pairs,
-            description=description,
-        )
-
-        # Handle 204s
-        if not len(result["content"]):
-            return None
-
-        try:
-            return json.loads(result["content"])
-        except json.JSONDecodeError:
-            # This is primarily intended for getting releases from CDN, because
-            # the file containing releases is plaintext and not json.
-            return result["content"]
 
 
 class UEPConnection(BaseConnection):

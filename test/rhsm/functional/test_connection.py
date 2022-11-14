@@ -22,7 +22,7 @@ from test import subman_marker_functional
 from rhsm.connection import (
     ContentConnection,
     UEPConnection,
-    Restlib,
+    BaseRestLib,
     UnauthorizedException,
     ForbiddenException,
     RestlibException,
@@ -129,7 +129,7 @@ class BindRequestTests(unittest.TestCase):
         consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
         self.consumer_uuid = consumerInfo["uuid"]
 
-    @patch.object(Restlib, "validateResponse")
+    @patch.object(BaseRestLib, "validateResponse")
     @patch("rhsm.connection.drift_check", return_value=False)
     @patch("httplib.HTTPSConnection", autospec=True)
     def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
@@ -144,7 +144,7 @@ class BindRequestTests(unittest.TestCase):
             if name == "().request":
                 self.assertEqual(None, kwargs["body"])
 
-    @patch.object(Restlib, "validateResponse")
+    @patch.object(BaseRestLib, "validateResponse")
     @patch("rhsm.connection.drift_check", return_value=False)
     @patch("httplib.HTTPSConnection", autospec=True)
     def test_bind_by_pool(self, mock_conn, mock_drift, mock_validate):

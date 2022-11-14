@@ -20,7 +20,7 @@ import tempfile
 from rhsm import connection
 from rhsm.connection import (
     UEPConnection,
-    Restlib,
+    BaseRestLib,
     ConnectionException,
     ConnectionSetupException,
     BadCertificateException,
@@ -582,7 +582,7 @@ class ConnectionTests(unittest.TestCase):
                 cert_dir=self.temp_ent_dir.name,
             )
             cont_conn.get_versions("/")
-        restlib = Restlib("somehost", "123", "somehandler")
+        restlib = BaseRestLib("somehost", "123", "somehandler")
         restlib.ca_dir = self.temp_ent_dir.name
         with self.assertRaises(BadCertificateException):
             restlib._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
@@ -632,7 +632,7 @@ class ConnectionTests(unittest.TestCase):
 
 class RestlibValidateResponseTests(unittest.TestCase):
     def setUp(self):
-        self.restlib = Restlib("somehost", "123", "somehandler")
+        self.restlib = BaseRestLib("somehost", "123", "somehandler")
         self.request_type = "GET"
         self.handler = "https://server/path"
 
