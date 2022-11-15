@@ -1253,13 +1253,9 @@ class BaseRestLib:
             else:
                 # This really needs an exception mapper too...
                 if str(result["status"]) in ["404", "410", "500", "502", "503", "504"]:
-                    raise RemoteServerException(
-                        result["status"], request_type=request_type, handler=handler
-                    )
+                    raise RemoteServerException(result["status"], request_type=request_type, handler=handler)
                 elif str(result["status"]) in ["401"]:
-                    raise UnauthorizedException(
-                        result["status"], request_type=request_type, handler=handler
-                    )
+                    raise UnauthorizedException(result["status"], request_type=request_type, handler=handler)
                 elif str(result["status"]) in ["403"]:
                     raise ForbiddenException(result["status"], request_type=request_type, handler=handler)
                 elif str(result["status"]) in ["429"]:

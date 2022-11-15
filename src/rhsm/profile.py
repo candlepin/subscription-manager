@@ -15,7 +15,7 @@ import logging
 import importlib.util
 import rpm
 import os.path
-from typing import List, Any, Union
+from typing import List, Union
 
 from rhsm import ourjson as json
 from rhsm.utils import suppress_output
@@ -303,7 +303,9 @@ class Package(object):
     Represents a package installed on the system.
     """
 
-    def __init__(self, name: str, version: str, release: str, arch: str, epoch: str = "0", vendor: str = None) -> None:
+    def __init__(
+        self, name: str, version: str, release: str, arch: str, epoch: str = "0", vendor: str = None
+    ) -> None:
         self.name: str = name
         self.version: str = version
         self.release: str = release

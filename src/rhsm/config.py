@@ -233,8 +233,8 @@ class RhsmConfigParser(SafeConfigParser):
                 )
                 print(
                     _(
-                        "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set "
-                        "the default_log_level to a valid value."
+                        "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to "
+                        "set the default_log_level to a valid value."
                     ),
                     file=sys.stderr,
                 )
