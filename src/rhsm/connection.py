@@ -2062,7 +2062,6 @@ class UEPConnection(BaseConnection):
             params = []
         return self.conn.request_delete(method, params, description=_("Removing content overrides"))
 
-    # FIXME: is it still supported? Do third-party vendors sell systems with preinstalled RHELs?
     def activateMachine(self, consumerId: str, email: str, lang: str = None) -> Union[dict, None]:
         """
         Activate a subscription by machine, information is located in the consumer facts
