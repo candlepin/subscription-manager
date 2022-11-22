@@ -262,6 +262,13 @@ client.registerSystem = (subscriptionDetails, update_progress) => {
         if (path) {
             connection_options.handler = dbus_str(path);
         }
+    } else {
+        // When user decide to not use proxy settings (checkbox "Use proxy server" is not checked),
+        // then set empty strings to all proxy options and do not use values from configuration file
+        connection_options.proxy_hostname = dbus_str('');
+        connection_options.proxy_port = dbus_str('');
+        connection_options.proxy_user = dbus_str('');
+        connection_options.proxy_password = dbus_str('');
     }
 
     // proxy is optional
