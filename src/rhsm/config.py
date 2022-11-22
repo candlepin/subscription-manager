@@ -20,6 +20,7 @@ import os
 from iniparse import SafeConfigParser
 from iniparse.compat import NoOptionError, InterpolationMissingOptionError, NoSectionError
 import re
+import tempfile
 from typing import Dict, List, Optional, Tuple
 from subscription_manager.i18n import ugettext as _
 
@@ -143,8 +144,7 @@ class RhsmConfigParser(SafeConfigParser):
         :param file_names: list of configuration files
         :return: number of configuration files read
         """
-        file_names: list = file_names or []
-        if not file_names:
+        if file_names is None:
             return super(RhsmConfigParser, self).read(self.config_file)
         else:
             return super(RhsmConfigParser, self).read(file_names)
@@ -160,7 +160,10 @@ class RhsmConfigParser(SafeConfigParser):
         if os.path.isdir(rhsm_conf_dir) is False:
             os.makedirs(rhsm_conf_dir)
 
-        with open(config_file, mode="w") as fo:
+        # Create a temporary file to write config data to it and
+        # rename the file to the expected config file name after successfully
+        # writing all config data.
+        with tempfile.NamedTemporaryFile(mode="w", dir=rhsm_conf_dir, delete=False) as fo:
             self.write(fo)
             fo.flush()
             mode: int
@@ -168,6 +171,7 @@ class RhsmConfigParser(SafeConfigParser):
                 mode = os.stat(config_file).st_mode
             except IOError:
                 mode = 0o644
+            os.rename(fo.name, config_file)
             os.chmod(config_file, mode)
 
     def get(self, section: str, prop: str) -> str:
@@ -341,7 +345,7 @@ class RhsmHostConfigParser(RhsmConfigParser):
     """
 
     def __init__(self, config_file: Optional[str] = None, defaults=None) -> None:
-        super(RhsmHostConfigParser, self).__init__(config_file, defaults)
+        super().__init__(config_file, defaults)
 
         # Override the ca_cert_dir and repo_ca_cert if necessary:
         ca_cert_dir: str = self.get("rhsm", "ca_cert_dir")

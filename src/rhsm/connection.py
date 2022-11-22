@@ -1452,7 +1452,7 @@ class UEPConnection(BaseConnection):
         self,
         name: str = "unknown",
         consumer_type: str = "system",
-        facts: dict = None,
+        facts: Optional[dict] = None,
         owner: str = None,
         environments: str = None,
         keys: str = None,
@@ -1469,10 +1469,12 @@ class UEPConnection(BaseConnection):
         """
         Creates a consumer on candlepin server
         """
+        if facts is None:
+            facts = {}
         params = {
             "type": consumer_type,
             "name": name,
-            "facts": facts or {},
+            "facts": facts,
         }
         if installed_products:
             params["installedProducts"] = installed_products
@@ -1777,7 +1779,7 @@ class UEPConnection(BaseConnection):
             return status == 204
         return False
 
-    def getCertificates(self, consumer_uuid: str, serials: list = None) -> List[dict]:
+    def getCertificates(self, consumer_uuid: str, serials: Optional[list] = None) -> List[dict]:
         """
         Fetch all entitlement certificates for this consumer. Specify a list of serial numbers to
         filter if desired
@@ -1852,7 +1854,7 @@ class UEPConnection(BaseConnection):
         :param serial: serial number of consumed pool
         """
         method = "/consumers/%s/certificates/%s" % (self.sanitize(consumerId), self.sanitize(str(serial)))
-        return self.conn.request_delete(method, description=_("Unsubscribing")) is not None
+        return self.conn.request_delete(method, description=_("Unsubscribing")) is None
 
     def unbindByPoolId(self, consumer_uuid: str, pool_id: str) -> bool:
         """
@@ -1862,7 +1864,7 @@ class UEPConnection(BaseConnection):
         :return: None
         """
         method = "/consumers/%s/entitlements/pool/%s" % (self.sanitize(consumer_uuid), self.sanitize(pool_id))
-        return self.conn.request_delete(method, description=_("Unsubscribing")) is not None
+        return self.conn.request_delete(method, description=_("Unsubscribing")) is None
 
     def unbindAll(self, consumerId: str) -> dict:
         """

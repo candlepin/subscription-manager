@@ -304,13 +304,13 @@ class Package(object):
     """
 
     def __init__(
-        self, name: str, version: str, release: str, arch: str, epoch: str = "0", vendor: str = None
+        self, name: str, version: str, release: str, arch: str, epoch: int = 0, vendor: str = None
     ) -> None:
         self.name: str = name
         self.version: str = version
         self.release: str = release
         self.arch: str = arch
-        self.epoch: str = epoch
+        self.epoch: int = epoch
         self.vendor: str = vendor
 
     def to_dict(self) -> dict:
@@ -405,7 +405,7 @@ class RPMProfile(object):
                     version=h["version"],
                     release=h["release"],
                     arch=h["arch"],
-                    epoch=h["epoch"] or "0",
+                    epoch=h["epoch"] or 0,
                     vendor=h["vendor"] or None,
                 )
             )

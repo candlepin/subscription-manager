@@ -280,9 +280,9 @@ def fix_no_proxy() -> None:
 
 def suppress_output(func: Callable) -> Callable:
     def wrapper(*args, **kwargs):
-        devnull: TextIO = None
-        stdout: TextIO = None
-        stderr: TextIO = None
+        devnull: Optional[TextIO] = None
+        stdout: Optional[TextIO] = None
+        stderr: Optional[TextIO] = None
         try:
             devnull = open(os.devnull, "w")
             stdout = sys.stdout
