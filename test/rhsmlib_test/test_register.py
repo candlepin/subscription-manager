@@ -772,6 +772,10 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         self.mock_register = register_patcher.start().return_value
         self.addCleanup(register_patcher.stop)
 
+        unregister_patcher = mock.patch('rhsmlib.dbus.objects.unregister.UnregisterService.unregister')
+        self.mock_unregister = unregister_patcher.start().return_value
+        self.addCleanup(unregister_patcher.stop)
+
         cert_invoker_patcher = mock.patch('rhsmlib.dbus.objects.register.EntCertActionInvoker', autospec=True)
         self.mock_cert_invoker = cert_invoker_patcher.start().return_value
         self.addCleanup(cert_invoker_patcher.stop)
@@ -885,6 +889,37 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         dbus_method_args = ['admin', 'admin', 'admin', {}, {}, '']
         self.dbus_request(assertions, self._build_interface().Register, dbus_method_args)
 
+    def test_cannot_register_over_domain_socket_when_already_registered(self):
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+
+        def assertions(*args):
+            # Be sure we are persisting the consumer cert
+            self.assertEqual(json.loads(args[0]), expected_consumer)
+
+        self.mock_identity.is_valid.return_value = True
+        self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
+
+        self.mock_register.register.return_value = expected_consumer
+
+        dbus_method_args = ['admin', 'admin', 'admin', {}, {}, '']
+        with self.assertRaisesRegexp(dbus.exceptions.DBusException, r'.* system is already registered.'):
+            self.dbus_request(assertions, self._build_interface().Register, dbus_method_args)
+
+    def test_can_register_over_domain_socket_with_force_option(self):
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+
+        def assertions(*args):
+            # Be sure we are persisting the consumer cert
+            self.assertEqual(json.loads(args[0]), expected_consumer)
+
+        self.mock_identity.is_valid.return_value = True
+        self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
+
+        self.mock_register.register.return_value = expected_consumer
+
+        dbus_method_args = ['admin', 'admin', 'admin', {'force': True}, {}, '']
+        self.dbus_request(assertions, self._build_interface().Register, dbus_method_args)
+
     def test_can_register_over_domain_socket_no_enabled_content(self):
         """
         Test calling Register method with argument "enable_content", when
@@ -989,6 +1024,59 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
             'admin',
             ['key1', 'key2'],
             {},
+            {
+                'host': 'localhost',
+                'port': '8443',
+                'handler': '/candlepin'
+            },
+            ''
+        ]
+
+        self.dbus_request(assertions, self._build_interface().RegisterWithActivationKeys, dbus_method_args)
+
+    def test_cannot_register_over_domain_socket_with_activation_keys_when_already_registered(self):
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+
+        def assertions(*args):
+            # Be sure we are persisting the consumer cert
+            self.assertEqual(json.loads(args[0]), expected_consumer)
+
+        self.mock_identity.is_valid.return_value = True
+        self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
+
+        self.mock_register.register.return_value = expected_consumer
+
+        dbus_method_args = [
+            'admin',
+            ['key1', 'key2'],
+            {},
+            {
+                'host': 'localhost',
+                'port': '8443',
+                'handler': '/candlepin'
+            },
+            ''
+        ]
+
+        with self.assertRaisesRegexp(dbus.exceptions.DBusException, r'.* system is already registered.'):
+            self.dbus_request(assertions, self._build_interface().RegisterWithActivationKeys, dbus_method_args)
+
+    def test_can_register_over_domain_socket_with_activation_keys_and_force_option(self):
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+
+        def assertions(*args):
+            # Be sure we are persisting the consumer cert
+            self.assertEqual(json.loads(args[0]), expected_consumer)
+
+        self.mock_identity.is_valid.return_value = True
+        self.mock_identity.uuid = 'INVALIDCONSUMERUUID'
+
+        self.mock_register.register.return_value = expected_consumer
+
+        dbus_method_args = [
+            'admin',
+            ['key1', 'key2'],
+            {'force': True},
             {
                 'host': 'localhost',
                 'port': '8443',

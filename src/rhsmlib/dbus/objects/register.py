@@ -18,9 +18,11 @@ import logging
 import threading
 import dbus
 import dbus.service
+import subscription_manager.injection as inj
 
 from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
 from rhsmlib.services.register import RegisterService
+from rhsmlib.services.unregister import UnregisterService
 from rhsmlib.services.attach import AttachService
 from rhsmlib.services.entitlement import EntitlementService
 
@@ -251,6 +253,25 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             enable_content = False
         return enable_content
 
+    def _unregister(self, connection_options: dict) -> None:
+        """
+        Unregisters a system that is currently registered and
+        cleans the cp_provider to handle authorization after un-registering.
+        :param connection_options: dictionary with connection options
+        :return: None
+        """
+        self.ensure_registered()
+        log.info("This system is already registered, attempting to un-register...")
+
+        cp_provider = inj.require(inj.CP_PROVIDER)
+
+        cp = self.build_uep(connection_options)
+        UnregisterService(cp).unregister()
+
+        # The CPProvider object must be cleaned and the cp object must
+        # be re-initialized to handle authorization after un-registration.
+        cp_provider.clean()
+
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
         in_signature='sssa{sv}a{sv}s',
@@ -268,9 +289,6 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         Note this method is registration ONLY.  Auto-attach is a separate process.
         """
-        if self.is_registered():
-            raise dbus.DBusException("This system is already registered")
-
         org = dbus_utils.dbus_to_python(org, expected_type=str)
         connection_options = dbus_utils.dbus_to_python(connection_options, expected_type=dict)
         connection_options['username'] = dbus_utils.dbus_to_python(username, expected_type=str)
@@ -279,6 +297,16 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
         Locale.set(locale)
+
+        force_registration: bool = options.get("force", False)
+        system_is_registered: bool = self.is_registered()
+        if system_is_registered and not force_registration:
+            raise dbus.DBusException("This system is already registered.")
+
+        # If the system is registered and the 'force' option is specified,
+        # Unregister the system and register the system again.
+        if system_is_registered and force_registration:
+            self._unregister(connection_options)
         cp = self.build_uep(connection_options)
 
         register_service = RegisterService(cp)
@@ -325,6 +353,16 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
         Locale.set(locale)
+
+        force_registration: bool = options.get("force", False)
+        system_is_registered: bool = self.is_registered()
+        if system_is_registered and not force_registration:
+            raise dbus.DBusException("This system is already registered.")
+
+        # If the system is registered and the 'force' option is specified,
+        # Unregister the system and register the system again.
+        if system_is_registered and force_registration:
+            self._unregister(connection_options)
         cp = self.build_uep(connection_options)
 
         register_service = RegisterService(cp)
