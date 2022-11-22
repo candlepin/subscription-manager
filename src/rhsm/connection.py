@@ -156,6 +156,20 @@ class BadCertificateException(ConnectionException):
         return "Bad certificate at %s" % self.cert_path
 
 
+class ConnectionOSErrorException(ConnectionException):
+    """
+    Thrown in case of OSError during the connect() of HTTPSConnection,
+    in case the OSError does not come from a syscall failure (and thus
+    its 'errno' attribute is None.
+    """
+
+    def __init__(self, host: str, port: int, handler: str, exc: OSError):
+        self.host = host
+        self.port = port
+        self.handler = handler
+        self.exc = exc
+
+
 class BaseConnection(object):
     def __init__(
             self,
@@ -823,6 +837,12 @@ class BaseRestLib(object):
                     code = httplib.PROXY_AUTHENTICATION_REQUIRED.value
                 if str(code) in str(err):
                     raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port, exc=err)
+                # in case this OSError does not have an errno set, it means it was
+                # not a syscall failure; mostly (if at all) this is raisen on proxy
+                # connection failures
+                if err.errno is None:
+                    # wrap this to carry also the details on the destination host
+                    raise ConnectionOSErrorException(self.host, self.ssl_port, self.apihandler, err)
                 raise
 
         else:

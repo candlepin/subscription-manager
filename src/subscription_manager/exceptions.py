@@ -57,6 +57,7 @@ PRODUCT_CERTIFICATE_LOADING_PATH_ERROR = _("Bad product certificate: {file}: [{l
 CERTIFICATE_LOADING_PATH_ERROR = _("Bad certificate: {file}: [{library}] {message}")
 CERTIFICATE_LOADING_PEM_ERROR = _("Bad certificate: [{library}] {message}\n{data}")
 CERTIFICATE_LOADING_ERROR = _("Bad certificate: [{library}] {message}")
+CONNECTION_UNREACHABLE_MESSAGE = _("Unable to reach the server at {host}: {message}")
 
 # TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 # (the part before the opening bracket originates on the server)
@@ -91,6 +92,10 @@ class ExceptionMapper(object):
             httplib.BadStatusLine: (REMOTE_SERVER_MESSAGE, self.format_using_template),
             TokenAuthUnsupportedException: (TOKEN_AUTH_UNSUPPORTED_MESSAGE, self.format_using_template),
             CertificateLoadingError: (None, self.format_cert_loading_error),
+            connection.ConnectionOSErrorException: (
+                CONNECTION_UNREACHABLE_MESSAGE,
+                self.format_connection_unreachable,
+            ),
         }
 
     def format_using_template(self, _: Exception, message: str) -> str:
@@ -169,6 +174,12 @@ class ExceptionMapper(object):
         if exc.pem is not None:
             return CERTIFICATE_LOADING_PEM_ERROR.format(**fmtargs)
         return CERTIFICATE_LOADING_ERROR.format(**fmtargs)
+
+    def format_connection_unreachable(
+        self, exc: connection.ConnectionOSErrorException, message_template: str
+    ):
+        host = f"{exc.host}:{exc.port}{exc.handler}"
+        return message_template.format(host=host, message=str(exc.exc))
 
     def get_message(self, exception) -> str:
         """Get string representation of an exception.

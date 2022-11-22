@@ -38,7 +38,7 @@ from rhsm.https import ssl
 
 import rhsm.config
 import rhsm.connection as connection
-from rhsm.connection import ProxyException, UnauthorizedException, ConnectionException, RemoteServerException
+from rhsm.connection import ProxyException, UnauthorizedException, ConnectionException, RemoteServerException, ConnectionOSErrorException
 from rhsm.utils import cmd_name, remove_scheme, ServerUrlParseError
 
 from subscription_manager import identity
@@ -533,7 +533,7 @@ class CliCommand(AbstractCLICommand):
                 except MissingCaCertException:
                     system_exit(os.EX_CONFIG,
                                 _("Error: CA certificate for subscription service has not been installed."))
-                except ProxyException as exc:
+                except (ProxyException, ConnectionOSErrorException) as exc:
                     system_exit(os.EX_UNAVAILABLE, exc)
 
         else:

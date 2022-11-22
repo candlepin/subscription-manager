@@ -21,7 +21,13 @@ except ImportError:
 
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.certdirectory import DEFAULT_PRODUCT_CERT_DIR
-from rhsm.connection import RestlibException, BadCertificateException, ProxyException, UnknownContentException
+from rhsm.connection import (
+    RestlibException,
+    BadCertificateException,
+    ProxyException,
+    UnknownContentException,
+    ConnectionOSErrorException,
+)
 from rhsm.https import httplib, ssl
 from rhsm.certificate2 import CertificateLoadingError
 
@@ -261,5 +267,20 @@ class TestExceptionMapper(unittest.TestCase):
         err = CertificateLoadingError(expected_library, expected_reason)
         self.assertEqual(
             f"Bad certificate: [{expected_library}] {expected_reason}",
+            mapper.get_message(err),
+        )
+
+    def test_connectionoserror(self):
+        expected_message = "Expected MESSAGE"
+        expected_hostname = "hostname"
+        expected_port = 1234
+        expected_handler = "/foo"
+        mapper = ExceptionMapper()
+
+        genericerr = OSError(expected_message)
+        err = ConnectionOSErrorException(expected_hostname, expected_port, expected_handler, genericerr)
+        self.assertEqual(
+            f"Unable to reach the server at {expected_hostname}:{expected_port}{expected_handler}: "
+            f"{expected_message}",
             mapper.get_message(err),
         )
