@@ -38,7 +38,7 @@ from subscription_manager import injection as inj
 # we may want to import some of the other items for
 # compatibility.
 from rhsm.utils import parse_url
-from rhsm.connection import ProxyException
+from rhsm.connection import ProxyException, ConnectionOSErrorException
 
 import subscription_manager.version
 from rhsm.connection import RestlibException, GoneException
@@ -162,7 +162,7 @@ def is_valid_server_info(conn):
         # Indicates a missing CA certificate, which callers may need to
         # notify the user of:
         raise MissingCaCertException(e)
-    except ProxyException:
+    except (ProxyException, ConnectionOSErrorException):
         raise
     except Exception as e:
         log.exception(e)
