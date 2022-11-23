@@ -167,6 +167,20 @@ class BadCertificateException(ConnectionException):
         return "Bad certificate at %s" % self.cert_path
 
 
+class ConnectionOSErrorException(ConnectionException):
+    """
+    Thrown in case of OSError during the connect() of HTTPSConnection,
+    in case the OSError does not come from a syscall failure (and thus
+    its 'errno' attribute is None.
+    """
+
+    def __init__(self, host: str, port: int, handler: str, exc: OSError):
+        self.host = host
+        self.port = port
+        self.handler = handler
+        self.exc = exc
+
+
 class ConnectionType(enum.Enum):
     """
     Enumerate of allowed connection types
@@ -787,7 +801,16 @@ class BaseRestLib(object):
         conn.max_requests_num = None
 
         # Do TCP and TLS handshake here before we make any request
-        conn.connect()
+        try:
+            conn.connect()
+        except OSError as e:
+            # in case this OSError does not have an errno set, it means it was
+            # not a syscall failure; mostly (if at all) this is raisen on proxy
+            # connection failures
+            if e.errno is None:
+                # wrap this to carry also the details on the destination host
+                raise ConnectionOSErrorException(self.host, self.ssl_port, self.apihandler, e)
+            raise
         log.debug(f"Created connection: {conn.sock}")
 
         # Store connection object only in the case, when it is not forbidden
