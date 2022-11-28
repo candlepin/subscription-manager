@@ -18,7 +18,7 @@ import shutil
 import socket
 import tempfile
 import time
-from mock import Mock, patch, mock_open
+from unittest.mock import Mock, patch, mock_open
 
 # used to get a user readable cfg class for test cases
 from .stubs import (

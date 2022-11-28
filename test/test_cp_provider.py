@@ -13,7 +13,7 @@
 #
 import unittest
 
-from mock import patch, mock
+from unittest.mock import patch, Mock
 
 from subscription_manager.cp_provider import CPProvider
 
@@ -132,7 +132,7 @@ class CPProviderTests(unittest.TestCase):
         Test of getting connection to candlepin server using keycloack authentication
         """
         no_auth_connection = self.cp_provider.get_no_auth_cp()
-        no_auth_connection.has_capability = mock.Mock(return_value=True)
+        no_auth_connection.has_capability = Mock(return_value=True)
         # TOKEN is base64 encoded following json document
         # {"typ":"bearer", "preferred_username": "foo"}
         connection = self.cp_provider.get_keycloak_auth_cp(
@@ -146,7 +146,7 @@ class CPProviderTests(unittest.TestCase):
         """
         # Create no auth connection and fake getting capabilities
         no_auth_connection = self.cp_provider.get_no_auth_cp()
-        no_auth_connection.has_capability = mock.Mock(return_value=True)
+        no_auth_connection.has_capability = Mock(return_value=True)
         # Then try to create keycloak connection
         # TOKEN is base64 encoded following json document
         # {"typ":"bearer", "preferred_username": "foo"}

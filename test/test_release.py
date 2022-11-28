@@ -12,7 +12,7 @@
 # in this software or its documentation.
 #
 
-import mock
+from unittest import mock
 import http.client
 import socket
 from rhsm.https import ssl

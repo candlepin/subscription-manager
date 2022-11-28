@@ -15,7 +15,7 @@ from ..fixture import Capture
 import io
 import json
 import os
-import mock
+from unittest import mock
 import tempfile
 import unittest
 

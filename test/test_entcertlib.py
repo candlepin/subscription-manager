@@ -12,7 +12,7 @@
 # in this software or its documentation.
 #
 
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 from datetime import timedelta, datetime
 
 from .stubs import StubEntitlementCertificate, StubProduct, StubEntitlementDirectory

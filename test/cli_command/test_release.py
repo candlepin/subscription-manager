@@ -2,7 +2,7 @@ from ..test_managercli import TestCliProxyCommand
 from subscription_manager import managercli
 from subscription_manager.cli_command import release
 
-from mock import patch, Mock
+from unittest.mock import patch, Mock
 
 
 class TestReleaseCommand(TestCliProxyCommand):

@@ -12,7 +12,7 @@
 # in this software or its documentation.
 #
 
-from mock import Mock, NonCallableMock
+from unittest.mock import Mock, NonCallableMock
 from datetime import datetime
 
 from .fixture import SubManFixture

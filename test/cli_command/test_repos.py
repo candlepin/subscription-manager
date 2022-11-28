@@ -7,7 +7,7 @@ from subscription_manager.repolib import Repo
 
 from ..fixture import Capture, Matcher, set_up_mock_sp_store
 
-from mock import patch, Mock, call
+from unittest.mock import patch, Mock, call
 
 
 class TestReposCommand(TestCliCommand):

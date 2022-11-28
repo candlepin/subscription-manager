@@ -26,7 +26,7 @@ from rhsm.certificate2 import (
     CertificateLoadingError,
 )
 
-from mock import patch
+from unittest.mock import patch
 
 
 class V1ProductCertTests(unittest.TestCase):

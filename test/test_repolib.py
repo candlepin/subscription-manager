@@ -20,7 +20,7 @@ from importlib import reload
 from . import fixture
 
 from iniparse import RawConfigParser, SafeConfigParser
-from mock import Mock, patch, MagicMock, mock_open
+from unittest.mock import Mock, patch, MagicMock, mock_open
 import tempfile
 from iniparse import ConfigParser
 

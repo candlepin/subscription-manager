@@ -13,7 +13,7 @@
 
 from rhsmlib import file_monitor
 import configparser
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 from test import fixture
 from threading import Thread
 import subprocess

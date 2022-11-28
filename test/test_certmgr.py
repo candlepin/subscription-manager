@@ -14,7 +14,7 @@
 
 from datetime import datetime, timedelta
 
-import mock
+from unittest import mock
 from . import stubs
 
 from rhsm import ourjson as json

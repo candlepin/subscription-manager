@@ -8,7 +8,7 @@ from subscription_manager import managercli
 
 from ..fixture import Capture
 
-from mock import patch
+from unittest.mock import patch
 
 
 class TestAddonsCommand(TestCliCommand):

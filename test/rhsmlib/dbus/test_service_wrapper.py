@@ -13,7 +13,7 @@
 import unittest
 
 import dbus
-import mock
+from unittest import mock
 
 from rhsmlib.dbus import service_wrapper, constants
 
@@ -41,7 +41,7 @@ class ServiceWrapperTest(unittest.TestCase):
     @mock.patch("rhsmlib.dbus.service_wrapper.server.Server")
     def test_loads_an_object_class(self, mock_serve):
         # Just use some class we have available
-        service_wrapper.main(["cmd_name", "mock.MagicMock"])
+        service_wrapper.main(["cmd_name", "unittest.mock.MagicMock"])
         mock_serve.assert_called_with(
             bus_class=dbus.SystemBus, bus_name=constants.BUS_NAME, object_classes=[mock.MagicMock]
         )

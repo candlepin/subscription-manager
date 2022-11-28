@@ -1,6 +1,6 @@
 from ..fixture import SubManFixture
 from ..test_managercli import TestCliProxyCommand
-from mock import Mock
+from unittest.mock import Mock
 from subscription_manager import managercli
 from subscription_manager.cache import ContentAccessCache, ContentAccessModeCache
 from subscription_manager.injection import provide, CONTENT_ACCESS_CACHE, CONTENT_ACCESS_MODE_CACHE

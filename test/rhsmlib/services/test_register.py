@@ -11,7 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-import mock
+from unittest import mock
 import json
 
 import subscription_manager.injection as inj

@@ -9,7 +9,7 @@ from subscription_manager.injection import provide, CERT_SORTER
 from ..stubs import StubProductCertificate, StubEntitlementCertificate, StubProduct, StubCertSorter, StubPool
 from ..fixture import Capture
 
-from mock import patch, Mock, MagicMock
+from unittest.mock import patch, Mock, MagicMock
 
 
 class TestListCommand(TestCliProxyCommand):

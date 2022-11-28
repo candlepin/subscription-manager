@@ -13,7 +13,7 @@
 
 import unittest
 
-import mock
+from unittest import mock
 
 from rhsmlib.facts import host_collector
 

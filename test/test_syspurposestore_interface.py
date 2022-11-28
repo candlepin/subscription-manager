@@ -19,7 +19,7 @@ import unittest
 from .fixture import set_up_mock_sp_store
 
 import os
-import mock
+from unittest import mock
 
 
 class SyspurposeStoreInterfaceTests(unittest.TestCase):

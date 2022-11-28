@@ -1,7 +1,7 @@
 import unittest
 
 from rhsmlib.facts import pkg_arches
-from mock import patch
+from unittest.mock import patch
 
 
 class TestSupportedArchesCollector(unittest.TestCase):

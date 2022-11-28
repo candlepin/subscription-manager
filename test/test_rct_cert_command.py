@@ -13,7 +13,7 @@
 #
 import unittest
 
-from mock import patch
+from unittest.mock import patch
 from rhsm.certificate import CertificateException
 from rct.cert_commands import RCTCertCommand
 from subscription_manager.cli import InvalidCLIOptionError

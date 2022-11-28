@@ -21,7 +21,7 @@ import os
 from tempfile import NamedTemporaryFile
 import unittest
 
-from mock import patch
+from unittest.mock import patch
 from rhsm.config import RhsmConfigParser, RhsmHostConfigParser, in_container
 
 TEST_CONFIG = """

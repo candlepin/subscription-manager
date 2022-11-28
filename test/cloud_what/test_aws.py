@@ -17,7 +17,7 @@ Module for testing AWS part of Python package cloud_what
 """
 
 import unittest
-from mock import patch, Mock
+from unittest.mock import patch, Mock
 import tempfile
 import time
 

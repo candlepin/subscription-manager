@@ -17,7 +17,7 @@ import io
 import os
 import errno
 import json
-import mock
+from unittest import mock
 import tempfile
 import unittest
 

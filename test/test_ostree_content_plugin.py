@@ -11,7 +11,7 @@
 # ignores wrong content type
 import configparser
 
-import mock
+from unittest import mock
 from . import fixture
 
 from subscription_manager.model import EntitlementSource, Entitlement, find_content

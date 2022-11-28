@@ -33,7 +33,6 @@ RUN dnf install -y \
     python3-iniparse \
     python3-inotify \
     python3-librepo \
-    python3-mock \
     python3-pip \
     python3-polib \
     python3-pytest \

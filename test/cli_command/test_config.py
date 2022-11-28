@@ -8,7 +8,7 @@ from subscription_manager.cli_command import config as config_command
 
 from ..fixture import Capture
 
-from mock import patch
+from unittest.mock import patch
 
 
 class TestConfigCommand(TestCliCommand):

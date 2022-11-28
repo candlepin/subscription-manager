@@ -16,7 +16,7 @@ import unittest
 import tempfile
 import os
 
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 from shutil import rmtree
 
 from .stubs import StubProduct, StubEntitlementCertificate, StubProductCertificate

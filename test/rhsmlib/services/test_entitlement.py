@@ -11,7 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import datetime
-import mock
+from unittest import mock
 
 from test.rhsmlib.base import InjectionMockingTest
 

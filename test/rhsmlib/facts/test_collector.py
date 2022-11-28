@@ -14,7 +14,7 @@
 import unittest
 
 import platform
-import mock
+from unittest import mock
 from test.fixture import open_mock
 
 from rhsmlib.facts import collector, firmware_info

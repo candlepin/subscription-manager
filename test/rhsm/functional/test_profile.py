@@ -14,7 +14,7 @@ import unittest
 
 from rhsm.profile import Package, RPMProfile, get_profile, InvalidProfileType
 from rhsm import ourjson as json
-from mock import Mock
+from unittest.mock import Mock
 
 from test import subman_marker_functional
 

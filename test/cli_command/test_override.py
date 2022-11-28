@@ -7,7 +7,7 @@ from subscription_manager.overrides import Override
 
 from ..fixture import Capture
 
-from mock import patch
+from unittest.mock import patch
 
 
 class TestOverrideCommand(TestCliProxyCommand):

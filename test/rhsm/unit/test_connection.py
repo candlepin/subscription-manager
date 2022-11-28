@@ -41,7 +41,7 @@ from rhsm.connection import (
 from subscription_manager.cache import ContentAccessCache
 import subscription_manager.injection as inj
 
-from mock import Mock, mock, patch, mock_open
+from unittest.mock import Mock, patch, mock_open
 from datetime import date
 from time import strftime, gmtime
 from rhsm import ourjson as json
@@ -189,7 +189,7 @@ class ConnectionTests(unittest.TestCase):
     def test_get_environment_by_name_requires_owner(self):
         self.assertRaises(Exception, self.cp.getEnvironment, None, {"name": "env name"})
 
-    @mock.patch("locale.getlocale")
+    @patch("locale.getlocale")
     def test_has_proper_language_header_utf8(self, mock_locale):
         # First test it with Japanese
         mock_locale.return_value = ("ja_JP", "UTF-8")
@@ -203,7 +203,7 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn._set_accept_language_in_header()
         self.assertEqual(self.cp.conn.headers["Accept-Language"], "es-es")
 
-    @mock.patch("locale.getlocale")
+    @patch("locale.getlocale")
     def test_has_proper_language_header_not_utf8(self, mock_locale):
         mock_locale.return_value = ("ja_JP", "")
         self.cp.conn.headers = {}

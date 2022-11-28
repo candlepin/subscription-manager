@@ -11,7 +11,7 @@ from subscription_manager import certdirectory
 
 from rhsm.certificate2 import Product
 
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 from .fixture import SubManFixture
 
 

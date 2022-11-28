@@ -15,7 +15,7 @@ from subscription_manager.cli_command import cli
 from .stubs import StubEntitlementCertificate, StubUEP, StubProductDirectory, StubCertSorter
 from .fixture import FakeException, FakeLogger, SubManFixture, Capture
 
-from mock import patch
+from unittest.mock import patch
 
 # for some exceptions
 from rhsm import connection

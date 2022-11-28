@@ -2,7 +2,7 @@ import threading
 import time
 import unittest
 
-from mock import patch
+from unittest.mock import patch
 from rhsm.utils import (
     remove_scheme,
     get_env_proxy_info,

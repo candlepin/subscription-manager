@@ -4,7 +4,7 @@ import sys
 from ..test_managercli import TestCliCommand
 from subscription_manager import managercli
 
-from mock import patch, Mock
+from unittest.mock import patch, Mock
 
 
 class TestImportCertCommand(TestCliCommand):
