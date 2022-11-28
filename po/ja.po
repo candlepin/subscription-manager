@@ -5,13 +5,14 @@
 # myamamot <myamamot@redhat.com>, 2018. #zanata
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022.
+# Transtats <suanand@redhat.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-20 11:31+0200\n"
-"PO-Revision-Date: 2022-06-30 14:18+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2022-11-28 13:19+0000\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ja/>\n"
 "Language: ja\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -135,7 +136,7 @@ msgstr "1 つの引数が必要です"
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
-msgstr "少なくとも 1 つの引数が必要です"
+msgstr "最大で 1 つの引数が必要です"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
@@ -2153,7 +2154,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:49
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr "{message} (HTTP エラーコード{code}: {title})"
+msgstr "{message} (HTTP エラーコード {code}: {title})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/gui/about.py:28
@@ -4659,7 +4660,7 @@ msgstr "サーバー側の変更を上書きする場合は、以下を実行し
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/managercli.py:213
 msgid "Deprecated, see 'syspurpose'"
-msgstr "非推奨です。「syspurpose」を参照してください"
+msgstr "非推奨です、'syspurpose' を参照してください"
 
 # translation auto-copied from project subscription-manager, version 1.13.X, document keys
 #: src/subscription_manager/managercli.py:254
@@ -6345,7 +6346,7 @@ msgstr "リポジトリー: %s"
 
 #: src/subscription_manager/managercli.py:3610
 msgid "Show or modify the system purpose role setting"
-msgstr "システム目的のアドオン設定の表示または変更"
+msgstr "システム目的のロール設定の表示または変更"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/managercli.py:3624
@@ -6832,8 +6833,7 @@ msgstr "スタック "
 msgid ""
 "Error: More than one release product certificate installed. Certificate "
 "paths: %s"
-msgstr ""
-"エラー: リリースの製品証明書が 1 つ以上インストールされています。証明書パス: "
+msgstr "エラー: リリースの製品証明書が 2 つ以上インストールされています。証明書パス: "
 "%s"
 
 #: src/subscription_manager/repolib.py:89
