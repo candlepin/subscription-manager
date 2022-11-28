@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-20 11:31+0200\n"
-"PO-Revision-Date: 2022-10-30 08:19+0000\n"
+"PO-Revision-Date: 2022-11-02 10:19+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
@@ -248,7 +248,7 @@ msgstr "삭제:"
 #: cockpit/src/insights.jsx:194 cockpit/src/insights.jsx:422
 #: cockpit/src/insights.jsx:427
 msgid "Details"
-msgstr "세부 정보"
+msgstr "상세정보"
 
 #: cockpit/src/insights.jsx:205 cockpit/src/insights.jsx:216
 #: cockpit/src/insights.jsx:300
@@ -446,7 +446,7 @@ msgstr "프락시 위치"
 
 #: cockpit/src/subscriptions-register.jsx:61
 msgid "Proxy Username"
-msgstr "프락시 사용자 이름"
+msgstr "프락시 사용자이름"
 
 #: cockpit/src/subscriptions-register.jsx:67
 msgid "Proxy Password"
@@ -820,9 +820,9 @@ msgstr ""
 "*** 경고 ***\n"
 "다음 제품의 서브스크립션이 만료되었습니다:\n"
 "%s\n"
-"이러한 제품을 제공하는 레포지터리에 더이상 적근 할 수 없습니다.  보안 및 기"
-"타 중요 업데이트에 액세스하려면 활성 서브스크립션이 필요합니다. 활성 서브스크"
-"립션이 없을 경우 만료된 서브스크립션을 갱신할 수 있습니다.  "
+"이러한 제품을 제공하는 저장소에 더 이상 접근 할 수 없습니다.  보안 및 기타 "
+"중대한 최신화에 접근하려면 활성 서브스크립션이 필요합니다. 활성 "
+"서브스크립션이 없을 경우, 만료된 서브스크립션을 갱신 할 수 있습니다.  "
 
 #: src/dnf-plugins/subscription-manager.py:50
 msgid ""
@@ -846,7 +846,7 @@ msgstr ""
 
 #: src/dnf-plugins/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
-msgstr "root가 아닙니다. 서브스크립션 관리 레포지터리가 업데이트되지 않습니다"
+msgstr "root가 아니며, 서브스크립션 관리 저장소가 최신화되지 않습니다"
 
 #: src/dnf-plugins/subscription-manager.py:115
 #, python-format
@@ -855,11 +855,11 @@ msgid ""
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr ""
 "subscription-manager 플러그인이 /etc/dnf/plugins/subscription-manager.conf의 "
-"구성과 관련된 %d 시스템 레포지터리를 비활성화했습니다"
+"구성과 관련된 %d 시스템 저장소를 비활성화했습니다"
 
 #: src/dnf-plugins/subscription-manager.py:128
 msgid "Updating Subscription Management repositories."
-msgstr "서브스크립션 관리 레포지터리를 업데이트하고 있습니다."
+msgstr "서브스크립션 관리 저장소를 최신화하기."
 
 #: src/dnf-plugins/subscription-manager.py:133
 msgid "Unable to read consumer identity"
@@ -1105,7 +1105,7 @@ msgstr "수량"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:241
 msgid "Created"
-msgstr "생성 일시"
+msgstr "생성일"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:242 src/rct/printing.py:134
@@ -4320,7 +4320,7 @@ msgstr "첨부된 서브스크립션이 없으면 사용 가능한 레포지터�
 #: src/subscription_manager/managercli.py:2969
 #: src/subscription_manager/managercli.py:3544
 msgid "Repositories disabled by configuration."
-msgstr "설정에 의해 레포지터리가 비활성화되었습니다."
+msgstr "구성에 의해 비활성화된 저장소."
 
 #: src/subscription_manager/gui/reposgui.py:131
 msgid "Gpgcheck"
@@ -4587,17 +4587,17 @@ msgstr "인타이틀먼트 유형:"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:144
 msgid "Repo ID:"
-msgstr "레포지터리 ID:"
+msgstr "저장소 ID:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:145
 msgid "Repo Name:"
-msgstr "레포지터리 이름:"
+msgstr "저장소 이름:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:146
 msgid "Repo URL:"
-msgstr "레포지터리 URL:"
+msgstr "저장소 URL:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:147
@@ -5903,35 +5903,33 @@ msgstr "활성화됨"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2935
 msgid "List the repositories which this system is entitled to use"
-msgstr "시스템이 사용할 권리가 있는 레포지터리를 나열합니다"
+msgstr "이와 같은 시스템이 사용 할 수 있는 저장소를 나열합니다"
 
 #: src/subscription_manager/managercli.py:2939
 msgid "list all known repositories for this system"
-msgstr "이 시스템에 대해 열려진 모든 레포지터리를 나열"
+msgstr "이 시스템을 위해 모든 알려진 저장소를 나열합니다"
 
 #: src/subscription_manager/managercli.py:2941
 msgid "list known, enabled repositories for this system"
-msgstr "이 시스템에 대해 알려진 활성화된 레포지터리를 나열"
+msgstr "이 시스템을 위해 알려진, 활성화된 저장소를 나열합니다"
 
 #: src/subscription_manager/managercli.py:2943
 msgid "list known, disabled repositories for this system"
-msgstr "이 시스템에 대해 알려진 비활성화된 레포지터리를 나열"
+msgstr "이 시스템을 위해 알려진, 비활성화된 저장소를 나열합니다"
 
 #: src/subscription_manager/managercli.py:2946
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
-msgstr ""
-"활성화할 레포지터리입니다. (한 번 이상 지정할 수 있음). 와일드 카드 (* 및 ?)"
-"가 지원됩니다."
+msgstr "활성화하려는 저장소(두 번 이상 지정 할 수 있음). 와일드카드(* 과 ?)가 "
+"지원됩니다."
 
 #: src/subscription_manager/managercli.py:2949
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
-msgstr ""
-"비활성화할 레포지터리입니다 (한 번 이상 지정할 수 있음). 와일드 카드 (* 및 ?)"
-"가 지원됩니다."
+msgstr "비활성화하는 저장소(두 번 이상 지정 할 수 있음). 와일드카드(* 과 ?)가 "
+"지원됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3010
@@ -5941,13 +5939,13 @@ msgstr "    %s에서 사용 가능한 레포지터리"
 
 #: src/subscription_manager/managercli.py:3020
 msgid "There were no available repositories matching the specified criteria."
-msgstr "지정된 기준에 일치하는 사용 가능한 레포지터리가 없습니다."
+msgstr "지정된 기준에 일치하는 사용 가능한 저장소가 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3022
 #: src/subscription_manager/managercli.py:3041
 msgid "This system has no repositories available through subscriptions."
-msgstr "이 시스템에는 서브스크립션을 통해 사용 가능한 레포지터리가 없습니다."
+msgstr "이 시스템은 서브스크립션을 통해 사용 가능한 저장소가 없습니다."
 
 #: src/subscription_manager/managercli.py:3048
 #, python-format
@@ -6221,12 +6219,12 @@ msgstr "소비된 서브스크립션 풀을 찾을 수 없습니다."
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3476
 msgid "Manage custom content repository settings"
-msgstr "사용자 정의 컨텐츠 레포지터리 설정 관리"
+msgstr "사용자 정의 컨텐츠 저장소 설정 관리"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3479
 msgid "repository to modify (can be specified more than once)"
-msgstr "수정할 레포지터리 (하나 이상을 지정할 수 있음)"
+msgstr "수정하려는 저장소 (두 번 이상을 지정 할 수 있음)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3481
@@ -6250,14 +6248,12 @@ msgstr ""
 #: src/subscription_manager/managercli.py:3485
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
-msgstr ""
-"모든 재정의를 삭제합니다; --repo를 사용하여 레포지터리에 지정 할 수 있습니다"
+msgstr "모든 재정의를 제거합니다; --repo를 제공하여 저장소를 지정 할 수 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3487
 msgid "list all overrides; can be specific to a repository by providing --repo"
-msgstr ""
-"모든 재정의를 나열합니다; --repo를 사용하여 레포지터리에 지정 할 수 있습니다"
+msgstr "모든 재정의를 나열합니다; --repo를 제공하여 저장소에 지정 할 수 있습니다"
 
 #: src/subscription_manager/managercli.py:3494
 msgid "You must specify an override in the form of \"name:value\" with --add."
@@ -6271,7 +6267,7 @@ msgstr "--add 인수는 \"name:value\" 형식이어야 합니다"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3509
 msgid "Error: You must specify a repository to modify"
-msgstr "오류: 수정할 레포지터리를 지정해야 합니다"
+msgstr "오류: 수정하려는 저장소를 지정해야 합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3511
@@ -6624,16 +6620,15 @@ msgid ""
 "Couldn't enable extra repositories."
 msgstr ""
 "\n"
-"추가 레포지터리를 활성화 할 수 없습니다."
+"추가 저장소를 활성화 할 수 없습니다."
 
 #: src/subscription_manager/migrate/migrate.py:792
 #, python-format
 msgid ""
 "Please ensure system has subscriptions attached, and see '%s' to enable "
 "additional repositories"
-msgstr ""
-"시스템에 서브스크립션이 첨부되어 있는지 확인하십시오. 추가 레포지터리를 활성"
-"화하려면 '%s'에서 참조하십시오"
+msgstr "시스템에 서브스크립션이 첨부되어 있는지 확인하세요, 추가 저장소를 "
+"활성화하려면 '%s'를 참조하세요"
 
 #: src/subscription_manager/migrate/migrate.py:811
 msgid "Stopping and disabling legacy services..."
@@ -6810,12 +6805,12 @@ msgstr ""
 
 #: src/subscription_manager/repolib.py:654
 msgid "Repo updates"
-msgstr "레포지터리 업데이트"
+msgstr "저장소 최신화"
 
 #: src/subscription_manager/repolib.py:655
 #, python-format
 msgid "Total repo updates: %d"
-msgstr "총 레포지터리 업데이트: %d"
+msgstr "총 저장소 최신화: %d"
 
 #: src/subscription_manager/repolib.py:656
 msgid "Updated"
@@ -6844,12 +6839,12 @@ msgstr "꾸러미 프로파일 적재 중 오류 발생: %s\n"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:208
 msgid "Updating entitlement certificates & repositories"
-msgstr "인타이틀먼트 인증서 & 레포지터리 업데이트하기"
+msgstr "자격 인증서 & 저장소를 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:286
 msgid "Unable to update entitlement certificates and repositories"
-msgstr "인타이틀먼트 인증서 및 레포지터리를 업데이트할 수 없음"
+msgstr "자격 인증서 및 저장소를 최신화 할 수 없음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author eukim
 #: src/subscription_manager/scripts/subscription_manager_gui.py:172
