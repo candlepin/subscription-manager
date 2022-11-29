@@ -199,8 +199,6 @@ class ConnectionType(enum.Enum):
     KEYCLOAK_AUTH = enum.auto()
 
 
-# FIXME: this concept with reslib_class is horrible. The _request() method can return anything.
-# It does not have much benefit and it is easy to introduce new bug.
 class BaseConnection:
     def __init__(
         self,
@@ -1160,15 +1158,7 @@ class BaseRestLib:
 
         self.validateResponse(result, request_type, handler)
 
-        # Handle 204s
-        if not len(result["content"]):
-            return None
-        try:
-            return json.loads(result["content"])
-        except json.JSONDecodeError:
-            # This is primarily intended for getting releases from CDN, because
-            # the file containing releases is plaintext and not json.
-            return result["content"]
+        return result
 
     def _update_smoothed_response_time(self, response_time: float):
         """
@@ -1287,6 +1277,18 @@ class BaseRestLib:
         if "error_description" in body:
             return body["error_description"]
 
+    @staticmethod
+    def _request_response_handling(request_result) -> Any:
+        # Handle 204s
+        if not len(request_result["content"]):
+            return None
+        try:
+            return json.loads(request_result["content"])
+        except json.JSONDecodeError:
+            # This is primarily intended for getting releases from CDN, because
+            # the file containing releases is plaintext and not json.
+            return request_result["content"]
+
     def request_get(
         self,
         method: str,
@@ -1294,27 +1296,38 @@ class BaseRestLib:
         cert_key_pairs: List[Tuple[str, str]] = None,
         description: Optional[str] = None,
     ) -> Any:
-        return self._request(
+        result: Dict[str, Any] = self._request(
             "GET", method, headers=headers, cert_key_pairs=cert_key_pairs, description=description
         )
+        return self._request_response_handling(result)
 
     def request_post(
         self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
     ) -> Any:
-        return self._request("POST", method, params, headers=headers, description=description)
+        result: Dict[str, Any] = self._request(
+            "POST", method, params, headers=headers, description=description
+        )
+        return self._request_response_handling(result)
 
     def request_head(self, method: str, headers: dict = None, description: Optional[str] = None) -> Any:
-        return self._request("HEAD", method, headers=headers, description=description)
+        result: Dict[str, Any] = self._request("HEAD", method, headers=headers, description=description)
+        return self._request_response_handling(result)
 
     def request_put(
         self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
     ) -> Any:
-        return self._request("PUT", method, params, headers=headers, description=description)
+        result: Dict[str, Any] = self._request(
+            "PUT", method, params, headers=headers, description=description
+        )
+        return self._request_response_handling(result)
 
     def request_delete(
         self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
     ) -> Any:
-        return self._request("DELETE", method, params, headers=headers, description=description)
+        result: Dict[str, Any] = self._request(
+            "DELETE", method, params, headers=headers, description=description
+        )
+        return self._request_response_handling(result)
 
     @staticmethod
     def _format_http_date(dt: datetime.datetime) -> str:
@@ -1775,8 +1788,7 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s" % self.sanitize(consumerId)
         result = self.conn.request_delete(method, description=_("Unregistering system"))
         if result is not None:
-            status = result.get("status")
-            return status == 204
+            return result["status"] == 204
         return False
 
     def getCertificates(self, consumer_uuid: str, serials: Optional[list] = None) -> List[dict]:
