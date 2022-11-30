@@ -78,7 +78,6 @@ RUN pip3 install -r dev-requirements.txt && \
 
 RUN chown -R user:user /build
 USER user
-ENV DBUS_SESSION_BUS_ADDRESS='unix:path=/tmp/bus'
 RUN echo "export SMDEV_CONTAINER_OFF='True'" >> /home/user/.bashrc && \
     echo "export SMDEV_CONTAINER_OFF='True'" >> /home/user/.zshrc
 WORKDIR /build/subscription-manager
