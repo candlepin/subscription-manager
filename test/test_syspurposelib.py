@@ -1,5 +1,5 @@
 from .fixture import SubManFixture, open_mock
-import mock
+from unittest import mock
 from subscription_manager import syspurposelib
 from subscription_manager.syspurposelib import SyspurposeSyncActionCommand, SyspurposeSyncActionReport
 import json

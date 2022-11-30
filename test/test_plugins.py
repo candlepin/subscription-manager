@@ -14,7 +14,7 @@
 import unittest
 
 import os
-import mock
+from unittest import mock
 import io
 
 from subscription_manager import plugins

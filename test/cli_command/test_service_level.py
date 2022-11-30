@@ -8,7 +8,7 @@ from subscription_manager import managercli
 from ..stubs import StubConsumerIdentity, StubUEP
 from ..fixture import set_up_mock_sp_store
 
-from mock import patch, Mock, call
+from unittest.mock import patch, Mock, call
 
 
 class TestServiceLevelCommand(TestCliProxyCommand):

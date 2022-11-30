@@ -13,7 +13,7 @@
 #
 import os
 
-from mock import Mock, NonCallableMock, patch, MagicMock
+from unittest.mock import Mock, NonCallableMock, patch, MagicMock
 
 from .stubs import StubUEP
 

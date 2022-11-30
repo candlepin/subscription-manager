@@ -235,7 +235,6 @@ install_requires = [
 
 test_require = (
     [
-        "mock",
         "pytest",
         "pytest-randomly",
         "pytest-timeout",

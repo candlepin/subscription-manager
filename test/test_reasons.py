@@ -14,7 +14,7 @@
 import unittest
 
 from .stubs import StubEntitlementCertificate, StubProduct
-from mock import Mock
+from unittest.mock import Mock
 from subscription_manager.reasons import Reasons
 
 INST_PID_1 = "100000000000002"  # awesomeos 64

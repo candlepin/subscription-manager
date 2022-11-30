@@ -9,7 +9,7 @@
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
-from mock import patch, call, Mock
+from unittest.mock import patch, call, Mock
 
 from subscription_manager import api
 from subscription_manager.repolib import Repo

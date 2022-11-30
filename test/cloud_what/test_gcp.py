@@ -17,7 +17,7 @@ Module for testing GCP part of Python package cloud_what
 """
 
 import unittest
-from mock import patch, Mock
+from unittest.mock import patch, Mock
 import json
 
 from cloud_what.providers import gcp

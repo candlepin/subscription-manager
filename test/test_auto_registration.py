@@ -18,7 +18,7 @@ Module for testing automatic registration on public cloud
 
 import unittest
 import base64
-from mock import patch, Mock
+from unittest.mock import patch, Mock
 
 from subscription_manager.scripts.rhsmcertd_worker import _collect_cloud_info
 from .rhsmlib.facts.test_cloud_facts import AWS_METADATA

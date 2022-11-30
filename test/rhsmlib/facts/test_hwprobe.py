@@ -14,9 +14,9 @@ import unittest
 
 import io
 
-from mock import patch
-from mock import Mock
-from mock import mock_open
+from unittest.mock import patch
+from unittest.mock import Mock
+from unittest.mock import mock_open
 
 import test.fixture
 from test.fixture import OPEN_FUNCTION

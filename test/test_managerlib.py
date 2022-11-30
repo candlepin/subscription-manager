@@ -38,7 +38,7 @@ from .modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
 from rhsm.certificate import create_from_pem, DateRange, GMT
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 
 cfg = rhsm.config.get_config_parser()
 ENT_CONFIG_DIR = cfg.get("rhsm", "entitlementCertDir")

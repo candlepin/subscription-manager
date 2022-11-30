@@ -5,7 +5,7 @@ from . import stubs
 
 import tempfile
 
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 from rhsm.utils import (
     ServerUrlParseErrorEmpty,
     ServerUrlParseErrorNone,

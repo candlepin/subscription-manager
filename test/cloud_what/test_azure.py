@@ -17,7 +17,7 @@ Module for testing Azure part of Python package cloud_what
 """
 
 import unittest
-from mock import patch, Mock, call
+from unittest.mock import patch, Mock, call
 import json
 import requests
 

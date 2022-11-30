@@ -8,7 +8,7 @@ import subscription_manager.injection as inj
 from ..stubs import StubUEP
 from ..fixture import Capture, SubManFixture
 
-from mock import patch, Mock, MagicMock
+from unittest.mock import patch, Mock, MagicMock
 
 
 class TestSyspurposeCommand(TestCliProxyCommand):

@@ -13,7 +13,7 @@
 import unittest
 
 import test.fixture
-from mock import patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 from rhsmlib.facts import virt, firmware_info
 

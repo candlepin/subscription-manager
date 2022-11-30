@@ -6,7 +6,7 @@ import tempfile
 from ..test_managercli import TestCliProxyCommand
 from subscription_manager import managercli
 
-from mock import patch
+from unittest.mock import patch
 
 
 # Test Attach and Subscribe are the same

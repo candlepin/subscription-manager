@@ -13,7 +13,7 @@ from subscription_manager.printing_utils import (
     FONT_NORMAL,
 )
 
-from mock import patch, Mock
+from unittest.mock import patch, Mock
 
 
 class TestFormatName(unittest.TestCase):

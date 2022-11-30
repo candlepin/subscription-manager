@@ -1,6 +1,6 @@
 import logging
 
-import mock
+from unittest import mock
 import tempfile
 import os
 

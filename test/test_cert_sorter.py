@@ -30,7 +30,7 @@ import subscription_manager.cert_sorter
 from subscription_manager.cert_sorter import CertSorter, UNKNOWN
 from subscription_manager.cache import EntitlementStatusCache
 from datetime import timedelta, datetime
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 from rhsm import ourjson as json
 
 

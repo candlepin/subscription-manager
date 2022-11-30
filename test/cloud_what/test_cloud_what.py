@@ -17,7 +17,7 @@ Unit testing of public part of cloud_what
 """
 
 import unittest
-from mock import patch, Mock
+from unittest.mock import patch, Mock
 
 from cloud_what.providers import aws, azure, gcp
 from cloud_what.provider import detect_cloud_provider, get_cloud_provider, DetectionMethod

@@ -15,7 +15,7 @@ import unittest
 
 from test.fixture import open_mock_many
 from rhsmlib.facts import insights
-from mock import patch
+from unittest.mock import patch
 import tempfile
 
 INSIGHT_FUTURE_UUID = "250878c1-a8a2-4c44-8a29-5736dc4094c7"

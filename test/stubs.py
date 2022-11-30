@@ -15,7 +15,7 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
 import io
-import mock
+from unittest import mock
 import random
 
 from rhsm import config

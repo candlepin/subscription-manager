@@ -4,7 +4,7 @@ import locale
 
 from datetime import datetime
 from dateutil.tz import tzutc, tzstr
-from mock import patch
+from unittest.mock import patch
 
 from subscription_manager import managerlib
 

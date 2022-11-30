@@ -14,7 +14,7 @@ from typing import Any, Dict
 
 import dbus
 import json
-import mock
+from unittest import mock
 
 from rhsmlib.dbus.objects import AttachDBusObject
 

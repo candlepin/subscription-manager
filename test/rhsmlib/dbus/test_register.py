@@ -15,7 +15,7 @@ import json
 import tempfile
 from typing import Optional
 
-import mock
+from unittest import mock
 import socket
 import dbus
 

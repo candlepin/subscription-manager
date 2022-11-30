@@ -4,7 +4,7 @@ from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 from ..stubs import StubConsumerIdentity, StubUEP
 from ..fixture import SubManFixture, Capture
 
-from mock import Mock, patch
+from unittest.mock import Mock, patch
 
 
 MOCK_SERVICE_STATUS_SCA = {

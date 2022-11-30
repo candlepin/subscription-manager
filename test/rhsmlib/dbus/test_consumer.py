@@ -13,7 +13,7 @@
 
 from rhsmlib.dbus.objects.consumer import ConsumerDBusObject
 
-import mock
+from unittest import mock
 from test.rhsmlib.base import DBusServerStubProvider
 
 

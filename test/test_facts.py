@@ -1,6 +1,6 @@
 import tempfile
 import shutil
-from mock import patch
+from unittest.mock import patch
 
 from . import fixture
 from subscription_manager import facts

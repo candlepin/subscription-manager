@@ -17,7 +17,7 @@ import rhsm.connection as connection
 from .stubs import StubUEP
 from .fixture import SubManFixture
 from subscription_manager import managercli
-from mock import patch, Mock
+from unittest.mock import patch, Mock
 
 
 class CliUnRegistrationTests(SubManFixture):

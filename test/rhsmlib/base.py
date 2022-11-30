@@ -22,7 +22,7 @@ import dbus.lowlevel
 import dbus.bus
 import dbus.mainloop.glib
 import logging
-import mock
+from unittest import mock
 
 from subscription_manager.i18n import Locale
 

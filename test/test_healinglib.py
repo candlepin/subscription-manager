@@ -12,7 +12,7 @@
 # in this software or its documentation.
 #
 
-import mock
+from unittest import mock
 
 from . import fixture
 

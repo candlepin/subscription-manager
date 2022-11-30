@@ -14,7 +14,7 @@
 import unittest
 
 import errno
-import mock
+from unittest import mock
 import os
 import io
 import tempfile
