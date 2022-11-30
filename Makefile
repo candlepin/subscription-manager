@@ -200,6 +200,7 @@ install-via-setup: install-subpackages-via-setup
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsmcertd-worker $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
+	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-package-profile-uploader $(DESTDIR)/$(LIBEXEC_DIR)/
 	find $(DESTDIR)/$(PYTHON_SITELIB) -name requires.txt -exec sed -i '/dbus-python/d' {} \;
 
 
