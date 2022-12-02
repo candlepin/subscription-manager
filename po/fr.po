@@ -8,13 +8,14 @@
 # John Sefler <jsefler@redhat.com>, 2021.
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 # Jérôme Fenal <jfenal@free.fr>, 2022.
+# blutch112 <vincent.lefebvre59@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-20 11:31+0200\n"
-"PO-Revision-Date: 2022-06-30 14:18+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2022-11-06 13:19+0000\n"
+"Last-Translator: blutch112 <vincent.lefebvre59@gmail.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/fr/>\n"
 "Language: fr\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -236,8 +237,8 @@ msgstr "Le paquet $0 va être installé."
 #: cockpit/src/insights.jsx:158
 msgid "The $0 package and $1 other package will be installed."
 msgid_plural "The $0 package and $1 other packages will be installed."
-msgstr[0] "Le paquet $0 et $1 autre paquet vont être installés."
-msgstr[1] "Le paquet $0 et les $1 autres paquets vont être installés."
+msgstr[0] "Le package $0 et l'autre package $1 seront installés."
+msgstr[1] "Le package $0 et les autres packages $1 seront installés."
 
 #: cockpit/src/insights.jsx:166
 msgid "$0 package needs to be removed."
@@ -5316,7 +5317,7 @@ msgstr ""
 msgid "No such environment: {names}"
 msgid_plural "No such environments: {names}"
 msgstr[0] "Cet environnement n'existe pas : {names}"
-msgstr[1] "Aucun environnement de ce type : {names}"
+msgstr[1] "Ces environnements n'existe pas : {names}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:1576
@@ -5802,8 +5803,8 @@ msgid ""
 "Ignoring request to attach. It is disabled for org \"{owner_id}\" because of "
 "the content access mode setting."
 msgstr ""
-"Ignorer la demande d'attachement. Il est désactivé pour l'org \"{owner_id}\" "
-"en raison du paramétrage du mode d'accès au contenu."
+"Ignorer la demande d'attachement. Il est désactivé pour l'organisation \""
+"{owner_id}\" en raison du paramétrage du mode d'accès au contenu."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/managercli.py:2482
