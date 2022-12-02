@@ -400,7 +400,7 @@ class RestlibException(ConnectionException):
     """
     Raised when a response with a valid json body is received along with a status code
     that is not in [200, 202, 204, 410, 429]
-    See RestLib.validateResponse to see when this and other exceptions are raised.
+    See BaseRestLib.validateResult to see when this and other exceptions are raised.
     """
 
     def __init__(self, code: int, msg: str = None, headers: dict = None) -> None:
@@ -1059,7 +1059,7 @@ class BaseRestLib:
         Make HTTP request to candlepin server
         :param request_type: string representing request type
         :param method: path of the request
-        :param info: data (usually dictionary) of request if any
+        :param params: data (usually dictionary) of request if any
         :param headers: dictionary with HTTP headers
         :param cert_key_pairs: list of tuples. Tuple contain cert and key
         :param description: description of request
@@ -1156,7 +1156,7 @@ class BaseRestLib:
         # FIXME: we should probably do this in a wrapper method
         # so we can use the request method for normal http
 
-        self.validateResponse(result, request_type, handler)
+        self.validateResult(result, request_type, handler)
 
         return result
 
@@ -1172,11 +1172,11 @@ class BaseRestLib:
             self.smoothed_rt = (self.ALPHA * self.smoothed_rt) + ((1 - self.ALPHA) * response_time)
         log.debug("Response time: %s, Smoothed response time: %s" % (response_time, self.smoothed_rt))
 
-    def validateResponse(self, result: dict, request_type: str = None, handler: str = None) -> None:
+    def validateResult(self, result: dict, request_type: str = None, handler: str = None) -> None:
         """
         Try to validate result of HTTP request. Raise exception, when validation of
         result failed
-        :param response: Dictionary holding result
+        :param result: Dictionary holding result
         :param request_type: String representation of original request
         :param handler: String containing handler of request
         """
@@ -1278,7 +1278,13 @@ class BaseRestLib:
             return body["error_description"]
 
     @staticmethod
-    def _request_response_handling(request_result) -> Any:
+    def _extract_content_from_response(request_result: Dict[str, Any]) -> Any:
+        """
+        Extracts the data within the 'content' field of the result from a successful http response.
+        :param request_result: Response result from an http request.
+        :return: Data from the 'content' field of the result or None if the response had a 204 status.
+        """
+
         # Handle 204s
         if not len(request_result["content"]):
             return None
@@ -1299,7 +1305,7 @@ class BaseRestLib:
         result: Dict[str, Any] = self._request(
             "GET", method, headers=headers, cert_key_pairs=cert_key_pairs, description=description
         )
-        return self._request_response_handling(result)
+        return self._extract_content_from_response(result)
 
     def request_post(
         self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
@@ -1307,11 +1313,11 @@ class BaseRestLib:
         result: Dict[str, Any] = self._request(
             "POST", method, params, headers=headers, description=description
         )
-        return self._request_response_handling(result)
+        return self._extract_content_from_response(result)
 
     def request_head(self, method: str, headers: dict = None, description: Optional[str] = None) -> Any:
         result: Dict[str, Any] = self._request("HEAD", method, headers=headers, description=description)
-        return self._request_response_handling(result)
+        return self._extract_content_from_response(result)
 
     def request_put(
         self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
@@ -1319,7 +1325,7 @@ class BaseRestLib:
         result: Dict[str, Any] = self._request(
             "PUT", method, params, headers=headers, description=description
         )
-        return self._request_response_handling(result)
+        return self._extract_content_from_response(result)
 
     def request_delete(
         self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
@@ -1327,7 +1333,7 @@ class BaseRestLib:
         result: Dict[str, Any] = self._request(
             "DELETE", method, params, headers=headers, description=description
         )
-        return self._request_response_handling(result)
+        return self._extract_content_from_response(result)
 
     @staticmethod
     def _format_http_date(dt: datetime.datetime) -> str:
@@ -1703,8 +1709,8 @@ class UEPConnection(BaseConnection):
                     return guestId
                 # Does not support the full guestId json, use the id string
                 return guestId["guestId"]
-            raise Exception("Error: A guest Id was not found in the provided guest Id dictionary.")
-        raise Exception("Error: Only a string or dictionary data type can be sanitized.")
+            raise KeyError("Error: A 'guestId' key was not found in the provided guest Id dictionary.")
+        raise TypeError("Error: Only a string or dictionary data type can be sanitized.")
 
     def updatePackageProfile(self, consumer_uuid: str, pkg_dicts: dict) -> dict:
         """
@@ -1786,10 +1792,7 @@ class UEPConnection(BaseConnection):
         :param consumerId: consumer UUID (it could be found in consumer cert, when system is registered)
         """
         method = "/consumers/%s" % self.sanitize(consumerId)
-        result = self.conn.request_delete(method, description=_("Unregistering system"))
-        if result is not None:
-            return result["status"] == 204
-        return False
+        return self.conn.request_delete(method, description=_("Unregistering system")) is None
 
     def getCertificates(self, consumer_uuid: str, serials: Optional[list] = None) -> List[dict]:
         """

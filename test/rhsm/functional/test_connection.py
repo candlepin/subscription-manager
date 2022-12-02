@@ -129,7 +129,7 @@ class BindRequestTests(unittest.TestCase):
         consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
         self.consumer_uuid = consumerInfo["uuid"]
 
-    @patch.object(BaseRestLib, "validateResponse")
+    @patch.object(BaseRestLib, "validateResult")
     @patch("rhsm.connection.drift_check", return_value=False)
     @patch("httplib.HTTPSConnection", autospec=True)
     def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
@@ -144,7 +144,7 @@ class BindRequestTests(unittest.TestCase):
             if name == "().request":
                 self.assertEqual(None, kwargs["body"])
 
-    @patch.object(BaseRestLib, "validateResponse")
+    @patch.object(BaseRestLib, "validateResult")
     @patch("rhsm.connection.drift_check", return_value=False)
     @patch("httplib.HTTPSConnection", autospec=True)
     def test_bind_by_pool(self, mock_conn, mock_drift, mock_validate):
@@ -224,7 +224,7 @@ class HypervisorCheckinTests(unittest.TestCase):
 
 
 @subman_marker_functional
-class RestlibTests(unittest.TestCase):
+class BaseRestLibTests(unittest.TestCase):
     def setUp(self):
         # Get handle to Restlib
         self.conn = UEPConnection().conn
@@ -233,7 +233,7 @@ class RestlibTests(unittest.TestCase):
 
     def _validate_response(self, response):
         # wrapper to specify request_type and handler
-        return self.conn.validateResponse(response, request_type=self.request_type, handler=self.handler)
+        return self.conn.validateResult(response, request_type=self.request_type, handler=self.handler)
 
     def test_invalid_credentitals_thrown_on_401_with_empty_body(self):
         mock_response = {"status": 401}

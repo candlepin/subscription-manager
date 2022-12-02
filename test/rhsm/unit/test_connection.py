@@ -629,8 +629,19 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.request_get = Mock(return_value=[])
         self.assertEqual([], self.cp.getOwnerList(username="test"))
 
+    def test_extract_content_from_response(self):
+        # ensure requests with empty content data (status 204) returns None
+        response_body = {"content": {}}
+        self.assertIsNone(BaseRestLib._extract_content_from_response(response_body))
+        # return content dict from request result if it is json parsable text
+        response_body = {"content": """{"test": "test"}"""}
+        self.assertEqual({"test": "test"}, BaseRestLib._extract_content_from_response(response_body))
+        # return content text from request result if it exists and it is not json parsable text
+        response_body = {"content": "test"}
+        self.assertEqual("test", BaseRestLib._extract_content_from_response(response_body))
 
-class RestlibValidateResponseTests(unittest.TestCase):
+
+class BaseRestLibValidateResponseTests(unittest.TestCase):
     def setUp(self):
         self.restlib = BaseRestLib("somehost", "123", "somehandler")
         self.request_type = "GET"
@@ -640,7 +651,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
         response = {"status": status, "content": content}
         if headers:
             response["headers"] = headers
-        self.restlib.validateResponse(response, self.request_type, self.handler)
+        self.restlib.validateResult(response, self.request_type, self.handler)
 
     # All empty responses that aren't 200/204 raise a UnknownContentException
     def test_200_empty(self):
@@ -865,7 +876,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
         self.assertRaises(UnknownContentException, self.vr, "599", "")
 
 
-class RestlibTests(unittest.TestCase):
+class BaseRestLibTests(unittest.TestCase):
     def test_json_uft8_encoding(self):
         # A unicode string containing JSON
         test_json = """

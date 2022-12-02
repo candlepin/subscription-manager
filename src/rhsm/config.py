@@ -163,6 +163,7 @@ class RhsmConfigParser(SafeConfigParser):
         # Create a temporary file to write config data to it and
         # rename the file to the expected config file name after successfully
         # writing all config data.
+        # Refer to BZ 1719725: https://bugzilla.redhat.com/show_bug.cgi?id=1719725
         with tempfile.NamedTemporaryFile(mode="w", dir=rhsm_conf_dir, delete=False) as fo:
             self.write(fo)
             fo.flush()
