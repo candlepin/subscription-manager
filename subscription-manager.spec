@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.33
+Version: 1.28.34
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1483,6 +1483,15 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Dec 02 2022 Pino Toscano <ptoscano@redhat.com> 1.28.34-1
+- tito: add rhel 8.8 releaser (ptoscano@redhat.com)
+- Translated using Weblate (Japanese) (suanand@redhat.com)
+- Translated using Weblate (French) (vincent.lefebvre59@gmail.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- ENT-5510: Fix issues with proxy and cockpit interaction (jajerome@redhat.com)
+- 2118486: [1.28] Implement "force" register option in rhsm dbus python binding
+  (jajerome@redhat.com)
+
 * Mon Oct 31 2022 Christopher Snyder <csnyder@redhat.com> 1.28.33-1
 - Translated using Weblate (Korean) (simmon@nplob.com)
 - Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
