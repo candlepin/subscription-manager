@@ -412,3 +412,48 @@ class InContainerTests(unittest.TestCase):
         with patch.dict(os.environ, {"SMDEV_CONTAINER_OFF": "True"}):
             self.assertFalse(in_container())
         self.assertEqual(in_container(), really_in_container)
+
+    @patch.dict("os.environ", {}, clear=True)
+    @patch("os.path.exists")
+    def test_existing_dotcontainer(self, exists_mock):
+        def exists_file(path):
+            return path == "/run/.containerenv"
+
+        exists_mock.side_effect = exists_file
+        self.assertTrue(in_container())
+
+    @patch.dict("os.environ", {}, clear=True)
+    @patch("os.path.exists")
+    def test_existing_dotdockerenv(self, exists_mock):
+        def exists_file(path):
+            return path == "/.dockerenv"
+
+        exists_mock.side_effect = exists_file
+        self.assertTrue(in_container())
+
+    @patch.dict("os.environ", {}, clear=True)
+    @patch("os.path.exists")
+    def test_existing_rhsm_host(self, exists_mock):
+        def exists_file(path):
+            return path == "/etc/rhsm-host/"
+
+        exists_mock.side_effect = exists_file
+        self.assertTrue(in_container())
+
+    @patch.dict(
+        "os.environ",
+        {
+            "KUBERNETES_PORT": "tcp://10.0.0.1:443",
+            "KUBERNETES_SERVICE_HOST": "10.0.0.1",
+            "KUBERNETES_SERVICE_PORT": "443",
+            "container": "oci",
+        },
+        clear=True,
+    )
+    @patch("os.path.exists")
+    def test_ocp(self, exists_mock):
+        def exists_file(path):
+            return path == "/run/.containerenv"
+
+        exists_mock.side_effect = exists_file
+        self.assertFalse(in_container())
