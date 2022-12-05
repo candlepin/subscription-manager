@@ -22,6 +22,8 @@ import json
 import dbus.connection
 import socket
 import six
+import tempfile
+from typing import Optional
 
 import subscription_manager.injection as inj
 
@@ -38,6 +40,7 @@ from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
 from rhsm import connection
 
 from rhsmlib.dbus import constants
+from rhsmlib.dbus.server import DomainSocketServer
 from rhsmlib.dbus.objects import RegisterDBusObject
 
 from rhsmlib.services import register, exceptions
@@ -743,6 +746,8 @@ class RegisterServiceTest(InjectionMockingTest):
 
 @subman_marker_dbus
 class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
+    socket_dir: Optional[tempfile.TemporaryDirectory] = None
+
     def dbus_objects(self):
         return [RegisterDBusObject]
 
@@ -788,6 +793,16 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
         self.mock_ent_cert_service_invoker = ent_cert_service_patcher.start()
         self.addCleanup(ent_cert_service_patcher.stop)
 
+        self.socket_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.socket_dir.cleanup)
+        socket_path_patch = mock.patch.object(DomainSocketServer, "_server_socket_path", self.socket_dir.name)
+        socket_path_patch.start()
+        # `tmpdir` behaves differently from `dir` on old versions of dbus
+        # (earlier than 1.12.24 and 1.14.4).
+        # In newer versions we are not getting abstract socket anymore.
+        socket_iface_patch = mock.patch.object(DomainSocketServer, "_server_socket_iface", "unix:dir=")
+        socket_iface_patch.start()
+
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
             return self.mock_identity
@@ -801,7 +816,7 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
 
         def assertions(*args):
             result = args[0]
-            six.assertRegex(self, result, r'/run/dbus.*')
+            six.assertRegex(self, result, self.socket_dir.name + "/dbus.*")
 
         self.dbus_request(assertions, self.interface.Start, dbus_method_args)
 
@@ -812,7 +827,7 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
             # Assign the result as an attribute to this function.
             # See http://stackoverflow.com/a/27910553/6124862
             assertions.result = args[0]
-            six.assertRegex(self, assertions.result, r'/run/dbus.*')
+            six.assertRegex(self, assertions.result, self.socket_dir.name + "/dbus.*")
 
         self.dbus_request(assertions, self.interface.Start, dbus_method_args)
 
@@ -844,10 +859,7 @@ class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
 
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         try:
-            # The socket returned for connection is an abstract socket so we have
-            # to begin the name with a NUL byte to get into that namespace.  See
-            # http://blog.eduardofleury.com/archives/2007/09/13
-            sock.connect('\0' + get_address.address)
+            sock.connect(get_address.address)
         finally:
             sock.close()
 
