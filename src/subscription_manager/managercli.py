@@ -34,6 +34,7 @@ from subscription_manager.cli_command.plugins import PluginsCommand
 from subscription_manager.cli_command.redeem import RedeemCommand
 from subscription_manager.cli_command.refresh import RefreshCommand
 from subscription_manager.cli_command.register import RegisterCommand
+from subscription_manager.cli_command.register_auth import RegisterAuthCommand
 from subscription_manager.cli_command.release import ReleaseCommand
 from subscription_manager.cli_command.remove import RemoveCommand
 from subscription_manager.cli_command.repos import ReposCommand
@@ -53,6 +54,7 @@ log = logging.getLogger(__name__)
 class ManagerCLI(CLI):
     def __init__(self):
         commands = [
+            RegisterAuthCommand,
             RegisterCommand,
             UnRegisterCommand,
             AddonsCommand,
