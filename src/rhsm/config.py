@@ -23,6 +23,7 @@ from iniparse.compat import NoOptionError, InterpolationMissingOptionError, NoSe
 import re
 import tempfile
 from typing import Dict, List, Optional, Tuple
+from subscription_manager.i18n import ugettext as _
 
 CONFIG_ENV_VAR = "RHSM_CONFIG"
 
@@ -172,7 +173,6 @@ class RhsmConfigParser(SafeConfigParser):
         :param file_names: list of configuration files
         :return: number of configuration files read
         """
-        # FIXME Instead of optional list, we can set default to [] instead
         if file_names is None:
             return super(RhsmConfigParser, self).read(self.config_file)
         else:
@@ -180,24 +180,29 @@ class RhsmConfigParser(SafeConfigParser):
 
     def save(self, config_file: Optional[str] = None) -> None:
         """Writes config file to storage."""
-        # FIXME config_file is not used
-        rhsm_conf_dir: str = os.path.dirname(self.config_file)
+        # Use self.config_file if config_file is not provided in method arguments.
+        config_file: str = config_file or self.config_file
+
+        rhsm_conf_dir: str = os.path.dirname(config_file)
 
         # When /etc/rhsm does not exist, then try to create it
         if os.path.isdir(rhsm_conf_dir) is False:
             os.makedirs(rhsm_conf_dir)
 
-        # FIXME Stop using tempfile like that
+        # Create a temporary file to write config data to it and
+        # rename the file to the expected config file name after successfully
+        # writing all config data.
+        # Refer to BZ 1719725: https://bugzilla.redhat.com/show_bug.cgi?id=1719725
         with tempfile.NamedTemporaryFile(mode="w", dir=rhsm_conf_dir, delete=False) as fo:
             self.write(fo)
             fo.flush()
             mode: int
             try:
-                mode = os.stat(self.config_file).st_mode
+                mode = os.stat(config_file).st_mode
             except IOError:
                 mode = 0o644
-            os.rename(fo.name, self.config_file)
-            os.chmod(self.config_file, mode)
+            os.rename(fo.name, config_file)
+            os.chmod(config_file, mode)
 
     def get(self, section: str, prop: str) -> str:
         """Get a value from rhsm config.
@@ -255,19 +260,20 @@ class RhsmConfigParser(SafeConfigParser):
         """
         valid: List[str] = ["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]
         if value not in valid + ["NOTSET"]:
-            # FIXME These strings are not being translated
             if print_warning is True:
                 print(
-                    "Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value),
+                    _("Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value)),
                     file=sys.stderr,
                 )
                 print(
-                    "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to set "
-                    "the default_log_level to a valid value.",
+                    _(
+                        "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to "
+                        "set the default_log_level to a valid value."
+                    ),
                     file=sys.stderr,
                 )
                 valid_str = ", ".join(valid)
-                print("Valid Values: {valid_str}".format(valid_str=valid_str), file=sys.stderr)
+                print(_("Valid Values: {valid_str}".format(valid_str=valid_str)), file=sys.stderr)
             return False
         return True
 
@@ -369,8 +375,7 @@ class RhsmHostConfigParser(RhsmConfigParser):
     """
 
     def __init__(self, config_file: Optional[str] = None, defaults=None) -> None:
-        # FIXME Use super() instead
-        RhsmConfigParser.__init__(self, config_file, defaults)
+        super().__init__(config_file, defaults)
 
         # Override the ca_cert_dir and repo_ca_cert if necessary:
         ca_cert_dir: str = self.get("rhsm", "ca_cert_dir")

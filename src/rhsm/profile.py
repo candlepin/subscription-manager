@@ -15,7 +15,7 @@ import logging
 import importlib.util
 import rpm
 import os.path
-from typing import List, Any, Union
+from typing import List, Union
 
 from rhsm import ourjson as json
 from rhsm.utils import suppress_output
@@ -303,16 +303,16 @@ class Package(object):
     Represents a package installed on the system.
     """
 
-    # FIXME: epoch should be probably string (not int)
-    def __init__(self, name: str, version: str, release: str, arch: str, epoch: int = 0, vendor: str = None):
-        self.name = name
-        self.version = version
-        self.release = release
-        self.arch = arch
-        self.epoch = epoch
-        self.vendor = vendor
+    def __init__(
+        self, name: str, version: str, release: str, arch: str, epoch: int = 0, vendor: str = None
+    ) -> None:
+        self.name: str = name
+        self.version: str = version
+        self.release: str = release
+        self.arch: str = arch
+        self.epoch: int = epoch
+        self.vendor: str = vendor
 
-    # FIXME: in the case, when epoch is really int, then it is not necessary to normalize it
     def to_dict(self) -> dict:
         """Returns a dict representation of this package info."""
         return {
@@ -346,10 +346,9 @@ class Package(object):
     def __str__(self) -> str:
         return "<Package: %s %s %s>" % (self.name, self.version, self.release)
 
-    # FIXME: the type of value should not be any, but it should be Union[str, bytes]
     # added in support of bz1519512, bz1543639
     @staticmethod
-    def _normalize_string(value: Any):
+    def _normalize_string(value: Union[str, bytes]) -> str:
         if type(value) is bytes:
             return value.decode("utf-8", "replace")
         return value

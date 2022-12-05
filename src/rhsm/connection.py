@@ -199,12 +199,9 @@ class ConnectionType(enum.Enum):
     KEYCLOAK_AUTH = enum.auto()
 
 
-# FIXME: this concept with reslib_class is horrible. The _request() method can return anything.
-# It does not have much benefit and it is easy to introduce new bug.
-class BaseConnection(object):
+class BaseConnection:
     def __init__(
         self,
-        restlib_class=None,
         host: Optional[str] = None,
         ssl_port: Optional[int] = None,
         handler: Optional[str] = None,
@@ -228,7 +225,6 @@ class BaseConnection(object):
         **kwargs,
     ) -> None:
 
-        restlib_class = restlib_class or Restlib
         self.host = host or config.get("server", "hostname")
         self.handler = handler or config.get("server", "prefix")
         self.ssl_port = ssl_port or safe_int(config.get("server", "port"))
@@ -322,7 +318,7 @@ class BaseConnection(object):
                 safe_int(self.proxy_port),
             )
         # initialize connection
-        self.conn = restlib_class(
+        self.conn: BaseRestLib = BaseRestLib(
             self.host,
             self.ssl_port,
             self.handler,
@@ -404,7 +400,7 @@ class RestlibException(ConnectionException):
     """
     Raised when a response with a valid json body is received along with a status code
     that is not in [200, 202, 204, 410, 429]
-    See RestLib.validateResponse to see when this and other exceptions are raised.
+    See BaseRestLib.validateResult to see when this and other exceptions are raised.
     """
 
     def __init__(self, code: int, msg: str = None, headers: dict = None) -> None:
@@ -586,7 +582,7 @@ def _get_locale() -> Union[None, str]:
     return None
 
 
-class BaseRestLib(object):
+class BaseRestLib:
     """
     A low-level wrapper around httplib
     to make rest calls easy and expose the details of
@@ -1050,13 +1046,11 @@ class BaseRestLib(object):
                     )
         return result, response
 
-    # FIXME: the name of info argument is confusing. Rename it to something consistent with other methods
-    # using _request() method (request_post, request_put, etc.). Suggestion: info -> params, data
     def _request(
         self,
         request_type: str,
         method: str,
-        info: Any = None,
+        params: Any = None,
         headers: dict = None,
         cert_key_pairs: Optional[List[Tuple[str, str]]] = None,
         description: Optional[str] = None,
@@ -1065,7 +1059,7 @@ class BaseRestLib(object):
         Make HTTP request to candlepin server
         :param request_type: string representing request type
         :param method: path of the request
-        :param info: data (usually dictionary) of request if any
+        :param params: data (usually dictionary) of request if any
         :param headers: dictionary with HTTP headers
         :param cert_key_pairs: list of tuples. Tuple contain cert and key
         :param description: description of request
@@ -1087,9 +1081,9 @@ class BaseRestLib(object):
             and "Content-type" in headers
             and headers["Content-type"] == "application/x-www-form-urlencoded"
         ):
-            body = urlencode(info).encode("utf-8")
-        elif info is not None:
-            body = json.dumps(info, default=json.encode)
+            body = urlencode(params).encode("utf-8")
+        elif params is not None:
+            body = json.dumps(params, default=json.encode)
         else:
             body = None
 
@@ -1162,7 +1156,7 @@ class BaseRestLib(object):
         # FIXME: we should probably do this in a wrapper method
         # so we can use the request method for normal http
 
-        self.validateResponse(result, request_type, handler)
+        self.validateResult(result, request_type, handler)
 
         return result
 
@@ -1178,32 +1172,29 @@ class BaseRestLib(object):
             self.smoothed_rt = (self.ALPHA * self.smoothed_rt) + ((1 - self.ALPHA) * response_time)
         log.debug("Response time: %s, Smoothed response time: %s" % (response_time, self.smoothed_rt))
 
-    # FIXME: The name of response is confusing, because it looks like that it is HTTPResponse, but it
-    # is not true. It is dictionary and it should be renamed to result (see e.g. _request method using
-    # validateResponse method)
-    def validateResponse(self, response: dict, request_type: str = None, handler: str = None) -> None:
+    def validateResult(self, result: dict, request_type: str = None, handler: str = None) -> None:
         """
         Try to validate result of HTTP request. Raise exception, when validation of
         result failed
-        :param response: Dictionary holding result
+        :param result: Dictionary holding result
         :param request_type: String representation of original request
         :param handler: String containing handler of request
         """
 
         # FIXME: what are we supposed to do with a 204?
-        if str(response["status"]) not in ["200", "202", "204", "304"]:
+        if str(result["status"]) not in ["200", "202", "204", "304"]:
             parsed = {}
-            if not response.get("content"):
+            if not result.get("content"):
                 parsed = {}
             else:
                 # try vaguely to see if it had a json parseable body
                 try:
-                    parsed = json.loads(response["content"])
+                    parsed = json.loads(result["content"])
                 except ValueError as e:
-                    log.error("Response: %s" % response["status"])
+                    log.error("Response: %s" % result["status"])
                     log.error("JSON parsing error: %s" % e)
                 except Exception as e:
-                    log.error("Response: %s" % response["status"])
+                    log.error("Response: %s" % result["status"])
                     log.exception(e)
 
             if parsed:
@@ -1213,10 +1204,10 @@ class BaseRestLib(object):
                 # NOTE: a 410 with an unparseable content will raise
                 # RemoteServerException and will not cause the client
                 # to delete the consumer cert.
-                if str(response["status"]) == "410":
-                    raise GoneException(response["status"], parsed["displayMessage"], parsed["deletedId"])
+                if str(result["status"]) == "410":
+                    raise GoneException(result["status"], parsed["displayMessage"], parsed["deletedId"])
 
-                elif str(response["status"]) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
+                elif str(result["status"]) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
                     raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port)
 
                 # I guess this is where we would have an exception mapper if we
@@ -1224,12 +1215,12 @@ class BaseRestLib(object):
                 # the server that means something.
 
                 error_msg = self._parse_msg_from_error_response_body(parsed)
-                if str(response["status"]) in ["429"]:
+                if str(result["status"]) in ["429"]:
                     raise RateLimitExceededException(
-                        response["status"], error_msg, headers=response.get("headers")
+                        result["status"], error_msg, headers=result.get("headers")
                     )
 
-                if str(response["status"]) in ["401"]:
+                if str(result["status"]) in ["401"]:
                     # If the proxy is not configured correctly
                     # it connects to the server without the identity cert
                     # even if the cert is valid
@@ -1238,41 +1229,37 @@ class BaseRestLib(object):
                             id_cert = certificate.create_from_file(self.cert_file)
                             if id_cert.is_valid():
                                 raise RestlibException(
-                                    response["status"],
+                                    result["status"],
                                     (
                                         "Unable to make a connection using SSL client certificate. "
                                         "Please review proxy configuration and connectivity."
                                     ),
-                                    response.get("headers"),
+                                    result.get("headers"),
                                 )
 
                 # FIXME: we can get here with a valid json response that
                 # could be anything, we don't verify it anymore
-                raise RestlibException(response["status"], error_msg, response.get("headers"))
+                raise RestlibException(result["status"], error_msg, result.get("headers"))
             else:
                 # This really needs an exception mapper too...
-                if str(response["status"]) in ["404", "410", "500", "502", "503", "504"]:
-                    raise RemoteServerException(
-                        response["status"], request_type=request_type, handler=handler
-                    )
-                elif str(response["status"]) in ["401"]:
-                    raise UnauthorizedException(
-                        response["status"], request_type=request_type, handler=handler
-                    )
-                elif str(response["status"]) in ["403"]:
-                    raise ForbiddenException(response["status"], request_type=request_type, handler=handler)
-                elif str(response["status"]) in ["429"]:
-                    raise RateLimitExceededException(response["status"], headers=response.get("headers"))
+                if str(result["status"]) in ["404", "410", "500", "502", "503", "504"]:
+                    raise RemoteServerException(result["status"], request_type=request_type, handler=handler)
+                elif str(result["status"]) in ["401"]:
+                    raise UnauthorizedException(result["status"], request_type=request_type, handler=handler)
+                elif str(result["status"]) in ["403"]:
+                    raise ForbiddenException(result["status"], request_type=request_type, handler=handler)
+                elif str(result["status"]) in ["429"]:
+                    raise RateLimitExceededException(result["status"], headers=result.get("headers"))
 
-                elif str(response["status"]) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
+                elif str(result["status"]) == str(httplib.PROXY_AUTHENTICATION_REQUIRED):
                     raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port)
 
                 else:
                     # unexpected with no valid content
                     raise UnknownContentException(
-                        response["status"],
-                        response.get("headers", {}).get("Content-Type"),
-                        response.get("content"),
+                        result["status"],
+                        result.get("headers", {}).get("Content-Type"),
+                        result.get("content"),
                     )
 
     @staticmethod
@@ -1290,6 +1277,24 @@ class BaseRestLib(object):
         if "error_description" in body:
             return body["error_description"]
 
+    @staticmethod
+    def _extract_content_from_response(request_result: Dict[str, Any]) -> Any:
+        """
+        Extracts the data within the 'content' field of the result from a successful http response.
+        :param request_result: Response result from an http request.
+        :return: Data from the 'content' field of the result or None if the response had a 204 status.
+        """
+
+        # Handle 204s
+        if not len(request_result["content"]):
+            return None
+        try:
+            return json.loads(request_result["content"])
+        except json.JSONDecodeError:
+            # This is primarily intended for getting releases from CDN, because
+            # the file containing releases is plaintext and not json.
+            return request_result["content"]
+
     def request_get(
         self,
         method: str,
@@ -1297,27 +1302,38 @@ class BaseRestLib(object):
         cert_key_pairs: List[Tuple[str, str]] = None,
         description: Optional[str] = None,
     ) -> Any:
-        return self._request(
+        result: Dict[str, Any] = self._request(
             "GET", method, headers=headers, cert_key_pairs=cert_key_pairs, description=description
         )
+        return self._extract_content_from_response(result)
 
     def request_post(
         self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
     ) -> Any:
-        return self._request("POST", method, params, headers=headers, description=description)
+        result: Dict[str, Any] = self._request(
+            "POST", method, params, headers=headers, description=description
+        )
+        return self._extract_content_from_response(result)
 
     def request_head(self, method: str, headers: dict = None, description: Optional[str] = None) -> Any:
-        return self._request("HEAD", method, headers=headers, description=description)
+        result: Dict[str, Any] = self._request("HEAD", method, headers=headers, description=description)
+        return self._extract_content_from_response(result)
 
     def request_put(
         self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
     ) -> Any:
-        return self._request("PUT", method, params, headers=headers, description=description)
+        result: Dict[str, Any] = self._request(
+            "PUT", method, params, headers=headers, description=description
+        )
+        return self._extract_content_from_response(result)
 
     def request_delete(
         self, method: str, params: Any = None, headers: dict = None, description: Optional[str] = None
     ) -> Any:
-        return self._request("DELETE", method, params, headers=headers, description=description)
+        result: Dict[str, Any] = self._request(
+            "DELETE", method, params, headers=headers, description=description
+        )
+        return self._extract_content_from_response(result)
 
     @staticmethod
     def _format_http_date(dt: datetime.datetime) -> str:
@@ -1325,54 +1341,6 @@ class BaseRestLib(object):
         Format a datetime to HTTP-date as described by RFC 7231.
         """
         return format_datetime(dt, usegmt=True)
-
-
-# FIXME: Remove this and use only BaseRestLib
-class Restlib(BaseRestLib):
-    """
-    A wrapper around httplib to make rest calls easier
-    See validateResponse() to learn when exceptions are raised as a result
-    of communication with the server.
-    """
-
-    def _request(
-        self,
-        request_type: str,
-        method: str,
-        info: Any = None,
-        headers: dict = None,
-        cert_key_pairs: List[Tuple[str, str]] = None,
-        description: Optional[str] = None,
-    ) -> Any:
-        """
-        Try to do HTTP request. This method returns only content (body) of response if any or None
-        :param request_type: GET/POST/PUT/etc.
-        :param method: REST API endpoint
-        :param info: Data (usually dictionary) of request if any
-        :param headers: Dictionary with HTTP headers
-        :param cert_key_pairs: List of tuples. Tuple contain cert and key
-        :param description: Description of request
-        :return: Content or response or None
-        """
-        result = super(Restlib, self)._request(
-            request_type,
-            method,
-            info=info,
-            headers=headers,
-            cert_key_pairs=cert_key_pairs,
-            description=description,
-        )
-
-        # Handle 204s
-        if not len(result["content"]):
-            return None
-
-        try:
-            return json.loads(result["content"])
-        except json.JSONDecodeError:
-            # This is primarily intended for getting releases from CDN, because
-            # the file containing releases is plaintext and not json.
-            return result["content"]
 
 
 class UEPConnection(BaseConnection):
@@ -1467,8 +1435,7 @@ class UEPConnection(BaseConnection):
             self.capabilities = self._load_manager_capabilities()
         return capability in self.capabilities
 
-    # FIXME: username and password are not used. Replace it with *args and **kwargs
-    def ping(self, username=None, password=None) -> Any:
+    def ping(self, *args, **kwargs) -> Any:
         return self.conn.request_get("/status/", description=_("Checking connection status"))
 
     def getJWToken(self, cloud_id: str, metadata: str, signature: str) -> Any:
@@ -1500,13 +1467,11 @@ class UEPConnection(BaseConnection):
             description=_("Fetching cloud token"),
         )
 
-    # FIXME: rename argument type to something else, because it shadows built-in 'type'
-    # FIXME: default value of facts should be None (not mutable {})
     def registerConsumer(
         self,
         name: str = "unknown",
-        type: str = "system",
-        facts: dict = {},
+        consumer_type: str = "system",
+        facts: Optional[dict] = None,
         owner: str = None,
         environments: str = None,
         keys: str = None,
@@ -1523,8 +1488,10 @@ class UEPConnection(BaseConnection):
         """
         Creates a consumer on candlepin server
         """
+        if facts is None:
+            facts = {}
         params = {
-            "type": type,
+            "type": consumer_type,
             "name": name,
             "facts": facts,
         }
@@ -1637,8 +1604,7 @@ class UEPConnection(BaseConnection):
         url = "/hypervisors/%s/heartbeat?%s" % (owner, query_params)
         return self.conn.request_put(url, description=_("Updating hypervisor information"))
 
-    # FIXME: default value of facts should not be dictionary
-    def updateConsumerFacts(self, consumer_uuid: str, facts: dict = {}) -> dict:
+    def updateConsumerFacts(self, consumer_uuid: str, facts: dict = None) -> dict:
         """
         Update a consumers facts on candlepin server
         """
@@ -1714,17 +1680,6 @@ class UEPConnection(BaseConnection):
         ret = self.conn.request_put(method, params, description=_("Updating consumer information"))
         return ret
 
-    # FIXME: It is not used by any client tool
-    def addOrUpdateGuestId(self, uuid: str, guestId: Union[str, dict]) -> dict:
-        if isinstance(guestId, str):
-            guest_uuid = guestId
-            guestId = {}
-        else:
-            # FIXME: replace with get(). This is not safe.
-            guest_uuid = guestId["guestId"]
-        method = "/consumers/%s/guestids/%s" % (self.sanitize(uuid), self.sanitize(guest_uuid))
-        return self.conn.request_put(method, guestId, description=_("Updating guest information"))
-
     def getGuestIds(self, uuid: str) -> dict:
         method = "/consumers/%s/guestids" % self.sanitize(uuid)
         return self.conn.request_get(method, description=_("Fetching guest information"))
@@ -1740,16 +1695,22 @@ class UEPConnection(BaseConnection):
     def sanitizeGuestIds(self, guestIds: Union[List[str], List[dict]]) -> Union[List[str], List[dict]]:
         return [self.sanitizeGuestId(guestId) for guestId in guestIds or []]
 
-    # FIXME: it looks like that this method can return None
     def sanitizeGuestId(self, guestId: Union[str, dict]) -> Union[str, dict]:
+        """
+        Sanitizes one or more provided guest Ids.
+        :param guestId: One or more guest Ids.
+        """
         if isinstance(guestId, str):
             return guestId
-        elif isinstance(guestId, dict) and "guestId" in list(guestId.keys()):
-            if self.supports_resource("guestids"):
-                # Upload full json
-                return guestId
-            # Does not support the full guestId json, use the id string
-            return guestId["guestId"]
+        elif isinstance(guestId, dict):
+            if "guestId" in list(guestId.keys()):
+                if self.supports_resource("guestids"):
+                    # Upload full json
+                    return guestId
+                # Does not support the full guestId json, use the id string
+                return guestId["guestId"]
+            raise KeyError("Error: A 'guestId' key was not found in the provided guest Id dictionary.")
+        raise TypeError("Error: Only a string or dictionary data type can be sanitized.")
 
     def updatePackageProfile(self, consumer_uuid: str, pkg_dicts: dict) -> dict:
         """
@@ -1772,26 +1733,13 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s/profiles" % self.sanitize(consumer_uuid)
         return self.conn.request_put(method, profile, description=_("Updating profile information"))
 
-    # FIXME: username and password not used here, remove it
-    def getConsumer(self, uuid: str, username=None, password=None) -> dict:
+    def getConsumer(self, uuid: str) -> dict:
         """
         Returns a consumer object with pem/key for existing consumers
         :param uuid: UUID of consumer (part of installed consumer cert, when system is registered)
         """
         method = "/consumers/%s" % self.sanitize(uuid)
         return self.conn.request_get(method, description=_("Fetching consumer keys"))
-
-    # FIXME: It is not used by any client tool
-    def getConsumers(self, owner: str = None) -> List[dict]:
-        """
-        Returns a list of consumers. This method requires admin connection and authenticated
-        using username/password
-        """
-        method = "/consumers/"
-        if owner:
-            method = "%s?owner=%s" % (method, owner)
-
-        return self.conn.request_get(method, description=_("Fetching consumers"))
 
     def getCompliance(self, uuid: str, on_date: datetime.datetime = None) -> dict:
         """
@@ -1818,57 +1766,12 @@ class UEPConnection(BaseConnection):
         method = "/owners/%s/system_purpose" % self.sanitize(owner_key)
         return self.conn.request_get(method, description=_("Fetching available system purpose settings"))
 
-    # FIXME: it is not possible to specify content access mode
-    # FIXME: It is not used by any client tool
-    def createOwner(self, ownerKey: str, ownerDisplayName: str = None) -> dict:
-        """
-        Creates new owner (organization). This method requires admin connection and authenticated
-        using username/password
-        :param ownerKey: new ID of new owner (organization)
-        :param ownerDisplayName: new display name of owner (organization)
-        :return: Dictionary representing new oner (organization)
-        """
-        params = {"key": ownerKey}
-        if ownerDisplayName:
-            params["displayName"] = ownerDisplayName
-        method = "/owners/"
-        return self.conn.request_post(method, params, description=_("Creating organization"))
-
     def getOwner(self, uuid: str) -> dict:
         """
         Returns an owner object with pem/key for existing consumers
         """
         method = "/consumers/%s/owner" % self.sanitize(uuid)
         return self.conn.request_get(method, description=_("Fetching organizations"))
-
-    # FIXME: It is not used by any client tool
-    def deleteOwner(self, key: str) -> None:
-        """
-        Deletes an owner. This method requires admin connection and authenticated
-        using username/password
-        :param key: owner ID
-        """
-        method = "/owners/%s" % self.sanitize(key)
-        return self.conn.request_delete(method, description=_("Removing organization"))
-
-    # FIXME: It is not used by any client tool
-    def getOwners(self) -> List[dict]:
-        """
-        Returns a list of all owners. This method requires admin connection and authenticated
-        using username/password
-        """
-        method = "/owners"
-        return self.conn.request_get(method, description=_("Fetching organizations"))
-
-    # FIXME: It is not used by any client tool
-    def getOwnerInfo(self, owner: str) -> dict:
-        """
-        Returns an owner info. This method requires admin connection and authenticated
-        using username/password
-        :param owner: owner ID (organization ID)
-        """
-        method = "/owners/%s/info" % self.sanitize(owner)
-        return self.conn.request_get(method, description=_("Fetching organization information"))
 
     def getOwnerList(self, username: str) -> List[dict]:
         """
@@ -1883,31 +1786,15 @@ class UEPConnection(BaseConnection):
         owners = [x for x in (owners or []) if x is not None]
         return owners
 
-    # FIXME: It is not used by any client tool (neither virt-who)
-    def getOwnerHypervisors(self, owner_key: str, hypervisor_ids: List[str] = None) -> List[dict]:
-        """
-        If hypervisor_ids is populated, only hypervisors with those ids will be returned. This method
-        requires admin connection and authenticated using username/password
-        :param owner_key: owner ID (organization ID)
-        :param hypervisor_ids: list of string with hypervisor UUIDs
-        """
-        method = "/owners/%s/hypervisors?" % owner_key
-        for hypervisor_id in hypervisor_ids or []:
-            method += "&hypervisor_id=%s" % self.sanitize(hypervisor_id)
-        return self.conn.request_get(method, description=_("Fetching organization hypervisors"))
-
-    # FIXME: this method should return result of REST API call. Candlepin server response with
-    # code 204 and no content is specified. If code 204 is returned, then True should be returned
-    def unregisterConsumer(self, consumerId: str) -> None:
+    def unregisterConsumer(self, consumerId: str) -> bool:
         """
         Deletes a consumer from candlepin server
         :param consumerId: consumer UUID (it could be found in consumer cert, when system is registered)
         """
         method = "/consumers/%s" % self.sanitize(consumerId)
-        return self.conn.request_delete(method, description=_("Unregistering system"))
+        return self.conn.request_delete(method, description=_("Unregistering system")) is None
 
-    # FIXME: default value of serials should not be list
-    def getCertificates(self, consumer_uuid: str, serials: list = []) -> List[dict]:
+    def getCertificates(self, consumer_uuid: str, serials: Optional[list] = None) -> List[dict]:
         """
         Fetch all entitlement certificates for this consumer. Specify a list of serial numbers to
         filter if desired
@@ -1915,7 +1802,7 @@ class UEPConnection(BaseConnection):
         :param serials: list of entitlement serial numbers
         """
         method = "/consumers/%s/certificates" % (self.sanitize(consumer_uuid))
-        if len(serials) > 0:
+        if serials:
             serials_str = ",".join(serials)
             method = "%s?serials=%s" % (method, serials_str)
         return self.conn.request_get(method, description=_("Fetching certificates"))
@@ -1958,20 +1845,6 @@ class UEPConnection(BaseConnection):
             method = "%s&quantity=%s" % (method, quantity)
         return self.conn.request_post(method, description=_("Updating subscriptions"))
 
-    # FIXME: It is not used by any client tool (auto-attach use bind() method)
-    def bindByProduct(self, consumerId: str, products: List[str]) -> List[dict]:
-        """
-        Subscribe consumer directly to one or more products by their ID.
-        This will cause the UEP to look for one or more pools which provide
-        access to the given product
-        :param consumerId: consumer UUID
-        :param products: List of product IDs
-        """
-        # FIXME: we should use self.sanitize() for replacing white spaces
-        args = "&".join(["product=" + product.replace(" ", "%20") for product in products])
-        method = "/consumers/%s/entitlements?%s" % (str(consumerId), args)
-        return self.conn.request_post(method, description=_("Updating subscriptions"))
-
     def bind(self, consumerId: str, entitle_date: datetime.datetime = None) -> List[dict]:
         """
         Same as bindByProduct, but assume the server has a list of the
@@ -1989,37 +1862,16 @@ class UEPConnection(BaseConnection):
 
         return self.conn.request_post(method, description=_("Updating subscriptions"))
 
-    # FIXME: No client tool use this method
-    def dryRunBind(self, consumer_uuid: str, service_level: str) -> List[dict]:
-        """
-        Performs a dry-run autobind on the server and returns the results of
-        what we would get. Callers can use this information to determine if
-        they wish to perform the autobind, and to explicitly grab entitlements
-        from each pool returned.
-
-        Return will be a dict containing a "quantity" and a "pool".
-        """
-        if service_level is None:
-            method = "/consumers/%s/entitlements/dry-run" % self.sanitize(consumer_uuid)
-        else:
-            method = "/consumers/%s/entitlements/dry-run?service_level=%s" % (
-                self.sanitize(consumer_uuid),
-                self.sanitize(service_level),
-            )
-        return self.conn.request_get(method, description=_("Simulating subscribing"))
-
-    # FIXME: This method should return True, when it was successful, not None
-    def unbindBySerial(self, consumerId: str, serial: str) -> None:
+    def unbindBySerial(self, consumerId: str, serial: str) -> bool:
         """
         Try to remove consumed pool by serial number
         :param consumerId: consumer UUID
         :param serial: serial number of consumed pool
         """
         method = "/consumers/%s/certificates/%s" % (self.sanitize(consumerId), self.sanitize(str(serial)))
-        return self.conn.request_delete(method, description=_("Unsubscribing"))
+        return self.conn.request_delete(method, description=_("Unsubscribing")) is None
 
-    # FIXME: This method should return True, when it was successful, not None
-    def unbindByPoolId(self, consumer_uuid: str, pool_id: str) -> None:
+    def unbindByPoolId(self, consumer_uuid: str, pool_id: str) -> bool:
         """
         Try to remove consumed pool by pool ID
         :param consumer_uuid: consumer UUID
@@ -2027,7 +1879,7 @@ class UEPConnection(BaseConnection):
         :return: None
         """
         method = "/consumers/%s/entitlements/pool/%s" % (self.sanitize(consumer_uuid), self.sanitize(pool_id))
-        return self.conn.request_delete(method, description=_("Unsubscribing"))
+        return self.conn.request_delete(method, description=_("Unsubscribing")) is None
 
     def unbindAll(self, consumerId: str) -> dict:
         """
@@ -2037,15 +1889,6 @@ class UEPConnection(BaseConnection):
         """
         method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
         return self.conn.request_delete(method, description=_("Unsubscribing"))
-
-    # FIXME: this should be really removed, because it is not used by any client tool, but it is not
-    # supported by candlepin server
-    def checkin(self, consumerId: str, checkin_date: datetime.datetime = None) -> Any:
-        method = "/consumers/%s/checkin" % self.sanitize(consumerId)
-        # add the optional date to the url
-        if checkin_date:
-            method = "%s?checkin_date=%s" % (method, self.sanitize(checkin_date.isoformat(), plus=True))
-        return self.conn.request_put(method)
 
     def getPoolsList(
         self,
@@ -2096,24 +1939,6 @@ class UEPConnection(BaseConnection):
 
         results = self.conn.request_get(method, description=_("Fetching pools"))
         return results
-
-    # FIXME: no client tool use this method
-    def getPool(self, poolId: str, consumerId: str = None) -> dict:
-        """
-        Try to get information about given pool
-        :param poolId: pool ID
-        :param consumerId: Consumer UUID
-        :return:
-        """
-        method = "/pools/%s" % self.sanitize(poolId)
-        if consumerId:
-            method = "%s?consumer=%s" % (method, self.sanitize(consumerId))
-        return self.conn.request_get(method, description=_("Fetching pool information"))
-
-    # FIXME: no client tool use this method
-    def getProduct(self, product_uuid: str) -> Any:
-        method = "/products/%s" % self.sanitize(product_uuid)
-        return self.conn.request_get(method, description=_("Fetching product information"))
 
     def getRelease(self, consumerId: str) -> dict:
         """
@@ -2175,32 +2000,6 @@ class UEPConnection(BaseConnection):
         results = self.conn.request_get(method, description=_("Fetching environments"))
         return results
 
-    # FIXME: no client tool use this method
-    def getEnvironment(self, owner_key: str = None, name: str = None) -> Optional[dict]:
-        """
-        Fetch an environment for an owner.
-
-        If querying by name, owner is required as environment names are only
-        unique within the context of an owner.
-
-        TODO: Add support for querying by ID, this will likely hit an entirely
-        different URL.
-        """
-        if name and not owner_key:
-            raise Exception("Must specify owner key to query environment " "by name")
-
-        query_param = urlencode({"name": name})
-        url = "/owners/%s/environments?%s" % (self.sanitize(owner_key), query_param)
-        results = self.conn.request_get(url, description=_("Fetching environment information"))
-        if len(results) == 0:
-            return None
-        return results[0]
-
-    # FIXME: no client tool use this method
-    def getEntitlement(self, entId: str) -> dict:
-        method = "/entitlements/%s" % self.sanitize(entId)
-        return self.conn.request_get(method, description=_("Fetching entitlement information"))
-
     def regenIdCertificate(self, consumerId: str) -> dict:
         """
         Try to regenerate consumer certificate
@@ -2236,38 +2035,6 @@ class UEPConnection(BaseConnection):
                 log.debug(e)
             else:
                 # Something else happened that we should probably raise
-                raise e
-
-        return result
-
-    # FIXME: no client tool use this method
-    def regenEntitlementCertificate(
-        self, consumer_id: str, entitlement_id: str, lazy_regen: bool = True
-    ) -> bool:
-        """
-        Regenerates the specified entitlement for the given consumer
-        """
-
-        method = "/consumers/%s/certificates?entitlement=%s" % (
-            self.sanitize(consumer_id),
-            self.sanitize(entitlement_id),
-        )
-
-        if lazy_regen:
-            method += "&lazy_regen=true"
-
-        result = False
-
-        try:
-            self.conn.request_put(method, description=_("Updating certificate"))
-            result = True
-        except (RemoteServerException, httplib.BadStatusLine, RestlibException) as e:
-            # 404s indicate that the service is unsupported (Candlepin too old, or SAM)
-            if isinstance(e, httplib.BadStatusLine) or str(e.code) == "404":
-                log.debug("Unable to refresh entitlement certificates: Service currently unsupported.")
-                log.debug(e)
-            else:
-                # Something else happened that we should probabaly raise
                 raise e
 
         return result
@@ -2312,9 +2079,7 @@ class UEPConnection(BaseConnection):
             params = []
         return self.conn.request_delete(method, params, description=_("Removing content overrides"))
 
-    # FIXME: email cannot be None
-    # FIXME: is it still supported? Do third-party vendors sell systems with preinstalled RHELs?
-    def activateMachine(self, consumerId: str, email: str = None, lang: str = None) -> Union[dict, None]:
+    def activateMachine(self, consumerId: str, email: str, lang: str = None) -> Union[dict, None]:
         """
         Activate a subscription by machine, information is located in the consumer facts
         :param consumerId: consumer UUID
@@ -2323,68 +2088,12 @@ class UEPConnection(BaseConnection):
         :return When activation was successful, then dictionary is returned. Otherwise, None is returned.
         """
         method = "/subscriptions?consumer_uuid=%s" % consumerId
-        if email:
-            # FIXME: sanitize email
-            method += "&email=%s" % email
-            if (not lang) and (locale.getdefaultlocale()[0] is not None):
-                lang = locale.getdefaultlocale()[0].lower().replace("_", "-")
-            # FIXME: sanitize lang
-            if lang:
-                method += "&email_locale=%s" % lang
+        method += "&email=%s" % self.sanitize(email)
+        if (not lang) and (locale.getdefaultlocale()[0] is not None):
+            lang = locale.getdefaultlocale()[0].lower().replace("_", "-")
+        if lang:
+            method += "&email_locale=%s" % self.sanitize(lang)
         return self.conn.request_post(method, description=_("Activating"))
-
-    # FIXME: no client tool use this method
-    def getSubscriptionList(self, owner_key: str) -> Any:
-        """
-        List the subscriptions for a particular owner.
-        """
-        method = "/owners/%s/subscriptions" % self.sanitize(owner_key)
-        results = self.conn.request_get(method, description=_("Fetching subscriptions"))
-        return results
-
-    # FIXME: no client tool use this method. BTW: some parts of this method coule never work.
-    def updateSubscriptionList(self, owner_key, auto_create_owner=None, lazy_regen=None):
-        """
-        Update subscriptions for a particular owner.
-        """
-        method = "/owners/%s/subscriptions?" % self.sanitize(owner_key)
-
-        if auto_create_owner is not None:
-            method += "&auto_create_owner=%s" % bool(auto_create_owner).lower()
-        if lazy_regen is not None:
-            method += "&lazy_regen=%s" % bool(lazy_regen).lower()
-
-        results = self.conn.request_put(method, description=_("Updating subscriptions"))
-        return results
-
-    # FIXME: no client tool use this method
-    def getJob(self, job_id):
-        """
-        Returns the status of a candlepin job.
-        """
-        query_params = urlencode({"result_data": True})
-        method = "/jobs/%s?%s" % (job_id, query_params)
-        results = self.conn.request_get(method, description=_("Fetching job"))
-        return results
-
-    # FIXME: no client tool use this method
-    def updateJobStatus(self, job_status):
-        """
-        Given a dict representing a candlepin JobStatus, check it's status.
-        """
-        # let key error bubble up
-        method = job_status["statusPath"]
-        results = self.conn.request_get(method, description=_("Updating job status"))
-        return results
-
-    # FIXME: no client tool use this method
-    def cancelJob(self, job_id):
-        """
-        Given a job id representing a candlepin JobStatus, cancel it.
-        """
-        method = "/jobs/%s" % (job_id)
-        results = self.conn.request_delete(method, description=_("Canceling job"))
-        return results
 
     def sanitize(self, url_param: str, plus: bool = False) -> str:
         """

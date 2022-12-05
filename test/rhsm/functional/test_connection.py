@@ -22,7 +22,7 @@ from test import subman_marker_functional
 from rhsm.connection import (
     ContentConnection,
     UEPConnection,
-    Restlib,
+    BaseRestLib,
     UnauthorizedException,
     ForbiddenException,
     RestlibException,
@@ -83,65 +83,6 @@ class ConnectionTests(unittest.TestCase):
         expected = testing_hypervisor_id.lower()
         self.assertEqual(expected, consumerInfo["hypervisorId"]["hypervisorId"])
 
-    def test_add_single_guest_id_string(self):
-        testing_guest_id = random_string("guestid")
-        self.cp.addOrUpdateGuestId(self.consumer_uuid, testing_guest_id)
-        guestIds = self.cp.getGuestIds(self.consumer_uuid)
-        self.assertEqual(1, len(guestIds))
-
-    def test_add_single_guest_id(self):
-        testing_guest_id = random_string("guestid")
-        guest_id_object = {"guestId": testing_guest_id, "attributes": {"some attr": "some value"}}
-        self.cp.addOrUpdateGuestId(self.consumer_uuid, guest_id_object)
-
-        guestId = self.cp.getGuestId(self.consumer_uuid, testing_guest_id)
-
-        # This check seems silly...
-        self.assertEqual(testing_guest_id, guestId["guestId"])
-        self.assertEqual("some value", guestId["attributes"]["some attr"])
-
-    def test_remove_single_guest_id(self):
-        testing_guest_id = random_string("guestid")
-        self.cp.addOrUpdateGuestId(self.consumer_uuid, testing_guest_id)
-        guestIds = self.cp.getGuestIds(self.consumer_uuid)
-        self.assertEqual(1, len(guestIds))
-
-        # Delete the guestId
-        self.cp.removeGuestId(self.consumer_uuid, testing_guest_id)
-
-        # Check that no guestIds exist anymore
-        guestIds = self.cp.getGuestIds(self.consumer_uuid)
-        self.assertEqual(0, len(guestIds))
-
-    def test_update_single_guest_id(self):
-        testing_guest_id = random_string("guestid")
-        guest_id_object = {"guestId": testing_guest_id, "attributes": {"some attr": "some value"}}
-        self.cp.addOrUpdateGuestId(self.consumer_uuid, guest_id_object)
-        guestId = self.cp.getGuestId(self.consumer_uuid, testing_guest_id)
-        # check the guestId was created and has the expected attribute
-        self.assertEqual("some value", guestId["attributes"]["some attr"])
-
-        guest_id_object["attributes"]["some attr"] = "crazy new value"
-        self.cp.addOrUpdateGuestId(self.consumer_uuid, guest_id_object)
-        guestId = self.cp.getGuestId(self.consumer_uuid, testing_guest_id)
-
-        # Verify there's still only one guestId
-        guestIds = self.cp.getGuestIds(self.consumer_uuid)
-        self.assertEqual(1, len(guestIds))
-
-        # Check that the attribute has changed
-        self.assertEqual("crazy new value", guestId["attributes"]["some attr"])
-
-    def test_get_owner_hypervisors(self):
-        testing_hypervisor_id = random_string("testHypervisor")
-        self.cp.updateConsumer(self.consumer_uuid, hypervisor_id=testing_hypervisor_id)
-        self.cp.getConsumer(self.consumer_uuid)["hypervisorId"]
-
-        hypervisors = self.cp.getOwnerHypervisors("admin", [testing_hypervisor_id])
-
-        self.assertEqual(1, len(hypervisors))
-        self.assertEqual(self.consumer_uuid, hypervisors[0]["uuid"])
-
     def tearDown(self):
         self.cp.unregisterConsumer(self.consumer_uuid)
 
@@ -153,9 +94,6 @@ class EntitlementRegenerationTests(unittest.TestCase):
 
         self.consumer = self.cp.registerConsumer("test-consumer", "system", owner="admin")
         self.consumer_uuid = self.consumer["uuid"]
-
-        # This product is present in the Candlepin test data
-        self.cp.bindByProduct(self.consumer_uuid, ["awesomeos-instancebased"])
 
         entitlements = self.cp.getEntitlementList(self.consumer_uuid)
         self.assertTrue(len(entitlements) > 0)
@@ -179,26 +117,6 @@ class EntitlementRegenerationTests(unittest.TestCase):
         result = self.cp.regenEntitlementCertificates("bad_consumer_uuid")
         self.assertFalse(result)
 
-    def test_regenerate_entitlement_default(self):
-        result = self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id)
-        self.assertTrue(result)
-
-    def test_regenerate_entitlement_lazy(self):
-        result = self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id, True)
-        self.assertTrue(result)
-
-    def test_regenerate_entitlement_eager(self):
-        result = self.cp.regenEntitlementCertificate(self.consumer_uuid, self.entitlement_id, False)
-        self.assertTrue(result)
-
-    def test_regenerate_entitlement_bad_consumer_uuid(self):
-        result = self.cp.regenEntitlementCertificate("bad_consumer_uuid", self.entitlement_id)
-        self.assertFalse(result)
-
-    def test_regenerate_entitlement_bad_entitlement_id(self):
-        result = self.cp.regenEntitlementCertificate(self.consumer_uuid, "bad_entitlement_id")
-        self.assertFalse(result)
-
     def tearDown(self):
         self.cp.unregisterConsumer(self.consumer_uuid)
 
@@ -211,7 +129,7 @@ class BindRequestTests(unittest.TestCase):
         consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
         self.consumer_uuid = consumerInfo["uuid"]
 
-    @patch.object(Restlib, "validateResponse")
+    @patch.object(BaseRestLib, "validateResult")
     @patch("rhsm.connection.drift_check", return_value=False)
     @patch("httplib.HTTPSConnection", autospec=True)
     def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
@@ -226,7 +144,7 @@ class BindRequestTests(unittest.TestCase):
             if name == "().request":
                 self.assertEqual(None, kwargs["body"])
 
-    @patch.object(Restlib, "validateResponse")
+    @patch.object(BaseRestLib, "validateResult")
     @patch("rhsm.connection.drift_check", return_value=False)
     @patch("httplib.HTTPSConnection", autospec=True)
     def test_bind_by_pool(self, mock_conn, mock_drift, mock_validate):
@@ -306,7 +224,7 @@ class HypervisorCheckinTests(unittest.TestCase):
 
 
 @subman_marker_functional
-class RestlibTests(unittest.TestCase):
+class BaseRestLibTests(unittest.TestCase):
     def setUp(self):
         # Get handle to Restlib
         self.conn = UEPConnection().conn
@@ -315,7 +233,7 @@ class RestlibTests(unittest.TestCase):
 
     def _validate_response(self, response):
         # wrapper to specify request_type and handler
-        return self.conn.validateResponse(response, request_type=self.request_type, handler=self.handler)
+        return self.conn.validateResult(response, request_type=self.request_type, handler=self.handler)
 
     def test_invalid_credentitals_thrown_on_401_with_empty_body(self):
         mock_response = {"status": 401}
@@ -361,15 +279,3 @@ class RestlibTests(unittest.TestCase):
         except Exception as ex:
             self.assertTrue(isinstance(ex, expected_exception))
             self.assertEqual(expected_error_code, ex.code)
-
-
-@subman_marker_functional
-class OwnerInfoTests(unittest.TestCase):
-    def setUp(self):
-        self.cp = UEPConnection(username="admin", password="admin", insecure=True)
-        self.owner_key = "test_owner_%d" % (random.randint(1, 5000))
-        self.cp.conn.request_post("/owners", {"key": self.owner_key, "displayName": self.owner_key})
-
-    def test_get_owner_info(self):
-        owner_info = self.cp.getOwnerInfo(self.owner_key)
-        self.assertTrue(owner_info is not None)

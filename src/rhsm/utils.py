@@ -18,7 +18,7 @@ import re
 import sys
 import time
 import threading
-from typing import Callable, List, Optional, Tuple, Union, Generator
+from typing import Callable, List, Optional, TextIO, Tuple, Union, Generator
 
 import urllib.parse
 
@@ -129,11 +129,10 @@ def parse_url(
     # Adding http:// onto the front of the hostname
 
     if local_server_entry == "":
-        raise ServerUrlParseErrorEmpty(local_server_entry)
+        raise ServerUrlParseErrorEmpty(local_server_entry, "Server entry is empty")
 
     if local_server_entry is None:
-        # FIXME: Raise exception with some useful message like: "No server entry provided", not None
-        raise ServerUrlParseErrorNone(local_server_entry)
+        raise ServerUrlParseErrorNone(local_server_entry, "No server entry provided")
 
     # good_url in this case meaning a schema we support, and
     # _something_ else. This is to make urlparse happy
@@ -153,8 +152,9 @@ def parse_url(
     if not good_url:
         good_url = "https://%s" % local_server_entry
 
-    # FIXME: need a try except here? docs
-    # don't seem to indicate any expected exceptions
+    # No need to do error-checking here since urlparse
+    # always returns a 6-length named tuple -- only consideration
+    # to note is that the urlparse input is a valid string.
     result = urllib.parse.urlparse(good_url)
     username: Union[None, str] = default_username
     password: Union[None, str] = default_password
@@ -280,6 +280,9 @@ def fix_no_proxy() -> None:
 
 def suppress_output(func: Callable) -> Callable:
     def wrapper(*args, **kwargs):
+        devnull: Optional[TextIO] = None
+        stdout: Optional[TextIO] = None
+        stderr: Optional[TextIO] = None
         try:
             devnull = open(os.devnull, "w")
             stdout = sys.stdout
@@ -288,10 +291,12 @@ def suppress_output(func: Callable) -> Callable:
             sys.stderr = devnull
             return func(*args, **kwargs)
         finally:
-            # FIXME: stdout, stderr and devnull might be referenced before assigment
-            sys.stdout = stdout
-            sys.stderr = stderr
-            devnull.close()
+            if stdout is not None:
+                sys.stdout = stdout
+            if stderr is not None:
+                sys.stderr = stderr
+            if devnull is not None:
+                devnull.close()
 
     return wrapper
 
@@ -481,13 +486,21 @@ class StatusSpinnerStyle:
       all TTYs, not just rich terminal emulators in GUI).
     """
 
-    # FIXME: There is not reason to have following variables mutable. Convert it to tuples
-    LINE: List[str] = ["|", "/", "-", "\\"]
-    BRAILLE: List[str] = ["⠋", "⠙", "⠸", "⠴", "⠦", "⠇"]
-    WIDE_BRAILLE: List[str] = ["⠧ ", "⠏ ", "⠋⠁", "⠉⠉", "⠈⠙", " ⠹", " ⠼", "⠠⠴", "⠤⠤", "⠦⠄"]
-    BAR_FORWARD: List[str] = ["[    ]", "[=   ]", "[==  ]", "[=== ]", "[====]", "[ ===]", "[  ==]", "[   =]"]
-    BAR_BACKWARD: List[str] = ["[    ]", "[   =]", "[  ==]", "[ ===]", "[====]", "[=== ]", "[==  ]", "[=   ]"]
-    BAR_BOUNCE: List[str] = BAR_FORWARD + BAR_BACKWARD
+    LINE: Tuple[str] = ("|", "/", "-", "\\")
+    BRAILLE: Tuple[str] = ("⠋", "⠙", "⠸", "⠴", "⠦", "⠇")
+    WIDE_BRAILLE: Tuple[str] = ("⠧ ", "⠏ ", "⠋⠁", "⠉⠉", "⠈⠙", " ⠹", " ⠼", "⠠⠴", "⠤⠤", "⠦⠄")
+    BAR_FORWARD: Tuple[str] = ("[    ]", "[=   ]", "[==  ]", "[=== ]", "[====]", "[ ===]", "[  ==]", "[   =]")
+    BAR_BACKWARD: Tuple[str] = (
+        "[    ]",
+        "[   =]",
+        "[  ==]",
+        "[ ===]",
+        "[====]",
+        "[=== ]",
+        "[==  ]",
+        "[=   ]",
+    )
+    BAR_BOUNCE: Tuple[str] = BAR_FORWARD + BAR_BACKWARD
 
 
 class LiveStatusMessage(StatusMessage):

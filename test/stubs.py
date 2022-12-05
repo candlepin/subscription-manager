@@ -481,7 +481,6 @@ class StubUEP(object):
         proxy_password=None,
         cert_file=None,
         key_file=None,
-        restlib_class=None,
     ):
         self.registered_consumer_info = {"uuid": "dummy-consumer-uuid"}
         self.environment_list = []
@@ -526,9 +525,6 @@ class StubUEP(object):
     def updatePackageProfile(self, uuid, pkg_dicts):
         pass
 
-    def getProduct(self):
-        return {}
-
     def getRelease(self, consumerId):
         return {"releaseVer": ""}
 
@@ -561,7 +557,7 @@ class StubUEP(object):
     def setConsumer(self, consumer):
         self.consumer = consumer
 
-    def getConsumer(self, consumerId, username=None, password=None):
+    def getConsumer(self, consumerId):
         if hasattr(self, "consumer") and self.consumer:
             return self.consumer
         if callable(self.registered_consumer_info):
@@ -594,9 +590,6 @@ class StubUEP(object):
 
     def getPoolsList(self, uuid, listAll, active_on, owner):
         return [{"id": "pool1"}, {"id": "pool2"}]
-
-    def getSubscriptionList(self, owner):
-        return [{"id": "sub1"}, {"id": "sub2"}]
 
     def getContentOverrides(self, uuid):
         return []
@@ -716,7 +709,6 @@ class StubCPProvider(object):
         proxy_password_arg=None,
         no_proxy_arg=None,
         correlation_id=None,
-        restlib_class=None,
     ):
         pass
 

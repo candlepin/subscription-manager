@@ -20,7 +20,7 @@ import tempfile
 from rhsm import connection
 from rhsm.connection import (
     UEPConnection,
-    Restlib,
+    BaseRestLib,
     ConnectionException,
     ConnectionSetupException,
     BadCertificateException,
@@ -186,9 +186,6 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn._update_smoothed_response_time(1.5)
         self.assertEqual(self.cp.conn.smoothed_rt, 1.05)
 
-    def test_get_environment_by_name_requires_owner(self):
-        self.assertRaises(Exception, self.cp.getEnvironment, None, {"name": "env name"})
-
     @patch("locale.getlocale")
     def test_has_proper_language_header_utf8(self, mock_locale):
         # First test it with Japanese
@@ -209,15 +206,6 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.headers = {}
         self.cp.conn._set_accept_language_in_header()
         self.assertEqual(self.cp.conn.headers["Accept-Language"], "ja-jp")
-
-    def test_get_environment_urlencoding(self):
-        self.cp.conn = Mock()
-        self.cp.conn.request_get = Mock(return_value=[])
-        self.cp.getEnvironment(owner_key="myorg", name="env name__++=*&")
-        self.cp.conn.request_get.assert_called_with(
-            "/owners/myorg/environments?name=env+name__%2B%2B%3D%2A%26",
-            description="Fetching environment information",
-        )
 
     def test_entitle_date(self):
         self.cp.conn = Mock()
@@ -594,7 +582,7 @@ class ConnectionTests(unittest.TestCase):
                 cert_dir=self.temp_ent_dir.name,
             )
             cont_conn.get_versions("/")
-        restlib = Restlib("somehost", "123", "somehandler")
+        restlib = BaseRestLib("somehost", "123", "somehandler")
         restlib.ca_dir = self.temp_ent_dir.name
         with self.assertRaises(BadCertificateException):
             restlib._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
@@ -641,10 +629,21 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.request_get = Mock(return_value=[])
         self.assertEqual([], self.cp.getOwnerList(username="test"))
 
+    def test_extract_content_from_response(self):
+        # ensure requests with empty content data (status 204) returns None
+        response_body = {"content": {}}
+        self.assertIsNone(BaseRestLib._extract_content_from_response(response_body))
+        # return content dict from request result if it is json parsable text
+        response_body = {"content": """{"test": "test"}"""}
+        self.assertEqual({"test": "test"}, BaseRestLib._extract_content_from_response(response_body))
+        # return content text from request result if it exists and it is not json parsable text
+        response_body = {"content": "test"}
+        self.assertEqual("test", BaseRestLib._extract_content_from_response(response_body))
 
-class RestlibValidateResponseTests(unittest.TestCase):
+
+class BaseRestLibValidateResponseTests(unittest.TestCase):
     def setUp(self):
-        self.restlib = Restlib("somehost", "123", "somehandler")
+        self.restlib = BaseRestLib("somehost", "123", "somehandler")
         self.request_type = "GET"
         self.handler = "https://server/path"
 
@@ -652,7 +651,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
         response = {"status": status, "content": content}
         if headers:
             response["headers"] = headers
-        self.restlib.validateResponse(response, self.request_type, self.handler)
+        self.restlib.validateResult(response, self.request_type, self.handler)
 
     # All empty responses that aren't 200/204 raise a UnknownContentException
     def test_200_empty(self):
@@ -877,7 +876,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
         self.assertRaises(UnknownContentException, self.vr, "599", "")
 
 
-class RestlibTests(unittest.TestCase):
+class BaseRestLibTests(unittest.TestCase):
     def test_json_uft8_encoding(self):
         # A unicode string containing JSON
         test_json = """
