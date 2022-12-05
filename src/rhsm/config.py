@@ -17,6 +17,7 @@
 
 import sys
 import os
+import logging
 from iniparse import SafeConfigParser
 from iniparse.compat import NoOptionError, InterpolationMissingOptionError, NoSectionError
 import re
@@ -100,6 +101,9 @@ DEFAULTS = {
 }
 
 
+log = logging.getLogger(__name__)
+
+
 def in_container() -> bool:
     """
     Are we running in a docker container or not?
@@ -108,8 +112,28 @@ def in_container() -> bool:
     # off
     if os.environ.get("SMDEV_CONTAINER_OFF", ""):
         return False
+
+    def in_ocp() -> bool:
+        """
+        Is the system running as pod in OCP (OpenShift Container Platform)?
+
+        Check some of the canonical environment variables set by Kubernets
+        (on which OCP is based):
+        https://kubernetes.io/docs/concepts/containers/container-environment/
+        in particular, look for the "kubernetes" default service
+
+        "container=oci" is generally set by Red Hat-based containers.
+        """
+        return (
+            os.environ.get("KUBERNETES_PORT", "") != ""
+            and os.environ.get("KUBERNETES_SERVICE_HOST", "") != ""
+            and os.environ.get("KUBERNETES_SERVICE_PORT", "") != ""
+            and os.environ.get("container", "") == "oci"
+        )
+
     # Known locations to check for as an easy way to detect whether
-    # we are running in a container
+    # we are running in a container; note that pods in OCP are not
+    # considered containers but standalone systems
     locations: List[str] = [
         # podman:
         # https://github.com/containers/podman/issues/6192
@@ -124,6 +148,11 @@ def in_container() -> bool:
     ]
     for fn in locations:
         if os.path.exists(fn):
+            log.debug(f"in_container(): found '{fn}', may be a container")
+            is_ocp = in_ocp()
+            if is_ocp:
+                log.debug("in_container(): found kubernetes/OCP environment, not considering container")
+                return False
             return True
     return False
 
