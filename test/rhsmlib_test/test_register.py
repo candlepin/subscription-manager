@@ -17,6 +17,8 @@ from __future__ import print_function, division, absolute_import
 import contextlib
 import json
 import socket
+import tempfile
+from typing import Optional
 
 import mock
 
@@ -33,6 +35,7 @@ from ..fixture import set_up_mock_sp_store
 from rhsm import connection
 
 import rhsmlib
+from rhsmlib.dbus.server import DomainSocketServer
 from rhsmlib.dbus.objects import RegisterDBusObject, DomainSocketRegisterDBusObject
 from rhsmlib.services import register, exceptions
 
@@ -738,6 +741,21 @@ class RegisterServiceTest(InjectionMockingTest):
 class RegisterDBusObjectTest(DBusServerStubProvider):
     dbus_class = RegisterDBusObject
     dbus_class_kwargs = {}
+    socket_dir: Optional[tempfile.TemporaryDirectory] = None
+
+    def setUp(self) -> None:
+        self.socket_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.socket_dir.cleanup)
+
+        socket_path_patch = mock.patch.object(DomainSocketServer, "_server_socket_path", self.socket_dir.name)
+        socket_path_patch.start()
+        # `tmpdir` behaves differently from `dir` on old versions of dbus
+        # (earlier than 1.12.24 and 1.14.4).
+        # In newer versions we are not getting abstract socket anymore.
+        socket_iface_patch = mock.patch.object(DomainSocketServer, "_server_socket_iface", "unix:dir=")
+        socket_iface_patch.start()
+
+        super().setUp()
 
     def tearDown(self) -> None:
         """Make sure the domain server is stopped once the test ends."""
@@ -747,7 +765,7 @@ class RegisterDBusObjectTest(DBusServerStubProvider):
         super().tearDown()
 
     def test_Start(self):
-        substring = "/run/dbus.*"
+        substring = self.socket_dir.name + "/dbus.*"
         result = self.obj.Start.__wrapped__(self.obj, self.LOCALE)
         self.assertRegex(result, substring)
 
@@ -764,10 +782,7 @@ class RegisterDBusObjectTest(DBusServerStubProvider):
 
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         try:
-            # The socket returned for connection is an abstract socket, so we
-            # have to begin the name with a NUL byte to get into that namespace.
-            # See http://blog.eduardofleury.com/archives/2007/09/13.
-            sock.connect("\0" + address)
+            sock.connect(address)
         finally:
             sock.close()
 
