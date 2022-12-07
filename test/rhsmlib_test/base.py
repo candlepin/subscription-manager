@@ -32,6 +32,8 @@ import rhsmlib.dbus.base_object
 from rhsmlib.dbus import constants
 from subscription_manager.i18n import Locale
 
+from test import subman_marker_dbus
+
 # Set DBus mainloop early in test run (test import time!)
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 log = logging.getLogger(__name__)
@@ -66,6 +68,7 @@ class InjectionMockingTest(unittest.TestCase):
         raise NotImplementedError("Subclasses should define injected objects")
 
 
+@subman_marker_dbus
 class DBusServerStubProvider(unittest.TestCase):
     """Special class used start a DBus server.
 
