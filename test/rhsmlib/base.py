@@ -30,6 +30,7 @@ import rhsmlib.dbus.base_object
 from rhsmlib.dbus import constants
 
 from test import subman_marker_dbus
+from test.fixture import SubManFixture
 
 # Set DBus mainloop early in test run (test import time!)
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -69,7 +70,7 @@ class InjectionMockingTest(unittest.TestCase):
 
 
 @subman_marker_dbus
-class DBusServerStubProvider(unittest.TestCase):
+class DBusServerStubProvider(SubManFixture):
     """Special class used start a DBus server.
 
     All rhsmlib.objects.*.*DbusObject classes need a connection, object path
