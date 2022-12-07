@@ -16,6 +16,8 @@ from __future__ import print_function, division, absolute_import
 from tempfile import NamedTemporaryFile
 from typing import Any, Dict, Optional
 
+from test.fixture import SubManFixture
+
 try:
     import unittest2 as unittest
 except ImportError:
@@ -69,7 +71,7 @@ class InjectionMockingTest(unittest.TestCase):
 
 
 @subman_marker_dbus
-class DBusServerStubProvider(unittest.TestCase):
+class DBusServerStubProvider(SubManFixture):
     """Special class used start a DBus server.
 
     All rhsmlib.objects.*.*DbusObject classes need a connection, object path
@@ -106,6 +108,8 @@ class DBusServerStubProvider(unittest.TestCase):
             **cls.dbus_class_kwargs,
         )
 
+        super().setUpClass()
+
     @classmethod
     def tearDownClass(cls) -> None:
         # Unload current DBus class
@@ -118,9 +122,13 @@ class DBusServerStubProvider(unittest.TestCase):
             except AttributeError as exc:
                 raise RuntimeError(f"Object {patch} cannot be stopped.") from exc
 
+        super().tearDownClass()
+
     def tearDown(self) -> None:
         # Always reset the locale to default value.
         # Some tests (Attach, for example) are passing non-english language
         # strings to DBus methods, which are changing the global locale
         # settings. This teardown makes sure the language will always be reset.
         Locale.set(self.LOCALE)
+
+        super().tearDown()
