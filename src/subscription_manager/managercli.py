@@ -1911,7 +1911,7 @@ class RegisterCommand(UserPassCommand):
         try:
             profile_mgr = inj.require(inj.PROFILE_MANAGER)
             # 767265: always force an upload of the packages when registering
-            profile_mgr.update_check(self.cp, consumer["uuid"], True)
+            profile_mgr.update_check(self.cp, consumer["uuid"], force=True)
         except RemoteServerException as err:
             # When it is not possible to upload profile ATM, then print only error about this
             # to rhsm.log. The rhsmcertd will try to upload it next time.
@@ -1933,7 +1933,10 @@ class RegisterCommand(UserPassCommand):
             if is_process_running("rhsmcertd", rhsmcertd_pid) is True:
                 # This will only send SIGUSR1 signal, which triggers gathering and uploading
                 # of DNF profile by rhsmcertd. We try to "outsource" this activity to rhsmcertd
-                # server to not block registration process
+                # server to not block registration process.
+                # Note: rhsmcertd tries to upload profile using Python script and this script
+                # is always triggered with --force-upload CLI option. We ignore report_package_config
+                # configure option here due to BZ: 767265
                 log.debug("Sending SIGUSR1 signal to rhsmcertd process")
                 try:
                     os.kill(rhsmcertd_pid, signal.SIGUSR1)

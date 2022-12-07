@@ -52,7 +52,6 @@ typedef enum {
 #define WORKER LIBEXECDIR"/rhsmcertd-worker"
 #define WORKER_NAME WORKER
 #define PACKAGE_PROFILE_UPLOADER LIBEXECDIR"/rhsm-package-profile-uploader"
-#define PACKAGE_PROFILE_UPLOADER_NAME PACKAGE_PROFILE_UPLOADER
 #define INITIAL_DELAY_SECONDS 120
 #define DEFAULT_AUTO_REG_INTERVAL_SECONDS 3600 /* 1 hour */
 #define DEFAULT_CERT_INTERVAL_SECONDS 14400    /* 4 hours */
@@ -254,13 +253,15 @@ long long gen_random(long long max) {
 /**
  * Try to run Python script package-profile-uploader. This script tries to upload DNF profile
  * to server, when server supports profile. New process is spawned in blocking way.
+ * Note: this script is spawned with --force-upload. Thus report_package_config configuration
+ * option is ignored and this configuration option should be checked before using this approach.
  * @return Return true, when uploading was successful. Otherwise, return false.
  */
 static gboolean
 upload_package_profile ()
 {
     gboolean ret;
-    const char * argv[] = {PACKAGE_PROFILE_UPLOADER, NULL};
+    const char * argv[] = {PACKAGE_PROFILE_UPLOADER, "--force-upload", NULL};
     gchar *standard_output = NULL;
     gchar *standard_error = NULL;
     gint wait_status = 0;
