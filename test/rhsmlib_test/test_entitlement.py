@@ -334,7 +334,7 @@ class TestEntitlementService(InjectionMockingTest):
         ent_service.entcertlib = mock.Mock().return_value
         ent_service.entcertlib.update = mock.Mock()
 
-        removed_pools, unremoved_pools, removed_serials = ent_service.remove_entilements_by_pool_ids(
+        removed_pools, unremoved_pools, removed_serials = ent_service.remove_entitlements_by_pool_ids(
             ['4028fa7a5dea087d015dea0b025003f6',
              '4028fa7a5dea087d015dea0adf560152']
         )
@@ -366,7 +366,7 @@ class TestEntitlementService(InjectionMockingTest):
         ent_service.entcertlib = mock.Mock().return_value
         ent_service.entcertlib.update = mock.Mock()
 
-        removed_pools, unremoved_pools, removed_serials = ent_service.remove_entilements_by_pool_ids(
+        removed_pools, unremoved_pools, removed_serials = ent_service.remove_entitlements_by_pool_ids(
             ['4028fa7a5dea087d015dea0b025003f6',
              '4028fa7a5dea087d015dea0b025003f6',
              '4028fa7a5dea087d015dea0adf560152']
@@ -403,7 +403,7 @@ class TestEntitlementService(InjectionMockingTest):
         ent_service.entcertlib = mock.Mock().return_value
         ent_service.entcertlib.update = mock.Mock()
 
-        removed_pools, unremoved_pools, removed_serials = ent_service.remove_entilements_by_pool_ids(
+        removed_pools, unremoved_pools, removed_serials = ent_service.remove_entitlements_by_pool_ids(
             ['4028fa7a5dea087d015dea0b025003f6', 'does_not_exist_d015dea0adf560152']
         )
 
@@ -609,7 +609,7 @@ class TestEntitlementDBusObject(DBusObjectTest, InjectionMockingTest):
         Test of D-Bus object for removing entitlements by pool IDs
         """
         removed_unremoved_pools_serials = (['4028fa7a5dea087d015dea0b025003f6'], [], ['6219625278114868779'])
-        self.mock_entitlement.remove_entilements_by_pool_ids = mock.Mock(return_value=removed_unremoved_pools_serials)
+        self.mock_entitlement.remove_entitlements_by_pool_ids = mock.Mock(return_value=removed_unremoved_pools_serials)
 
         expected_result = json.dumps(removed_unremoved_pools_serials[2])
 
