@@ -19,6 +19,7 @@ from __future__ import print_function, division, absolute_import
 import datetime
 from . import fixture
 
+import pytest
 import mock
 
 from subscription_manager.ga import GObject as ga_GObject
@@ -42,6 +43,7 @@ class ListPoolsStubUEP(stubs.StubUEP):
         return []
 
 
+@pytest.mark.skip(reason="This test is unreliable.")
 class TestAsyncPool(fixture.SubManFixture):
     def setUp(self):
         self.callbacks = []
@@ -64,8 +66,7 @@ class TestAsyncPool(fixture.SubManFixture):
         inj.provide(inj.ENT_DIR, stubs.StubEntitlementDirectory())
         inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
-        self.pool_stash = \
-                managerlib.PoolStash()
+        self.pool_stash = managerlib.PoolStash()
 
         self.ap = async_utils.AsyncPool(self.pool_stash)
 
