@@ -38,6 +38,7 @@ from six.moves import queue
 import rhsmlib.dbus.base_object
 from rhsmlib.dbus import constants, server
 from subscription_manager.identity import Identity
+from subscription_manager.i18n import Locale
 
 # Set DBus mainloop early in test run (test import time!)
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -321,3 +322,10 @@ class DBusServerStubProvider(unittest.TestCase):
                 patch.stop()
             except AttributeError as exc:
                 raise RuntimeError(f"Object {patch} cannot be stopped.") from exc
+
+    def tearDown(self) -> None:
+        # Always reset the locale to default value.
+        # Some tests (Attach, for example) are passing non-english language
+        # strings to DBus methods, which are changing the global locale
+        # settings. This teardown makes sure the language will always be reset.
+        Locale.set(self.LOCALE)

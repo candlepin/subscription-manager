@@ -15,22 +15,17 @@ from __future__ import print_function, division, absolute_import
 import dbus
 import json
 import mock
-import six
-
-from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
 
 from subscription_manager import injection as inj
 from subscription_manager.identity import Identity
 from subscription_manager.plugins import PluginManager
-from subscription_manager.cp_provider import CPProvider
 
 from rhsm import connection
 
 from rhsmlib.dbus.objects import AttachDBusObject
-from rhsmlib.dbus import constants
 from rhsmlib.services import attach
 
-from test import subman_marker_dbus
+from test.rhsmlib_test.base import DBusServerStubProvider, InjectionMockingTest
 
 CONTENT_JSON = [{
     "id": "19ec0d4f93ae47e18233b2590b3e71f3",
@@ -165,171 +160,142 @@ class TestAttachService(InjectionMockingTest):
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
 
-@subman_marker_dbus
-class TestAttachDBusObject(DBusObjectTest, InjectionMockingTest):
-    def setUp(self):
-        super(TestAttachDBusObject, self).setUp()
-        self.proxy = self.proxy_for(AttachDBusObject.default_dbus_path)
-        self.interface = dbus.Interface(self.proxy, constants.ATTACH_INTERFACE)
+class TestAttachDBusObject(DBusServerStubProvider):
+    dbus_class = AttachDBusObject
+    dbus_class_kwargs = {}
 
-        attach_patcher = mock.patch('rhsmlib.dbus.objects.attach.AttachService', autospec=True)
-        self.mock_attach = attach_patcher.start().return_value
-        self.addCleanup(attach_patcher.stop)
+    @classmethod
+    def setUpClass(cls) -> None:
+        is_simple_content_access_patch = mock.patch(
+            "rhsmlib.dbus.objects.attach.is_simple_content_access",
+            name="is_simple_content_access",
+        )
+        cls.patches["is_simple_content_access"] = is_simple_content_access_patch.start()
+        cls.addClassCleanup(is_simple_content_access_patch.stop)
 
-        entcertlib_patcher = mock.patch('rhsmlib.dbus.objects.attach.entcertlib.EntCertActionInvoker')
-        self.mock_action_invoker = entcertlib_patcher.start().return_value
-        self.addCleanup(entcertlib_patcher.stop)
+        is_registered_patch = mock.patch(
+            "rhsmlib.dbus.base_object.BaseObject.is_registered",
+            name="is_registered",
+        )
+        cls.patches["is_registered"] = is_registered_patch.start()
+        cls.addClassCleanup(is_registered_patch.stop)
 
-        self.mock_identity.is_valid.return_value = True
-        self.mock_identity.uuid = "id"
+        update_patch = mock.patch(
+            "subscription_manager.certlib.BaseActionInvoker.update",
+            name="update",
+        )
+        cls.patches["update"] = update_patch.start()
+        cls.addClassCleanup(update_patch.stop)
 
-        is_simple_content_access_patcher = mock.patch('rhsmlib.dbus.objects.attach.is_simple_content_access')
-        self.mock_is_simple_content_access = is_simple_content_access_patcher.start()
-        self.mock_is_simple_content_access.return_value = False
-        self.addCleanup(is_simple_content_access_patcher.stop)
+        super().setUpClass()
 
-    def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.CP_PROVIDER:
-            provider = mock.Mock(spec=CPProvider, name="CPProvider").return_value
-            provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
-            return provider
-        else:
-            return None
+    def setUp(self) -> None:
+        self.patches["is_simple_content_access"].return_value = False
+        self.patches["is_registered"].return_value = True
+        self.patches["update"].return_value = None
 
-    def dbus_objects(self):
-        return [AttachDBusObject]
+        AttachService_patch = mock.patch(
+            "rhsmlib.dbus.objects.attach.AttachService",
+            name="AttachService",
+            autospec=True,
+        )
+        self.mock_attach = AttachService_patch.start().return_value
+        self.addCleanup(AttachService_patch.stop)
 
-    def test_pool_attach(self):
-        def assertions(*args):
-            expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
-            result = args[0]
-            self.assertEqual(result, expected_content)
+        super().setUp()
 
+    def test_PoolAttach(self):
         self.mock_attach.attach_pool.return_value = CONTENT_JSON
 
-        dbus_method_args = [['x', 'y'], 1, {}, '']
-        self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+        expected = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+        result = self.obj.PoolAttach.__wrapped__(self.obj, ["x", "y"], 1, {}, self.LOCALE)
+        self.assertEqual(result, expected)
 
-    def test_pool_attach_using_proxy(self):
-        def assertions(*args):
-            expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
-            result = args[0]
-            self.assertEqual(result, expected_content)
-
+    def test_PoolAttach__proxy(self):
         self.mock_attach.attach_pool.return_value = CONTENT_JSON
 
-        dbus_method_args = [
-            ['x', 'y'],
+        expected = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+        result = self.obj.PoolAttach.__wrapped__(
+            self.obj,
+            ["x", "y"],
             1,
             {
-                'proxy_hostname': 'proxy.company.com',
-                'proxy_port': '3128',
-                'proxy_user': 'user',
-                'proxy_password': 'secret'
+                "proxy_hostname": "proxy.company.com",
+                "proxy_port": "3128",
+                "proxy_user": "user",
+                "proxy_password": "password",
             },
-            ''
-        ]
-        self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+            self.LOCALE,
+        )
+        self.assertEqual(result, expected)
 
-    def test_pool_germany_attach(self):
-        def assertions(*args):
-            expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
-            result = args[0]
-            self.assertEqual(result, expected_content)
-
+    def test_PoolAttach__de(self):
         self.mock_attach.attach_pool.return_value = CONTENT_JSON
 
-        dbus_method_args = [['x', 'y'], 1, {}, 'de']
-        self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+        expected = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+        result = self.obj.PoolAttach.__wrapped__(self.obj, ["x", "y"], 1, {}, "de")
+        self.assertEqual(expected, result)
 
-    def test_pool_germany_GERMANY__attach(self):
-        def assertions(*args):
-            expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
-            result = args[0]
-            self.assertEqual(result, expected_content)
-
+    def test_PoolAttach__de_DE(self):
         self.mock_attach.attach_pool.return_value = CONTENT_JSON
 
-        dbus_method_args = [['x', 'y'], 1, {}, 'de_DE']
-        self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+        expected = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+        result = self.obj.PoolAttach.__wrapped__(self.obj, ["x", "y"], 1, {}, "de_DE")
+        self.assertEqual(expected, result)
 
-    def test_pool_germany_utf8_attach(self):
-        def assertions(*args):
-            expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
-            result = args[0]
-            self.assertEqual(result, expected_content)
-
+    def test_PoolAttach__de_DE_utf8(self):
         self.mock_attach.attach_pool.return_value = CONTENT_JSON
 
-        dbus_method_args = [['x', 'y'], 1, {}, 'de_DE.utf-8']
-        self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+        expected = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+        result = self.obj.PoolAttach.__wrapped__(self.obj, ["x", "y"], 1, {}, "de_DE.utf-8")
+        self.assertEqual(expected, result)
 
-    def test_pool_germany_UTF8_attach(self):
-        def assertions(*args):
-            expected_content = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
-            result = args[0]
-            self.assertEqual(result, expected_content)
-
+    def test_PoolAttach__de_DE_UTF8(self):
         self.mock_attach.attach_pool.return_value = CONTENT_JSON
 
-        dbus_method_args = [['x', 'y'], 1, {}, 'de_DE.UTF-8']
-        self.dbus_request(assertions, self.interface.PoolAttach, dbus_method_args)
+        expected = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+        result = self.obj.PoolAttach.__wrapped__(self.obj, ["x", "y"], 1, {}, "de_DE.UTF-8")
+        self.assertEqual(expected, result)
 
-    def test_must_be_registered_pool(self):
-        self.mock_identity.is_valid.return_value = False
-        pool_method_args = [['x', 'y'], 1, {}, '']
-        with six.assertRaisesRegex(self, dbus.DBusException, r'requires the consumer to be registered.*'):
-            self.dbus_request(None, self.interface.PoolAttach, pool_method_args)
+    def test_PoolAttach__sca(self):
+        self.patches["is_simple_content_access"].return_value = True
+        self.mock_attach.attach_pool.return_value = CONTENT_JSON
 
-    def test_must_be_registered_auto(self):
-        self.mock_identity.is_valid.return_value = False
-        auto_method_args = ['service_level', {}, '']
-        with six.assertRaisesRegex(self, dbus.DBusException, r'requires the consumer to be registered.*'):
-            self.dbus_request(None, self.interface.AutoAttach, auto_method_args)
+        # TODO: Change to assertRaises when auto-attach is not supported in SCA mode
+        # BZ 2049101, BZ 2049620
 
-    @mock.patch('rhsmlib.dbus.objects.attach.is_simple_content_access')
-    def test_auto_attach(self, mock_is_simple_content_access):
-        """
-        Test calling AutoAttach method in non-SCA mode
-        """
-        mock_is_simple_content_access.return_value = False
+        expected = [json.dumps(CONTENT_JSON), json.dumps(CONTENT_JSON)]
+        result = self.obj.PoolAttach.__wrapped__(self.obj, ["x", "y"], 1, {}, "de_DE.UTF-8")
+        self.assertEqual(expected, result)
 
-        def assertions(*args):
-            result = args[0]
-            self.assertEqual(result, json.dumps(CONTENT_JSON))
+    def test_PoolAttach__not_registered(self):
+        self.patches["is_registered"].return_value = False
+        self.mock_attach.attach_pool.return_value = CONTENT_JSON
 
+        with self.assertRaisesRegex(dbus.DBusException, "requires the consumer to be registered"):
+            self.obj.PoolAttach.__wrapped__(self.obj, ["x", "y"], 1, {}, self.LOCALE)
+
+    def test_AutoAttach(self):
         self.mock_attach.attach_auto.return_value = CONTENT_JSON
 
-        dbus_method_args = ['service_level', {}, '']
-        self.dbus_request(assertions, self.interface.AutoAttach, dbus_method_args)
+        expected = json.dumps(CONTENT_JSON)
+        result = self.obj.AutoAttach.__wrapped__(self.obj, "service_level", {}, self.LOCALE)
+        self.assertEqual(expected, result)
 
-    def test_auto_attach_sca(self):
-        """
-        Test that calling AutoAttach method raises exception, when system is in SCA mode
-        """
-        self.mock_is_simple_content_access.return_value = True
-
+    def test_AutoAttach__sca(self):
+        self.patches["is_simple_content_access"].return_value = True
         self.mock_attach.attach_auto.return_value = CONTENT_JSON
 
-        dbus_method_args = ['service_level', {}, '']
+        # TODO: Change to assertRaises when auto-attach is not supported in SCA mode
+        # BZ 2049101, BZ 2049620
 
-        # TODO: change following code to assert, when calling AutoAttach will not be supported in SCA mode
-        # with self.assertRaises(dbus.exceptions.DBusException):
-        #     self.dbus_request(None, self.interface.AutoAttach, dbus_method_args)
-        self.dbus_request(None, self.interface.AutoAttach, dbus_method_args)
+        expected = json.dumps(CONTENT_JSON)
+        result = self.obj.AutoAttach.__wrapped__(self.obj, "service_level", {}, self.LOCALE)
+        self.assertEqual(expected, result)
 
-    def test_attach_pool_sca(self):
-        """
-        Test that calling PoolAttach method raises exception in SCA mode
-        """
-        self.mock_is_simple_content_access.return_value = True
-
+    def test_AutoAttach__not_registered(self):
         self.mock_attach.attach_pool.return_value = CONTENT_JSON
-        dbus_method_args = [['x', 'y'], 1, {}, '']
+        self.patches["is_registered"].return_value = False
 
-        # TODO: change following code to assert, when calling PoolAttach will not be supported in SCA mode
-        # with self.assertRaises(dbus.exceptions.DBusException):
-        #     self.dbus_request(None, self.interface.PoolAttach, dbus_method_args)
-        self.dbus_request(None, self.interface.PoolAttach, dbus_method_args)
+        with self.assertRaisesRegex(dbus.DBusException, "requires the consumer to be registered"):
+            self.obj.AutoAttach.__wrapped__(self.obj, ["x", "y"], 1, {}, self.LOCALE)
