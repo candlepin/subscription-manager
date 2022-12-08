@@ -198,6 +198,9 @@ class ConnectionType(enum.Enum):
     # Connection uses Keycloak token
     KEYCLOAK_AUTH = enum.auto()
 
+    # Connection uses OAuth device authentication
+    DEVICE_AUTH = enum.auto()
+
 
 class BaseConnection:
     def __init__(
@@ -850,6 +853,8 @@ class BaseRestLib:
                 auth = "consumer auth"
             elif self.auth_type == ConnectionType.NO_AUTH:
                 auth = "no auth"
+            elif self.auth_type == ConnectionType.DEVICE_AUTH:
+                auth = "device auth"
             else:
                 auth = "undefined auth"
 
@@ -1091,6 +1096,7 @@ class BaseRestLib:
             self.headers["Connection"] = "keep-alive"
 
         log.debug("Making request: %s %s" % (request_type, handler))
+        print("Making request: %s %s | %s" % (request_type, handler, body))
 
         if self.user_agent:
             self.headers["User-Agent"] = self.user_agent
@@ -1104,6 +1110,7 @@ class BaseRestLib:
         # Try to do request, when it wasn't possible, because server closed connection,
         # then close existing connection and try it once again
         try:
+            print("Full Request: %s %s | %s %s" % (request_type, self.host + handler, final_headers, body))
             result, response = self._make_request(
                 request_type, handler, final_headers, body, cert_key_pairs, description
             )
@@ -1125,6 +1132,7 @@ class BaseRestLib:
             )
         response_log = '%s, request="%s %s"' % (response_log, request_type, handler)
         log.debug(response_log)
+        print(response_log)
 
         connection_http_header = response.getheader("Connection", default="").lower()
         if connection_http_header == "keep-alive":
@@ -1156,6 +1164,8 @@ class BaseRestLib:
         # FIXME: we should probably do this in a wrapper method
         # so we can use the request method for normal http
 
+        print("result pre-validation")
+        print(result)
         self.validateResult(result, request_type, handler)
 
         return result
@@ -1732,6 +1742,17 @@ class UEPConnection(BaseConnection):
         """
         method = "/consumers/%s/profiles" % self.sanitize(consumer_uuid)
         return self.conn.request_put(method, profile, description=_("Updating profile information"))
+
+    def postDeviceAuth(self, client_id: str, scope: str) -> dict:
+        method = "/realms/redhat-external/protocol/openid-connect/auth"
+        params = {
+            "client_id": client_id,
+            "scope": scope
+        }
+        headers = {
+            "Content-type": "application/x-www-form-urlencoded"
+        }
+        return self.conn.request_post(method, params, headers, description=_("Attempting OAuth device authorization"))
 
     def getConsumer(self, uuid: str) -> dict:
         """

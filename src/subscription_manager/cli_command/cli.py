@@ -354,6 +354,7 @@ class CliCommand(AbstractCLICommand):
             connection_info["proxy_password_arg"] = self.proxy_password
         if self.server_hostname:
             connection_info["host"] = self.server_hostname
+            print(connection_info["host"])
         if self.server_port:
             connection_info["ssl_port"] = self.server_port
         if self.server_prefix:
@@ -420,6 +421,7 @@ class CliCommand(AbstractCLICommand):
             system_exit(os.EX_SOFTWARE, exc)
         except (CertificateException, ssl.SSLError) as e:
             log.error(e)
+            print(e)
             system_exit(os.EX_SOFTWARE, _("System certificates corrupted. Please reregister."))
         except connection.GoneException as ge:
             if ge.deleted_id == self.identity.uuid:

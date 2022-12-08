@@ -37,7 +37,7 @@ from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import handle_exception, conf
 from subscription_manager.cli_command.environments import MULTI_ENV
 from subscription_manager.cli_command.list import show_autosubscribe_output
-from subscription_manager.cli_command.user_pass import UserPassCommand
+from subscription_manager.cli_command.device_auth import DeviceAuthCommand
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_CAPABILITY
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.utils import (
@@ -54,7 +54,7 @@ from subscription_manager.exceptions import ExceptionMapper
 log = logging.getLogger(__name__)
 
 
-class RegisterAuthCommand(UserPassCommand):
+class RegisterAuthCommand(DeviceAuthCommand):
     def __init__(self):
         shortdesc = get_branding().CLI_REGISTER_DEVICE_AUTH
 
@@ -140,8 +140,6 @@ class RegisterAuthCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("This system is already registered. Use --force to override"))
         elif self.options.consumername == "":
             system_exit(os.EX_USAGE, _("Error: system name can not be empty."))
-        elif (self.options.username or self.options.token) and self.options.activation_keys:
-            system_exit(os.EX_USAGE, _("Error: Activation keys do not require user credentials."))
         elif self.options.consumerid and self.options.activation_keys:
             system_exit(
                 os.EX_USAGE, _("Error: Activation keys can not be used with previously registered IDs.")
@@ -308,122 +306,7 @@ class RegisterAuthCommand(UserPassCommand):
         if previously_registered:
             print(_("All local data removed"))
 
-        # Proceed with new registration:
-        try:
-            if self.options.token:
-                admin_cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
-            elif not self.options.activation_keys:
-                hostname = conf["server"]["hostname"]
-                if ":" in hostname:
-                    normalized_hostname = "[{hostname}]".format(hostname=hostname)
-                else:
-                    normalized_hostname = hostname
-                print(
-                    _("Registering to: {hostname}:{port}{prefix}").format(
-                        hostname=normalized_hostname,
-                        port=conf["server"]["port"],
-                        prefix=conf["server"]["prefix"],
-                    )
-                )
-                self.cp_provider.set_user_pass(self.username, self.password)
-                admin_cp = self.cp_provider.get_basic_auth_cp()
-            else:
-                admin_cp = self.cp_provider.get_no_auth_cp()
-
-            # This is blocking and not async, which aside from blocking here, also
-            # means things like following name owner changes gets weird.
-            service = register.RegisterService(admin_cp)
-
-            if self.options.consumerid:
-                log.debug("Registering as existing consumer: {id}".format(id=self.options.consumerid))
-                consumer = service.register(None, consumerid=self.options.consumerid)
-            else:
-                if self.options.org:
-                    owner_key = self.options.org
-                else:
-                    owner_key = service.determine_owner_key(
-                        username=self.username, get_owner_cb=self._get_owner_cb, no_owner_cb=self._no_owner_cb
-                    )
-                environment_ids = self._process_environments(admin_cp, owner_key)
-                consumer = service.register(
-                    owner_key,
-                    activation_keys=self.options.activation_keys,
-                    environments=environment_ids,
-                    force=self.options.force,
-                    name=self.options.consumername,
-                    consumer_type=self.options.consumertype,
-                    service_level=self.options.service_level,
-                )
-        except (connection.RestlibException, exceptions.ServiceError) as re:
-            log.exception(re)
-
-            system_exit(os.EX_SOFTWARE, re)
-        except Exception as e:
-            handle_exception(_("Error during registration: {e}").format(e=e), e)
-        else:
-            consumer_info = identity.ConsumerIdentity(consumer["idCert"]["key"], consumer["idCert"]["cert"])
-            print(_("The system has been registered with ID: {id}").format(id=consumer_info.getConsumerId()))
-            print(_("The registered system name is: {name}").format(name=consumer_info.getConsumerName()))
-            if self.options.service_level:
-                print(_("Service level set to: {level}").format(level=self.options.service_level))
-
-        # We have new credentials, restart virt-who
-        restart_virt_who()
-
-        # get a new UEP as the consumer
-        self.cp = self.cp_provider.get_consumer_auth_cp()
-
-        # log the version of the server we registered to
-        self.log_server_version()
-
-        facts = inj.require(inj.FACTS)
-
-        # FIXME: can these cases be replaced with invoking
-        # FactsLib (or a FactsManager?)
-        # Must update facts to clear out the old ones:
-        if self.options.consumerid:
-            log.debug("Updating facts")
-            #
-            # FIXME: Need a ConsumerFacts.sync or update or something
-            # TODO: We register, with facts, then update facts again...?
-            #       Are we trying to sync potential new or dynamic facts?
-            facts.update_check(self.cp, consumer["uuid"], force=True)
-
-        # Facts and installed products went out with the registration request,
-        # manually write caches to disk:
-        # facts service job now(soon)
-        facts.write_cache()
-        self.installed_mgr.update_check(self.cp, consumer["uuid"])
-
-        if self.options.release:
-            # TODO: grab the list of valid options, and check
-            self.cp.updateConsumer(consumer["uuid"], release=self.options.release)
-
-        if self.autoattach:
-            self._do_auto_attach(consumer)
-
-        if (
-            self.options.consumerid
-            or self.options.activation_keys
-            or self.autoattach
-            or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY)
-        ):
-            log.debug("System registered, updating entitlements if needed")
-            # update certs, repos, and caches.
-            # FIXME: aside from the overhead, should this be cert_action_client.update?
-            self.entcertlib.update()
-
-        self._upload_profile(consumer)
-
-        subscribed = 0
-        if self.options.activation_keys or self.autoattach:
-            # update with the latest cert info
-            self.sorter = inj.require(inj.CERT_SORTER)
-            self.sorter.force_cert_check()
-            subscribed = show_autosubscribe_output(self.cp, self.identity)
-
-        self._request_validity_check()
-        return subscribed
+        return self._get_oauth()
 
     def _prompt_for_environment(self):
         """

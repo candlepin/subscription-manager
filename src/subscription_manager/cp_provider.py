@@ -45,6 +45,7 @@ class CPProvider:
     """
 
     consumer_auth_cp: Optional[connection.UEPConnection] = None
+    oauth_cp: Optional[connection.UEPConnection] = None
     basic_auth_cp: Optional[connection.UEPConnection] = None
     no_auth_cp: Optional[connection.UEPConnection] = None
     content_connection: Optional[connection.ContentConnection] = None
@@ -140,6 +141,7 @@ class CPProvider:
         self.basic_auth_cp = None
         self.no_auth_cp = None
         self.keycloak_auth_cp = None
+        self.oauth_cp = None
 
     @staticmethod
     def get_client_version() -> str:
@@ -178,6 +180,9 @@ class CPProvider:
         if self.keycloak_auth_cp is not None:
             log.debug("Closing auth/keycloak connection...")
             self.keycloak_auth_cp.conn.close_connection()
+        if self.no_auth_cp is not None:
+            log.debug("Closing auth/keycloak connection...")
+            self.no_auth_cp.conn.close_connection()
 
     def get_consumer_auth_cp(self) -> connection.UEPConnection:
         if not self.consumer_auth_cp:
@@ -279,6 +284,24 @@ class CPProvider:
                 auth_type=connection.ConnectionType.NO_AUTH,
             )
         return self.no_auth_cp
+
+    def get_oauth_cp(self) -> connection.UEPConnection:
+        if not self.oauth_cp:
+            self.oauth_cp = connection.UEPConnection(
+                host=self.server_hostname,
+                ssl_port=self.server_port,
+                handler=self.server_prefix,
+                proxy_hostname=self.proxy_hostname,
+                proxy_port=self.proxy_port,
+                proxy_user=self.proxy_user,
+                proxy_password=self.proxy_password,
+                correlation_id=self.correlation_id,
+                no_proxy=self.no_proxy,
+                client_version=self.get_client_version(),
+                dbus_sender=self.get_dbus_sender(),
+                auth_type=connection.ConnectionType.DEVICE_AUTH,
+            )
+        return self.oauth_cp
 
     def get_content_connection(self) -> connection.ContentConnection:
         if not self.content_connection:
