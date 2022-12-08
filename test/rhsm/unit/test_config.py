@@ -466,3 +466,21 @@ class InContainerTests(unittest.TestCase):
 
         exists_mock.side_effect = exists_file
         self.assertTrue(in_container())
+
+    @patch.dict(
+        "os.environ",
+        {
+            "KUBERNETES_PORT": "tcp://10.0.0.1:443",
+            "KUBERNETES_SERVICE_HOST": "10.0.0.1",
+            "KUBERNETES_SERVICE_PORT": "443",
+            "container": "oci",
+        },
+        clear=True,
+    )
+    @patch("os.path.exists")
+    def test_ocp(self, exists_mock):
+        def exists_file(path):
+            return path == "/run/.containerenv"
+
+        exists_mock.side_effect = exists_file
+        self.assertFalse(in_container())
