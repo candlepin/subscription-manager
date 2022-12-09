@@ -1059,6 +1059,7 @@ class BaseRestLib:
         headers: dict = None,
         cert_key_pairs: Optional[List[Tuple[str, str]]] = None,
         description: Optional[str] = None,
+        ignore_validation: bool = False,
     ) -> Dict[str, Any]:
         """
         Make HTTP request to candlepin server
@@ -1096,7 +1097,6 @@ class BaseRestLib:
             self.headers["Connection"] = "keep-alive"
 
         log.debug("Making request: %s %s" % (request_type, handler))
-        print("Making request: %s %s | %s" % (request_type, handler, body))
 
         if self.user_agent:
             self.headers["User-Agent"] = self.user_agent
@@ -1110,7 +1110,7 @@ class BaseRestLib:
         # Try to do request, when it wasn't possible, because server closed connection,
         # then close existing connection and try it once again
         try:
-            print("Full Request: %s %s | %s %s" % (request_type, self.host + handler, final_headers, body))
+            print("Full Request:\n%s %s | %s %s" % (request_type, self.host + handler, final_headers, body))
             result, response = self._make_request(
                 request_type, handler, final_headers, body, cert_key_pairs, description
             )
@@ -1132,7 +1132,7 @@ class BaseRestLib:
             )
         response_log = '%s, request="%s %s"' % (response_log, request_type, handler)
         log.debug(response_log)
-        print(response_log)
+        # print(response_log)
 
         connection_http_header = response.getheader("Connection", default="").lower()
         if connection_http_header == "keep-alive":
@@ -1164,9 +1164,10 @@ class BaseRestLib:
         # FIXME: we should probably do this in a wrapper method
         # so we can use the request method for normal http
 
-        print("result pre-validation")
-        print(result)
-        self.validateResult(result, request_type, handler)
+        # print("result pre-validation")
+        # print(result)
+        if not ignore_validation:
+            self.validateResult(result, request_type, handler)
 
         return result
 
@@ -1743,16 +1744,33 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s/profiles" % self.sanitize(consumer_uuid)
         return self.conn.request_put(method, profile, description=_("Updating profile information"))
 
-    def postDeviceAuth(self, client_id: str, scope: str) -> dict:
-        method = "/realms/redhat-external/protocol/openid-connect/auth"
+    def initializeDeviceAuth(self, client_id: str, scope: str) -> dict:
+        method = "/realms/redhat-external/protocol/openid-connect/auth/device"
         params = {
             "client_id": client_id,
             "scope": scope
         }
         headers = {
+            "Accept": "application/json",
             "Content-type": "application/x-www-form-urlencoded"
         }
-        return self.conn.request_post(method, params, headers, description=_("Attempting OAuth device authorization"))
+        return self.conn.request_post(method, params, headers, description=_("Attempting OAuth device authorization request"))
+
+    def pollDeviceAuthAccessToken(self, client_id: str, device_code: str):
+        method = "/realms/redhat-external/protocol/openid-connect/token"
+        params = {
+            "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+            "client_id": client_id,
+            "device_code": device_code
+        }
+        headers = {
+            "Content-type": "application/x-www-form-urlencoded"
+        }
+        result: Dict[str, Any] = self.conn._request(
+            "POST", method, params, headers=headers, description=_("Attempting OAuth device access token request"), ignore_validation=True
+        )
+        return result
+        # return self.conn.request_post(method, params, headers, description=_("Attempting OAuth device access token request"))
 
     def getConsumer(self, uuid: str) -> dict:
         """

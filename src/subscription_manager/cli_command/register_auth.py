@@ -29,15 +29,14 @@ from rhsm.https import ssl
 from rhsm.utils import LiveStatusMessage
 
 from rhsmlib.facts.hwprobe import ClassicCheck
-from rhsmlib.services import attach, unregister, register, exceptions
+from rhsmlib.services import attach, unregister, register, exceptions, device_auth
 
 from subscription_manager import identity
 from subscription_manager.branding import get_branding
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import handle_exception, conf
 from subscription_manager.cli_command.environments import MULTI_ENV
-from subscription_manager.cli_command.list import show_autosubscribe_output
-from subscription_manager.cli_command.device_auth import DeviceAuthCommand
+from subscription_manager.cli_command.cli import CliCommand
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_CAPABILITY
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.utils import (
@@ -49,17 +48,16 @@ from subscription_manager.utils import (
     is_process_running,
 )
 from subscription_manager.cli_command.environments import check_set_environment_names
-from subscription_manager.exceptions import ExceptionMapper
 
 log = logging.getLogger(__name__)
 
 
-class RegisterAuthCommand(DeviceAuthCommand):
+class RegisterAuthCommand(CliCommand):
     def __init__(self):
         shortdesc = get_branding().CLI_REGISTER_DEVICE_AUTH
 
         super().__init__("register_auth", shortdesc, True)
-
+        
         self._add_url_options()
         self.parser.add_argument(
             "--baseurl",
@@ -140,6 +138,8 @@ class RegisterAuthCommand(DeviceAuthCommand):
             system_exit(os.EX_USAGE, _("This system is already registered. Use --force to override"))
         elif self.options.consumername == "":
             system_exit(os.EX_USAGE, _("Error: system name can not be empty."))
+        elif (self.options.username or self.options.token) and self.options.activation_keys:
+            system_exit(os.EX_USAGE, _("Error: Activation keys do not require user credentials."))
         elif self.options.consumerid and self.options.activation_keys:
             system_exit(
                 os.EX_USAGE, _("Error: Activation keys can not be used with previously registered IDs.")
@@ -173,90 +173,6 @@ class RegisterAuthCommand(DeviceAuthCommand):
             if not self.cp.has_capability(MULTI_ENV) and "," in self.options.environments:
                 system_exit(os.EX_USAGE, _("The entitlement server does not allow multiple environments"))
 
-    def persist_server_options(self):
-        """
-        If the user provides a --serverurl or --baseurl, we want to persist it
-        to the config file so that future commands will use the value.
-        """
-        return True
-
-    def _do_auto_attach(self, consumer):
-        """
-        Try to do auto-attach, when it was requested using --auto-attach CLI option
-        :return: None
-        """
-
-        # Do not try to do auto-attach, when simple content access mode is used
-        # Only print info message to stdout
-        if is_simple_content_access(uep=self.cp, identity=self.identity):
-            self._print_ignore_auto_attach_message()
-            return
-
-        if "serviceLevel" not in consumer and self.options.service_level:
-            system_exit(
-                os.EX_UNAVAILABLE,
-                _(
-                    "Error: The --servicelevel option is not supported "
-                    "by the server. Did not complete your request."
-                ),
-            )
-        try:
-            # We don't call auto_attach with self.option.service_level, because it has been already
-            # set during service.register() call
-            attach.AttachService(self.cp).attach_auto(service_level=None)
-        except connection.RestlibException as rest_lib_err:
-            mapped_message: str = ExceptionMapper().get_message(rest_lib_err)
-            print_error(mapped_message)
-        except Exception:
-            log.exception("Auto-attach failed")
-            raise
-
-    def _upload_profile_blocking(self, consumer: dict) -> None:
-        """
-        Try to upload DNF profile to server
-        """
-        with LiveStatusMessage(_("Uploading DNF profile")):
-            try:
-                profile_mgr = inj.require(inj.PROFILE_MANAGER)
-                # 767265: always force an upload of the packages when registering
-                profile_mgr.update_check(self.cp, consumer["uuid"], True)
-            except RemoteServerException as err:
-                # When it is not possible to upload profile ATM, then print only error about this
-                # to rhsm.log. The rhsmcertd will try to upload it next time.
-                log.error("Unable to upload profile: {err!s}".format(err=err))
-
-    def _upload_profile(self, consumer: dict) -> None:
-        """
-        Try to upload DNF profile to server, when it is supported by server. This method
-        tries to "outsource" this activity to rhsmcertd first. When it is not possible due to
-        various reasons, then we try to do it ourselves in blocking way.
-        """
-        # First try to get PID of rhsmcertd from lock file
-        try:
-            with open("/var/lock/subsys/rhsmcertd", "r") as lock_file:
-                rhsmcertd_pid = int(lock_file.readline())
-        except (IOError, ValueError) as err:
-            log.info(f"Unable to read rhsmcertd lock file: {err}")
-        else:
-            if is_process_running("rhsmcertd", rhsmcertd_pid) is True:
-                # This will only send SIGUSR1 signal, which triggers gathering and uploading
-                # of DNF profile by rhsmcertd. We try to "outsource" this activity to rhsmcertd
-                # server to not block registration process
-                log.debug("Sending SIGUSR1 signal to rhsmcertd process")
-                try:
-                    os.kill(rhsmcertd_pid, signal.SIGUSR1)
-                except ProcessLookupError as err:
-                    # When rhsmcertd process was terminated between calling is_process_running()
-                    # and sending signal using kill(), then fallback to uploading profile from
-                    # current process
-                    log.debug(f"Unable to send signal SIGUSR1 to rhsmcertd process {rhsmcertd_pid}: {err}")
-                    self._upload_profile_blocking(consumer)
-            else:
-                # When rhsmcertd process is not running, then fallback to uploading profile from
-                # current process
-                log.info(f"rhsmcertd process with given PID: {rhsmcertd_pid} is not running")
-                self._upload_profile_blocking(consumer)
-
     def _do_command(self):
         """
         Executes the command.
@@ -268,140 +184,45 @@ class RegisterAuthCommand(DeviceAuthCommand):
         if ClassicCheck().is_registered_with_classic():
             print(get_branding().REGISTERED_TO_OTHER_WARNING)
 
-        self._validate_options()
+        # self._validate_options()
 
         # gather installed products info
         self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
 
-        previously_registered = False
         if self.is_registered() and self.options.force:
-            previously_registered = True
-            # First let's try to un-register previous consumer; if this fails
-            # we'll let the error bubble up, so that we don't blindly re-register.
-            # managerlib.unregister handles the special case that the consumer has already been removed.
-            old_uuid = self.identity.uuid
+            print("Consumer is already registered, exiting.")
+            return
 
-            print(
-                _("Unregistering from: {hostname}:{port}{prefix}").format(
-                    hostname=conf["server"]["hostname"],
-                    port=conf["server"]["port"],
-                    prefix=conf["server"]["prefix"],
-                )
-            )
-            try:
-                unregister.UnregisterService(self.cp).unregister()
-                self.entitlement_dir.__init__()
-                self.product_dir.__init__()
-                log.info("--force specified, unregistered old consumer: {old_uuid}".format(old_uuid=old_uuid))
-                print(_("The system with UUID {old_uuid} has been unregistered").format(old_uuid=old_uuid))
-            except ssl.SSLError as e:
-                # since the user can override serverurl for register, a common use case
-                # is to try to switch servers using register --force... However, this
-                # normally cannot successfully unregister since the servers are different.
-                handle_exception("Unregister failed: {e}".format(e=e), e)
-            except Exception as e:
-                handle_exception("Unregister failed", e)
-
-        self.cp_provider.clean()
-        if previously_registered:
-            print(_("All local data removed"))
-
-        return self._get_oauth()
-
-    def _prompt_for_environment(self):
-        """
-        By breaking this code out, we can write cleaner tests
-        """
-        if not is_interactive():
-            system_exit(
-                os.EX_USAGE,
-                _("Error: --environments is a required parameter in non-interactive mode."),
-            )
-
-        if self.cp.has_capability(MULTI_ENV):
-            environment = input(_("Environments: ")).replace(" ", "")
+        # Create instance of the OAuth register service class.
+        device_auth_service = device_auth.OAuthRegisterService(self.cp, self.cp_provider)
+        # Check with candlepin server if device auth is supported.
+        auth_capability_data = device_auth_service.get_device_auth_capability()
+        # Initialize the device auth process which should return a dictionary if the server supports device auth,
+        # otherwise returns None.
+        oauth_data = device_auth_service.initialize_device_auth(auth_capability_data)
+        if oauth_data is None:
+            print("The server does not support OAuth device auth.")
+            return
+        # Display the oauth login prompt to the user.
+        self._display_oauth_login(oauth_data.get("verification_uri"), oauth_data.get("user_code"))
+        # Poll the oauth provider until the user has entered a login code.
+        access_token = device_auth_service.poll_oauth_provider(auth_capability_data.get("client_id"), oauth_data)
+        if access_token:
+            print(access_token)
+            print("The device has been authorized.")
         else:
-            environment = input(_("Environment: ")).strip()
-        readline.clear_history()
-        return environment or self._prompt_for_environment()
+            print("The device failed to authorize.")
 
-    def _process_environments(self, admin_cp, owner_key):
-        """
-        Confirms that environment(s) have been chosen if they are supported
-        and a choice needs to be made
-        """
-        supported_resources = get_supported_resources()
-        supports_environments = "environments" in supported_resources
+        return None
 
-        if not supports_environments:
-            if self.options.environments is not None:
-                system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
-            return None
-
-        # We have an activation key, so don't need to fill/check the bits
-        # related to environments, as they are part of the activation key
-        if self.options.activation_keys:
-            return None
-
-        all_env_list = admin_cp.getEnvironmentList(owner_key)
-        if self.options.environments:
-            environments = self.options.environments
-        else:
-            # If there aren't any environments, don't prompt for one
-            if not all_env_list:
-                return None
-
-            # If the envronment list is len 1, pick that environment
-            if len(all_env_list) == 1:
-                log.debug(
-                    'Using the only available environment: "{name}"'.format(name=all_env_list[0]["name"])
-                )
-                return all_env_list[0]["id"]
-
-            env_name_list = [env["name"] for env in all_env_list]
-            print(
-                _('Hint: Organization "{key}" contains following environments: {list}').format(
-                    key=owner_key, list=", ".join(env_name_list)
-                )
-            )
-            environments = self._prompt_for_environment()
-            if not self.cp.has_capability(MULTI_ENV) and "," in environments:
-                system_exit(os.EX_USAGE, _("The entitlement server does not allow multiple environments"))
-
-        return check_set_environment_names(all_env_list, environments)
-
-    @staticmethod
-    def _no_owner_cb(username):
-        """
-        Method called, when there it no owner in the list of owners for given user
-        :return: None
-        """
-        system_exit(1, _("{name} cannot register with any organizations.").format(name=username))
-
-    def _get_owner_cb(self, owners):
-        """
-        Callback method used, when it is necessary to specify owner (organization)
-        during registration
-        :param owners: list of owners (organizations)
-        :return:
-        """
-        # Print list of owners to the console
-        org_keys = [owner["key"] for owner in owners]
-        print(
-            _('Hint: User "{name}" is member of following organizations: {orgs}').format(
-                name=self.username, orgs=", ".join(org_keys)
-            )
-        )
-
-        # Read the owner key from stdin or raise a system error if in a non-interactive session.
-        if not is_interactive():
-            system_exit(
-                os.EX_USAGE,
-                _("Error: --org is a required parameter in non-interactive mode."),
-            )
-
-        owner_key = None
-        while not owner_key:
-            owner_key = input(_("Organization: "))
-            readline.clear_history()
-        return owner_key
+    def _display_oauth_login(self, verification_uri: str, user_code: str):
+        if verification_uri is None:
+            raise ValueError("Error: A verification uri must be provided to display in the oauth login message.")
+        if user_code is None:
+            raise ValueError("Error: A oauth user login code must be provided to display in the oauth login message.")
+        # This implementation currently only displays the verification uri and login code
+        # and can be expanded to display a QR code.
+        print(_("Using a browser on another device, visit:\n{verification_uri}\nAnd enter the following code to log in:\n{user_code}").format(
+            verification_uri=verification_uri,
+            user_code=user_code
+        ))
