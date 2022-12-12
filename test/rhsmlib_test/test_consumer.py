@@ -14,17 +14,13 @@ from __future__ import print_function, division, absolute_import
 # in this software or its documentation.
 
 import mock
-import dbus
 
 from rhsmlib.services import consumer
-from rhsmlib.dbus import constants
 from rhsmlib.dbus.objects.consumer import ConsumerDBusObject
 
 from subscription_manager import injection as inj
 from subscription_manager.identity import Identity
-from test.rhsmlib_test.base import InjectionMockingTest, DBusObjectTest
-
-from test import subman_marker_dbus
+from test.rhsmlib_test.base import DBusServerStubProvider, InjectionMockingTest
 
 
 class TestConsumerService(InjectionMockingTest):
@@ -60,44 +56,24 @@ class TestConsumerService(InjectionMockingTest):
         self.assertEqual(uuid, "")
 
 
-@subman_marker_dbus
-class TestConsumerDBusObject(DBusObjectTest, InjectionMockingTest):
-    def setUp(self):
-        super(TestConsumerDBusObject, self).setUp()
-        self.proxy = self.proxy_for(ConsumerDBusObject.default_dbus_path)
-        self.interface = dbus.Interface(self.proxy, constants.CONSUMER_INTERFACE)
+class TestConsumerDbusObject(DBusServerStubProvider):
+    dbus_class = ConsumerDBusObject
+    dbus_class_kwargs = {}
 
-        consumer_patcher = mock.patch('rhsmlib.dbus.objects.consumer.Consumer', autospec=True)
-        self.mock_consumer = consumer_patcher.start().return_value
-        self.addCleanup(consumer_patcher.stop)
+    @classmethod
+    def setUpClass(cls) -> None:
+        get_consumer_uuid_patch = mock.patch(
+            "rhsmlib.dbus.objects.consumer.Consumer.get_consumer_uuid",
+            name="get_consumer_uuid",
+        )
+        cls.patches["get_consumer_uuid"] = get_consumer_uuid_patch.start()
+        cls.addClassCleanup(get_consumer_uuid_patch)
 
-    def _create_mock_identity(self):
-        self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
-        self.mock_identity.is_valid.return_value = True
-        self.mock_identity.uuid = "43b30b32-86cf-459e-9310-cb4182c23c4a"
+        super().setUpClass()
 
-    def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            if not hasattr(self, 'mock_identity'):
-                self._create_mock_identity()
-            return self.mock_identity
-        else:
-            return None
+    def test_GetUuid(self):
+        self.patches["get_consumer_uuid"].return_value = "fake-uuid"
 
-    def dbus_objects(self):
-        return [ConsumerDBusObject]
-
-    def test_get_consumer_uuid(self):
-        """
-        Test of getting consumer UUID
-        """
-        expected_result = "43b30b32-86cf-459e-9310-cb4182c23c4a"
-
-        def assertions(*args):
-            result = args[0]
-            self.assertEqual(result, expected_result)
-
-        self.mock_consumer.get_consumer_uuid.return_value = expected_result
-
-        dbus_method_args = ['']
-        self.dbus_request(assertions, self.interface.GetUuid, dbus_method_args)
+        expected = "fake-uuid"
+        result = self.obj.GetUuid.__wrapped__(self.obj, self.LOCALE)
+        self.assertEqual(expected, result)
