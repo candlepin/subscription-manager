@@ -20,6 +20,7 @@ import socket
 import tempfile
 from typing import Optional
 
+import dbus
 import mock
 
 import subscription_manager.injection as inj
@@ -808,6 +809,13 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
         cls.patches["register"] = register_patch.start()
         cls.addClassCleanup(register_patch.stop)
 
+        unregister_patch = mock.patch(
+            "rhsmlib.services.unregister.UnregisterService.unregister",
+            name="unregister",
+        )
+        cls.patches["unregister"] = unregister_patch.start()
+        cls.addClassCleanup(unregister_patch.stop)
+
         is_registered_patch = mock.patch(
             "rhsmlib.dbus.base_object.BaseObject.is_registered",
             name="is_registered",
@@ -850,6 +858,26 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
 
         result = self.obj.Register.__wrapped__(self.obj, "org", "username", "password", {}, {}, self.LOCALE)
         self.assertEqual(expected, json.loads(result))
+
+    def test_Register__with_force_option(self):
+        expected = json.loads(CONSUMER_CONTENT_JSON)
+        self.patches["register"].return_value = expected
+        self.patches["unregister"].return_value = None
+        self.patches["is_registered"].return_value = True
+
+        result = self.obj.Register.__wrapped__(
+            self.obj, "org", "username", "password", {"force": True}, {}, self.LOCALE
+        )
+        self.assertEqual(expected, json.loads(result))
+
+    def test_Register__already_registered(self):
+        expected = json.loads(CONSUMER_CONTENT_JSON)
+        self.patches["register"].return_value = expected
+        self.patches["unregister"].return_value = None
+        self.patches["is_registered"].return_value = True
+
+        with self.assertRaisesRegex(dbus.DBusException, "This system is already registered."):
+            self.obj.Register.__wrapped__(self.obj, "org", "username", "password", {}, {}, self.LOCALE)
 
     def test_Register__enable_content(self):
         """Test including 'enable_content' in entitlement mode with no content."""
@@ -909,6 +937,37 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
             "username",
             ["key1", "key2"],
             {},
+            {"host": "localhost", "port": "8443", "handler": "/candlepin"},
+            self.LOCALE,
+        )
+        self.assertEqual(expected, json.loads(result))
+
+    def test_RegisterWithActivationKeys__already_registered(self):
+        expected = json.loads(CONSUMER_CONTENT_JSON)
+        self.patches["is_registered"].return_value = True
+        self.patches["register"].return_value = expected
+
+        with self.assertRaisesRegex(dbus.DBusException, "This system is already registered."):
+            self.obj.RegisterWithActivationKeys.__wrapped__(
+                self.obj,
+                "username",
+                ["key1", "key2"],
+                {},
+                {"host": "localhost", "port": "8443", "handler": "/candlepin"},
+                self.LOCALE,
+            )
+
+    def test_RegisterWithActivationKeys__with_force_option(self):
+        expected = json.loads(CONSUMER_CONTENT_JSON)
+        self.patches["is_registered"].return_value = True
+        self.patches["unregister"].return_value = None
+        self.patches["register"].return_value = expected
+
+        result = self.obj.RegisterWithActivationKeys.__wrapped__(
+            self.obj,
+            "username",
+            ["key1", "key2"],
+            {"force": True},
             {"host": "localhost", "port": "8443", "handler": "/candlepin"},
             self.LOCALE,
         )
