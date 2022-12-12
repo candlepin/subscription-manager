@@ -27,7 +27,7 @@ import pytest
 
 from rhsm import connection
 from rhsm.connection import UEPConnection, Restlib, ConnectionException, ConnectionSetupException, \
-    BadCertificateException, RestlibException, GoneException, NetworkException, \
+    BadCertificateException, RestlibException, GoneException, UnknownContentException, \
     RemoteServerException, drift_check, ExpiredIdentityCertException, UnauthorizedException, \
     ForbiddenException, AuthenticationException, RateLimitExceededException, ContentConnection, NoValidEntitlement
 
@@ -537,7 +537,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             response['headers'] = headers
         self.restlib.validateResponse(response, self.request_type, self.handler)
 
-    # All empty responses that aren't 200/204 raise a NetworkException
+    # All empty responses that aren't 200/204 raise a UnknownContentException
     def test_200_empty(self):
         # this should just not raise any exceptions
         self.vr("200", "")
@@ -573,12 +573,12 @@ class RestlibValidateResponseTests(unittest.TestCase):
     #     self.vr("301", "")
 
     def test_400_empty(self):
-        # FIXME: not sure 400 makes sense as "NetworkException"
-        #        we check for NetworkException in several places in
+        # FIXME: not sure 400 makes sense as "UnknownContentException"
+        #        we check for UnknownContentException in several places in
         #        addition to RestlibException and RemoteServerException
         #        I think maybe a 400 ("Bad Request") should be a
         #        RemoteServerException
-        self.assertRaises(NetworkException,
+        self.assertRaises(UnknownContentException,
                           self.vr,
                           "400",
                           "")
@@ -750,7 +750,7 @@ class RestlibValidateResponseTests(unittest.TestCase):
             self.fail("RemoteServerException expected")
 
     def test_599_emtpty(self):
-        self.assertRaises(NetworkException, self.vr, "599", "")
+        self.assertRaises(UnknownContentException, self.vr, "599", "")
 
 
 class RestlibTests(unittest.TestCase):
@@ -833,6 +833,7 @@ class BadCertificateExceptionTest(ExceptionTest):
 
     def _create_exception(self, *args, **kwargs):
         kwargs['cert_path'] = "/etc/sdfsd"
+        kwargs["ssl_exc"] = ssl.SSLError(5, "some ssl error")
         return self.exception(*args, **kwargs)
 
 

@@ -20,7 +20,7 @@ import unittest
 
 from test.rhsm.unit import certdata
 from rhsm.certificate import create_from_pem, CertificateException
-from rhsm.certificate2 import Content, EntitlementCertificate, IdentityCertificate, Product, ProductCertificate
+from rhsm.certificate2 import Content, EntitlementCertificate, IdentityCertificate, Product, ProductCertificate, CertificateLoadingError
 
 from mock import patch
 
@@ -84,7 +84,7 @@ class V1EntCertTests(unittest.TestCase):
         self.assertRaises(CertificateException, create_from_pem, "")
 
     def test_junk_contents_throws_exception(self):
-        self.assertRaises(CertificateException, create_from_pem,
+        self.assertRaises(CertificateLoadingError, create_from_pem,
                 "DOESTHISLOOKLIKEACERTTOYOU?")
 
     def test_factory_method_on_ent_cert(self):

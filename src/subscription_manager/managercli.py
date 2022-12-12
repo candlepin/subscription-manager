@@ -33,12 +33,12 @@ import json
 from time import localtime, strftime, strptime
 
 from rhsm.certificate import CertificateException
-from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
+from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE, CertificateLoadingError
 from rhsm.https import ssl
 
 import rhsm.config
 import rhsm.connection as connection
-from rhsm.connection import ProxyException, UnauthorizedException, ConnectionException, RemoteServerException
+from rhsm.connection import ProxyException, UnauthorizedException, ConnectionException, RemoteServerException, ConnectionOSErrorException
 from rhsm.utils import cmd_name, remove_scheme, ServerUrlParseError
 
 from subscription_manager import identity
@@ -229,10 +229,8 @@ def handle_exception(msg, ex):
     log.error(msg)
     log.exception(ex)
 
-    exception_mapper = ExceptionMapper()
-
-    mapped_message: str = exception_mapper.get_message(ex)
-    system_exit(os.EX_SOFTWARE, mapped_message)
+    # Directly pass the exception to system_exit for exception message formatting and exit.
+    system_exit(os.EX_SOFTWARE, ex)
 
 
 def show_autosubscribe_output(uep, identity):
@@ -535,8 +533,8 @@ class CliCommand(AbstractCLICommand):
                 except MissingCaCertException:
                     system_exit(os.EX_CONFIG,
                                 _("Error: CA certificate for subscription service has not been installed."))
-                except ProxyException:
-                    system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+                except (ProxyException, ConnectionOSErrorException) as exc:
+                    system_exit(os.EX_UNAVAILABLE, exc)
 
         else:
             self.cp = None
@@ -552,6 +550,8 @@ class CliCommand(AbstractCLICommand):
 
             if return_code is not None:
                 return return_code
+        except CertificateLoadingError as exc:
+            system_exit(os.EX_SOFTWARE, exc)
         except (CertificateException, ssl.SSLError) as e:
             log.error(e)
             system_exit(os.EX_SOFTWARE, _('System certificates corrupted. Please reregister.'))
@@ -712,8 +712,8 @@ class AbstractSyspurposeCommand(CliCommand):
             # When system is registered, then try to get valid fields from cache file
             try:
                 valid_fields = get_syspurpose_valid_fields(uep=self.cp, identity=self.identity)
-            except ProxyException:
-                system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+            except ProxyException as exc:
+                system_exit(os.EX_UNAVAILABLE, exc)
         elif self.options.username and self.options.password and self.cp is not None:
             # Try to get current organization key. It is property of OrgCommand.
             # Every Syspurpose command has to be subclass of OrgCommand too
@@ -723,10 +723,9 @@ class AbstractSyspurposeCommand(CliCommand):
                 server_response = self.cp.getOwnerSyspurposeValidFields(org_key)
             except connection.RestlibException as rest_err:
                 log.warning("Unable to get list of valid fields using REST API: %s" % rest_err)
-                mapped_message: str = ExceptionMapper().get_message(rest_err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
-            except ProxyException:
-                system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+                system_exit(os.EX_SOFTWARE, rest_err)
+            except ProxyException as exc:
+                system_exit(os.EX_UNAVAILABLE, exc)
             else:
                 if 'systemPurposeAttributes' in server_response:
                     server_response = post_process_received_data(server_response)
@@ -949,8 +948,7 @@ class AbstractSyspurposeCommand(CliCommand):
             log.exception(re)
             if getattr(self.options, 'list', None):
                 log.error("Error: Unable to retrieve %s from server: %s" % (self.attr, err))
-                mapped_message: str = ExceptionMapper().get_message(err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, err)
             else:
                 log.debug("Error: Unable to retrieve %s from server: %s" % (self.attr, err))
         except Exception as err:
@@ -1000,7 +998,7 @@ class AbstractSyspurposeCommand(CliCommand):
             advice = SP_ADVICE.format(command=command)
             value = result[attr]
             msg = _(SP_CONFLICT_MESSAGE.format(attr=attr, download_value=value, advice=advice))
-            system_exit(os.EX_SOFTWARE, msgs=msg)
+            system_exit(os.EX_SOFTWARE, msg)
         else:
             print(success_msg)
 
@@ -1274,8 +1272,7 @@ class RefreshCommand(CliCommand):
             refresh_service.refresh(force=self.options.force)
         except connection.RestlibException as re_err:
             log.error(re_err)
-            mapped_message: str = ExceptionMapper().get_message(re_err)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re_err)
         except Exception as e:
             handle_exception(
                 _("Unable to perform refresh due to the following exception: {e}").format(e=e), e
@@ -1374,8 +1371,7 @@ class IdentityCommand(UserPassCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to generate a new identity for the system: %s" % re)
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error: Unable to generate a new identity for the system"), e)
 
@@ -1414,8 +1410,7 @@ class OwnersCommand(UserPassCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve org list from server: %s" % re)
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve org list from server"), e)
 
@@ -1472,8 +1467,7 @@ class EnvironmentsCommand(OrgCommand):
             log.exception(re)
             log.error(u"Error: Unable to retrieve environment list from server: %s" % re)
 
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve environment list from server"), e)
 
@@ -1693,8 +1687,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
         except connection.RestlibException as re:
             log.exception(re)
             log.error(u"Error: Unable to retrieve service levels: %s" % re)
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error: Unable to retrieve service levels."), e)
         else:
@@ -1716,10 +1709,9 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             except connection.RestlibException as re_err:
                 log.exception(re_err)
                 log.error(u"Error: Unable to retrieve service levels: %s" % re_err)
-                mapped_message: str = ExceptionMapper().get_message(re_err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
-            except ProxyException:
-                system_exit(os.EX_UNAVAILABLE, _("Proxy connection failed, please check your settings."))
+                system_exit(os.EX_SOFTWARE, re_err)
+            except ProxyException as exc:
+                system_exit(os.EX_UNAVAILABLE, exc)
 
     def set(self):
         if self.cp.has_capability("syspurpose"):
@@ -1785,8 +1777,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             if e.code == 404 and e.msg.find('/servicelevels') > 0:
                 system_exit(os.EX_UNAVAILABLE, _("Error: The service-level command is not supported by the server."))
             elif e.code == 404:
-                mapped_message: str = ExceptionMapper().get_message(e)
-                system_exit(os.EX_DATAERR, mapped_message)
+                system_exit(os.EX_DATAERR, e)
             else:
                 raise e
 
@@ -2001,8 +1992,7 @@ class RegisterCommand(UserPassCommand):
                 )
         except (connection.RestlibException, exceptions.ServiceError) as re:
             log.exception(re)
-            mapped_message: str = ExceptionMapper().get_message(re)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re)
         except Exception as e:
             handle_exception(_("Error during registration: %s") % e, e)
         else:
@@ -2705,8 +2695,7 @@ class RemoveCommand(CliCommand):
                 raise ge
             except connection.RestlibException as err:
                 log.error(err)
-                mapped_message: str = ExceptionMapper().get_message(err)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, err)
             except Exception as e:
                 handle_exception(_("Unable to perform remove due to the following exception: %s") % e, e)
         else:
@@ -2796,8 +2785,7 @@ class FactsCommand(CliCommand):
                 raise ge
             except connection.RestlibException as re:
                 log.exception(re)
-                mapped_message: str = ExceptionMapper().get_message(re)
-                system_exit(os.EX_SOFTWARE, mapped_message)
+                system_exit(os.EX_SOFTWARE, re)
             log.debug("Succesfully updated the system facts.")
             print(_("Successfully updated the system facts."))
 
@@ -3574,8 +3562,7 @@ class OverrideCommand(CliCommand):
                 if ex.code == 400:
                     # black listed overrides specified.
                     # Print message and return a less severe code.
-                    mapped_message: str = ExceptionMapper().get_message(ex)
-                    system_exit(1, mapped_message)
+                    system_exit(1, ex)
                 else:
                     raise ex
 
