@@ -107,7 +107,7 @@
 %global use_rhsm_icons 0%{use_cockpit}
 
 Name: subscription-manager
-Version: 1.29.26.1
+Version: 1.29.26.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -862,6 +862,17 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Fri Dec 16 2022 Pino Toscano <ptoscano@redhat.com> 1.29.26.2-1
+- Translated using Weblate (French) (vincent.lefebvre59@gmail.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- 2151830: do not detect containers in OCP as such (ptoscano@redhat.com)
+- tests: extend InContainerTests for path checks (ptoscano@redhat.com)
+- build: switch rpmlint check to rpmlint 2.x (ptoscano@redhat.com)
+- Fix possible parsing issues of dmidecode output (mhorky@redhat.com)
+- test: use --track-naughties option (martin@piware.de)
+- Bump cockpit test API to 273 + run-tests scheduler fix (martin@piware.de)
+- webpack: Avoid md4 hash for OpenSSL 3 compatibility (martin@piware.de)
+
 * Mon Jul 18 2022 Christopher Snyder <csnyder@redhat.com> 1.29.26.1-1
 - ENT-5215: Handle all exceptions caused by network problems
   (mhorky@redhat.com)
