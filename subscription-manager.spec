@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.30
+Version: 1.29.30.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -736,6 +736,15 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Fri Dec 16 2022 Pino Toscano <ptoscano@redhat.com> 1.29.30.1-1
+- tito: add rhel 9.1 releaser (ptoscano@redhat.com)
+- 2151829: do not detect containers in OCP as such (ptoscano@redhat.com)
+- tests: extend InContainerTests for path checks (ptoscano@redhat.com)
+- [1.29.30] 2142611: Clear progress messages properly (mhorky@redhat.com)
+- Fix possible parsing issues of dmidecode output (mhorky@redhat.com)
+- cockpit: disable the reference branch for sub-man-cockpit
+  (ptoscano@redhat.com)
+
 * Tue Aug 09 2022 Christopher Snyder <csnyder@redhat.com> 1.29.30-1
 - Fix issue, when connection is not shared (jhnidek@redhat.com)
 - Unit tests: Add stub class for SyspurposeComplianceStatusCache
