@@ -493,13 +493,31 @@ class RepoUpdateActionCommand(object):
         # assumes items in content_list are hashable
         return set(content_list)
 
+    def use_os_release_product_enabled(self):
+        try:
+            use_os_release_product = conf["rhsm"].get_int("use_os_release_product")
+        except ValueError as e:
+            log.exception(e)
+            return False
+        except configparser.Error as e:
+            log.exception(e)
+            return False
+        else:
+            if use_os_release_product is None:
+                return False
+        return bool(use_os_release_product)
+
     # Expose as public API for RepoActionInvoker.is_managed, since that
     # is used by Openshift tooling.
     # See https://bugzilla.redhat.com/show_bug.cgi?id=1223038
     def matching_content(self):
         content = []
         for content_type in ALLOWED_CONTENT_TYPES:
-            content += model.find_content(self.ent_source, content_type=content_type)
+            content += model.find_content(
+                self.ent_source,
+                content_type=content_type,
+                use_os_release_product=self.use_os_release_product_enabled(),
+            )
         return content
 
     def get_all_content(self, baseurl, ca_cert):

@@ -15,6 +15,7 @@
 import logging
 
 from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
+from rhsmlib.facts.hwprobe import HardwareCollector
 
 log = logging.getLogger(__name__)
 
@@ -89,22 +90,28 @@ class EntitlementSource(object):
         return self._entitlements[key]
 
 
-def find_content(ent_source, content_type=None):
+def find_content(ent_source, content_type=None, use_os_release_product=False):
     """
     Scan all entitlements looking for content of the given type. (string)
     Type will be compared case insensitive.
+    If use_os_release_product is enabled, generate a os-product-version tag and
+    add it ot the list of product_tags
 
     Returns a list of model.Content.
     """
     entitled_content = []
     content_access_entitlement_content = {}
     content_labels = set()
+    if use_os_release_product:
+        all_product_tags = add_os_product_tags(ent_source.product_tags)
+    else:
+        all_product_tags = ent_source.product_tags
     log.debug("Searching for content of type: %s" % content_type)
     for entitlement in ent_source:
         for content in entitlement.contents:
             # this is basically matching_content from repolib
             if content.content_type.lower() == content_type.lower() and content_tag_match(
-                content.tags, ent_source.product_tags
+                content.tags, all_product_tags
             ):
                 if entitlement.entitlement_type == CONTENT_ACCESS_CERT_TYPE:
                     content_access_entitlement_content[content.label] = content
@@ -117,6 +124,19 @@ def find_content(ent_source, content_type=None):
         if label not in content_labels:
             entitled_content.append(content)
     return entitled_content
+
+
+def add_os_product_tags(product_tags):
+    """Add [os-id]-[os-version] tag to product tag list based on /etc/os-release
+
+    Returns the product_tags including the os-product tag
+    """
+    all_tags = product_tags
+
+    dist_info = HardwareCollector().get_distribution()
+    os_product = "{name}-{version}".format(name=dist_info[4], version=dist_info[1])
+    all_tags.add(os_product)
+    return all_tags
 
 
 def content_tag_match(content_tags, product_tags):
