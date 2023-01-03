@@ -372,6 +372,10 @@ class TokenAuthException(Exception):
     pass
 
 
+class DeviceAuthException(Exception):
+    pass
+
+
 class KeycloakConnection(BaseConnection):
     """
     Keycloak Based Authentication
@@ -397,6 +401,50 @@ class KeycloakConnection(BaseConnection):
             if e.code == 400:
                 raise TokenAuthException(e.msg)
             raise
+
+
+class DeviceAuthConnection(BaseConnection):
+    """
+    OAuth2 Device Authorization
+    """
+    def __init__(self, auth_url, client_id, scope, realm, **kwargs):
+        host = urlparse(auth_url).hostname or ""
+        handler = urlparse(auth_url).path
+        ssl_port = urlparse(auth_url).port or 443
+        super().__init__(host=host, ssl_port=ssl_port, handler=handler, **kwargs)
+        self.realm = realm
+        self.client_id = client_id
+        self.scope = scope
+
+    def attempt_device_auth_request(self) -> dict:
+        params = {"client_id": self.client_id, "scope": self.scope}
+        headers = {
+            "Accept": "application/json",
+            "Content-type": "application/x-www-form-urlencoded"
+        }
+        try:
+            data = self.conn.request_post("", params, headers, description=_("Attempting OAuth device authorization request"))
+            return data
+        except RestlibException as e:
+            if e.code == 400:
+                raise DeviceAuthException(e.msg)
+            raise
+
+    def poll_device_auth_token(self, device_code: str):
+        # print(self.host, self.handler, self.ssl_port)
+        method = "/realms/" + self.realm + "/protocol/openid-connect/token"
+        params = {
+            "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
+            "client_id": self.client_id,
+            "device_code": device_code
+        }
+        headers = {
+            "Content-type": "application/x-www-form-urlencoded"
+        }
+        result: Dict[str, Any] = self.conn._request(
+            "POST", method, params, headers=headers, description=_("Attempting OAuth device access token request"), ignore_validation=True
+        )
+        return result
 
 
 class RestlibException(ConnectionException):
@@ -1165,7 +1213,7 @@ class BaseRestLib:
         # so we can use the request method for normal http
 
         # print("result pre-validation")
-        # print(result)
+        print(result)
         if not ignore_validation:
             self.validateResult(result, request_type, handler)
 
@@ -1743,34 +1791,6 @@ class UEPConnection(BaseConnection):
         """
         method = "/consumers/%s/profiles" % self.sanitize(consumer_uuid)
         return self.conn.request_put(method, profile, description=_("Updating profile information"))
-
-    def initializeDeviceAuth(self, client_id: str, scope: str) -> dict:
-        method = "/realms/redhat-external/protocol/openid-connect/auth/device"
-        params = {
-            "client_id": client_id,
-            "scope": scope
-        }
-        headers = {
-            "Accept": "application/json",
-            "Content-type": "application/x-www-form-urlencoded"
-        }
-        return self.conn.request_post(method, params, headers, description=_("Attempting OAuth device authorization request"))
-
-    def pollDeviceAuthAccessToken(self, client_id: str, device_code: str):
-        method = "/realms/redhat-external/protocol/openid-connect/token"
-        params = {
-            "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
-            "client_id": client_id,
-            "device_code": device_code
-        }
-        headers = {
-            "Content-type": "application/x-www-form-urlencoded"
-        }
-        result: Dict[str, Any] = self.conn._request(
-            "POST", method, params, headers=headers, description=_("Attempting OAuth device access token request"), ignore_validation=True
-        )
-        return result
-        # return self.conn.request_post(method, params, headers, description=_("Attempting OAuth device access token request"))
 
     def getConsumer(self, uuid: str) -> dict:
         """

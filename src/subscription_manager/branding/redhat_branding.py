@@ -3,9 +3,6 @@ from subscription_manager.i18n import ugettext as _
 
 class Branding(object):
     def __init__(self):
-        self.CLI_REGISTER_DEVICE_AUTH = _(
-            "Register this system using OAuth2 device auth to the Customer Portal or another subscription management service"
-        )
         self.CLI_REGISTER = _(
             "Register this system to the Customer Portal or another subscription management service"
         )
