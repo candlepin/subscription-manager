@@ -26,7 +26,7 @@ from subscription_manager.repofile import Repo, manage_repos_enabled, get_repo_f
 from subscription_manager.repofile import YumRepoFile
 from subscription_manager.utils import get_supported_resources
 
-from rhsm.config import get_config_parser, in_container
+import rhsm.config
 import configparser
 from rhsmlib.facts.hwprobe import HardwareCollector
 
@@ -39,7 +39,7 @@ from subscription_manager.i18n import ugettext as _
 
 log = logging.getLogger(__name__)
 
-conf = config.Config(get_config_parser())
+conf = config.Config(rhsm.config.get_config_parser())
 
 ALLOWED_CONTENT_TYPES = ["yum", "deb"]
 
@@ -303,7 +303,7 @@ class YumReleaseverSource(object):
         # same consumer as the host they run on. They only have the same
         # access to content as the host they run on.)
         result = None
-        if not in_container():
+        if not rhsm.config.in_container():
             uep = self.cp_provider.get_consumer_auth_cp()
             result = self.release_status_cache.read_status(uep, self.identity.uuid)
 
