@@ -423,7 +423,7 @@ class DeviceAuthConnection(BaseConnection):
             "Content-type": "application/x-www-form-urlencoded"
         }
         try:
-            data = self.conn.request_post("", params, headers, description=_("Attempting OAuth device authorization request"))
+            data = self.conn.request_post("", params, headers, description=_("Attempting OAuth device authorization request..."))
             return data
         except RestlibException as e:
             if e.code == 400:
@@ -442,7 +442,7 @@ class DeviceAuthConnection(BaseConnection):
             "Content-type": "application/x-www-form-urlencoded"
         }
         result: Dict[str, Any] = self.conn._request(
-            "POST", method, params, headers=headers, description=_("Attempting OAuth device access token request"), ignore_validation=True
+            "POST", method, params, headers=headers, description=_("Querying for OAuth device authorization token entered..."), ignore_validation=True
         )
         return result
 
@@ -1158,7 +1158,7 @@ class BaseRestLib:
         # Try to do request, when it wasn't possible, because server closed connection,
         # then close existing connection and try it once again
         try:
-            print("Full Request:\n%s %s | %s %s" % (request_type, self.host + handler, final_headers, body))
+            # print("Full Request:\n%s %s | %s %s" % (request_type, self.host + handler, final_headers, body))
             result, response = self._make_request(
                 request_type, handler, final_headers, body, cert_key_pairs, description
             )
@@ -1213,7 +1213,7 @@ class BaseRestLib:
         # so we can use the request method for normal http
 
         # print("result pre-validation")
-        print(result)
+        # print(result)
         if not ignore_validation:
             self.validateResult(result, request_type, handler)
 

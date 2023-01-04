@@ -4,6 +4,8 @@ import time
 import os
 from typing import Callable, Dict, Any, Optional
 
+from rhsm import utils
+
 from rhsm.connection import DeviceAuthConnection, UEPConnection
 
 from rhsmlib.services import exceptions
@@ -40,12 +42,14 @@ class OAuthRegisterService:
         return DeviceAuthConnection(auth_url, client_id, scope, realm)
 
     def initialize_device_auth(self) -> Optional[Dict[str, Any]]:
+        """
         print("Auth URL: {auth_host}, Handler: {handler}, Client Id: {client_id}, Scope: {scope}".format(
             auth_host=self.device_auth_connection.host,
             handler=self.device_auth_connection.handler,
             client_id=self.device_auth_connection.client_id,
             scope=self.device_auth_connection.scope
         ))
+        """
         return self.device_auth_connection.attempt_device_auth_request()
 
         """
@@ -87,32 +91,31 @@ class OAuthRegisterService:
         elapsed_time: int = 0
         resp_received: bool = False
         access_token_resp: Optional[Dict[str, Any]] = None
-        try:
-            while not resp_received:
-                if elapsed_time > login_expiration_time:
-                    system_exit(os.EX_NOTFOUND, "OAuth device code not provided, cancelled authorization process.")
+        with utils.LiveStatusMessage(_("Device authorization pending...")):
+            try:
+                while not resp_received:
+                    if elapsed_time > login_expiration_time:
+                        system_exit(os.EX_NOTFOUND, "OAuth device code not provided, cancelled authorization process.")
 
-                # Query the OAuth provider to check if the user has provided a login code.
-                print("Querying OAuth provider for device authorization response...")
-                access_token_resp = polling_connection.poll_device_auth_token(
-                    device_code=oauth_login_data["device_code"]
-                )
+                    # Query the OAuth provider to check if the user has provided a login code.
+                    # print("Querying OAuth provider for device authorization response...")
+                    access_token_resp = polling_connection.poll_device_auth_token(
+                        device_code=oauth_login_data["device_code"]
+                    )
+                    if access_token_resp is not None:
+                        if access_token_resp["status"] == 404:
+                            system_exit(os.EX_UNAVAILABLE, "Invalid authorization content received.")
+                        elif access_token_resp["status"] != 400:
+                            resp_received = True
+                            break
+
+                    time.sleep(polling_interval)
+                    elapsed_time += polling_interval
                 if access_token_resp is not None:
-                    if access_token_resp["status"] == 400:
-                        print("Authorization pending...")
-                    elif access_token_resp["status"] == 404:
-                        system_exit(os.EX_UNAVAILABLE, "Invalid authorization content received.")
-                    else:
-                        resp_received = True
-                        break
-
-                time.sleep(polling_interval)
-                elapsed_time += polling_interval
-            if access_token_resp is not None:
-                access_token_resp = polling_connection.conn._extract_content_from_response(access_token_resp)
-            return access_token_resp
-        except KeyboardInterrupt:
-            system_exit(os.EX_SOFTWARE, "OAuth device authorization process cancelled by user.")
+                    access_token_resp = polling_connection.conn._extract_content_from_response(access_token_resp)
+                return access_token_resp
+            except KeyboardInterrupt:
+                system_exit(os.EX_SOFTWARE, "OAuth device authorization process cancelled by user.")
 
     def _validate_device_auth_info(self, device_auth_info: Dict[str, Any]):
         if not isinstance(device_auth_info, dict):
