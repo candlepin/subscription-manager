@@ -29,7 +29,7 @@ from rhsm.https import ssl
 from rhsm.utils import LiveStatusMessage
 
 from rhsmlib.facts.hwprobe import ClassicCheck
-from rhsmlib.services import attach, unregister, register, exceptions, device_auth
+from rhsmlib.services import attach, unregister, register, exceptions
 
 from subscription_manager import identity
 from subscription_manager.branding import get_branding
@@ -140,7 +140,7 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("This system is already registered. Use --force to override"))
         elif self.options.consumername == "":
             system_exit(os.EX_USAGE, _("Error: system name can not be empty."))
-        elif (self.options.username or self.options.token) and self.options.activation_keys:
+        elif (self.options.username or self.token) and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys do not require user credentials."))
         elif self.options.consumerid and self.options.activation_keys:
             system_exit(
@@ -308,53 +308,25 @@ class RegisterCommand(UserPassCommand):
         if previously_registered:
             print(_("All local data removed"))
 
-        """
-        device_auth_service = device_auth.OAuthRegisterService(self.cp_provider)
-        oauth_data = device_auth_service.initialize_device_auth()
-        self._display_oauth_login(oauth_data.get("verification_uri"), oauth_data.get("user_code"))
-        oauth_access_data = device_auth_service.poll_oauth_provider(oauth_data)
-        access_token, expires_in = oauth_access_data["access_token"], oauth_access_data["expires_in"]
-        print(access_token, expires_in)
-        """
-
         # Proceed with new registration:
-        use_device_auth = False
-        device_auth_token = None
-        device_auth_token_exp = None
         try:
-            if self.options.token:
-                admin_cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
+            if self.token:
+                admin_cp = self.cp_provider.get_keycloak_auth_cp(self.token)
             elif not self.options.activation_keys:
-                if self.cp.has_capability("device_auth"):
-                    admin_cp = self.cp_provider.get_no_auth_cp()
-                    device_auth_service = device_auth.OAuthRegisterService(admin_cp)
-
-                    oauth_data = device_auth_service.initialize_device_auth()
-                    self._display_oauth_login(oauth_data.get("verification_uri"), oauth_data.get("user_code"))
-                    oauth_access_data = device_auth_service.poll_oauth_provider(oauth_data)
-
-                    device_auth_token = str(oauth_access_data["access_token"])
-                    device_auth_token_exp = int(oauth_access_data["expires_in"])
-                    print("Access Token: " + device_auth_token)
-                    print("Token Expires In: " + str(device_auth_token_exp))
-                    admin_cp = self.cp_provider.get_keycloak_auth_cp(device_auth_token)
-                    use_device_auth = True
-                    print("Registering using device auth connection...")
+                hostname = conf["server"]["hostname"]
+                if ":" in hostname:
+                    normalized_hostname = "[{hostname}]".format(hostname=hostname)
                 else:
-                    hostname = conf["server"]["hostname"]
-                    if ":" in hostname:
-                        normalized_hostname = "[{hostname}]".format(hostname=hostname)
-                    else:
-                        normalized_hostname = hostname
-                    print(
-                        _("Registering to: {hostname}:{port}{prefix}").format(
-                            hostname=normalized_hostname,
-                            port=conf["server"]["port"],
-                            prefix=conf["server"]["prefix"],
-                        )
+                    normalized_hostname = hostname
+                print(
+                    _("Registering to: {hostname}:{port}{prefix}").format(
+                        hostname=normalized_hostname,
+                        port=conf["server"]["port"],
+                        prefix=conf["server"]["prefix"],
                     )
-                    self.cp_provider.set_user_pass(self.username, self.password)
-                    admin_cp = self.cp_provider.get_basic_auth_cp()
+                )
+                self.cp_provider.set_user_pass(self.username, self.password)
+                admin_cp = self.cp_provider.get_basic_auth_cp()
             else:
                 admin_cp = self.cp_provider.get_no_auth_cp()
 
@@ -369,8 +341,6 @@ class RegisterCommand(UserPassCommand):
                 if self.options.org:
                     owner_key = self.options.org
                 else:
-                    if use_device_auth:
-                        self.options.token = device_auth_token
                     owner_key = service.determine_owner_key(
                         username=self.username, get_owner_cb=self._get_owner_cb, no_owner_cb=self._no_owner_cb
                     )
@@ -454,18 +424,6 @@ class RegisterCommand(UserPassCommand):
 
         self._request_validity_check()
         return subscribed
-
-    def _display_oauth_login(self, verification_uri: str, user_code: str):
-        if verification_uri is None:
-            raise ValueError("Error: A verification uri must be provided to display in the oauth login message.")
-        if user_code is None:
-            raise ValueError("Error: A oauth user login code must be provided to display in the oauth login message.")
-        # This implementation currently only displays the verification uri and login code
-        # and can be expanded to display a QR code.
-        print(_("Using a browser on another device, visit:\n{verification_uri}\nAnd enter the following code to log in:\n'{user_code}'").format(
-            verification_uri=verification_uri,
-            user_code=user_code
-        ))
 
     def _prompt_for_environment(self):
         """
