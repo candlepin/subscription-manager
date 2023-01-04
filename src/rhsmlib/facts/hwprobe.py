@@ -29,7 +29,7 @@ from datetime import datetime, timedelta
 from rhsmlib.facts import cpuinfo
 from rhsmlib.facts import collector
 
-from typing import Callable, Dict, Optional, List, TextIO, Tuple, Union
+from typing import Callable, Dict, Optional, List, Set, TextIO, Tuple, Union
 
 log = logging.getLogger(__name__)
 
@@ -771,6 +771,7 @@ class HardwareCollector(collector.FactsCollector):
                 )
             except Exception:
                 net_info["network.fqdn"] = hostname
+                infolist = []
             else:
                 # getaddrinfo has to return at least one item
                 # and canonical name can't be empty string.
@@ -782,20 +783,29 @@ class HardwareCollector(collector.FactsCollector):
                 else:
                     net_info["network.fqdn"] = hostname
 
-            try:
-                info: List[tuple] = socket.getaddrinfo(hostname, None, socket.AF_INET, socket.SOCK_STREAM)
-                ip_list = set([x[4][0] for x in info])
-                net_info["network.ipv4_address"] = ", ".join(ip_list)
-            except Exception as err:
-                log.debug("Error during resolving IPv4 address of hostname: %s, %s" % (hostname, err))
+            ipv4_addresses: Set[str] = set()
+            ipv6_addresses: Set[str] = set()
+            for address_tuple in infolist:
+                address: str = address_tuple[4][0]
+                if address_tuple[0] is socket.AF_INET:
+                    ipv4_addresses.add(address)
+                if address_tuple[0] is socket.AF_INET6:
+                    ipv6_addresses.add(address)
+
+            # FIXME In 2017-09 (616ec72), we added `_get_ipvX_addr_list()` functions, but the original code
+            #  using sockets stayed; the new one was used just in the `except:` block. Why?
+            # TODO python-ethtool is deprecated and does not receive any updates, a new implementation should
+            #  be created to replace both of these.
+            if ipv4_addresses:
+                net_info["network.ipv4_address"] = ", ".join(ipv4_addresses)
+            else:
+                log.debug("Could not obtain IPv4 addresses using socket inspection. Using ethtool instead.")
                 net_info["network.ipv4_address"] = ", ".join(self._get_ipv4_addr_list())
 
-            try:
-                info: List[tuple] = socket.getaddrinfo(hostname, None, socket.AF_INET6, socket.SOCK_STREAM)
-                ip_list = set([x[4][0] for x in info])
-                net_info["network.ipv6_address"] = ", ".join(ip_list)
-            except Exception as err:
-                log.debug("Error during resolving IPv6 address of hostname: %s, %s" % (hostname, err))
+            if ipv6_addresses:
+                net_info["network.ipv6_address"] = ", ".join(ipv6_addresses)
+            else:
+                log.debug("Could not obtain IPv6 addresses using socket inspection. Using ethtool instead.")
                 net_info["network.ipv6_address"] = ", ".join(self._get_ipv6_addr_list())
 
         except Exception as err:
