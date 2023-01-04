@@ -38,7 +38,7 @@ class OAuthRegisterService:
         auth_url = candlepin_status["deviceAuthUrl"]
         client_id = candlepin_status["deviceAuthClientId"]
         scope = candlepin_status["deviceAuthScope"]
-        realm = candlepin_status["keycloakRealm"]
+        realm = candlepin_status["deviceAuthRealm"]
         return DeviceAuthConnection(auth_url, client_id, scope, realm)
 
     def initialize_device_auth(self) -> Optional[Dict[str, Any]]:
@@ -95,7 +95,7 @@ class OAuthRegisterService:
             try:
                 while not resp_received:
                     if elapsed_time > login_expiration_time:
-                        system_exit(os.EX_NOTFOUND, _("OAuth device code not provided, cancelled authorization process."))
+                        system_exit(os.EX_NOTFOUND, _("Device access code not provided, cancelled authorization process."))
 
                     # Query the OAuth provider to check if the user has provided a login code.
                     # print("Querying OAuth provider for device authorization response...")
@@ -104,7 +104,7 @@ class OAuthRegisterService:
                     )
                     if access_token_resp is not None:
                         if access_token_resp["status"] == 404:
-                            system_exit(os.EX_UNAVAILABLE, _("Invalid authorization content received."))
+                            system_exit(os.EX_UNAVAILABLE, _("No authorization content received."))
                         elif access_token_resp["status"] != 400:
                             resp_received = True
                             break
@@ -115,7 +115,7 @@ class OAuthRegisterService:
                     access_token_resp = polling_connection.conn._extract_content_from_response(access_token_resp)
                 return access_token_resp
             except KeyboardInterrupt:
-                system_exit(os.EX_SOFTWARE, _("OAuth device authorization process cancelled by user."))
+                system_exit(os.EX_SOFTWARE, _("Device authorization process cancelled by user."))
 
     def _validate_device_auth_info(self, device_auth_info: Dict[str, Any]):
         if not isinstance(device_auth_info, dict):
