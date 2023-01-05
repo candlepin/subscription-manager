@@ -344,7 +344,7 @@ class RegisterCommand(UserPassCommand):
                     owner_key = service.determine_owner_key(
                         username=self.username, get_owner_cb=self._get_owner_cb, no_owner_cb=self._no_owner_cb
                     )
-                    print(owner_key)
+                    # print(owner_key)
                 environment_ids = self._process_environments(admin_cp, owner_key)
                 consumer = service.register(
                     owner_key,
@@ -369,6 +369,9 @@ class RegisterCommand(UserPassCommand):
 
         # We have new credentials, restart virt-who
         restart_virt_who()
+
+        # Remove cached access token since we are registered
+        self.clear_cache()
 
         # get a new UEP as the consumer
         self.cp = self.cp_provider.get_consumer_auth_cp()

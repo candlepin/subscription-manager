@@ -20,6 +20,8 @@ import os
 import errno
 import logging
 import time
+# import qrcode
+# import io
 
 from subscription_manager.cli_command.cli import CliCommand
 from subscription_manager.cli import system_exit
@@ -97,15 +99,22 @@ class UserPassCommand(CliCommand):
         attempts to retrieve the authorization token from a cache file. If the token in the cache file
         has expired or does not exist then the OAuth device auth process is started.
 
+        The device auth process is not used if a username/password is provided with --username/--password.
+
         The device auth process displays a verification url and access code that the user must enter
         in a browser on a separate device. The service will poll the OAuth provider until an access code is
-        entered and then retrieves the authorization token and stores it in a cache file.
+        entered and then retrieves the authorization token.
+
+        The authorization token is cached only if the "--no-token-reuse" is not provided and
+        the system is not registered.
         """
+        if self.options.username and self.options.password:
+            return
         if self.options.token:
             self._token = self.options.token
         elif not self._token:
             if not self.options.no_token_reuse:
-                cached_token = self.__read_cache_file(self.DEVICEAUTH_CACHE_FILE)
+                cached_token = self._read_cache_file()
                 if cached_token is not None:
                     if cached_token["expires"] - int(time.time()) > 0:
                         self._token = cached_token["token"]
@@ -113,12 +122,16 @@ class UserPassCommand(CliCommand):
                         return
                     else:
                         log.debug("Device access token expired")
-                        self.__delete_cache_file(self.DEVICEAUTH_CACHE_FILE)
+                        self._delete_cache_file()
                         log.debug("Device access token cache deleted.")
                         print(_("Device access token cache deleted."))
+            else:
+                self._delete_cache_file()
+                log.debug("Old cached device access token deleted.")
+                print(_("Old cached device access token deleted."))
             if self.cp.has_capability("device_auth"):
-                admin_cp = self.cp_provider.get_no_auth_cp()
-                device_auth_service = device_auth.OAuthRegisterService(admin_cp)
+                no_auth_cp = self.cp_provider.get_no_auth_cp()
+                device_auth_service = device_auth.OAuthRegisterService(no_auth_cp)
 
                 # Initialize device auth service and display the verification url and access code.
                 oauth_data = device_auth_service.initialize_device_auth()
@@ -130,24 +143,26 @@ class UserPassCommand(CliCommand):
                 self._token = str(oauth_access_data["access_token"])
                 token_created_timestamp = int(time.time())
                 token_expires_timestamp = token_created_timestamp + int(oauth_access_data["expires_in"])
-                print("Access Token: " + self._token)
-                print("Token Expires In: " + str(oauth_access_data["expires_in"]))
+                # print("Access Token: " + self._token)
+                # print("Token Expires In: " + str(oauth_access_data["expires_in"]))
                 cache_data = {
                     "token": self._token,
                     "expires": token_expires_timestamp,
                 }
-                self.__write_cache_file(cache_data, self.DEVICEAUTH_CACHE_FILE)
+                # Only cache the token if not registered and the `no_token_reuse` option is provided.
+                if not self.options.no_token_reuse and not self.is_registered():
+                    self._write_cache_file(cache_data)
 
-    def __read_cache_file(self, file_name):
+    def _read_cache_file(self):
         try:
-            with open(file_name) as file:
+            with open(self.DEVICEAUTH_CACHE_FILE) as file:
                 json_str = file.read()
                 data = json.loads(json_str)
             return data
         except IOError as err:
             # if the file does not exist we'll create it later
             if err.errno != errno.ENOENT:
-                log.error("Unable to read access token cache: %s" % file_name)
+                log.error("Unable to read access token cache: %s" % self.DEVICEAUTH_CACHE_FILE)
                 log.exception(err)
         except ValueError:
             # ignore json file parse errors, we are going to generate
@@ -155,23 +170,28 @@ class UserPassCommand(CliCommand):
             pass
         return None
 
-    def __write_cache_file(self, data, file_name):
+    def _write_cache_file(self, data):
         try:
-            dir_name = os.path.dirname(file_name)
+            dir_name = os.path.dirname(self.DEVICEAUTH_CACHE_FILE)
             if not os.access(dir_name, os.R_OK):
                 log.debug("Try to create directory: %s" % dir_name)
                 os.makedirs(dir_name)
-            with open(file_name, "w") as file:
+            with open(self.DEVICEAUTH_CACHE_FILE, "w") as file:
                 json.dump(data, file, default=json.encode)
-            log.debug("Wrote access token cache: %s" % file_name)
+            log.debug("Wrote access token cache: %s" % self.DEVICEAUTH_CACHE_FILE)
         except IOError as err:
-            log.error("Unable to write access token cache: %s" % file_name)
+            log.error("Unable to write access token cache: %s" % self.DEVICEAUTH_CACHE_FILE)
             log.exception(err)
 
-    def __delete_cache_file(self, file_name):
-        if os.path.exists(file_name):
-            log.debug("Deleting access token cache: %s" % file_name)
-            os.remove(file_name)
+    def _delete_cache_file(self):
+        if os.path.exists(self.DEVICEAUTH_CACHE_FILE):
+            log.debug("Deleting access token cache: %s" % self.DEVICEAUTH_CACHE_FILE)
+            os.remove(self.DEVICEAUTH_CACHE_FILE)
+
+    def clear_cache(self):
+        self.options.token = None
+        self._token = None
+        self._delete_cache_file()
 
     def display_oauth_login(self, verification_uri: str, user_code: str):
         if verification_uri is None:
@@ -184,6 +204,17 @@ class UserPassCommand(CliCommand):
             verification_uri=verification_uri,
             user_code=user_code
         ))
+        # QR Code implementation using python3-qrcode-core
+        """
+        qr = qrcode.QRCode(
+            border=2,
+        )
+        qr.add_data(verification_uri)
+        qr_str = io.StringIO()
+        qr.print_ascii(out=qr_str, invert=True)
+        qr_str.seek(0)
+        print(qr_str.read())
+        """
 
     # lazy load the username and password, prompting for them if they weren't
     # given as options. this lets us not prompt if another option fails,
