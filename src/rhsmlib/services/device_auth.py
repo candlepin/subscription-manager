@@ -52,23 +52,6 @@ class OAuthRegisterService:
         """
         return self.device_auth_connection.attempt_device_auth_request()
 
-        """
-        # Hard-code handler/url for now since candlepin server is returning incorrect values.
-        # TODO: Replace hard-coded host url with: device_auth_info["auth_url"]
-        handler = "/auth"
-        self.cp_provider.set_connection_info(
-            host=device_auth_info["auth_url"],
-            ssl_port=443,
-            handler=handler
-        )
-        uep = self.cp_provider.get_no_auth_cp()
-        oauth_resp_content = uep.initializeDeviceAuth(
-            client_id=device_auth_info["client_id"],
-            scope=device_auth_info["scope"]
-        )
-        return oauth_resp_content
-        """
-
     def poll_oauth_provider(self, oauth_login_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         self._validate_oauth_login_data(oauth_login_data)
 
@@ -96,6 +79,10 @@ class OAuthRegisterService:
                 while not resp_received:
                     if elapsed_time > login_expiration_time:
                         system_exit(os.EX_NOTFOUND, _("Device access code not provided, cancelled authorization process."))
+                    
+                    # Poll the OAuth provider ever X seconds
+                    time.sleep(polling_interval)
+                    elapsed_time += polling_interval
 
                     # Query the OAuth provider to check if the user has provided a login code.
                     # print("Querying OAuth provider for device authorization response...")
@@ -108,11 +95,9 @@ class OAuthRegisterService:
                         elif access_token_resp["status"] != 400:
                             resp_received = True
                             break
-
-                    time.sleep(polling_interval)
-                    elapsed_time += polling_interval
                 if access_token_resp is not None:
                     access_token_resp = polling_connection.conn._extract_content_from_response(access_token_resp)
+                    # print(access_token_resp)
                 return access_token_resp
             except KeyboardInterrupt:
                 system_exit(os.EX_SOFTWARE, _("Device authorization process cancelled by user."))
