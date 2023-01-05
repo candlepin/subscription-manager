@@ -382,8 +382,9 @@ class KeycloakConnection(BaseConnection):
     """
 
     def __init__(self, realm: Any, auth_url: str, resource: Any, **kwargs) -> None:
-        host = urlparse(auth_url).hostname or ""
-        handler = urlparse(auth_url).path
+        host = urlparse(auth_url).hostname or None
+        # handler = urlparse(auth_url).path
+        handler = "/auth/realms/redhat-external/protocol/openid-connect/token"
         ssl_port = urlparse(auth_url).port or 443
         super(KeycloakConnection, self).__init__(host=host, ssl_port=ssl_port, handler=handler, **kwargs)
         self.realm = realm
@@ -391,7 +392,8 @@ class KeycloakConnection(BaseConnection):
 
     def get_access_token_through_refresh(self, refreshtoken: Any) -> Optional[Any]:
         # Get access token in exchange for refresh token
-        method = "/realms/" + self.realm + "/protocol/openid-connect/token"
+        # method = "realms/" + self.realm + "/protocol/openid-connect/token"
+        method = ""
         params = {"client_id": self.resource, "grant_type": "refresh_token", "refresh_token": refreshtoken}
         headers = {"Content-type": "application/x-www-form-urlencoded"}
         try:
@@ -1158,6 +1160,7 @@ class BaseRestLib:
         # Try to do request, when it wasn't possible, because server closed connection,
         # then close existing connection and try it once again
         try:
+            # TODO: Remove this print
             # print("Full Request:\n%s %s | %s %s" % (request_type, self.host + handler, final_headers, body))
             result, response = self._make_request(
                 request_type, handler, final_headers, body, cert_key_pairs, description
@@ -1180,6 +1183,7 @@ class BaseRestLib:
             )
         response_log = '%s, request="%s %s"' % (response_log, request_type, handler)
         log.debug(response_log)
+        # TODO: Remove this print
         # print(response_log)
 
         connection_http_header = response.getheader("Connection", default="").lower()
@@ -1213,6 +1217,7 @@ class BaseRestLib:
         # so we can use the request method for normal http
 
         # print("result pre-validation")
+        # TODO: Remove this print
         # print(result)
         if not ignore_validation:
             self.validateResult(result, request_type, handler)
