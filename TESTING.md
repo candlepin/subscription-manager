@@ -67,14 +67,33 @@ coverage html
 coverage xml
 ```
 
----
+## Containers
 
-Following text may not be up to date.
+You can use Podman to run the test suite, ensuring your local setup does not differ from CI.
 
-# Testing of the game
+First, pick which container you'll want to use: CentOS Stream 9, Fedora latest, Fedora Rawhide, ...:
 
-- [System testing](#system-testing)
-- [Cockpit Subscriptions Plugin Tests](#cockpit-subscriptions-plugin-tests)
+```bash
+IMAGE="quay.io/centos/centos:stream9"
+IMAGE="registry.fedoraproject.org/fedora:latest"
+IMAGE="registry.fedoraproject.org/fedora:rawhide"
+```
+
+Enter the container (assuming you are in the project root) and run a pre-test script that will set install the dependencies and compile C extensions:
+
+```bash
+podman run -it --rm --name subscription-manager -v .:/subscription-manager --privileged $IMAGE bash
+cd /subscription-manager/
+bash scripts/container-pre-test.sh
+```
+
+Then you can run the test suite. You have to use `dbus-run-session` wrapper, because D-Bus is not running in containers:
+
+```bash
+SUBMAN_TEST_IN_CONTAINER=1 dbus-run-session python3 -m pytest
+```
+
+## Further reading
 
 
 ## System testing
