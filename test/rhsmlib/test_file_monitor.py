@@ -10,14 +10,18 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-
-from rhsmlib import file_monitor
-import configparser
-from unittest.mock import Mock, patch
-from test import fixture
-from threading import Thread
 import subprocess
 import tempfile
+import time
+import os
+from threading import Thread
+
+import configparser
+from rhsmlib import file_monitor
+
+from unittest.mock import Mock, patch
+
+from test import fixture
 
 
 class TestFilesystemWatcher(fixture.SubManFixture):
@@ -34,6 +38,9 @@ class TestFilesystemWatcher(fixture.SubManFixture):
         self.dir_list = {"DW1": self.dw1, "DW2": self.dw2, "DW3": self.dw3}
         self.fsw1 = file_monitor.FilesystemWatcher(self.dir_list)
         self.fsw2 = file_monitor.InotifyFilesystemWatcher(self.dir_list)
+
+        now: float = time.time()
+        self.future = now + 120.0
 
     def tearDown(self):
         super(TestFilesystemWatcher, self).tearDown()
@@ -99,18 +106,18 @@ class TestFilesystemWatcher(fixture.SubManFixture):
 
     def test_polling_changed_dw_set_2_modified(self):
         self.fsw1.changed_dw_set()
-        subprocess.call("touch %s -m" % self.testpath1, shell=True)
-        subprocess.call("touch %s -m" % self.testpath2, shell=True)
+        os.utime(self.testpath1, (self.future, self.future))
+        os.utime(self.testpath2, (self.future, self.future))
         self.assertEqual(self.fsw1.changed_dw_set(), {self.dw1, self.dw2, self.dw3})
 
     def test_polling_changed_dw_set_first_modified(self):
         self.fsw1.changed_dw_set()
-        subprocess.call("touch %s -m" % self.testpath1, shell=True)
+        os.utime(self.testpath1, (self.future, self.future))
         self.assertEqual(self.fsw1.changed_dw_set(), {self.dw1})
 
     def test_polling_changed_dw_set_second_modified(self):
         self.fsw1.changed_dw_set()
-        subprocess.call("touch %s -m" % self.testpath2, shell=True)
+        os.utime(self.testpath2, (self.future, self.future))
         self.assertEqual(self.fsw1.changed_dw_set(), {self.dw2, self.dw3})
 
     def test_polling_changed_dw_set_0_modified(self):
@@ -119,18 +126,18 @@ class TestFilesystemWatcher(fixture.SubManFixture):
 
     def test_polling_update_2_modified(self):
         self.fsw1.changed_dw_set()
-        subprocess.call("touch %s -m" % self.testpath1, shell=True)
-        subprocess.call("touch %s -m" % self.testpath2, shell=True)
+        os.utime(self.testpath1, (self.future, self.future))
+        os.utime(self.testpath2, (self.future, self.future))
         self.assertEqual(self.fsw1.update(), {self.dw1, self.dw2, self.dw3})
 
     def test_polling_update_first_modified(self):
         self.fsw1.changed_dw_set()
-        subprocess.call("touch %s -m" % self.testpath1, shell=True)
+        os.utime(self.testpath1, (self.future, self.future))
         self.assertEqual(self.fsw1.update(), {self.dw1})
 
     def test_polling_update_second_modified(self):
         self.fsw1.changed_dw_set()
-        subprocess.call("touch %s -m" % self.testpath2, shell=True)
+        os.utime(self.testpath2, (self.future, self.future))
         self.assertEqual(self.fsw1.update(), {self.dw2, self.dw3})
 
     def test_polling_update_0_modified(self):
