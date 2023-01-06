@@ -29,7 +29,17 @@ class TestFactsDBusObject(DBusServerStubProvider):
             name="get_virt_info",
         )
         cls.patches["get_virt_info"] = get_virt_info_patch.start()
+        cls.patches["get_virt_info"].return_value = {}
         cls.addClassCleanup(get_virt_info_patch.stop)
+
+        # Do not collect network facts, as they can cause issues in containers
+        get_network_info_patch = mock.patch(
+            "rhsmlib.facts.hwprobe.HardwareCollector.get_network_info",
+            name="get_network_info",
+        )
+        cls.patches["get_network_info"] = get_network_info_patch.start()
+        cls.patches["get_network_info"].return_value = {}
+        cls.addClassCleanup(get_network_info_patch.stop)
 
         super().setUpClass()
 
