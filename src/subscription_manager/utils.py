@@ -27,7 +27,6 @@ import signal
 import socket
 import syslog
 import uuid
-import pkg_resources
 
 from six.moves import urllib
 from rhsm.https import ssl
@@ -280,6 +279,8 @@ def get_client_versions():
     try:
         sm_version = subscription_manager.version.rpm_version
         if sm_version is None or sm_version == "None":
+            import pkg_resources
+
             sm_version = pkg_resources.require("subscription-manager")[0].version
     except Exception as e:
         log.debug("Client Versions: Unable to check client versions")
