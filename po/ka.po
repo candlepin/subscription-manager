@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the rhsm package.
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2022.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-11 15:11+0100\n"
-"PO-Revision-Date: 2022-08-31 13:22+0000\n"
+"PO-Revision-Date: 2023-01-13 00:20+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14\n"
+"X-Generator: Weblate 4.15\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -88,7 +88,7 @@ msgstr "არასავალდებულო არგუმენტე�
 
 #: /usr/lib64/python3.9/argparse.py:1744
 msgid "show this help message and exit"
-msgstr ""
+msgstr "ამ დახმარების ჩვენება და გასვლა"
 
 #: /usr/lib64/python3.9/argparse.py:1775
 msgid "cannot have multiple subparser arguments"
@@ -225,7 +225,7 @@ msgstr ""
 #: src/daemons/rhsmcertd.c:697
 #, c-format
 msgid "Invalid option: %s\n"
-msgstr ""
+msgstr "არასწორი პარამეტრი: %s\n"
 
 #: src/daemons/rhsmcertd.c:711
 #, c-format
@@ -466,7 +466,7 @@ msgstr "დაწყების თარიღი"
 
 #: src/rct/manifest_commands.py:247 src/rct/printing.py:123
 msgid "End Date"
-msgstr "დამთავრების თარიღი"
+msgstr "დასრულების თარიღი"
 
 #: src/rct/manifest_commands.py:248 src/rct/printing.py:74
 msgid "Service Level"
@@ -876,7 +876,7 @@ msgstr "ხელმისაწვდომი რელიზების გ�
 
 #: src/rhsm/connection.py:2132
 msgid "Fetching entitlements"
-msgstr ""
+msgstr "გარემოების გამოთხოვა"
 
 #: src/rhsm/connection.py:2141
 msgid "Fetching service levels"
@@ -1186,7 +1186,7 @@ msgstr "მითითებული არაა"
 #: src/rhsmlib/services/syspurpose.py:105
 #: src/subscription_manager/cert_sorter.py:282
 msgid "Disabled"
-msgstr "გამორთული"
+msgstr "გამორთულია"
 
 #: src/subscription_manager/branding/__init__.py:77
 msgid "Register the system to the server"
@@ -2358,7 +2358,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/org.py:48
 #: src/subscription_manager/cli_command/register.py:480
 msgid "Organization: "
-msgstr "ორგანზაცია: "
+msgstr "ორგანიზაცია: "
 
 #: src/subscription_manager/cli_command/org.py:62
 #, python-brace-format
@@ -2500,11 +2500,11 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/plugins.py:53
 msgid "disabled"
-msgstr "გათიშული"
+msgstr "გამორთულია"
 
 #: src/subscription_manager/cli_command/plugins.py:55
 msgid "enabled"
-msgstr "ჩართული"
+msgstr "ჩართულია"
 
 #: src/subscription_manager/cli_command/redeem.py:29
 msgid "Attempt to redeem a subscription for a preconfigured system"
@@ -2991,7 +2991,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/unregister.py:38
 #: src/subscription_manager/utils.py:268
 msgid "This system is currently not registered."
-msgstr ""
+msgstr "თქვენი სისტემა ამჟამად დაურეგისტრირებელია."
 
 #: src/subscription_manager/cli_command/unregister.py:71
 msgid "System has been unregistered."
@@ -3031,7 +3031,7 @@ msgstr "პაროლი: "
 
 #: src/subscription_manager/cli_command/version.py:27
 msgid "Print version information"
-msgstr ""
+msgstr "ვერსიის ინფორმაციის გამოტანა"
 
 #: src/subscription_manager/cli_command/version.py:35
 #, python-brace-format
@@ -3137,10 +3137,9 @@ msgid ""
 msgstr ""
 
 #: src/subscription_manager/exceptions.py:48
-#, fuzzy, python-brace-format
-#| msgid "Certificate Version"
+#, python-brace-format
 msgid "Bad CA certificate: {file}: {reason}"
-msgstr "სერტიფიკატის ვერსია"
+msgstr "არასწორი CA სერტიფიკატი: {file}: {reason}"
 
 #: src/subscription_manager/exceptions.py:49
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:218
@@ -3229,7 +3228,7 @@ msgstr "წაშლილია:"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:141
 msgid "Updates:"
-msgstr "განახლდა:"
+msgstr "განახლებები:"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:145
 msgid "Deleted:"
