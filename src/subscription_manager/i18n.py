@@ -40,39 +40,37 @@ def configure_i18n():
     Configure internationalization for the application. Should only be
     called once per invocation. (once for CLI, once for GUI)
     """
-    import locale
-
+    # Setup the localization framework
     try:
         locale.setlocale(category=locale.LC_ALL, locale="")
     except locale.Error:
-        # Following message could be little bit confusing. Why? When environment variable
-        # LANG is set to e.g. es_ES.UTF-8, then we can show localized message for this language,
-        # but this language could not be fully supported by the system. It means that en_ES is not
-        # listed in the list of 'locale -a'
-        _locale = None
-        if "LANG" in os.environ:
-            _locale = os.environ["LANG"]
-        elif "LC_ALL" in os.environ:
-            _locale = os.environ["LC_ALL"]
-        if _locale is not None and Locale.is_locale_supported(_locale):
-            print(
-                'You are attempting to use a locale: "%s" that is not fully supported by this system.'
-                % _locale
-            )
-        os.environ["LC_ALL"] = "C.UTF-8"
-        locale.setlocale(locale.LC_ALL, "C.UTF-8")
+        # We end up with a locale.Error when the language code that the user
+        # used is not supported by the OS.  The language code might be valid
+        # but the system hasn't been configured to use it, for example.  (You
+        # can check which languages the system has been configured to use by
+        # running `locale -a`)
 
+        os.environ["LC_ALL"] = "C.UTF-8"
+        locale.setlocale(category=locale.LC_ALL, locale="")
+
+    # We used LC_ALL in the setup phase to set all the categories but here we
+    # specifically retrieve the information for LC_MESSAGES.  LC_ALL returns
+    # a string which is formatted to display all of the localization settings
+    # but we only want the string which specifies the language code
+    # to use for translations.
+    lang = locale.setlocale(category=locale.LC_MESSAGES, locale=None)
     configure_gettext()
-    # RHBZ 1642271  Don't set a None lang
-    lang = os.environ.get("LANG")
-    if lang is not None:
-        Locale.set(lang)
+    Locale.set(lang)
 
 
 def configure_gettext() -> None:
     """Configure gettext for all RHSM-related code.
 
-    Since Glade internally uses gettext, we need to use the C-level bindings in locale to adjust the encoding.
+    We needed to use the C-level bindings in locale to adjust the encoding
+    when we used glade. We don't use glade anymore but
+    bind_textdomain_codeset() should be a minor optimization (since the
+    catalog and the output are both UTF-8, this avoids converting it
+    unnecessarily) so we keep it for now.
 
     See https://docs.python.org/2/library/locale.html#access-to-message-catalogs
     """

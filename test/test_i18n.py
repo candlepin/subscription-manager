@@ -57,7 +57,7 @@ class TestI18N(unittest.TestCase):
     @patch("subscription_manager.i18n.Locale")
     def test_configure_i18n_lang_none(self, locale):
         """
-        Ensure the method i18n does not pass a None from the environment to Locale
+        Ensure the we use a proper language code instead of callng Locale.set with None
         :return:
         """
         with patch.dict(os.environ, clear=True):
@@ -66,4 +66,4 @@ class TestI18N(unittest.TestCase):
             except Exception:
                 self.fail()
 
-        locale.set.assert_not_called()
+        locale.set.assert_called_with("C")
