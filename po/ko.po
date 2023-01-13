@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-11 15:11+0100\n"
-"PO-Revision-Date: 2022-11-02 05:19+0000\n"
+"PO-Revision-Date: 2022-12-16 04:20+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -1838,16 +1838,13 @@ msgstr "오류: 파일 \"{file}\"은 존재하지 않거나 읽을 수 없습니
 
 # translation manually copied from candlepin
 #: src/subscription_manager/cli_command/attach.py:157
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to attach. It is disabled for org \"{owner_id}\" because "
-#| "of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring the request to attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
-"첨부 요청을 무시합니다. 콘텐츠 접근 방식 설정으로 인하여 \"{owner_id}\" 조직"
-"에 대해 비활성화 되었습니다."
+"첨부 요청을 무시합니다. 첨부된 서브스크립션은 단순 콘텐츠 접근(SCA)이 활성화 "
+"되었기 때문에 조직 \"{owner_id}\"를 위해 비활성화 되었습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:201
@@ -1945,16 +1942,13 @@ msgstr "로컬 데이터가 모두 삭제되었습니다"
 
 # translation manually copied from candlepin
 #: src/subscription_manager/cli_command/cli.py:130
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
-#| "because of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
-"자동 첨부 요청을 무시합니다. 콘텐츠 액세스 모드 설정으로 인해 \"{owner_id}\" "
-"조직에 대해 비활성화되어 있습니다."
+"자동-첨부 요청을 무시합니다. 첨부된 서브스크립션은 단순 컨텐츠 접근(SCA)가 "
+"활성화 되었기 때문에 조직 \"{owner_id}\"를 위해 비활성화되어 있습니다."
 
 #: src/subscription_manager/cli_command/cli.py:151
 msgid "server URL in the form of https://hostname:port/prefix"
@@ -2805,7 +2799,7 @@ msgstr "조직을 지정합니다"
 #: src/subscription_manager/cli_command/org.py:46
 #: src/subscription_manager/cli_command/register.py:475
 msgid "Error: --org is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "오류: --org는 비-대화형 방식에서 매개변수가 필요합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/org.py:48
@@ -3169,7 +3163,7 @@ msgstr "서비스 레벨 설정: {level}"
 
 #: src/subscription_manager/cli_command/register.py:393
 msgid "Error: --environments is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "오류: --environments는 비-대화형 방식에서 매개변수가 필요합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:397
@@ -3586,11 +3580,11 @@ msgstr "서버 인증시 사용 할 토큰"
 
 #: src/subscription_manager/cli_command/user_pass.py:64
 msgid "Error: --username is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "오류: --username 비-대화형 방식에서 매개변수가 필요합니다."
 
 #: src/subscription_manager/cli_command/user_pass.py:69
 msgid "Error: --password is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "오류: --passwd는 비-대화형 방식에서 매개변수가 필요합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/user_pass.py:73
@@ -3663,49 +3657,44 @@ msgstr ""
 "log에서 확인하십시오."
 
 #: src/subscription_manager/exceptions.py:32
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Network error: {message} (error code {code})"
-msgstr "{message} (HTTP 오류 코드 {code}: {title})"
+msgstr "네트워크 오류: {message} (오류 코드 {code})"
 
 #: src/subscription_manager/exceptions.py:33
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Connection error: {message} (error code {code})"
-msgstr "{message} (HTTP 오류 코드 {code}: {title})"
+msgstr "연결 오류: {message} (오류 코드 {code})"
 
 #: src/subscription_manager/exceptions.py:34
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
-msgstr "{message} (HTTP 오류 코드 {code}: {title})"
+msgstr ""
+"알지 못하는 서버 응답 (HTTP 오류 코드 {code}: {title}):\n"
+"{content}"
 
 #: src/subscription_manager/exceptions.py:35
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Unknown server reply (HTTP error code {code}: {title})"
-msgstr "{message} (HTTP 오류 코드 {code}: {title})"
+msgstr "알지 못하는 서버 응답 (HTTP 오류 코드 {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:37
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
-msgstr "프락시 오류, 프락시 서버에 연결 할 수 없습니다."
+msgstr "프락시 오류: {hostname}: {message} (오류 코드 {code})에 연결 할 수 없습니다"
 
 #: src/subscription_manager/exceptions.py:39
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}: {message}"
-msgstr "프락시 오류, 프락시 서버에 연결 할 수 없습니다."
+msgstr "프락시 오류:{hostname}: {message}에 연결 할 수 없습니다"
 
 #: src/subscription_manager/exceptions.py:40
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}"
-msgstr "프락시 오류, 프락시 서버에 연결 할 수 없습니다."
+msgstr "프락시 오류: {hostname}에 연결 할 수 없습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:41
@@ -3730,10 +3719,9 @@ msgstr "원격 서버 오류. 연결 정보 또는 /var/log/rhsm/rhsm.log를 확
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:48
-#, fuzzy, python-brace-format
-#| msgid "Bad CA certificate: %s"
+#, python-brace-format
 msgid "Bad CA certificate: {file}: {reason}"
-msgstr "잘못된 CA 인증서: %s"
+msgstr "잘못된 CA 인증서: {file}: {reason}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:49
@@ -3789,12 +3777,12 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:60
 #, python-brace-format
 msgid "Bad product certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "잘못된 제품 인증서: {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:61
 #, python-brace-format
 msgid "Bad certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "잘못된 인증서: {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:62
 #, python-brace-format
@@ -3802,13 +3790,14 @@ msgid ""
 "Bad certificate: [{library}] {message}\n"
 "{data}"
 msgstr ""
+"잘못된 인증서: [{library}] {message}\n"
+"{data}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:63
-#, fuzzy, python-brace-format
-#| msgid "Bad CA certificate: %s"
+#, python-brace-format
 msgid "Bad certificate: [{library}] {message}"
-msgstr "잘못된 CA 인증서: %s"
+msgstr "잘못된 인증서: [{library}] {message}"
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
