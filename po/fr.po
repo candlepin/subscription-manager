@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-11 15:11+0100\n"
-"PO-Revision-Date: 2022-11-06 13:19+0000\n"
-"Last-Translator: blutch112 <vincent.lefebvre59@gmail.com>\n"
+"PO-Revision-Date: 2022-11-28 08:54+0000\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
 "Language: fr\n"
@@ -1898,16 +1898,14 @@ msgstr "Erreur : le fichier « {file} » n'existe pas ou ne peut pas être lu
 
 # translation manually copied from candlepin
 #: src/subscription_manager/cli_command/attach.py:157
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to attach. It is disabled for org \"{owner_id}\" because "
-#| "of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring the request to attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
-"Ignorer la demande d'attachement. Il est désactivé pour l'organisation "
-"\"{owner_id}\" en raison du paramétrage du mode d'accès au contenu."
+"Ignorer la demande de rattachement. Le rattachement des abonnements est "
+"désactivé pour l'organisation \"{owner_id}\" car l'accès simple au contenu "
+"(SCA) est activé."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/attach.py:201
@@ -2015,17 +2013,14 @@ msgstr "Toutes les données locales supprimées"
 
 # translation manually copied from candlepin
 #: src/subscription_manager/cli_command/cli.py:130
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
-#| "because of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
-"Requête auto-attach ignorée. L'organisation \"{owner_id}\" a déjà la "
-"fonction d'auto-assignée désactivée à cause de la configuration de mode "
-"d'accès au contenu."
+"Ignorer la demande de rattachement automatique. Le rattachement des "
+"abonnements est désactivé pour l'organisation \"{owner_id}\" car l'accès "
+"simple au contenu (SCA) est activé."
 
 #: src/subscription_manager/cli_command/cli.py:151
 msgid "server URL in the form of https://hostname:port/prefix"
@@ -2912,7 +2907,7 @@ msgstr "spécifier une organisation"
 #: src/subscription_manager/cli_command/org.py:46
 #: src/subscription_manager/cli_command/register.py:475
 msgid "Error: --org is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "Erreur : --org est un paramètre obligatoire en mode non-interactif."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/org.py:48
@@ -3291,6 +3286,7 @@ msgstr "Niveau de service paramétré sur : {level}"
 #: src/subscription_manager/cli_command/register.py:393
 msgid "Error: --environments is a required parameter in non-interactive mode."
 msgstr ""
+"Erreur : --environments est un paramètre obligatoire en mode non-interactif."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/register.py:397
@@ -3729,10 +3725,12 @@ msgstr "jeton à utiliser lors de l'autorisation sur le serveur"
 #: src/subscription_manager/cli_command/user_pass.py:64
 msgid "Error: --username is a required parameter in non-interactive mode."
 msgstr ""
+"Erreur : --username est un paramètre obligatoire en mode non-interactif."
 
 #: src/subscription_manager/cli_command/user_pass.py:69
 msgid "Error: --password is a required parameter in non-interactive mode."
 msgstr ""
+"Erreur : --password est un paramètre obligatoire en mode non-interactif."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/user_pass.py:73
@@ -3807,49 +3805,46 @@ msgstr ""
 "rhsm/rhsm.log pour plus d'informations."
 
 #: src/subscription_manager/exceptions.py:32
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Network error: {message} (error code {code})"
-msgstr "{message} (Code d'erreur HTTP {code} : {title})"
+msgstr "Erreur réseau : {message} (code d'erreur {code})"
 
 #: src/subscription_manager/exceptions.py:33
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Connection error: {message} (error code {code})"
-msgstr "{message} (Code d'erreur HTTP {code} : {title})"
+msgstr "Erreur de connexion : {message} (code d'erreur {code})"
 
 #: src/subscription_manager/exceptions.py:34
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
-msgstr "{message} (Code d'erreur HTTP {code} : {title})"
+msgstr ""
+"Réponse du serveur inconnue (code d'erreur HTTP {code}: {title}) :\n"
+"{content}"
 
 #: src/subscription_manager/exceptions.py:35
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Unknown server reply (HTTP error code {code}: {title})"
-msgstr "{message} (Code d'erreur HTTP {code} : {title})"
+msgstr "Réponse du serveur inconnu (code d'erreur HTTP {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:37
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
-msgstr "Erreur de proxy. Impossible de se connecter au serveur proxy."
+msgstr ""
+"Erreur de proxy : impossible de se connecter à {hostname}: {message} (code "
+"d'erreur {code})"
 
 #: src/subscription_manager/exceptions.py:39
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}: {message}"
-msgstr "Erreur de proxy. Impossible de se connecter au serveur proxy."
+msgstr "Erreur de proxy : impossible de se connecter à {hostname}: {message}"
 
 #: src/subscription_manager/exceptions.py:40
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}"
-msgstr "Erreur de proxy. Impossible de se connecter au serveur proxy."
+msgstr "Erreur de proxy : impossible de se connecter à {hostname}"
 
 #: src/subscription_manager/exceptions.py:41
 msgid "Unauthorized: Invalid credentials for request."
@@ -3877,10 +3872,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/exceptions.py:48
-#, fuzzy, python-brace-format
-#| msgid "Bad CA certificate: %s"
+#, python-brace-format
 msgid "Bad CA certificate: {file}: {reason}"
-msgstr "Mauvais certificat CA : %s"
+msgstr "Mauvais certificat CA : {file}: {reason}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/exceptions.py:49
@@ -3942,12 +3936,12 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:60
 #, python-brace-format
 msgid "Bad product certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "Mauvais certificat de produit : {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:61
 #, python-brace-format
 msgid "Bad certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "Mauvais certificat : {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:62
 #, python-brace-format
@@ -3955,13 +3949,14 @@ msgid ""
 "Bad certificate: [{library}] {message}\n"
 "{data}"
 msgstr ""
+"Mauvais certificat : [{library}] {message}\n"
+"{data}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/exceptions.py:63
-#, fuzzy, python-brace-format
-#| msgid "Bad CA certificate: %s"
+#, python-brace-format
 msgid "Bad certificate: [{library}] {message}"
-msgstr "Mauvais certificat CA : %s"
+msgstr "Mauvais certificat : [{library}] {message}"
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
