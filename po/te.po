@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-25 11:27+0200\n"
+"POT-Creation-Date: 2022-11-11 15:11+0100\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Telugu\n"
@@ -204,88 +204,88 @@ msgstr "%s: దోషం: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:95
+#: src/daemons/rhsmcertd.c:105
 msgid "deprecated, see --cert-check-interval"
 msgstr "తీసివేసిన, --cert-check-interval చూడండి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:98
+#: src/daemons/rhsmcertd.c:108
 msgid "interval to run cert check (in minutes)"
 msgstr "ధృవీకరణపత్ర పరిశీలన నడుపుటకు విరామం (నిమిషాలలో)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:102
+#: src/daemons/rhsmcertd.c:112
 msgid "deprecated, see --auto-attach-interval"
 msgstr "తీసివేయబడెను, --auto-attach-interval చూడు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:115
 msgid "interval to run auto-attach (in minutes)"
 msgstr "ఆటో-ఎటాచ్ నడుపుటకు విరామం (నిమిషాలలో)"
 
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:118
 msgid "interval to run auto-registration (in minutes)"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:111
+#: src/daemons/rhsmcertd.c:121
 msgid "run the initial checks immediately, with no delay"
 msgstr "ప్రాథమిక పరిశీలనలను తక్షణమే నడుపుము, ఆలస్యం లేకుండా"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:114
+#: src/daemons/rhsmcertd.c:124
 msgid "show debug messages"
 msgstr "డీబగ్ సందేశములను చూపుము"
 
-#: src/daemons/rhsmcertd.c:116
+#: src/daemons/rhsmcertd.c:126
 msgid "do not add an offset to the initial checks."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:119
+#: src/daemons/rhsmcertd.c:129
 msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:454
+#: src/daemons/rhsmcertd.c:483
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "మరింత సమాచారం కొరకు నడుపుము: rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:514
+#: src/daemons/rhsmcertd.c:600
 msgid "Wrong number of arguments specified.\n"
 msgstr "సరికాని సంఖ్యలో ఆర్గుమెంట్లు తెలుపబడెను.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:590
+#: src/daemons/rhsmcertd.c:676
 msgid "Invalid argument specified.\n"
 msgstr "చెల్లని ఆర్గుమెంట్ తెలుపబడెను.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:596
+#: src/daemons/rhsmcertd.c:682
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "హెచ్చరిక: తీసివేసిన CLI ఆర్గుమెంట్లు వుపయోగించబడినవి.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:611
+#: src/daemons/rhsmcertd.c:697
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "చెల్లని ఐచ్చికాలు: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:625
+#: src/daemons/rhsmcertd.c:711
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "చెల్లని ఆర్గుమెంట్ తెలుపబడెను: %s\n"
@@ -333,7 +333,7 @@ msgid ""
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr "ఈ వ్యవస్థ RHN Classic మరియు Red Hat సబ్‌స్క్రిప్షన్ నిర్వహణ రెంటినీ వుపయోగించి నమోదైంది."
 
-#: src/plugins/dnf/subscription-manager.py:86
+#: src/plugins/dnf/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 
@@ -972,7 +972,7 @@ msgstr "ప్రత్యామ్నాయ పేరు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rct/printing.py:218 src/rhsmlib/services/entitlement.py:292
+#: src/rct/printing.py:218 src/rhsmlib/services/entitlement.py:297
 msgid "Not Available"
 msgstr "అందుబాటులో లేదు"
 
@@ -1010,37 +1010,37 @@ msgstr "గుర్తింపు దృవీకరణపత్రం"
 msgid "Unknown Certificate Type"
 msgstr "తెలియని దృవీకరణపత్రం రకం"
 
-#: src/rhsm/connection.py:1303
+#: src/rhsm/connection.py:1389
 msgid "Fetching supported resources"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1362
+#: src/rhsm/connection.py:1449
 #, fuzzy
 #| msgid "connectionStatusLabel"
 msgid "Checking connection status"
 msgstr "అనుసంధానంస్థితిలేబుల్"
 
-#: src/rhsm/connection.py:1390
+#: src/rhsm/connection.py:1477
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1461
+#: src/rhsm/connection.py:1550
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "సిస్టమ్ నమోదుచేయి"
 
-#: src/rhsm/connection.py:1489 src/rhsm/connection.py:1501
+#: src/rhsm/connection.py:1580 src/rhsm/connection.py:1592
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1524
+#: src/rhsm/connection.py:1615
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
@@ -1048,7 +1048,7 @@ msgstr "వర్షన్ సమాచారం ముద్రించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1599
+#: src/rhsm/connection.py:1691
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
@@ -1056,7 +1056,7 @@ msgstr "సబ్‌స్క్రిప్షన్ నమోదీకరణ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1609
+#: src/rhsm/connection.py:1703
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Updating guest information"
@@ -1064,7 +1064,7 @@ msgstr "మానిఫెస్ట్ సమాచారం ముద్రి�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1613 src/rhsm/connection.py:1617
+#: src/rhsm/connection.py:1707 src/rhsm/connection.py:1711
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
@@ -1072,7 +1072,7 @@ msgstr "మానిఫెస్ట్ సమాచారం ముద్రి�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1621
+#: src/rhsm/connection.py:1715
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
@@ -1080,35 +1080,35 @@ msgstr "తీసివేయుచున్నది"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1644 src/rhsm/connection.py:1655
+#: src/rhsm/connection.py:1739 src/rhsm/connection.py:1750
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "ధృవీకరణపత్రం సమాచారం ముద్రించు"
 
-#: src/rhsm/connection.py:1663
+#: src/rhsm/connection.py:1759
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1673
+#: src/rhsm/connection.py:1771
 msgid "Fetching consumers"
 msgstr ""
 
-#: src/rhsm/connection.py:1682
+#: src/rhsm/connection.py:1780
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1691
+#: src/rhsm/connection.py:1789
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1698
+#: src/rhsm/connection.py:1796
 msgid "Fetching available system purpose settings"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1705
+#: src/rhsm/connection.py:1812
 #, fuzzy
 #| msgid "specify organization"
 msgid "Creating organization"
@@ -1116,8 +1116,8 @@ msgstr "సంస్థను తెలుపు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1712 src/rhsm/connection.py:1726
-#: src/rhsm/connection.py:1740
+#: src/rhsm/connection.py:1819 src/rhsm/connection.py:1838
+#: src/rhsm/connection.py:1856
 #, fuzzy
 #| msgid "specify organization"
 msgid "Fetching organizations"
@@ -1125,7 +1125,7 @@ msgstr "సంస్థను తెలుపు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1719
+#: src/rhsm/connection.py:1829
 #, fuzzy
 #| msgid "specify organization"
 msgid "Removing organization"
@@ -1133,7 +1133,7 @@ msgstr "సంస్థను తెలుపు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1733
+#: src/rhsm/connection.py:1848
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching organization information"
@@ -1141,7 +1141,7 @@ msgstr "వర్షన్ సమాచారం ముద్రించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1754
+#: src/rhsm/connection.py:1874
 #, fuzzy
 #| msgid "Fetching list of possible organizations"
 msgid "Fetching organization hypervisors"
@@ -1149,7 +1149,7 @@ msgstr "సాధ్యమగు సంస్థలను వెతుకుత�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1761
+#: src/rhsm/connection.py:1884
 #, fuzzy
 #| msgid "Register System"
 msgid "Unregistering system"
@@ -1157,24 +1157,24 @@ msgstr "సిస్టమ్ నమోదుచేయి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1772
+#: src/rhsm/connection.py:1898
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "గుర్తింపు దృవీకరణపత్రం"
 
-#: src/rhsm/connection.py:1779
+#: src/rhsm/connection.py:1907
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1795
+#: src/rhsm/connection.py:1923
 msgid "Fetching content for a certificate"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1805 src/rhsm/connection.py:1815
-#: src/rhsm/connection.py:1830 src/rhsm/connection.py:2120
+#: src/rhsm/connection.py:1936 src/rhsm/connection.py:1950
+#: src/rhsm/connection.py:1967 src/rhsm/connection.py:2334
 #, fuzzy
 #| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
@@ -1182,7 +1182,7 @@ msgstr "సబ్‌స్కిప్షన్లను అనుబంది�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1848
+#: src/rhsm/connection.py:1986
 #, fuzzy
 #| msgid "Attaching subscriptions"
 msgid "Simulating subscribing"
@@ -1190,20 +1190,20 @@ msgstr "సబ్‌స్కిప్షన్లను అనుబంది�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1852 src/rhsm/connection.py:1856
-#: src/rhsm/connection.py:1860
+#: src/rhsm/connection.py:1996 src/rhsm/connection.py:2007
+#: src/rhsm/connection.py:2016
 #, fuzzy
 #| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
 msgstr "సబ్‌స్క్రైబ్ అగుటలో దోషం: %s"
 
-#: src/rhsm/connection.py:1917
+#: src/rhsm/connection.py:2074
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1924
+#: src/rhsm/connection.py:2088
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching pool information"
@@ -1211,7 +1211,7 @@ msgstr "వర్షన్ సమాచారం ముద్రించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1928
+#: src/rhsm/connection.py:2093
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching product information"
@@ -1219,7 +1219,7 @@ msgstr "వర్షన్ సమాచారం ముద్రించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1932
+#: src/rhsm/connection.py:2103
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
@@ -1227,7 +1227,7 @@ msgstr "వర్షన్ సమాచారం ముద్రించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1945
+#: src/rhsm/connection.py:2117
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
@@ -1235,7 +1235,7 @@ msgstr "అందుబాటులోని విడుదలలు జాబ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1954
+#: src/rhsm/connection.py:2132
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
@@ -1243,7 +1243,7 @@ msgstr "సాధ్యమగు పరిసరాల జాబితాను 
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1962
+#: src/rhsm/connection.py:2141
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
@@ -1251,7 +1251,7 @@ msgstr "సేవా స్థాయిను వుపయోగించుట:
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1973
+#: src/rhsm/connection.py:2152
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
@@ -1259,7 +1259,7 @@ msgstr "సాధ్యమగు పరిసరాల జాబితాను 
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1991
+#: src/rhsm/connection.py:2171
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching environment information"
@@ -1267,7 +1267,7 @@ msgstr "వర్షన్ సమాచారం ముద్రించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1998
+#: src/rhsm/connection.py:2179
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Fetching entitlement information"
@@ -1275,7 +1275,7 @@ msgstr "ధృవీకరణపత్రం సమాచారం ముద్�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2002 src/rhsm/connection.py:2046
+#: src/rhsm/connection.py:2188 src/rhsm/connection.py:2239
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Updating certificate"
@@ -1283,51 +1283,51 @@ msgstr "గుర్తింపు దృవీకరణపత్రం"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2017
+#: src/rhsm/connection.py:2207
 #, fuzzy
 #| msgid "Import Certificates"
 msgid "Updating certificates"
 msgstr "ధృవీకరణపత్రాలను దిగుమతిచేయి"
 
-#: src/rhsm/connection.py:2061
+#: src/rhsm/connection.py:2258
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2068
+#: src/rhsm/connection.py:2266
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2075
+#: src/rhsm/connection.py:2277
 msgid "Updating content overrides"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2084
+#: src/rhsm/connection.py:2290
 #, fuzzy
 #| msgid "Remove All Overrides"
 msgid "Removing content overrides"
 msgstr "అన్ని ఓవర్‌రైడ్లు తొలగించు"
 
-#: src/rhsm/connection.py:2099
+#: src/rhsm/connection.py:2311
 msgid "Activating"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2106
+#: src/rhsm/connection.py:2319
 #, fuzzy
 #| msgid "Attaching subscriptions"
 msgid "Fetching subscriptions"
 msgstr "సబ్‌స్కిప్షన్లను అనుబందిస్తోంది"
 
-#: src/rhsm/connection.py:2129
+#: src/rhsm/connection.py:2344
 msgid "Fetching job"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2138
+#: src/rhsm/connection.py:2354
 #, fuzzy
 #| msgid "Unknown"
 msgid "Updating job status"
@@ -1335,7 +1335,7 @@ msgstr "తెలియని"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2146
+#: src/rhsm/connection.py:2363
 #, fuzzy
 #| msgid "Cancel"
 msgid "Canceling job"
@@ -1413,13 +1413,13 @@ msgstr ""
 msgid "Unable to create zip file of system information: {error}"
 msgstr "వ్యవస్థ సమాచారం కొరకు జిప్ ఫైలు సృష్టించలేదు: %s"
 
-#: src/rhsmlib/dbus/objects/register.py:102
+#: src/rhsmlib/dbus/objects/register.py:104
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/register.py:118
+#: src/rhsmlib/dbus/objects/register.py:120
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr ""
@@ -1442,86 +1442,86 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:50
+#: src/rhsmlib/services/entitlement.py:51
 msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 msgstr "ప్రవేశపెట్టిన తేది చెల్లనిది. తేది YYYY-MM-DD రూపంలోనే వుండాలి (ఉదాహరణ: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:55
+#: src/rhsmlib/services/entitlement.py:56
 msgid "Past dates are not allowed"
 msgstr "గత తేదీలు అనుమతించబడవు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:92
-#: src/rhsmlib/services/syspurpose.py:104
+#: src/rhsmlib/services/entitlement.py:93
+#: src/rhsmlib/services/syspurpose.py:106
 #: src/subscription_manager/cert_sorter.py:283
-#: src/subscription_manager/cli_command/cli.py:233
+#: src/subscription_manager/cli_command/cli.py:232
+#: src/subscription_manager/cli_command/cli.py:236
 #: src/subscription_manager/cli_command/cli.py:237
 #: src/subscription_manager/cli_command/cli.py:238
-#: src/subscription_manager/cli_command/cli.py:239
-#: src/subscription_manager/cli_command/facts.py:67
+#: src/subscription_manager/cli_command/facts.py:66
 #: src/subscription_manager/cli_command/list.py:54
 #: src/subscription_manager/reasons.py:109
-#: src/subscription_manager/utils.py:252 src/subscription_manager/utils.py:266
-#: src/subscription_manager/utils.py:268 src/subscription_manager/utils.py:288
-#: src/subscription_manager/utils.py:290 src/subscription_manager/utils.py:309
+#: src/subscription_manager/utils.py:253 src/subscription_manager/utils.py:267
+#: src/subscription_manager/utils.py:269 src/subscription_manager/utils.py:289
+#: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:310
 msgid "Unknown"
 msgstr "తెలియని"
 
-#: src/rhsmlib/services/entitlement.py:120 src/rhsmlib/services/register.py:57
+#: src/rhsmlib/services/entitlement.py:123 src/rhsmlib/services/register.py:63
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:283
+#: src/rhsmlib/services/entitlement.py:288
 #: src/subscription_manager/cli_command/list.py:428
 msgid "Virtual"
 msgstr "వర్చ్యువల్"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:285
+#: src/rhsmlib/services/entitlement.py:290
 #: src/subscription_manager/cli_command/list.py:430
 msgid "Physical"
 msgstr "ఫిజికల్"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:288
+#: src/rhsmlib/services/entitlement.py:293
 #: src/subscription_manager/cli_command/list.py:433
 msgid "Yes"
 msgstr "అవును"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:290
+#: src/rhsmlib/services/entitlement.py:295
 #: src/subscription_manager/cli_command/list.py:435
 msgid "No"
 msgstr "కాదు"
 
-#: src/rhsmlib/services/entitlement.py:310
+#: src/rhsmlib/services/entitlement.py:315
 msgid "Subscription is current"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:313
+#: src/rhsmlib/services/entitlement.py:318
 msgid "Subscription is expired"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:315
+#: src/rhsmlib/services/entitlement.py:320
 msgid "Subscription has not begun"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:317
+#: src/rhsmlib/services/entitlement.py:322
 msgid "Subscription management service doesn't support Status Details."
 msgstr "సబ్‌స్క్రిప్షన్ నిర్వహణ సేవ అనునది స్థితి వివరాలకు తోడ్పాటు నీయదు."
 
-#: src/rhsmlib/services/entitlement.py:484
+#: src/rhsmlib/services/entitlement.py:491
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
@@ -1529,62 +1529,62 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:489
+#: src/rhsmlib/services/entitlement.py:496
 #: src/subscription_manager/cli_command/list.py:292
 msgid "Error: --all is only applicable with --available"
 msgstr "దోషం: --all అనునది --available తో మాత్రమే ఆపాదితం అగును"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:491
+#: src/rhsmlib/services/entitlement.py:498
 #: src/subscription_manager/cli_command/list.py:294
 msgid "Error: --ondate is only applicable with --available"
 msgstr "దోషం: --ondate అనునది --available తో మాత్రమే ఆపాదింత అగును"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:496
+#: src/rhsmlib/services/entitlement.py:503
 #: src/subscription_manager/cli_command/list.py:297
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "దోషం: --servicelevel అనునది --available లేదా --consumed తో మాత్రమే ఆపాదితం"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:500
+#: src/rhsmlib/services/entitlement.py:507
 #: src/subscription_manager/cli_command/list.py:302
 msgid "Error: --match-installed is only applicable with --available"
 msgstr "దోషం:--match-installed అనునది --available తో మాత్రమే ఆపాదితం అగును"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:503
+#: src/rhsmlib/services/entitlement.py:510
 #: src/subscription_manager/cli_command/list.py:304
 msgid "Error: --no-overlap is only applicable with --available"
 msgstr "దోషం: --no-overlap అనునది --available తో మాత్రమే ఆపాదితం అగును"
 
-#: src/rhsmlib/services/entitlement.py:508
+#: src/rhsmlib/services/entitlement.py:515
 #: src/subscription_manager/cli_command/list.py:307
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr "దోషం: --pool-only అనునది --available మరియు/లేదా --consumed తో మాత్రమే తగును"
 
-#: src/rhsmlib/services/entitlement.py:511
+#: src/rhsmlib/services/entitlement.py:518
 msgid "Error: this system is not registered"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:183
+#: src/rhsmlib/services/register.py:194
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:186
-#: src/subscription_manager/cli_command/register.py:138
+#: src/rhsmlib/services/register.py:197
+#: src/subscription_manager/cli_command/register.py:139
 msgid "Error: system name can not be empty."
 msgstr "దోషం: వ్యవస్థ పేరు ఖాళీగా వుండలేదు."
 
-#: src/rhsmlib/services/register.py:190
-#: src/subscription_manager/cli_command/register.py:160
+#: src/rhsmlib/services/register.py:201
+#: src/subscription_manager/cli_command/register.py:161
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
@@ -1593,53 +1593,54 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:200
-#: src/subscription_manager/cli_command/register.py:151
+#: src/rhsmlib/services/register.py:211
+#: src/subscription_manager/cli_command/register.py:152
 msgid "Error: Must specify an activation key"
 msgstr "దోషం: తప్పక వొక క్రియాశీలపు కీ తెలుపవలె"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:202
-#: src/subscription_manager/cli_command/register.py:140
+#: src/rhsmlib/services/register.py:213
+#: src/subscription_manager/cli_command/register.py:141
 msgid "Error: Activation keys do not require user credentials."
 msgstr "దోషం: క్రియాశీల కీలకు వాడుకరి ఆనవాళ్ళు అవసరంలేదు."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:205
-#: src/subscription_manager/cli_command/register.py:143
+#: src/rhsmlib/services/register.py:216
+#: src/subscription_manager/cli_command/register.py:144
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "దోషం: గతంలో నమోదైన ఐడిలతో క్రియాశీల కీలు వుపయోగించబడలేవు."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:209
-#: src/subscription_manager/cli_command/register.py:146
+#: src/rhsmlib/services/register.py:220
+#: src/subscription_manager/cli_command/register.py:147
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr "దోషం: క్రియాశీల కీలు యెన్విరాన్మెంట్లను తెలుపుటకు అనుమతించబడవు."
 
-#: src/rhsmlib/services/register.py:216
+#: src/rhsmlib/services/register.py:227
 msgid "Error: Missing username or password."
 msgstr ""
 
-#: src/rhsmlib/services/syspurpose.py:97 src/rhsmlib/services/syspurpose.py:100
+#: src/rhsmlib/services/syspurpose.py:99 src/rhsmlib/services/syspurpose.py:102
 msgid "Matched"
 msgstr ""
 
-#: src/rhsmlib/services/syspurpose.py:98 src/rhsmlib/services/syspurpose.py:101
+#: src/rhsmlib/services/syspurpose.py:100
+#: src/rhsmlib/services/syspurpose.py:103
 msgid "Mismatched"
 msgstr ""
 
-#: src/rhsmlib/services/syspurpose.py:99
+#: src/rhsmlib/services/syspurpose.py:101
 msgid "Partial"
 msgstr ""
 
-#: src/rhsmlib/services/syspurpose.py:102
+#: src/rhsmlib/services/syspurpose.py:104
 msgid "Not Specified"
 msgstr ""
 
-#: src/rhsmlib/services/syspurpose.py:103
+#: src/rhsmlib/services/syspurpose.py:105
 #: src/subscription_manager/cert_sorter.py:282
 msgid "Disabled"
 msgstr ""
@@ -1820,7 +1821,7 @@ msgstr "చెల్లని"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli.py:77
+#: src/subscription_manager/cli.py:79
 #, fuzzy, python-format, python-brace-format
 #| msgid "%prog [OPTIONS]"
 msgid "%(prog)s {name} [OPTIONS]"
@@ -1828,24 +1829,24 @@ msgstr "%prog [ఐచ్చికాలు]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli.py:117
+#: src/subscription_manager/cli.py:119
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 msgstr "వాడుక: %s మాడ్యూల్-పేరు [మాడ్యూల్-ఐచ్చికాలు] [--help]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli.py:129
+#: src/subscription_manager/cli.py:131
 msgid "Primary Modules:"
 msgstr "ప్రాధమిక మాడ్యూళ్ళు:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli.py:131
+#: src/subscription_manager/cli.py:133
 msgid "Other Modules:"
 msgstr "ఇతర మాడ్యూళ్ళు:"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:36
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:35
 #, python-brace-format
 msgid ""
 "Warning: A {attr} of \"{download_value}\" was recently set for this system "
@@ -1853,7 +1854,7 @@ msgid ""
 "{advice}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:39
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:38
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
@@ -1861,80 +1862,73 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #. TRANSLATORS: this refers to a deprecated command
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:42
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:41
 #, fuzzy
 #| msgid "Deprecated, see remove"
 msgid "Deprecated, see 'syspurpose'"
 msgstr "తీసివేసెను, remove చూడు"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:76
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:75
 #, python-brace-format
 msgid "set {attr} of system purpose"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:83
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:82
 #, python-brace-format
 msgid "unset {attr} of system purpose"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:91
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:90
 #, python-brace-format
 msgid "add an item to the list ({attr})."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:99
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:98
 #, python-brace-format
 msgid "remove an item from the list ({attr})."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:106
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:105
 #, python-brace-format
 msgid "show this system's current {attr}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:113
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:112
 #, python-brace-format
 msgid "list all {attr} available"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:143
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:142
 msgid "--unset cannot be used with --set, --add, or --remove"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:145
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:144
 msgid "--add cannot be used with --remove"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:152
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:151
 msgid "Error: you can specify --username or --token not both"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:157
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:156
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:174
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:173
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:190
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:205
-#: src/subscription_manager/cli_command/cli.py:404
-#: src/subscription_manager/cli_command/service_level.py:156
-msgid "Proxy connection failed, please check your settings."
-msgstr ""
-
 #. TRANSLATORS: this is used to quote a string
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:253
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:251
 #, python-brace-format
 msgid "\"{value}\""
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:257
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:255
 #, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
@@ -1945,7 +1939,7 @@ msgstr[1] ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:266
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:264
 #, fuzzy, python-brace-format
 #| msgid "This org does not have any subscriptions with service levels."
 msgid ""
@@ -1954,66 +1948,66 @@ msgid ""
 "subscriptions."
 msgstr "సేవా స్థాయిలతో యీ org యెటువంటి సబ్‌స్క్రిప్షన్లను కలిగిలేదు."
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:280
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:278
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:298
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:296
 #, python-brace-format
 msgid "{attr} unset."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:315
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:340
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:313
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:338
 #, python-brace-format
 msgid "{attr} updated."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:371
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:369
 #, python-brace-format
 msgid "Current {name}: {val}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:373
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:371
 #, python-brace-format
 msgid "{name} not set."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:391
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:389
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:403
-#: src/subscription_manager/cli_command/service_level.py:221
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:401
+#: src/subscription_manager/cli_command/service_level.py:215
 #, python-brace-format
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:411
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:409
 #, python-brace-format
 msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:437
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:435
 msgid "Unable to connect to server using token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:486
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:483
 #: src/subscription_manager/i18n_argparse.py:35
 #, fuzzy, python-format
 #| msgid "%prog [OPTIONS]"
 msgid "%(prog)s [OPTIONS]"
 msgstr "%prog [ఐచ్చికాలు]"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:495
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:492
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
@@ -2109,19 +2103,19 @@ msgstr "దోషం: ఫైల్ \"%s\" లేదు లేదా చదవబ
 #: src/subscription_manager/cli_command/attach.py:157
 #, python-brace-format
 msgid ""
-"Ignoring request to attach. It is disabled for org \"{owner_id}\" because of "
-"the content access mode setting."
+"Ignoring the request to attach. Attaching subscriptions is disabled for "
+"organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/attach.py:200
+#: src/subscription_manager/cli_command/attach.py:201
 msgid "Please enter a valid numeric pool ID."
 msgstr "దయచేసి చెల్లునటువంటి సంఖ్యా పూల్ ఐడి ప్రవేశపెట్టుము."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/attach.py:208
+#: src/subscription_manager/cli_command/attach.py:209
 #, fuzzy, python-brace-format
 #| msgid "Successfully attached a subscription for: %s"
 msgid "Successfully attached a subscription for: {name}"
@@ -2129,13 +2123,13 @@ msgstr "దీని కొరకు సబ్‌స్క్రిప్షన�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/attach.py:238
+#: src/subscription_manager/cli_command/attach.py:239
 msgid "No Installed products on system. No need to attach subscriptions."
 msgstr "వ్యవస్థపై యే సంస్థాపిత వుత్పత్తులు లేవు. సబ్‌స్క్రిప్షన్లను అనుబందించవలసిన అవసరంలేదు."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/attach.py:242
+#: src/subscription_manager/cli_command/attach.py:243
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
@@ -2145,8 +2139,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/attach.py:256
-#: src/subscription_manager/cli_command/register.py:197
+#: src/subscription_manager/cli_command/attach.py:257
+#: src/subscription_manager/cli_command/register.py:198
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
@@ -2154,13 +2148,13 @@ msgstr "దోషం: --servicelevel ఐచ్చికం సేవికచే
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/attach.py:270
+#: src/subscription_manager/cli_command/attach.py:271
 #, fuzzy
 #| msgid "Service level set to: %s"
 msgid "Service level set to: {}"
 msgstr "సేవా స్థాయి దీనికి వుంచబడెను: %s"
 
-#: src/subscription_manager/cli_command/attach.py:279
+#: src/subscription_manager/cli_command/attach.py:280
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
 msgstr "కింది కారణాల వలన ఎన్టైటిల్మెంట్ ధృవీకరణపత్రము(ల) నవీకరణ విఫలమైంది:"
 
@@ -2216,22 +2210,22 @@ msgstr "సేవికపై ప్రభావం లేకుండా అన
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/clean.py:31
-#: src/subscription_manager/cli_command/register.py:259
+#: src/subscription_manager/cli_command/register.py:260
 msgid "All local data removed"
 msgstr "స్థానిక దత్తాంశం అంతా తీసివేయబడెను"
 
-#: src/subscription_manager/cli_command/cli.py:132
+#: src/subscription_manager/cli_command/cli.py:130
 #, python-brace-format
 msgid ""
-"Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
-"because of the content access mode setting."
+"Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
+"organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
 
-#: src/subscription_manager/cli_command/cli.py:152
+#: src/subscription_manager/cli_command/cli.py:151
 msgid "server URL in the form of https://hostname:port/prefix"
 msgstr "https://hostname:port/prefix రూపంలో సేవిక URL"
 
-#: src/subscription_manager/cli_command/cli.py:159
+#: src/subscription_manager/cli_command/cli.py:158
 msgid ""
 "do not check the entitlement server SSL certificate against available "
 "certificate authorities"
@@ -2239,7 +2233,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:170
+#: src/subscription_manager/cli_command/cli.py:169
 #, fuzzy
 #| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
@@ -2247,30 +2241,30 @@ msgstr "proxy_hostname:proxy_port రూపములో ప్రోక్సీ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:176
+#: src/subscription_manager/cli_command/cli.py:175
 msgid "user for HTTP proxy with basic authentication"
 msgstr "ప్రాధమిక ధృవీకరణతో HTTP ప్రోక్సీ కొరకు వాడుకరి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:182
+#: src/subscription_manager/cli_command/cli.py:181
 msgid "password for HTTP proxy with basic authentication"
 msgstr "ప్రాధమిక ధృవీకరణతో HTTP ప్రోక్సీ కొరకు సంకేతపదము"
 
-#: src/subscription_manager/cli_command/cli.py:188
+#: src/subscription_manager/cli_command/cli.py:187
 msgid "host suffixes that should bypass HTTP proxy"
 msgstr ""
 
-#: src/subscription_manager/cli_command/cli.py:197
+#: src/subscription_manager/cli_command/cli.py:196
 msgid "Do not display progress messages"
 msgstr ""
 
-#: src/subscription_manager/cli_command/cli.py:209
+#: src/subscription_manager/cli_command/cli.py:208
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 
-#: src/subscription_manager/cli_command/cli.py:268
+#: src/subscription_manager/cli_command/cli.py:267
 msgid ""
 "subscription-manager is disabled when running inside a container. Please "
 "refer to your host system for subscription management.\n"
@@ -2280,7 +2274,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:283
+#: src/subscription_manager/cli_command/cli.py:282
 #, fuzzy, python-brace-format
 #| msgid "%s: error: %s"
 msgid "{prog}: error: no such option: {args}"
@@ -2288,19 +2282,19 @@ msgstr "%s: దోషం: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:302
+#: src/subscription_manager/cli_command/cli.py:301
 msgid "Error parsing serverurl:"
 msgstr "సేవికయుఆర్ఎల్ పార్స్ చేయుటలో దోషం:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:318
+#: src/subscription_manager/cli_command/cli.py:317
 msgid "Error parsing baseurl:"
 msgstr "బేస్‌యుఆర్ఎల్ పార్స్ చేయుటలో దోషం:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:391
+#: src/subscription_manager/cli_command/cli.py:390
 #, fuzzy, python-brace-format
 #| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to reach the server at {host}:{port}{handler}"
@@ -2308,17 +2302,17 @@ msgstr "%s:%s%s వద్దని సర్వర్‌ను చేరలే�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:401
+#: src/subscription_manager/cli_command/cli.py:400
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "దోషం: సబ్‌స్క్రిప్షన్ సేవ కొరకు CA ధృవీకరణపత్రం సంస్థాపించలేదు."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:422
+#: src/subscription_manager/cli_command/cli.py:423
 msgid "System certificates corrupted. Please reregister."
 msgstr "వ్యవస్థ ధృవీకరణపత్రాలు పాడైనవి. దయచేసి నమోదవ్వండి."
 
-#: src/subscription_manager/cli_command/cli.py:433
+#: src/subscription_manager/cli_command/cli.py:434
 #, python-brace-format
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
@@ -2408,27 +2402,27 @@ msgstr "విభాగం %s మరియు పేరు %s తీసివే
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:45
+#: src/subscription_manager/cli_command/environments.py:44
 msgid "Display the environments available for a user"
 msgstr "వాడుకరి కొరకు అందుబాటులో వున్న వాతావరణాలను ప్రదర్శించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:46
+#: src/subscription_manager/cli_command/environments.py:45
 msgid "specify organization for environment list, using organization key"
 msgstr "పరిసర జాబితా కొరకు సంస్థను తెలుపు, సంస్థ కీ వుపయోగించి"
 
-#: src/subscription_manager/cli_command/environments.py:53
+#: src/subscription_manager/cli_command/environments.py:52
 msgid "set an ordered comma-separated list of environments for this consumer"
 msgstr ""
 
-#: src/subscription_manager/cli_command/environments.py:59
+#: src/subscription_manager/cli_command/environments.py:58
 msgid "list all environments for the organization"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:66
+#: src/subscription_manager/cli_command/environments.py:65
 #, fuzzy
 #| msgid "Display the environments available for a user"
 msgid "list the environments enabled for this consumer in order"
@@ -2436,26 +2430,26 @@ msgstr "వాడుకరి కొరకు అందుబాటులో వ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:73
+#: src/subscription_manager/cli_command/environments.py:72
 #, fuzzy
 #| msgid "Display the environments available for a user"
 msgid "list the environments not enabled for this consumer"
 msgstr "వాడుకరి కొరకు అందుబాటులో వున్న వాతావరణాలను ప్రదర్శించు"
 
-#: src/subscription_manager/cli_command/environments.py:82
+#: src/subscription_manager/cli_command/environments.py:81
 msgid "You may not specify an --org for environments when registered."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:91
-#: src/subscription_manager/cli_command/register.py:407
+#: src/subscription_manager/cli_command/environments.py:90
+#: src/subscription_manager/cli_command/register.py:413
 msgid "Error: Server does not support environments."
 msgstr "దోషం: పరిసరాలకు సేవిక తోడ్పాటునీయదు."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:98
+#: src/subscription_manager/cli_command/environments.py:97
 #, fuzzy
 #| msgid "%s option requires %d arguments"
 msgid "This operation requires user credentials"
@@ -2463,13 +2457,13 @@ msgstr "%s ఐచ్చికానికి %d ఆర్గుమెంట్�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:113
+#: src/subscription_manager/cli_command/environments.py:111
 msgid "Error: Unable to retrieve environment list from server"
 msgstr "దోషం: సేవిక నుండి యెన్విరాన్మెంట్ జాబితాను వెలికితీయలేక పోయింది"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:128
+#: src/subscription_manager/cli_command/environments.py:126
 #, fuzzy
 #| msgid "Environments"
 msgid "Environments updated."
@@ -2477,7 +2471,7 @@ msgstr "ఎన్విరాన్మెంట్స్"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:130
+#: src/subscription_manager/cli_command/environments.py:128
 #, fuzzy
 #| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support environment updates."
@@ -2485,7 +2479,7 @@ msgstr "దోషం: పరిసరాలకు సేవిక తోడ్�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:138
+#: src/subscription_manager/cli_command/environments.py:136
 #, fuzzy
 #| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support multi-environment operations."
@@ -2493,25 +2487,25 @@ msgstr "దోషం: పరిసరాలకు సేవిక తోడ్�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:156
+#: src/subscription_manager/cli_command/environments.py:154
 msgid "Environments"
 msgstr "ఎన్విరాన్మెంట్స్"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:169
+#: src/subscription_manager/cli_command/environments.py:167
 #, fuzzy
 #| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
 msgstr "సంస్థ ఏ ఎన్విరాన్మెంట్లను కలిగిలేదు."
 
-#: src/subscription_manager/cli_command/environments.py:205
+#: src/subscription_manager/cli_command/environments.py:203
 msgid "Error: The same environment may not be listed more than once. "
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:211
+#: src/subscription_manager/cli_command/environments.py:209
 #, fuzzy, python-brace-format
 #| msgid "No such environment: %s"
 msgid "No such environment: {names}"
@@ -2521,41 +2515,41 @@ msgstr[1] "అటువంటి యెన్విరాన్మెంటు �
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/facts.py:33
+#: src/subscription_manager/cli_command/facts.py:32
 msgid "View or update the detected system information"
 msgstr "గుర్తించిన వ్యవస్థ సమాచారంను దర్శించు లేదా నవీకరించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/facts.py:39
+#: src/subscription_manager/cli_command/facts.py:38
 msgid "list known facts for this system"
 msgstr "ఈ సిస్టమ్ కొరకు తెలిసిన ఫాక్ట్సును జాబితాచేయి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/facts.py:44
+#: src/subscription_manager/cli_command/facts.py:43
 msgid "update the system facts"
 msgstr "సిస్టమ్ ఫాక్ట్సును నవీకరించుము"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/facts.py:82
+#: src/subscription_manager/cli_command/facts.py:80
 msgid "Successfully updated the system facts."
 msgstr "సిస్టమ్ యదార్ధాలను విజయవంతంగా నవీకరించెను."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:41
+#: src/subscription_manager/cli_command/identity.py:40
 msgid "Display the identity certificate for this system or request a new one"
 msgstr "ఈ వ్యవస్థ కొరకు గుర్తింపు ధృవీకరణపత్రం ప్రదర్శించు లేదా కొత్త దానిని అభ్యర్ధించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:48
+#: src/subscription_manager/cli_command/identity.py:47
 msgid "request a new certificate be generated"
 msgstr "కొత్త ధృవీకరణపత్రం వుద్భవింపచేయవలెనని అభ్యర్థించుము"
 
-#: src/subscription_manager/cli_command/identity.py:54
+#: src/subscription_manager/cli_command/identity.py:53
 msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
@@ -2565,24 +2559,24 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:62
+#: src/subscription_manager/cli_command/identity.py:61
 msgid "--force can only be used with --regenerate"
 msgstr "--force అనునది --regenerate తో మాత్రమే వుపయోగించగలం"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:64
+#: src/subscription_manager/cli_command/identity.py:63
 msgid "--username and --password can only be used with --force"
 msgstr "--username మరియు --password అనునవి --force తో మాత్రమే వుపయోగించగలం"
 
-#: src/subscription_manager/cli_command/identity.py:66
+#: src/subscription_manager/cli_command/identity.py:65
 msgid "--token can only be used with --force"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:75
-#: src/subscription_manager/cli_command/identity.py:78
+#: src/subscription_manager/cli_command/identity.py:74
+#: src/subscription_manager/cli_command/identity.py:77
 #: src/subscription_manager/cli_command/version.py:33
 #, fuzzy, python-brace-format
 #| msgid "server type: %s"
@@ -2591,33 +2585,33 @@ msgstr "సేవిక రకం: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:90
+#: src/subscription_manager/cli_command/identity.py:89
 #, fuzzy, python-brace-format
 #| msgid "system identity: %s"
 msgid "system identity: {consumerid}"
 msgstr "వ్యవస్థ గుర్తింపు: %s"
 
-#: src/subscription_manager/cli_command/identity.py:91
+#: src/subscription_manager/cli_command/identity.py:90
 #, python-brace-format
 msgid "name: {consumer_name}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:92
+#: src/subscription_manager/cli_command/identity.py:91
 #, fuzzy, python-brace-format
 #| msgid "org name: %s"
 msgid "org name: {ownername}"
 msgstr "సంస్థ పేరు: %s"
 
-#: src/subscription_manager/cli_command/identity.py:93
+#: src/subscription_manager/cli_command/identity.py:92
 #, python-brace-format
 msgid "org ID: {ownerid}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:108
+#: src/subscription_manager/cli_command/identity.py:107
 #: src/subscription_manager/printing_utils.py:163
 #: src/subscription_manager/printing_utils.py:182
 msgid "None"
@@ -2625,7 +2619,7 @@ msgstr "ఏదీకాదు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:111
+#: src/subscription_manager/cli_command/identity.py:110
 #, fuzzy, python-brace-format
 #| msgid "environment name: %s"
 msgid "environment name: {environment_name}"
@@ -2635,13 +2629,13 @@ msgstr[1] "పరిసరం పేరు: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:131
+#: src/subscription_manager/cli_command/identity.py:130
 msgid "Identity certificate has been regenerated."
 msgstr "గుర్తింపు ధృవీకరణపత్రం తిరిగిజనియింపచేయబడింది."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:145
+#: src/subscription_manager/cli_command/identity.py:143
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "దోషం: సిస్టమ్ కొరకు కొత్త గుర్తింపును వుద్భవింపచేయలేక పోయింది"
 
@@ -3215,48 +3209,53 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/org.py:34
+#: src/subscription_manager/cli_command/org.py:35
 #, fuzzy
 #| msgid "specify organization"
 msgid "specify an organization"
 msgstr "సంస్థను తెలుపు"
 
+#: src/subscription_manager/cli_command/org.py:46
+#: src/subscription_manager/cli_command/register.py:475
+msgid "Error: --org is a required parameter in non-interactive mode."
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/org.py:45
-#: src/subscription_manager/cli_command/register.py:468
+#: src/subscription_manager/cli_command/org.py:48
+#: src/subscription_manager/cli_command/register.py:480
 msgid "Organization: "
 msgstr "సంస్థ: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/org.py:59
+#: src/subscription_manager/cli_command/org.py:62
 #, fuzzy, python-brace-format
 #| msgid "%s cannot register with any organizations."
 msgid "Error: User {username} is not member of any organization."
 msgstr "%s ఏ సంస్థలతో నమోదు కాలేదు."
 
-#: src/subscription_manager/cli_command/org.py:71
-#: src/subscription_manager/cli_command/register.py:460
+#: src/subscription_manager/cli_command/org.py:74
+#: src/subscription_manager/cli_command/register.py:466
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:33
+#: src/subscription_manager/cli_command/override.py:32
 msgid "Manage custom content repository settings"
 msgstr "మలచుకొనిన విషయాల రిపోజిటరీ అమరికలు నిర్వహించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:40
+#: src/subscription_manager/cli_command/override.py:39
 msgid "repository to modify (can be specified more than once)"
 msgstr "సవరించాల్సిన రిపోజిటరీ (ఒకసారి కన్నా ఎక్కువ తెలుపవచ్చు)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:48
+#: src/subscription_manager/cli_command/override.py:47
 msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
@@ -3265,7 +3264,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:57
+#: src/subscription_manager/cli_command/override.py:56
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
@@ -3275,77 +3274,77 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:64
+#: src/subscription_manager/cli_command/override.py:63
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
 msgstr "అన్ని ఓవర్‌రైడ్లను తీసివేయి; --repo ద్వారా అందిస్తూ రిపోజిటరీకు ప్రత్యేకం కావచ్చును"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:69
+#: src/subscription_manager/cli_command/override.py:68
 msgid "list all overrides; can be specific to a repository by providing --repo"
 msgstr "అన్ని ఓవర్‌రైడ్లను జాబితాచేయి; --repo ద్వారా అందిస్తూ రిపోజిటరీకు ప్రత్యేకం కావచ్చును"
 
-#: src/subscription_manager/cli_command/override.py:77
+#: src/subscription_manager/cli_command/override.py:76
 msgid "You must specify an override in the form of \"name:value\" with --add."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:82
+#: src/subscription_manager/cli_command/override.py:81
 msgid "--add arguments should be in the form of \"name:value\""
 msgstr "--add ఆర్గుమెంట్లు \"name:value\" రూపంలో ఉండాలి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:92
+#: src/subscription_manager/cli_command/override.py:91
 msgid "Error: You must specify a repository to modify"
 msgstr "దోషం: సవరించుటకు మీరు తప్పకుండా ఒక రిపోజిటరీ తెలుపాలి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:95
+#: src/subscription_manager/cli_command/override.py:94
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr "దోషం: --remove-all మరియు --list తో మీరు --add లేదా --remove ఉపయోగించకూడదు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:98
+#: src/subscription_manager/cli_command/override.py:97
 msgid "Error: You may not use --list with --remove-all"
 msgstr "దోషం: --remove-all తో మీరు --list ఉపయోగించకపోవచ్చు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:103
+#: src/subscription_manager/cli_command/override.py:102
 msgid "Error: The --repo option must be used with --list or --add or --remove."
 msgstr "దోషం: --repo ఐచ్చికం తప్పకుండా --list లేదా --add లేదా --remove తో ఉపయోగించాలి."
 
-#: src/subscription_manager/cli_command/override.py:108
+#: src/subscription_manager/cli_command/override.py:107
 msgid "Error: You must specify an override name with --remove."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:127
+#: src/subscription_manager/cli_command/override.py:126
 msgid "Error: The 'repo-override' command is not supported by the server."
 msgstr "దోషం: 'repo-override' ఆదేశం అనునది సేవికచేత తోడ్పాటునీయబడదు."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:139
+#: src/subscription_manager/cli_command/override.py:138
 #: src/subscription_manager/cli_command/repos.py:124
 msgid "Repositories disabled by configuration."
 msgstr "ఆకృతీకరణచే రిపోజిటరీను అచేతనం చేయబడెను."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:146
+#: src/subscription_manager/cli_command/override.py:145
 msgid "This system does not have any content overrides applied to it."
 msgstr "ఈ వ్యవస్థ దానికి వర్తించబడినటువంటి విషయం కలిగిలేదు."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:172
+#: src/subscription_manager/cli_command/override.py:170
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "Repository '%s' does not currently exist, but the override has been added."
@@ -3356,7 +3355,7 @@ msgstr "రిపోజిటరీ '%s' ప్రస్తుతం లేద�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:200
+#: src/subscription_manager/cli_command/override.py:198
 #, fuzzy, python-brace-format
 #| msgid "Nothing is known about '%s'"
 msgid "Nothing is known about '{r}'"
@@ -3364,7 +3363,7 @@ msgstr "'%s' గురించి ఏమీ తెలియదు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/override.py:205
+#: src/subscription_manager/cli_command/override.py:203
 #, fuzzy, python-brace-format
 #| msgid "Repository: %s"
 msgid "Repository: {repo}"
@@ -3372,19 +3371,19 @@ msgstr "రిపోజిటరీ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/owners.py:35
+#: src/subscription_manager/cli_command/owners.py:34
 msgid "Display the organizations against which a user can register a system"
 msgstr "వాడుకరి వేటికి వ్యవస్థను నమోదు చేయగలరో ఆ సంస్థలను ప్రదర్శించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/owners.py:54
+#: src/subscription_manager/cli_command/owners.py:53
 msgid "Organizations"
 msgstr "సంస్థలు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/owners.py:63
+#: src/subscription_manager/cli_command/owners.py:62
 #, fuzzy, python-brace-format
 #| msgid "%s cannot register with any organizations."
 msgid "{username} cannot register with any organizations."
@@ -3392,7 +3391,7 @@ msgstr "%s ఏ సంస్థలతో నమోదు కాలేదు."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/owners.py:72
+#: src/subscription_manager/cli_command/owners.py:70
 msgid "Error: Unable to retrieve org list from server"
 msgstr "దోషం: సేవిక నుండి సంస్థ జాబితాను వెలికితీయలేక పోయింది"
 
@@ -3473,17 +3472,17 @@ msgstr "దోషం: ఈ ఆదేశమునకు మీరు --email త�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/refresh.py:33
+#: src/subscription_manager/cli_command/refresh.py:32
 msgid "Pull the latest subscription data from the server"
 msgstr "సేవిక నుండి సరికొత్త సబ్‌స్క్రిప్షన్ దత్తాంశం లాగుము"
 
-#: src/subscription_manager/cli_command/refresh.py:35
+#: src/subscription_manager/cli_command/refresh.py:34
 msgid "force certificate regeneration"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/refresh.py:48
+#: src/subscription_manager/cli_command/refresh.py:46
 #, fuzzy, python-brace-format
 #| msgid "Unable to perform refresh due to the following exception: %s"
 msgid "Unable to perform refresh due to the following exception: {e}"
@@ -3491,35 +3490,35 @@ msgstr "కింది ఆక్షేపణ కారణంగా రీఫ్
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/refresh.py:51
+#: src/subscription_manager/cli_command/refresh.py:49
 msgid "All local data refreshed"
 msgstr "స్థానిక డాటా అంతా తాజాపరచబడెను"
 
-#: src/subscription_manager/cli_command/register.py:64
+#: src/subscription_manager/cli_command/register.py:65
 msgid "base URL for content in form of https://hostname:port/prefix"
 msgstr "https://hostname:port/prefix రూపంలో కాంటెంట్ యొక్క ప్రాథమిక URL"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:77
+#: src/subscription_manager/cli_command/register.py:78
 msgid "name of the system to register, defaults to the hostname"
 msgstr "నమోదయ్యే వ్యవస్థ పేరు, అప్రమేయంగా అతిధేయిపేరు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:83
+#: src/subscription_manager/cli_command/register.py:84
 msgid "the existing system data is pulled from the server"
 msgstr "ఉన్న వ్యవస్థ దత్తాంశం సేవికనుండి లాగబడును"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:89
+#: src/subscription_manager/cli_command/register.py:90
 msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
 msgstr "వాడుకరి కొరకు బహుళ సంస్థలలో వొక దానితో నమోదైంది, సంస్థ కీను వుపయోగిస్తోంది"
 
-#: src/subscription_manager/cli_command/register.py:95
+#: src/subscription_manager/cli_command/register.py:96
 msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
@@ -3528,23 +3527,23 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:103
+#: src/subscription_manager/cli_command/register.py:104
 msgid "set a release version"
 msgstr "విడుదల వర్షన్ అమర్చు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:108
+#: src/subscription_manager/cli_command/register.py:109
 msgid "Deprecated, see --auto-attach"
 msgstr "తీసివేయబడెను, --auto-attach చూడు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:114
+#: src/subscription_manager/cli_command/register.py:115
 msgid "automatically attach compatible subscriptions to this system"
 msgstr "సారూప్య సబ్‌స్క్రిప్షన్లను వ్యవస్థకు స్వయంచాలకంగా అనుబందించు"
 
-#: src/subscription_manager/cli_command/register.py:119
+#: src/subscription_manager/cli_command/register.py:120
 msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
@@ -3552,50 +3551,50 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:125
+#: src/subscription_manager/cli_command/register.py:126
 msgid ""
 "activation key to use for registration (can be specified more than once)"
 msgstr "నమోదీకరణ కొరకు వుపయోగించుటకు క్రియాశీల కీ (ఒకటి కన్నా యెక్కువ మార్లు తెలుపవచ్చు)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:130
+#: src/subscription_manager/cli_command/register.py:131
 msgid ""
 "system preference used when subscribing automatically, requires --auto-attach"
 msgstr "స్వయంచాలకంగా సబ్‌స్క్రైబ్ అగునప్పుడు ఉపయోగించిన వ్యవస్థ అభీష్టం, --auto-attach కావాలి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:136
+#: src/subscription_manager/cli_command/register.py:137
 msgid "This system is already registered. Use --force to override"
 msgstr "ఈ సిస్టమ్ యిప్పటికే నమోదైంది. --force వుపయోగించు వోవర్‌రైడ్‌కు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:148
+#: src/subscription_manager/cli_command/register.py:149
 msgid "Error: Activation keys cannot be used with --auto-attach."
 msgstr "దోషం: క్రియాశీల కీలు --auto-attach తో వుపయోగించలేము."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:153
+#: src/subscription_manager/cli_command/register.py:154
 msgid "Error: Must use --auto-attach with --servicelevel."
 msgstr "దోషం: --auto-attach ను తప్పక --servicelevel తో వుపయోగించాలి."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:155
+#: src/subscription_manager/cli_command/register.py:156
 msgid "Error: Must provide --org with activation keys."
 msgstr "దోషం: క్రియాశీల కీలతో తప్పక --org అందిచాలి."
 
-#: src/subscription_manager/cli_command/register.py:169
+#: src/subscription_manager/cli_command/register.py:170
 msgid "Error: The --type option has been deprecated and may not be used."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:172
-#: src/subscription_manager/cli_command/register.py:438
+#: src/subscription_manager/cli_command/register.py:173
+#: src/subscription_manager/cli_command/register.py:444
 #, fuzzy
 #| msgid "This org does not have any environments."
 msgid "The entitlement server does not allow multiple environments"
@@ -3603,7 +3602,7 @@ msgstr "సంస్థ ఏ ఎన్విరాన్మెంట్లను 
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:237
+#: src/subscription_manager/cli_command/register.py:238
 #: src/subscription_manager/cli_command/unregister.py:41
 #, fuzzy, python-brace-format
 #| msgid "Enter in the format hostname(:port)"
@@ -3612,13 +3611,13 @@ msgstr "హోస్టుపేరు రూపునందు ప్రవే�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:248
+#: src/subscription_manager/cli_command/register.py:249
 #, fuzzy, python-brace-format
 #| msgid "The system with UUID %s has been unregistered"
 msgid "The system with UUID {old_uuid} has been unregistered"
 msgstr "సిస్టమ్ UUID %s తో నమోదు తీసివేయబడింది"
 
-#: src/subscription_manager/cli_command/register.py:272
+#: src/subscription_manager/cli_command/register.py:273
 #, python-brace-format
 msgid "Registering to: {hostname}:{port}{prefix}"
 msgstr ""
@@ -3652,9 +3651,13 @@ msgstr ""
 msgid "Service level set to: {level}"
 msgstr "సేవా స్థాయి దీనికి వుంచబడెను: %s"
 
+#: src/subscription_manager/cli_command/register.py:393
+msgid "Error: --environments is a required parameter in non-interactive mode."
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:391
+#: src/subscription_manager/cli_command/register.py:397
 #, fuzzy
 #| msgid "Environment: "
 msgid "Environments: "
@@ -3662,18 +3665,18 @@ msgstr "పరిసరం: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:393
+#: src/subscription_manager/cli_command/register.py:399
 msgid "Environment: "
 msgstr "పరిసరం: "
 
-#: src/subscription_manager/cli_command/register.py:432
+#: src/subscription_manager/cli_command/register.py:438
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:448
+#: src/subscription_manager/cli_command/register.py:454
 #, fuzzy, python-brace-format
 #| msgid "%s cannot register with any organizations."
 msgid "{name} cannot register with any organizations."
@@ -3767,79 +3770,79 @@ msgstr "అందుబాటులోని విడుదలలు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:42
+#: src/subscription_manager/cli_command/remove.py:41
 msgid "certificate serial number to remove (can be specified more than once)"
 msgstr "తీసివేయుటకు ధృవీకరణపత్రం వరుస సంఖ్య (ఒకమారు కన్నా యెక్కువ తెలుపవచ్చు)"
 
-#: src/subscription_manager/cli_command/remove.py:49
+#: src/subscription_manager/cli_command/remove.py:48
 msgid "the ID of the pool to remove (can be specified more than once)"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:55
+#: src/subscription_manager/cli_command/remove.py:54
 msgid "remove all subscriptions from this system"
 msgstr "ఈ వ్యవస్థ నుండి అన్ని సబ్‌స్క్రిప్షన్లను తీసివేయి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:59
+#: src/subscription_manager/cli_command/remove.py:58
 msgid "Remove all or specific subscriptions from this system"
 msgstr "ఈ వ్యవస్థనుండి అన్ని లేదా తెలిపిన సబ్‌స్క్రిప్షన్లను తీసివేయి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:72
+#: src/subscription_manager/cli_command/remove.py:71
 #, fuzzy, python-brace-format
 #| msgid "Error: '%s' is not a valid serial number"
 msgid "Error: '{serial}' is not a valid serial number"
 msgstr "దోషం: '%s' చెల్లునటువంటి వరుస సంఖ్య కాదు"
 
-#: src/subscription_manager/cli_command/remove.py:81
+#: src/subscription_manager/cli_command/remove.py:80
 msgid ""
 "Error: The registered entitlement server does not support remove --pool.\n"
 "Instead, use the remove --serial option."
 msgstr ""
 
-#: src/subscription_manager/cli_command/remove.py:88
+#: src/subscription_manager/cli_command/remove.py:87
 msgid ""
 "Error: This command requires that you specify one of --serial, --pool or --"
 "all."
 msgstr ""
 
-#: src/subscription_manager/cli_command/remove.py:94
+#: src/subscription_manager/cli_command/remove.py:93
 msgid "The entitlement server successfully removed these pools:"
 msgstr ""
 
-#: src/subscription_manager/cli_command/remove.py:96
+#: src/subscription_manager/cli_command/remove.py:95
 msgid "The entitlement server successfully removed these serial numbers:"
 msgstr ""
 
-#: src/subscription_manager/cli_command/remove.py:98
+#: src/subscription_manager/cli_command/remove.py:97
 msgid "The entitlement server successfully removed these IDs:"
 msgstr ""
 
-#: src/subscription_manager/cli_command/remove.py:103
+#: src/subscription_manager/cli_command/remove.py:102
 msgid "The entitlement server failed to remove these pools:"
 msgstr ""
 
-#: src/subscription_manager/cli_command/remove.py:105
+#: src/subscription_manager/cli_command/remove.py:104
 msgid "The entitlement server failed to remove these serial numbers:"
 msgstr ""
 
-#: src/subscription_manager/cli_command/remove.py:107
+#: src/subscription_manager/cli_command/remove.py:106
 msgid "The entitlement server failed to remove these IDs:"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:125
+#: src/subscription_manager/cli_command/remove.py:124
 msgid "All subscriptions have been removed at the server."
 msgstr "సేవిక వద్ద అన్ని సబ్‌స్క్రిప్షన్లు తీసివేయబడెను."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:130
+#: src/subscription_manager/cli_command/remove.py:129
 #, python-format
 msgid "%s subscription removed at the server."
 msgid_plural "%s subscriptions removed at the server."
@@ -3848,8 +3851,8 @@ msgstr[1] "సేవిక వద్ద %s సబ్‌స్క్రిప్�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:172
-#: src/subscription_manager/cli_command/remove.py:202
+#: src/subscription_manager/cli_command/remove.py:170
+#: src/subscription_manager/cli_command/remove.py:200
 #, fuzzy, python-brace-format
 #| msgid "Unable to perform remove due to the following exception: %s"
 msgid "Unable to perform remove due to the following exception: {e}"
@@ -3857,7 +3860,7 @@ msgstr "కింది ఆక్షేపణ వలన తీసివేతన
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:182
+#: src/subscription_manager/cli_command/remove.py:180
 #, fuzzy, python-brace-format
 #| msgid "%s subscriptions removed from this system."
 msgid "{total} subscriptions removed from this system."
@@ -3865,7 +3868,7 @@ msgstr "ఈ వ్యవస్థ నుండి %s సబ్‌స్క్ర
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:194
+#: src/subscription_manager/cli_command/remove.py:192
 #, fuzzy, python-brace-format
 #| msgid "Subscription with serial number %s removed from this system"
 msgid "Subscription with serial number {serial} removed from this system"
@@ -3947,24 +3950,24 @@ msgstr "ఈ వ్యవస్థకు రెపోజిటరీ '%s' అచ�
 msgid "Show or modify the system purpose role setting"
 msgstr ""
 
-#: src/subscription_manager/cli_command/service_level.py:44
+#: src/subscription_manager/cli_command/service_level.py:43
 msgid "Show or modify the system purpose service-level setting"
 msgstr ""
 
-#: src/subscription_manager/cli_command/service_level.py:73
+#: src/subscription_manager/cli_command/service_level.py:72
 msgid "Error: --org is only supported with the --list or --set option"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:81
+#: src/subscription_manager/cli_command/service_level.py:80
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
 msgstr ""
 "దోషం: సేవా స్థాయిలను తెలుపుటకు మీరు తప్పక నమోదైవుండాలి లేదా --username మరియు --password తెలుపాలి"
 
-#: src/subscription_manager/cli_command/service_level.py:102
+#: src/subscription_manager/cli_command/service_level.py:101
 msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
@@ -3972,33 +3975,33 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:130
+#: src/subscription_manager/cli_command/service_level.py:128
 msgid "Error: Unable to retrieve service levels."
 msgstr "దోషం: సేవా స్థాయిలను వెలికితీయలేక పోయెను."
 
-#: src/subscription_manager/cli_command/service_level.py:165
+#: src/subscription_manager/cli_command/service_level.py:159
 #, python-brace-format
 msgid "Service level set to: \"{val}\"."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:173
+#: src/subscription_manager/cli_command/service_level.py:167
 msgid "Service level preference has been unset"
 msgstr "సేవా స్థాయి అభీష్టం అనునది తిరిగివుంచబడెను"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:180
-#: src/subscription_manager/cli_command/service_level.py:196
-#: src/subscription_manager/cli_command/service_level.py:230
-#: src/subscription_manager/cli_command/service_level.py:237
+#: src/subscription_manager/cli_command/service_level.py:174
+#: src/subscription_manager/cli_command/service_level.py:190
+#: src/subscription_manager/cli_command/service_level.py:224
+#: src/subscription_manager/cli_command/service_level.py:231
 msgid "Error: The service-level command is not supported by the server."
 msgstr "దోషం: సేవా-స్థాయి ఆదేశం సేవిక ద్వారా తోడ్పాటునీయుట లేదు."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:200
+#: src/subscription_manager/cli_command/service_level.py:194
 #, fuzzy, python-brace-format
 #| msgid "Current service level: %s"
 msgid "Current service level: {level}"
@@ -4006,13 +4009,13 @@ msgstr "ప్రస్తుత సేవా స్థాయి: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:202
+#: src/subscription_manager/cli_command/service_level.py:196
 msgid "Service level preference not set"
 msgstr "సేవా స్థాయి అభీష్టం యింకా అమర్చలేదు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:214
+#: src/subscription_manager/cli_command/service_level.py:208
 msgid "Available Service Levels"
 msgstr "అందుబాటులోని సేవా స్థాయిలు"
 
@@ -4093,7 +4096,7 @@ msgstr "%prog [ఐచ్చికాలు]"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/unregister.py:38
-#: src/subscription_manager/utils.py:267
+#: src/subscription_manager/utils.py:268
 msgid "This system is currently not registered."
 msgstr "ఈ సిస్టమ్ ప్రస్తుతం నమోదైలేదు."
 
@@ -4109,29 +4112,37 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/user_pass.py:37
+#: src/subscription_manager/cli_command/user_pass.py:40
 msgid "username to use when authorizing against the server"
 msgstr "సేవకకు వ్యతిరేకంగా ధృవీకరిస్తున్నప్పుడు వుపయోగించుటకు వాడుకరిపేరు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/user_pass.py:42
+#: src/subscription_manager/cli_command/user_pass.py:45
 msgid "password to use when authorizing against the server"
 msgstr "సేవికకు వ్యతిరేకంగా ధృవీకరిస్తున్నప్పుడు వుపయోగించుటకు సంకేతపదం"
 
-#: src/subscription_manager/cli_command/user_pass.py:47
+#: src/subscription_manager/cli_command/user_pass.py:50
 msgid "token to use when authorizing against the server"
+msgstr ""
+
+#: src/subscription_manager/cli_command/user_pass.py:64
+msgid "Error: --username is a required parameter in non-interactive mode."
+msgstr ""
+
+#: src/subscription_manager/cli_command/user_pass.py:69
+msgid "Error: --password is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/user_pass.py:58
+#: src/subscription_manager/cli_command/user_pass.py:73
 msgid "Username: "
 msgstr "వాడుకరిపేరు: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/user_pass.py:61
+#: src/subscription_manager/cli_command/user_pass.py:76
 msgid "Password: "
 msgstr "సంకేతపదం: "
 
@@ -4200,7 +4211,7 @@ msgstr "తొలగించెను (రోగ్):"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:27
+#: src/subscription_manager/exceptions.py:30
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
@@ -4208,39 +4219,63 @@ msgstr ""
 "నెట్వర్కు దోషం, సేవికకు అనుసంధానం కాలేకపోయెను. అధిక సమాచారము కొరకు దయచేసి /var/log/rhsm/rhsm."
 "log చూడండి."
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/exceptions.py:30
-msgid ""
-"Network error. Please check the connection details, or see /var/log/rhsm/"
-"rhsm.log for more information."
-msgstr ""
-"నెట్వర్కు దోషం. దయచేసి అనుసంధానత వివరములను పరిశీలించండి, లేదా మరింత సమాచారము కొరకు /var/log/"
-"rhsm/rhsm.log చూడండి."
-
 #: src/subscription_manager/exceptions.py:32
-msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
+msgid "Network error: {message} (error code {code})"
+msgstr ""
+
+#: src/subscription_manager/exceptions.py:33
+#, python-brace-format
+msgid "Connection error: {message} (error code {code})"
+msgstr ""
+
+#: src/subscription_manager/exceptions.py:34
+#, python-brace-format
+msgid ""
+"Unknown server reply (HTTP error code {code}: {title}):\n"
+"{content}"
+msgstr ""
+
+#: src/subscription_manager/exceptions.py:35
+#, python-brace-format
+msgid "Unknown server reply (HTTP error code {code}: {title})"
+msgstr ""
+
+#: src/subscription_manager/exceptions.py:37
+#, python-brace-format
+msgid ""
+"Proxy error: unable to connect to {hostname}: {message} (error code {code})"
+msgstr ""
+
+#: src/subscription_manager/exceptions.py:39
+#, python-brace-format
+msgid "Proxy error: unable to connect to {hostname}: {message}"
+msgstr ""
+
+#: src/subscription_manager/exceptions.py:40
+#, python-brace-format
+msgid "Proxy error: unable to connect to {hostname}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:33
+#: src/subscription_manager/exceptions.py:41
 msgid "Unauthorized: Invalid credentials for request."
 msgstr "అధికారంలేని: అభ్యర్ధనకు చెల్లని క్రెడెన్షియల్స్."
 
-#: src/subscription_manager/exceptions.py:34
+#: src/subscription_manager/exceptions.py:42
 msgid "Token authentication not supported by the entitlement server"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:35
+#: src/subscription_manager/exceptions.py:43
 msgid "Forbidden: Invalid credentials for request."
 msgstr "నిషిద్ధమైన: అభ్యర్ధనకు చెల్లని క్రెడెన్షియల్స్."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:37
+#: src/subscription_manager/exceptions.py:45
 msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
@@ -4250,70 +4285,96 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:40
-#, python-format
-msgid "Bad CA certificate: %s"
+#: src/subscription_manager/exceptions.py:48
+#, fuzzy, python-brace-format
+#| msgid "Bad CA certificate: %s"
+msgid "Bad CA certificate: {file}: {reason}"
 msgstr "చెడ్డ CA ధృవీకరణపత్రం: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:41
+#: src/subscription_manager/exceptions.py:49
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:218
 msgid "Your identity certificate has expired"
 msgstr "మీ గుర్తింపు ధృవీకరణపత్రం గడువుముగిసినది"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:42
+#: src/subscription_manager/exceptions.py:50
 #, python-format
 msgid "Unable to verify server's identity: %s"
 msgstr "సేవిక యొక్క గుర్తింపును నిర్థారించలేక పోయెను: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:43
+#: src/subscription_manager/exceptions.py:51
 msgid "Server URL can not be empty"
 msgstr "సేవిక URL ఖాళీగా వుండలేదు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:44
+#: src/subscription_manager/exceptions.py:52
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
 msgstr "సేవిక URL వొక స్కీమా. అతిధేయిపేరు, మరియు/లేదా పోర్ట్ మరియు పాత్ చేర్చవలెను"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:45
+#: src/subscription_manager/exceptions.py:53
 msgid "Server URL can not be None"
 msgstr "సేవిక URL ఏమీ కాకుండా వుండలేదు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:46
+#: src/subscription_manager/exceptions.py:54
 msgid "Server URL port should be numeric"
 msgstr "సేవిక URL పోర్టు సంఖ్యాత్మకంగా వుండాలి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/exceptions.py:47
+#: src/subscription_manager/exceptions.py:55
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
 msgstr "సేవిక URL చెల్లని స్కీమ్ కలిగివుంది. http:// మరియు https:// తోడ్పాటునీయబడును."
 
-#: src/subscription_manager/exceptions.py:48
+#: src/subscription_manager/exceptions.py:56
 msgid "The server rate limit has been exceeded, please try again later."
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:50
+#: src/subscription_manager/exceptions.py:58
 #, python-format
 msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "%s seconds)"
 msgstr ""
 
+#: src/subscription_manager/exceptions.py:60
+#, python-brace-format
+msgid "Bad product certificate: {file}: [{library}] {message}"
+msgstr ""
+
+#: src/subscription_manager/exceptions.py:61
+#, python-brace-format
+msgid "Bad certificate: {file}: [{library}] {message}"
+msgstr ""
+
+#: src/subscription_manager/exceptions.py:62
+#, python-brace-format
+msgid ""
+"Bad certificate: [{library}] {message}\n"
+"{data}"
+msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/exceptions.py:63
+#, fuzzy, python-brace-format
+#| msgid "Bad CA certificate: %s"
+msgid "Bad certificate: [{library}] {message}"
+msgstr "చెడ్డ CA ధృవీకరణపత్రం: %s"
+
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
-#: src/subscription_manager/exceptions.py:55
+#: src/subscription_manager/exceptions.py:67
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
 msgstr ""
@@ -4424,22 +4485,31 @@ msgstr "ఎన్టైటిల్మెంట్ ధృవీకరణపత�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/utils.py:367
+#: src/subscription_manager/utils.py:368
 msgid "and"
 msgstr "మరియు"
 
-#: src/syspurpose/files.py:448
+#: src/syspurpose/files.py:463
 #, python-brace-format
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
 msgstr ""
 
-#: src/syspurpose/files.py:457
+#: src/syspurpose/files.py:472
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "Network error. Please check the connection details, or see /var/log/rhsm/"
+#~ "rhsm.log for more information."
+#~ msgstr ""
+#~ "నెట్వర్కు దోషం. దయచేసి అనుసంధానత వివరములను పరిశీలించండి, లేదా మరింత సమాచారము కొరకు /var/log/"
+#~ "rhsm/rhsm.log చూడండి."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
