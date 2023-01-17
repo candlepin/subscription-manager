@@ -485,7 +485,8 @@ if HAS_DEB822:
 
         def fix_content(self, content):
             # Luckily apt ignores all Fields it does not recognize
-            baseurl = content["baseurl"]
+            parsed_url = urlparse(content["baseurl"])
+            baseurl = parsed_url._replace(query="").geturl()
             url_res = re.match(r"^https?://(?P<location>.*)$", baseurl)
             ent_res = re.match(r"^/etc/pki/entitlement/(?P<entitlement>.*).pem$", content["sslclientcert"])
             if url_res and ent_res:
@@ -493,11 +494,19 @@ if HAS_DEB822:
                 entitlement = ent_res.group("entitlement")
                 baseurl = "katello://{}@{}".format(entitlement, location)
 
+            query = parse_qs(parsed_url.query)
+            if "rel" in query and "comp" in query:
+                suites = query["rel"][0].replace(",", " ")
+                components = query["rel"][0].replace(",", " ")
+            else:
+                suites = "default"
+                components = "all"
+
             apt_cont = content.copy()
             apt_cont["Types"] = "deb"
             apt_cont["URIs"] = baseurl
-            apt_cont["Suites"] = "default"
-            apt_cont["Components"] = "all"
+            apt_cont["Suites"] = suites
+            apt_cont["Components"] = components
             apt_cont["Trusted"] = "yes"
 
             if apt_cont["arches"] is None or apt_cont["arches"] == ["ALL"]:
