@@ -1,0 +1,33 @@
+name: pytest
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    name: "pytest"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: "CentOS Stream 8"
+            image: "quay.io/centos/centos:stream8"
+            pytest_args: ''
+
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.image }}
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "Run container-pre-test.sh"
+        run: |
+          bash scripts/container-pre-test.sh
+
+      - name: "Run nosetest"
+        run: |
+          nosetests -v -c playpen/noserc.ci
