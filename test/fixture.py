@@ -194,7 +194,7 @@ class SubManFixture(unittest.TestCase):
         subscription_manager.managercli.conf = config.Config(self.mock_cfg_parser)
         self.addCleanup(unstub_conf)
 
-        facts_host_patcher = patch('rhsmlib.dbus.facts.FactsClient', auto_spec=True)
+        facts_host_patcher = patch('rhsmlib.dbus.facts.FactsClient', autospec=True)
         self.mock_facts_host = facts_host_patcher.start()
         self.mock_facts_host.return_value.GetFacts.return_value = self.set_facts()
 

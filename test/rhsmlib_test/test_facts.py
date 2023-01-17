@@ -23,19 +23,14 @@ class TestFactsDBusObject(DBusServerStubProvider):
     dbus_class = AllFacts
     dbus_class_kwargs = {}
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        # Do not try to use system virt-what
+    def setUp(self) -> None:
         get_virt_info_patch = mock.patch(
             "rhsmlib.facts.virt.VirtWhatCollector.get_virt_info",
             name="get_virt_info",
         )
-        cls.patches["get_virt_info"] = get_virt_info_patch.start()
-        cls.addClassCleanup(get_virt_info_patch.stop)
+        self.patches["get_virt_info"] = get_virt_info_patch.start()
+        self.addCleanup(get_virt_info_patch.stop)
 
-        super().setUpClass()
-
-    def setUp(self) -> None:
         self.patches["get_virt_info"].return_value = {"virt.is_guest": "Unknown"}
 
         super().setUp()

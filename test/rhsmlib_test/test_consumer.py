@@ -60,16 +60,15 @@ class TestConsumerDbusObject(DBusServerStubProvider):
     dbus_class = ConsumerDBusObject
     dbus_class_kwargs = {}
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self) -> None:
         get_consumer_uuid_patch = mock.patch(
             "rhsmlib.dbus.objects.consumer.Consumer.get_consumer_uuid",
             name="get_consumer_uuid",
         )
-        cls.patches["get_consumer_uuid"] = get_consumer_uuid_patch.start()
-        cls.addClassCleanup(get_consumer_uuid_patch)
+        self.patches["get_consumer_uuid"] = get_consumer_uuid_patch.start()
+        self.addCleanup(get_consumer_uuid_patch.stop)
 
-        super().setUpClass()
+        super().setUp()
 
     def test_GetUuid(self):
         self.patches["get_consumer_uuid"].return_value = "fake-uuid"
