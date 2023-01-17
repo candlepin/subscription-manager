@@ -12,6 +12,8 @@ from . import stubs
 
 from rhsm import logutil
 
+import unittest
+
 
 # no NullHandler in 2.6, include our own
 class NullHandler(logging.Handler):
@@ -111,6 +113,7 @@ class TestLogutil(fixture.SubManFixture):
 
         self.assertNotEqual(test_logger.getEffectiveLevel(), config_level)
 
+    @unittest.skipIf(os.getuid() == 0, "Test cannot be run under root.")
     def test_missing_log_directory(self):
         """
         Test creating directory for log directory
@@ -143,6 +146,7 @@ class TestLogutil(fixture.SubManFixture):
         logutil.LOGFILE_DIR = old_dir_path
         logutil.LOGFILE_PATH = old_file_path
 
+    @unittest.skipIf(os.getuid() == 0, "Test cannot be run under root.")
     def test_not_possible_to_create_log_dir_due_to_access_perm(self):
         """
         Test that it is not possible to create log directory due to access permission
@@ -176,6 +180,7 @@ class TestLogutil(fixture.SubManFixture):
         logutil.LOGFILE_DIR = old_dir_path
         logutil.LOGFILE_PATH = old_file_path
 
+    @unittest.skipIf(os.getuid() == 0, "Test cannot be run under root.")
     def test_wrong_rhsm_log_priv(self):
         """
         Test that error messages are not printed to stderr, when it is not possible
