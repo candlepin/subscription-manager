@@ -1,0 +1,86 @@
+name: pytest
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    name: "pytest"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: "CentOS Stream 9"
+            image: "quay.io/centos/centos:stream9"
+            pytest_args: '--deselect test/rhsmlib/facts/test_hwprobe.py::HardwareProbeTest::test_networkinfo'
+            # The 'test_networkinfo' breaks in CentOS container because it has IPv6 disabled.
+            # Because of a bug in Python, collecting 'socket.AF_INET6' via 'socket.getaddrinfo()' causes
+            # segfaults instead of exceptions. This deselect is a workaround until it is fixed or until
+            # we switch to a different way of collecting network facts.
+          - name: "CentOS Stream 8"
+            image: "quay.io/centos/centos:stream8"
+            pytest_args: '--deselect test/rhsmlib/facts/test_hwprobe.py::HardwareProbeTest::test_networkinfo'
+          - name: "Fedora latest"
+            image: "fedora:latest"
+            pytest_args: ''
+          - name: "Fedora Rawhide"
+            image: "fedora:rawhide"
+            pytest_args: ''
+
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.image }}
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      # this is required for libdnf-devel
+      - name: "CentOS 8: Enable Powertools repository"
+        if: ${{ matrix.name == 'CentOS Stream 9' }}
+        run: |
+          dnf --setopt install_weak_deps=False install -y dnf-plugins-core
+          dnf config-manager --set-enabled powertools
+
+      # this is required for libdnf-devel
+      - name: "CentOS 9: Enable CRB repository"
+        if: ${{ matrix.name == 'CentOS Stream 9' }}
+        run: |
+          dnf --setopt install_weak_deps=False install -y dnf-plugins-core
+          dnf config-manager --enable crb
+
+      - name: "Instal essential packages"
+        run: |
+          dnf --setopt install_weak_deps=False install -y \
+            git gcc cmake python3 python3-devel python3-pip
+
+      - name: "Display system information"
+        run: |
+          python3 --version && cat /etc/os-release
+
+      - name: "Install system packages"
+        run: |
+          dnf --setopt instal_week_deps=False install -y \
+            intltool dbus-daemon python3-rpm python3-librepo python3-gobject libnl3-devel \
+            openssl-devel glib2-devel libdnf-devel dbus-devel \
+            glibc-langpack-en glibc-langpack-de glibc-langpack-ja
+
+      - name: "Install Python packages"
+        run: |
+          python3 -m pip install --upgrade pip wheel setuptools
+          python3 -m pip install -r test-requirements.txt
+          python3 -m pip install iniparse python-dateutil requests dbus-python ethtool PyGObject
+
+      - name: "Build the project"
+        run: |
+          python3 setup.py build
+          python3 setup.py build_ext --inplace
+
+      - name: "Run pytest"
+        env:
+          PYTEST_ADDOPTS: "--color=yes --code-highlight=yes --showlocals"
+        run: |
+          SUBMAN_TEST_IN_CONTAINER=1 dbus-run-session \
+            python3 -m pytest ${{ matrix.pytest_args }}
