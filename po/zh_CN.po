@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-12 16:52+0100\n"
-"PO-Revision-Date: 2022-06-30 14:18+0000\n"
+"PO-Revision-Date: 2022-12-19 12:20+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-1-28/zh_CN/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.15\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -2005,49 +2005,44 @@ msgid ""
 msgstr "网络出错，无法连接到服务器。详情请查看 /var/log/rhsm/rhsm.log。"
 
 #: src/subscription_manager/exceptions.py:33
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Network error: {message} (error code {code})"
-msgstr "{message} （HTTP 错误码 {code} ：{title}）"
+msgstr "网络错误： {message} （错误代码 {code}）"
 
 #: src/subscription_manager/exceptions.py:34
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Connection error: {message} (error code {code})"
-msgstr "{message} （HTTP 错误码 {code} ：{title}）"
+msgstr "连接错误： {message} （错误代码 {code}）"
 
 #: src/subscription_manager/exceptions.py:35
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
-msgstr "{message} （HTTP 错误码 {code} ：{title}）"
+msgstr ""
+"未知服务器回复 (HTTP 错误代码 {code}: {title}):\n"
+"{content}"
 
 #: src/subscription_manager/exceptions.py:36
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Unknown server reply (HTTP error code {code}: {title})"
-msgstr "{message} （HTTP 错误码 {code} ：{title}）"
+msgstr "未知服务器回复 (HTTP 错误代码 {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:38
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
-msgstr "代理错误，无法连接到代理服务器。"
+msgstr "代理错误： 无法连接到 {hostname}: {message} （错误代码 {code}）"
 
 #: src/subscription_manager/exceptions.py:40
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}: {message}"
-msgstr "代理错误，无法连接到代理服务器。"
+msgstr "代理错误： 无法连接到 {hostname}: {message}"
 
 #: src/subscription_manager/exceptions.py:41
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}"
-msgstr "代理错误，无法连接到代理服务器。"
+msgstr "代理错误： 无法连接到 {hostname}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:42
@@ -2072,10 +2067,9 @@ msgstr "远程服务器出错。详情请查看连接情况或者 /var/log/rhsm/
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:46
-#, fuzzy, python-brace-format
-#| msgid "Bad CA certificate: %s"
+#, python-brace-format
 msgid "Bad CA certificate: {file}: {reason}"
-msgstr "错误的 CA 证书：%s"
+msgstr "错误 CA 证书： {file}: {reason}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:47
@@ -2129,12 +2123,12 @@ msgstr "已超过该服务器速率限制，请稍后再试（%s 秒后即超过
 #: src/subscription_manager/exceptions.py:56
 #, python-brace-format
 msgid "Bad product certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "错误产品证书： {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:57
 #, python-brace-format
 msgid "Bad certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "错误证书： {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:58
 #, python-brace-format
@@ -2142,20 +2136,20 @@ msgid ""
 "Bad certificate: [{library}] {message}\n"
 "{data}"
 msgstr ""
+"错误证书： [{library}] {message}\n"
+"{data}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:59
-#, fuzzy, python-brace-format
-#| msgid "Bad CA certificate: %s"
+#, python-brace-format
 msgid "Bad certificate: [{library}] {message}"
-msgstr "错误的 CA 证书：%s"
+msgstr "错误证书： [{library}] {message}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:60
-#, fuzzy, python-brace-format
-#| msgid "Unable to reach the server at %s:%s%s"
+#, python-brace-format
 msgid "Unable to reach the server at {host}: {message}"
-msgstr "无法在 %s:%s%s 连接该服务器"
+msgstr "无法连接到服务器 {host}:{message}"
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
@@ -4694,16 +4688,12 @@ msgstr "无法为所有安装的产品找到可用订阅。"
 
 # translation manually copied from candlepin
 #: src/subscription_manager/managercli.py:321
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
-#| "because of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr ""
-"忽略自动附加的请求。 因为内容访问模式的设置 ，组织“ {owner_id}”禁用了这个功"
-"能。"
+msgstr "忽略自动附加请求。机构 \"{owner_id}\" 附加订阅已被禁用，因为启用了 Simple "
+"Content Access (SCA)。"
 
 #: src/subscription_manager/managercli.py:337
 msgid "server URL in the form of https://hostname:port/prefix"
@@ -4934,11 +4924,11 @@ msgstr "在服务器中进行验证时使用的令牌"
 
 #: src/subscription_manager/managercli.py:1032
 msgid "Error: --username is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "错误：--username 在非互动模式中是一个必需的参数。"
 
 #: src/subscription_manager/managercli.py:1034
 msgid "Error: --password is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "错误：--password 在非互动模式中是一个必需的参数。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1036
@@ -4958,7 +4948,7 @@ msgstr "指定机构"
 #: src/subscription_manager/managercli.py:1082
 #: src/subscription_manager/managercli.py:2143
 msgid "Error: --org is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "错误：--org 在非互动模式中是一个必需的参数。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:1084
@@ -5452,7 +5442,7 @@ msgstr "将服务等级设定为：%s"
 
 #: src/subscription_manager/managercli.py:2073
 msgid "Error: --environments is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "错误：--environments 在非互动模式中是一个必需的参数。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2075
@@ -5651,14 +5641,12 @@ msgstr "错误：文件 \"%s\" 不存在或者无法读取。"
 
 # translation manually copied from candlepin
 #: src/subscription_manager/managercli.py:2442
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to attach. It is disabled for org \"{owner_id}\" because "
-#| "of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring the request to attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr "忽略附加请求。由于内容访问模式设置，org \"{owner_id}\"禁用了它。"
+msgstr "忽略附加请求。机构 \"{owner_id}\" 附加订阅已被禁用，因为启用了 Simple "
+"Content Access (SCA)。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2486
