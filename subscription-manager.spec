@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.34
+Version: 1.28.35
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1483,6 +1483,59 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Jan 20 2023 Pino Toscano <ptoscano@redhat.com> 1.28.35-1
+- Translated using Weblate (Spanish) (ptoscano@redhat.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (ljanda@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Update translation files (noreply@weblate.org)
+- Translated using Weblate (German) (atalanttore@googlemail.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Base DBusServerStubProvider on SubManFixture (mhorky@redhat.com)
+- Mark D-Bus tests (mhorky@redhat.com)
+- Remove unused classes of DBus tests (mhorky@redhat.com)
+- ENT-5533: Update D-Bus tests of Unregister (mhorky@redhat.com)
+- ENT-5350: Implement "force" register option in rhsm dbus python bindings
+  (mhorky@redhat.com)
+- ENT-5533: Fix failures of D-Bus' Register tests (mhorky@redhat.com)
+- ENT-5533: Update D-Bus tests of Register (mhorky@redhat.com)
+- ENT-5533: Update D-Bus tests of Products (mhorky@redhat.com)
+- ENT-5533: Update D-Bus tests of AllFacts (mhorky@redhat.com)
+- ENT-5533: Update D-Bus tests of Entitlement (mhorky@redhat.com)
+- Fix typo in method name of EntitlementService (mhorky@redhat.com)
+- ENT-5533: Update D-Bus tests of Consumer (mhorky@redhat.com)
+- ENT-5533: Update D-Bus tests of Attach (mhorky@redhat.com)
+- ENT-5533: Update D-Bus tests of Config (mhorky@redhat.com)
+- Skip AsyncPool tests (mhorky@redhat.com)
+- Catch generic OSError during BaseRestLib._request() (ptoscano@redhat.com)
+- Catch also CertificateLoadingError for identity cert loading
+  (ptoscano@redhat.com)
+- Fix formatting of proxy errors w/o errno (ptoscano@redhat.com)
+- Improve formatting of CertificateLoadingError (ptoscano@redhat.com)
+- Raise a new CertificateLoadingError on X.509 loading failures
+  (ptoscano@redhat.com)
+- Improve formatting of UnknownContentException (ptoscano@redhat.com)
+- connection: improve the internal UnknownContentException
+  (ptoscano@redhat.com)
+- utils: add terminal_printable_content (ptoscano@redhat.com)
+- connection: rename NetworkException to UnknownContentException
+  (ptoscano@redhat.com)
+- Improve formatting of ProxyException (ptoscano@redhat.com)
+- connection: improve the internal ProxyException (ptoscano@redhat.com)
+- Improve formatting of socket.gaierror (ptoscano@redhat.com)
+- Improve formatting of ConnectionError (ptoscano@redhat.com)
+- Improve formatting of BadCertificateException (ptoscano@redhat.com)
+- connection: extend BadCertificateException w/ SSL exception
+  (ptoscano@redhat.com)
+- connection: drop dead code (ptoscano@redhat.com)
+- ENT-4286: Additional fix for exception handling (jajerome@redhat.com)
+- ENT-4286: Simplify exception reporting with system_exit()
+  (jajerome@redhat.com)
+- Cloud-what: Make saving token file more robust (jhnidek@redhat.com)
+- Remove deprecated function call (mhorky@redhat.com)
+-  Fix failures of D-Bus' Register tests (mhorky@redhat.com)
+- Show locals in pytest output (mhorky@redhat.com)
+
 * Fri Dec 02 2022 Pino Toscano <ptoscano@redhat.com> 1.28.34-1
 - tito: add rhel 8.8 releaser (ptoscano@redhat.com)
 - Translated using Weblate (Japanese) (suanand@redhat.com)
