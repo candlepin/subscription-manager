@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-20 11:31+0200\n"
-"PO-Revision-Date: 2022-02-13 18:16+0000\n"
+"PO-Revision-Date: 2022-12-05 13:19+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/de/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -6554,10 +6554,9 @@ msgstr ""
 "%s"
 
 #: src/subscription_manager/managercli.py:3740
-#, fuzzy, python-brace-format
-#| msgid "System Purpose Status: %s"
+#, python-brace-format
 msgid "System Purpose Status: {status}"
-msgstr "Systemzweckstatus: %s"
+msgstr "Systemzweckstatus: {status}"
 
 #: src/subscription_manager/migrate/migrate.py:53
 #: src/subscription_manager/migrate/migrate.py:55
