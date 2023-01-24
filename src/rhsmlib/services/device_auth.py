@@ -1,8 +1,7 @@
 import logging
-import socket
 import time
 import os
-from typing import Callable, Dict, Any, Optional
+from typing import Dict, Any, Optional
 
 from rhsm import utils
 
@@ -11,10 +10,7 @@ from rhsm.connection import DeviceAuthConnection, UEPConnection
 from rhsmlib.services import exceptions
 
 from subscription_manager import injection as inj
-from subscription_manager import managerlib
-from subscription_manager import syspurposelib
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.cp_provider import CPProvider
 from subscription_manager.cli import system_exit
 
 log = logging.getLogger(__name__)
@@ -79,8 +75,8 @@ class OAuthRegisterService:
                 while not resp_received:
                     if elapsed_time > login_expiration_time:
                         system_exit(os.EX_NOTFOUND, _("Device access code not provided, cancelled authorization process."))
-                    
-                    # Poll the OAuth provider ever X seconds
+
+                    # Poll the OAuth provider every X seconds
                     time.sleep(polling_interval)
                     elapsed_time += polling_interval
 
@@ -92,7 +88,9 @@ class OAuthRegisterService:
                     if access_token_resp is not None:
                         if access_token_resp["status"] == 404:
                             system_exit(os.EX_UNAVAILABLE, _("No authorization content received."))
-                        elif access_token_resp["status"] != 400:
+                        elif access_token_resp["status"] == 400:
+                            system_exit(os.EX_UNAVAILABLE, _("Access was denied or the user cancelled the authorization process."))
+                        elif access_token_resp["status"] == 200:
                             resp_received = True
                             break
                 if access_token_resp is not None:
