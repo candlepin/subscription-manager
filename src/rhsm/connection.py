@@ -383,8 +383,8 @@ class KeycloakConnection(BaseConnection):
 
     def __init__(self, realm: Any, auth_url: str, resource: Any, **kwargs) -> None:
         host = urlparse(auth_url).hostname or None
-        # handler = urlparse(auth_url).path
-        handler = "/auth/realms/redhat-external/protocol/openid-connect/token"
+        handler = urlparse(auth_url).path
+        # handler = "/auth/realms/redhat-external/protocol/openid-connect/token"
         ssl_port = urlparse(auth_url).port or 443
         super(KeycloakConnection, self).__init__(host=host, ssl_port=ssl_port, handler=handler, **kwargs)
         self.realm = realm
@@ -392,8 +392,7 @@ class KeycloakConnection(BaseConnection):
 
     def get_access_token_through_refresh(self, refreshtoken: Any) -> Optional[Any]:
         # Get access token in exchange for refresh token
-        # method = "realms/" + self.realm + "/protocol/openid-connect/token"
-        method = ""
+        method = "/realms/" + self.realm + "/protocol/openid-connect/token"
         params = {"client_id": self.resource, "grant_type": "refresh_token", "refresh_token": refreshtoken}
         headers = {"Content-type": "application/x-www-form-urlencoded"}
         try:
@@ -419,13 +418,14 @@ class DeviceAuthConnection(BaseConnection):
         self.scope = scope
 
     def attempt_device_auth_request(self) -> dict:
+        method = "/realms/" + self.realm + "/protocol/openid-connect/auth/device"
         params = {"client_id": self.client_id, "scope": self.scope}
         headers = {
             "Accept": "application/json",
             "Content-type": "application/x-www-form-urlencoded"
         }
         try:
-            data = self.conn.request_post("", params, headers, description=_("Attempting OAuth device authorization request..."))
+            data = self.conn.request_post(method, params, headers, description=_("Attempting OAuth device authorization request..."))
             return data
         except RestlibException as e:
             if e.code == 400:
