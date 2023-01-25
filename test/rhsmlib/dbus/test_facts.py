@@ -29,7 +29,7 @@ class TestFactsDBusObject(DBusServerStubProvider):
             name="get_virt_info",
         )
         cls.patches["get_virt_info"] = get_virt_info_patch.start()
-        cls.patches["get_virt_info"].return_value = {}
+        cls.patches["get_virt_info"].return_value = {"virt.is_guest": "Unknown"}
         cls.addClassCleanup(get_virt_info_patch.stop)
 
         # Do not collect network facts, as they can cause issues in containers
@@ -42,11 +42,6 @@ class TestFactsDBusObject(DBusServerStubProvider):
         cls.addClassCleanup(get_network_info_patch.stop)
 
         super().setUpClass()
-
-    def setUp(self) -> None:
-        self.patches["get_virt_info"].return_value = {"virt.is_guest": "Unknown"}
-
-        super().setUp()
 
     def test_GetFacts(self):
         expected = "uname.machine"
