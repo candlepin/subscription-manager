@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 15:11+0100\n"
+"POT-Creation-Date: 2023-01-26 15:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -168,66 +168,66 @@ msgstr ""
 msgid "%(prog)s: error: %(message)s\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:107
 msgid "deprecated, see --cert-check-interval"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:110
 msgid "interval to run cert check (in minutes)"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:112
+#: src/daemons/rhsmcertd.c:114
 msgid "deprecated, see --auto-attach-interval"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:115
+#: src/daemons/rhsmcertd.c:117
 msgid "interval to run auto-attach (in minutes)"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:118
+#: src/daemons/rhsmcertd.c:120
 msgid "interval to run auto-registration (in minutes)"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:121
+#: src/daemons/rhsmcertd.c:123
 msgid "run the initial checks immediately, with no delay"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:124
+#: src/daemons/rhsmcertd.c:126
 msgid "show debug messages"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:126
+#: src/daemons/rhsmcertd.c:128
 msgid "do not add an offset to the initial checks."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:129
+#: src/daemons/rhsmcertd.c:131
 msgid "try to perform auto-registration."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:483
+#: src/daemons/rhsmcertd.c:612
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:600
+#: src/daemons/rhsmcertd.c:729
 msgid "Wrong number of arguments specified.\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:676
+#: src/daemons/rhsmcertd.c:805
 msgid "Invalid argument specified.\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:682
+#: src/daemons/rhsmcertd.c:811
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:697
+#: src/daemons/rhsmcertd.c:826
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:711
+#: src/daemons/rhsmcertd.c:840
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr ""
@@ -739,203 +739,157 @@ msgstr ""
 msgid "Unknown Certificate Type"
 msgstr ""
 
-#: src/rhsm/connection.py:1389
+#: src/rhsm/config.py:265
+#, python-brace-format
+msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
+msgstr ""
+
+#: src/rhsm/config.py:270
+msgid ""
+"Please use:  subscription-manager config --logging.default_log_level=<Log "
+"Level> to set the default_log_level to a valid value."
+msgstr ""
+
+#: src/rhsm/config.py:276
+#, python-brace-format
+msgid "Valid Values: {valid_str}"
+msgstr ""
+
+#: src/rhsm/connection.py:1380
 msgid "Fetching supported resources"
 msgstr ""
 
-#: src/rhsm/connection.py:1449
+#: src/rhsm/connection.py:1439
 msgid "Checking connection status"
 msgstr ""
 
-#: src/rhsm/connection.py:1477
+#: src/rhsm/connection.py:1467
 msgid "Fetching cloud token"
 msgstr ""
 
-#: src/rhsm/connection.py:1550
+#: src/rhsm/connection.py:1540
 msgid "Registering system"
 msgstr ""
 
-#: src/rhsm/connection.py:1580 src/rhsm/connection.py:1592
+#: src/rhsm/connection.py:1570 src/rhsm/connection.py:1582
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
-#: src/rhsm/connection.py:1615
+#: src/rhsm/connection.py:1605
 msgid "Updating hypervisor information"
 msgstr ""
 
-#: src/rhsm/connection.py:1691
+#: src/rhsm/connection.py:1680
 msgid "Updating consumer information"
 msgstr ""
 
-#: src/rhsm/connection.py:1703
-msgid "Updating guest information"
-msgstr ""
-
-#: src/rhsm/connection.py:1707 src/rhsm/connection.py:1711
+#: src/rhsm/connection.py:1685 src/rhsm/connection.py:1689
 msgid "Fetching guest information"
 msgstr ""
 
-#: src/rhsm/connection.py:1715
+#: src/rhsm/connection.py:1693
 msgid "Removing guests"
 msgstr ""
 
-#: src/rhsm/connection.py:1739 src/rhsm/connection.py:1750
+#: src/rhsm/connection.py:1723 src/rhsm/connection.py:1734
 msgid "Updating profile information"
 msgstr ""
 
-#: src/rhsm/connection.py:1759
+#: src/rhsm/connection.py:1742
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1771
-msgid "Fetching consumers"
-msgstr ""
-
-#: src/rhsm/connection.py:1780
+#: src/rhsm/connection.py:1751
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1789
+#: src/rhsm/connection.py:1760
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1796
+#: src/rhsm/connection.py:1767
 msgid "Fetching available system purpose settings"
 msgstr ""
 
-#: src/rhsm/connection.py:1812
-msgid "Creating organization"
-msgstr ""
-
-#: src/rhsm/connection.py:1819 src/rhsm/connection.py:1838
-#: src/rhsm/connection.py:1856
+#: src/rhsm/connection.py:1774 src/rhsm/connection.py:1782
 msgid "Fetching organizations"
 msgstr ""
 
-#: src/rhsm/connection.py:1829
-msgid "Removing organization"
-msgstr ""
-
-#: src/rhsm/connection.py:1848
-msgid "Fetching organization information"
-msgstr ""
-
-#: src/rhsm/connection.py:1874
-msgid "Fetching organization hypervisors"
-msgstr ""
-
-#: src/rhsm/connection.py:1884
+#: src/rhsm/connection.py:1795
 msgid "Unregistering system"
 msgstr ""
 
-#: src/rhsm/connection.py:1898
+#: src/rhsm/connection.py:1808
 msgid "Fetching certificates"
 msgstr ""
 
-#: src/rhsm/connection.py:1907
+#: src/rhsm/connection.py:1817
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1923
+#: src/rhsm/connection.py:1833
 msgid "Fetching content for a certificate"
 msgstr ""
 
-#: src/rhsm/connection.py:1936 src/rhsm/connection.py:1950
-#: src/rhsm/connection.py:1967 src/rhsm/connection.py:2334
+#: src/rhsm/connection.py:1846 src/rhsm/connection.py:1863
 msgid "Updating subscriptions"
 msgstr ""
 
-#: src/rhsm/connection.py:1986
-msgid "Simulating subscribing"
-msgstr ""
-
-#: src/rhsm/connection.py:1996 src/rhsm/connection.py:2007
-#: src/rhsm/connection.py:2016
+#: src/rhsm/connection.py:1872 src/rhsm/connection.py:1882
+#: src/rhsm/connection.py:1891
 msgid "Unsubscribing"
 msgstr ""
 
-#: src/rhsm/connection.py:2074
+#: src/rhsm/connection.py:1940
 msgid "Fetching pools"
 msgstr ""
 
-#: src/rhsm/connection.py:2088
-msgid "Fetching pool information"
-msgstr ""
-
-#: src/rhsm/connection.py:2093
-msgid "Fetching product information"
-msgstr ""
-
-#: src/rhsm/connection.py:2103
+#: src/rhsm/connection.py:1951
 msgid "Fetching release information"
 msgstr ""
 
-#: src/rhsm/connection.py:2117
+#: src/rhsm/connection.py:1965
 msgid "Fetching available releases"
 msgstr ""
 
-#: src/rhsm/connection.py:2132
+#: src/rhsm/connection.py:1980
 msgid "Fetching entitlements"
 msgstr ""
 
-#: src/rhsm/connection.py:2141
+#: src/rhsm/connection.py:1989
 msgid "Fetching service levels"
 msgstr ""
 
-#: src/rhsm/connection.py:2152
+#: src/rhsm/connection.py:2000
 msgid "Fetching environments"
 msgstr ""
 
-#: src/rhsm/connection.py:2171
-msgid "Fetching environment information"
-msgstr ""
-
-#: src/rhsm/connection.py:2179
-msgid "Fetching entitlement information"
-msgstr ""
-
-#: src/rhsm/connection.py:2188 src/rhsm/connection.py:2239
+#: src/rhsm/connection.py:2010
 msgid "Updating certificate"
 msgstr ""
 
-#: src/rhsm/connection.py:2207
+#: src/rhsm/connection.py:2029
 msgid "Updating certificates"
 msgstr ""
 
-#: src/rhsm/connection.py:2258
+#: src/rhsm/connection.py:2048
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2266
+#: src/rhsm/connection.py:2056
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2277
+#: src/rhsm/connection.py:2067
 msgid "Updating content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2290
+#: src/rhsm/connection.py:2080
 msgid "Removing content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2311
+#: src/rhsm/connection.py:2096
 msgid "Activating"
-msgstr ""
-
-#: src/rhsm/connection.py:2319
-msgid "Fetching subscriptions"
-msgstr ""
-
-#: src/rhsm/connection.py:2344
-msgid "Fetching job"
-msgstr ""
-
-#: src/rhsm/connection.py:2354
-msgid "Updating job status"
-msgstr ""
-
-#: src/rhsm/connection.py:2363
-msgid "Canceling job"
 msgstr ""
 
 #: src/rhsm_debug/debug_commands.py:39
@@ -1037,13 +991,13 @@ msgstr ""
 #: src/subscription_manager/cli_command/facts.py:66
 #: src/subscription_manager/cli_command/list.py:54
 #: src/subscription_manager/reasons.py:109
-#: src/subscription_manager/utils.py:253 src/subscription_manager/utils.py:267
-#: src/subscription_manager/utils.py:269 src/subscription_manager/utils.py:289
-#: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:310
+#: src/subscription_manager/utils.py:252 src/subscription_manager/utils.py:268
+#: src/subscription_manager/utils.py:270 src/subscription_manager/utils.py:290
+#: src/subscription_manager/utils.py:292 src/subscription_manager/utils.py:311
 msgid "Unknown"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:123 src/rhsmlib/services/register.py:63
+#: src/rhsmlib/services/entitlement.py:123 src/rhsmlib/services/register.py:61
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr ""
@@ -1125,44 +1079,44 @@ msgstr ""
 msgid "Error: this system is not registered"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:194
+#: src/rhsmlib/services/register.py:192
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 
-#: src/rhsmlib/services/register.py:197
-#: src/subscription_manager/cli_command/register.py:139
+#: src/rhsmlib/services/register.py:195
+#: src/subscription_manager/cli_command/register.py:142
 msgid "Error: system name can not be empty."
 msgstr ""
 
-#: src/rhsmlib/services/register.py:201
-#: src/subscription_manager/cli_command/register.py:161
+#: src/rhsmlib/services/register.py:199
+#: src/subscription_manager/cli_command/register.py:164
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
 "use the clean command and try again without --force."
 msgstr ""
 
-#: src/rhsmlib/services/register.py:211
-#: src/subscription_manager/cli_command/register.py:152
+#: src/rhsmlib/services/register.py:209
+#: src/subscription_manager/cli_command/register.py:155
 msgid "Error: Must specify an activation key"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:213
-#: src/subscription_manager/cli_command/register.py:141
+#: src/rhsmlib/services/register.py:211
+#: src/subscription_manager/cli_command/register.py:144
 msgid "Error: Activation keys do not require user credentials."
 msgstr ""
 
-#: src/rhsmlib/services/register.py:216
-#: src/subscription_manager/cli_command/register.py:144
+#: src/rhsmlib/services/register.py:214
+#: src/subscription_manager/cli_command/register.py:147
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr ""
 
-#: src/rhsmlib/services/register.py:220
-#: src/subscription_manager/cli_command/register.py:147
+#: src/rhsmlib/services/register.py:218
+#: src/subscription_manager/cli_command/register.py:150
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr ""
 
-#: src/rhsmlib/services/register.py:227
+#: src/rhsmlib/services/register.py:225
 msgid "Error: Missing username or password."
 msgstr ""
 
@@ -1587,7 +1541,7 @@ msgid ""
 msgstr ""
 
 #: src/subscription_manager/cli_command/attach.py:257
-#: src/subscription_manager/cli_command/register.py:198
+#: src/subscription_manager/cli_command/register.py:201
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
@@ -1635,7 +1589,7 @@ msgid ""
 msgstr ""
 
 #: src/subscription_manager/cli_command/clean.py:31
-#: src/subscription_manager/cli_command/register.py:260
+#: src/subscription_manager/cli_command/register.py:312
 msgid "All local data removed"
 msgstr ""
 
@@ -1803,7 +1757,7 @@ msgid "You may not specify an --org for environments when registered."
 msgstr ""
 
 #: src/subscription_manager/cli_command/environments.py:90
-#: src/subscription_manager/cli_command/register.py:413
+#: src/subscription_manager/cli_command/register.py:458
 msgid "Error: Server does not support environments."
 msgstr ""
 
@@ -2351,12 +2305,12 @@ msgid "specify an organization"
 msgstr ""
 
 #: src/subscription_manager/cli_command/org.py:46
-#: src/subscription_manager/cli_command/register.py:475
+#: src/subscription_manager/cli_command/register.py:520
 msgid "Error: --org is a required parameter in non-interactive mode."
 msgstr ""
 
 #: src/subscription_manager/cli_command/org.py:48
-#: src/subscription_manager/cli_command/register.py:480
+#: src/subscription_manager/cli_command/register.py:525
 msgid "Organization: "
 msgstr ""
 
@@ -2366,7 +2320,7 @@ msgid "Error: User {username} is not member of any organization."
 msgstr ""
 
 #: src/subscription_manager/cli_command/org.py:74
-#: src/subscription_manager/cli_command/register.py:466
+#: src/subscription_manager/cli_command/register.py:511
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr ""
@@ -2525,6 +2479,10 @@ msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr ""
 
+#: src/subscription_manager/cli_command/redeem.py:74
+msgid "Error: Unable to redeem subscription for this system."
+msgstr ""
+
 #: src/subscription_manager/cli_command/refresh.py:32
 msgid "Pull the latest subscription data from the server"
 msgstr ""
@@ -2542,138 +2500,142 @@ msgstr ""
 msgid "All local data refreshed"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:65
+#: src/subscription_manager/cli_command/register.py:68
 msgid "base URL for content in form of https://hostname:port/prefix"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:78
+#: src/subscription_manager/cli_command/register.py:81
 msgid "name of the system to register, defaults to the hostname"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:84
+#: src/subscription_manager/cli_command/register.py:87
 msgid "the existing system data is pulled from the server"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:90
+#: src/subscription_manager/cli_command/register.py:93
 msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:96
+#: src/subscription_manager/cli_command/register.py:99
 msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:104
+#: src/subscription_manager/cli_command/register.py:107
 msgid "set a release version"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:109
+#: src/subscription_manager/cli_command/register.py:112
 msgid "Deprecated, see --auto-attach"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:115
+#: src/subscription_manager/cli_command/register.py:118
 msgid "automatically attach compatible subscriptions to this system"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:120
+#: src/subscription_manager/cli_command/register.py:123
 msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:126
+#: src/subscription_manager/cli_command/register.py:129
 msgid ""
 "activation key to use for registration (can be specified more than once)"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:131
+#: src/subscription_manager/cli_command/register.py:134
 msgid ""
 "system preference used when subscribing automatically, requires --auto-attach"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:137
+#: src/subscription_manager/cli_command/register.py:140
 msgid "This system is already registered. Use --force to override"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:149
+#: src/subscription_manager/cli_command/register.py:152
 msgid "Error: Activation keys cannot be used with --auto-attach."
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:154
+#: src/subscription_manager/cli_command/register.py:157
 msgid "Error: Must use --auto-attach with --servicelevel."
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:156
+#: src/subscription_manager/cli_command/register.py:159
 msgid "Error: Must provide --org with activation keys."
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:170
+#: src/subscription_manager/cli_command/register.py:173
 msgid "Error: The --type option has been deprecated and may not be used."
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:173
-#: src/subscription_manager/cli_command/register.py:444
+#: src/subscription_manager/cli_command/register.py:176
+#: src/subscription_manager/cli_command/register.py:489
 msgid "The entitlement server does not allow multiple environments"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:238
+#: src/subscription_manager/cli_command/register.py:220
+msgid "Uploading DNF profile"
+msgstr ""
+
+#: src/subscription_manager/cli_command/register.py:290
 #: src/subscription_manager/cli_command/unregister.py:41
 #, python-brace-format
 msgid "Unregistering from: {hostname}:{port}{prefix}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:249
+#: src/subscription_manager/cli_command/register.py:301
 #, python-brace-format
 msgid "The system with UUID {old_uuid} has been unregistered"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:273
+#: src/subscription_manager/cli_command/register.py:325
 #, python-brace-format
 msgid "Registering to: {hostname}:{port}{prefix}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:313
+#: src/subscription_manager/cli_command/register.py:365
 #, python-brace-format
 msgid "Error during registration: {e}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:316
+#: src/subscription_manager/cli_command/register.py:368
 #, python-brace-format
 msgid "The system has been registered with ID: {id}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:317
+#: src/subscription_manager/cli_command/register.py:369
 #, python-brace-format
 msgid "The registered system name is: {name}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:319
+#: src/subscription_manager/cli_command/register.py:371
 #, python-brace-format
 msgid "Service level set to: {level}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:393
+#: src/subscription_manager/cli_command/register.py:438
 msgid "Error: --environments is a required parameter in non-interactive mode."
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:397
+#: src/subscription_manager/cli_command/register.py:442
 msgid "Environments: "
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:399
+#: src/subscription_manager/cli_command/register.py:444
 msgid "Environment: "
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:438
+#: src/subscription_manager/cli_command/register.py:483
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:454
+#: src/subscription_manager/cli_command/register.py:499
 #, python-brace-format
 msgid "{name} cannot register with any organizations."
 msgstr ""
@@ -2989,7 +2951,7 @@ msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 msgstr ""
 
 #: src/subscription_manager/cli_command/unregister.py:38
-#: src/subscription_manager/utils.py:268
+#: src/subscription_manager/utils.py:269
 msgid "This system is currently not registered."
 msgstr ""
 
@@ -3205,9 +3167,14 @@ msgstr ""
 msgid "Bad certificate: [{library}] {message}"
 msgstr ""
 
+#: src/subscription_manager/exceptions.py:64
+#, python-brace-format
+msgid "Unable to reach the server at {host}: {message}"
+msgstr ""
+
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
-#: src/subscription_manager/exceptions.py:67
+#: src/subscription_manager/exceptions.py:68
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
 msgstr ""
@@ -3301,7 +3268,7 @@ msgstr ""
 msgid "Unable to update entitlement certificates and repositories"
 msgstr ""
 
-#: src/subscription_manager/utils.py:368
+#: src/subscription_manager/utils.py:369
 msgid "and"
 msgstr ""
 
