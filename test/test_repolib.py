@@ -1042,6 +1042,109 @@ class AptRepoFileTest(unittest.TestCase):
             self.assertEqual(act_content[key], exp_params[key])
 
     @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_fix_content_url_params(self, mock_file):
+        # Setup mock and expected values
+        assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
+        mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
+        exp_params = {
+            "arches": "none",
+            "Types": "deb",
+            "URIs": "https://example.site.org/",
+            "Suites": "focal",
+            "Components": "puppet7",
+            "Trusted": "yes",
+            "sslclientcert": "mypem.pem",
+        }
+        ar = self._helper_stub_repofile()
+        repo_mock = self._helper_stub_repo(
+            "mock",
+            existing_values=[
+                ("baseurl", "https://example.site.org/?comp=puppet7&rel=focal"),
+                ("sslclientcert", exp_params["sslclientcert"]),
+            ],
+        )
+        # Modify data
+        act_content = ar.fix_content(repo_mock)
+        # Test modification by comparing with expected values
+        for key in exp_params:
+            self.assertIn(key, act_content)
+            self.assertEqual(act_content[key], exp_params[key])
+
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_fix_content_url_params_multi(self, mock_file):
+        # Setup mock and expected values
+        assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
+        mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
+        exp_params = {
+            "arches": "none",
+            "Types": "deb",
+            "URIs": "https://example.site.org/",
+            "Suites": "focal jammy",
+            "Components": "puppet7 puppet6",
+            "Trusted": "yes",
+            "sslclientcert": "mypem.pem",
+        }
+        ar = self._helper_stub_repofile()
+        repo_mock = self._helper_stub_repo(
+            "mock",
+            existing_values=[
+                ("baseurl", "https://example.site.org/?comp=puppet7,puppet6&rel=focal,jammy"),
+                ("sslclientcert", exp_params["sslclientcert"]),
+            ],
+        )
+        # Modify data
+        act_content = ar.fix_content(repo_mock)
+        # Test modification by comparing with expected values
+        for key in exp_params:
+            self.assertIn(key, act_content)
+            self.assertEqual(act_content[key], exp_params[key])
+
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_fix_content_url_single_param(self, mock_file):
+        # Setup mock and expected values
+        assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
+        mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
+        exp_params = {
+            "arches": "none",
+            "Types": "deb",
+            "URIs": "https://example.site.org/",
+            "Suites": "default",
+            "Components": "all",
+            "Trusted": "yes",
+            "sslclientcert": "mypem.pem",
+        }
+        # Test only 'comp' param
+        ar = self._helper_stub_repofile()
+        repo_mock = self._helper_stub_repo(
+            "mock",
+            existing_values=[
+                ("baseurl", "https://example.site.org/?comp=puppet7"),
+                ("sslclientcert", exp_params["sslclientcert"]),
+            ],
+        )
+        # Modify data
+        act_content = ar.fix_content(repo_mock)
+        # Test modification by comparing with expected values
+        for key in exp_params:
+            self.assertIn(key, act_content)
+            self.assertEqual(act_content[key], exp_params[key])
+        # Test only 'rel' param
+        ar = self._helper_stub_repofile()
+        repo_mock = self._helper_stub_repo(
+            "mock",
+            existing_values=[
+                ("baseurl", "https://example.site.org/?rel=focal,jammy"),
+                ("sslclientcert", exp_params["sslclientcert"]),
+            ],
+        )
+        # Modify data
+        act_content = ar.fix_content(repo_mock)
+        # Test modification by comparing with expected values
+        for key in exp_params:
+            self.assertIn(key, act_content)
+            self.assertEqual(act_content[key], exp_params[key])
+
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
     def test_fix_content_arches(self, mock_file):
         # Setup mock and expected values
         assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
