@@ -8,14 +8,14 @@
 # simmon <simmon@nplob.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
 # Kim InSoo <simmon@nplob.com>, 2022.
-# 김인수 <simmon@nplob.com>, 2022.
+# 김인수 <simmon@nplob.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-26 15:00+0100\n"
-"PO-Revision-Date: 2023-01-26 16:35+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2023-01-31 07:20+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
 "Language: ko\n"
@@ -881,18 +881,20 @@ msgstr "알 수 없는 인증서 유형"
 #: src/rhsm/config.py:265
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
-msgstr ""
+msgstr "잘못된 로그 레벨: {lvl}, 이와 같은 실행을 위해 INFO로 설정합니다."
 
 #: src/rhsm/config.py:270
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
+"사용해 주세요:  subscription-manager config --logging.default_log_level=<Log "
+"Level>는 default_log_level을 유효한 값으로 설정합니다."
 
 #: src/rhsm/config.py:276
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
-msgstr ""
+msgstr "유효 값: {valid_str}"
 
 #: src/rhsm/connection.py:1380
 msgid "Fetching supported resources"
@@ -2954,10 +2956,8 @@ msgstr "오류: 이 명령에서는 --email을 사용하여 이메일 주소를 
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:74
-#, fuzzy
-#| msgid "Error: Unable to generate a new identity for the system"
 msgid "Error: Unable to redeem subscription for this system."
-msgstr "오류: 시스템에 새로운 ID를 생성할 수 없습니다"
+msgstr "오류: 이와 같은 시스템을 위해 서브스크립션을 상환 할 수 없습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:32
@@ -3073,10 +3073,8 @@ msgid "The entitlement server does not allow multiple environments"
 msgstr "자격 서버는 다중 환경을 허용하지 않습니다"
 
 #: src/subscription_manager/cli_command/register.py:220
-#, fuzzy
-#| msgid "Uploading package profile"
 msgid "Uploading DNF profile"
-msgstr "패키지 프로파일을 업로드하고 있습니다"
+msgstr "DNF 프로파일을 적재 중"
 
 #: src/subscription_manager/cli_command/register.py:290
 #: src/subscription_manager/cli_command/unregister.py:41
@@ -3757,10 +3755,9 @@ msgstr "잘못된 인증서: [{library}] {message}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:64
-#, fuzzy, python-brace-format
-#| msgid "Unable to reach the server at {host}:{port}{handler}"
+#, python-brace-format
 msgid "Unable to reach the server at {host}: {message}"
-msgstr "{host}:{port}{handler}에 있는 서버에 연결할 수 없습니다"
+msgstr "{host}: {message}에 있는 서버에 도달 할 수 없습니다"
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
