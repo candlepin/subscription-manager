@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 15:11+0100\n"
+"POT-Creation-Date: 2023-01-26 15:00+0100\n"
 "PO-Revision-Date: 2015-09-25 03:30-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Bengali (India)\n"
@@ -204,88 +204,88 @@ msgstr "%s: ত্রুটি: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:107
 msgid "deprecated, see --cert-check-interval"
 msgstr "অবচিত, --cert-check-interval দেখুন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:110
 msgid "interval to run cert check (in minutes)"
 msgstr "cert check সঞ্চালনার বিরতি (মিনিটে ধার্য)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/daemons/rhsmcertd.c:112
+#: src/daemons/rhsmcertd.c:114
 msgid "deprecated, see --auto-attach-interval"
 msgstr "অবচিত, --auto-attach-interval দেখুন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:115
+#: src/daemons/rhsmcertd.c:117
 msgid "interval to run auto-attach (in minutes)"
 msgstr "auto-attach সঞ্চালনার মধ্যে বিরতি (মিনিট অনুযায়ী ধার্য)"
 
-#: src/daemons/rhsmcertd.c:118
+#: src/daemons/rhsmcertd.c:120
 msgid "interval to run auto-registration (in minutes)"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:121
+#: src/daemons/rhsmcertd.c:123
 msgid "run the initial checks immediately, with no delay"
 msgstr "অবিলম্বে প্রারম্ভিক পরীক্ষাগুলি সঞ্চালিত হবে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/daemons/rhsmcertd.c:124
+#: src/daemons/rhsmcertd.c:126
 msgid "show debug messages"
 msgstr "ডিবাগ বার্তা প্রদর্শন করা হবে"
 
-#: src/daemons/rhsmcertd.c:126
+#: src/daemons/rhsmcertd.c:128
 msgid "do not add an offset to the initial checks."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:129
+#: src/daemons/rhsmcertd.c:131
 msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:483
+#: src/daemons/rhsmcertd.c:612
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "অধিক বিবরণের জন্য, চিহ্নিত কমান্ড প্রয়োগ করুন: rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:600
+#: src/daemons/rhsmcertd.c:729
 msgid "Wrong number of arguments specified.\n"
 msgstr "সঠিক সংখ্যক আর্গুমেন্ট উল্লিখিত হয়নি।\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:676
+#: src/daemons/rhsmcertd.c:805
 msgid "Invalid argument specified.\n"
 msgstr "অবৈধ আর্গুমেন্ট উল্লিখিত হয়েছে।\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:682
+#: src/daemons/rhsmcertd.c:811
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "সতর্কবার্তা: অবচিত CLI আর্গুমেন্ট ব্যবহার করা হচ্ছে।\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:697
+#: src/daemons/rhsmcertd.c:826
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "অবৈধ বিকল্প: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:711
+#: src/daemons/rhsmcertd.c:840
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "অবৈধ বিকল্প উল্লিখিত হয়েছে: %s\n"
@@ -1012,37 +1012,53 @@ msgstr "আইডেন্টিটি সার্টিফিকেট"
 msgid "Unknown Certificate Type"
 msgstr "অজানা ধরনের সার্টিফিকেট"
 
-#: src/rhsm/connection.py:1389
+#: src/rhsm/config.py:265
+#, python-brace-format
+msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
+msgstr ""
+
+#: src/rhsm/config.py:270
+msgid ""
+"Please use:  subscription-manager config --logging.default_log_level=<Log "
+"Level> to set the default_log_level to a valid value."
+msgstr ""
+
+#: src/rhsm/config.py:276
+#, python-brace-format
+msgid "Valid Values: {valid_str}"
+msgstr ""
+
+#: src/rhsm/connection.py:1380
 msgid "Fetching supported resources"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:1449
+#: src/rhsm/connection.py:1439
 #, fuzzy
 #| msgid "connectionStatusLabel"
 msgid "Checking connection status"
 msgstr "connectionStatusLabel"
 
-#: src/rhsm/connection.py:1477
+#: src/rhsm/connection.py:1467
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1550
+#: src/rhsm/connection.py:1540
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "সিস্টেম নিবন্ধন"
 
-#: src/rhsm/connection.py:1580 src/rhsm/connection.py:1592
+#: src/rhsm/connection.py:1570 src/rhsm/connection.py:1582
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:1615
+#: src/rhsm/connection.py:1605
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
@@ -1050,7 +1066,7 @@ msgstr "সংস্করণ সংক্রান্ত তথ্য প্র
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:1691
+#: src/rhsm/connection.py:1680
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
@@ -1058,21 +1074,13 @@ msgstr "সাবস্ক্রিপশন নিবন্ধন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/rhsm/connection.py:1703
-#, fuzzy
-#| msgid "Print manifest information"
-msgid "Updating guest information"
-msgstr "ম্যানিফেস্ট বিষয়ক তথ্য প্রিন্ট করুন"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author bnin
-#: src/rhsm/connection.py:1707 src/rhsm/connection.py:1711
+#: src/rhsm/connection.py:1685 src/rhsm/connection.py:1689
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
 msgstr "ম্যানিফেস্ট বিষয়ক তথ্য প্রিন্ট করুন"
 
-#: src/rhsm/connection.py:1715
+#: src/rhsm/connection.py:1693
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
@@ -1080,76 +1088,39 @@ msgstr "মুছে ফেলা হচ্ছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1739 src/rhsm/connection.py:1750
+#: src/rhsm/connection.py:1723 src/rhsm/connection.py:1734
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "সার্টিফিকেট সংক্রান্ত তথ্য প্রদর্শন করা হবে"
 
-#: src/rhsm/connection.py:1759
+#: src/rhsm/connection.py:1742
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1771
-msgid "Fetching consumers"
-msgstr ""
-
-#: src/rhsm/connection.py:1780
+#: src/rhsm/connection.py:1751
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1789
+#: src/rhsm/connection.py:1760
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1796
+#: src/rhsm/connection.py:1767
 msgid "Fetching available system purpose settings"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/rhsm/connection.py:1812
-#, fuzzy
-#| msgid "specify organization"
-msgid "Creating organization"
-msgstr "প্রতিষ্ঠান উল্লেখ করুন"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author bnin
-#: src/rhsm/connection.py:1819 src/rhsm/connection.py:1838
-#: src/rhsm/connection.py:1856
+#: src/rhsm/connection.py:1774 src/rhsm/connection.py:1782
 #, fuzzy
 #| msgid "specify organization"
 msgid "Fetching organizations"
 msgstr "প্রতিষ্ঠান উল্লেখ করুন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author bnin
-#: src/rhsm/connection.py:1829
-#, fuzzy
-#| msgid "specify organization"
-msgid "Removing organization"
-msgstr "প্রতিষ্ঠান উল্লেখ করুন"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:1848
-#, fuzzy
-#| msgid "Print version information"
-msgid "Fetching organization information"
-msgstr "সংস্করণ সংক্রান্ত তথ্য প্রদর্শন করা হবে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:1874
-#, fuzzy
-#| msgid "Fetching list of possible organizations"
-msgid "Fetching organization hypervisors"
-msgstr "সম্ভাব্য প্রতিষ্ঠানের তালিকা প্রাপ্ত করা হচ্ছে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1884
+#: src/rhsm/connection.py:1795
 #, fuzzy
 #| msgid "Register System"
 msgid "Unregistering system"
@@ -1157,24 +1128,23 @@ msgstr "সিস্টেম নিবন্ধন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1898
+#: src/rhsm/connection.py:1808
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "আইডেন্টিটি সার্টিফিকেট"
 
-#: src/rhsm/connection.py:1907
+#: src/rhsm/connection.py:1817
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1923
+#: src/rhsm/connection.py:1833
 msgid "Fetching content for a certificate"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1936 src/rhsm/connection.py:1950
-#: src/rhsm/connection.py:1967 src/rhsm/connection.py:2334
+#: src/rhsm/connection.py:1846 src/rhsm/connection.py:1863
 #, fuzzy
 #| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
@@ -1182,44 +1152,20 @@ msgstr "সাবস্ক্রিপশন সংযুক্ত করা হ
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1986
-#, fuzzy
-#| msgid "Attaching subscriptions"
-msgid "Simulating subscribing"
-msgstr "সাবস্ক্রিপশন সংযুক্ত করা হয়েছে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/rhsm/connection.py:1996 src/rhsm/connection.py:2007
-#: src/rhsm/connection.py:2016
+#: src/rhsm/connection.py:1872 src/rhsm/connection.py:1882
+#: src/rhsm/connection.py:1891
 #, fuzzy
 #| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
 msgstr "সাবস্ক্রাইব করতে ত্রুটি: %s"
 
-#: src/rhsm/connection.py:2074
+#: src/rhsm/connection.py:1940
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:2088
-#, fuzzy
-#| msgid "Print version information"
-msgid "Fetching pool information"
-msgstr "সংস্করণ সংক্রান্ত তথ্য প্রদর্শন করা হবে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:2093
-#, fuzzy
-#| msgid "Print version information"
-msgid "Fetching product information"
-msgstr "সংস্করণ সংক্রান্ত তথ্য প্রদর্শন করা হবে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:2103
+#: src/rhsm/connection.py:1951
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
@@ -1227,7 +1173,7 @@ msgstr "সংস্করণ সংক্রান্ত তথ্য প্র
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:2117
+#: src/rhsm/connection.py:1965
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
@@ -1235,7 +1181,7 @@ msgstr "উপলব্ধ রিলিজের তালিকা প্রদ
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:2132
+#: src/rhsm/connection.py:1980
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
@@ -1243,7 +1189,7 @@ msgstr "সম্ভাব্য পরিবেশের তালিকা প
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:2141
+#: src/rhsm/connection.py:1989
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
@@ -1251,31 +1197,15 @@ msgstr "পরিসেবার স্তর ব্যবহারের প্
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:2152
+#: src/rhsm/connection.py:2000
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
 msgstr "সম্ভাব্য পরিবেশের তালিকা প্রাপ্ত করা হচ্ছে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:2171
-#, fuzzy
-#| msgid "Print version information"
-msgid "Fetching environment information"
-msgstr "সংস্করণ সংক্রান্ত তথ্য প্রদর্শন করা হবে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:2179
-#, fuzzy
-#| msgid "Print certificate information"
-msgid "Fetching entitlement information"
-msgstr "সার্টিফিকেট সংক্রান্ত তথ্য প্রদর্শন করা হবে"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/rhsm/connection.py:2188 src/rhsm/connection.py:2239
+#: src/rhsm/connection.py:2010
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Updating certificate"
@@ -1283,61 +1213,33 @@ msgstr "আইডেন্টিটি সার্টিফিকেট"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:2207
+#: src/rhsm/connection.py:2029
 #, fuzzy
 #| msgid "Import Certificates"
 msgid "Updating certificates"
 msgstr "সার্টিফিকেট ইম্পোর্ট করুন"
 
-#: src/rhsm/connection.py:2258
+#: src/rhsm/connection.py:2048
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2266
+#: src/rhsm/connection.py:2056
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2277
+#: src/rhsm/connection.py:2067
 msgid "Updating content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2290
+#: src/rhsm/connection.py:2080
 #, fuzzy
 #| msgid "Remove All Overrides"
 msgid "Removing content overrides"
 msgstr "সকল ওভার-রাইড সরান"
 
-#: src/rhsm/connection.py:2311
+#: src/rhsm/connection.py:2096
 msgid "Activating"
 msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/rhsm/connection.py:2319
-#, fuzzy
-#| msgid "Attaching subscriptions"
-msgid "Fetching subscriptions"
-msgstr "সাবস্ক্রিপশন সংযুক্ত করা হয়েছে"
-
-#: src/rhsm/connection.py:2344
-msgid "Fetching job"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author Runa Bhattacharjee
-#: src/rhsm/connection.py:2354
-#, fuzzy
-#| msgid "Unknown"
-msgid "Updating job status"
-msgstr "অজানা"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/rhsm/connection.py:2363
-#, fuzzy
-#| msgid "Cancel"
-msgid "Canceling job"
-msgstr "বাতিল"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -1454,13 +1356,13 @@ msgstr "অতীতের তারিখ অনুমোদিত নয়"
 #: src/subscription_manager/cli_command/facts.py:66
 #: src/subscription_manager/cli_command/list.py:54
 #: src/subscription_manager/reasons.py:109
-#: src/subscription_manager/utils.py:253 src/subscription_manager/utils.py:267
-#: src/subscription_manager/utils.py:269 src/subscription_manager/utils.py:289
-#: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:310
+#: src/subscription_manager/utils.py:252 src/subscription_manager/utils.py:268
+#: src/subscription_manager/utils.py:270 src/subscription_manager/utils.py:290
+#: src/subscription_manager/utils.py:292 src/subscription_manager/utils.py:311
 msgid "Unknown"
 msgstr "অজানা"
 
-#: src/rhsmlib/services/entitlement.py:123 src/rhsmlib/services/register.py:63
+#: src/rhsmlib/services/entitlement.py:123 src/rhsmlib/services/register.py:61
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr ""
@@ -1561,19 +1463,19 @@ msgstr "ত্রুটি: --pool-only শুধুমাত্র --available 
 msgid "Error: this system is not registered"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:194
+#: src/rhsmlib/services/register.py:192
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/register.py:197
-#: src/subscription_manager/cli_command/register.py:139
+#: src/rhsmlib/services/register.py:195
+#: src/subscription_manager/cli_command/register.py:142
 msgid "Error: system name can not be empty."
 msgstr "ত্রুটি: সিস্টেমের নাম ফাঁকা রাখ চলবে না।"
 
-#: src/rhsmlib/services/register.py:201
-#: src/subscription_manager/cli_command/register.py:161
+#: src/rhsmlib/services/register.py:199
+#: src/subscription_manager/cli_command/register.py:164
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
@@ -1582,33 +1484,33 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/rhsmlib/services/register.py:211
-#: src/subscription_manager/cli_command/register.py:152
+#: src/rhsmlib/services/register.py:209
+#: src/subscription_manager/cli_command/register.py:155
 msgid "Error: Must specify an activation key"
 msgstr "ত্রুটি: একটি অ্যাক্টিভেশন-কি উল্লেখ করা আবশ্যক"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/rhsmlib/services/register.py:213
-#: src/subscription_manager/cli_command/register.py:141
+#: src/rhsmlib/services/register.py:211
+#: src/subscription_manager/cli_command/register.py:144
 msgid "Error: Activation keys do not require user credentials."
 msgstr "ত্রুটি: অ্যাক্টিভেশন-কির ক্ষেত্রে ব্যবহারকারীর পরিচয় উল্লেখ করা আবশ্যক নয়"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/rhsmlib/services/register.py:216
-#: src/subscription_manager/cli_command/register.py:144
+#: src/rhsmlib/services/register.py:214
+#: src/subscription_manager/cli_command/register.py:147
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "ত্রুটি: পূর্বে নিবন্ধিত ID-র সাথে অ্যাক্টিভেশন-কি ব্যবহার করা যাবে।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/register.py:220
-#: src/subscription_manager/cli_command/register.py:147
+#: src/rhsmlib/services/register.py:218
+#: src/subscription_manager/cli_command/register.py:150
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr "ত্রুটি: অ্যাক্টিভেশন-কি দ্বারা নএভায়রনমেন্ট নির্ধারণ করা যাবে না।"
 
-#: src/rhsmlib/services/register.py:227
+#: src/rhsmlib/services/register.py:225
 msgid "Error: Missing username or password."
 msgstr ""
 
@@ -2142,7 +2044,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/subscription_manager/cli_command/attach.py:257
-#: src/subscription_manager/cli_command/register.py:198
+#: src/subscription_manager/cli_command/register.py:201
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
@@ -2217,7 +2119,7 @@ msgstr "সার্ভার প্রভাবিত না করে সক�
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/subscription_manager/cli_command/clean.py:31
-#: src/subscription_manager/cli_command/register.py:260
+#: src/subscription_manager/cli_command/register.py:312
 msgid "All local data removed"
 msgstr "স্থানীয় সকল তথ্য মুছে ফেলা হয়"
 
@@ -2451,7 +2353,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
 #: src/subscription_manager/cli_command/environments.py:90
-#: src/subscription_manager/cli_command/register.py:413
+#: src/subscription_manager/cli_command/register.py:458
 msgid "Error: Server does not support environments."
 msgstr "ত্রুটি: সার্ভার দ্বারা পরিবেশগুলি সমর্থন করা হয় না।"
 
@@ -3227,14 +3129,14 @@ msgid "specify an organization"
 msgstr "প্রতিষ্ঠান উল্লেখ করুন"
 
 #: src/subscription_manager/cli_command/org.py:46
-#: src/subscription_manager/cli_command/register.py:475
+#: src/subscription_manager/cli_command/register.py:520
 msgid "Error: --org is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
 #: src/subscription_manager/cli_command/org.py:48
-#: src/subscription_manager/cli_command/register.py:480
+#: src/subscription_manager/cli_command/register.py:525
 msgid "Organization: "
 msgstr "প্রতিষ্ঠান: "
 
@@ -3247,7 +3149,7 @@ msgid "Error: User {username} is not member of any organization."
 msgstr "কোনো প্রতিষ্ঠানেই %s নিবন্ধন করানো সম্ভব নয়।"
 
 #: src/subscription_manager/cli_command/org.py:74
-#: src/subscription_manager/cli_command/register.py:466
+#: src/subscription_manager/cli_command/register.py:511
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr ""
@@ -3460,6 +3362,14 @@ msgstr ""
 "ত্রুটি: এই কমান্ডের ক্ষেত্রে --email সহযোগে একটি ইমেইল ঠিকানা নির্ধারণ করা আবশ্যক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#: src/subscription_manager/cli_command/redeem.py:74
+#, fuzzy
+#| msgid "Error: Unable to generate a new identity for the system"
+msgid "Error: Unable to redeem subscription for this system."
+msgstr "ত্রুটি: সিস্টেমের ক্ষেত্রে নতুন পরিচয় প্রস্তুত করতে ব্যর্থ"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
 #: src/subscription_manager/cli_command/refresh.py:32
 msgid "Pull the latest subscription data from the server"
@@ -3483,25 +3393,25 @@ msgstr "নিম্নলিখিত এক্সেপশনের কার�
 msgid "All local data refreshed"
 msgstr "সকল স্থানীয় তথ্য নবায়িত হয়"
 
-#: src/subscription_manager/cli_command/register.py:65
+#: src/subscription_manager/cli_command/register.py:68
 msgid "base URL for content in form of https://hostname:port/prefix"
 msgstr "https://hostname:port/prefix বিন্যাসে তথ্যের বেস URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:78
+#: src/subscription_manager/cli_command/register.py:81
 msgid "name of the system to register, defaults to the hostname"
 msgstr "নিবন্ধনের জন্য সিস্টেমের নাম, ডিফল্টরূপে হোস্ট-নেম ব্যবহার করা হবে"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:84
+#: src/subscription_manager/cli_command/register.py:87
 msgid "the existing system data is pulled from the server"
 msgstr "উপস্থিত সিস্টেমের তথ্য সার্ভার থেকে প্রাপ্ত করা হয়"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/subscription_manager/cli_command/register.py:90
+#: src/subscription_manager/cli_command/register.py:93
 msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
@@ -3509,7 +3419,7 @@ msgstr ""
 "প্রতিষ্ঠান কী ব্যবহার করে, ব্যবহারকারীর জন্য একাধিক প্রতিষ্ঠানের একটির সাথে নিবন্ধন "
 "করুন"
 
-#: src/subscription_manager/cli_command/register.py:96
+#: src/subscription_manager/cli_command/register.py:99
 msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
@@ -3518,23 +3428,23 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/subscription_manager/cli_command/register.py:104
+#: src/subscription_manager/cli_command/register.py:107
 msgid "set a release version"
 msgstr "একটি রিলিজ সংস্করণ নির্ধারণ করুন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:109
+#: src/subscription_manager/cli_command/register.py:112
 msgid "Deprecated, see --auto-attach"
 msgstr "অবচিত, --auto-attach দেখুন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/subscription_manager/cli_command/register.py:115
+#: src/subscription_manager/cli_command/register.py:118
 msgid "automatically attach compatible subscriptions to this system"
 msgstr "এই সিস্টেমে স্বয়ংক্রিভাবে সুসংগত সাবস্ক্রিপশনগুলি যোগ করুন"
 
-#: src/subscription_manager/cli_command/register.py:120
+#: src/subscription_manager/cli_command/register.py:123
 msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
@@ -3542,12 +3452,12 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:126
+#: src/subscription_manager/cli_command/register.py:129
 msgid ""
 "activation key to use for registration (can be specified more than once)"
 msgstr "নিবন্ধনের জন্য ব্যবহারযোগ্য অ্যাক্টিভেশন-কি (একাধিকবার উল্লেখ করা যাবে)"
 
-#: src/subscription_manager/cli_command/register.py:131
+#: src/subscription_manager/cli_command/register.py:134
 msgid ""
 "system preference used when subscribing automatically, requires --auto-attach"
 msgstr ""
@@ -3555,43 +3465,47 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:137
+#: src/subscription_manager/cli_command/register.py:140
 msgid "This system is already registered. Use --force to override"
 msgstr ""
 "এই সিস্টেমটি পূর্বে নিবন্ধিত হয়েছে। বলপূর্বক পুনরায় নিবন্ধনের জন্য --force ব্যবহার করুন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:149
+#: src/subscription_manager/cli_command/register.py:152
 msgid "Error: Activation keys cannot be used with --auto-attach."
 msgstr "ত্রুটি: --auto-attach বিকল্পের সাথে অ্যাক্টিভেশন-কি ব্যবহার করা যাবে না"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:154
+#: src/subscription_manager/cli_command/register.py:157
 msgid "Error: Must use --auto-attach with --servicelevel."
 msgstr "ত্রুটি: --auto-attach-র সাথে --servicelevel ব্যবহার করা আবশ্যক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:156
+#: src/subscription_manager/cli_command/register.py:159
 msgid "Error: Must provide --org with activation keys."
 msgstr "ত্রুটি: অ্যাক্টিভেশন-কির সাথে --org উল্লেখ করা আবশ্যক।"
 
-#: src/subscription_manager/cli_command/register.py:170
+#: src/subscription_manager/cli_command/register.py:173
 msgid "Error: The --type option has been deprecated and may not be used."
 msgstr ""
 
-#: src/subscription_manager/cli_command/register.py:173
-#: src/subscription_manager/cli_command/register.py:444
+#: src/subscription_manager/cli_command/register.py:176
+#: src/subscription_manager/cli_command/register.py:489
 #, fuzzy
 #| msgid "This org does not have any environments."
 msgid "The entitlement server does not allow multiple environments"
 msgstr "এই প্রতিষ্ঠানে কোনো পরিবেশ উপস্থিত নেই।"
 
+#: src/subscription_manager/cli_command/register.py:220
+msgid "Uploading DNF profile"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:238
+#: src/subscription_manager/cli_command/register.py:290
 #: src/subscription_manager/cli_command/unregister.py:41
 #, fuzzy, python-brace-format
 #| msgid "Enter in the format hostname(:port)"
@@ -3600,20 +3514,20 @@ msgstr "hostname(:port) বিন্যাসে লিখুন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:249
+#: src/subscription_manager/cli_command/register.py:301
 #, fuzzy, python-brace-format
 #| msgid "The system with UUID %s has been unregistered"
 msgid "The system with UUID {old_uuid} has been unregistered"
 msgstr "UUID %s সহ সিস্টেমটির নিবন্ধন বাতিল করা হয়েছে"
 
-#: src/subscription_manager/cli_command/register.py:273
+#: src/subscription_manager/cli_command/register.py:325
 #, python-brace-format
 msgid "Registering to: {hostname}:{port}{prefix}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:313
+#: src/subscription_manager/cli_command/register.py:365
 #, fuzzy, python-brace-format
 #| msgid "Error during registration: %s"
 msgid "Error during registration: {e}"
@@ -3621,32 +3535,32 @@ msgstr "নিবন্ধনের সময় ত্রুটি হয়েছে
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/subscription_manager/cli_command/register.py:316
+#: src/subscription_manager/cli_command/register.py:368
 #, fuzzy, python-brace-format
 #| msgid "The system has been registered with ID: %s "
 msgid "The system has been registered with ID: {id}"
 msgstr "ID সহযোগে এই সিস্টেমটি নিবন্ধন করা হয়েছে: %s "
 
-#: src/subscription_manager/cli_command/register.py:317
+#: src/subscription_manager/cli_command/register.py:369
 #, python-brace-format
 msgid "The registered system name is: {name}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
-#: src/subscription_manager/cli_command/register.py:319
+#: src/subscription_manager/cli_command/register.py:371
 #, fuzzy, python-brace-format
 #| msgid "Service level set to: %s"
 msgid "Service level set to: {level}"
 msgstr "নির্ধারিত পরিসেবার স্তর: %s"
 
-#: src/subscription_manager/cli_command/register.py:393
+#: src/subscription_manager/cli_command/register.py:438
 msgid "Error: --environments is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/subscription_manager/cli_command/register.py:397
+#: src/subscription_manager/cli_command/register.py:442
 #, fuzzy
 #| msgid "Environment: "
 msgid "Environments: "
@@ -3654,18 +3568,18 @@ msgstr "এনভায়রনমেন্ট: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/subscription_manager/cli_command/register.py:399
+#: src/subscription_manager/cli_command/register.py:444
 msgid "Environment: "
 msgstr "এনভায়রনমেন্ট: "
 
-#: src/subscription_manager/cli_command/register.py:438
+#: src/subscription_manager/cli_command/register.py:483
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/subscription_manager/cli_command/register.py:454
+#: src/subscription_manager/cli_command/register.py:499
 #, fuzzy, python-brace-format
 #| msgid "%s cannot register with any organizations."
 msgid "{name} cannot register with any organizations."
@@ -4089,7 +4003,7 @@ msgstr "%prog [বিকল্প]"
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/subscription_manager/cli_command/unregister.py:38
-#: src/subscription_manager/utils.py:268
+#: src/subscription_manager/utils.py:269
 msgid "This system is currently not registered."
 msgstr "সিস্টেমটি বর্তমানে নিবন্ধিত নয়।"
 
@@ -4364,9 +4278,17 @@ msgstr ""
 msgid "Bad certificate: [{library}] {message}"
 msgstr "ত্রুটিপূর্ণ CA সার্টিফিকেট: %s"
 
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author Runa Bhattacharjee
+#: src/subscription_manager/exceptions.py:64
+#, fuzzy, python-brace-format
+#| msgid "Unable to reach the server at %s:%s%s"
+msgid "Unable to reach the server at {host}: {message}"
+msgstr "%s:%s%s-এ উপস্থিত সার্ভারের সাথে সংযোগ করতে সমস্যা"
+
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
-#: src/subscription_manager/exceptions.py:67
+#: src/subscription_manager/exceptions.py:68
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
 msgstr ""
@@ -4477,7 +4399,7 @@ msgstr "এনটাইটেলমেন্ট সার্টিফিকে�
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
-#: src/subscription_manager/utils.py:368
+#: src/subscription_manager/utils.py:369
 msgid "and"
 msgstr "এবং"
 
@@ -4493,6 +4415,97 @@ msgstr ""
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author bnin
+#, fuzzy
+#~| msgid "Print manifest information"
+#~ msgid "Updating guest information"
+#~ msgstr "ম্যানিফেস্ট বিষয়ক তথ্য প্রিন্ট করুন"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author bnin
+#, fuzzy
+#~| msgid "specify organization"
+#~ msgid "Creating organization"
+#~ msgstr "প্রতিষ্ঠান উল্লেখ করুন"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author bnin
+#, fuzzy
+#~| msgid "specify organization"
+#~ msgid "Removing organization"
+#~ msgstr "প্রতিষ্ঠান উল্লেখ করুন"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author Runa Bhattacharjee
+#, fuzzy
+#~| msgid "Print version information"
+#~ msgid "Fetching organization information"
+#~ msgstr "সংস্করণ সংক্রান্ত তথ্য প্রদর্শন করা হবে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author Runa Bhattacharjee
+#, fuzzy
+#~| msgid "Fetching list of possible organizations"
+#~ msgid "Fetching organization hypervisors"
+#~ msgstr "সম্ভাব্য প্রতিষ্ঠানের তালিকা প্রাপ্ত করা হচ্ছে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#, fuzzy
+#~| msgid "Attaching subscriptions"
+#~ msgid "Simulating subscribing"
+#~ msgstr "সাবস্ক্রিপশন সংযুক্ত করা হয়েছে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author Runa Bhattacharjee
+#, fuzzy
+#~| msgid "Print version information"
+#~ msgid "Fetching pool information"
+#~ msgstr "সংস্করণ সংক্রান্ত তথ্য প্রদর্শন করা হবে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author Runa Bhattacharjee
+#, fuzzy
+#~| msgid "Print version information"
+#~ msgid "Fetching product information"
+#~ msgstr "সংস্করণ সংক্রান্ত তথ্য প্রদর্শন করা হবে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author Runa Bhattacharjee
+#, fuzzy
+#~| msgid "Print version information"
+#~ msgid "Fetching environment information"
+#~ msgstr "সংস্করণ সংক্রান্ত তথ্য প্রদর্শন করা হবে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#, fuzzy
+#~| msgid "Print certificate information"
+#~ msgid "Fetching entitlement information"
+#~ msgstr "সার্টিফিকেট সংক্রান্ত তথ্য প্রদর্শন করা হবে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#, fuzzy
+#~| msgid "Attaching subscriptions"
+#~ msgid "Fetching subscriptions"
+#~ msgstr "সাবস্ক্রিপশন সংযুক্ত করা হয়েছে"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author Runa Bhattacharjee
+#, fuzzy
+#~| msgid "Unknown"
+#~ msgid "Updating job status"
+#~ msgstr "অজানা"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#, fuzzy
+#~| msgid "Cancel"
+#~ msgid "Canceling job"
+#~ msgstr "বাতিল"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
