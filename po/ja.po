@@ -3,7 +3,7 @@
 # John Sefler <jsefler@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # myamamot <myamamot@redhat.com>, 2018. #zanata
-# Ludek Janda <ljanda@redhat.com>, 2021, 2022.
+# Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023.
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
 msgid ""
@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-19 14:16+0100\n"
-"PO-Revision-Date: 2022-02-09 14:16+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2023-02-01 11:20+0000\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
-"subscription-manager/subscription-manager-main/ja/>\n"
+"subscription-manager/subscription-manager-1-29-26/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -135,7 +135,7 @@ msgstr "1 つの引数が必要です"
 
 #: /usr/lib64/python3.9/argparse.py:2150
 msgid "expected at most one argument"
-msgstr "少なくとも 1 つの引数が必要です"
+msgstr "最大で 1 つの引数が必要です"
 
 #: /usr/lib64/python3.9/argparse.py:2151
 msgid "expected at least one argument"
@@ -1869,7 +1869,7 @@ msgstr "サーバー側の変更を上書きする場合は、以下を実行し
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:40
 msgid "Deprecated, see 'syspurpose'"
-msgstr "非推奨です。「syspurpose」を参照してください"
+msgstr "非推奨です、'syspurpose' を参照してください"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:66
 #, python-brace-format
@@ -3709,7 +3709,7 @@ msgstr "リポジトリー '{repoid}' は、このシステムに対して無効
 
 #: src/subscription_manager/cli_command/role.py:24
 msgid "Show or modify the system purpose role setting"
-msgstr "システム目的のアドオン設定の表示または変更"
+msgstr "システム目的のロール設定の表示または変更"
 
 #: src/subscription_manager/cli_command/service_level.py:41
 msgid "Show or modify the system purpose service-level setting"
@@ -4042,7 +4042,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:46
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr "{message} (HTTP エラーコード{code}: {title})"
+msgstr "{message} (HTTP エラーコード {code}: {title})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:51
