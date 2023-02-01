@@ -8,6 +8,8 @@ jobs:
   pytest:
     name: "pytest"
 
+    permissions: write-all
+
     strategy:
       fail-fast: false
       matrix:
@@ -31,6 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ${{ matrix.image }}
+      volumes:
+        - /tmp:/tmp
 
     steps:
       - name: "Checkout repository"
@@ -43,7 +47,16 @@ jobs:
       - name: "Run pytest"
         env:
           SUBMAN_TEST_IN_CONTAINER: "1"
-          PYTEST_ADDOPTS: "--color=yes --code-highlight=yes --showlocals"
+          PYTEST_ADDOPTS:
+            "--color=yes --code-highlight=yes --showlocals
+            --cov 'src/' --cov-report 'xml:/tmp/coverage.xml' --cov-report 'term:skip-covered'"
         run: |
           dbus-run-session \
             python3 -m pytest ${{ matrix.pytest_args }}
+
+      - name: "Publish coverage"
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-xml-coverage-path: /tmp/coverage.xml
+          unique-id-for-comment: ${{ matrix.name }}
+          report-only-changed-files: true
