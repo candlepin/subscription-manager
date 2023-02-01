@@ -6,14 +6,14 @@
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023.
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
-# Transtats <suanand@redhat.com>, 2022.
+# Transtats <suanand@redhat.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-26 15:00+0100\n"
 "PO-Revision-Date: 2023-02-01 07:17+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ja/>\n"
 "Language: ja\n"
@@ -889,18 +889,20 @@ msgstr "不明な証明書タイプ"
 #: src/rhsm/config.py:265
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
-msgstr ""
+msgstr "無効なログレベル: {lvl}、この実行では INFO に設定します。"
 
 #: src/rhsm/config.py:270
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
+"使用: subscription-manager config --logging.default_log_level=<Log Level> "
+"を使用して default_log_level を有効な値に設定してください。"
 
 #: src/rhsm/config.py:276
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
-msgstr ""
+msgstr "有効な値: {valid_str}"
 
 #: src/rhsm/connection.py:1380
 msgid "Fetching supported resources"
@@ -2974,10 +2976,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:74
-#, fuzzy
-#| msgid "Error: Unable to generate a new identity for the system"
 msgid "Error: Unable to redeem subscription for this system."
-msgstr "エラー: システム用に新規の識別子を生成できません"
+msgstr "エラー: このシステムのサブスクリプションは有効化できません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/cli_command/refresh.py:32
@@ -3102,10 +3102,8 @@ msgid "The entitlement server does not allow multiple environments"
 msgstr "エンタイトルメントサーバーでは複数の環境を使用できません"
 
 #: src/subscription_manager/cli_command/register.py:220
-#, fuzzy
-#| msgid "Uploading package profile"
 msgid "Uploading DNF profile"
-msgstr "パッケージプロファイルをアップロードしています"
+msgstr "DNF プロファイルをアップロードしています"
 
 #: src/subscription_manager/cli_command/register.py:290
 #: src/subscription_manager/cli_command/unregister.py:41
@@ -3807,10 +3805,9 @@ msgstr "不適切な証明書: [{library}] {message}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/exceptions.py:64
-#, fuzzy, python-brace-format
-#| msgid "Unable to reach the server at {host}:{port}{handler}"
+#, python-brace-format
 msgid "Unable to reach the server at {host}: {message}"
-msgstr "{host}:{port}{handler} にあるサーバーに接続できません"
+msgstr "{host} にあるサービスに接続できません: {message}"
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
