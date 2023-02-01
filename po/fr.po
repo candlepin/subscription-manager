@@ -9,15 +9,15 @@
 # Sundeep Anand <suanand@redhat.com>, 2021.
 # Julien Humbert <julroy67@gmail.com>, 2022.
 # Jérôme Fenal <jfenal@free.fr>, 2022.
-# Transtats <suanand@redhat.com>, 2022.
+# Transtats <suanand@redhat.com>, 2022, 2023.
 # blutch112 <vincent.lefebvre59@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-26 15:00+0100\n"
-"PO-Revision-Date: 2022-12-19 12:20+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2023-02-01 07:17+0000\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
 "Language: fr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -903,17 +903,22 @@ msgstr "Type de certificat inconnu"
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
 msgstr ""
+"Niveau de journalisation non valide : {lvl} réglé sur INFO pour cette "
+"exécution."
 
 #: src/rhsm/config.py:270
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
+"Veuillez utiliser : subscription-manager config --"
+"logging.default_log_level=<Log Level> pour définir le niveau de "
+"journalisation par défaut à une valeur valide."
 
 #: src/rhsm/config.py:276
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
-msgstr ""
+msgstr "Valeurs valides : {valid_str}"
 
 #: src/rhsm/connection.py:1380
 msgid "Fetching supported resources"
@@ -3065,10 +3070,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:74
-#, fuzzy
-#| msgid "Error: Unable to generate a new identity for the system"
 msgid "Error: Unable to redeem subscription for this system."
-msgstr "Erreur : incapable de générer une nouvelle identité pour le système"
+msgstr "Erreur : Impossible d’utiliser l'abonnement pour ce système."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/refresh.py:32
@@ -3195,10 +3198,8 @@ msgid "The entitlement server does not allow multiple environments"
 msgstr "Le serveur d'autorisation ne permet pas les environnements multiples"
 
 #: src/subscription_manager/cli_command/register.py:220
-#, fuzzy
-#| msgid "Uploading package profile"
 msgid "Uploading DNF profile"
-msgstr "Téléchargement du profil de paquet"
+msgstr "Téléchargement du profil DNF"
 
 #: src/subscription_manager/cli_command/register.py:290
 #: src/subscription_manager/cli_command/unregister.py:41
@@ -3775,26 +3776,26 @@ msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
 msgstr ""
-"Réponse du serveur inconnue (code d'erreur HTTP {code} : {title}) :\n"
+"Réponse du serveur inconnue (code d'erreur HTTP {code}: {title}) :\n"
 "{content}"
 
 #: src/subscription_manager/exceptions.py:35
 #, python-brace-format
 msgid "Unknown server reply (HTTP error code {code}: {title})"
-msgstr "Réponse du serveur inconnu (code d'erreur HTTP {code} : {title})"
+msgstr "Réponse du serveur inconnu (code d'erreur HTTP {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:37
 #, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
 msgstr ""
-"Erreur de proxy : impossible de se connecter à {hostname} : {message} (code "
+"Erreur de proxy : impossible de se connecter à {hostname}: {message} (code "
 "d'erreur {code})"
 
 #: src/subscription_manager/exceptions.py:39
 #, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}: {message}"
-msgstr "Erreur de proxy : impossible de se connecter à {hostname} : {message}"
+msgstr "Erreur de proxy : impossible de se connecter à {hostname}: {message}"
 
 #: src/subscription_manager/exceptions.py:40
 #, python-brace-format
@@ -3829,7 +3830,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:48
 #, python-brace-format
 msgid "Bad CA certificate: {file}: {reason}"
-msgstr "Mauvais certificat CA : {file} : {reason}"
+msgstr "Mauvais certificat CA : {file}: {reason}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/exceptions.py:49
@@ -3891,12 +3892,12 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:60
 #, python-brace-format
 msgid "Bad product certificate: {file}: [{library}] {message}"
-msgstr "Mauvais certificat de produit : {file} : [{library}] {message}"
+msgstr "Mauvais certificat de produit : {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:61
 #, python-brace-format
 msgid "Bad certificate: {file}: [{library}] {message}"
-msgstr "Mauvais certificat : {file} : [{library}] {message}"
+msgstr "Mauvais certificat : {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:62
 #, python-brace-format
@@ -3915,10 +3916,9 @@ msgstr "Mauvais certificat : [{library}] {message}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/exceptions.py:64
-#, fuzzy, python-brace-format
-#| msgid "Unable to reach the server at {host}:{port}{handler}"
+#, python-brace-format
 msgid "Unable to reach the server at {host}: {message}"
-msgstr "Incapable de joindre le serveur sur {host}:{port}{handler}"
+msgstr "Impossible d'atteindre le serveur à l'adresse {host}: {message}"
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
