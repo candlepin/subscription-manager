@@ -6,13 +6,13 @@
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
-# Transtats <suanand@redhat.com>, 2022.
+# Transtats <suanand@redhat.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-26 15:00+0100\n"
-"PO-Revision-Date: 2022-11-28 08:54+0000\n"
+"PO-Revision-Date: 2023-02-01 07:17+0000\n"
 "Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -875,18 +875,20 @@ msgstr "未知证书类型"
 #: src/rhsm/config.py:265
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
-msgstr ""
+msgstr "无效的日志级别：{lvl}，应为这个运行设置为 INFO。"
 
 #: src/rhsm/config.py:270
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
+"请使用：subscription-manager config --logging.default_log_level=<Log Level> "
+"将 default_log_level 设置为一个有效的值。"
 
 #: src/rhsm/config.py:276
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
-msgstr ""
+msgstr "有效值：{valid_str}"
 
 #: src/rhsm/connection.py:1380
 msgid "Fetching supported resources"
@@ -2876,10 +2878,8 @@ msgstr "错误：这个命令要求您使用 --email 指定一个电子邮件地
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:74
-#, fuzzy
-#| msgid "Error: Unable to generate a new identity for the system"
 msgid "Error: Unable to redeem subscription for this system."
-msgstr "错误：无法为该系统生成新身份"
+msgstr "错误：无法为这个系统赎回订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:32
@@ -2994,10 +2994,8 @@ msgid "The entitlement server does not allow multiple environments"
 msgstr "授权服务器不允许多个环境"
 
 #: src/subscription_manager/cli_command/register.py:220
-#, fuzzy
-#| msgid "Uploading package profile"
 msgid "Uploading DNF profile"
-msgstr "正在上传软件包配置文件"
+msgstr "上传 DNF 配置集"
 
 #: src/subscription_manager/cli_command/register.py:290
 #: src/subscription_manager/cli_command/unregister.py:41
@@ -3666,10 +3664,9 @@ msgstr "错误证书： [{library}] {message}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:64
-#, fuzzy, python-brace-format
-#| msgid "Unable to reach the server at {host}:{port}{handler}"
+#, python-brace-format
 msgid "Unable to reach the server at {host}: {message}"
-msgstr "无法连接到服务器 {host}:{port}{handler}"
+msgstr "无法连接到服务器 {host}:{message}"
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
