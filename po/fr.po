@@ -9,13 +9,14 @@
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 # Jérôme Fenal <jfenal@free.fr>, 2022.
 # blutch112 <vincent.lefebvre59@gmail.com>, 2022.
+# Transtats <suanand@redhat.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-12 16:52+0100\n"
-"PO-Revision-Date: 2022-12-19 12:20+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2023-02-01 07:17+0000\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/fr/>\n"
 "Language: fr\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -2105,26 +2106,26 @@ msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
 msgstr ""
-"Réponse du serveur inconnue (code d'erreur HTTP {code} : {title}) :\n"
+"Réponse du serveur inconnue (code d'erreur HTTP {code}: {title}) :\n"
 "{content}"
 
 #: src/subscription_manager/exceptions.py:36
 #, python-brace-format
 msgid "Unknown server reply (HTTP error code {code}: {title})"
-msgstr "Réponse du serveur inconnu (code d'erreur HTTP {code} : {title})"
+msgstr "Réponse du serveur inconnu (code d'erreur HTTP {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:38
 #, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
 msgstr ""
-"Erreur de proxy : impossible de se connecter à {hostname} : {message} (code "
+"Erreur de proxy : impossible de se connecter à {hostname}: {message} (code "
 "d'erreur {code})"
 
 #: src/subscription_manager/exceptions.py:40
 #, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}: {message}"
-msgstr "Erreur de proxy : impossible de se connecter à {hostname} : {message}"
+msgstr "Erreur de proxy : impossible de se connecter à {hostname}: {message}"
 
 #: src/subscription_manager/exceptions.py:41
 #, python-brace-format
@@ -2159,7 +2160,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:46
 #, python-brace-format
 msgid "Bad CA certificate: {file}: {reason}"
-msgstr "Mauvais certificat CA : {file} : {reason}"
+msgstr "Mauvais certificat CA : {file}: {reason}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/exceptions.py:47
@@ -2221,12 +2222,12 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:56
 #, python-brace-format
 msgid "Bad product certificate: {file}: [{library}] {message}"
-msgstr "Mauvais certificat de produit : {file} : [{library}] {message}"
+msgstr "Mauvais certificat de produit : {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:57
 #, python-brace-format
 msgid "Bad certificate: {file}: [{library}] {message}"
-msgstr "Mauvais certificat : {file} : [{library}] {message}"
+msgstr "Mauvais certificat : {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:58
 #, python-brace-format
@@ -2247,7 +2248,7 @@ msgstr "Mauvais certificat : [{library}] {message}"
 #: src/subscription_manager/exceptions.py:60
 #, python-brace-format
 msgid "Unable to reach the server at {host}: {message}"
-msgstr "Impossible d'atteindre le serveur à l'adresse {host} : {message}"
+msgstr "Impossible d'atteindre le serveur à l'adresse {host}: {message}"
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
