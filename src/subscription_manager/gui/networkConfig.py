@@ -275,7 +275,7 @@ class NetworkConfigDialog(widgets.SubmanBaseWidget):
             log.warn("Reporting proxy connection as good despite %s" %
              e)
             return True
-        except connection.NetworkException as e:
+        except connection.UnknownContentException as e:
             log.warn("%s when attempting to connect through %s:%s" %
              (e.code, proxy_host, proxy_port))
             return False
