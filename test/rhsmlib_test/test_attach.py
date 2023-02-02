@@ -164,32 +164,28 @@ class TestAttachDBusObject(DBusServerStubProvider):
     dbus_class = AttachDBusObject
     dbus_class_kwargs = {}
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self) -> None:
         is_simple_content_access_patch = mock.patch(
             "rhsmlib.dbus.objects.attach.is_simple_content_access",
             name="is_simple_content_access",
         )
-        cls.patches["is_simple_content_access"] = is_simple_content_access_patch.start()
-        cls.addClassCleanup(is_simple_content_access_patch.stop)
+        self.patches["is_simple_content_access"] = is_simple_content_access_patch.start()
+        self.addCleanup(is_simple_content_access_patch.stop)
 
         is_registered_patch = mock.patch(
             "rhsmlib.dbus.base_object.BaseObject.is_registered",
             name="is_registered",
         )
-        cls.patches["is_registered"] = is_registered_patch.start()
-        cls.addClassCleanup(is_registered_patch.stop)
+        self.patches["is_registered"] = is_registered_patch.start()
+        self.addCleanup(is_registered_patch.stop)
 
         update_patch = mock.patch(
             "subscription_manager.certlib.BaseActionInvoker.update",
             name="update",
         )
-        cls.patches["update"] = update_patch.start()
-        cls.addClassCleanup(update_patch.stop)
+        self.patches["update"] = update_patch.start()
+        self.addCleanup(update_patch.stop)
 
-        super().setUpClass()
-
-    def setUp(self) -> None:
         self.patches["is_simple_content_access"].return_value = False
         self.patches["is_registered"].return_value = True
         self.patches["update"].return_value = None

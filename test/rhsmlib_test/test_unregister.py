@@ -60,16 +60,15 @@ class TestUnregisterDBusObject_(DBusServerStubProvider):
     dbus_class = UnregisterDBusObject
     dbus_class_kwargs = {}
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self):
         is_registered_patch = mock.patch(
             "rhsmlib.dbus.base_object.BaseObject.is_registered",
             name="is_registered",
         )
-        cls.patches["is_registered"] = is_registered_patch.start()
-        cls.addClassCleanup(is_registered_patch.stop)
+        self.patches["is_registered"] = is_registered_patch.start()
+        self.addCleanup(is_registered_patch.stop)
 
-        super().setUpClass()
+        super().setUp()
 
     def test_Unregister__must_be_registered(self):
         self.patches["is_registered"].return_value = False

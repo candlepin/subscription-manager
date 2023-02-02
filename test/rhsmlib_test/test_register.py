@@ -800,53 +800,49 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
     dbus_class = DomainSocketRegisterDBusObject
     dbus_class_kwargs = {}
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self) -> None:
         register_patch = mock.patch(
             "rhsmlib.dbus.objects.register.RegisterService.register",
             name="register",
         )
-        cls.patches["register"] = register_patch.start()
-        cls.addClassCleanup(register_patch.stop)
+        self.patches["register"] = register_patch.start()
+        self.addCleanup(register_patch.stop)
 
         unregister_patch = mock.patch(
             "rhsmlib.services.unregister.UnregisterService.unregister",
             name="unregister",
         )
-        cls.patches["unregister"] = unregister_patch.start()
-        cls.addClassCleanup(unregister_patch.stop)
+        self.patches["unregister"] = unregister_patch.start()
+        self.addCleanup(unregister_patch.stop)
 
         is_registered_patch = mock.patch(
             "rhsmlib.dbus.base_object.BaseObject.is_registered",
             name="is_registered",
         )
-        cls.patches["is_registered"] = is_registered_patch.start()
-        cls.addClassCleanup(is_registered_patch.stop)
+        self.patches["is_registered"] = is_registered_patch.start()
+        self.addCleanup(is_registered_patch.stop)
 
         update_patch = mock.patch(
             "rhsmlib.dbus.objects.register.EntCertActionInvoker.update",
             name="update",
         )
-        cls.patches["update"] = update_patch.start()
-        cls.addClassCleanup(update_patch.stop)
+        self.patches["update"] = update_patch.start()
+        self.addCleanup(update_patch.stop)
 
         attach_auto_patch = mock.patch(
             "rhsmlib.dbus.objects.register.AttachService.attach_auto",
             name="attach_auto",
         )
-        cls.patches["attach_auto"] = attach_auto_patch.start()
-        cls.addClassCleanup(attach_auto_patch.stop)
+        self.patches["attach_auto"] = attach_auto_patch.start()
+        self.addCleanup(attach_auto_patch.stop)
 
         build_uep_patch = mock.patch(
             "rhsmlib.dbus.base_object.BaseObject.build_uep",
             name="build_uep",
         )
-        cls.patches["build_uep"] = build_uep_patch.start()
-        cls.addClassCleanup(build_uep_patch.stop)
+        self.patches["build_uep"] = build_uep_patch.start()
+        self.addCleanup(build_uep_patch.stop)
 
-        super().setUpClass()
-
-    def setUp(self) -> None:
         self.patches["update"].return_value = None
 
         super().setUp()

@@ -316,16 +316,15 @@ class TestProductsDBusObject(DBusServerStubProvider):
     dbus_class = ProductsDBusObject
     dbus_class_kwargs = {}
 
-    @classmethod
-    def setUpClass(cls) -> None:
+    def setUp(self) -> None:
         list_patch = mock.patch(
             "rhsmlib.dbus.objects.products.InstalledProducts.list",
             name="list",
         )
-        cls.patches["list"] = list_patch.start()
-        cls.addClassCleanup(list_patch.stop)
+        self.patches["list"] = list_patch.start()
+        self.addCleanup(list_patch.stop)
 
-        super().setUpClass()
+        super().setUp()
 
     def test_ListInstalledProducts__no_filter(self):
         expected = [

@@ -210,7 +210,7 @@ class BindRequestTests(unittest.TestCase):
 
     @patch.object(Restlib, 'validateResponse')
     @patch('rhsm.connection.drift_check', return_value=False)
-    @patch('httplib.HTTPSConnection', auto_spec=True)
+    @patch('httplib.HTTPSConnection', autospec=True)
     def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
 
         self.cp.bind(self.consumer_uuid)
@@ -225,7 +225,7 @@ class BindRequestTests(unittest.TestCase):
 
     @patch.object(Restlib, 'validateResponse')
     @patch('rhsm.connection.drift_check', return_value=False)
-    @patch('httplib.HTTPSConnection', auto_spec=True)
+    @patch('httplib.HTTPSConnection', autospec=True)
     def test_bind_by_pool(self, mock_conn, mock_drift, mock_validate):
         # this test is just to verify we make the httplib connection with
         # right args, we don't validate the bind here

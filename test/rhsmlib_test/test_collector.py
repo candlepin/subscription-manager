@@ -58,9 +58,8 @@ class GetNonDmiUuid(unittest.TestCase):
         result = firmware_provider_class.get_all()
         self.assertTrue(result['dmi.system.uuid'] == '356B6CCC-30C4-11B2-A85C-BBB0CCD29F36')
 
+    @mock.patch(OPEN_FUNCTION, mock.MagicMock(side_effect=IOError()))
     def test_get_aarch64_uuid_collection_no_file(self):
-        mock.mock_open(read_data="no file")
-        mock.mock_open.side_effect = IOError()
         firmware_provider_class = firmware_info.get_firmware_collector(arch='aarch64')
         firmware_provider_class.arch = 'aarch64'
         result = firmware_provider_class.get_all()
