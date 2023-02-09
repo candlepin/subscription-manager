@@ -130,7 +130,7 @@ Source2: subscription-manager-rpmlintrc
 # nesting is required since RPM requires the various preamble directives to be
 # at the start of a line making meaningful indentation impossible.
 
-Requires:  %{py_package_prefix}-ethtool
+Requires:  iproute
 Requires:  %{py_package_prefix}-iniparse
 Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what

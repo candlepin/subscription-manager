@@ -19,6 +19,7 @@ from rhsmlib.facts import insights
 from rhsmlib.facts import kpatch
 from rhsmlib.facts import cloud_facts
 from rhsmlib.facts import pkg_arches
+from rhsmlib.facts import network
 
 
 class AllFactsCollector(collector.FactsCollector):
@@ -27,6 +28,7 @@ class AllFactsCollector(collector.FactsCollector):
             collector.StaticFactsCollector,
             host_collector.HostCollector,
             hwprobe.HardwareCollector,
+            network.NetworkCollector,
             custom.CustomFactsCollector,
             insights.InsightsCollector,
             kpatch.KPatchCollector,

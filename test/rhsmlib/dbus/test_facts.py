@@ -33,13 +33,19 @@ class TestFactsDBusObject(DBusServerStubProvider):
         cls.addClassCleanup(get_virt_info_patch.stop)
 
         # Do not collect network facts, as they can cause issues in containers
-        get_network_info_patch = mock.patch(
-            "rhsmlib.facts.hwprobe.HardwareCollector.get_network_info",
-            name="get_network_info",
+        get_network_patch = mock.patch(
+            "rhsmlib.facts.network.NetworkCollector.get_network", name="get_network"
         )
-        cls.patches["get_network_info"] = get_network_info_patch.start()
-        cls.patches["get_network_info"].return_value = {}
-        cls.addClassCleanup(get_network_info_patch.stop)
+        cls.patches["get_network"] = get_network_patch.start()
+        cls.patches["get_network"].return_value = {}
+        cls.addClassCleanup(get_network_patch.stop)
+
+        get_interfaces_patch = mock.patch(
+            "rhsmlib.facts.network.NetworkCollector.get_interfaces", name="get_interfaces"
+        )
+        cls.patches["get_interfaces"] = get_interfaces_patch.start()
+        cls.patches["get_interfaces"].return_value = {}
+        cls.addClassCleanup(get_interfaces_patch.stop)
 
         super().setUpClass()
 
