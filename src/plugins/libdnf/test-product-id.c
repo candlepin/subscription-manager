@@ -172,8 +172,8 @@ void testFindProductIdInCorrectPEM(handleFixture *fixture, gconstpointer ignored
     (void)ignored;
     GString *result = g_string_new("");
     GString *certContent = g_string_new(CORRECT_PEM_CERT);
-    int ret = findProductId(certContent, result);
-    g_assert_cmpint(ret, ==, 1);
+    gboolean ret = findProductId(certContent, result);
+    g_assert_cmpint(ret, ==, TRUE);
     g_assert_cmpstr(result->str, ==, "69");
     g_string_free(certContent, TRUE);
     g_string_free(result, TRUE);
@@ -185,8 +185,8 @@ void testFindProductIdInCorruptedPEM(handleFixture *fixture, gconstpointer ignor
     (void)ignored;
     GString *result = g_string_new("");
     GString *certContent = g_string_new(CORRUPTED_PEM_CERT);
-    int ret = findProductId(certContent, result);
-    g_assert_cmpint(ret, ==, -1);
+    gboolean ret = findProductId(certContent, result);
+    g_assert_cmpint(ret, ==, FALSE);
     g_assert_cmpstr(result->str, ==, "");
     g_string_free(certContent, TRUE);
     g_string_free(result, TRUE);
@@ -198,8 +198,8 @@ void testFindProductIdInConsumerPEM(handleFixture *fixture, gconstpointer ignore
     (void)ignored;
     GString *result = g_string_new("");
     GString *certContent = g_string_new(CONSUMER_CERT);
-    int ret = findProductId(certContent, result);
-    g_assert_cmpint(ret, ==, -1);
+    gboolean ret = findProductId(certContent, result);
+    g_assert_cmpint(ret, ==, FALSE);
     g_assert_cmpstr(result->str, ==, "");
     g_string_free(certContent, TRUE);
     g_string_free(result, TRUE);
