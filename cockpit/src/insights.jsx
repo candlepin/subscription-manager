@@ -55,7 +55,7 @@ export function detect() {
 function spawn_error_to_string(err, data) {
     // a problem in starting/running the process: get its string representation
     // from cockpit directly
-    if (err.problem) {
+    if (err.problem || err.message) {
         return cockpit.message(err);
     }
     // the process ran correctly, and exited with a non-zero code: get its
@@ -65,7 +65,7 @@ function spawn_error_to_string(err, data) {
     }
     // When err contains only string then return this string
     if (err) {
-        return err;
+        return err.toString();
     }
 
     console.debug(">>>> returning undefined");
