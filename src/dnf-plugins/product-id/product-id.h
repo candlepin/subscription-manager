@@ -81,7 +81,7 @@ void getActiveReposFromInstalledPkgs(DnfContext *dnfContext, const GPtrArray *en
 void getActive(DnfContext *dnfContext, const GPtrArray *enabledRepoAndProductIds,
         GPtrArray *activeRepoAndProductIds);
 int decompress(gzFile input, GString *output);
-int findProductId(GString *certContent, GString *result);
+gboolean findProductId(GString *certContent, GString *result);
 int fetchProductId(DnfRepo *repo, RepoProductId *repoProductId);
 int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const char *product_cert_dir);
 void writeRepoMap(ProductDb *productDb);

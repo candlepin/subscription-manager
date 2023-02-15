@@ -971,7 +971,7 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const c
         debug("Decompressing of certificate finished with status: %d", ret);
         debug("Content of product cert:\n%s", pemOutput->str);
 
-        int productIdFound = findProductId(pemOutput, outname);
+        gboolean productIdFound = findProductId(pemOutput, outname);
         if (productIdFound) {
             gint ret_val = g_mkdir_with_parents(product_cert_dir, 0775);
             if (ret_val == 0) {
@@ -1018,15 +1018,14 @@ int installProductId(RepoProductId *repoProductId, ProductDb *productDb, const c
  *
  * @param certContent String containing content of product certificate
  * @param result String containing ID of of product certificate
- * @return
+ * @return whether the product ID was found
  */
-int findProductId(GString *certContent, GString *result) {
-    int ret_val = 1;
+gboolean findProductId(GString *certContent, GString *result) {
     BIO *bio = BIO_new_mem_buf(certContent->str, (int) certContent->len);
     if (bio == NULL) {
         debug("Unable to create buffer for content of certificate: %s",
                 ERR_error_string(ERR_get_error(), NULL));
-        return -1;
+        return FALSE;
     }
 
     X509 *x509 = PEM_read_bio_X509(bio, NULL, NULL, NULL);
@@ -1036,9 +1035,10 @@ int findProductId(GString *certContent, GString *result) {
     if (x509 == NULL) {
         debug("Failed to read content of certificate from buffer to X509 structure: %s",
                 ERR_error_string(ERR_get_error(), NULL));
-        return -1;
+        return FALSE;
     }
 
+    gboolean ret_val = FALSE;
     int exts = X509_get_ext_count(x509);
     gboolean redhat_oid_found = FALSE;
     for (int i = 0; i < exts; i++) {
@@ -1047,7 +1047,7 @@ int findProductId(GString *certContent, GString *result) {
         if (ext == NULL) {
             debug("Failed to get extension of X509 structure: %s",
                   ERR_error_string(ERR_get_error(), NULL));
-            ret_val = -1;
+            ret_val = FALSE;
             break;
         }
         OBJ_obj2txt(oid, MAX_BUFF, X509_EXTENSION_get_object(ext), 1);
@@ -1065,9 +1065,10 @@ int findProductId(GString *certContent, GString *result) {
             if (comp_id > 9) {
                 debug("ID of product certificate: %s", components[9]);
                 g_string_assign(result, components[9]);
+                ret_val = TRUE;
             } else {
                 error("Product certificate does not contain required ID");
-                ret_val = -1;
+                ret_val = FALSE;
             }
             g_strfreev(components);
             break;
@@ -1076,7 +1077,7 @@ int findProductId(GString *certContent, GString *result) {
 
     if (redhat_oid_found == FALSE) {
         warn("Red Hat Product OID: %s not found", REDHAT_PRODUCT_OID);
-        ret_val = -1;
+        ret_val = FALSE;
     }
 
     X509_free(x509);
