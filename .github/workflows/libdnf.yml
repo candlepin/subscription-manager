@@ -1,0 +1,55 @@
+name: libdnf
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  libdnf:
+    name: "libdnf"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: "CentOS Stream 9"
+            image: "quay.io/centos/centos:stream9"
+          - name: "CentOS Stream 8"
+            image: "quay.io/centos/centos:stream8"
+          - name: "Fedora latest"
+            image: "fedora:latest"
+          - name: "Fedora Rawhide"
+            image: "fedora:rawhide"
+
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.image }}
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "Enable PowerTools repository"
+        if: ${{ matrix.name == 'CentOS Stream 8' }}
+        run: |
+          dnf --setopt install_weak_deps=False install -y dnf-plugins-core
+          dnf config-manager --enable powertools
+
+      - name: "Enable CRB repository"
+        if: ${{ matrix.name == 'CentOS Stream 9' }}
+        run: |
+          dnf --setopt install_weak_deps=False install -y dnf-plugins-core
+          dnf config-manager --enable crb
+
+      - name: "Install packages"
+        run: |
+          dnf --setopt install_weak_deps=False install -y \
+            cmake gcc glib2-devel libdnf-devel json-c-devel
+
+      - name: "Run libdnf plugin test"
+        run: |
+          cd './src/dnf-plugins/product-id'
+          mkdir build && cd build
+          cmake ../ -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
+          make
+          CTEST_OUTPUT_ON_FAILURE=1 make test
