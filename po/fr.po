@@ -4,19 +4,19 @@
 # khowell <khowell@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2019. #zanata
-# Ludek Janda <ljanda@redhat.com>, 2021, 2022.
+# Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023.
 # John Sefler <jsefler@redhat.com>, 2021.
 # Sundeep Anand <suanand@redhat.com>, 2021.
 # Julien Humbert <julroy67@gmail.com>, 2022.
 # Jérôme Fenal <jfenal@free.fr>, 2022.
-# Transtats <suanand@redhat.com>, 2022.
+# Transtats <suanand@redhat.com>, 2022, 2023.
 # blutch112 <vincent.lefebvre59@gmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 15:11+0100\n"
-"PO-Revision-Date: 2022-12-19 12:20+0000\n"
+"POT-Creation-Date: 2023-01-26 15:00+0100\n"
+"PO-Revision-Date: 2023-02-01 11:20+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -190,49 +190,49 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s : erreur : %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:107
 msgid "deprecated, see --cert-check-interval"
 msgstr "déprécié, voir --cert-check-interval"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:110
 msgid "interval to run cert check (in minutes)"
 msgstr "intervalle d'exécution des vérifications de certificats ( en minutes)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/daemons/rhsmcertd.c:112
+#: src/daemons/rhsmcertd.c:114
 msgid "deprecated, see --auto-attach-interval"
 msgstr "obsolète, se reporter à --auto-attach-interval"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:115
+#: src/daemons/rhsmcertd.c:117
 msgid "interval to run auto-attach (in minutes)"
 msgstr "intervalle d'exécution de l'auto-assignation (en minutes)"
 
-#: src/daemons/rhsmcertd.c:118
+#: src/daemons/rhsmcertd.c:120
 msgid "interval to run auto-registration (in minutes)"
 msgstr "intervalle d’exécution d’auto-enregistrement (en minutes)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:121
+#: src/daemons/rhsmcertd.c:123
 msgid "run the initial checks immediately, with no delay"
 msgstr "exécuter les vérifications initiales immédiatement, sans aucun délai"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:124
+#: src/daemons/rhsmcertd.c:126
 msgid "show debug messages"
 msgstr "afficher les messages de débogage"
 
-#: src/daemons/rhsmcertd.c:126
+#: src/daemons/rhsmcertd.c:128
 msgid "do not add an offset to the initial checks."
 msgstr "n’ajoutez pas un décalage dans les vérifications initiales."
 
-#: src/daemons/rhsmcertd.c:129
+#: src/daemons/rhsmcertd.c:131
 msgid "try to perform auto-registration."
 msgstr "essayer de procéder à l’auto-enregistrement."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:483
+#: src/daemons/rhsmcertd.c:612
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr ""
@@ -240,29 +240,29 @@ msgstr ""
 "--help\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:600
+#: src/daemons/rhsmcertd.c:729
 msgid "Wrong number of arguments specified.\n"
 msgstr "Mauvaise quantité d'arguments spécifiée.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:676
+#: src/daemons/rhsmcertd.c:805
 msgid "Invalid argument specified.\n"
 msgstr "Argument invalide spécifié.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:682
+#: src/daemons/rhsmcertd.c:811
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "AVERTISSEMENT : Des arguments CLI sont utilisés.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:697
+#: src/daemons/rhsmcertd.c:826
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "Option invalide : %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:711
+#: src/daemons/rhsmcertd.c:840
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "Argument invalide spécifié : %s\n"
@@ -899,234 +899,181 @@ msgstr "Certificat d'identité"
 msgid "Unknown Certificate Type"
 msgstr "Type de certificat inconnu"
 
-#: src/rhsm/connection.py:1389
+#: src/rhsm/config.py:265
+#, python-brace-format
+msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
+msgstr ""
+"Niveau de journalisation non valide : {lvl} réglé sur INFO pour cette "
+"exécution."
+
+#: src/rhsm/config.py:270
+msgid ""
+"Please use:  subscription-manager config --logging.default_log_level=<Log "
+"Level> to set the default_log_level to a valid value."
+msgstr ""
+"Veuillez utiliser : subscription-manager config --"
+"logging.default_log_level=<Log Level> pour définir le niveau de "
+"journalisation par défaut à une valeur valide."
+
+#: src/rhsm/config.py:276
+#, python-brace-format
+msgid "Valid Values: {valid_str}"
+msgstr "Valeurs valides : {valid_str}"
+
+#: src/rhsm/connection.py:1380
 msgid "Fetching supported resources"
 msgstr "Extraire les ressources prises en charge"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:1449
+#: src/rhsm/connection.py:1439
 msgid "Checking connection status"
 msgstr "Vérification de l'état de la connexion"
 
-#: src/rhsm/connection.py:1477
+#: src/rhsm/connection.py:1467
 msgid "Fetching cloud token"
 msgstr "Extraire le jeton cloud"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1550
+#: src/rhsm/connection.py:1540
 msgid "Registering system"
 msgstr "Système d'enregistrement"
 
-#: src/rhsm/connection.py:1580 src/rhsm/connection.py:1592
+#: src/rhsm/connection.py:1570 src/rhsm/connection.py:1582
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 "Mise à jour des machines virtuelles détectées fonctionnant sur un hôte donné"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:1615
+#: src/rhsm/connection.py:1605
 msgid "Updating hypervisor information"
 msgstr "Mise à jour des informations sur l'hyperviseur"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:1691
+#: src/rhsm/connection.py:1680
 msgid "Updating consumer information"
 msgstr "Mise à jour des informations relatives aux consommateurs"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:1703
-msgid "Updating guest information"
-msgstr "Mise à jour des informations sur les clients"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:1707 src/rhsm/connection.py:1711
+#: src/rhsm/connection.py:1685 src/rhsm/connection.py:1689
 msgid "Fetching guest information"
 msgstr "Extraire les informations sur les clients"
 
-#: src/rhsm/connection.py:1715
+#: src/rhsm/connection.py:1693
 msgid "Removing guests"
 msgstr "Suppression des invités"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1739 src/rhsm/connection.py:1750
+#: src/rhsm/connection.py:1723 src/rhsm/connection.py:1734
 msgid "Updating profile information"
 msgstr "Mise à jour des informations du profil"
 
-#: src/rhsm/connection.py:1759
+#: src/rhsm/connection.py:1742
 msgid "Fetching consumer keys"
 msgstr "Extraire les clés des consommateurs"
 
-#: src/rhsm/connection.py:1771
-msgid "Fetching consumers"
-msgstr "Extraire les consommateurs"
-
-#: src/rhsm/connection.py:1780
+#: src/rhsm/connection.py:1751
 msgid "Checking compliance status"
 msgstr "Vérification du statut de conformité"
 
-#: src/rhsm/connection.py:1789
+#: src/rhsm/connection.py:1760
 msgid "Checking system purpose compliance status"
 msgstr "Vérification de l'état de conformité de l'objet du système"
 
-#: src/rhsm/connection.py:1796
+#: src/rhsm/connection.py:1767
 msgid "Fetching available system purpose settings"
 msgstr "Extraire les paramètres disponibles de l'objectif du système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:1812
-msgid "Creating organization"
-msgstr "Créer une organisation"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:1819 src/rhsm/connection.py:1838
-#: src/rhsm/connection.py:1856
+#: src/rhsm/connection.py:1774 src/rhsm/connection.py:1782
 msgid "Fetching organizations"
 msgstr "Extraire les organisations"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:1829
-msgid "Removing organization"
-msgstr "Supprimer l'organisation"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:1848
-msgid "Fetching organization information"
-msgstr "Extraire les informations sur l'organisation"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:1874
-msgid "Fetching organization hypervisors"
-msgstr "Extraire les hyperviseurs de l'organisation"
-
-#: src/rhsm/connection.py:1884
+#: src/rhsm/connection.py:1795
 msgid "Unregistering system"
 msgstr "Annulation de l’enregistrement du système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1898
+#: src/rhsm/connection.py:1808
 msgid "Fetching certificates"
 msgstr "Extraire les certificats"
 
-#: src/rhsm/connection.py:1907
+#: src/rhsm/connection.py:1817
 msgid "Fetching certificate serial numbers"
 msgstr "Extraire les numéros de série des certificats"
 
-#: src/rhsm/connection.py:1923
+#: src/rhsm/connection.py:1833
 msgid "Fetching content for a certificate"
 msgstr "Extraire le contenu d'un certificat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1936 src/rhsm/connection.py:1950
-#: src/rhsm/connection.py:1967 src/rhsm/connection.py:2334
+#: src/rhsm/connection.py:1846 src/rhsm/connection.py:1863
 msgid "Updating subscriptions"
 msgstr "Mise à jour des abonnements"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1986
-msgid "Simulating subscribing"
-msgstr "Simulation de l'abonnement"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1996 src/rhsm/connection.py:2007
-#: src/rhsm/connection.py:2016
+#: src/rhsm/connection.py:1872 src/rhsm/connection.py:1882
+#: src/rhsm/connection.py:1891
 msgid "Unsubscribing"
 msgstr "Désabonnement"
 
-#: src/rhsm/connection.py:2074
+#: src/rhsm/connection.py:1940
 msgid "Fetching pools"
 msgstr "Extraire les pools"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:2088
-msgid "Fetching pool information"
-msgstr "Extraire les informations sur les pools"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:2093
-msgid "Fetching product information"
-msgstr "Recherche d'informations sur les produits"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:2103
+#: src/rhsm/connection.py:1951
 msgid "Fetching release information"
 msgstr "Extraire les informations sur les dates de publication de versions"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:2117
+#: src/rhsm/connection.py:1965
 msgid "Fetching available releases"
 msgstr "Extraire les versions disponibles"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:2132
+#: src/rhsm/connection.py:1980
 msgid "Fetching entitlements"
 msgstr "Extraire les informations sur les droits d’accès"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:2141
+#: src/rhsm/connection.py:1989
 msgid "Fetching service levels"
 msgstr "Extraire les informations sur les niveaux de service"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:2152
+#: src/rhsm/connection.py:2000
 msgid "Fetching environments"
 msgstr "Extraire les environnements"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:2171
-msgid "Fetching environment information"
-msgstr "Extraire les informations sur l'environnement"
-
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:2179
-msgid "Fetching entitlement information"
-msgstr "Extraire les informations sur les droits d’accès"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:2188 src/rhsm/connection.py:2239
+#: src/rhsm/connection.py:2010
 msgid "Updating certificate"
 msgstr "Mise à jour du certificat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsm/connection.py:2207
+#: src/rhsm/connection.py:2029
 msgid "Updating certificates"
 msgstr "Mise à jour des certificats"
 
-#: src/rhsm/connection.py:2258
+#: src/rhsm/connection.py:2048
 msgid "Checking server status"
 msgstr "Vérification de l'état du serveur"
 
-#: src/rhsm/connection.py:2266
+#: src/rhsm/connection.py:2056
 msgid "Fetching content overrides"
 msgstr "Extraire les remplacements de contenu"
 
-#: src/rhsm/connection.py:2277
+#: src/rhsm/connection.py:2067
 msgid "Updating content overrides"
 msgstr "Mise à jour des remplacements de contenu"
 
-#: src/rhsm/connection.py:2290
+#: src/rhsm/connection.py:2080
 msgid "Removing content overrides"
 msgstr "Suppression des remplacements de contenu"
 
-#: src/rhsm/connection.py:2311
+#: src/rhsm/connection.py:2096
 msgid "Activating"
 msgstr "Activation de"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:2319
-msgid "Fetching subscriptions"
-msgstr "Extraire les abonnements"
-
-#: src/rhsm/connection.py:2344
-msgid "Fetching job"
-msgstr "Extraire job"
-
-#: src/rhsm/connection.py:2354
-msgid "Updating job status"
-msgstr "Mise à jour de l'état des jobs"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:2363
-msgid "Canceling job"
-msgstr "Annulation d'un job"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_debug/debug_commands.py:39
@@ -1248,13 +1195,13 @@ msgstr "Les dates révolues ne sont pas autorisées"
 #: src/subscription_manager/cli_command/facts.py:66
 #: src/subscription_manager/cli_command/list.py:54
 #: src/subscription_manager/reasons.py:109
-#: src/subscription_manager/utils.py:253 src/subscription_manager/utils.py:267
-#: src/subscription_manager/utils.py:269 src/subscription_manager/utils.py:289
-#: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:310
+#: src/subscription_manager/utils.py:252 src/subscription_manager/utils.py:268
+#: src/subscription_manager/utils.py:270 src/subscription_manager/utils.py:290
+#: src/subscription_manager/utils.py:292 src/subscription_manager/utils.py:311
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: src/rhsmlib/services/entitlement.py:123 src/rhsmlib/services/register.py:63
+#: src/rhsmlib/services/entitlement.py:123 src/rhsmlib/services/register.py:61
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr "Arguments inconnus : %s"
@@ -1352,18 +1299,18 @@ msgstr ""
 msgid "Error: this system is not registered"
 msgstr "Erreur : ce système n'est pas inscrit"
 
-#: src/rhsmlib/services/register.py:194
+#: src/rhsmlib/services/register.py:192
 msgid "This system is already registered. Add force to options to override."
 msgstr "Ce système est déjà inscrit. Ajouter force aux options à substituer."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/register.py:197
-#: src/subscription_manager/cli_command/register.py:139
+#: src/rhsmlib/services/register.py:195
+#: src/subscription_manager/cli_command/register.py:142
 msgid "Error: system name can not be empty."
 msgstr "Erreur : le nom du système ne peut pas être vide."
 
-#: src/rhsmlib/services/register.py:201
-#: src/subscription_manager/cli_command/register.py:161
+#: src/rhsmlib/services/register.py:199
+#: src/subscription_manager/cli_command/register.py:164
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
@@ -1375,36 +1322,36 @@ msgstr ""
 "nouveau avec --force."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/register.py:211
-#: src/subscription_manager/cli_command/register.py:152
+#: src/rhsmlib/services/register.py:209
+#: src/subscription_manager/cli_command/register.py:155
 msgid "Error: Must specify an activation key"
 msgstr "Erreur : une clé d'activation doit être spécifiée"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/register.py:213
-#: src/subscription_manager/cli_command/register.py:141
+#: src/rhsmlib/services/register.py:211
+#: src/subscription_manager/cli_command/register.py:144
 msgid "Error: Activation keys do not require user credentials."
 msgstr ""
 "Erreur : les clés d'activation ne requièrent pas d'informations "
 "d'identification de l'utilisateur."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/rhsmlib/services/register.py:216
-#: src/subscription_manager/cli_command/register.py:144
+#: src/rhsmlib/services/register.py:214
+#: src/subscription_manager/cli_command/register.py:147
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr ""
 "Erreur : les clés d'activation ne peuvent pas être utilisées avec des ID "
 "précédemment inscrits."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsmlib/services/register.py:220
-#: src/subscription_manager/cli_command/register.py:147
+#: src/rhsmlib/services/register.py:218
+#: src/subscription_manager/cli_command/register.py:150
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr ""
 "Erreur : les clé d'activation ne permettent pas de spécifier les "
 "environnements."
 
-#: src/rhsmlib/services/register.py:227
+#: src/rhsmlib/services/register.py:225
 msgid "Error: Missing username or password."
 msgstr "Erreur : Manquant username ou password."
 
@@ -1936,7 +1883,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/attach.py:257
-#: src/subscription_manager/cli_command/register.py:198
+#: src/subscription_manager/cli_command/register.py:201
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
@@ -2007,7 +1954,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/clean.py:31
-#: src/subscription_manager/cli_command/register.py:260
+#: src/subscription_manager/cli_command/register.py:312
 msgid "All local data removed"
 msgstr "Toutes les données locales supprimées"
 
@@ -2226,7 +2173,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/environments.py:90
-#: src/subscription_manager/cli_command/register.py:413
+#: src/subscription_manager/cli_command/register.py:458
 msgid "Error: Server does not support environments."
 msgstr "Erreur : le serveur ne prend pas en charges les environnements."
 
@@ -2905,13 +2852,13 @@ msgid "specify an organization"
 msgstr "spécifier une organisation"
 
 #: src/subscription_manager/cli_command/org.py:46
-#: src/subscription_manager/cli_command/register.py:475
+#: src/subscription_manager/cli_command/register.py:520
 msgid "Error: --org is a required parameter in non-interactive mode."
 msgstr "Erreur : --org est un paramètre obligatoire en mode non-interactif."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/org.py:48
-#: src/subscription_manager/cli_command/register.py:480
+#: src/subscription_manager/cli_command/register.py:525
 msgid "Organization: "
 msgstr "Organisation : "
 
@@ -2921,7 +2868,7 @@ msgid "Error: User {username} is not member of any organization."
 msgstr "Erreur : L'utilisateur {username} n'est membre d'aucune organisation."
 
 #: src/subscription_manager/cli_command/org.py:74
-#: src/subscription_manager/cli_command/register.py:466
+#: src/subscription_manager/cli_command/register.py:511
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr ""
@@ -3121,6 +3068,11 @@ msgstr ""
 "Erreur : cette commande requiert que vous spécifiez une adresse électronique "
 "avec --email."
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#: src/subscription_manager/cli_command/redeem.py:74
+msgid "Error: Unable to redeem subscription for this system."
+msgstr "Erreur : Impossible d’utiliser l'abonnement pour ce système."
+
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/refresh.py:32
 msgid "Pull the latest subscription data from the server"
@@ -3141,23 +3093,23 @@ msgstr "Incapable de réactualiser à cause de l'exception suivante : {e}"
 msgid "All local data refreshed"
 msgstr "Toutes les données locales réactualisées"
 
-#: src/subscription_manager/cli_command/register.py:65
+#: src/subscription_manager/cli_command/register.py:68
 msgid "base URL for content in form of https://hostname:port/prefix"
 msgstr ""
 "L'URL de base pour le contenu est sous le format https://hostname:port/prefix"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/register.py:78
+#: src/subscription_manager/cli_command/register.py:81
 msgid "name of the system to register, defaults to the hostname"
 msgstr "nom du système à inscrire, par défaut un nom d'hôte"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/register.py:84
+#: src/subscription_manager/cli_command/register.py:87
 msgid "the existing system data is pulled from the server"
 msgstr "les données existantes du système sont récupérées du serveur"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/cli_command/register.py:90
+#: src/subscription_manager/cli_command/register.py:93
 msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
@@ -3165,7 +3117,7 @@ msgstr ""
 "inscrire sur une des multiples organisations pour l'utilisateur, à l'aide de "
 "la clé de l'organisation"
 
-#: src/subscription_manager/cli_command/register.py:96
+#: src/subscription_manager/cli_command/register.py:99
 msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
@@ -3177,21 +3129,21 @@ msgstr ""
 "serveur d'autorisation"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/register.py:104
+#: src/subscription_manager/cli_command/register.py:107
 msgid "set a release version"
 msgstr "définir une version de publication"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/register.py:109
+#: src/subscription_manager/cli_command/register.py:112
 msgid "Deprecated, see --auto-attach"
 msgstr "Obsolète, voir --auto-attach"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/cli_command/register.py:115
+#: src/subscription_manager/cli_command/register.py:118
 msgid "automatically attach compatible subscriptions to this system"
 msgstr "automatiquement assigner des abonnements compatibles à ce système"
 
-#: src/subscription_manager/cli_command/register.py:120
+#: src/subscription_manager/cli_command/register.py:123
 msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
@@ -3200,14 +3152,14 @@ msgstr ""
 "nouvelle identité de système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/cli_command/register.py:126
+#: src/subscription_manager/cli_command/register.py:129
 msgid ""
 "activation key to use for registration (can be specified more than once)"
 msgstr ""
 "clé d'activation à utiliser pour l'enregistrement (elle peut être spécifiée "
 "plus d'une fois)"
 
-#: src/subscription_manager/cli_command/register.py:131
+#: src/subscription_manager/cli_command/register.py:134
 msgid ""
 "system preference used when subscribing automatically, requires --auto-attach"
 msgstr ""
@@ -3215,90 +3167,94 @@ msgstr ""
 "auto-attach"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/register.py:137
+#: src/subscription_manager/cli_command/register.py:140
 msgid "This system is already registered. Use --force to override"
 msgstr "Ce système est déjà inscrit. Utilisez --force pour remplacer"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/register.py:149
+#: src/subscription_manager/cli_command/register.py:152
 msgid "Error: Activation keys cannot be used with --auto-attach."
 msgstr ""
 "Erreur : les clés d'activation ne peuvent pas être utilisées avec --auto-"
 "attach."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/register.py:154
+#: src/subscription_manager/cli_command/register.py:157
 msgid "Error: Must use --auto-attach with --servicelevel."
 msgstr "Erreur : --auto-attach doit être utilisé avec --servicelevel."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/register.py:156
+#: src/subscription_manager/cli_command/register.py:159
 msgid "Error: Must provide --org with activation keys."
 msgstr "Erreur : --org doit être spécifié avec des clés d'activation."
 
-#: src/subscription_manager/cli_command/register.py:170
+#: src/subscription_manager/cli_command/register.py:173
 msgid "Error: The --type option has been deprecated and may not be used."
 msgstr "Erreur : l'option --type est dépréciée et ne doit pas être utilisée."
 
-#: src/subscription_manager/cli_command/register.py:173
-#: src/subscription_manager/cli_command/register.py:444
+#: src/subscription_manager/cli_command/register.py:176
+#: src/subscription_manager/cli_command/register.py:489
 msgid "The entitlement server does not allow multiple environments"
 msgstr "Le serveur d'autorisation ne permet pas les environnements multiples"
 
-#: src/subscription_manager/cli_command/register.py:238
+#: src/subscription_manager/cli_command/register.py:220
+msgid "Uploading DNF profile"
+msgstr "Téléchargement du profil DNF"
+
+#: src/subscription_manager/cli_command/register.py:290
 #: src/subscription_manager/cli_command/unregister.py:41
 #, python-brace-format
 msgid "Unregistering from: {hostname}:{port}{prefix}"
 msgstr "Annulation de l’inscription de : {hostname}:{port}{prefix}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/register.py:249
+#: src/subscription_manager/cli_command/register.py:301
 #, python-brace-format
 msgid "The system with UUID {old_uuid} has been unregistered"
 msgstr "Le système avec l'UUID {old_uuid} a été désinscrit"
 
-#: src/subscription_manager/cli_command/register.py:273
+#: src/subscription_manager/cli_command/register.py:325
 #, python-brace-format
 msgid "Registering to: {hostname}:{port}{prefix}"
 msgstr "Inscription sur : {hostname}:{port}{prefix}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/cli_command/register.py:313
+#: src/subscription_manager/cli_command/register.py:365
 #, python-brace-format
 msgid "Error during registration: {e}"
 msgstr "Erreur lors de l'inscription : {e}"
 
-#: src/subscription_manager/cli_command/register.py:316
+#: src/subscription_manager/cli_command/register.py:368
 #, python-brace-format
 msgid "The system has been registered with ID: {id}"
 msgstr "Le système a été inscrit avec l'ID : {id}"
 
-#: src/subscription_manager/cli_command/register.py:317
+#: src/subscription_manager/cli_command/register.py:369
 #, python-brace-format
 msgid "The registered system name is: {name}"
 msgstr "Le nom du système inscrit est : {name}"
 
-#: src/subscription_manager/cli_command/register.py:319
+#: src/subscription_manager/cli_command/register.py:371
 #, python-brace-format
 msgid "Service level set to: {level}"
 msgstr "Niveau de service paramétré sur : {level}"
 
-#: src/subscription_manager/cli_command/register.py:393
+#: src/subscription_manager/cli_command/register.py:438
 msgid "Error: --environments is a required parameter in non-interactive mode."
 msgstr ""
 "Erreur : --environments est un paramètre obligatoire en mode non-interactif."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/cli_command/register.py:397
+#: src/subscription_manager/cli_command/register.py:442
 msgid "Environments: "
 msgstr "Environnements : "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/cli_command/register.py:399
+#: src/subscription_manager/cli_command/register.py:444
 msgid "Environment: "
 msgstr "Environnement : "
 
-#: src/subscription_manager/cli_command/register.py:438
+#: src/subscription_manager/cli_command/register.py:483
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
 msgstr ""
@@ -3306,7 +3262,7 @@ msgstr ""
 "{list}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/cli_command/register.py:454
+#: src/subscription_manager/cli_command/register.py:499
 #, python-brace-format
 msgid "{name} cannot register with any organizations."
 msgstr "{name} ne peut s'inscrire dans aucune organisation."
@@ -3695,7 +3651,7 @@ msgstr "%(prog)s {name} [SOUS-MODULE] [OPTIONS]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:38
-#: src/subscription_manager/utils.py:268
+#: src/subscription_manager/utils.py:269
 msgid "This system is currently not registered."
 msgstr "Ce système n'est pas actuellement inscrit."
 
@@ -3958,9 +3914,15 @@ msgstr ""
 msgid "Bad certificate: [{library}] {message}"
 msgstr "Mauvais certificat : [{library}] {message}"
 
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#: src/subscription_manager/exceptions.py:64
+#, python-brace-format
+msgid "Unable to reach the server at {host}: {message}"
+msgstr "Impossible d'atteindre le serveur à l'adresse {host} : {message}"
+
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
-#: src/subscription_manager/exceptions.py:67
+#: src/subscription_manager/exceptions.py:68
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
 msgstr "{message} (Code d'erreur HTTP {code} : {title})"
@@ -4069,7 +4031,7 @@ msgstr ""
 "Mise à jour des certificats de droits d'accès et des référentiels impossible"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
-#: src/subscription_manager/utils.py:368
+#: src/subscription_manager/utils.py:369
 msgid "and"
 msgstr "et"
 
@@ -4089,6 +4051,63 @@ msgid ""
 msgstr ""
 "Avertissement : La clé fournie « {key} » ne figure pas dans la liste des "
 "clés valides :"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#~ msgid "Updating guest information"
+#~ msgstr "Mise à jour des informations sur les clients"
+
+#~ msgid "Fetching consumers"
+#~ msgstr "Extraire les consommateurs"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#~ msgid "Creating organization"
+#~ msgstr "Créer une organisation"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#~ msgid "Removing organization"
+#~ msgstr "Supprimer l'organisation"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#~ msgid "Fetching organization information"
+#~ msgstr "Extraire les informations sur l'organisation"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#~ msgid "Fetching organization hypervisors"
+#~ msgstr "Extraire les hyperviseurs de l'organisation"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#~ msgid "Simulating subscribing"
+#~ msgstr "Simulation de l'abonnement"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#~ msgid "Fetching pool information"
+#~ msgstr "Extraire les informations sur les pools"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#~ msgid "Fetching product information"
+#~ msgstr "Recherche d'informations sur les produits"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
+#~ msgid "Fetching environment information"
+#~ msgstr "Extraire les informations sur l'environnement"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#~ msgid "Fetching entitlement information"
+#~ msgstr "Extraire les informations sur les droits d’accès"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#~ msgid "Fetching subscriptions"
+#~ msgstr "Extraire les abonnements"
+
+#~ msgid "Fetching job"
+#~ msgstr "Extraire job"
+
+#~ msgid "Updating job status"
+#~ msgstr "Mise à jour de l'état des jobs"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys
+#~ msgid "Canceling job"
+#~ msgstr "Annulation d'un job"
 
 #~ msgid "Proxy connection failed, please check your settings."
 #~ msgstr ""
@@ -5908,9 +5927,6 @@ msgstr ""
 
 #~ msgid "Unable to unregister"
 #~ msgstr "Enregistrement impossible"
-
-#~ msgid "Uploading package profile"
-#~ msgstr "Téléchargement du profil de paquet"
 
 #~ msgid "_Attach"
 #~ msgstr "_Attacher"
