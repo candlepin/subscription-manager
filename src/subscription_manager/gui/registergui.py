@@ -1946,6 +1946,8 @@ class AsyncBackend(object):
         """
         method run in the worker thread.
         """
+        # Avoid passing empty strings as environments
+        environments = env if env else None
         try:
             # We've got several steps here that all happen in this thread
             #
@@ -1991,7 +1993,7 @@ class AsyncBackend(object):
 
             cp = self.backend.cp_provider.get_basic_auth_cp()
             retval = cp.registerConsumer(name=name, facts=facts_dict,
-                                         owner=owner, environments=env,
+                                         owner=owner, environments=environments,
                                          keys=activation_keys,
                                          installed_products=installed_mgr.format_for_server(),
                                          role=syspurpose.get('role'),
