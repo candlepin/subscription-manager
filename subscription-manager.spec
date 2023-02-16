@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.32
+Version: 1.29.33
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -736,6 +736,25 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Feb 16 2023 Pino Toscano <ptoscano@redhat.com> 1.29.33-1
+- Translated using Weblate (French) (ljanda@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
+- Translated using Weblate (Japanese) (suanand@redhat.com)
+- Translated using Weblate (Japanese) (ljanda@redhat.com)
+- Translated using Weblate (French) (suanand@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Update translation files (noreply@weblate.org)
+- Translated using Weblate (Korean) (jsefler@redhat.com)
+- ENT-5542: Build package using GitHub Actions (mhorky@redhat.com)
+- Test libdnf plugin using GitHub Actions (mhorky@redhat.com)
+- libdnf: fix return value of findProductId() (ptoscano@redhat.com)
+- ENT-5541: Publish PR coverage (mhorky@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Translated using Weblate (Kannada) (jsefler@redhat.com)
+- Translated using Weblate (Spanish) (ptoscano@redhat.com)
+- Simplify test setup for D-Bus fact collection (mhorky@redhat.com)
+- ENT-3759: Test on GitHub Actions (mhorky@redhat.com)
+
 * Mon Jan 16 2023 Pino Toscano <ptoscano@redhat.com> 1.29.32-1
 - Translated using Weblate (French) (ljanda@redhat.com)
 - Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
