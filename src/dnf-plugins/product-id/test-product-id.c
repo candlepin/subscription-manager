@@ -13,6 +13,7 @@
  * in this software or its documentation.
  */
 
+#include <stdlib.h>
 #include <glib.h>
 #include <stdio.h>
 #include <gio/gio.h>
@@ -93,11 +94,21 @@ typedef struct {
 } handleFixture;
 
 void setup(handleFixture *fixture, gconstpointer testData) {
+    GError *error = NULL;
     (void)testData;
     fixture->dnfContext = dnf_context_new();
+    dnf_context_setup(fixture->dnfContext, NULL, &error);
     PluginMode mode = PLUGIN_MODE_CONTEXT;
-    // This is never explicitly called
-    fixture->handle = pluginInitHandle(1, mode, (void*)fixture->dnfContext);
+    // When plugin product-id is called by libdnf application, then pluginInitHandle is called,
+    // but this function pluginInitHandle() should not be never called by other application
+    // directly, because only libdnf can set DNF context properly. Thus it is not possible to
+    // call this: fixture->handle = pluginInitHandle(1, mode, (void*)fixture->dnfContext);
+    // We have to set attributes of handle using following way.
+    fixture->handle = g_malloc(sizeof(PluginHandle));
+    if(fixture->handle != NULL) {
+        fixture->handle->version = 1;
+        fixture->handle->mode = mode;
+    }
 }
 
 void teardown(handleFixture *fixture, gconstpointer testData) {
@@ -161,8 +172,8 @@ void testFindProductIdInCorrectPEM(handleFixture *fixture, gconstpointer ignored
     (void)ignored;
     GString *result = g_string_new("");
     GString *certContent = g_string_new(CORRECT_PEM_CERT);
-    int ret = findProductId(certContent, result);
-    g_assert_cmpint(ret, ==, 1);
+    gboolean ret = findProductId(certContent, result);
+    g_assert_cmpint(ret, ==, TRUE);
     g_assert_cmpstr(result->str, ==, "69");
     g_string_free(certContent, TRUE);
     g_string_free(result, TRUE);
@@ -174,8 +185,8 @@ void testFindProductIdInCorruptedPEM(handleFixture *fixture, gconstpointer ignor
     (void)ignored;
     GString *result = g_string_new("");
     GString *certContent = g_string_new(CORRUPTED_PEM_CERT);
-    int ret = findProductId(certContent, result);
-    g_assert_cmpint(ret, ==, -1);
+    gboolean ret = findProductId(certContent, result);
+    g_assert_cmpint(ret, ==, FALSE);
     g_assert_cmpstr(result->str, ==, "");
     g_string_free(certContent, TRUE);
     g_string_free(result, TRUE);
@@ -187,8 +198,8 @@ void testFindProductIdInConsumerPEM(handleFixture *fixture, gconstpointer ignore
     (void)ignored;
     GString *result = g_string_new("");
     GString *certContent = g_string_new(CONSUMER_CERT);
-    int ret = findProductId(certContent, result);
-    g_assert_cmpint(ret, ==, -1);
+    gboolean ret = findProductId(certContent, result);
+    g_assert_cmpint(ret, ==, FALSE);
     g_assert_cmpstr(result->str, ==, "");
     g_string_free(certContent, TRUE);
     g_string_free(result, TRUE);
@@ -466,7 +477,12 @@ void teardownInstalledProduct(installedProductCertsFixture *fixture, gconstpoint
 void testInstalledProduct(installedProductCertsFixture *fixture, gconstpointer testData) {
     (void)testData;
 
-    int ret = getInstalledProductCerts("./test_data/cert_dir/", fixture->repos, fixture->enabledRepoProductId, fixture->productDb);
+    int ret = getInstalledProductCerts(
+            "./test_data/cert_dir/",
+            fixture->repos,
+            fixture->enabledRepoProductId,
+            fixture->productDb
+            );
     g_assert_cmpint(1, ==, ret);
 }
 

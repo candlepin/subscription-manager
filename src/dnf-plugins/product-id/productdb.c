@@ -55,7 +55,10 @@ void freeProductDb(ProductDb *productDb) {
 }
 
 /**
- * Read content of product db from json file into structure
+ * Read content of product db from json file into structure. The content of
+ * the file could look like this:
+ *
+ * { "37080": [ "awesomeos-modifier-37080" ], "99000": [ "awesomeos-i686-99000" ] }
  *
  * @param productDb Pointer at ProductDb struct.  The ProductDb is populated.
  * @param err Pointer to a pointer to a glib error.  Updated if an error occurs.
@@ -97,6 +100,7 @@ void readProductDb(ProductDb *productDb, GError **err) {
             json_object *repoIds = json_object_iter_peek_value(&it);
             if (repoIds == NULL) {
                 *err = g_error_new_literal(quark, 0, error_string);
+                g_free(productId);
                 return;
             }
             GSList *repoList = NULL;
@@ -104,6 +108,7 @@ void readProductDb(ProductDb *productDb, GError **err) {
             array_list *idArray = json_object_get_array(repoIds);
             if (idArray == NULL) {
                 *err = g_error_new_literal(quark, 0, error_string);
+                g_free(productId);
                 return;
             }
             int len = array_list_length(idArray);
@@ -113,6 +118,7 @@ void readProductDb(ProductDb *productDb, GError **err) {
                 gchar *repoId = g_strdup(json_object_get_string(o));
                 if (repoId == NULL) {
                     *err = g_error_new_literal(quark, 0, error_string);
+                    g_free(productId);
                     return;
                 }
                 repoList = g_slist_prepend(repoList, (gpointer) repoId);
@@ -130,9 +136,10 @@ void readProductDb(ProductDb *productDb, GError **err) {
 /**
  * Write the GHashTable in the ProductDb repoMap field to the path stored in the ProductDb path field.
  * @param productDb populated ProductDb
- * @param err a pointer to a pointer to a glib error.  Updated if an error occurs.
+ * @return TRUE, when productDb was written to JSON file. Otherwise return FALSE
  */
-void writeProductDb(ProductDb *productDb, GError **err) {
+gboolean writeProductDb(ProductDb *productDb) {
+    gboolean ret = TRUE;
     json_object *productIdDb = json_object_new_object();
     GList *keys = g_hash_table_get_keys(productDb->repoMap);
 
@@ -160,7 +167,6 @@ void writeProductDb(ProductDb *productDb, GError **err) {
 
     GFileOutputStream *os = g_file_replace(dbFile, NULL, FALSE, G_FILE_CREATE_NONE, NULL, &internalErr);
     if (!internalErr) {
-        gboolean ret;
         ret = g_output_stream_write_all((GOutputStream *) os, dbJson, strlen(dbJson), NULL, NULL, &internalErr);
         if (ret == FALSE && internalErr) {
             printError("Unable to write into /var/lib/rhsm/productid.js file", internalErr);
@@ -171,6 +177,7 @@ void writeProductDb(ProductDb *productDb, GError **err) {
         }
     } else {
         printError("Unable to update /var/lib/rhsm/productid.js file", internalErr);
+        ret = FALSE;
     }
 
     // Free productIdDb.  JSON-C has a confusing method name for this
@@ -178,11 +185,7 @@ void writeProductDb(ProductDb *productDb, GError **err) {
     g_object_unref(dbFile);
     g_object_unref(os);
 
-    if (internalErr) {
-        *err = g_error_copy(internalErr);
-        g_error_free(internalErr);
-        return;
-    }
+    return ret;
 }
 
 /**
