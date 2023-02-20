@@ -15,6 +15,7 @@
 #
 import logging
 import os
+from typing import Dict, List, Optional, Set, Tuple, TYPE_CHECKING
 
 from rhsm.certificate import Key, create_from_file
 from rhsm.config import get_config_parser
@@ -22,6 +23,10 @@ from subscription_manager.injection import require, ENT_DIR
 
 from rhsmlib.services import config
 from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
+
+
+if TYPE_CHECKING:
+    from rhsm.certificate2 import EntitlementCertificate
 
 log = logging.getLogger(__name__)
 
@@ -34,7 +39,7 @@ class Directory(object):
     def __init__(self, path):
         self.path = Path.abs(path)
 
-    def list_all(self):
+    def list_all(self) -> List[Tuple[str, str]]:
         all_items = []
         if not os.path.exists(self.path):
             return all_items
@@ -44,7 +49,7 @@ class Directory(object):
             all_items.append(p)
         return all_items
 
-    def list(self):
+    def list(self) -> List[Tuple[str, str]]:
         files = []
         for p, fn in self.list_all():
             path = self.abspath(fn)
@@ -54,7 +59,7 @@ class Directory(object):
                 files.append((p, fn))
         return files
 
-    def listdirs(self):
+    def listdirs(self) -> List["Directory"]:
         dirs = []
         for _p, fn in self.list_all():
             path = self.abspath(fn)
@@ -82,7 +87,7 @@ class Directory(object):
             else:
                 os.unlink(path)
 
-    def abspath(self, filename):
+    def abspath(self, filename) -> str:
         """
         Return path for a filename relative to this directory.
         """
@@ -90,7 +95,7 @@ class Directory(object):
         # can just join normally.
         return os.path.join(self.path, filename)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.path
 
 
@@ -98,16 +103,16 @@ class CertificateDirectory(Directory):
 
     KEY = "key.pem"
 
-    def __init__(self, path):
+    def __init__(self, path: str):
         super(CertificateDirectory, self).__init__(path)
         self.create()
-        self._listing = None
+        self._listing: Optional[List["EntitlementCertificate"]] = None
 
-    def refresh(self):
+    def refresh(self) -> None:
         # simply clear the cache. the next list() will reload.
         self._listing = None
 
-    def list(self):
+    def list(self) -> List["EntitlementCertificate"]:
         if self._listing is not None:
             return self._listing
         listing = []
@@ -119,28 +124,28 @@ class CertificateDirectory(Directory):
         self._listing = listing
         return listing
 
-    def list_valid(self):
+    def list_valid(self) -> List["EntitlementCertificate"]:
         valid = []
         for c in self.list():
             if c.is_valid():
                 valid.append(c)
         return valid
 
-    def list_expired(self):
+    def list_expired(self) -> List["EntitlementCertificate"]:
         expired = []
         for c in self.list():
             if c.is_expired():
                 expired.append(c)
         return expired
 
-    def find(self, sn):
+    def find(self, sn: str) -> Optional["EntitlementCertificate"]:
         # TODO: could optimize to just load SERIAL.pem? Maybe not in all cases.
         for c in self.list():
             if c.serial == sn:
                 return c
         return None
 
-    def find_all_by_product(self, p_hash):
+    def find_all_by_product(self, p_hash: str) -> List["EntitlementCertificate"]:
         certs = set()
         providing_stack_ids = set()
         stack_id_map = {}
@@ -167,7 +172,7 @@ class CertificateDirectory(Directory):
 
         return list(certs)
 
-    def find_by_product(self, p_hash):
+    def find_by_product(self, p_hash: str) -> Optional["EntitlementCertificate"]:
         for c in self.list():
             for p in c.products:
                 if p.id == p_hash:
@@ -179,7 +184,7 @@ class CertificateDirectory(Directory):
 
 
 class ProductCertificateDirectory(CertificateDirectory):
-    def get_provided_tags(self):
+    def get_provided_tags(self) -> Set[str]:
         """
         Iterates all product certificates in the directory and extracts a set
         of all tags they provide.
@@ -197,13 +202,13 @@ class ProductCertificateDirectory(CertificateDirectory):
     # This needs to pick the correct cert if multiple
     # product certs provide the same product id.
     #
-    # If we put the defaults at the begining of .list()
-    # results, we will override them with the instaled products
+    # If we put the defaults at the beginning of .list()
+    # results, we will override them with the installed products
     # certs.
     #
     # Instead of always overriding, something like
     # productid.ComparableProductCert may be useful
-    def get_installed_products(self):
+    def get_installed_products(self) -> Dict[str, "EntitlementCertificate"]:
         prod_certs = self.list()
         installed_products = {}
         for product_cert in prod_certs:
@@ -214,22 +219,23 @@ class ProductCertificateDirectory(CertificateDirectory):
 
 
 class ProductDirectory(ProductCertificateDirectory):
-    def __init__(self, path=None, default_path=None):
-        installed_prod_path = path or conf["rhsm"]["productCertDir"]
-        default_prod_path = default_path or DEFAULT_PRODUCT_CERT_DIR
+    def __init__(self, path: Optional[str] = None, default_path: Optional[str] = None):
+        # FIXME Missing super() call
+        installed_prod_path: str = path or conf["rhsm"]["productCertDir"]
+        default_prod_path: str = default_path or DEFAULT_PRODUCT_CERT_DIR
         self.installed_prod_dir = ProductCertificateDirectory(path=installed_prod_path)
         self.default_prod_dir = ProductCertificateDirectory(path=default_prod_path)
 
-    def list(self):
-        installed_prod_list = self.installed_prod_dir.list()
-        default_prod_list = self.default_prod_dir.list()
+    def list(self) -> List["EntitlementCertificate"]:
+        installed_prod_list: List[EntitlementCertificate] = self.installed_prod_dir.list()
+        default_prod_list: List[EntitlementCertificate] = self.default_prod_dir.list()
 
         # Product IDs in installed_prod dir.
-        pids = set([cert.products[0].id for cert in installed_prod_list])
+        pids: Set[str] = set([cert.products[0].id for cert in installed_prod_list])
         # Everything from /etc/pki/product, only use product-default for pids that don't already exist
         return installed_prod_list + [cert for cert in default_prod_list if cert.products[0].id not in pids]
 
-    def refresh(self):
+    def refresh(self) -> None:
         self.installed_prod_dir.refresh()
         self.default_prod_dir.refresh()
 
@@ -242,7 +248,7 @@ class ProductDirectory(ProductCertificateDirectory):
     # the product cert back to the host in some manner. Or better, let a plugin
     # decide.
     @property
-    def path(self):
+    def path(self) -> str:
         return self.installed_prod_dir.path
 
 
@@ -252,13 +258,13 @@ class EntitlementDirectory(CertificateDirectory):
     PRODUCT = "product"
 
     @classmethod
-    def productpath(cls):
+    def productpath(cls) -> str:
         return cls.PATH
 
     def __init__(self):
         super(EntitlementDirectory, self).__init__(self.productpath())
 
-    def _check_key(self, cert):
+    def _check_key(self, cert: "EntitlementCertificate") -> bool:
         """
         If the new key file (SERIAL-key.pem) does not exist, check for
         the old style (key.pem), and if found write it out as the new style.
@@ -280,17 +286,18 @@ class EntitlementDirectory(CertificateDirectory):
 
             # write the key/cert out again in new style format
             key = Key.read(old_key_path)
+            # FIXME Writer does not take any arguments
             cert_writer = Writer(self)
             cert_writer.write(key, cert)
         return True
 
-    def list_valid(self):
+    def list_valid(self) -> List["EntitlementCertificate"]:
         return [x for x in self.list() if self._check_key(x) and x.is_valid()]
 
-    def list_valid_with_content_access(self):
+    def list_valid_with_content_access(self) -> List["EntitlementCertificate"]:
         return [x for x in self.list_with_content_access() if self._check_key(x) and x.is_valid()]
 
-    def list(self):
+    def list(self) -> List["EntitlementCertificate"]:
         """
         List entitlement certificates that do not have SCA type
         :return: list of entitlement certs
@@ -298,14 +305,14 @@ class EntitlementDirectory(CertificateDirectory):
         certs = super(EntitlementDirectory, self).list()
         return [cert for cert in certs if cert.entitlement_type != CONTENT_ACCESS_CERT_TYPE]
 
-    def list_with_content_access(self):
+    def list_with_content_access(self) -> List["EntitlementCertificate"]:
         """
         List all entitlement certificates
         :return: list of entitlement certs
         """
         return super(EntitlementDirectory, self).list()
 
-    def list_with_sca_mode(self):
+    def list_with_sca_mode(self) -> List["EntitlementCertificate"]:
         """
         List only entitlement certificates that do have SCA type
         :return:
@@ -313,7 +320,7 @@ class EntitlementDirectory(CertificateDirectory):
         certs = super(EntitlementDirectory, self).list()
         return [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
 
-    def list_for_product(self, product_id):
+    def list_for_product(self, product_id: str) -> List["EntitlementCertificate"]:
         """
         Returns all entitlement certificates providing access to the given
         product ID.
@@ -325,7 +332,7 @@ class EntitlementDirectory(CertificateDirectory):
                     entitlements.append(cert)
         return entitlements
 
-    def list_for_pool_id(self, pool_id):
+    def list_for_pool_id(self, pool_id: str) -> List["EntitlementCertificate"]:
         """
         Returns all entitlement certificates provided by the given
         pool ID.
@@ -335,7 +342,7 @@ class EntitlementDirectory(CertificateDirectory):
         ]
         return entitlements
 
-    def list_serials_for_pool_ids(self, pool_ids):
+    def list_serials_for_pool_ids(self, pool_ids: List[str]) -> Dict[str, List[str]]:
         """
         Returns a dict of all entitlement certificate serials for each pool_id in the list provided
         """
@@ -352,12 +359,12 @@ class Path(object):
     ROOT = "/"
 
     @classmethod
-    def join(cls, a, b):
+    def join(cls, a: str, b: str) -> str:
         path = os.path.join(a, b)
         return cls.abs(path)
 
     @classmethod
-    def abs(cls, path):
+    def abs(cls, path: str) -> str:
         """Append the ROOT path to the given path."""
         if os.path.isabs(path):
             return os.path.join(cls.ROOT, path[1:])
@@ -365,15 +372,15 @@ class Path(object):
             return os.path.join(cls.ROOT, path)
 
     @classmethod
-    def isdir(cls, path):
+    def isdir(cls, path: str) -> bool:
         return os.path.isdir(path)
 
 
 class Writer(object):
     def __init__(self):
-        self.ent_dir = require(ENT_DIR)
+        self.ent_dir: EntitlementDirectory = require(ENT_DIR)
 
-    def write(self, key, cert):
+    def write(self, key: Key, cert: "EntitlementCertificate") -> None:
         serial = cert.serial
         ent_dir_path = self.ent_dir.productpath()
 

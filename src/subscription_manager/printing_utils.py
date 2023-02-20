@@ -14,6 +14,7 @@
 import fnmatch
 import re
 import logging
+from typing import Callable, List
 
 from subscription_manager.unicode_width import textual_width as utf8_width
 from subscription_manager.utils import get_terminal_width
@@ -27,11 +28,11 @@ FONT_RED = "\033[31m"
 FONT_NORMAL = "\033[0m"
 
 
-def ljust_wide(in_str, padding):
+def ljust_wide(in_str: str, padding: int):
     return in_str + " " * (padding - utf8_width(in_str))
 
 
-def columnize(caption_list, callback, *args, **kwargs):
+def columnize(caption_list: List[str], callback: Callable, *args, **kwargs) -> str:
     """
     Take a list of captions and values and columnize the output so that
     shorter captions are padded to be the same length as the longest caption.
@@ -43,21 +44,21 @@ def columnize(caption_list, callback, *args, **kwargs):
     The callback gives us the ability to do things like replacing None values
     with the string "None" (see none_wrap_columnize_callback()).
     """
-    indent = kwargs.get("indent", 0)
-    caption_list = [" " * indent + caption for caption in caption_list]
-    columns = get_terminal_width()
-    padding = sorted(map(utf8_width, caption_list))[-1] + 1
+    indent: int = kwargs.get("indent", 0)
+    caption_list: List[str] = [" " * indent + caption for caption in caption_list]
+    columns: int = get_terminal_width()
+    padding: int = sorted(map(utf8_width, caption_list))[-1] + 1
     if columns:
         padding = min(padding, int(columns / 2))
-    padded_list = []
+    padded_list: List[str] = []
     for caption in caption_list:
-        lines = format_name(caption, indent, padding - 1).split("\n")
+        lines: List[str] = format_name(caption, indent, padding - 1).split("\n")
         lines[-1] = ljust_wide(lines[-1], padding) + "%s"
-        fixed_caption = "\n".join(lines)
+        fixed_caption: str = "\n".join(lines)
         padded_list.append(fixed_caption)
 
     lines = list(zip(padded_list, args))
-    output = []
+    output: List[str] = []
     for (caption, value) in lines:
         kwargs["caption"] = caption
         if isinstance(value, dict):
@@ -80,7 +81,7 @@ def columnize(caption_list, callback, *args, **kwargs):
     return "\n".join(output)
 
 
-def format_name(name, indent, max_length):
+def format_name(name: str, indent: int, max_length: int) -> str:
     """
     Formats a potentially long name for multi-line display, giving
     it a columned effect.  Assumes the first line is already
@@ -89,6 +90,7 @@ def format_name(name, indent, max_length):
     if not name or not max_length or (max_length - indent) <= 2 or not isinstance(name, str):
         return name
     if not isinstance(name, str):
+        # FIXME This is not necessary in Python 3 code
         name = name.decode("utf-8")
     words = name.split()
     lines = []
@@ -134,11 +136,11 @@ def format_name(name, indent, max_length):
     return "\n".join(lines)
 
 
-def highlight_by_filter_string_columnize_cb(template_str, *args, **kwargs):
+def highlight_by_filter_string_columnize_cb(template_str: str, *args, **kwargs) -> str:
     """
     Takes a template string and arguments and highlights word matches
-    when the value contains a match to the filter_string.This occurs
-    only when the row caption exists in the match columns.  Mainly this
+    when the value contains a match to the filter_string. This occurs
+    only when the row caption exists in the match columns. Mainly this
     is a callback meant to be used by columnize().
     """
     filter_string = kwargs.get("filter_string")
@@ -170,7 +172,7 @@ def highlight_by_filter_string_columnize_cb(template_str, *args, **kwargs):
     return template_str % tuple(arglist)
 
 
-def none_wrap_columnize_callback(template_str, *args, **kwargs):
+def none_wrap_columnize_callback(template_str: str, *args, **kwargs) -> str:
     """
     Takes a template string and arguments and replaces any None arguments
     with the word "None" before rendering the template.  Mainly this is
@@ -184,7 +186,7 @@ def none_wrap_columnize_callback(template_str, *args, **kwargs):
     return template_str % tuple(arglist)
 
 
-def echo_columnize_callback(template_str, *args, **kwargs):
+def echo_columnize_callback(template_str: str, *args, **kwargs) -> str:
     """
     Just takes a template string and arguments and renders it.  Mainly
     this is a callback meant to be used by columnize().

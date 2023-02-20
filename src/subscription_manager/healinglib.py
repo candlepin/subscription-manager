@@ -14,12 +14,20 @@
 
 import datetime
 import logging
+from typing import List, TYPE_CHECKING
 
 from rhsm import certificate
 
 from subscription_manager import certlib
 from subscription_manager import entcertlib
 from subscription_manager import injection as inj
+
+if TYPE_CHECKING:
+    from subscription_manager.cert_sorter import CertSorter
+    from subscription_manager.identity import Identity
+    from subscription_manager.plugins import PluginManager
+    from rhsm.connection import UEPConnection
+    from subscription_manager.cp_provider import CPProvider
 
 log = logging.getLogger(__name__)
 
@@ -28,14 +36,14 @@ class HealingActionInvoker(certlib.BaseActionInvoker):
     """
     An object used to run healing nightly. Checks cert validity for today, heals
     if necessary, then checks for 24 hours from now, so we theoretically will
-    never have invalid certificats if subscriptions are available.
+    never have invalid certificates if subscriptions are available.
 
     NOTE: We may update entitlement status in this class, but we do not
           update entitlement certs, since we are inside a lock. So a
           EntCertActionInvoker.update() needs to follow a HealingActionInvoker.update()
     """
 
-    def _do_update(self):
+    def _do_update(self) -> int:
         action = HealingUpdateAction()
         return action.perform()
 
@@ -49,7 +57,7 @@ class HealingUpdateAction(object):
     If either show incomplete entitlement, ask the RHSM API to
     auto attach pools to fix entitlement.
 
-    Attemps to avoid gaps in entitlement coverage.
+    Attempts to avoid gaps in entitlement coverage.
 
     Used by subscription-manager if the "autoheal" options
     are enabled.
@@ -63,16 +71,16 @@ class HealingUpdateAction(object):
     """
 
     def __init__(self):
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
-        self.report = entcertlib.EntCertUpdateReport()
-        self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
+        self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+        self.uep: UEPConnection = self.cp_provider.get_consumer_auth_cp()
+        self.report: entcertlib.EntCertUpdateReport = entcertlib.EntCertUpdateReport()
+        self.plugin_manager: PluginManager = inj.require(inj.PLUGIN_MANAGER)
 
     def perform(self):
         # inject
-        identity = inj.require(inj.IDENTITY)
-        uuid = identity.uuid
-        consumer = self.uep.getConsumer(uuid)
+        identity: Identity = inj.require(inj.IDENTITY)
+        uuid: str = identity.uuid
+        consumer: dict = self.uep.getConsumer(uuid)
 
         if "autoheal" not in consumer or not consumer["autoheal"]:
             log.warning("Auto-heal disabled on server, skipping.")
@@ -80,22 +88,22 @@ class HealingUpdateAction(object):
 
         try:
 
-            today = datetime.datetime.now(certificate.GMT())
-            tomorrow = today + datetime.timedelta(days=1)
-            valid_today = False
-            valid_tomorrow = False
+            today: datetime.datetime = datetime.datetime.now(certificate.GMT())
+            tomorrow: datetime.datetime = today + datetime.timedelta(days=1)
+            valid_today: bool = False
+            valid_tomorrow: bool = False
 
             # Check if we're invalid today and heal if so. If we are
             # valid, see if 24h from now is greater than our "valid until"
             # date, and heal for tomorrow if so.
 
-            cs = inj.require(inj.CERT_SORTER)
+            cs: CertSorter = inj.require(inj.CERT_SORTER)
 
             cert_updater = entcertlib.EntCertActionInvoker()
             if not cs.is_valid():
                 log.warning("Found invalid entitlements for today: %s" % today)
                 self.plugin_manager.run("pre_auto_attach", consumer_uuid=uuid)
-                ents = self.uep.bind(uuid, today)
+                ents: List[dict] = self.uep.bind(uuid, today)
                 self.plugin_manager.run("post_auto_attach", consumer_uuid=uuid, entitlement_data=ents)
 
                 # NOTE: we need to call EntCertActionInvoker.update after Healing.update

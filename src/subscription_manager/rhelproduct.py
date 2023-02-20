@@ -24,21 +24,27 @@ import re
 #       may or may not be a RHEL "branded" Product. See rhelentbranding for
 #       code that handles finding and comparing RHEL "branded" Product objects.
 #
+from typing import TYPE_CHECKING, Optional
+
+if TYPE_CHECKING:
+    from rhsm.certificate2 import Product
+
+
 class RHELProductMatcher(object):
     """Check a Product object to see if it is a RHEL product.
 
     Compares the provided tags to see if any provide 'rhel-VERSION'.
     """
 
-    def __init__(self, product=None):
-        self.product = product
+    def __init__(self, product: Optional["Product"] = None):
+        self.product: Optional[Product] = product
         # Match "rhel-6" or "rhel-11" or "rhel-alt-7" (bz1510024)
         # but not "rhel-6-server" or "rhel-6-server-highavailabilty"
         # NOTE: we considered rhel(-[\w\d]+)?-\d+$ but decided against it
         # due to possibility of unintentional matches
         self.pattern = r"rhel(-alt)?-\d+$|rhel-5-workstation$"
 
-    def is_rhel(self):
+    def is_rhel(self) -> bool:
         """return true if this is a rhel product cert"""
 
         return any([re.match(self.pattern, tag) for tag in self.product.provided_tags])

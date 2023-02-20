@@ -25,7 +25,7 @@ import socket
 import sys
 import time
 import traceback
-from typing import Optional, Any, Union, List, Dict, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 from pathlib import Path
 import re
 import enum
@@ -547,7 +547,7 @@ class ContentConnection(BaseConnection):
             handler="/", cert_dir=cert_dir, user_agent=user_agent, **kwargs
         )
 
-    def get_versions(self, path: str, cert_key_pairs: list = None) -> Union[dict, None]:
+    def get_versions(self, path: str, cert_key_pairs: Iterable[Tuple[str, str]] = None) -> Union[dict, None]:
         """
         Get list of available release versions from the given path
         :param path: path, where is simple text file containing supported release versions
@@ -1722,7 +1722,7 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s/packages" % self.sanitize(consumer_uuid)
         return self.conn.request_put(method, pkg_dicts, description=_("Updating profile information"))
 
-    def updateCombinedProfile(self, consumer_uuid: str, profile: dict) -> dict:
+    def updateCombinedProfile(self, consumer_uuid: str, profile: List[Dict]) -> dict:
         """
         Updates the costumers' combined profile containing package profile,
         enabled repositories and dnf modules.

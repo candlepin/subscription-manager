@@ -14,7 +14,7 @@
 import base64
 import json
 import logging
-from typing import Optional
+from typing import Optional, Dict
 
 from subscription_manager.identity import ConsumerIdentity
 from subscription_manager import utils
@@ -55,38 +55,38 @@ class CPProvider:
         # FIXME: This does not make much sense to call this method and then rewrite almost everything
         # with None
         self.set_connection_info()
-        self.correlation_id = None
-        self.username = None
-        self.password = None
-        self.token = None
-        self.token_username = None
-        self.cdn_hostname = None
-        self.cdn_port = None
-        self.cert_file = ConsumerIdentity.certpath()
-        self.key_file = ConsumerIdentity.keypath()
-        self.server_hostname = None
-        self.server_port = None
-        self.server_prefix = None
+        self.correlation_id: Optional[str] = None
+        self.username: Optional[str] = None
+        self.password: Optional[str] = None
+        self.token: Optional[str] = None
+        self.token_username: Optional[str] = None
+        self.cdn_hostname: Optional[str] = None
+        self.cdn_port: Optional[str] = None
+        self.cert_file: str = ConsumerIdentity.certpath()
+        self.key_file: str = ConsumerIdentity.keypath()
+        self.server_hostname: Optional[str] = None
+        self.server_port: Optional[int] = None
+        self.server_prefix: Optional[str] = None
         self.proxy_hostname = None
-        self.proxy_port = None
-        self.proxy_user = None
-        self.proxy_password = None
-        self.no_proxy = None
+        self.proxy_port: Optional[int] = None
+        self.proxy_user: Optional[str] = None
+        self.proxy_password: Optional[str] = None
+        self.no_proxy: Optional[bool] = None
 
     # Reread the config file and prefer arguments over config values
     # then recreate connections
     def set_connection_info(
         self,
-        host=None,
-        ssl_port=None,
-        handler=None,
-        cert_file=None,
-        key_file=None,
-        proxy_hostname_arg=None,
-        proxy_port_arg=None,
-        proxy_user_arg=None,
-        proxy_password_arg=None,
-        no_proxy_arg=None,
+        host: Optional[str] = None,
+        ssl_port: Optional[int] = None,
+        handler: Optional[str] = None,
+        cert_file: Optional[str] = None,
+        key_file: Optional[str] = None,
+        proxy_hostname_arg: Optional[str] = None,
+        proxy_port_arg: Optional[int] = None,
+        proxy_user_arg: Optional[str] = None,
+        proxy_password_arg: Optional[str] = None,
+        no_proxy_arg: Optional[bool] = None,
     ):
         self.cert_file = ConsumerIdentity.certpath()
         self.key_file = ConsumerIdentity.keypath()
@@ -105,18 +105,18 @@ class CPProvider:
 
     # Set username and password used for basic_auth without
     # modifying previously set options
-    def set_user_pass(self, username=None, password=None):
+    def set_user_pass(self, username: Optional[str] = None, password: Optional[str] = None) -> None:
         self.username = username
         self.password = password
         self.basic_auth_cp = None
 
-    def _parse_token(self, token):
+    def _parse_token(self, token: str) -> Dict:
         # FIXME: make this more reliable
         _header, payload, _signature = token.split(".")
         payload += "=" * (4 - (len(payload) % 4))  # pad to the appropriate length
         return json.loads(base64.b64decode(payload))
 
-    def set_token(self, token=None):
+    def set_token(self, token: Optional[str] = None) -> None:
         self.token = token
         # FIXME: make this more reliable
         if token:
@@ -126,12 +126,12 @@ class CPProvider:
         self.keycloak_auth_cp = None
 
     # set up info for the connection to the cdn for finding release versions
-    def set_content_connection_info(self, cdn_hostname=None, cdn_port=None):
+    def set_content_connection_info(self, cdn_hostname: Optional[str] = None, cdn_port: Optional[int] = None):
         self.cdn_hostname = cdn_hostname
         self.cdn_port = cdn_port
         self.content_connection = None
 
-    def set_correlation_id(self, correlation_id):
+    def set_correlation_id(self, correlation_id: str):
         self.correlation_id = correlation_id
 
     # Force connections to be re-initialized
@@ -145,15 +145,13 @@ class CPProvider:
     def get_client_version() -> str:
         """
         Try to get version of subscription manager
-        :return: string with version of subscription-manager
         """
         return " subscription-manager/%s" % utils.get_client_versions()["subscription-manager"]
 
     @staticmethod
-    def get_dbus_sender():
+    def get_dbus_sender() -> str:
         """
         Try to get D-Bus sender
-        :return: string with d-bus sender
         """
         dbus_sender = DBusSender()
         if dbus_sender.cmd_line is not None:
@@ -164,7 +162,6 @@ class CPProvider:
     def close_all_connections(self) -> None:
         """
         Try to close all connections to candlepin server, CDN, etc.
-        :return: None
         """
         if self.consumer_auth_cp is not None:
             log.debug("Closing auth/consumer connection...")
@@ -203,23 +200,24 @@ class CPProvider:
         if self.keycloak_auth_cp:
             return self.keycloak_auth_cp
 
-        uep = self.get_no_auth_cp()
+        uep: connection.UEPConnection = self.get_no_auth_cp()
 
         if not uep.has_capability("keycloak_auth"):
+            # FIXME This error class should be instantiated
             raise TokenAuthUnsupportedException
 
         # FIXME: make this more reliable
-        token_type = self._parse_token(token)["typ"]
+        token_type: str = self._parse_token(token)["typ"]
         if token_type.lower() == "bearer":
             access_token = token
         else:
-            status = uep.getStatus()
+            status: Dict = uep.getStatus()
             auth_url = status["keycloakAuthUrl"]
             realm = status["keycloakRealm"]
             resource = status["keycloakResource"]
             keycloak_instance = connection.KeycloakConnection(realm, auth_url, resource)
 
-            access_token = keycloak_instance.get_access_token_through_refresh(token)
+            access_token: str = keycloak_instance.get_access_token_through_refresh(token)
 
         self.set_token(access_token)
 

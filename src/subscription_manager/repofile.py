@@ -15,6 +15,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from typing import Dict, List, Literal, Optional, TextIO, Tuple, TYPE_CHECKING
 
 from iniparse import RawConfigParser as ConfigParser
 import logging
@@ -39,6 +40,10 @@ from rhsm.config import get_config_parser
 
 from rhsmlib.services import config
 
+if TYPE_CHECKING:
+    from subscription_manager.model import Content
+    from subscription_manager.repolib import YumReleaseverSource
+
 log = logging.getLogger(__name__)
 
 conf = config.Config(get_config_parser())
@@ -51,7 +56,7 @@ HAS_YUM = "yum" in sys.modules
 
 class Repo(dict):
     # (name, mutable, default) - The mutability information is only used in disconnected cases
-    PROPERTIES = {
+    PROPERTIES: Dict[str, Tuple[int, Optional[Literal["0", "1"]]]] = {
         "name": (0, None),
         "baseurl": (0, None),
         "enabled": (1, "1"),
@@ -70,17 +75,18 @@ class Repo(dict):
         "ui_repoid_vars": (0, None),
     }
 
-    def __init__(self, repo_id, existing_values=None):
+    def __init__(self, repo_id: str, existing_values: List = None):
+        # FIXME Missing super() call
         if HAS_DEB822 is True:
             self.PROPERTIES["arches"] = (1, None)
 
         # existing_values is a list of 2-tuples
         existing_values = existing_values or []
-        self.id = self._clean_id(repo_id)
+        self.id: str = self._clean_id(repo_id)
 
         # used to store key order, so we can write things out in the order
         # we read them from the config.
-        self._order = []
+        self._order: List[str] = []
 
         self.content_type = None
 
@@ -104,13 +110,15 @@ class Repo(dict):
         return new_repo
 
     @classmethod
-    def from_ent_cert_content(cls, content, baseurl, ca_cert, release_source):
+    def from_ent_cert_content(
+        cls, content: "Content", baseurl: str, ca_cert: str, release_source: "YumReleaseverSource"
+    ) -> "Repo":
         """Create an instance of Repo() from an ent_cert.EntitlementCertContent().
 
         And the other out of band info we need including baseurl, ca_cert, and
         the release version string.
         """
-        repo = cls(content.label)
+        repo: Repo = cls(content.label)
 
         repo.content_type = content.content_type
 
@@ -161,7 +169,7 @@ class Repo(dict):
         return repo
 
     @staticmethod
-    def _set_proxy_info(repo):
+    def _set_proxy_info(repo: "Repo") -> "Repo":
         proxy = ""
 
         proxy_scheme = conf["server"]["proxy_scheme"]
@@ -195,7 +203,7 @@ class Repo(dict):
         return repo
 
     @staticmethod
-    def _expand_releasever(release_source, contenturl):
+    def _expand_releasever(release_source: "YumReleaseverSource", contenturl: str) -> str:
         # no $releasever to expand
         if release_source.marker not in contenturl:
             return contenturl
@@ -210,7 +218,7 @@ class Repo(dict):
         #       trusted.
         return contenturl.replace(release_source.marker, expansion)
 
-    def _clean_id(self, repo_id):
+    def _clean_id(self, repo_id: str) -> str:
         """
         Format the config file id to contain only characters that yum expects
         (we'll just replace 'bad' chars with -)
@@ -225,7 +233,7 @@ class Repo(dict):
 
         return new_id
 
-    def items(self):
+    def items(self) -> Tuple[Tuple[str, Tuple[int, Optional[Literal["0", "1"]]]], ...]:
         """
         Called when we fetch the items for this yum repo to write to disk.
         """
@@ -238,12 +246,12 @@ class Repo(dict):
         # to get into our dict.
         return tuple([(k, self[k]) for k in self._order if k in self and self[k]])
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: str, value: Optional[Literal["0", "1"]]):
         if key not in self._order:
             self._order.append(key)
         dict.__setitem__(self, key, value)
 
-    def __str__(self):
+    def __str__(self) -> str:
         s = []
         s.append("[%s]" % self.id)
         for k in self.PROPERTIES:
@@ -254,15 +262,14 @@ class Repo(dict):
 
         return "\n".join(s)
 
-    def __eq__(self, other):
+    def __eq__(self, other: "Repo") -> bool:
         return self.id == other.id
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.id)
 
 
-def manage_repos_enabled():
-
+def manage_repos_enabled() -> bool:
     try:
         manage_repos = conf["rhsm"].get_int("manage_repos")
     except ValueError as e:
@@ -289,12 +296,12 @@ class TidyWriter(object):
     versions.
     """
 
-    def __init__(self, backing_file):
+    def __init__(self, backing_file: TextIO):
         self.backing_file = backing_file
-        self.ends_with_newline = False
-        self.writing_empty_lines = False
+        self.ends_with_newline: bool = False
+        self.writing_empty_lines: bool = False
 
-    def write(self, line):
+    def write(self, line: str) -> None:
         lines = line.split("\n")
         i = 0
         while i < len(lines):
@@ -317,7 +324,7 @@ class TidyWriter(object):
         else:
             self.ends_with_newline = False
 
-    def close(self):
+    def close(self) -> None:
         if not self.ends_with_newline:
             self.backing_file.write("\n")
 
@@ -327,34 +334,33 @@ class RepoFileBase(object):
     Base class for managing repository.
     """
 
-    PATH = None
-    NAME = None
-    REPOFILE_HEADER = None
+    PATH: str = None
+    NAME: str = None
+    REPOFILE_HEADER: str = None
 
-    def __init__(self, path=None, name=None):
-        # note PATH get's expanded with chroot info, etc
+    def __init__(self, path: Optional[str] = None, name: Optional[str] = None):
+        # PATH gets expanded with chroot info, etc
         path = path or self.PATH
         name = name or self.NAME
-        self.path = Path.join(path, name)
-        self.repos_dir = Path.abs(path)
-        self.manage_repos = manage_repos_enabled()
+        self.path: str = Path.join(path, name)
+        self.repos_dir: str = Path.abs(path)
+        self.manage_repos: bool = manage_repos_enabled()
         if self.manage_repos is True:
             self.create()
 
     # Easier than trying to mock/patch os.path.exists
-    def path_exists(self, path):
+    def path_exists(self, path: str) -> bool:
         """
         Wrapper around os.path.exists
         """
         return os.path.exists(path)
 
-    def exists(self):
+    def exists(self) -> bool:
         return self.path_exists(self.path)
 
-    def create_dir_path(self):
+    def create_dir_path(self) -> None:
         """
         Try to create directory for .repo files
-        :return: None
         """
         if not self.path_exists(self.repos_dir):
             log.debug("The directory %s does not exist. Trying to create it" % self.PATH)
@@ -365,10 +371,9 @@ class RepoFileBase(object):
         else:
             log.debug("The directory %s already exists" % self.repos_dir)
 
-    def create(self):
+    def create(self) -> None:
         """
         Try to create new repo file.
-        :return: None
         """
         self.create_dir_path()
         if self.path_exists(self.path) or not self.manage_repos:
@@ -376,15 +381,15 @@ class RepoFileBase(object):
         with open(self.path, "w") as f:
             f.write(self.REPOFILE_HEADER)
 
-    def fix_content(self, content):
+    def fix_content(self, content: str) -> str:
         return content
 
     @classmethod
-    def installed(cls):
+    def installed(cls) -> bool:
         return os.path.exists(Path.abs(cls.PATH))
 
     @classmethod
-    def server_value_repo_file(cls):
+    def server_value_repo_file(cls) -> "RepoFileBase":
         return cls("var/lib/rhsm/repo_server_val/")
 
 
@@ -392,10 +397,10 @@ if HAS_DEB822:
 
     class AptRepoFile(RepoFileBase):
 
-        PATH = "etc/apt/sources.list.d"
-        NAME = "rhsm.sources"
-        CONTENT_TYPES = ["deb"]
-        REPOFILE_HEADER = """#
+        PATH: str = "etc/apt/sources.list.d"
+        NAME: str = "rhsm.sources"
+        CONTENT_TYPES: List[str] = ["deb"]
+        REPOFILE_HEADER: str = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
 #
@@ -409,7 +414,7 @@ if HAS_DEB822:
 #
 """
 
-        def __init__(self, path=None, name=None):
+        def __init__(self, path: Optional[str] = None, name: Optional[str] = None):
             super(AptRepoFile, self).__init__(path, name)
             self.repos822 = []
 
@@ -500,14 +505,14 @@ class YumRepoFile(RepoFileBase, ConfigParser):
 #
 """
 
-    def __init__(self, path=None, name=None):
+    def __init__(self, path: Optional[str] = None, name: Optional[str] = None):
         ConfigParser.__init__(self)
         RepoFileBase.__init__(self, path, name)
 
-    def read(self):
+    def read(self) -> None:
         ConfigParser.read(self, self.path)
 
-    def _configparsers_equal(self, otherparser):
+    def _configparsers_equal(self, otherparser) -> bool:
         if set(otherparser.sections()) != set(self.sections()):
             return False
 
@@ -518,7 +523,7 @@ class YumRepoFile(RepoFileBase, ConfigParser):
                 return False
         return True
 
-    def _has_changed(self):
+    def _has_changed(self) -> bool:
         """
         Check if the version on disk is different from what we have loaded
         """
@@ -526,7 +531,7 @@ class YumRepoFile(RepoFileBase, ConfigParser):
         on_disk.read(self.path)
         return not self._configparsers_equal(on_disk)
 
-    def write(self):
+    def write(self) -> None:
         if not self.manage_repos:
             log.debug("Skipping write due to manage_repos setting: %s" % self.path)
             return
@@ -536,14 +541,14 @@ class YumRepoFile(RepoFileBase, ConfigParser):
                 ConfigParser.write(self, tidy_writer)
                 tidy_writer.close()
 
-    def add(self, repo):
+    def add(self, repo: "Repo") -> None:
         self.add_section(repo.id)
         self.update(repo)
 
-    def delete(self, section):
+    def delete(self, section) -> bool:
         return self.remove_section(section)
 
-    def update(self, repo):
+    def update(self, repo: "Repo") -> None:
         # Need to clear out the old section to allow unsetting options:
         # don't use remove section though, as that will reorder sections,
         # and move whitespace around (resulting in more and more whitespace
@@ -554,7 +559,7 @@ class YumRepoFile(RepoFileBase, ConfigParser):
         for k, v in list(repo.items()):
             ConfigParser.set(self, repo.id, k, v)
 
-    def section(self, section):
+    def section(self, section: str) -> "Repo":
         if self.has_section(section):
             return Repo(section, self.items(section))
 
@@ -579,16 +584,16 @@ class ZypperRepoFile(YumRepoFile):
 #
 """
 
-    def __init__(self, path=None, name=None):
+    def __init__(self, path: Optional[str] = None, name: Optional[str] = None):
         super(ZypperRepoFile, self).__init__(path, name)
-        self.gpgcheck = False
-        self.repo_gpgcheck = False
-        self.autorefresh = False
+        self.gpgcheck: bool = False
+        self.repo_gpgcheck: bool = False
+        self.autorefresh: bool = False
         # According to
         # https://github.com/openSUSE/libzypp/blob/67f55b474d67f77c1868955da8542a7acfa70a9f/zypp/media/MediaManager.h#L394
         #   the following values are valid: "yes", "no", "host", "peer"
-        self.gpgkey_ssl_verify = None
-        self.repo_ssl_verify = None
+        self.gpgkey_ssl_verify: Optional[str] = None
+        self.repo_ssl_verify: Optional[str] = None
 
     def read_zypp_conf(self):
         """
@@ -608,7 +613,7 @@ class ZypperRepoFile(YumRepoFile):
         if zypp_cfg.has_option("rhsm-plugin", "repo-ssl-verify"):
             self.repo_ssl_verify = zypp_cfg.get("rhsm-plugin", "repo-ssl-verify")
 
-    def fix_content(self, content):
+    def fix_content(self, content: "Content") -> str:
         self.read_zypp_conf()
         zypper_cont = content.copy()
         sslverify = zypper_cont["sslverify"]
@@ -654,7 +659,7 @@ class ZypperRepoFile(YumRepoFile):
 
         baseurl = zypper_cont["baseurl"]
         parsed = urlparse(baseurl)
-        zypper_query_args = parse_qs(parsed.query)
+        zypper_query_args: Dict[str, str] = parse_qs(parsed.query)
 
         if sslverify and sslverify in ["1"]:
             if self.repo_ssl_verify:
@@ -685,21 +690,21 @@ class ZypperRepoFile(YumRepoFile):
 
     # We need to overwrite this, to avoid name clashes with yum's server_val_repo_file
     @classmethod
-    def server_value_repo_file(cls):
+    def server_value_repo_file(cls) -> "ZypperRepoFile":
         return cls("var/lib/rhsm/repo_server_val/", "zypper_{}".format(cls.NAME))
 
 
-def init_repo_file_classes():
-    repo_file_classes = [YumRepoFile, ZypperRepoFile]
+def init_repo_file_classes() -> List[Tuple[type(RepoFileBase), str]]:
+    repo_file_classes: List[type(RepoFileBase)] = [YumRepoFile, ZypperRepoFile]
     if HAS_DEB822:
         repo_file_classes.append(AptRepoFile)
-    _repo_files = [
+    _repo_files: List[Tuple[type(RepoFileBase), type(RepoFileBase)]] = [
         (RepoFile, RepoFile.server_value_repo_file) for RepoFile in repo_file_classes if RepoFile.installed()
     ]
     return _repo_files
 
 
-def get_repo_file_classes():
+def get_repo_file_classes() -> List[Tuple[type(RepoFileBase), type(RepoFileBase)]]:
     global repo_files
     if not repo_files:
         repo_files = init_repo_file_classes()

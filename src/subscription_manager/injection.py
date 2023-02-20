@@ -12,6 +12,8 @@
 # in this software or its documentation.
 #
 # Supported Features:
+from typing import Dict
+
 IDENTITY = "IDENTITY"
 CERT_SORTER = "CERT_SORTER"
 PRODUCT_DATE_RANGE_CALCULATOR = "PRODUCT_DATE_RANGE_CALCULATOR"
@@ -49,9 +51,9 @@ class FeatureBroker(object):
     """
 
     def __init__(self):
-        self.providers = {}
+        self.providers: Dict[str, object] = {}
 
-    def provide(self, feature, provider):
+    def provide(self, feature: str, provider: object) -> None:
         """
         Provide an implementation for a feature.
 
@@ -62,7 +64,7 @@ class FeatureBroker(object):
         """
         self.providers[feature] = provider
 
-    def require(self, feature, *args, **kwargs):
+    def require(self, feature: str, *args, **kwargs) -> object:
         """
         Require an implementation for a feature. Can be used to create objects
         without requiring an exact implementation to use.
@@ -84,7 +86,7 @@ class FeatureBroker(object):
         return self.providers[feature]
 
 
-def nonSingleton(other):
+def nonSingleton(other: type) -> object:
     """
     Creates a factory method for a class. Passes args to the constructor
     in order to create a new object every time it is required.
@@ -103,12 +105,15 @@ FEATURES = FeatureBroker()
 
 # Small wrapper functions to make usage look a little cleaner, can use these
 # instead of the global:
-def require(feature, *args, **kwargs):
+def require(feature: str, *args, **kwargs):
+    # NOTE This function is not type hinted for a reason. Putting anything here
+    #      makes IDEs and type checkers question what we are doing, it's better
+    #      to assign all types where this function is called.
     global FEATURES
     return FEATURES.require(feature, *args, **kwargs)
 
 
-def provide(feature, provider, singleton=False):
+def provide(feature: str, provider: object, singleton: bool = False) -> None:
     global FEATURES
     if not singleton and isinstance(provider, type):
         provider = nonSingleton(provider)

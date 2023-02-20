@@ -17,6 +17,7 @@
 import logging
 import os
 import sys
+from typing import Optional
 
 import rhsm.config
 import rhsm.connection as connection
@@ -257,7 +258,7 @@ class CliCommand(AbstractCLICommand):
         self.server_versions = get_server_versions(cp, exception_on_timeout=False)
         log.debug("Server Versions: {versions}".format(versions=self.server_versions))
 
-    def main(self, args=None):
+    def main(self, args=None) -> Optional[int]:
 
         # TODO: For now, we disable the CLI entirely. We may want to allow some commands in the future.
         if rhsm.config.in_container():
@@ -269,7 +270,7 @@ class CliCommand(AbstractCLICommand):
                 ),
             )
 
-        config_changed = False
+        config_changed: bool = False
 
         # In testing we sometimes specify args, otherwise use the default:
         if args is None:

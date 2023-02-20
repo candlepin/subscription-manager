@@ -13,53 +13,55 @@
 # in this software or its documentation.
 #
 import logging
+from typing import List, TYPE_CHECKING
+
+from rhsm.connection import GoneException, ExpiredIdentityCertException
 
 from subscription_manager import injection as inj
 
-from rhsm.connection import GoneException, ExpiredIdentityCertException
+if TYPE_CHECKING:
+    from subscription_manager.certlib import BaseActionInvoker, ActionReport
+    from subscription_manager.lock import ActionLock
 
 log = logging.getLogger(__name__)
 
 
 class BaseActionClient(object):
     """
-    An object used to update the certficates, yum repos, and facts for the system.
+    An object used to update the certificates, DNF repos, and facts for the system.
     """
 
-    def __init__(self, skips=None):
+    # FIXME Default for skips should be []
+    def __init__(self, skips: List[type("ActionReport")] = None):
 
-        self._libset = self._get_libset()
-        self.lock = inj.require(inj.ACTION_LOCK)
-        self.report = None
-        self.update_reports = []
-        self.skips = skips or []
+        self._libset: List[BaseActionInvoker] = self._get_libset()
+        self.lock: ActionLock = inj.require(inj.ACTION_LOCK)
+        # FIXME `report` attribute is not used here
+        self.report: ActionReport = None
+        self.update_reports: List[ActionReport] = []
+        self.skips: List[type(ActionReport)] = skips or []
 
-    def _get_libset(self):
+    def _get_libset(self) -> List["BaseActionInvoker"]:
+        # FIXME (?) Raise NotImplementedError, to ensure each subclass is using its own function
         return []
 
-    def update(self, autoheal=False):
+    def update(self, autoheal: bool = False) -> None:
         """
-        Update I{entitlement} certificates and corresponding
-        yum repositiories.
-        @return: A list of update reports
-        @rtype: list
+        Update I{entitlement} certificates and corresponding DNF repositories.
         """
-        lock = self.lock
-
         # TODO: move to using a lock context manager
         try:
-            lock.acquire()
+            self.lock.acquire()
             self.update_reports = self._run_updates(autoheal)
         finally:
-            lock.release()
+            self.lock.release()
 
-    def _run_update(self, lib):
-        update_report = None
+    def _run_update(self, lib: type) -> "ActionReport":
+        update_report: ActionReport = None
 
         try:
             update_report = lib.update()
-        # see bz#852706, reraise GoneException so that
-        # consumer cert deletion works
+        # see bz#852706, reraise GoneException so that consumer cert deletion works
         except GoneException:
             raise
         # raise this so it can be exposed clearly
@@ -74,16 +76,17 @@ class BaseActionClient(object):
 
         return update_report
 
-    def _run_updates(self, autoheal):
+    # FIXME `autoheal` is not used
+    def _run_updates(self, autoheal: bool) -> List["ActionReport"]:
 
-        update_reports = []
+        update_reports: List[ActionReport] = []
 
         for lib in self._libset:
             if type(lib) in self.skips:
                 continue
 
             log.debug("running lib: %s" % lib)
-            update_report = self._run_update(lib)
+            update_report: ActionReport = self._run_update(lib)
 
             # a map/dict may make more sense here
             update_reports.append(update_report)

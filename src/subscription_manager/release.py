@@ -19,15 +19,25 @@ import logging
 import socket
 
 import http.client
+
+from typing import Dict, Iterable, List, Optional, Set, Tuple, TYPE_CHECKING
+
 from rhsm.https import ssl
-from rhsm.connection import NoValidEntitlement
 
 import rhsm.config
+from rhsm.connection import NoValidEntitlement
 
 from subscription_manager import injection as inj
 from subscription_manager import listing
 from subscription_manager import rhelproduct
 from subscription_manager.i18n import ugettext as _
+
+if TYPE_CHECKING:
+    from rhsm.connection import ContentConnection
+    from rhsm.certificate2 import Certificate, Content, EntitlementCertificate, Product, ProductCertificate
+    from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
+
 
 log = logging.getLogger(__name__)
 
@@ -35,7 +45,7 @@ cfg = rhsm.config.get_config_parser()
 
 
 class MultipleReleaseProductsError(ValueError):
-    def __init__(self, certificates):
+    def __init__(self, certificates: Iterable["Certificate"]):
         self.certificates = certificates
         self.certificate_paths = ", ".join([certificate.path for certificate in certificates])
         super(ValueError, self).__init__(
@@ -45,7 +55,7 @@ class MultipleReleaseProductsError(ValueError):
             )
         )
 
-    def translated_message(self):
+    def translated_message(self) -> str:
         return _(
             "Error: More than one release product certificate installed. Certificate paths: %s"
         ) % ", ".join([certificate.path for certificate in self.certificates])
@@ -58,7 +68,7 @@ class ContentConnectionProvider(object):
 
 class ReleaseBackend(object):
     def get_releases(self):
-        provider = self._get_release_version_provider()
+        provider: CdnReleaseVersionProvider = self._get_release_version_provider()
         return provider.get_releases()
 
     def _get_release_version_provider(self):
@@ -85,21 +95,21 @@ class ApiReleaseVersionProvider(object):
 
 class CdnReleaseVersionProvider(object):
     def __init__(self):
-        self.entitlement_dir = inj.require(inj.ENT_DIR)
-        self.product_dir = inj.require(inj.PROD_DIR)
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.content_connection = self.cp_provider.get_content_connection()
+        self.entitlement_dir: EntitlementDirectory = inj.require(inj.ENT_DIR)
+        self.product_dir: ProductDirectory = inj.require(inj.PROD_DIR)
+        self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+        self.content_connection: ContentConnection = self.cp_provider.get_content_connection()
 
-    def get_releases(self):
+    def get_releases(self) -> List[str]:
         # cdn base url
 
         # Find the rhel products
-        release_products = []
-        certificates = set()
-        installed_products = self.product_dir.get_installed_products()
+        release_products: List[Product] = []
+        certificates: Set[ProductCertificate] = set()
+        installed_products: Dict[str, EntitlementCertificate] = self.product_dir.get_installed_products()
         for product_hash in installed_products:
-            product_cert = installed_products[product_hash]
-            products = product_cert.products
+            product_cert: ProductCertificate = installed_products[product_hash]
+            products: List[Product] = product_cert.products
             for product in products:
                 rhel_matcher = rhelproduct.RHELProductMatcher(product)
                 if rhel_matcher.is_rhel():
@@ -113,18 +123,18 @@ class CdnReleaseVersionProvider(object):
             raise MultipleReleaseProductsError(certificates=certificates)
 
         # Note: only release_products with one item can pass previous if-elif
-        release_product = release_products[0]
-        entitlements = self.entitlement_dir.list_for_product(release_product.id)
+        release_product: Product = release_products[0]
+        entitlements: List[EntitlementCertificate] = self.entitlement_dir.list_for_product(release_product.id)
 
         # When there is SCA entitlement certificate, then add this cert to
         # the list too. See: https://bugzilla.redhat.com/show_bug.cgi?id=1924921
-        sca_entitlements = self.entitlement_dir.list_with_sca_mode()
+        sca_entitlements: List[EntitlementCertificate] = self.entitlement_dir.list_with_sca_mode()
         entitlements.extend(sca_entitlements)
 
-        listings = []
-        ent_cert_key_pairs = set()
+        listings: List[str] = []
+        ent_cert_key_pairs: Set[Tuple[str, str]] = set()
         for entitlement in entitlements:
-            contents = entitlement.content
+            contents: List[Content] = entitlement.content
             for content in contents:
                 # ignore content that is not enabled
                 # see bz #820639
@@ -143,11 +153,11 @@ class CdnReleaseVersionProvider(object):
 
         # hmm. We are really only supposed to have one product
         # with one content with one listing file. We shall see.
-        releases = []
+        releases: List[str] = []
         listings = sorted(set(listings))
         for listing_path in listings:
             try:
-                data = self.content_connection.get_versions(
+                data: Optional[dict] = self.content_connection.get_versions(
                     path=listing_path, cert_key_pairs=ent_cert_key_pairs
                 )
             except (socket.error, http.client.HTTPException, ssl.SSLError, NoValidEntitlement) as e:
@@ -170,7 +180,7 @@ class CdnReleaseVersionProvider(object):
         releases_set = sorted(set(releases))
         return releases_set
 
-    def _build_listing_path(self, content_url):
+    def _build_listing_path(self, content_url: str) -> str:
         listing_parts = content_url.split("$releasever", 1)
         listing_base = listing_parts[0]
         # FIXME: cleanup paths ("//"'s, etc)
@@ -179,7 +189,7 @@ class CdnReleaseVersionProvider(object):
 
     # require tags provided by installed products?
 
-    def _is_correct_rhel(self, product_tags, content_tags):
+    def _is_correct_rhel(self, product_tags: List[str], content_tags: List[str]) -> bool:
         # easy to pass a string instead of a list
         assert not isinstance(product_tags, str)
         assert not isinstance(content_tags, str)

@@ -78,7 +78,7 @@ class CloudFactsCollector(collector.FactsCollector):
 
         facts: Dict[str, Union[str, None]] = {}
         if metadata_str is not None:
-            values: dict[str, Union[str, None]] = self.parse_json_content(metadata_str)
+            values: Dict[str, Union[str, None]] = self.parse_json_content(metadata_str)
 
             # Add these three attributes to system facts
             if "instanceId" in values:

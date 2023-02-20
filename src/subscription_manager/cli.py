@@ -14,7 +14,7 @@
 import os
 import sys
 import logging
-from typing import Union
+from typing import Dict, List, Optional, Tuple, Type, Union
 
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
@@ -28,15 +28,14 @@ log = logging.getLogger(__name__)
 
 
 class InvalidCLIOptionError(Exception):
-    def __init__(self, message):
+    def __init__(self, message: str):
         Exception.__init__(self, message)
 
 
-def flush_stdout_stderr():
+def flush_stdout_stderr() -> None:
     """
     Try to flush stdout and stderr, when it is not possible
     due to blocking process, then print error message to log file.
-    :return: None
     """
     # Try to flush all outputs, see BZ: 1350402
     try:
@@ -52,18 +51,26 @@ class AbstractCLICommand(object):
     strategy.
     """
 
-    def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):
-        self.name = name
-        self.shortdesc = shortdesc
-        self.primary = primary
-        self.aliases = aliases or []
+    # FIXME Default for aliases should be []
+    def __init__(
+        self,
+        name: str = "cli",
+        aliases: List[str] = None,
+        shortdesc: Optional[str] = None,
+        primary: bool = False,
+    ):
+        self.name: str = name
+        self.shortdesc: Optional[str] = shortdesc
+        self.primary: bool = primary
+        self.aliases: List[str] = aliases or []
 
-        self.parser = self._create_argparser()
+        self.parser: ArgumentParser = self._create_argparser()
 
-    def main(self, args=None):
+    # FIXME What is the type of `args`?
+    def main(self, args=None) -> None:
         raise NotImplementedError("Commands must implement: main(self, args=None)")
 
-    def _validate_options(self):
+    def _validate_options(self) -> None:
         """
         Validates the command's arguments.
         @raise InvalidCLIOptionError: Raised when arg validation fails.
@@ -71,20 +78,19 @@ class AbstractCLICommand(object):
         # No argument validation by default.
         pass
 
-    def _get_usage(self):
+    def _get_usage(self) -> str:
         """
-        Usage format strips any leading 'usage' so
-        do not include it
+        Usage format strips any leading 'usage' so do not include it.
         """
         return _("%(prog)s {name} [OPTIONS]").format(name=self.name)
 
-    def _do_command(self):
+    def _do_command(self) -> None:
         """
         Does the work that this command intends.
         """
         raise NotImplementedError("Commands must implement: _do_command(self)")
 
-    def _create_argparser(self):
+    def _create_argparser(self) -> ArgumentParser:
         """
         Creates an argparse.ArgumentParser object for this command.
 
@@ -97,37 +103,40 @@ class AbstractCLICommand(object):
 
 # taken wholseale from rho...
 class CLI(object):
-    def __init__(self, command_classes=None):
+    def __init__(self, command_classes: List[Type[AbstractCLICommand]] = None):
         command_classes = command_classes or []
-        self.cli_commands = {}
-        self.cli_aliases = {}
+        self.cli_commands: Dict[str, AbstractCLICommand] = {}
+        self.cli_aliases: Dict[str, AbstractCLICommand] = {}
         for clazz in command_classes:
-            cmd = clazz()
+            cmd: AbstractCLICommand = clazz()
             # ignore the base class
             if cmd.name != "cli":
                 self.cli_commands[cmd.name] = cmd
                 for alias in cmd.aliases:
                     self.cli_aliases[alias] = cmd
 
-    def _add_command(self, cmd):
+    def _add_command(self, cmd: AbstractCLICommand):
         self.cli_commands[cmd.name] = cmd
 
-    def _default_command(self):
+    def _default_command(self) -> None:
         self._usage()
 
-    def _usage(self):
+    def _usage(self) -> None:
         print(_("Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]") % os.path.basename(sys.argv[0]))
         print("\r")
         items = sorted(self.cli_commands.items())
-        items_primary = []
-        items_other = []
+        items_primary: List[Tuple[str, str]] = []
+        items_other: List[Tuple[str, str]] = []
+
+        name: str
+        cmd: AbstractCLICommand
         for (name, cmd) in items:
             if cmd.primary:
                 items_primary.append(("  " + name, cmd.shortdesc))
             else:
                 items_other.append(("  " + name, cmd.shortdesc))
 
-        all_items = (
+        all_items: List[Tuple[str, str]] = (
             [(_("Primary Modules:"), "\n")]
             + items_primary
             + [("\n" + _("Other Modules:"), "\n")]
@@ -135,11 +144,11 @@ class CLI(object):
         )
         self._do_columnize(all_items)
 
-    def _do_columnize(self, items_list):
+    def _do_columnize(self, items_list: List[Tuple[str, str]]) -> None:
         modules, descriptions = list(zip(*items_list))
         print(columnize(modules, echo_columnize_callback, *descriptions) + "\n")
 
-    def _find_best_match(self, args):
+    def _find_best_match(self, args: List[str]) -> Optional[AbstractCLICommand]:
         """
         Returns the subcommand class that best matches the subcommand specified
         in the argument list. For example, if you have two commands that start
@@ -149,7 +158,7 @@ class CLI(object):
 
         This function ignores the arguments which begin with --
         """
-        possiblecmd = []
+        possiblecmd: List[str] = []
         for arg in args[1:]:
             if not arg.startswith("-"):
                 possiblecmd.append(arg)
@@ -157,10 +166,10 @@ class CLI(object):
         if not possiblecmd:
             return None
 
-        cmd = None
-        i = len(possiblecmd)
+        cmd: Optional[AbstractCLICommand] = None
+        i: int = len(possiblecmd)
         while cmd is None:
-            key = " ".join(possiblecmd[:i])
+            key: str = " ".join(possiblecmd[:i])
             if key is None or key == "":
                 break
 
@@ -171,8 +180,8 @@ class CLI(object):
 
         return cmd
 
-    def main(self):
-        cmd = self._find_best_match(sys.argv)
+    def main(self) -> Optional[int]:
+        cmd: AbstractCLICommand = self._find_best_match(sys.argv)
         if len(sys.argv) < 2:
             self._default_command()
             flush_stdout_stderr()
@@ -180,7 +189,7 @@ class CLI(object):
         if not cmd:
             self._usage()
             # Allow for a 0 return code if just calling --help
-            return_code = 1
+            return_code: int = 1
             if (len(sys.argv) > 1) and (sys.argv[1] == "--help"):
                 return_code = 0
             flush_stdout_stderr()
@@ -189,6 +198,8 @@ class CLI(object):
         try:
             return cmd.main()
         except InvalidCLIOptionError as error:
+            # FIXME Re-raise the exception instead. Returning None
+            #  (a non-integer) results in return code 0, which is not correct.
             print(error)
 
 

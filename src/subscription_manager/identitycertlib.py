@@ -13,10 +13,15 @@
 #
 
 import logging
-
+from typing import TYPE_CHECKING
 
 from subscription_manager import certlib
 from subscription_manager import injection as inj
+
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
+    from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.identity import ConsumerIdentity, Identity
 
 log = logging.getLogger(__name__)
 
@@ -29,7 +34,7 @@ class IdentityCertActionInvoker(certlib.BaseActionInvoker):
     for updates.
     """
 
-    def _do_update(self):
+    def _do_update(self) -> certlib.ActionReport:
         action = IdentityUpdateAction()
         return action.perform()
 
@@ -41,14 +46,14 @@ class IdentityUpdateAction(object):
     1 indicates identity cert was updated."""
 
     def __init__(self):
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
+        self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+        self.uep: UEPConnection = self.cp_provider.get_consumer_auth_cp()
 
         # Use the default report
         self.report = certlib.ActionReport()
 
-    def perform(self):
-        identity = inj.require(inj.IDENTITY)
+    def perform(self) -> certlib.ActionReport:
+        identity: Identity = inj.require(inj.IDENTITY)
 
         if not identity.is_valid():
             # we could in theory try to update the id in the
@@ -60,15 +65,15 @@ class IdentityUpdateAction(object):
 
         return self._update_cert(identity)
 
-    def _update_cert(self, identity):
+    def _update_cert(self, identity: "Identity") -> certlib.ActionReport:
 
         # to avoid circular imports
         # FIXME: move persist stuff here
         from subscription_manager import managerlib
 
-        idcert = identity.consumer
+        idcert: ConsumerIdentity = identity.consumer
 
-        consumer = self._get_consumer(identity)
+        consumer: dict = self._get_consumer(identity)
 
         # only write the cert if the serial has changed
         # FIXME: this would be a good place to have a Consumer/ConsumerCert
@@ -84,7 +89,7 @@ class IdentityUpdateAction(object):
         self.report._status = 1
         return self.report
 
-    def _get_consumer(self, identity):
+    def _get_consumer(self, identity: "Identity") -> dict:
         # FIXME: not much for error handling here
-        consumer = self.uep.getConsumer(identity.uuid)
+        consumer: dict = self.uep.getConsumer(identity.uuid)
         return consumer

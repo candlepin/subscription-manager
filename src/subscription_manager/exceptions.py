@@ -13,6 +13,8 @@
 # in this software or its documentation.
 #
 import inspect
+from typing import Callable, Dict, Optional, Tuple
+
 from socket import error as socket_error, gaierror as socket_gaierror
 from rhsm.https import ssl, httplib
 
@@ -71,7 +73,7 @@ RESTLIB_MESSAGE = _("{message} (HTTP error code {code}: {title})")
 class ExceptionMapper(object):
     def __init__(self):
 
-        self.message_map = {
+        self.message_map: Dict[str, Callable] = {
             socket_error: (SOCKET_MESSAGE, self.format_using_template),
             socket_gaierror: (GAI_MESSAGE, self.format_generic_oserror),
             ConnectionError: (CONNECTION_MESSAGE, self.format_generic_oserror),
@@ -106,7 +108,7 @@ class ExceptionMapper(object):
         """Return unaltered message template."""
         return message
 
-    def format_using_error(self, exc: Exception, _: str) -> str:
+    def format_using_error(self, exc: Exception, _: Optional[str]) -> str:
         """Return string representation of the error."""
         return str(exc)
 
@@ -146,15 +148,25 @@ class ExceptionMapper(object):
             file=bad_ca_cert_error.cert_path, reason=str(bad_ca_cert_error.ssl_exc)
         )
 
-    def format_ssl_error(self, ssl_error, message_template):
+    def format_ssl_error(self, ssl_error: ssl.SSLError, message_template: str):
         return message_template % ssl_error
 
-    def format_restlib_exception(self, restlib_exception, message_template):
+    def format_restlib_exception(
+        self,
+        restlib_exception: connection.RestlibException,
+        message_template: str,
+    ):
         return message_template.format(
-            message=restlib_exception.msg, code=restlib_exception.code, title=restlib_exception.title
+            message=restlib_exception.msg,
+            code=restlib_exception.code,
+            title=restlib_exception.title,
         )
 
-    def format_rate_limit_exception(self, rate_limit_exception, _):
+    def format_rate_limit_exception(
+        self,
+        rate_limit_exception: connection.RateLimitExceededException,
+        _: str,
+    ):
         if rate_limit_exception.retry_after is not None:
             return RATE_LIMIT_EXPIRATION % str(rate_limit_exception.retry_after)
         else:
@@ -194,9 +206,12 @@ class ExceptionMapper(object):
         representation is returned.
         """
         # Lookup by __class__ instead of type to support old style classes
-        exception_classes = inspect.getmro(exception.__class__)
+        exception_classes: Tuple[type(Exception), ...] = inspect.getmro(exception.__class__)
+        exception_class: type(Exception)
         for exception_class in exception_classes:
             if exception_class in self.message_map:
+                message_template: str
+                formatter: Callable
                 message_template, formatter = self.message_map[exception_class]
                 return formatter(exception, message_template)
         return self.format_using_error(exception, None)

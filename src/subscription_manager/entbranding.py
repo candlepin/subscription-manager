@@ -17,45 +17,49 @@
 
 
 import logging
+from typing import List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from rhsm.certificate2 import EntitlementCertificate, Product
 
 log = logging.getLogger(__name__)
 
 
 class BrandsInstaller(object):
-    def __init__(self, ent_certs=None):
-        self.ent_certs = ent_certs
+    def __init__(self, ent_certs: Optional[List["EntitlementCertificate"]] = None):
+        self.ent_certs: Optional[List[EntitlementCertificate]] = ent_certs
 
         # find brand installers
         self.brand_installers = self._get_brand_installers()
 
-    def _get_brand_installers(self):
+    def _get_brand_installers(self) -> List["BrandInstaller"]:
         """returns a list or iterable of BrandInstaller(s)"""
         return []
 
-    def install(self):
+    def install(self) -> None:
         for brand_installer in self.brand_installers:
             brand_installer.install()
 
 
 class BrandInstaller(object):
-    """Install branding info for a set of entititlement certs."""
+    """Install branding info for a set of entitlement certs."""
 
-    def __init__(self, ent_certs=None):
-        self.ent_certs = ent_certs
+    def __init__(self, ent_certs: Optional[List["EntitlementCertificate"]] = None):
+        self.ent_certs: Optional[List["EntitlementCertificate"]] = ent_certs
 
         log.debug("BrandInstaller ent_certs:  %s" % [x.serial for x in ent_certs or []])
 
-    def install(self):
+    def install(self) -> None:
         """Create a Brand object if needed, and save it."""
 
-        brand_picker = self._get_brand_picker()
-        new_brand = brand_picker.get_brand()
+        brand_picker: BrandPicker = self._get_brand_picker()
+        new_brand: Brand = brand_picker.get_brand()
 
         # no branded name info to install
         if not new_brand:
             return
 
-        current_brand = self._get_current_brand()
+        current_brand: Brand = self._get_current_brand()
 
         log.debug("Current branded name info, if any: %s" % current_brand.name)
         log.debug("Fresh ent cert has branded product info: %s" % new_brand.name)
@@ -65,13 +69,13 @@ class BrandInstaller(object):
         else:
             log.debug("Product branding info does not need to be updated")
 
-    def _get_brand_picker(self):
+    def _get_brand_picker(self) -> "BrandPicker":
         raise NotImplementedError
 
-    def _get_current_brand(self):
+    def _get_current_brand(self) -> "Brand":
         raise NotImplementedError
 
-    def _install(self, brand):
+    def _install(self, brand: "Brand") -> None:
         raise NotImplementedError
 
 
@@ -81,22 +85,22 @@ class BrandPicker(object):
     Check installed product certs, and the list of entitlement certs
     passed in, and find the correct branded name, if any."""
 
-    def __init__(self, ent_certs=None):
-        self.ent_certs = ent_certs
+    def __init__(self, ent_certs: Optional[List["EntitlementCertificate"]] = None):
+        self.ent_certs: Optional[List["EntitlementCertificate"]] = ent_certs
 
-    def get_brand(self):
+    def get_brand(self) -> "Brand":
         raise NotImplementedError
 
 
 class Brand(object):
     """Base class for Brand objects."""
 
-    name = None
+    name: Optional[str] = None
 
     # could potentially be a __lt__ etc, though there is some
     # oddness in the compares are not symetric for the empty
-    # cases (ie, we update nothing with something,etc)
-    def is_outdated_by(self, new_brand):
+    # cases (ie, we update nothing with something, etc)
+    def is_outdated_by(self, new_brand: "Brand") -> bool:
         """If a Brand should be replaced with new_brand."""
         if not self.name:
             return True
@@ -113,23 +117,23 @@ class Brand(object):
 class ProductBrand(Brand):
     """A brand for a branded product"""
 
-    def __init__(self, name):
-        self.brand_file = self._get_brand_file()
+    def __init__(self, name: str):
+        self.brand_file: BrandFile = self._get_brand_file()
         self.name = name
 
-    def _get_brand_file(self):
+    def _get_brand_file(self) -> "BrandFile":
         return BrandFile()
 
-    def save(self):
-        brand = self.format_brand(self.name)
+    def save(self) -> None:
+        brand: str = self.format_brand(self.name)
         self.brand_file.write(brand)
 
     @classmethod
-    def from_product(cls, product):
+    def from_product(cls, product: "Product") -> "ProductBrand":
         return cls(product.brand_name)
 
     @staticmethod
-    def format_brand(brand):
+    def format_brand(brand: str) -> str:
         if not brand.endswith("\n"):
             brand += "\n"
 
@@ -140,15 +144,15 @@ class CurrentBrand(Brand):
     """The currently installed brand"""
 
     def __init__(self):
-        self.brand_file = self._get_brand_file()
+        self.brand_file: BrandFile = self._get_brand_file()
         self.load()
 
-    def _get_brand_file(self):
+    def _get_brand_file(self) -> "BrandFile":
         return BrandFile()
 
     def load(self):
         try:
-            brand_info = self.brand_file.read()
+            brand_info: str = self.brand_file.read()
         except IOError:
             log.error("No brand info file found (%s) " % self.brand_file)
             return
@@ -156,7 +160,7 @@ class CurrentBrand(Brand):
         self.name = self.unformat_brand(brand_info)
 
     @staticmethod
-    def unformat_brand(brand):
+    def unformat_brand(brand: str) -> Optional[str]:
         if brand:
             return brand.strip()
         return None
@@ -168,15 +172,15 @@ class BrandFile(object):
     Default is "/var/lib/rhsm/branded_name
     """
 
-    path = "/var/lib/rhsm/branded_name"
+    path: str = "/var/lib/rhsm/branded_name"
 
-    def write(self, brand_info):
+    def write(self, brand_info: str) -> None:
         with open(self.path, "w") as brand_file:
             brand_file.write(brand_info)
 
-    def read(self):
+    def read(self) -> str:
         with open(self.path, "r") as brand_file:
             return brand_file.read()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "<BrandFile path=%s>" % self.path

@@ -12,7 +12,7 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
+from typing import Dict, Iterable, List, Literal, Optional, Set, Tuple, Union, TYPE_CHECKING
 
 from iniparse import RawConfigParser as ConfigParser
 import logging
@@ -37,6 +37,15 @@ from rhsmlib.services import config
 
 from subscription_manager.i18n import ugettext as _
 
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
+
+    from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
+    from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.certlib import Locker
+    from subscription_manager.identity import Identity
+    from subscription_manager.model import Content
+
 log = logging.getLogger(__name__)
 
 conf = config.Config(rhsm.config.get_config_parser())
@@ -60,7 +69,7 @@ class YumPluginManager(object):
     PLUGIN_DISABLED = 0
 
     @staticmethod
-    def is_auto_enable_enabled():
+    def is_auto_enable_enabled() -> bool:
         """
         Automatic enabling of yum plugins can be explicitly disabled in /etc/rhsm/rhsm.conf
         Try to get this configuration.
@@ -80,7 +89,7 @@ class YumPluginManager(object):
         return bool(auto_enable_yum_plugins)
 
     @staticmethod
-    def warning_message(enabled_yum_plugins):
+    def warning_message(enabled_yum_plugins: List[str]) -> str:
         message = _(
             "The yum/dnf plugins: %s were automatically enabled for the benefit of "
             "Red Hat Subscription Management. If not desired, use "
@@ -90,7 +99,7 @@ class YumPluginManager(object):
         return message
 
     @classmethod
-    def _enable_plugins(cls, pkg_mgr_name, plugin_dir):
+    def _enable_plugins(cls, pkg_mgr_name: str, plugin_dir: str) -> List[str]:
         """
         This class method tries to enable plugins for DNF or YUM
         :param pkg_mgr_name: It can be "dnf" or "yum"
@@ -159,7 +168,7 @@ class YumPluginManager(object):
         return enabled_lugins
 
     @classmethod
-    def enable_pkg_plugins(cls):
+    def enable_pkg_plugins(cls) -> List[str]:
         """
         This function tries to enable dnf/yum plugins: subscription-manager and product-id.
         It takes no action, when automatic enabling of yum plugins is disabled in rhsm.conf.
@@ -188,21 +197,21 @@ class YumPluginManager(object):
 class RepoActionInvoker(BaseActionInvoker):
     """Invoker for yum/dnf repo updating related actions."""
 
-    def __init__(self, cache_only=False, locker=None):
+    def __init__(self, cache_only: bool = False, locker: Optional["Locker"] = None):
         super(RepoActionInvoker, self).__init__(locker=locker)
-        self.cache_only = cache_only
-        self.identity = inj.require(inj.IDENTITY)
+        self.cache_only: bool = cache_only
+        self.identity: Identity = inj.require(inj.IDENTITY)
 
-    def _do_update(self):
+    def _do_update(self) -> Union[int, "RepoActionReport"]:
         action = RepoUpdateActionCommand(cache_only=self.cache_only)
         res = action.perform()
         return res
 
-    def is_managed(self, repo):
+    def is_managed(self, repo: Repo) -> bool:
         action = RepoUpdateActionCommand(cache_only=self.cache_only)
         return repo in [c.label for c in action.matching_content()]
 
-    def get_repos(self, apply_overrides=True):
+    def get_repos(self, apply_overrides: bool = True) -> Set[Repo]:
         action = RepoUpdateActionCommand(cache_only=self.cache_only, apply_overrides=apply_overrides)
         repos = action.get_unique_content()
 
@@ -228,12 +237,12 @@ class RepoActionInvoker(BaseActionInvoker):
 
         return current
 
-    def get_repo_file(self):
+    def get_repo_file(self) -> str:
         yum_repo_file = YumRepoFile()
         return yum_repo_file.path
 
     @classmethod
-    def delete_repo_file(cls):
+    def delete_repo_file(cls) -> None:
         for repo_class, server_val_repo_class in get_repo_file_classes():
             repo_file = repo_class()
             server_val_repo_file = server_val_repo_class()
@@ -266,19 +275,19 @@ class YumReleaseverSource(object):
         self.release_status_cache = inj.require(inj.RELEASE_STATUS_CACHE)
         self._expansion = None
 
-        self.identity = inj.require(inj.IDENTITY)
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
+        self.identity: Identity = inj.require(inj.IDENTITY)
+        self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
 
     # FIXME: these guys are really more of model helpers for the object
     #        represent a release.
     @staticmethod
-    def is_not_empty(expansion):
+    def is_not_empty(expansion: Optional[dict]) -> bool:
         if expansion is None or len(expansion) == 0:
             return False
         return True
 
     @staticmethod
-    def is_set(result):
+    def is_set(result: dict) -> bool:
         """Check result for existing, and having a non empty value.
 
         Return True if result has a non empty, non null result['releaseVer']
@@ -293,7 +302,7 @@ class YumReleaseverSource(object):
         except Exception:
             return False
 
-    def get_expansion(self):
+    def get_expansion(self) -> str:
         # mem cache
         if self._expansion:
             return self._expansion
@@ -340,25 +349,25 @@ class RepoUpdateActionCommand(object):
     Returns an RepoActionReport.
     """
 
-    def __init__(self, cache_only=False, apply_overrides=True):
-        self.identity = inj.require(inj.IDENTITY)
+    def __init__(self, cache_only: bool = False, apply_overrides: bool = True):
+        self.identity: Identity = inj.require(inj.IDENTITY)
 
         # These should probably move closer their use
-        self.ent_dir = inj.require(inj.ENT_DIR)
-        self.prod_dir = inj.require(inj.PROD_DIR)
+        self.ent_dir: EntitlementDirectory = inj.require(inj.ENT_DIR)
+        self.prod_dir: ProductDirectory = inj.require(inj.PROD_DIR)
 
         self.ent_source = ent_cert.EntitlementDirEntitlementSource()
 
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = None
+        self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+        self.uep: Optional[UEPConnection] = None
 
-        self.manage_repos = 1
-        self.apply_overrides = apply_overrides
+        self.manage_repos: Union[bool, Literal[0, 1]] = 1
+        self.apply_overrides: bool = apply_overrides
         self.manage_repos = manage_repos_enabled()
 
         self.release = None
         self.overrides = {}
-        self.override_supported = False
+        self.override_supported: bool = False
 
         try:
             self.override_supported = "content_overrides" in get_supported_resources(
@@ -389,7 +398,7 @@ class RepoUpdateActionCommand(object):
         # by the server.
         if self.override_supported:
             try:
-                override_cache = inj.require(inj.OVERRIDE_STATUS_CACHE)
+                override_cache: OverrideStatusCache = inj.require(inj.OVERRIDE_STATUS_CACHE)
             except KeyError:
                 override_cache = OverrideStatusCache()
 
@@ -404,12 +413,13 @@ class RepoUpdateActionCommand(object):
                     self.overrides[item["contentLabel"]] = {}
                 self.overrides[item["contentLabel"]][item["name"]] = item["value"]
 
-    def get_consumer_auth_cp(self):
+    def get_consumer_auth_cp(self) -> "UEPConnection":
         if self.uep is None:
             self.uep = self.cp_provider.get_consumer_auth_cp()
         return self.uep
 
-    def perform(self):
+    def perform(self) -> Union["RepoActionReport", Literal[0]]:
+        # FIXME return None instead of 0
         # the [rhsm] manage_repos can be overridden to disable generation of the
         # redhat.repo file:
         if not self.manage_repos:
@@ -478,7 +488,7 @@ class RepoUpdateActionCommand(object):
         log.debug("repos updated: %s" % self.report)
         return self.report
 
-    def get_unique_content(self):
+    def get_unique_content(self) -> Iterable[Repo]:
         # FIXME Shouldn't this skip all of the repo updating?
         if not self.manage_repos:
             return []
@@ -496,13 +506,13 @@ class RepoUpdateActionCommand(object):
     # Expose as public API for RepoActionInvoker.is_managed, since that
     # is used by Openshift tooling.
     # See https://bugzilla.redhat.com/show_bug.cgi?id=1223038
-    def matching_content(self):
+    def matching_content(self) -> List["Content"]:
         content = []
         for content_type in ALLOWED_CONTENT_TYPES:
             content += model.find_content(self.ent_source, content_type=content_type)
         return content
 
-    def get_all_content(self, baseurl, ca_cert):
+    def get_all_content(self, baseurl: str, ca_cert: str) -> List[Repo]:
         matching_content = self.matching_content()
         content_list = []
 
@@ -541,7 +551,7 @@ class RepoUpdateActionCommand(object):
 
         return content_list
 
-    def _set_override_info(self, repo):
+    def _set_override_info(self, repo: Repo) -> Repo:
         # In the disconnected case, self.overrides will be an empty list
 
         for name, value in list(self.overrides.get(repo.id, {}).items()):
@@ -549,22 +559,22 @@ class RepoUpdateActionCommand(object):
 
         return repo
 
-    def _is_overridden(self, repo, key):
+    def _is_overridden(self, repo: Repo, key: str) -> bool:
         return key in self.overrides.get(repo.id, {})
 
-    def _was_overridden(self, repo, key, value):
+    def _was_overridden(self, repo: Repo, key: str, value: object) -> bool:
         written_value = self.written_overrides.overrides.get(repo.id, {}).get(key)
         # Compare values as strings to avoid casting problems from io
         return written_value is not None and value is not None and str(written_value) == str(value)
 
-    def _build_props(self, old_repo, new_repo):
+    def _build_props(self, old_repo: Repo, new_repo: Repo) -> Dict[str, Tuple[int, str, None]]:
         result = {}
         all_keys = list(old_repo.keys()) + list(new_repo.keys())
         for key in all_keys:
             result[key] = Repo.PROPERTIES.get(key, (1, None))
         return result
 
-    def update_repo(self, old_repo, new_repo, server_value_repo=None):
+    def update_repo(self, old_repo: Repo, new_repo: Repo, server_value_repo: Optional[dict] = None) -> int:
         """
         Checks an existing repo definition against a potentially updated
         version created from most recent entitlement certificates and
@@ -618,10 +628,10 @@ class RepoUpdateActionCommand(object):
 
         return changes_made
 
-    def report_update(self, repo):
+    def report_update(self, repo: Repo) -> None:
         self.report.repo_updates.append(repo)
 
-    def report_add(self, repo):
+    def report_add(self, repo: Repo) -> None:
         self.report.repo_added.append(repo)
 
     def report_delete(self, section):
@@ -639,11 +649,11 @@ class RepoActionReport(ActionReport):
         self.repo_added = []
         self.repo_deleted = []
 
-    def updates(self):
+    def updates(self) -> int:
         """How many repos were updated"""
         return len(self.repo_updates) + len(self.repo_added) + len(self.repo_deleted)
 
-    def format_repos_info(self, repos, formatter):
+    def format_repos_info(self, repos, formatter) -> str:
         indent = "    "
         if not repos:
             return "%s<NONE>" % indent
@@ -653,20 +663,20 @@ class RepoActionReport(ActionReport):
             r.append("%s%s" % (indent, formatter(repo)))
         return "\n".join(r)
 
-    def repo_format(self, repo):
+    def repo_format(self, repo: Repo) -> bytes:
         msg = "[id:%s %s]" % (repo.id, repo["name"])
         return msg.encode("utf8")
 
-    def section_format(self, section):
+    def section_format(self, section: dict) -> str:
         return "[%s]" % section
 
-    def format_repos(self, repos):
+    def format_repos(self, repos: List[Repo]) -> str:
         return self.format_repos_info(repos, self.repo_format)
 
-    def format_sections(self, sections):
+    def format_sections(self, sections: List[dict]) -> str:
         return self.format_repos_info(sections, self.section_format)
 
-    def __str__(self):
+    def __str__(self) -> str:
         s = [_("Repo updates") + "\n"]
         s.append(_("Total repo updates: %d") % self.updates())
         s.append(_("Updated"))

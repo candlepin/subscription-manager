@@ -16,9 +16,15 @@
 # on subscription, RHEL specific implementation
 
 import logging
+from typing import Dict, List, Optional, Tuple, TYPE_CHECKING
 
 from subscription_manager import injection as inj
 from subscription_manager import entbranding
+
+if TYPE_CHECKING:
+    from rhsm.certificate2 import EntitlementCertificate, Product
+
+    from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
 
 log = logging.getLogger(__name__)
 
@@ -28,30 +34,30 @@ class RHELBrandsInstaller(entbranding.BrandsInstaller):
 
     Currently just the RHELBrandInstaller."""
 
-    def _get_brand_installers(self):
+    def _get_brand_installers(self) -> List[entbranding.BrandInstaller]:
         return [RHELBrandInstaller(self.ent_certs)]
 
 
 class RHELBrandInstaller(entbranding.BrandInstaller):
-    def _get_brand_picker(self):
+    def _get_brand_picker(self) -> entbranding.BrandPicker:
         return RHELBrandPicker(self.ent_certs)
 
-    def _get_current_brand(self):
+    def _get_current_brand(self) -> entbranding.Brand:
         return RHELCurrentBrand()
 
-    def _install(self, brand):
+    def _install(self, brand: entbranding.Brand) -> None:
         log.debug("Updating product branding info for: %s" % brand.name)
         brand.save()
 
 
 class RHELBrandPicker(entbranding.BrandPicker):
-    def __init__(self, ent_certs=None):
+    def __init__(self, ent_certs: List["EntitlementCertificate"] = None):
         super(RHELBrandPicker, self).__init__(ent_certs=ent_certs)
 
-        prod_dir = inj.require(inj.PROD_DIR)
-        self.installed_products = prod_dir.get_installed_products()
+        prod_dir: ProductDirectory = inj.require(inj.PROD_DIR)
+        self.installed_products: Dict[str, EntitlementCertificate] = prod_dir.get_installed_products()
 
-    def get_brand(self):
+    def get_brand(self) -> Optional[entbranding.Brand]:
         branded_cert_product = self._get_branded_cert_product()
 
         if not branded_cert_product:
@@ -60,7 +66,7 @@ class RHELBrandPicker(entbranding.BrandPicker):
         branded_product = branded_cert_product[1]
         return RHELProductBrand.from_product(branded_product)
 
-    def _get_branded_cert_product(self):
+    def _get_branded_cert_product(self) -> Optional[Tuple["EntitlementCertificate", "Product"]]:
         """Given a list of ent certs providing product branding, return one.
 
         If we can collapse them into one, do it. Otherwise, return nothing
@@ -105,7 +111,7 @@ class RHELBrandPicker(entbranding.BrandPicker):
                 )
             return None
 
-    def _get_branded_cert_products(self):
+    def _get_branded_cert_products(self) -> List[Tuple["EntitlementCertificate", "Product"]]:
         branded_cert_products = []
         for cert in self._get_ent_certs():
             products = cert.products or []
@@ -133,16 +139,16 @@ class RHELBrandPicker(entbranding.BrandPicker):
 
         return branded_cert_products
 
-    def _get_ent_certs(self):
+    def _get_ent_certs(self) -> List["EntitlementCertificate"]:
         """Returns contents of injected ENT_DIR, or self.ent_dir if set"""
         if self.ent_certs:
             return self.ent_certs
-        ent_dir = inj.require(inj.ENT_DIR)
+        ent_dir: EntitlementDirectory = inj.require(inj.ENT_DIR)
         ent_dir.refresh()
         return ent_dir.list_valid()
 
-    def _get_installed_branded_products(self, products):
-        branded_products = []
+    def _get_installed_branded_products(self, products: List["Product"]) -> List["Product"]:
+        branded_products: List[Product] = []
 
         for product in products:
             # could support other types of branded products
@@ -156,10 +162,10 @@ class RHELBrandPicker(entbranding.BrandPicker):
 
         return branded_products
 
-    def _is_installed_rhel_branded_product(self, product):
+    def _is_installed_rhel_branded_product(self, product: "Product") -> bool:
         return product.id in self.installed_products
 
-    def _is_rhel_branded_product(self, product):
+    def _is_rhel_branded_product(self, product: "Product") -> bool:
         if not hasattr(product, "brand_type"):
             return False
         elif product.brand_type != "OS":
@@ -175,17 +181,17 @@ class RHELBrandPicker(entbranding.BrandPicker):
 
 
 class RHELProductBrand(entbranding.ProductBrand):
-    def _get_brand_file(self):
+    def _get_brand_file(self) -> entbranding.BrandFile:
         return RHELBrandFile()
 
 
 class RHELCurrentBrand(entbranding.CurrentBrand):
-    def _get_brand_file(self):
+    def _get_brand_file(self) -> entbranding.BrandFile:
         return RHELBrandFile()
 
 
 class RHELBrandFile(entbranding.BrandFile):
     path = "/var/lib/rhsm/branded_name"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "<BrandFile path=%s>" % self.path

@@ -8,10 +8,17 @@
 # NON-INFRINGEMENT, or FITNESS FOR A PARTICULAR PURPOSE. You should
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
-#
+from typing import TYPE_CHECKING
 
 from subscription_manager import injection as inj
 from subscription_manager import certlib
+
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
+
+    from subscription_manager.cache import InstalledProductsManager
+    from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.identity import Identity
 
 
 class InstalledProductsActionInvoker(certlib.BaseActionInvoker):
@@ -19,7 +26,7 @@ class InstalledProductsActionInvoker(certlib.BaseActionInvoker):
     products on this system periodically.
     """
 
-    def _do_update(self):
+    def _do_update(self) -> "InstalledProductsActionReport":
         action = InstalledProductsActionCommand()
         return action.perform()
 
@@ -32,12 +39,12 @@ class InstalledProductsActionCommand(object):
 
     def __init__(self):
         self.report = InstalledProductsActionReport()
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.uep = self.cp_provider.get_consumer_auth_cp()
+        self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+        self.uep: UEPConnection = self.cp_provider.get_consumer_auth_cp()
 
-    def perform(self):
-        mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
-        consumer_identity = inj.require(inj.IDENTITY)
+    def perform(self) -> "InstalledProductsActionReport":
+        mgr: InstalledProductsManager = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
+        consumer_identity: Identity = inj.require(inj.IDENTITY)
 
         ret = mgr.update_check(self.uep, consumer_identity.uuid)
         self.report._status = ret
@@ -45,4 +52,4 @@ class InstalledProductsActionCommand(object):
 
 
 class InstalledProductsActionReport(certlib.ActionReport):
-    name = "Installed Products"
+    name: str = "Installed Products"

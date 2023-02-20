@@ -17,11 +17,20 @@ Classes here track various information last sent to the server, compare
 this with the current state, and perform an update on the server if
 necessary.
 """
+import datetime
 import logging
 import os
 import socket
 import threading
 import time
+from typing import Dict, TextIO, Union, Literal, Optional, List, Any, Set, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from rhsm.certificate2 import EntitlementCertificate, Product
+    from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
+    from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.identity import Identity
+
 from rhsm.https import ssl
 
 from rhsm.config import get_config_parser
@@ -54,49 +63,48 @@ class CacheManager(object):
     """
 
     # Fields the subclass must override:
-    CACHE_FILE = None
+    CACHE_FILE: str = None
 
-    def to_dict(self):
+    def to_dict(self) -> Dict:
         """
         Returns the data for this collection as a dict to be serialized
         as JSON.
         """
         raise NotImplementedError
 
-    def _load_data(self, open_file):
+    def _load_data(self, open_file: TextIO) -> Optional[Dict]:
         """
         Load the data in whatever format the sub-class uses from
         an already opened file descriptor.
         """
         raise NotImplementedError
 
-    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
+    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs) -> None:
         """
         Sync the latest data to/from the server.
         """
         raise NotImplementedError
 
-    def has_changed(self):
+    def has_changed(self) -> bool:
         """
-        Check if the current system data has changed since the last time we
-        updated.
+        Check if the current system data has changed since the last time we updated.
         """
         raise NotImplementedError
 
     @classmethod
-    def delete_cache(cls):
+    def delete_cache(cls) -> None:
         """Delete the cache for this collection from disk."""
         if os.path.exists(cls.CACHE_FILE):
             log.debug("Deleting cache: %s" % cls.CACHE_FILE)
             os.remove(cls.CACHE_FILE)
 
-    def _cache_exists(self):
+    def _cache_exists(self) -> bool:
         return os.path.exists(self.CACHE_FILE)
 
-    def exists(self):
+    def exists(self) -> bool:
         return self._cache_exists()
 
-    def write_cache(self, debug=True):
+    def write_cache(self, debug: bool = True) -> None:
         """
         Write the current cache to disk. Should only be done after
         successful communication with the server.
@@ -110,7 +118,7 @@ class CacheManager(object):
         try:
             if not os.access(os.path.dirname(self.CACHE_FILE), os.R_OK):
                 os.makedirs(os.path.dirname(self.CACHE_FILE))
-            f = open(self.CACHE_FILE, "w+")
+            f: TextIO = open(self.CACHE_FILE, "w+")
             json.dump(self.to_dict(), f, default=json.encode)
             f.close()
             if debug:
@@ -119,7 +127,7 @@ class CacheManager(object):
             log.error("Unable to write cache: %s" % self.CACHE_FILE)
             log.exception(err)
 
-    def _read_cache(self):
+    def _read_cache(self) -> Optional[Dict]:
         """
         Load the last data we sent to the server.
         Returns none if no cache file exists.
@@ -127,8 +135,9 @@ class CacheManager(object):
 
         try:
             f = open(self.CACHE_FILE)
-            data = self._load_data(f)
+            data: Optional[Dict] = self._load_data(f)
             f.close()
+            # FIXME We loaded data, but the code expects optional dictionaries
             return data
         except IOError as err:
             log.error("Unable to read cache: %s" % self.CACHE_FILE)
@@ -138,7 +147,7 @@ class CacheManager(object):
             # a new as if it didn't exist
             pass
 
-    def read_cache_only(self):
+    def read_cache_only(self) -> Optional[Dict]:
         """
         Try to read only cached data. When cache does not exist,
         then None is returned.
@@ -149,9 +158,13 @@ class CacheManager(object):
             log.debug("Cache file %s does not exist" % self.CACHE_FILE)
             return None
 
-    def update_check(self, uep, consumer_uuid, force=False):
+    def update_check(
+        self, uep: connection.UEPConnection, consumer_uuid: str, force: bool = False
+    ) -> Literal[0, 1]:
         """
         Check if data has changed, and push an update if so.
+
+        :return: 1 if the cache was updated, 0 otherwise.
         """
 
         # The package_upload.py yum plugin from katello-agent will
@@ -199,15 +212,16 @@ class StatusCache(CacheManager):
     """
 
     def __init__(self):
-        self.server_status = None
-        self.last_error = None
+        self.server_status: Optional[Dict] = None
+        self.last_error: Optional[Exception] = None
 
-    def load_status(self, uep, uuid, on_date=None):
+    def load_status(
+        self, uep: connection.UEPConnection, uuid: str, on_date: Optional[datetime.datetime] = None
+    ) -> Optional[Dict]:
         """
         Load status from wherever is appropriate.
 
-        If server is reachable, return it's response
-        and cache the results to disk.
+        If server is reachable, return its response and cache the results to disk.
 
         If the server is not reachable, return the latest cache if
         it is still reasonable to use it.
@@ -257,14 +271,14 @@ class StatusCache(CacheManager):
             self.last_error = ex
             return None
 
-    def to_dict(self):
+    def to_dict(self) -> Dict:
         return self.server_status
 
-    def _load_data(self, open_file):
-        json_str = open_file.read()
+    def _load_data(self, open_file) -> Dict:
+        json_str: str = open_file.read()
         return json.loads(json_str)
 
-    def _read_cache(self):
+    def _read_cache(self) -> Optional[Dict]:
         """
         Prefer in memory cache to avoid io.  If it doesn't exist, save
         the disk cache to the in-memory cache to avoid reading again.
@@ -277,7 +291,7 @@ class StatusCache(CacheManager):
             log.debug("Reading status from in-memory cache of %s file" % self.CACHE_FILE)
         return self.server_status
 
-    def _cache_exists(self):
+    def _cache_exists(self) -> bool:
         """
         If a cache exists in memory, we have written it to the disk
         No need for unnecessary disk io here.
@@ -286,7 +300,9 @@ class StatusCache(CacheManager):
             return True
         return super(StatusCache, self)._cache_exists()
 
-    def read_status(self, uep, uuid, on_date=None):
+    def read_status(
+        self, uep: connection.UEPConnection, uuid: str, on_date: Optional[datetime.datetime] = None
+    ) -> Optional[str]:
         """
         Return status, from cache if it exists, otherwise load_status
         and write cache and return it.
@@ -321,7 +337,7 @@ class StatusCache(CacheManager):
         log.debug("Started thread to write cache: %s" % self.CACHE_FILE)
 
     # we override a @classmethod with an instance method in the sub class?
-    def delete_cache(self):
+    def delete_cache(self) -> None:
         super(StatusCache, self).delete_cache()
         self.server_status = None
 
@@ -335,7 +351,15 @@ class EntitlementStatusCache(StatusCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/entitlement_status.json"
 
-    def _sync_with_server(self, uep, uuid, on_date=None, *args, **kwargs):
+    # TODO Should we allow *args/**kwargs even if we know we are not using them?
+    def _sync_with_server(
+        self,
+        uep: connection.UEPConnection,
+        uuid: str,
+        on_date: Optional[datetime.datetime] = None,
+        *args,
+        **kwargs,
+    ):
         self.server_status = uep.getCompliance(uuid, on_date)
 
 
@@ -348,27 +372,35 @@ class SyspurposeComplianceStatusCache(StatusCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/syspurpose_compliance_status.json"
 
-    def _sync_with_server(self, uep, uuid, on_date=None, *args, **kwargs):
+    def _sync_with_server(
+        self,
+        uep: connection.UEPConnection,
+        uuid: str,
+        on_date: Optional[datetime.datetime] = None,
+        *args,
+        **kwargs,
+    ):
         self.syspurpose_service = syspurpose.Syspurpose(uep)
-        self.server_status = self.syspurpose_service.get_syspurpose_status(on_date)
+        self.server_status: Dict = self.syspurpose_service.get_syspurpose_status(on_date)
 
     def write_cache(self):
         if self.server_status is not None and self.server_status["status"] != "unknown":
             super(SyspurposeComplianceStatusCache, self).write_cache()
 
-    def get_overall_status(self):
+    def get_overall_status(self) -> str:
         if self.server_status is not None:
             return self.syspurpose_service.get_overall_status(self.server_status["status"])
         else:
             return self.syspurpose_service.get_overall_status("unknown")
 
-    def get_overall_status_code(self):
+    # FIXME This is wrong; it should be 'str' and 'self.server_status["status"]' instead
+    def get_overall_status_code(self) -> Union[Dict, str]:
         if self.server_status is not None:
             return self.server_status
         else:
             return "unknown"
 
-    def get_status_reasons(self):
+    def get_status_reasons(self) -> Optional[str]:
         if self.server_status is not None and "reasons" in self.server_status:
             return self.server_status["reasons"]
         else:
@@ -382,8 +414,8 @@ class ProductStatusCache(StatusCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/product_status.json"
 
-    def _sync_with_server(self, uep, uuid, *args, **kwargs):
-        consumer_data = uep.getConsumer(uuid)
+    def _sync_with_server(self, uep: connection.UEPConnection, uuid: str, *args, **kwargs):
+        consumer_data: Dict = uep.getConsumer(uuid)
 
         if "installedProducts" not in consumer_data:
             log.warning("Server does not support product date ranges.")
@@ -398,7 +430,7 @@ class OverrideStatusCache(StatusCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/content_overrides.json"
 
-    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
+    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs):
         self.server_status = uep.getContentOverrides(consumer_uuid)
 
 
@@ -409,8 +441,8 @@ class ReleaseStatusCache(StatusCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/releasever.json"
 
-    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
-        def get_release(uuid):
+    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs):
+        def get_release(uuid: str) -> Dict:
 
             # To mimic connection problems you can raise required exception:
             # raise connection.RemoteServerException(500, "GET", "/release")
@@ -450,7 +482,7 @@ class ProfileManager(CacheManager):
         return get_profile(profile_type)
 
     @staticmethod
-    def _assembly_profile(rpm_profile, enabled_repos_profile, module_profile):
+    def _assembly_profile(rpm_profile, enabled_repos_profile, module_profile) -> Dict[str, List[Dict]]:
         combined_profile = {
             "rpm": rpm_profile,
             "enabled_repos": enabled_repos_profile,
@@ -459,33 +491,37 @@ class ProfileManager(CacheManager):
         return combined_profile
 
     @property
-    def current_profile(self):
+    def current_profile(self) -> Dict[str, List[Dict]]:
         if not self._current_profile:
-            rpm_profile = get_profile("rpm").collect()
-            enabled_repos = get_profile("enabled_repos").collect()
-            module_profile = get_profile("modulemd").collect()
-            combined_profile = self._assembly_profile(rpm_profile, enabled_repos, module_profile)
+            rpm_profile: List[Dict] = get_profile("rpm").collect()
+            enabled_repos: List[Dict] = get_profile("enabled_repos").collect()
+            module_profile: List[Dict] = get_profile("modulemd").collect()
+            combined_profile: Dict[str, List[Dict]] = self._assembly_profile(
+                rpm_profile, enabled_repos, module_profile
+            )
             self._current_profile = combined_profile
         return self._current_profile
 
     @current_profile.setter
-    def current_profile(self, new_profile):
+    def current_profile(self, new_profile: Dict[str, List[Dict]]):
         self._current_profile = new_profile
 
-    def to_dict(self):
+    def to_dict(self) -> Dict[str, List[Dict]]:
         return self.current_profile
 
-    def _load_data(self, open_file):
-        json_str = open_file.read()
+    def _load_data(self, open_file: TextIO) -> Dict:
+        json_str: str = open_file.read()
         return json.loads(json_str)
 
-    def update_check(self, uep, consumer_uuid, force=False):
+    def update_check(
+        self, uep: connection.UEPConnection, consumer_uuid: str, force: bool = False
+    ) -> Literal[0, 1]:
         """
         Check if packages have changed, and push an update if so.
         """
 
         # If the server doesn't support packages, don't try to send the profile:
-        supported_resources = get_supported_resources(uep=None, identity=self.identity)
+        supported_resources: Dict = get_supported_resources(uep=None, identity=self.identity)
         if PACKAGES_RESOURCE not in supported_resources:
             log.warning("Server does not support packages, skipping profile upload.")
             return 0
@@ -498,22 +534,22 @@ class ProfileManager(CacheManager):
         else:
             return 0
 
-    def has_changed(self):
+    def has_changed(self) -> bool:
         if not self._cache_exists():
             log.debug("Cache file %s does not exist" % self.CACHE_FILE)
             return True
 
-        cached_profile = self._read_cache()
+        cached_profile: Optional[str] = self._read_cache()
         return not cached_profile == self.current_profile
 
-    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
+    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs) -> None:
         """
         This method has to be able to sync combined profile, when server supports this functionality
         and it also has to be able to send only profile containing list of installed RPMs.
         """
-        combined_profile = self.current_profile
+        combined_profile: Dict = self.current_profile
         if uep.has_capability("combined_reporting"):
-            _combined_profile = [
+            _combined_profile: List[Dict] = [
                 {"content_type": "rpm", "profile": combined_profile["rpm"]},
                 {"content_type": "enabled_repos", "profile": combined_profile["enabled_repos"]},
                 {"content_type": "modulemd", "profile": combined_profile["modulemd"]},
@@ -532,14 +568,14 @@ class InstalledProductsManager(CacheManager):
     CACHE_FILE = "/var/lib/rhsm/cache/installed_products.json"
 
     def __init__(self):
-        self._installed = None
-        self.tags = None
+        self._installed: Dict[str, Dict] = None
+        self.tags: Set[str] = None
 
-        self.product_dir = inj.require(inj.PROD_DIR)
+        self.product_dir: ProductDirectory = inj.require(inj.PROD_DIR)
 
         self._setup_installed()
 
-    def _get_installed(self):
+    def _get_installed(self) -> Dict:
         if self._installed:
             return self._installed
 
@@ -547,24 +583,24 @@ class InstalledProductsManager(CacheManager):
 
         return self._installed
 
-    def _set_installed(self, value):
+    def _set_installed(self, value: Dict) -> None:
         self._installed = value
 
     installed = property(_get_installed, _set_installed)
 
-    def to_dict(self):
+    def to_dict(self) -> Dict:
         return {"products": self.installed, "tags": self.tags}
 
-    def _load_data(self, open_file):
+    def _load_data(self, open_file: TextIO) -> Dict:
         json_str = open_file.read()
         return json.loads(json_str)
 
-    def has_changed(self):
+    def has_changed(self) -> bool:
         if not self._cache_exists():
             log.debug("Cache file %s does not exist" % self.CACHE_FILE)
             return True
 
-        cached = self._read_cache()
+        cached: Dict = self._read_cache()
         try:
             products = cached["products"]
             tags = set(cached["tags"])
@@ -585,15 +621,16 @@ class InstalledProductsManager(CacheManager):
 
         return False
 
-    def _setup_installed(self):
+    def _setup_installed(self) -> None:
         """
         Format installed product data to match the cache
         and what the server can use.
         """
-        self._installed = {}
+        self._installed: Dict[str, Dict] = {}
         self.tags = set()
+        prod_cert: EntitlementCertificate
         for prod_cert in self.product_dir.list():
-            prod = prod_cert.products[0]
+            prod: Product = prod_cert.products[0]
             self.tags |= set(prod.provided_tags)
             self._installed[prod.id] = {
                 "productId": prod.id,
@@ -602,17 +639,17 @@ class InstalledProductsManager(CacheManager):
                 "arch": ",".join(prod.architectures),
             }
 
-    def format_for_server(self):
+    def format_for_server(self) -> List[Dict]:
         """
         Convert the format we store in this object (which is a little
         easier to work with) into the format the server expects for the
         consumer.
         """
         self._setup_installed()
-        final = [val for (key, val) in list(self.installed.items())]
+        final: List[Dict] = [val for (key, val) in list(self.installed.items())]
         return final
 
-    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
+    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs) -> None:
         uep.updateConsumer(
             consumer_uuid,
             installed_products=self.format_for_server(),
@@ -627,7 +664,7 @@ class PoolStatusCache(StatusCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/pool_status.json"
 
-    def _sync_with_server(self, uep, uuid, *args, **kwargs):
+    def _sync_with_server(self, uep: connection.UEPConnection, uuid: str, *args, **kwargs) -> None:
         self.server_status = uep.getEntitlementList(uuid)
 
 
@@ -637,45 +674,47 @@ class PoolTypeCache(object):
     """
 
     def __init__(self):
-        self.identity = inj.require(inj.IDENTITY)
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.ent_dir = inj.require(inj.ENT_DIR)
-        self.pool_cache = inj.require(inj.POOL_STATUS_CACHE)
-        self.pooltype_map = {}
+        self.identity: Identity = inj.require(inj.IDENTITY)
+        self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+        self.ent_dir: EntitlementDirectory = inj.require(inj.ENT_DIR)
+        self.pool_cache: PoolStatusCache = inj.require(inj.POOL_STATUS_CACHE)
+        self.pooltype_map: Dict[str, str] = {}
         self.update()
 
-    def get(self, pool_id):
+    def get(self, pool_id: str):
         return self.pooltype_map.get(pool_id, "")
 
-    def update(self):
+    def update(self) -> None:
         if self.requires_update():
             self._do_update()
 
-    def requires_update(self):
-        attached_pool_ids = set([ent.pool.id for ent in self.ent_dir.list() if ent.pool and ent.pool.id])
-        missing_types = attached_pool_ids - set(self.pooltype_map)
+    def requires_update(self) -> bool:
+        attached_pool_ids: Set[str] = set(
+            [ent.pool.id for ent in self.ent_dir.list() if ent.pool and ent.pool.id]
+        )
+        missing_types: Set[str] = attached_pool_ids - set(self.pooltype_map)
         return bool(missing_types)
 
-    def _do_update(self):
-        result = {}
+    def _do_update(self) -> None:
+        result: Dict[str, str] = {}
         if self.identity.is_valid():
             self.pool_cache.load_status(self.cp_provider.get_consumer_auth_cp(), self.identity.uuid)
-            entitlement_list = self.pool_cache.server_status
+            entitlement_list: List[Dict] = self.pool_cache.server_status
 
             if entitlement_list is not None:
                 for ent in entitlement_list:
                     pool = PoolWrapper(ent.get("pool", {}))
-                    pool_type = pool.get_pool_type()
+                    pool_type: str = pool.get_pool_type()
                     result[pool.get_id()] = pool_type
 
         self.pooltype_map.update(result)
 
-    def update_from_pools(self, pool_map):
+    def update_from_pools(self, pool_map: Dict) -> None:
         # pool_map maps pool ids to pool json
         for pool_id in pool_map:
             self.pooltype_map[pool_id] = PoolWrapper(pool_map[pool_id]).get_pool_type()
 
-    def clear(self):
+    def clear(self) -> None:
         self.pooltype_map = {}
 
 
@@ -683,13 +722,13 @@ class ContentAccessCache(object):
     CACHE_FILE = "/var/lib/rhsm/cache/content_access.json"
 
     def __init__(self):
-        self.cp_provider = inj.require(inj.CP_PROVIDER)
-        self.identity = inj.require(inj.IDENTITY)
+        self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+        self.identity: Identity = inj.require(inj.IDENTITY)
 
-    def _query_for_update(self, if_modified_since=None):
-        uep = self.cp_provider.get_consumer_auth_cp()
+    def _query_for_update(self, if_modified_since: Optional[datetime.datetime] = None):
+        uep: connection.UEPConnection = self.cp_provider.get_consumer_auth_cp()
         try:
-            response = uep.getAccessibleContent(self.identity.uuid, if_modified_since=if_modified_since)
+            response: Dict = uep.getAccessibleContent(self.identity.uuid, if_modified_since=if_modified_since)
         except connection.RestlibException as err:
             log.warning("Unable to query for content access updates: %s", err)
             return None
@@ -699,17 +738,18 @@ class ContentAccessCache(object):
             self._update_cache(response)
             return response
 
-    def exists(self):
+    def exists(self) -> bool:
         return os.path.exists(self.CACHE_FILE)
 
     def remove(self):
         return os.remove(self.CACHE_FILE)
 
-    def check_for_update(self):
-        data = None
+    def check_for_update(self) -> Optional[Dict]:
+        data: Optional[Dict] = None
+        last_update: Optional[datetime.datetime]
         if self.exists():
             try:
-                data = json.loads(self.read())
+                data: Dict = json.loads(self.read())
                 last_update = parse_date(data["lastUpdate"])
             except (ValueError, KeyError) as err:
                 log.debug("Cache file {file} is corrupted: {err}".format(file=self.CACHE_FILE, err=err))
@@ -717,7 +757,7 @@ class ContentAccessCache(object):
         else:
             last_update = None
 
-        response = self._query_for_update(if_modified_since=last_update)
+        response: Optional[Dict] = self._query_for_update(if_modified_since=last_update)
         # Candlepin 4 bug 2010251. if_modified_since is not reliable so
         # we double checks whether or not the sca certificate is changed.
         if data is not None and data == response:
@@ -726,23 +766,23 @@ class ContentAccessCache(object):
         return response
 
     @staticmethod
-    def update_cert(cert, data):
+    def update_cert(cert: "EntitlementCertificate", data: Optional[Dict]) -> None:
         if data is None:
             return
         if data["contentListing"] is None or str(cert.serial) not in data["contentListing"]:
             log.warning("Cert serial %s not contained in content listing; not updating it." % cert.serial)
             return
         with open(cert.path, "w") as output:
-            updated_cert = "".join(data["contentListing"][str(cert.serial)])
+            updated_cert: str = "".join(data["contentListing"][str(cert.serial)])
             log.debug("Updating certificate %s with new content" % cert.serial)
             output.write(updated_cert)
 
-    def _update_cache(self, data):
+    def _update_cache(self, data: Dict) -> None:
         log.debug("Updating content access cache")
         with open(self.CACHE_FILE, "w") as cache:
             cache.write(json.dumps(data))
 
-    def read(self):
+    def read(self) -> str:
         with open(self.CACHE_FILE, "r") as cache:
             return cache.read()
 
@@ -756,15 +796,15 @@ class WrittenOverrideCache(CacheManager):
 
     CACHE_FILE = "/var/lib/rhsm/cache/written_overrides.json"
 
-    def __init__(self, overrides=None):
+    def __init__(self, overrides: Optional[Dict] = None):
         self.overrides = overrides or {}
 
-    def to_dict(self):
+    def to_dict(self) -> Dict:
         return self.overrides
 
-    def _load_data(self, open_file):
+    def _load_data(self, open_file: TextIO) -> Optional[Dict]:
         try:
-            self.overrides = json.loads(open_file.read()) or {}
+            self.overrides: Dict = json.loads(open_file.read()) or {}
             return self.overrides
         except IOError as err:
             log.error("Unable to read cache: %s" % self.CACHE_FILE)
@@ -792,17 +832,17 @@ class ConsumerCache(CacheManager):
     # Some data should have some timeout of validity, because data can be changed over time
     # on the server, because server could be updated and it can start provide new functionality.
     # E.g. supported resources or available capabilities. Value of timeout is in seconds.
-    TIMEOUT = None
+    TIMEOUT: Optional[int] = None
 
-    def __init__(self, data=None):
+    def __init__(self, data: Any = None):
         self.data = data or {}
 
-    def to_dict(self):
+    def to_dict(self) -> Dict:
         return self.data
 
-    def _load_data(self, open_file):
+    def _load_data(self, open_file: TextIO) -> Optional[Dict]:
         try:
-            self.data = json.loads(open_file.read()) or {}
+            self.data: Dict = json.loads(open_file.read()) or {}
             return self.data
         except IOError as err:
             log.error("Unable to read cache: %s" % self.CACHE_FILE)
@@ -811,7 +851,7 @@ class ConsumerCache(CacheManager):
             # Ignore json file parse error
             pass
 
-    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
+    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs):
         """
         This method has to be implemented in sub-classes of this class
         :param uep: object representing connection to candlepin server
@@ -822,7 +862,9 @@ class ConsumerCache(CacheManager):
         """
         raise NotImplementedError
 
-    def _is_cache_obsoleted(self, uep, identity, *args, **kwargs):
+    def _is_cache_obsoleted(
+        self, uep: connection.UEPConnection, identity: "Identity", *args, **kwargs
+    ) -> bool:
         """
         Another method for checking if cached file is obsoleted
         :param args: positional arguments
@@ -831,7 +873,7 @@ class ConsumerCache(CacheManager):
         """
         return False
 
-    def set_data(self, current_data, identity=None):
+    def set_data(self, current_data: Any, identity: Optional["Identity"] = None):
         """
         Set data into internal cache
         :param current_data: data to set
@@ -842,9 +884,11 @@ class ConsumerCache(CacheManager):
         if identity is None:
             identity = inj.require(inj.IDENTITY)
 
-        self.data = {identity.uuid: current_data}
+        self.data: Dict[str, Any] = {identity.uuid: current_data}
 
-    def read_data(self, uep=None, identity=None):
+    def read_data(
+        self, uep: Optional[connection.UEPConnection] = None, identity: Optional["Identity"] = None
+    ) -> Dict:
         """
         This function tries to get data from cache or server
         :param uep: connection to candlepin server
@@ -852,10 +896,10 @@ class ConsumerCache(CacheManager):
         :return: information about current owner
         """
 
-        current_data = self.DEFAULT_VALUE
+        current_data: Dict = self.DEFAULT_VALUE
 
         if identity is None:
-            identity = inj.require(inj.IDENTITY)
+            identity: Identity = inj.require(inj.IDENTITY)
 
         # When identity is not known, then system is not registered and
         # data are obsoleted
@@ -864,16 +908,16 @@ class ConsumerCache(CacheManager):
             return current_data
 
         # Try to use class specific test if the cache file is obsoleted
-        cache_file_obsoleted = self._is_cache_obsoleted(uep, identity)
+        cache_file_obsoleted: bool = self._is_cache_obsoleted(uep, identity)
 
         # When timeout for cache is defined, then check if the cache file is not
         # too old. In that case content of the cache file will be overwritten with
         # new content from the server.
         if self.TIMEOUT is not None:
             if os.path.exists(self.CACHE_FILE):
-                mod_time = os.path.getmtime(self.CACHE_FILE)
-                cur_time = time.time()
-                diff = cur_time - mod_time
+                mod_time: float = os.path.getmtime(self.CACHE_FILE)
+                cur_time: float = time.time()
+                diff: float = cur_time - mod_time
                 if diff > self.TIMEOUT:
                     log.debug("Validity of cache file %s timed out (%d)" % (self.CACHE_FILE, self.TIMEOUT))
                     cache_file_obsoleted = True
@@ -881,7 +925,7 @@ class ConsumerCache(CacheManager):
         if cache_file_obsoleted is False:
             # Try to read data from cache first
             log.debug("Trying to read %s from cache file %s" % (self.__class__.__name__, self.CACHE_FILE))
-            data = self.read_cache_only()
+            data: Optional[Dict] = self.read_cache_only()
             if data is not None:
                 if identity.uuid in data:
                     current_data = data[identity.uuid]
@@ -895,12 +939,12 @@ class ConsumerCache(CacheManager):
             log.debug("Data loaded from cache file: %s" % self.CACHE_FILE)
         else:
             if uep is None:
-                cp_provider = inj.require(inj.CP_PROVIDER)
+                cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
                 uep = cp_provider.get_consumer_auth_cp()
 
             log.debug("Getting data from server for %s" % self.__class__)
             try:
-                current_data = self._sync_with_server(uep=uep, consumer_uuid=identity.uuid)
+                current_data: Dict = self._sync_with_server(uep=uep, consumer_uuid=identity.uuid)
             except connection.RestlibException as rest_err:
                 log.warning("Unable to get data for %s using REST API: %s" % (self.__class__, rest_err))
                 log.debug("Deleting cache file: %s", self.CACHE_FILE)
@@ -922,14 +966,14 @@ class SyspurposeValidFieldsCache(ConsumerCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/valid_fields.json"
 
-    def __init__(self, data=None):
+    def __init__(self, data: Any = None):
         super(SyspurposeValidFieldsCache, self).__init__(data=data)
 
-    def _sync_with_server(self, uep, *args, **kwargs):
-        cache = inj.require(inj.CURRENT_OWNER_CACHE)
-        owner = cache.read_data(uep)
+    def _sync_with_server(self, uep: connection.UEPConnection, *args, **kwargs) -> Dict:
+        cache: CurrentOwnerCache = inj.require(inj.CURRENT_OWNER_CACHE)
+        owner: Dict = cache.read_data(uep)
         if "key" in owner:
-            data = uep.getOwnerSyspurposeValidFields(owner["key"])
+            data: Dict = uep.getOwnerSyspurposeValidFields(owner["key"])
             return post_process_received_data(data)
         else:
             return self.DEFAULT_VALUE
@@ -945,13 +989,15 @@ class CurrentOwnerCache(ConsumerCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/current_owner.json"
 
-    def __init__(self, data=None):
+    def __init__(self, data: Any = None):
         super(CurrentOwnerCache, self).__init__(data=data)
 
-    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
+    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs):
         return uep.getOwner(consumer_uuid)
 
-    def _is_cache_obsoleted(self, uep, identity, *args, **kwargs):
+    def _is_cache_obsoleted(
+        self, uep: connection.UEPConnection, identity: "Identity", *args, **kwargs
+    ) -> bool:
         """
         We don't know if the cache is valid until we get valid response
         :param uep: object representing connection to candlepin server
@@ -961,8 +1007,8 @@ class CurrentOwnerCache(ConsumerCache):
         :return: True, when cache is obsoleted or validity of cache is unknown.
         """
         if uep is None:
-            cp_provider = inj.require(inj.CP_PROVIDER)
-            uep = cp_provider.get_consumer_auth_cp()
+            cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+            uep: connection.UEPConnection = cp_provider.get_consumer_auth_cp()
         if hasattr(uep.conn, "is_consumer_cert_key_valid") and uep.conn.is_consumer_cert_key_valid is True:
             return False
         else:
@@ -981,12 +1027,12 @@ class ContentAccessModeCache(ConsumerCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/content_access_mode.json"
 
-    def __init__(self, data=None):
+    def __init__(self, data: Any = None):
         super(ContentAccessModeCache, self).__init__(data=data)
 
-    def _sync_with_server(self, uep, consumer_uuid, *args, **kwargs):
+    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs):
         try:
-            current_owner = uep.getOwner(consumer_uuid)
+            current_owner: Dict = uep.getOwner(consumer_uuid)
         except Exception:
             log.debug(
                 "Error checking for content access mode,"
@@ -1003,7 +1049,7 @@ class ContentAccessModeCache(ConsumerCache):
                 )
         return "unknown"
 
-    def _is_cache_obsoleted(self, uep, identity, *args, **kwargs):
+    def _is_cache_obsoleted(self, uep: connection.UEPConnection, identity: "Identity", *args, **kwargs):
         """
         We don't know if the cache is valid until we get valid response
         :param uep: object representing connection to candlepin server
@@ -1013,8 +1059,8 @@ class ContentAccessModeCache(ConsumerCache):
         :return: True, when cache is obsoleted or validity of cache is unknown.
         """
         if uep is None:
-            cp_provider = inj.require(inj.CP_PROVIDER)
-            uep = cp_provider.get_consumer_auth_cp()
+            cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+            uep: connection.UEPConnection = cp_provider.get_consumer_auth_cp()
 
         if hasattr(uep.conn, "is_consumer_cert_key_valid"):
             if uep.conn.is_consumer_cert_key_valid is None:
@@ -1047,10 +1093,10 @@ class SupportedResourcesCache(ConsumerCache):
     # We will try to get new list of supported resources at leas once a day
     TIMEOUT = 60 * 60 * 24
 
-    def __init__(self, data=None):
+    def __init__(self, data: Any = None):
         super(SupportedResourcesCache, self).__init__(data=data)
 
-    def _sync_with_server(self, uep, *args, **kwargs):
+    def _sync_with_server(self, uep: connection.UEPConnection, *args, **kwargs):
         return uep.get_supported_resources()
 
 
@@ -1074,13 +1120,14 @@ class AvailableEntitlementsCache(CacheManager):
     def to_dict(self):
         return self.available_entitlements
 
-    def timeout(self):
+    def timeout(self) -> float:
         """
         Compute timeout of cache. Computation of timeout is based on SRT (smoothed response time)
         of connection to candlepin server. This algorithm is inspired by retransmission timeout used
         by TCP connection (see: RFC 793)
         """
-        uep = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+        uep: connection.UEPConnection = inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
+        smoothed_rt: float
 
         if uep.conn.smoothed_rt is not None:
             smoothed_rt = uep.conn.smoothed_rt
@@ -1088,7 +1135,7 @@ class AvailableEntitlementsCache(CacheManager):
             smoothed_rt = 0.0
         return min(self.UBOUND, max(self.LBOUND, self.BETA * smoothed_rt))
 
-    def get_not_obsolete_data(self, identity, filter_options):
+    def get_not_obsolete_data(self, identity: "Identity", filter_options: Dict) -> Dict:
         """
         Try to get not obsolete cached data
         :param identity: identity with UUID
@@ -1096,11 +1143,11 @@ class AvailableEntitlementsCache(CacheManager):
         :return: When data are not obsoleted, then return cached dictionary of available entitlements.
         Otherwise return empty dictionary.
         """
-        data = self.read_cache_only()
-        available_pools = {}
+        data: Optional[Dict] = self.read_cache_only()
+        available_pools: Dict = {}
         if data is not None:
             if identity.uuid in data:
-                cached_data = data[identity.uuid]
+                cached_data: Dict = data[identity.uuid]
                 if cached_data["filter_options"] == filter_options:
                     log.debug("timeout: %s, current time: %s" % (cached_data["timeout"], time.time()))
                     if cached_data["timeout"] > time.time():
@@ -1112,7 +1159,7 @@ class AvailableEntitlementsCache(CacheManager):
                     log.debug("Cache of available entitlements does not contain given filter options")
         return available_pools
 
-    def _load_data(self, open_file):
+    def _load_data(self, open_file: TextIO) -> Optional[Dict]:
         try:
             self.available_entitlements = json.loads(open_file.read()) or {}
             return self.available_entitlements

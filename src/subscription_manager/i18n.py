@@ -19,6 +19,8 @@ from threading import local
 import os
 
 # Localization domain:
+from typing import Optional, Tuple
+
 APP = "rhsm"
 # Directory where translations are deployed:
 DIR = "/usr/share/locale/"
@@ -67,7 +69,7 @@ def configure_i18n():
         Locale.set(lang)
 
 
-def configure_gettext():
+def configure_gettext() -> None:
     """Configure gettext for all RHSM-related code.
 
     Since Glade internally uses gettext, we need to use the C-level bindings in locale to adjust the encoding.
@@ -79,14 +81,14 @@ def configure_gettext():
     locale.bind_textdomain_codeset(APP, "UTF-8")
 
 
-def ugettext(*args, **kwargs):
+def ugettext(*args, **kwargs) -> str:
     if hasattr(LOCALE, "lang") and LOCALE.lang is not None:
         return LOCALE.lang.gettext(*args, **kwargs)
     else:
         return TRANSLATION.gettext(*args, **kwargs)
 
 
-def ungettext(*args, **kwargs):
+def ungettext(*args, **kwargs) -> str:
     if hasattr(LOCALE, "lang") and LOCALE.lang is not None:
         return LOCALE.lang.ngettext(*args, **kwargs)
     else:
@@ -101,12 +103,12 @@ class Locale(object):
     translations = {}
 
     @classmethod
-    def is_locale_supported(cls, language):
+    def is_locale_supported(cls, language: str) -> bool:
         """
         Is translation for given locale supported?
         :param language: String with locale code e.g. de_DE, de_DE.UTF-8
-        :return: True if the locale is supported by rhsm. Otherwise return False
         """
+        lang: Optional[gettext.GNUTranslations]
         try:
             lang = gettext.translation(APP, DIR, languages=[language])
         except IOError:
@@ -118,14 +120,14 @@ class Locale(object):
             return False
 
     @classmethod
-    def _find_lang_alternative(cls, language):
+    def _find_lang_alternative(cls, language: str) -> Tuple[gettext.GNUTranslations, Optional[str]]:
         """
         Try to find alternative for given language
         :param language: string with code of language e.g. de_LU
         :return: Instance of gettext.translation and code of new_language
         """
-        lang = None
-        new_language = None
+        lang: Optional[gettext.GNUTranslations] = None
+        new_language: Optional[str] = None
         # For similar case: 'de'
         if "_" not in language:
             new_language = language + "_" + language.upper()
@@ -144,7 +146,7 @@ class Locale(object):
         return lang, new_language
 
     @classmethod
-    def set(cls, language):
+    def set(cls, language: str) -> None:
         """
         Set language used by gettext and ungettext method. This method is
         intended for changing language on the fly, because rhsm service can
@@ -154,7 +156,7 @@ class Locale(object):
                 (e.g. de, de_DE, de_DE.utf-8, de_DE.UTF-8)
         """
         global LOCALE
-        lang = None
+        lang: gettext.GNUTranslations = None
 
         if language != "":
             if language in cls.translations.keys():

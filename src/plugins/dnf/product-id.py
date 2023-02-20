@@ -13,6 +13,7 @@
 #
 
 import logging
+from typing import Set
 
 from subscription_manager.productid import ProductManager
 from subscription_manager.utils import chroot
@@ -202,7 +203,7 @@ class DnfProductManager(ProductManager):
     def read_productid_cache(self):
         return self.__read_cache_file(self.PRODUCTID_CACHE_FILE)
 
-    def get_active(self):
+    def get_active(self) -> Set[str]:
         """
         Find the list of repos that provide packages that are actually installed.
         """

@@ -11,6 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from typing import Dict, List
 
 from subscription_manager.i18n import ugettext as _
 
@@ -25,19 +26,19 @@ class Reasons(object):
         self.reasons = reasons
         self.sorter = sorter
 
-    def get_subscription_reasons(self, sub_id):
+    def get_subscription_reasons(self, sub_id) -> List[str]:
         """
         returns reasons for sub_id, or empty list
         if there are none.
         """
         return self.get_subscription_reasons_map().get(sub_id, [])
 
-    def get_subscription_reasons_map(self):
+    def get_subscription_reasons_map(self) -> Dict[str, List[str]]:
         """
         returns a dictionary that maps
         valid entitlements to lists of reasons.
         """
-        result = {}
+        result: Dict[str, List[str]] = {}
         for s in self.sorter.valid_entitlement_certs:
             result[s.subject["CN"]] = []
 
@@ -59,7 +60,7 @@ class Reasons(object):
                     result[s_id].append(reason["message"])
         return result
 
-    def get_name_message_map(self):
+    def get_name_message_map(self) -> Dict[str, List[str]]:
         result = {}
         for reason in self.reasons:
             reason_name = reason["attributes"]["name"]
@@ -70,7 +71,7 @@ class Reasons(object):
             result[reason_name].append(reason["message"])
         return result
 
-    def get_reason_ids_map(self):
+    def get_reason_ids_map(self) -> Dict[str, List[str]]:
         result = {}
         for reason in self.reasons:
             if "attributes" in reason and "product_id" in reason["attributes"]:
@@ -87,14 +88,14 @@ class Reasons(object):
                 )
         return result
 
-    def get_stack_subscriptions(self, stack_id):
+    def get_stack_subscriptions(self, stack_id) -> List[str]:
         result = set([])
         for s in self.sorter.valid_entitlement_certs:
             if s.order.stacking_id and s.order.stacking_id == stack_id:
                 result.add(s.subject["CN"])
         return list(result)
 
-    def get_reason_id(self, reason):
+    def get_reason_id(self, reason) -> str:
         # returns ent/prod/stack id
         # ex: Subscription 123456
         if "product_id" in reason["attributes"]:
@@ -108,7 +109,7 @@ class Reasons(object):
             # Reason has no id attr
             return _("Unknown")
 
-    def get_product_reasons(self, prod):
+    def get_product_reasons(self, prod) -> List[str]:
         """
         Returns a list of reason messages that
         apply to the installed product
@@ -142,7 +143,7 @@ class Reasons(object):
                     result.add(reason["message"])
         return list(result)
 
-    def get_product_subscriptions(self, prod):
+    def get_product_subscriptions(self, prod) -> List[str]:
         """
         Returns a list of subscriptions that provide
         the product.

@@ -19,7 +19,7 @@ Make argparse friendlier to i18n/l10n
 
 Just use this instead of argparse, the interface should be the same.
 
-For some backgorund, see:
+For some background, see:
 http://bugs.python.org/issue4319
 """
 import argparse
@@ -36,10 +36,10 @@ USAGE = _("%(prog)s [OPTIONS]")
 
 
 class ArgumentParser(_ArgumentParser):
-    def print_help(self):
+    def print_help(self) -> None:
         sys.stdout.write(self.format_help())
 
-    def error(self, msg):
+    def error(self, msg: str) -> None:
         """
         Override default error handler to localize
 

@@ -17,8 +17,12 @@
 # in this software or its documentation.
 #
 import logging
+from typing import List, TYPE_CHECKING
 
 from subscription_manager import base_action_client
+
+if TYPE_CHECKING:
+    from subscription_manager.certlib import BaseActionInvoker
 
 from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.identitycertlib import IdentityCertActionInvoker
@@ -33,7 +37,7 @@ log = logging.getLogger(__name__)
 
 
 class ActionClient(base_action_client.BaseActionClient):
-    def _get_libset(self):
+    def _get_libset(self) -> List["BaseActionInvoker"]:
 
         # TODO: replace with FSM thats progress through this async and wait/joins if needed
         self.entcertlib = EntCertActionInvoker()
@@ -47,7 +51,7 @@ class ActionClient(base_action_client.BaseActionClient):
         # WARNING: order is important here, we need to update a number
         # of things before attempting to autoheal, and we need to autoheal
         # before attempting to fetch our certificates:
-        lib_set = [
+        lib_set: List[BaseActionInvoker] = [
             self.entcertlib,
             self.idcertlib,
             self.content_client,
@@ -61,47 +65,55 @@ class ActionClient(base_action_client.BaseActionClient):
 
 
 class HealingActionClient(base_action_client.BaseActionClient):
-    def _get_libset(self):
+    def _get_libset(self) -> List["BaseActionInvoker"]:
 
         self.entcertlib = EntCertActionInvoker()
         self.installedprodlib = InstalledProductsActionInvoker()
         self.syspurposelib = SyspurposeSyncActionInvoker()
         self.healinglib = HealingActionInvoker()
 
-        lib_set = [self.installedprodlib, self.syspurposelib, self.healinglib, self.entcertlib]
+        lib_set: List[BaseActionInvoker] = [
+            self.installedprodlib,
+            self.syspurposelib,
+            self.healinglib,
+            self.entcertlib,
+        ]
 
         return lib_set
 
 
 # it may make more sense to have *Lib.cleanup actions?
 # *Lib things are weird, since some are idempotent, but
-# some arent. entcertlib/repolib .update can both install
+# some are not. entcertlib/repolib .update can both install
 # certs, and/or delete all of them.
 class UnregisterActionClient(base_action_client.BaseActionClient):
     """CertManager for cleaning up on unregister.
 
-    This class should not need a consumer id, or a uep connection, since it
+    This class should not need a consumer id nor an UEP connection, since it
     is running post unregister.
     """
 
-    def _get_libset(self):
+    def _get_libset(self) -> List["BaseActionInvoker"]:
 
         self.entcertlib = EntCertActionInvoker()
         self.content_action_client = ContentActionClient()
 
-        lib_set = [self.entcertlib, self.content_action_client]
+        lib_set: List[BaseActionInvoker] = [
+            self.entcertlib,
+            self.content_action_client,
+        ]
         return lib_set
 
 
 class ProfileActionClient(base_action_client.BaseActionClient):
     """
-    This class should not need a consumer id, or a uep connection, since it
+    This class should not need a consumer id nor an UEP connection, since it
     is running post unregister.
     """
 
-    def _get_libset(self):
+    def _get_libset(self) -> List["BaseActionInvoker"]:
 
         self.profilelib = PackageProfileActionInvoker()
 
-        lib_set = [self.profilelib]
+        lib_set: List[BaseActionInvoker] = [self.profilelib]
         return lib_set
