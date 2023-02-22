@@ -207,7 +207,7 @@ def _main(options, log):
         else:
             action_client = ActionClient()
 
-        action_client.update(options.autoheal)
+        action_client.update()
 
         for update_report in action_client.update_reports:
             # FIXME: make sure we don't get None reports
