@@ -17,7 +17,7 @@ from gzip import GzipFile
 import logging
 import os
 
-from typing import Callable, Dict, List, Literal, Optional, Union
+from typing import Callable, Dict, List, Literal, Optional, Tuple, Union
 
 # for labelCompare
 import rpm
@@ -111,8 +111,6 @@ class ProductDatabase:
 class ComparableMixin:
     """Needs compare_keys to be implemented."""
 
-    # FIXME self.compare_keys should be defined here, raising NotImplementedError
-
     def _compare(self, keys: List, method: Callable) -> Union[Literal[NotImplemented], bool]:
         return method(keys[0], keys[1]) if keys else NotImplemented
 
@@ -133,6 +131,9 @@ class ComparableMixin:
 
     def __ge__(self, other):
         return self._compare(self.compare_keys(other), lambda s, o: s >= o)
+
+    def compare_keys(self, other):
+        raise NotImplementedError()
 
 
 class RpmVersion:
@@ -234,8 +235,8 @@ class ComparableProduct(ComparableMixin):
     def __init__(self, product):
         self.product = product
 
-    def compare_keys(self, other):
-        """Create a a tuple of RpmVersion objects.
+    def compare_keys(self, other) -> Optional[Tuple[RpmVersion, RpmVersion]]:
+        """Create a tuple of RpmVersion objects.
 
         Create a RpmVersion using the product's version attribute
         as the 'version' attribute for a rpm label tuple. We let the
@@ -269,7 +270,7 @@ class ComparableProductCert(ComparableMixin):
 
     # keys used to compare certificate. For now, just the keys for the
     # Product.version. This could include say, certificate serial or issue date
-    def compare_keys(self, other):
+    def compare_keys(self, other) -> Optional[Tuple[RpmVersion, RpmVersion]]:
         return self.comp_product.compare_keys(other.comp_product)
 
 

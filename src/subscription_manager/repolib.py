@@ -418,8 +418,7 @@ class RepoUpdateActionCommand:
             self.uep = self.cp_provider.get_consumer_auth_cp()
         return self.uep
 
-    def perform(self) -> Union["RepoActionReport", Literal[0]]:
-        # FIXME return None instead of 0
+    def perform(self) -> Optional["RepoActionReport"]:
         # the [rhsm] manage_repos can be overridden to disable generation of the
         # redhat.repo file:
         if not self.manage_repos:
@@ -429,7 +428,7 @@ class RepoUpdateActionCommand:
                 if repo_file.exists():
                     log.info("Removing %s due to manage_repos configuration." % repo_file.path)
             RepoActionInvoker.delete_repo_file()
-            return 0
+            return None
 
         repo_pairs = []
         for repo_class, server_val_repo_class in get_repo_file_classes():

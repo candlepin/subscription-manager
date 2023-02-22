@@ -203,7 +203,6 @@ class CPProvider:
         uep: connection.UEPConnection = self.get_no_auth_cp()
 
         if not uep.has_capability("keycloak_auth"):
-            # FIXME This error class should be instantiated
             raise TokenAuthUnsupportedException
 
         # FIXME: make this more reliable

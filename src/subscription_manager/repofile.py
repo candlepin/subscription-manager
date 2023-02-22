@@ -76,7 +76,7 @@ class Repo(dict):
     }
 
     def __init__(self, repo_id: str, existing_values: List = None):
-        # FIXME Missing super() call
+        super().__init__()
         if HAS_DEB822 is True:
             self.PROPERTIES["arches"] = (1, None)
 
