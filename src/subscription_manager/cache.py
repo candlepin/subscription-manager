@@ -74,12 +74,14 @@ class CacheManager:
 
     def _load_data(self, open_file: TextIO) -> Optional[Dict]:
         """
-        Load the data in whatever format the sub-class uses from
+        Load the data in whatever format the subclass uses from
         an already opened file descriptor.
         """
         raise NotImplementedError
 
-    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs) -> None:
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> None:
         """
         Sync the latest data to/from the server.
         """
@@ -278,6 +280,17 @@ class StatusCache(CacheManager):
         json_str: str = open_file.read()
         return json.loads(json_str)
 
+    def _sync_with_server(
+        self,
+        uep: connection.UEPConnection,
+        consumer_uuid: str,
+        _: Optional[datetime.datetime] = None,
+    ) -> None:
+        """
+        Sync the latest data to/from the server.
+        """
+        raise NotImplementedError
+
     def _read_cache(self) -> Optional[Dict]:
         """
         Prefer in memory cache to avoid io.  If it doesn't exist, save
@@ -315,7 +328,6 @@ class StatusCache(CacheManager):
         using a default value instead of calling it again. If there is
         no default, the None likely indicates an error needs to be raised.
         """
-
         if self.server_status is None:
             self.server_status = self._read_cache()
             if self.server_status is None:
@@ -351,16 +363,10 @@ class EntitlementStatusCache(StatusCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/entitlement_status.json"
 
-    # TODO Should we allow *args/**kwargs even if we know we are not using them?
     def _sync_with_server(
-        self,
-        uep: connection.UEPConnection,
-        uuid: str,
-        on_date: Optional[datetime.datetime] = None,
-        *args,
-        **kwargs,
-    ):
-        self.server_status = uep.getCompliance(uuid, on_date)
+        self, uep: connection.UEPConnection, consumer_uuid: str, on_date: Optional[datetime.datetime] = None
+    ) -> None:
+        self.server_status = uep.getCompliance(consumer_uuid, on_date)
 
 
 class SyspurposeComplianceStatusCache(StatusCache):
@@ -373,13 +379,8 @@ class SyspurposeComplianceStatusCache(StatusCache):
     CACHE_FILE = "/var/lib/rhsm/cache/syspurpose_compliance_status.json"
 
     def _sync_with_server(
-        self,
-        uep: connection.UEPConnection,
-        uuid: str,
-        on_date: Optional[datetime.datetime] = None,
-        *args,
-        **kwargs,
-    ):
+        self, uep: connection.UEPConnection, consumer_uuid: str, on_date: Optional[datetime.datetime] = None
+    ) -> None:
         self.syspurpose_service = syspurpose.Syspurpose(uep)
         self.server_status: Dict = self.syspurpose_service.get_syspurpose_status(on_date)
 
@@ -414,8 +415,10 @@ class ProductStatusCache(StatusCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/product_status.json"
 
-    def _sync_with_server(self, uep: connection.UEPConnection, uuid: str, *args, **kwargs):
-        consumer_data: Dict = uep.getConsumer(uuid)
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> None:
+        consumer_data: Dict = uep.getConsumer(consumer_uuid)
 
         if "installedProducts" not in consumer_data:
             log.warning("Server does not support product date ranges.")
@@ -430,7 +433,9 @@ class OverrideStatusCache(StatusCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/content_overrides.json"
 
-    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs):
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> None:
         self.server_status = uep.getContentOverrides(consumer_uuid)
 
 
@@ -441,7 +446,9 @@ class ReleaseStatusCache(StatusCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/releasever.json"
 
-    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs):
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> None:
         def get_release(uuid: str) -> Dict:
 
             # To mimic connection problems you can raise required exception:
@@ -542,7 +549,9 @@ class ProfileManager(CacheManager):
         cached_profile: Optional[str] = self._read_cache()
         return not cached_profile == self.current_profile
 
-    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs) -> None:
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> None:
         """
         This method has to be able to sync combined profile, when server supports this functionality
         and it also has to be able to send only profile containing list of installed RPMs.
@@ -649,7 +658,9 @@ class InstalledProductsManager(CacheManager):
         final: List[Dict] = [val for (key, val) in list(self.installed.items())]
         return final
 
-    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs) -> None:
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> None:
         uep.updateConsumer(
             consumer_uuid,
             installed_products=self.format_for_server(),
@@ -664,8 +675,10 @@ class PoolStatusCache(StatusCache):
 
     CACHE_FILE = "/var/lib/rhsm/cache/pool_status.json"
 
-    def _sync_with_server(self, uep: connection.UEPConnection, uuid: str, *args, **kwargs) -> None:
-        self.server_status = uep.getEntitlementList(uuid)
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> None:
+        self.server_status = uep.getEntitlementList(consumer_uuid)
 
 
 class PoolTypeCache:
@@ -851,24 +864,20 @@ class ConsumerCache(CacheManager):
             # Ignore json file parse error
             pass
 
-    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs):
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> dict:
         """
-        This method has to be implemented in sub-classes of this class
+        This method has to be implemented in subclasses of this class
         :param uep: object representing connection to candlepin server
         :param consumer_uuid: consumer UUID object
-        :param args: other position arguments
-        :param kwargs: other keyed arguments
         :return: Subclass method has to return the content that was returned by candlepin server.
         """
         raise NotImplementedError
 
-    def _is_cache_obsoleted(
-        self, uep: connection.UEPConnection, identity: "Identity", *args, **kwargs
-    ) -> bool:
+    def _is_cache_obsoleted(self, uep: connection.UEPConnection, identity: "Identity") -> bool:
         """
         Another method for checking if cached file is obsoleted
-        :param args: positional arguments
-        :param kwargs: keyed arguments
         :return: True if the cache is obsoleted; otherwise return False
         """
         return False
@@ -969,7 +978,9 @@ class SyspurposeValidFieldsCache(ConsumerCache):
     def __init__(self, data: Any = None):
         super(SyspurposeValidFieldsCache, self).__init__(data=data)
 
-    def _sync_with_server(self, uep: connection.UEPConnection, *args, **kwargs) -> Dict:
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> dict:
         cache: CurrentOwnerCache = inj.require(inj.CURRENT_OWNER_CACHE)
         owner: Dict = cache.read_data(uep)
         if "key" in owner:
@@ -992,18 +1003,16 @@ class CurrentOwnerCache(ConsumerCache):
     def __init__(self, data: Any = None):
         super(CurrentOwnerCache, self).__init__(data=data)
 
-    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs):
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> dict:
         return uep.getOwner(consumer_uuid)
 
-    def _is_cache_obsoleted(
-        self, uep: connection.UEPConnection, identity: "Identity", *args, **kwargs
-    ) -> bool:
+    def _is_cache_obsoleted(self, uep: connection.UEPConnection, identity: "Identity") -> bool:
         """
         We don't know if the cache is valid until we get valid response
         :param uep: object representing connection to candlepin server
         :param identity: consumer identity
-        :param args: other arguments
-        :param kwargs: other keyed arguments
         :return: True, when cache is obsoleted or validity of cache is unknown.
         """
         if uep is None:
@@ -1030,7 +1039,9 @@ class ContentAccessModeCache(ConsumerCache):
     def __init__(self, data: Any = None):
         super(ContentAccessModeCache, self).__init__(data=data)
 
-    def _sync_with_server(self, uep: connection.UEPConnection, consumer_uuid: str, *args, **kwargs):
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> str:
         try:
             current_owner: Dict = uep.getOwner(consumer_uuid)
         except Exception:
@@ -1049,13 +1060,11 @@ class ContentAccessModeCache(ConsumerCache):
                 )
         return "unknown"
 
-    def _is_cache_obsoleted(self, uep: connection.UEPConnection, identity: "Identity", *args, **kwargs):
+    def _is_cache_obsoleted(self, uep: connection.UEPConnection, identity: "Identity"):
         """
         We don't know if the cache is valid until we get valid response
         :param uep: object representing connection to candlepin server
         :param identity: consumer identity
-        :param args: other arguments
-        :param kwargs: other keyed arguments
         :return: True, when cache is obsoleted or validity of cache is unknown.
         """
         if uep is None:
@@ -1096,7 +1105,9 @@ class SupportedResourcesCache(ConsumerCache):
     def __init__(self, data: Any = None):
         super(SupportedResourcesCache, self).__init__(data=data)
 
-    def _sync_with_server(self, uep: connection.UEPConnection, *args, **kwargs):
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str = None, _: Optional[datetime.datetime] = None
+    ) -> dict:
         return uep.get_supported_resources()
 
 
