@@ -2095,6 +2095,16 @@ class UEPConnection(BaseConnection):
             method += "&email_locale=%s" % self.sanitize(lang)
         return self.conn.request_post(method, description=_("Activating"))
 
+    # used by virt-who
+    def getJob(self, job_id: str) -> str:
+        """
+        Returns the status of a candlepin job.
+        """
+        query_params = urlencode({"result_data": True})
+        method = "/jobs/%s?%s" % (job_id, query_params)
+        results = self.conn.request_get(method, description=_("Fetching job"))
+        return results
+
     def sanitize(self, url_param: str, plus: bool = False) -> str:
         """
         This is a wrapper around urllib.quote to avoid issues like the one
