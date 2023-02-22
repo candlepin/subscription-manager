@@ -220,11 +220,20 @@ class ProductCertificateDirectory(CertificateDirectory):
 
 class ProductDirectory(ProductCertificateDirectory):
     def __init__(self, path: Optional[str] = None, default_path: Optional[str] = None):
-        # FIXME Missing super() call
         installed_prod_path: str = path or conf["rhsm"]["productCertDir"]
         default_prod_path: str = default_path or DEFAULT_PRODUCT_CERT_DIR
         self.installed_prod_dir = ProductCertificateDirectory(path=installed_prod_path)
         self.default_prod_dir = ProductCertificateDirectory(path=default_prod_path)
+
+        # In productid.py, ProductDirectory.path is used as path to write new certs
+        # to. Souse  the installed_prod_dir (/etc/pki/product) as that is
+        # meant to be writable
+        #
+        # FIXME: a ProductDirectory should probably be responsible for deciding
+        # where to write out the certs. For container cases, this could be passing
+        # the product cert back to the host in some manner. Or better, let a plugin
+        # decide.
+        super().__init__(installed_prod_path)
 
     def list(self) -> List["EntitlementCertificate"]:
         installed_prod_list: List[EntitlementCertificate] = self.installed_prod_dir.list()
@@ -238,18 +247,6 @@ class ProductDirectory(ProductCertificateDirectory):
     def refresh(self) -> None:
         self.installed_prod_dir.refresh()
         self.default_prod_dir.refresh()
-
-    # In productid.py, ProductDirectory.path is used as path to write new certs
-    # to. Souse  the installed_prod_dir (/etc/pki/product) as that is
-    # meant to be writable
-    #
-    # FIXME: a ProductDirectory should probably be responsible for deciding
-    # where to write out the certs. For container cases, this could be passing
-    # the product cert back to the host in some manner. Or better, let a plugin
-    # decide.
-    @property
-    def path(self) -> str:
-        return self.installed_prod_dir.path
 
 
 class EntitlementDirectory(CertificateDirectory):
