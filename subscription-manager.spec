@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.35
+Version: 1.28.36
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1483,6 +1483,35 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Feb 22 2023 Pino Toscano <ptoscano@redhat.com> 1.28.36-1
+- Translated using Weblate (French) (ljanda@redhat.com)
+- Translated using Weblate (French) (suanand@redhat.com)
+- Translated using Weblate (Korean) (jsefler@redhat.com)
+- 2168576: cockpit: insights: fix spawn_error_to_string in more cases
+  (ptoscano@redhat.com)
+- cockpit: Fix the issue, when it is not possible to install insights-client
+  (jhnidek@redhat.com)
+- ENT-5542: Build package using GitHub Actions (mhorky@redhat.com)
+- 2166317: gui: do not use an empty environment string (ptoscano@redhat.com)
+- Test libdnf plugin using GitHub Actions (mhorky@redhat.com)
+- libdnf: fix return value of findProductId() (ptoscano@redhat.com)
+- 1938878: Fix issues discovered by static code analyzers (#2644)
+  (jhnidek@redhat.com)
+- ENT-5541: Publish PR coverage (mhorky@redhat.com)
+- 2166623: gui: use UnknownContentException instead of NetworkException
+  (ptoscano@redhat.com)
+- ENT-3759: Test on GitHub Actions (mhorky@redhat.com)
+- Alter import of rhsm.config functions (mhorky@redhat.com)
+- ENT-5536: Fix FileMonitor tests (mhorky@redhat.com)
+- tests: drop test_po_files.py (ptoscano@redhat.com)
+- Ensure tests don't fail when run under root (mhorky@redhat.com)
+- build: pin pytest to < 7 (ptoscano@redhat.com)
+- rhsm: drop custom which() implementation (ptoscano@redhat.com)
+- facts: switch to shutil.which() (ptoscano@redhat.com)
+- Fix tests for Python 3.6 runner (mhorky@redhat.com)
+- Stop calling pytest with --failed-first (mhorky@redhat.com)
+- Handle tests in containers better (mhorky@redhat.com)
+
 * Fri Jan 20 2023 Pino Toscano <ptoscano@redhat.com> 1.28.35-1
 - Translated using Weblate (Spanish) (ptoscano@redhat.com)
 - Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
