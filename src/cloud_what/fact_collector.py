@@ -22,13 +22,9 @@ This module contains minimalistic collectors of system facts
 # TODO: used by many applications on Linux.
 
 import os
+import shutil
 import subprocess
 import logging
-
-try:
-    import dmidecode
-except ImportError:
-    dmidecode = None
 
 log = logging.getLogger(__name__)
 
@@ -39,6 +35,7 @@ class MiniHostCollector(object):
     """
 
     VIRT_WHAT_PATH = '/usr/sbin/virt-what'
+    DMIDECODE_PATH = "/usr/sbin/dmidecode"
 
     def get_virt_what(self) -> dict:
         """
@@ -73,46 +70,53 @@ class MiniHostCollector(object):
 
         return virt_dict
 
-    def _get_dmi_data(self, func_output, tag, dmi_info):
-        for key, value in func_output.items():
-            for key1, value1 in list(value['data'].items()):
-                # Skip everything that isn't string
-                if not isinstance(value1, str) and not isinstance(value1, bytes):
-                    continue
+    def _get_dmidecode_string(self, string_keyword):
+        """
+        Run `dmidecode` to get the value of a specific DMI string.
 
-                nkey = ''.join([tag, key1.lower()]).replace(" ", "_")
-                dmi_info[nkey] = str(value1, 'utf-8')
+        :return: string with DMI value, or None on error
+        """
+        env = dict(os.environ)
+        env.update({"LANGUAGE": "en_US.UTF-8"})
 
-        return dmi_info
+        args = [self.DMIDECODE_PATH, "-s", string_keyword]
+
+        try:
+            res = subprocess.check_output(args, stderr=subprocess.PIPE, universal_newlines=True)
+        except subprocess.SubprocessError as exc:
+            log.error(f"Failed to call '{' '.join(args)}': {exc}")
+            return None
+
+        return res.rstrip()
 
     def get_dmidecode(self) -> dict:
         """
-        Try to get output from dmidecode. It require dmidecode module
+        Try to get output from dmidecode. It requires the dmidecode tool
         :return: Dictionary with facts
         """
-        if dmidecode is None:
-            log.error('The dmidecode module is not installed. Unable to detect public cloud providers.')
+        if shutil.which(self.DMIDECODE_PATH) is None:
+            log.error("The dmidecode executable is not installed. Unable to detect public cloud providers.")
             return {}
 
-        dmi_data = {
-            "dmi.bios.": dmidecode.bios,
-            "dmi.processor.": dmidecode.processor,
-            "dmi.baseboard.": dmidecode.baseboard,
-            "dmi.chassis.": dmidecode.chassis,
-            "dmi.slot.": dmidecode.slot,
-            "dmi.system.": dmidecode.system,
-            "dmi.memory.": dmidecode.memory,
-            "dmi.connector.": dmidecode.connector,
+        # DMI strings required, and that can provide hits for detection
+        dmi_tags = {
+            "dmi.baseboard.manufacturer": "baseboard-manufacturer",
+            "dmi.bios.vendor": "bios-vendor",
+            "dmi.bios.version": "bios-version",
+            "dmi.chassis.asset_tag": "chassis-asset-tag",
+            "dmi.chassis.manufacturer": "chassis-manufacturer",
+            "dmi.chassis.serial_number": "chassis-serial-number",
+            "dmi.chassis.version": "chassis-version",
+            "dmi.system.manufacturer": "system-manufacturer",
+            "dmi.system.serial_number": "system-serial-number",
+            "dmi.system.uuid": "system-uuid",
         }
 
         dmi_info = {}
-        for key, func in dmi_data.items():
-            try:
-                func_output = func()
-            except Exception as err:
-                log.error(f'Unable to read system DMI information {func}: {err}')
-            else:
-                dmi_info = self._get_dmi_data(func_output, key, dmi_info)
+        for tag, string_keyword in dmi_tags.items():
+            value = self._get_dmidecode_string(string_keyword)
+            if value is not None:
+                dmi_info[tag] = value
         return dmi_info
 
     def get_all(self) -> dict:

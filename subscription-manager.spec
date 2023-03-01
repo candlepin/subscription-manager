@@ -15,9 +15,7 @@
 %global use_container_plugin 1
 %endif
 
-%if (0%{?rhel} >= 7 || 0%{?fedora})
-%global dmidecode_version >= 3.12.2-2
-%endif
+%global dmidecode_arches %{ix86} x86_64 aarch64
 
 # We use the tmpfiles_create macro from systemd-rpm-macros rpm.
 # Because of an incorrect version labelling of that rpm in SLES 12 which
@@ -291,6 +289,10 @@ Requires:  %{py_package_prefix}-ethtool
 Requires:  %{py_package_prefix}-iniparse
 Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what
+%ifarch %{dmidecode_arches}
+Requires: dmidecode
+%endif
+
 %if 0%{?suse_version}
 Requires:  logrotate
 Requires:  cron
@@ -336,11 +338,6 @@ Requires:  usermode
 Requires: python3-gobject-base
 %else
 Requires:  %{?gtk3:gobject-introspection, pygobject3-base} %{!?gtk3:pygobject2}
-%endif
-# There's no dmi to read on these arches, so don't pull in this dep.
-# Additionally, dmidecode isn't packaged at all on SUSE
-%ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
-Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
 %endif
 %endif
 
@@ -746,8 +743,8 @@ subscription-manager-initial-setup-addon, and subscription-manager-cockpit-plugi
 Summary: Python package for detection of public cloud provider
 License: GPLv2
 Requires: python3-requests
-%ifnarch aarch64 ppc ppc64 ppc64le s390 s390x
-Requires:  %{py_package_prefix}-dmidecode %{?dmidecode_version}
+%ifarch %{dmidecode_arches}
+Requires: dmidecode
 %endif
 
 %description -n python3-cloud-what
