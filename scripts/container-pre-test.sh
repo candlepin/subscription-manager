@@ -1,17 +1,16 @@
 #!/bin/bash
 
+# Install essential packages
+dnf --setopt install_weak_deps=False install -y \
+  dnf-plugins-core git gcc cmake python3 python3-devel python3-pip
+
 source /etc/os-release
 # These repositories are required for the 'libdnf-devel' package.
 # Fedora has it available out of the box.
 # RHEL needs it to be enabled via 'subscription-manager repos'.
 if [[ $ID == "centos" && $VERSION == "9" ]]; then
-  dnf --setopt install_weak_deps=False install -y dnf-plugins-core
   dnf config-manager --enable crb
 fi
-
-# Install essential packages
-dnf --setopt install_weak_deps=False install -y \
-  git gcc cmake python3 python3-devel python3-pip
 
 # Install system, build and runtime packages
 dnf --setopt install_weak_deps=False install -y \
