@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.33
+Version: 1.29.33.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -736,6 +736,10 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Mar 02 2023 Pino Toscano <ptoscano@redhat.com> 1.29.33.1-1
+- tito: add rhel 9.2 releaser (ptoscano@redhat.com)
+- 2169251: connection: restore UEPConnection.getJob() (ptoscano@redhat.com)
+
 * Thu Feb 16 2023 Pino Toscano <ptoscano@redhat.com> 1.29.33-1
 - Translated using Weblate (French) (ljanda@redhat.com)
 - Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
