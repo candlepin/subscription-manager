@@ -60,7 +60,7 @@ from test import subman_marker_slow, subman_marker_slow_timeout
 log = logging.getLogger(__name__)
 
 
-class _FACT_MATCHER(object):
+class _FACT_MATCHER:
     def __eq__(self, other):
         return True
 

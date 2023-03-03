@@ -24,7 +24,7 @@ PATH_END = "PATH END"
 LISTING = "listing"
 
 
-class PathTree(object):
+class PathTree:
     """
     This builds and makes available a tree that represents matchable paths. A
     path must be matched starting from its root and the root of the tree,

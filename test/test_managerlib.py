@@ -695,7 +695,7 @@ class PoolFilterTests(SubManFixture):
         return pool
 
 
-class MockLog(object):
+class MockLog:
     def info(self):
         pass
 

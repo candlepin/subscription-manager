@@ -31,7 +31,7 @@ class InstalledProductsActionInvoker(certlib.BaseActionInvoker):
         return action.perform()
 
 
-class InstalledProductsActionCommand(object):
+class InstalledProductsActionCommand:
     """Update the consumers installed product list to RHSM API.
 
     Returns a InstalledProductsActionReport.

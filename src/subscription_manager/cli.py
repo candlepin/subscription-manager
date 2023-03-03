@@ -45,7 +45,7 @@ def flush_stdout_stderr() -> None:
         log.error("Error: Unable to print data to stdout/stderr output during exit process: %s" % io_err)
 
 
-class AbstractCLICommand(object):
+class AbstractCLICommand:
     """
     Base class for rt commands. This class provides a templated run
     strategy.
@@ -102,7 +102,7 @@ class AbstractCLICommand(object):
 
 
 # taken wholseale from rho...
-class CLI(object):
+class CLI:
     def __init__(self, command_classes: List[Type[AbstractCLICommand]] = None):
         command_classes = command_classes or []
         self.cli_commands: Dict[str, AbstractCLICommand] = {}

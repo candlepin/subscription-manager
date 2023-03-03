@@ -32,7 +32,7 @@ def xstr(value):
         return str(value)
 
 
-class ProductPrinter(object):
+class ProductPrinter:
     def as_str(self, product):
         s = []
         s.append("%s:" % _("Product"))
@@ -56,7 +56,7 @@ class ProductPrinter(object):
         return "%s\n" % "\n".join(s)
 
 
-class OrderPrinter(object):
+class OrderPrinter:
     def as_str(self, order):
 
         if order is None:
@@ -90,7 +90,7 @@ class OrderPrinter(object):
         return "%s\n" % "\n".join(s)
 
 
-class ContentPrinter(object):
+class ContentPrinter:
     def as_str(self, content):
         s = []
         s.append("%s:" % _("Content"))
@@ -109,7 +109,7 @@ class ContentPrinter(object):
         return "\n".join(s)
 
 
-class CertificatePrinter(object):
+class CertificatePrinter:
     def cert_to_str(self, cert):
         s = []
         s.append("\n+-------------------------------------------+")
@@ -228,7 +228,7 @@ class EntitlementCertificatePrinter(ProductCertificatePrinter):
         return "%s" % "\n".join(s)
 
 
-class CertificatePrinterFactory(object):
+class CertificatePrinterFactory:
     def get_printer(self, cert, **kwargs):
         if isinstance(cert, EntitlementCertificate):
             return EntitlementCertificatePrinter(**kwargs)

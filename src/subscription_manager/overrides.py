@@ -29,7 +29,7 @@ log = logging.getLogger(__name__)
 # Module for manipulating content overrides
 
 
-class Overrides(object):
+class Overrides:
     def __init__(self):
         self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
 
@@ -75,7 +75,7 @@ class Overrides(object):
         return self.cp_provider.get_consumer_auth_cp()
 
 
-class Override(object):
+class Override:
     def __init__(self, repo_id: str, name: str, value: Optional[object] = None):
         self.repo_id: str = repo_id
         self.name: str = name

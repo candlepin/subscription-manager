@@ -872,7 +872,7 @@ class Order:
         return "<Order: name=%s number=%s sku=%s>" % (self.name, self.number, self.sku)
 
 
-class Content(object):
+class Content:
     def __init__(
         self,
         content_type=None,
@@ -929,7 +929,7 @@ class Content(object):
         return hash(self.label)
 
 
-class Pool(object):
+class Pool:
     """
     Represents the pool an entitlement originates from.
     """

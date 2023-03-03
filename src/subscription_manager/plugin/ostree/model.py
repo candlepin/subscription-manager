@@ -42,7 +42,7 @@ class RemoteSectionNameParseError(OstreeContentError):
         self.section = section
 
 
-class OstreeRemote(object):
+class OstreeRemote:
     """Represent a ostree repo remote.
 
     A repo remote is one of the the '[remote "ostree-awesomeos-8"]' section in
@@ -238,7 +238,7 @@ class OstreeRemote(object):
         return self.report_template.format(self=self)
 
 
-class OstreeRemotes(object):
+class OstreeRemotes:
     """A container/set of OstreeRemote objects.
 
     Representing OstreeRemote's as found in the repo configs, or
@@ -281,7 +281,7 @@ class OstreeRemotes(object):
         return s
 
 
-class OstreeConfigFileStore(object):
+class OstreeConfigFileStore:
     """For loading/saving a ostree remotes repo config file."""
 
     default_repo_file_path = OSTREE_REPO_CONFIG_PATH
@@ -303,7 +303,7 @@ class OstreeConfigFileStore(object):
 
 
 # persist OstreeConfig object to a config file
-class OstreeConfigFileWriter(object):
+class OstreeConfigFileWriter:
     """Populate config file parser with infrom from OstreeConfig and save."""
 
     def __init__(self, repo_file):
@@ -336,7 +336,7 @@ class OstreeConfigFileWriter(object):
         self.repo_file.set_core(ostree_config.core)
 
 
-class OstreeConfigUpdatesBuilder(object):
+class OstreeConfigUpdatesBuilder:
     def __init__(self, ostree_config, contents):
         self.orig_ostree_config = ostree_config
         self.contents = contents
@@ -382,7 +382,7 @@ class OstreeCore(dict):
     pass
 
 
-class OstreeConfig(object):
+class OstreeConfig:
     """Represents the config state of the systems ostree tool.
 
     Config file loading and parsing will create one of these and populate it
@@ -448,7 +448,7 @@ class OstreeRepoConfig(OstreeConfig):
     default_repo_file_path = OSTREE_REPO_CONFIG_PATH
 
 
-class OstreeConfigUpdates(object):
+class OstreeConfigUpdates:
     """The info a ostree update action needs to update OstreeConfig.
 
     remote sets, branches, etc.

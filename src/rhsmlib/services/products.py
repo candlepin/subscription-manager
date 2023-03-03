@@ -19,7 +19,7 @@ from subscription_manager import utils
 from subscription_manager import managerlib
 
 
-class InstalledProducts(object):
+class InstalledProducts:
     """
     Class for listing installed products
     """

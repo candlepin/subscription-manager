@@ -47,7 +47,7 @@ class ContentPluginActionReport(certlib.ActionReport):
         self.reports.add(report)
 
 
-class ContentPluginActionCommand(object):
+class ContentPluginActionCommand:
     """An ActionCommand used to wrap 'content_update' plugin invocations.
 
     args:

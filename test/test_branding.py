@@ -16,7 +16,7 @@ import unittest
 from subscription_manager.branding import Branding
 
 
-class TestBranding(object):
+class TestBranding:
     def __init__(self):
         self.CLI_REGISTER = "register with awesomeness"
 

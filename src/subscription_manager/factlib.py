@@ -29,7 +29,7 @@ log = logging.getLogger(__name__)
 
 # FactsActionInvoker has a Facts
 #   Facts is a CacheManager
-class FactsActionInvoker(object):
+class FactsActionInvoker:
     """Used by CertActionClient to update a system's facts with the server, used
     primarily by the cron job but in a couple other places as well.
 
@@ -67,7 +67,7 @@ class FactsActionReport(ActionReport):
         return len(self.fact_updates)
 
 
-class FactsActionCommand(object):
+class FactsActionCommand:
     """UpdateAction for facts.
 
     Update facts if calculated local facts are different than

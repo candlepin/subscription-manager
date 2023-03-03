@@ -48,7 +48,7 @@ class HealingActionInvoker(certlib.BaseActionInvoker):
         return action.perform()
 
 
-class HealingUpdateAction(object):
+class HealingUpdateAction:
     """UpdateAction for ent cert healing.
 
     Core if entitlement certificate healing.

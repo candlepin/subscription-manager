@@ -403,7 +403,7 @@ def chroot(dirname: str) -> None:
     Path.ROOT = dirname
 
 
-class CertificateFilter(object):
+class CertificateFilter:
     def match(self, cert: "EntitlementCertificate"):
         """
         Checks if the specified certificate matches this filter's restrictions.

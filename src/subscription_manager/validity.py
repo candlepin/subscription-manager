@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-class ValidProductDateRangeCalculator(object):
+class ValidProductDateRangeCalculator:
     def __init__(self, uep: Optional["UEPConnection"] = None):
         uep = uep or inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()
         self.identity: Identity = inj.require(inj.IDENTITY)

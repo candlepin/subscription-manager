@@ -59,7 +59,7 @@ class TestEntitlement(fixture.SubManFixture):
         self.assertTrue(isinstance(e.contents[0], mock.Mock))
 
 
-class EntitlementSourceBuilder(object):
+class EntitlementSourceBuilder:
     def contents_list(self, name):
         return [self.mock_content(name), self.mock_content(name)]
 

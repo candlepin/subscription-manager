@@ -52,7 +52,7 @@ def get_branding():
     return _branding
 
 
-class Branding(object):
+class Branding:
     def __init__(self, custom_branding=None):
         self._default = DefaultBranding()
         if custom_branding is None:
@@ -66,7 +66,7 @@ class Branding(object):
             return getattr(self._default, x)
 
 
-class DefaultBranding(object):
+class DefaultBranding:
 
     """
     Default branding. values are defined in init to help with i18n/l10n
@@ -88,7 +88,7 @@ class DefaultBranding(object):
         self.REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY = _("Red Hat Subscription Management")
 
 
-class EmptyBranding(object):
+class EmptyBranding:
     """
     Empty branding object to use in place of a custom branding
     (so we always fall back to the defaults.

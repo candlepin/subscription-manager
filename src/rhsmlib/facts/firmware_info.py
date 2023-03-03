@@ -26,7 +26,7 @@ log = logging.getLogger(__name__)
 
 # This doesn't really do anything other than provide a null/noop provider for
 # non-DMI platforms.
-class NullFirmwareInfoCollector(object):
+class NullFirmwareInfoCollector:
     """Default provider for platform without a specific platform info provider.
 
     ie, all platforms except those with DMI (ie, intel platforms)"""

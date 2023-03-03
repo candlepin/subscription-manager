@@ -16,7 +16,7 @@ from typing import Dict, List
 from subscription_manager.i18n import ugettext as _
 
 
-class Reasons(object):
+class Reasons:
     """
     Holds reasons and parses them for
     the client.

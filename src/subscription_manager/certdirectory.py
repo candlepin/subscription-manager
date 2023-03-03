@@ -35,7 +35,7 @@ conf = config.Config(get_config_parser())
 DEFAULT_PRODUCT_CERT_DIR = "/etc/pki/product-default"
 
 
-class Directory(object):
+class Directory:
     def __init__(self, path):
         self.path = Path.abs(path)
 
@@ -352,7 +352,7 @@ class EntitlementDirectory(CertificateDirectory):
         return pool_id_to_serials
 
 
-class Path(object):
+class Path:
 
     # Used during Anaconda install by the yum pidplugin to ensure we operate
     # beneath /mnt/sysimage/ instead of /.
@@ -376,7 +376,7 @@ class Path(object):
         return os.path.isdir(path)
 
 
-class Writer(object):
+class Writer:
     def __init__(self):
         self.ent_dir: EntitlementDirectory = require(ENT_DIR)
 

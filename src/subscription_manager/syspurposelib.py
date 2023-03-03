@@ -242,7 +242,7 @@ class SyspurposeSyncActionReport(certlib.ActionReport):
         return buf
 
 
-class SyspurposeSyncActionCommand(object):
+class SyspurposeSyncActionCommand:
     """
     Sync the system purpose values, by performing a three-way merge between:
       - The last known shared state (SyspurposeCache)

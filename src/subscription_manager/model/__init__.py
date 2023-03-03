@@ -23,7 +23,7 @@ log = logging.getLogger(__name__)
 # be based on containers.abc.Iterable
 
 
-class Content(object):
+class Content:
     """
     A generic representation of entitled content.
     """
@@ -54,7 +54,7 @@ class Content(object):
         self.arches = arches
 
 
-class Entitlement(object):
+class Entitlement:
     """Represent an entitlement.
 
     Has a 'contents' attribute that is an
@@ -69,7 +69,7 @@ class Entitlement(object):
         self.entitlement_type = entitlement_type
 
 
-class EntitlementSource(object):
+class EntitlementSource:
     """Populate with info needed for plugins to find content.
 
     Acts as a iterable over entitlements.

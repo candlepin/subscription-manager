@@ -45,7 +45,7 @@ class CandlepinApiNetworkError(CandlepinApiError):
     pass
 
 
-class Candlepin(object):
+class Candlepin:
     def __init__(self, uep):
         self.uep = uep
         self._default_args = ()

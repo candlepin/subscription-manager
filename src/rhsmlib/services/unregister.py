@@ -29,7 +29,7 @@ from rhsm import connection
 log = logging.getLogger(__name__)
 
 
-class UnregisterService(object):
+class UnregisterService:
     """
     Class providing functionality of unregistering the system from
     Candlepin server.

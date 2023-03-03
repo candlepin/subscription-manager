@@ -27,7 +27,7 @@ from subscription_manager.i18n import ugettext as _
 log = logging.getLogger(__name__)
 
 
-class RegisterService(object):
+class RegisterService:
     def __init__(self, cp: UEPConnection) -> None:
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
         self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)

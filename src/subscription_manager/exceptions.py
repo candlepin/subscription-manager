@@ -70,7 +70,7 @@ CONNECTION_UNREACHABLE_MESSAGE = _("Unable to reach the server at {host}: {messa
 RESTLIB_MESSAGE = _("{message} (HTTP error code {code}: {title})")
 
 
-class ExceptionMapper(object):
+class ExceptionMapper:
     def __init__(self):
 
         self.message_map: Dict[str, Callable] = {

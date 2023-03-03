@@ -95,7 +95,7 @@ def ungettext(*args, **kwargs) -> str:
         return TRANSLATION.ngettext(*args, **kwargs)
 
 
-class Locale(object):
+class Locale:
     """
     Class used for changing languages on the fly
     """

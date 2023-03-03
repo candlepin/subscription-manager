@@ -57,7 +57,7 @@ class EntCertActionInvoker(certlib.BaseActionInvoker):
 # NOTE: this lib and EntCertDeleteAction are currently
 # unused. Intention is to replace managerlib.clean_all_data
 # with a CertActionClient.delete invocation
-class EntCertDeleteLib(object):
+class EntCertDeleteLib:
     """Invoker for entitlement certificate delete actions."""
 
     def __init__(self, serial_numbers=None, ent_dir=None):
@@ -73,7 +73,7 @@ class EntCertDeleteLib(object):
 
 
 # FIXME: currently unused
-class EntCertDeleteAction(object):
+class EntCertDeleteAction:
     """Action for deleting all entitlement certs."""
 
     def __init__(self, ent_dir=None):
@@ -88,7 +88,7 @@ class EntCertDeleteAction(object):
         return self
 
 
-class EntCertUpdateAction(object):
+class EntCertUpdateAction:
     """Action for syncing entitlement certificates.
 
     EntCertUpdateAction is used to sync entitlement certs based on
@@ -338,7 +338,7 @@ class EntCertUpdateAction(object):
             self.ent_dir.refresh()
 
 
-class EntitlementCertBundlesInstaller(object):
+class EntitlementCertBundlesInstaller:
     """Install a list of entitlement cert bundles.
 
     pre_install() is triggered before any of the ent cert
@@ -381,7 +381,7 @@ class EntitlementCertBundlesInstaller(object):
         return self.report.added
 
 
-class EntitlementCertBundleInstaller(object):
+class EntitlementCertBundleInstaller:
     """Install an entitlement cert bundle (cert/key).
 
     Split a bundle into an certificate.EntitlementCertificate and a

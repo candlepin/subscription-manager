@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-class Locker(object):
+class Locker:
     def __init__(self):
         self.lock: ActionLock = self._get_lock()
 
@@ -24,7 +24,7 @@ class Locker(object):
         return inj.require(inj.ACTION_LOCK)
 
 
-class BaseActionInvoker(object):
+class BaseActionInvoker:
     def __init__(self, locker: Optional[Locker] = None):
         self.locker = locker or Locker()
         self.report: Any = None
@@ -39,7 +39,7 @@ class BaseActionInvoker(object):
         return
 
 
-class ActionReport(object):
+class ActionReport:
     """Base class for cert lib and action reports"""
 
     name: str = "Report"

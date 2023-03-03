@@ -107,7 +107,7 @@ from typing import Any, Callable, Dict, Generator, List, Optional, Set, Tuple, U
 log = logging.getLogger("rhsm-app." + __name__)
 
 
-class DefaultCpuFields(object):
+class DefaultCpuFields:
     """Maps generic cpuinfo fields to the corresponding field from ProcessorModel.
 
     For, a cpu MODEL (a number or string that the cpu vendor assigns to that model of
@@ -121,23 +121,23 @@ class DefaultCpuFields(object):
     MODEL: str = "model"
 
 
-class X86_64Fields(object):
+class X86_64Fields:
     MODEL_NAME: str = "model_name"
     MODEL: str = "model"
 
 
-class Aarch64Fields(object):
+class Aarch64Fields:
     MODEL: str = "cpu_part"
     MODEL_NAME: str = "model_name"
 
 
-class Ppc64Fields(object):
+class Ppc64Fields:
     MODEL: str = "model"
     MODEL_NAME: str = "machine"
 
 
 # represent the data in /proc/cpuinfo, which may include multiple processors
-class CpuinfoModel(object):
+class CpuinfoModel:
     fields_class: type = DefaultCpuFields
 
     def __init__(self, cpuinfo_data: str = None):
@@ -347,7 +347,7 @@ Hardware    : APM X-Gene Mustang board
 """
 
 
-class BaseCpuInfo(object):
+class BaseCpuInfo:
     cpu_info: CpuinfoModel
 
     @classmethod
@@ -473,7 +473,7 @@ class Ppc64CpuInfo(BaseCpuInfo):
         return item[0] != "timebase"
 
 
-class SystemCpuInfoFactory(object):
+class SystemCpuInfoFactory:
     uname_to_cpuinfo: Dict[str, type(BaseCpuInfo)] = {
         "x86_64": X86_64CpuInfo,
         "aarch64": Aarch64CpuInfo,

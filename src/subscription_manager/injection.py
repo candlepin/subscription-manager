@@ -40,7 +40,7 @@ CONTENT_ACCESS_CACHE = "CONTENT_ACCESS_CACHE"
 SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE = "SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE"
 
 
-class FeatureBroker(object):
+class FeatureBroker:
     """
     Tracks all configured features.
 

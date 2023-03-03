@@ -58,7 +58,7 @@ def get_arch(prefix: str = None) -> str:
 # An empty FactsCollector should just return an empty dict on get_all()
 
 
-class FactsCollector(object):
+class FactsCollector:
     def __init__(
         self,
         arch: str = None,

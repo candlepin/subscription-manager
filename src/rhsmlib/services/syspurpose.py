@@ -34,7 +34,7 @@ from rhsmlib.dbus.server import Server
 log = logging.getLogger(__name__)
 
 
-class Syspurpose(object):
+class Syspurpose:
     def __init__(self, cp: UEPConnection) -> None:
         self.cp = cp
         self.identity = inj.require(inj.IDENTITY)

@@ -31,7 +31,7 @@ class PackageProfileActionInvoker(certlib.BaseActionInvoker):
         return action.perform()
 
 
-class PackageProfileActionCommand(object):
+class PackageProfileActionCommand:
     """Action for updating the list of installed packages to RHSM API,
 
     Returns a PackageProfileActionReport.

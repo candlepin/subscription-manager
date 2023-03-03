@@ -12,5 +12,5 @@ class DummyPlugin(SubManPlugin):
         conduit.log.error("Hello World")
 
 
-class DontImportMe(object):
+class DontImportMe:
     pass

@@ -30,7 +30,7 @@ if TYPE_CHECKING:
     from rhsm.certificate2 import Product
 
 
-class RHELProductMatcher(object):
+class RHELProductMatcher:
     """Check a Product object to see if it is a RHEL product.
 
     Compares the provided tags to see if any provide 'rhel-VERSION'.

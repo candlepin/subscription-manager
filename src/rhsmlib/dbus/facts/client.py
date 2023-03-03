@@ -28,7 +28,7 @@ class FactsClientAuthenticationError(Exception):
         self.action_id = action_id
 
 
-class FactsClient(object):
+class FactsClient:
     bus_name = facts_constants.FACTS_DBUS_NAME
     object_path = facts_constants.FACTS_DBUS_PATH
     interface_name = facts_constants.FACTS_DBUS_INTERFACE

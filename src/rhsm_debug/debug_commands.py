@@ -263,7 +263,7 @@ class SystemCommand(CliCommand):
         os.makedirs(dest_dir_name, ROOT_READ_ONLY_DIR)
 
 
-class SaferFileMove(object):
+class SaferFileMove:
     """Try to copy a file avoiding race conditions.
 
     Opens the dest file os.O_RDWR | os.O_CREAT | os.O_EXCL, which

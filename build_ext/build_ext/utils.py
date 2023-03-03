@@ -68,7 +68,7 @@ class BaseCommand(cmd.Command):
         pass
 
 
-class Utils(object):
+class Utils:
     @staticmethod
     def run_if_new(src, dest, callback):
         src_mtime = os.stat(src)[8]

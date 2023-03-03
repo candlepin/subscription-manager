@@ -73,7 +73,7 @@ def post_process_received_data(data: dict) -> dict:
     return data
 
 
-class SyspurposeStore(object):
+class SyspurposeStore:
     """
     Represents and maintains a json syspurpose file
     """
@@ -222,7 +222,7 @@ class SyspurposeStore(object):
         return new_store
 
 
-class SyncResult(object):
+class SyncResult:
     """
     A container class for the results of a sync operation performed by a SyncedStore class.
     """
@@ -234,7 +234,7 @@ class SyncResult(object):
         self.cached_changed = cached_changed
 
 
-class SyncedStore(object):
+class SyncedStore:
     """
     Stores values in a local file backed by a cache which is then synced with another source
     of the same values.

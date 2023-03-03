@@ -29,7 +29,7 @@ import rhsm.connection as connection
 log = logging.getLogger(__name__)
 
 
-class EntitlementService(object):
+class EntitlementService:
     def __init__(self, cp: connection.UEPConnection = None) -> None:
         self.cp = cp
         self.identity = inj.require(inj.IDENTITY)

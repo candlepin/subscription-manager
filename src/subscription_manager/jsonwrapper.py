@@ -18,7 +18,7 @@ from typing import Dict, List, Optional, Union
 from subscription_manager.utils import is_true_value
 
 
-class PoolWrapper(object):
+class PoolWrapper:
     def __init__(self, pool_json: dict):
         self.data: dict = pool_json
 

@@ -285,7 +285,7 @@ def manage_repos_enabled() -> bool:
     return bool(manage_repos)
 
 
-class TidyWriter(object):
+class TidyWriter:
 
     """
     ini file reader that removes successive newlines,
@@ -329,7 +329,7 @@ class TidyWriter(object):
             self.backing_file.write("\n")
 
 
-class RepoFileBase(object):
+class RepoFileBase:
     """
     Base class for managing repository.
     """
