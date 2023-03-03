@@ -2072,10 +2072,12 @@ class RegisterCommand(UserPassCommand):
         if not is_interactive():
             system_exit(os.EX_USAGE, _("Error: --environments is a required parameter in non-interactive mode."))
         if self.cp.has_capability(MULTI_ENV):
-            environment = six.moves.input(_("Environments: ")).replace(" ", "")
+            environment = six.moves.input(_("Environments: "))
         else:
-            environment = six.moves.input(_("Environment: ")).strip()
+            environment = six.moves.input(_("Environment: "))
         readline.clear_history()
+        # ensure the input is not empty
+        environment = environment.strip()
         return environment or self._prompt_for_environment()
 
     def _process_environments(self, admin_cp, owner_key):
