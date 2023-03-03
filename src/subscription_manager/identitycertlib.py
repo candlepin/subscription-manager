@@ -39,7 +39,7 @@ class IdentityCertActionInvoker(certlib.BaseActionInvoker):
         return action.perform()
 
 
-class IdentityUpdateAction(object):
+class IdentityUpdateAction:
     """UpdateAction for consumer identity certificates.
 
     Returns a certlib.ActionReport. report.status of

@@ -27,7 +27,7 @@ import logging
 log = logging.getLogger(__name__)
 
 
-class MiniHostCollector(object):
+class MiniHostCollector:
     """
     Minimalistic collector of host facts
     """
@@ -124,7 +124,7 @@ class MiniHostCollector(object):
 
 
 # We do not need this collector for cloud-what, so it is really dummy
-class MiniCustomFactsCollector(object):
+class MiniCustomFactsCollector:
     @staticmethod
     def get_all() -> dict:
         return {}

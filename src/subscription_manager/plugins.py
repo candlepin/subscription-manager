@@ -133,7 +133,7 @@ class SlotNameException(Exception):
         return "slot name %s does not have a conduit to handle it" % self.slot_name
 
 
-class BaseConduit(object):
+class BaseConduit:
     """An API entry point for rhsm plugins.
 
     Conduit()'s are used to provide access to the data a SubManPlugin may need.
@@ -429,7 +429,7 @@ class PostAutoAttachConduit(PostSubscriptionConduit):
         super(PostAutoAttachConduit, self).__init__(clazz, consumer_uuid, entitlement_data)
 
 
-class PluginConfig(object):
+class PluginConfig:
     """Represents configuation for each rhsm plugin.
 
     Attributes:
@@ -493,7 +493,7 @@ class PluginConfig(object):
         return buf
 
 
-class PluginHookRunner(object):
+class PluginHookRunner:
     """Encapsulates a Conduit() instance and a bound plugin method.
 
     PluginManager.runiter() returns an iterable that will yield
@@ -514,7 +514,7 @@ class PluginHookRunner(object):
 
 # NOTE: need to be super paranoid here about existing of cfg variables
 # BasePluginManager with our default config info
-class BasePluginManager(object):
+class BasePluginManager:
     """Finds, load, and provides access to subscription-manager plugins."""
 
     def __init__(self, search_path: Optional[str] = None, plugin_conf_path: Optional[str] = None):

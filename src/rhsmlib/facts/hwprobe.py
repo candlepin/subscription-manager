@@ -41,7 +41,7 @@ except ImportError:
     ethtool = None
 
 
-class ClassicCheck(object):
+class ClassicCheck:
     def is_registered_with_classic(self) -> bool:
         try:
             sys.path.append("/usr/share/rhn")
@@ -82,7 +82,7 @@ def gather_entries(entries_string: str) -> List[int]:
 
 
 # FIXME This class does not seem to be used anywhere
-class GenericPlatformSpecificInfoProvider(object):
+class GenericPlatformSpecificInfoProvider:
     """Default provider for platform without a specific platform info provider.
     ie, all platforms except those with DMI (ie, intel platforms)"""
 

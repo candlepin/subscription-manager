@@ -19,7 +19,7 @@ This module provides service for consumer identity.
 from subscription_manager import injection as inj
 
 
-class Consumer(object):
+class Consumer:
     def __init__(self) -> None:
         """
         Initialization of Consumer instance.

@@ -23,7 +23,7 @@ from subscription_manager.plugin.ostree import action_invoker
 from rhsm import certificate2
 
 
-class StubPluginManager(object):
+class StubPluginManager:
     pass
 
 

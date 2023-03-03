@@ -43,7 +43,7 @@ PRODUCT_WATCHER = "PRODUCT_WATCHER"
 SYSPURPOSE_WATCHER = "SYSPURPOSE_WATCHER"
 
 
-class FilesystemWatcher(object):
+class FilesystemWatcher:
     """
     Watches a set of directories and notifies when there are changes
 
@@ -233,7 +233,7 @@ class InotifyFilesystemWatcher(FilesystemWatcher):
             self.watch_manager.rm_watch(dir_watch.path, rec=True)
 
 
-class DirectoryWatch(object):
+class DirectoryWatch:
     """
     Directory to be watched
 

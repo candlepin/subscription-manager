@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-class BaseActionClient(object):
+class BaseActionClient:
     """
     An object used to update the certificates, DNF repos, and facts for the system.
     """

@@ -118,7 +118,7 @@ class KeyFileConfigParser(RhsmConfigParser):
         super(KeyFileConfigParser, self).save()
 
 
-class BaseOstreeConfigFile(object):
+class BaseOstreeConfigFile:
     config_parser_class = KeyFileConfigParser
 
     def __init__(self, filename=None):

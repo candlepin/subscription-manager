@@ -247,7 +247,7 @@ class TestBasePluginManagerAddPluginsFromModule(unittest.TestCase):
         mock_module = mock.Mock()
         mock_module.__name__ = "mock_module"
 
-        class NotAPluginClass(object):
+        class NotAPluginClass:
             pass
 
         mock_module.NotAPluginClass = NotAPluginClass
@@ -830,7 +830,7 @@ class TestPluginManagerRunIter(TestPluginManagerRun):
             runner.run()
 
     def test_iter_wrapper(self):
-        class Wrapper(object):
+        class Wrapper:
             def __init__(self, runner):
                 self.runner = runner
                 self.runner_func = self.runner.func

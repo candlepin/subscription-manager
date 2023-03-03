@@ -54,7 +54,7 @@ PACKAGES_RESOURCE = "packages"
 conf = config.Config(get_config_parser())
 
 
-class CacheManager(object):
+class CacheManager:
     """
     Parent class used for common logic in a number of collections
     where we need to push some consumer JSON up to the server,
@@ -668,7 +668,7 @@ class PoolStatusCache(StatusCache):
         self.server_status = uep.getEntitlementList(uuid)
 
 
-class PoolTypeCache(object):
+class PoolTypeCache:
     """
     Cache type of pool
     """
@@ -718,7 +718,7 @@ class PoolTypeCache(object):
         self.pooltype_map = {}
 
 
-class ContentAccessCache(object):
+class ContentAccessCache:
     CACHE_FILE = "/var/lib/rhsm/cache/content_access.json"
 
     def __init__(self):

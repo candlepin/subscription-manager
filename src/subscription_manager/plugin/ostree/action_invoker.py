@@ -28,7 +28,7 @@ log = logging.getLogger(__name__)
 OSTREE_CONTENT_TYPE = "ostree"
 
 
-class OstreeContentUpdateActionCommand(object):
+class OstreeContentUpdateActionCommand:
     """UpdateActionCommand for ostree repos.
 
     Update the repo configuration for rpm-ostree when triggered.

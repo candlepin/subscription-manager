@@ -72,7 +72,7 @@ class RepoLocker(Locker):
             self.lock.release()
 
 
-class ZypperService(object):
+class ZypperService:
 
     ZYPP_RHSM_PLUGIN_CONFIG_FILE = '/etc/rhsm/zypper.conf'
 

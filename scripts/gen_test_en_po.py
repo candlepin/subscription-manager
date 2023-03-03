@@ -4,7 +4,7 @@ import polib
 import sys
 
 
-class PotFile(object):
+class PotFile:
     def __init__(self):
 
         self.msgids = []

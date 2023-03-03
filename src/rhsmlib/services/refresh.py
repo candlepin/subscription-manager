@@ -26,7 +26,7 @@ from subscription_manager.entcertlib import EntCertActionInvoker
 log = logging.getLogger(__name__)
 
 
-class Refresh(object):
+class Refresh:
     """
     Class used for refreshing entitlement certificates
     """

@@ -55,7 +55,7 @@ class InvalidProfileType(Exception):
     pass
 
 
-class ModulesProfile(object):
+class ModulesProfile:
     def __init__(self) -> None:
         self.content: List[dict] = self.__generate()
 
@@ -191,7 +191,7 @@ class ModulesProfile(object):
         return self.content
 
 
-class EnabledRepos(object):
+class EnabledRepos:
     def __generate(self) -> List[dict]:
         if not os.path.exists(self.repofile):
             return []
@@ -279,7 +279,7 @@ class EnabledRepos(object):
         return {"releasever": self.yb.conf.yumvar["releasever"], "basearch": self.yb.conf.yumvar["basearch"]}
 
 
-class EnabledReposProfile(object):
+class EnabledReposProfile:
     """
     Collect information about enabled repositories
     """
@@ -298,7 +298,7 @@ class EnabledReposProfile(object):
         return self._enabled_repos.content
 
 
-class Package(object):
+class Package:
     """
     Represents a package installed on the system.
     """
@@ -354,7 +354,7 @@ class Package(object):
         return value
 
 
-class RPMProfile(object):
+class RPMProfile:
     def __init__(self, from_file: _io.TextIOWrapper = None) -> None:
         """
         Load the RPM package profile from a given file, or from rpm itself.

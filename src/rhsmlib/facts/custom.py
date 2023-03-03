@@ -24,7 +24,7 @@ from rhsmlib.facts.collector import FactsCollector
 log = logging.getLogger(__name__)
 
 
-class CustomFacts(object):
+class CustomFacts:
     def __init__(self, data: Dict[str, Any] = None):
         self.data: Dict[str, Any] = data
 
@@ -52,7 +52,7 @@ class CustomFactsFileError(Exception):
     pass
 
 
-class CustomFactsFile(object):
+class CustomFactsFile:
     def __init__(self, path: str = None):
         self.path: str = path
         self.buf = None
@@ -73,7 +73,7 @@ class CustomFactsFile(object):
         pass
 
 
-class CustomFactsDirectory(object):
+class CustomFactsDirectory:
     def __init__(self, path: str = None, glob_pattern: str = None):
         self.path: str = path
         self.glob_pattern: str = glob_pattern
@@ -94,7 +94,7 @@ class CustomFactsDirectory(object):
             yield CustomFacts.from_json(fact_file.read())
 
 
-class CustomFactsDirectories(object):
+class CustomFactsDirectories:
     def __init__(self, path_and_globs: Dict[str, str]):
         self.path_and_globs: Dict[str, str] = path_and_globs
 

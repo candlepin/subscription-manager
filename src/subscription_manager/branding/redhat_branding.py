@@ -1,7 +1,7 @@
 from subscription_manager.i18n import ugettext as _
 
 
-class Branding(object):
+class Branding:
     def __init__(self):
         self.CLI_REGISTER = _(
             "Register this system to the Customer Portal or another subscription management service"

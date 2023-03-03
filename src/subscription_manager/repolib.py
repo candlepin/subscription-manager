@@ -53,7 +53,7 @@ conf = config.Config(rhsm.config.get_config_parser())
 ALLOWED_CONTENT_TYPES = ["yum", "deb"]
 
 
-class YumPluginManager(object):
+class YumPluginManager:
     """
     Instance of this class is used for automatic enabling of dnf plugins
     (formerly for yum plugins, hence the name).
@@ -258,7 +258,7 @@ class RepoActionInvoker(BaseActionInvoker):
 # just the marker, and get_expansion would change
 #
 # For example, for full craziness, we could expand facts in urls...
-class YumReleaseverSource(object):
+class YumReleaseverSource:
     """
     Contains a ReleaseStatusCache and releasever helpers.
 
@@ -332,7 +332,7 @@ class YumReleaseverSource(object):
         return self._expansion
 
 
-class RepoUpdateActionCommand(object):
+class RepoUpdateActionCommand:
     """UpdateAction for yum repos.
 
     Update yum repos when triggered. Generates yum repo config

@@ -128,7 +128,7 @@ def fetch_certificates(certlib) -> Literal[True]:
     return True
 
 
-class PoolFilter(object):
+class PoolFilter:
     """
     Helper to filter a list of pools.
     """
@@ -451,7 +451,7 @@ def get_available_entitlements(
     return data
 
 
-class MergedPools(object):
+class MergedPools:
     """
     Class to track the view of merged pools for the same product.
     Used to view total entitlement information across all pools for a
@@ -545,7 +545,7 @@ class MergedPoolsStackingGroupSorter(StackingGroupSorter):
         return merged_pool.pools[0]["productName"]
 
 
-class PoolStash(object):
+class PoolStash:
     """
     Object used to fetch pools from the server, sort them into compatible,
     incompatible, and installed lists. Also does filtering based on name.
@@ -759,7 +759,7 @@ class PoolStash(object):
         return provided_products
 
 
-class ImportFileExtractor(object):
+class ImportFileExtractor:
     """
     Responsible for checking an import file and pulling cert and key from it.
     An import file may include only the certificate, but may also include its

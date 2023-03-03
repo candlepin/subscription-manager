@@ -91,7 +91,7 @@ def locale_context(new_locale, category=None):
         locale.setlocale(category, old_locale)
 
 
-class FakeLogger(object):
+class FakeLogger:
     def __init__(self):
         self.expected_msg = ""
         self.msg = None
@@ -124,7 +124,7 @@ class FakeException(Exception):
         return repr(self.msg)
 
 
-class Matcher(object):
+class Matcher:
     @staticmethod
     def set_eq(first, second):
         """Useful for dealing with sets that have been cast to or instantiated as lists."""
@@ -330,8 +330,8 @@ class SubManFixture(unittest.TestCase):
         return True
 
 
-class Capture(object):
-    class Tee(object):
+class Capture:
+    class Tee:
         def __init__(self, stream, silent):
             self.buf = io.StringIO()
             self.stream = stream

@@ -18,7 +18,7 @@ from rhsm.connection import UEPConnection
 log = logging.getLogger(__name__)
 
 
-class AttachService(object):
+class AttachService:
     """
     Service using for attach pools by ID or auto-attaching
     """

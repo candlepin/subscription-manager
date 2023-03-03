@@ -37,7 +37,7 @@ dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 log = logging.getLogger(__name__)
 
 
-class TestUtilsMixin(object):
+class TestUtilsMixin:
     def assert_items_equals(self, a, b):
         """Assert that two lists contain the same items regardless of order."""
         if sorted(a) != sorted(b):

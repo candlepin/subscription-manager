@@ -33,7 +33,7 @@ conf = config.Config(get_config_parser())
 log = logging.getLogger(__name__)
 
 
-class ConsumerIdentity(object):
+class ConsumerIdentity:
     """Consumer info and certificate information.
 
     Includes helpers for reading/writing consumer identity certificates
@@ -126,7 +126,7 @@ class ConsumerIdentity(object):
         return 'consumer: name="%s", uuid=%s' % (self.getConsumerName(), self.getConsumerId())
 
 
-class Identity(object):
+class Identity:
     """Wrapper for sharing consumer identity without constant reloading."""
 
     def __init__(self):

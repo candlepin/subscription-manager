@@ -69,7 +69,7 @@ def compare_with_graylist(dict_a: dict, dict_b: dict, graylist: Set[str]) -> boo
     return ka == kb and all(dict_a[k] == dict_b[k] for k in ka)
 
 
-class FactsCollection(object):
+class FactsCollection:
     def __init__(self, facts_dict: FactsDict = None):
         self.data: FactsDict = facts_dict or FactsDict()
         self.collection_datetime = datetime.now()

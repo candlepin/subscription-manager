@@ -61,12 +61,12 @@ class MultipleReleaseProductsError(ValueError):
         ) % ", ".join([certificate.path for certificate in self.certificates])
 
 
-class ContentConnectionProvider(object):
+class ContentConnectionProvider:
     def __init__(self):
         pass
 
 
-class ReleaseBackend(object):
+class ReleaseBackend:
     def get_releases(self):
         provider: CdnReleaseVersionProvider = self._get_release_version_provider()
         return provider.get_releases()
@@ -78,7 +78,7 @@ class ReleaseBackend(object):
         return CdnReleaseVersionProvider()
 
 
-class ApiReleaseVersionProvider(object):
+class ApiReleaseVersionProvider:
     def __init__(self):
         self.cp_provider = inj.require(inj.CP_PROVIDER)
         self.identity = inj.require(inj.IDENTITY)
@@ -93,7 +93,7 @@ class ApiReleaseVersionProvider(object):
         return self.cp_provider.get_consumer_auth_cp()
 
 
-class CdnReleaseVersionProvider(object):
+class CdnReleaseVersionProvider:
     def __init__(self):
         self.entitlement_dir: EntitlementDirectory = inj.require(inj.ENT_DIR)
         self.product_dir: ProductDirectory = inj.require(inj.PROD_DIR)

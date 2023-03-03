@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from subscription_manager.plugins import PluginConfig
 
 
-class SubManPlugin(object):
+class SubManPlugin:
     """Base class for all subscription-manager "rhsm-plugins"
 
     Plugins need to subclass SubManPlugin() to be found

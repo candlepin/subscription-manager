@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-class BrandsInstaller(object):
+class BrandsInstaller:
     def __init__(self, ent_certs: Optional[List["EntitlementCertificate"]] = None):
         self.ent_certs: Optional[List[EntitlementCertificate]] = ent_certs
 
@@ -41,7 +41,7 @@ class BrandsInstaller(object):
             brand_installer.install()
 
 
-class BrandInstaller(object):
+class BrandInstaller:
     """Install branding info for a set of entitlement certs."""
 
     def __init__(self, ent_certs: Optional[List["EntitlementCertificate"]] = None):
@@ -79,7 +79,7 @@ class BrandInstaller(object):
         raise NotImplementedError
 
 
-class BrandPicker(object):
+class BrandPicker:
     """Returns the branded name to install.
 
     Check installed product certs, and the list of entitlement certs
@@ -92,7 +92,7 @@ class BrandPicker(object):
         raise NotImplementedError
 
 
-class Brand(object):
+class Brand:
     """Base class for Brand objects."""
 
     name: Optional[str] = None
@@ -166,7 +166,7 @@ class CurrentBrand(Brand):
         return None
 
 
-class BrandFile(object):
+class BrandFile:
     """The file used for storing product branding info.
 
     Default is "/var/lib/rhsm/branded_name

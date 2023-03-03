@@ -51,7 +51,7 @@ class ProductIdRepoMap(utils.DefaultDict):
         # FIXME Missing super() call
 
 
-class ProductDatabase(object):
+class ProductDatabase:
     def __init__(self):
         self.dir = DatabaseDirectory()
         self.content = ProductIdRepoMap()
@@ -108,7 +108,7 @@ class ProductDatabase(object):
         return self.dir.abspath("productid.js")
 
 
-class ComparableMixin(object):
+class ComparableMixin:
     """Needs compare_keys to be implemented."""
 
     # FIXME self.compare_keys should be defined here, raising NotImplementedError
@@ -135,7 +135,7 @@ class ComparableMixin(object):
         return self._compare(self.compare_keys(other), lambda s, o: s >= o)
 
 
-class RpmVersion(object):
+class RpmVersion:
     """Represent the epoch, version, release of a rpm style version.
 
     This includes the rich comparison methods to support >,<,==,!-
@@ -273,7 +273,7 @@ class ComparableProductCert(ComparableMixin):
         return self.comp_product.compare_keys(other.comp_product)
 
 
-class ProductId(object):
+class ProductId:
     def __init__(self, product_cert):
         self.product_cert = product_cert
 
@@ -293,7 +293,7 @@ class ProductId(object):
     # def compare(self, other):   # version check?
 
 
-class ProductManager(object):
+class ProductManager:
     """Manager product certs, detecting when they need to be installed, or deleted.
 
     Note that this class has no knowledge of when it runs, and no nothing of the

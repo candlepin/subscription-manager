@@ -116,7 +116,7 @@ def deprecated(func: Callable) -> Callable:
     return new_func
 
 
-class Certificate(object):
+class Certificate:
     """
     Represents and x.509 certificate.
 
@@ -505,7 +505,7 @@ class EntitlementCertificate(ProductCertificate):
         return "\n".join(s)
 
 
-class Key(object):
+class Key:
     """
     The (private|public) key.
 
@@ -572,7 +572,7 @@ class Key(object):
         return self.content
 
 
-class DateRange(object):
+class DateRange:
     """
     Date range object.
 
@@ -906,7 +906,7 @@ class OID:
         return self._str
 
 
-class Order(object):
+class Order:
     @deprecated
     def __init__(self, ext):
         self.ext = ext
@@ -996,7 +996,7 @@ class Order(object):
         return "\n".join(s)
 
 
-class Product(object):
+class Product:
     @deprecated
     def __init__(self, p_hash: str, ext: Extensions) -> None:
         self.hash = p_hash

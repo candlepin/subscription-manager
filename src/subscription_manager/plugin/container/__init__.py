@@ -31,7 +31,7 @@ RH_CDN_REGEX = re.compile(r"^cdn\.(?:.*\.)?redhat\.com$")
 RH_CDN_CA = "/etc/rhsm/ca/redhat-entitlement-authority.pem"
 
 
-class ContainerContentUpdateActionCommand(object):
+class ContainerContentUpdateActionCommand:
     """
     UpdateActionCommand for Docker configuration.
 
@@ -74,7 +74,7 @@ class ContainerContentUpdateActionCommand(object):
         return unique_cert_paths
 
 
-class KeyPair(object):
+class KeyPair:
     """Simple object to hold paths to an entitlement cert and key."""
 
     def __init__(self, cert_path, key_path):
@@ -108,7 +108,7 @@ class KeyPair(object):
         return hash(self.__repr__())
 
 
-class ContainerCertDir(object):
+class ContainerCertDir:
     """
     An object to manage the docker certificate directory at
     /etc/docker/certs.d/.

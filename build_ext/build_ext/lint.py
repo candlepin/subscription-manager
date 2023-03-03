@@ -69,7 +69,7 @@ class Flake8(BaseCommand):
         spawn(["flake8"])
 
 
-class AstVisitor(object):
+class AstVisitor:
     """Visitor pattern for looking at specific nodes in an AST.  Basically a copy of
     ast.NodeVisitor, but with the additional feature of appending return values onto a result
     list that is ultimately returned.
@@ -163,7 +163,7 @@ class GettextVisitor(AstVisitor):
                 )
 
 
-class AstChecker(object):
+class AstChecker:
     name = "SubscriptionManagerAstChecker"
     version = "1.0"
 

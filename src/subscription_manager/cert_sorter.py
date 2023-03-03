@@ -64,7 +64,7 @@ RHSM_PARTIALLY_VALID = 4
 RHSM_REGISTRATION_REQUIRED = 5
 
 
-class ComplianceManager(object):
+class ComplianceManager:
     def __init__(self, on_date: Optional[datetime] = None):
         self.cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
         self.product_dir: ProductDirectory = inj.require(inj.PROD_DIR)
@@ -454,7 +454,7 @@ class CertSorter(ComplianceManager):
         return len(self.entitlement_dir.list()) > 0
 
 
-class StackingGroupSorter(object):
+class StackingGroupSorter:
     def __init__(self, entitlements: List["EntitlementCertificate"]):
         self.groups: List[EntitlementGroup] = []
         stacking_groups: Dict[str, EntitlementGroup] = {}
@@ -480,7 +480,7 @@ class StackingGroupSorter(object):
         raise NotImplementedError("Subclasses must implement: _get_identity_name")
 
 
-class EntitlementGroup(object):
+class EntitlementGroup:
     def __init__(self, entitlement: "EntitlementCertificate", name: str = ""):
         self.name = name
         self.entitlements: List[EntitlementCertificate] = []

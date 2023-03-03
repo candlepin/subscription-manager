@@ -28,7 +28,7 @@ log = logging.getLogger(__name__)
 LOCK_WAIT_DURATION: float = 0.5
 
 
-class LockFile(object):
+class LockFile:
     def __init__(self, path: str):
         self.path: str = path
         self.pid: Optional[int] = None
@@ -90,7 +90,7 @@ class LockFile(object):
         self.close()
 
 
-class Lock(object):
+class Lock:
 
     mutex = Mutex()
 

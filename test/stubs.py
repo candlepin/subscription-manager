@@ -428,7 +428,7 @@ class StubProductDirectory(StubCertificateDirectory, ProductDirectory):
         pass
 
 
-class StubConsumerIdentity(object):
+class StubConsumerIdentity:
     CONSUMER_NAME = "John Q Consumer"
     CONSUMER_ID = "211211381984"
     SERIAL = "23234523452345234523453453434534534"
@@ -467,7 +467,7 @@ class StubConsumerIdentity(object):
         return ""
 
 
-class StubUEP(object):
+class StubUEP:
     def __init__(
         self,
         host=None,
@@ -601,7 +601,7 @@ class StubUEP(object):
         }
 
 
-class StubBackend(object):
+class StubBackend:
     def __init__(self, uep=None):
         self.cp_provider = StubCPProvider()
         self.entitlement_dir = None
@@ -618,7 +618,7 @@ class StubBackend(object):
         pass
 
 
-class StubContentConnection(object):
+class StubContentConnection:
     proxy_hostname = None
     proxy_port = None
 
@@ -652,7 +652,7 @@ class StubFacts(Facts):
         self.server_status = None
 
 
-class StubConsumer(object):
+class StubConsumer:
     def __init__(self):
         self.uuid = None
 
@@ -666,7 +666,7 @@ class StubConsumer(object):
         return "12341234234"
 
 
-class StubEntActionInvoker(object):
+class StubEntActionInvoker:
     def __init__(self, uep=None):
         self.uep = uep or StubUEP()
 
@@ -687,7 +687,7 @@ class StubCertSorter(CertSorter):
         pass
 
 
-class StubCPProvider(object):
+class StubCPProvider:
     def __init__(self):
         self.cert_file = StubConsumerIdentity.certpath()
         self.key_file = StubConsumerIdentity.keypath()
@@ -818,7 +818,7 @@ class StubCurrentOwnerCache(CurrentOwnerCache):
         self.server_status = None
 
 
-class StubPool(object):
+class StubPool:
     def __init__(self, poolid):
         self.id = poolid
 

@@ -14,7 +14,7 @@
 from typing import List, Optional
 
 
-class ListingFile(object):
+class ListingFile:
     def __init__(self, data: Optional[str] = None):
         self.data: Optional[str] = data
         self.releases: List[str] = []

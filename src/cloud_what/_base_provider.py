@@ -28,7 +28,7 @@ from typing import Union
 log = logging.getLogger(__name__)
 
 
-class BaseCloudProvider(object):
+class BaseCloudProvider:
     """
     Base class of cloud provider. This class is used for cloud detecting
     and collecting metadata/signature.
