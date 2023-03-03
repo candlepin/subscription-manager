@@ -439,10 +439,12 @@ class RegisterCommand(UserPassCommand):
             )
 
         if self.cp.has_capability(MULTI_ENV):
-            environment = input(_("Environments: ")).replace(" ", "")
+            environment = input(_("Environments: "))
         else:
-            environment = input(_("Environment: ")).strip()
+            environment = input(_("Environment: "))
         readline.clear_history()
+        # ensure the input is not empty
+        environment = environment.strip()
         return environment or self._prompt_for_environment()
 
     def _process_environments(self, admin_cp, owner_key):
