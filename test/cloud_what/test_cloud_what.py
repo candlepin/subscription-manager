@@ -27,7 +27,7 @@ import json
 import requests
 
 from cloud_what.providers import aws, azure, gcp
-from cloud_what.provider import detect_cloud_provider, get_cloud_provider
+from cloud_what.provider import detect_cloud_provider, get_cloud_provider, DetectionMethod
 
 
 def send_only_imds_v2_is_supported(request, *args, **kwargs):
@@ -1070,7 +1070,7 @@ class TestCloudProvider(unittest.TestCase):
             'dmi.system.manufacturer': 'Amazon'
         }
         self.host_fact_collector_instance.get_all.return_value = host_facts
-        detected_clouds = detect_cloud_provider(methods={'strong'})
+        detected_clouds = detect_cloud_provider(methods=DetectionMethod.STRONG)
         self.assertEqual(detected_clouds, [])
 
     def test_detect_cloud_provider_aws_heuristics(self):
