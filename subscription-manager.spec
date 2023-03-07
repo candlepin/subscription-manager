@@ -138,7 +138,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.25.17
+Version: 1.25.17.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1167,6 +1167,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Mar 07 2023 Pino Toscano <ptoscano@redhat.com> 1.25.17.1-1
+- 2175880: Fix getting releases, when SCA is used (jhnidek@redhat.com)
+
 * Thu Sep 26 2019 Christopher Snyder <csnyder@redhat.com> 1.25.17-1
 - 1754082: Fix our TPS tests (csnyder@redhat.com)
 
