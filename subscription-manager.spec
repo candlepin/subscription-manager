@@ -222,7 +222,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.26.21
+Version: 1.26.22
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1400,6 +1400,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Mar 07 2023 Pino Toscano <ptoscano@redhat.com> 1.26.22-1
+- 2175879: Fix getting releases, when SCA is used (jhnidek@redhat.com)
+
 * Wed Oct 20 2021 Christopher Snyder <csnyder@redhat.com> 1.26.21-1
 - 2011844: Clear content access mode cache on refresh (csnyder@redhat.com)
 
