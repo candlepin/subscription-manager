@@ -248,8 +248,8 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.29
-Release: 3%{?dist}
+Version: 1.28.29.1
+Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
 Group:   Productivity/Networking/System
@@ -1491,6 +1491,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Mar 09 2023 Pino Toscano <ptoscano@redhat.com> 1.28.29.1-1
+- 2175823: Improve API of detection of cloud-what (jhnidek@redhat.com)
+- 2175823: Facts: do no use heuristics detection of cloud (jhnidek@redhat.com)
+- test: use --track-naughties option (martin@piware.de)
+- Bump cockpit test API to 273 + run-tests scheduler fix (martin@piware.de)
+- cockpit: Read files in /var/lib/insights as superuser (mvollmer@redhat.com)
+
 * Wed Apr 13 2022 Christopher Snyder <csnyder@redhat.com> 1.28.29-3
 - refresh: clear also the release status (ptoscano@redhat.com)
 - 2073558: clear the release cache on release change (ptoscano@redhat.com)
