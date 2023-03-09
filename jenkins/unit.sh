@@ -22,7 +22,7 @@ python3 setup.py build
 python3 setup.py build_ext --inplace
 
 # make sure we have a dbus session for the dbus tests
-dbus-run-session coverage run -m pytest -v
+dbus-run-session coverage run -m pytest -vvl
 RETVAL="$?"
 coverage report
 coverage xml

@@ -10,27 +10,22 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
-
-import errno
+import contextlib
+import json
+import tempfile
+from typing import Optional
 
 import mock
-import json
-import dbus.connection
 import socket
-
-import subscription_manager.injection as inj
-
-from subscription_manager.cp_provider import CPProvider
-
-from test.rhsmlib.base import DBusObjectTest, InjectionMockingTest
 
 from rhsm import connection
 
-from rhsmlib.dbus import constants
-from rhsmlib.dbus.objects import RegisterDBusObject
+import rhsmlib.dbus.exceptions
+from rhsmlib.dbus.server import DomainSocketServer
+from rhsmlib.dbus.objects import RegisterDBusObject, DomainSocketRegisterDBusObject
 
-from test import subman_marker_dbus
+from test.rhsmlib.base import DBusServerStubProvider
+
 
 CONSUMER_CONTENT_JSON = """{"hypervisorId": null,
         "serviceLevel": "",
@@ -169,176 +164,155 @@ OWNERS_CONTENT_JSON = """[
 """
 
 
-@subman_marker_dbus
-class DomainSocketRegisterDBusObjectTest(DBusObjectTest, InjectionMockingTest):
-    def dbus_objects(self):
-        return [RegisterDBusObject]
+class RegisterDBusObjectTest(DBusServerStubProvider):
+    dbus_class = RegisterDBusObject
+    dbus_class_kwargs = {}
+    socket_dir: Optional[tempfile.TemporaryDirectory] = None
 
-    def setUp(self):
-        super(DomainSocketRegisterDBusObjectTest, self).setUp()
+    def setUp(self) -> None:
+        self.socket_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.socket_dir.cleanup)
 
-        self.proxy = self.proxy_for(RegisterDBusObject.default_dbus_path)
-        self.interface = dbus.Interface(self.proxy, constants.REGISTER_INTERFACE)
+        socket_path_patch = mock.patch.object(DomainSocketServer, "_server_socket_path", self.socket_dir.name)
+        socket_path_patch.start()
+        # `tmpdir` behaves differently from `dir` on old versions of dbus
+        # (earlier than 1.12.24 and 1.14.4).
+        # In newer versions we are not getting abstract socket anymore.
+        socket_iface_patch = mock.patch.object(DomainSocketServer, "_server_socket_iface", "unix:dir=")
+        socket_iface_patch.start()
 
-        self.mock_identity.is_valid.return_value = True
+        super().setUp()
 
-        self.mock_cp_provider = mock.Mock(spec=CPProvider, name="CPProvider")
-        self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
+    def tearDown(self) -> None:
+        """Make sure the domain server is stopped once the test ends."""
+        with contextlib.suppress(rhsmlib.dbus.exceptions.Failed):
+            self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
 
-        # Mock a basic auth connection
-        self.mock_cp.username = "username"
-        self.mock_cp.password = "password"
+        super().tearDown()
 
-        self.mock_cp.getOwnerList = mock.Mock()
-        self.mock_cp.getOwnerList.return_value = json.loads(OWNERS_CONTENT_JSON)
+    def test_Start(self):
+        substring = self.socket_dir.name + "/dbus.*"
+        result = self.obj.Start.__wrapped__(self.obj, self.LOCALE)
+        self.assertRegex(result, substring)
 
-        # For the tests in which it's used, the consumer_auth cp and basic_auth cp can be the same
-        self.mock_cp_provider.get_consumer_auth_cp.return_value = self.mock_cp
-        self.mock_cp_provider.get_basic_auth_cp.return_value = self.mock_cp
+    def test_Start__two_starts(self):
+        """Test that opening the server twice returns the same address"""
+        result_1 = self.obj.Start.__wrapped__(self.obj, self.LOCALE)
+        result_2 = self.obj.Start.__wrapped__(self.obj, self.LOCALE)
+        self.assertEqual(result_1, result_2)
 
-        register_patcher = mock.patch("rhsmlib.dbus.objects.register.RegisterService", autospec=True)
-        self.mock_register = register_patcher.start().return_value
-        self.addCleanup(register_patcher.stop)
-
-        cert_invoker_patcher = mock.patch("rhsmlib.dbus.objects.register.EntCertActionInvoker", autospec=True)
-        self.mock_cert_invoker = cert_invoker_patcher.start().return_value
-        self.addCleanup(cert_invoker_patcher.stop)
-
-    def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.CP_PROVIDER:
-            return self.mock_cp_provider
-        else:
-            return None
-
-    def test_open_domain_socket(self):
-        dbus_method_args = [""]
-
-        def assertions(*args):
-            result = args[0]
-            self.assertRegex(result, r"/run/dbus.*")
-
-        self.dbus_request(assertions, self.interface.Start, dbus_method_args)
-
-    def test_same_socket_on_subsequent_opens(self):
-        dbus_method_args = [""]
-
-        def assertions(*args):
-            # Assign the result as an attribute to this function.
-            # See http://stackoverflow.com/a/27910553/6124862
-            assertions.result = args[0]
-            self.assertRegex(assertions.result, r"/run/dbus.*")
-
-        self.dbus_request(assertions, self.interface.Start, dbus_method_args)
-
-        # Reset the handler_complete_event so we'll block for the second
-        # dbus_request
-        self.handler_complete_event.clear()
-
-        def assertions2(*args):
-            result2 = args[0]
-            self.assertEqual(assertions.result, result2)
-
-        self.dbus_request(assertions2, self.interface.Start, dbus_method_args)
-
-    def test_cannot_close_what_is_not_opened(self):
-        dbus_method_args = [""]
-        with self.assertRaises(dbus.exceptions.DBusException):
-            self.dbus_request(None, self.interface.Stop, dbus_method_args)
-
-    def test_closes_domain_socket(self):
-        dbus_method_args = [""]
-
-        def get_address(*args):
-            address = args[0]
-            _prefix, _equal, address = address.partition("=")
-            get_address.address, _equal, _suffix = address.partition(",")
-
-        self.dbus_request(get_address, self.interface.Start, dbus_method_args)
-        self.handler_complete_event.clear()
+    def test_Start__can_connect(self):
+        result = self.obj.Start.__wrapped__(self.obj, self.LOCALE)
+        prefix, _, data = result.partition("=")
+        address, _, guid = data.partition(",")
 
         sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         try:
-            # The socket returned for connection is an abstract socket so we have
-            # to begin the name with a NUL byte to get into that namespace.  See
-            # http://blog.eduardofleury.com/archives/2007/09/13
-            sock.connect("\0" + get_address.address)
+            sock.connect(address)
         finally:
             sock.close()
 
-        self.dbus_request(None, self.interface.Stop, dbus_method_args)
-        self.handler_complete_event.wait()
+    def test_Stop(self):
+        self.obj.Start.__wrapped__(self.obj, self.LOCALE)
+        self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
 
-        with self.assertRaises(socket.error) as serr:
-            sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            try:
-                sock.connect("\0" + get_address.address)
-            finally:
-                sock.close()
-            self.assertEqual(serr.errno, errno.ECONNREFUSED)
+    def test_Stop__not_running(self):
+        with self.assertRaises(rhsmlib.dbus.exceptions.Failed):
+            self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
 
-    def _build_interface(self):
-        dbus_method_args = [""]
 
-        def get_address(*args):
-            get_address.address = args[0]
+class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
+    dbus_class = DomainSocketRegisterDBusObject
+    dbus_class_kwargs = {}
 
-        self.dbus_request(get_address, self.interface.Start, dbus_method_args)
-        self.handler_complete_event.clear()
-        socket_conn = dbus.connection.Connection(get_address.address)
-        socket_proxy = socket_conn.get_object(constants.BUS_NAME, constants.PRIVATE_REGISTER_DBUS_PATH)
-        return dbus.Interface(socket_proxy, constants.PRIVATE_REGISTER_INTERFACE)
+    @classmethod
+    def setUpClass(cls) -> None:
+        register_patch = mock.patch(
+            "rhsmlib.dbus.objects.register.RegisterService.register",
+            name="register",
+        )
+        cls.patches["register"] = register_patch.start()
+        cls.addClassCleanup(register_patch.stop)
 
-    def test_can_register_over_domain_socket(self):
-        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+        is_registered_patch = mock.patch(
+            "rhsmlib.dbus.base_object.BaseObject.is_registered",
+            name="is_registered",
+        )
+        cls.patches["is_registered"] = is_registered_patch.start()
+        cls.addClassCleanup(is_registered_patch.stop)
 
-        def assertions(*args):
-            # Be sure we are persisting the consumer cert
-            self.assertEqual(json.loads(args[0]), expected_consumer)
+        update_patch = mock.patch(
+            "rhsmlib.dbus.objects.register.EntCertActionInvoker.update",
+            name="update",
+        )
+        cls.patches["update"] = update_patch.start()
+        cls.addClassCleanup(update_patch.stop)
 
-        self.mock_identity.is_valid.return_value = False
-        self.mock_identity.uuid = "INVALIDCONSUMERUUID"
+        attach_auto_patch = mock.patch(
+            "rhsmlib.dbus.objects.register.AttachService.attach_auto",
+            name="attach_auto",
+        )
+        cls.patches["attach_auto"] = attach_auto_patch.start()
+        cls.addClassCleanup(attach_auto_patch.stop)
 
-        self.mock_register.register.return_value = expected_consumer
+        build_uep_patch = mock.patch(
+            "rhsmlib.dbus.base_object.BaseObject.build_uep",
+            name="build_uep",
+        )
+        cls.patches["build_uep"] = build_uep_patch.start()
+        cls.addClassCleanup(build_uep_patch.stop)
 
-        dbus_method_args = ["admin", "admin", "admin", {}, {}, ""]
-        self.dbus_request(assertions, self._build_interface().Register, dbus_method_args)
+        super().setUpClass()
 
-    def test_can_get_orgs_over_domain_socket(self):
-        expected_owners = json.loads(OWNERS_CONTENT_JSON)
-        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+    def setUp(self) -> None:
+        self.patches["update"].return_value = None
 
-        def assertions(*args):
-            # Be sure we are persisting the consumer cert
-            self.assertEqual(json.loads(args[0]), expected_owners)
+        super().setUp()
 
-        self.mock_identity.is_valid.return_value = False
-        self.mock_identity.uuid = "INVALIDCONSUMERUUID"
+    def test_Register(self):
+        expected = json.loads(CONSUMER_CONTENT_JSON)
+        self.patches["register"].return_value = expected
+        self.patches["is_registered"].return_value = False
 
-        self.mock_register.register.return_value = expected_consumer
+        result = self.obj.Register.__wrapped__(self.obj, "org", "username", "password", {}, {}, self.LOCALE)
+        self.assertEqual(expected, json.loads(result))
 
-        dbus_method_args = ["admin", "admin", {}, ""]
-        self.dbus_request(assertions, self._build_interface().GetOrgs, dbus_method_args)
+    def test_Register__enable_content(self):
+        """Test including 'enable_content' in entitlement mode with no content."""
+        expected = json.loads(CONSUMER_CONTENT_JSON)
+        self.patches["register"].return_value = expected
+        self.patches["attach_auto"].return_value = []
+        self.patches["is_registered"].return_value = False
 
-    def test_can_register_over_domain_socket_with_activation_keys(self):
-        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+        result = self.obj.Register.__wrapped__(
+            self.obj, "org", "username", "password", {"enable_content": "1"}, {}, self.LOCALE
+        )
+        self.assertEqual(expected, json.loads(result))
 
-        def assertions(*args):
-            # Be sure we are persisting the consumer cert
-            self.assertEqual(json.loads(args[0]), expected_consumer)
+    def test_GetOrgs(self):
+        self.patches["is_registered"].return_value = False
+        mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
+        mock_cp.username = "username"
+        mock_cp.password = "password"
+        mock_cp.getOwnerList = mock.Mock()
+        mock_cp.getOwnerList.return_value = json.loads(OWNERS_CONTENT_JSON)
+        self.patches["build_uep"].return_value = mock_cp
 
-        self.mock_identity.is_valid.return_value = False
-        self.mock_identity.uuid = "INVALIDCONSUMERUUID"
+        expected = json.loads(OWNERS_CONTENT_JSON)
+        result = self.obj.GetOrgs.__wrapped__(self.obj, "username", "password", {}, self.LOCALE)
+        self.assertEqual(expected, json.loads(result))
 
-        self.mock_register.register.return_value = expected_consumer
+    def test_RegisterWithActivationKeys(self):
+        expected = json.loads(CONSUMER_CONTENT_JSON)
+        self.patches["is_registered"].return_value = False
+        self.patches["register"].return_value = expected
 
-        dbus_method_args = [
-            "admin",
+        result = self.obj.RegisterWithActivationKeys.__wrapped__(
+            self.obj,
+            "username",
             ["key1", "key2"],
             {},
             {"host": "localhost", "port": "8443", "handler": "/candlepin"},
-            "",
-        ]
-
-        self.dbus_request(assertions, self._build_interface().RegisterWithActivationKeys, dbus_method_args)
+            self.LOCALE,
+        )
+        self.assertEqual(expected, json.loads(result))

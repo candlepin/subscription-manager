@@ -169,7 +169,7 @@ class SubManFixture(unittest.TestCase):
         cli.conf = config.Config(self.mock_cfg_parser)
         self.addCleanup(unstub_conf)
 
-        facts_host_patcher = patch("rhsmlib.dbus.facts.FactsClient", auto_spec=True)
+        facts_host_patcher = patch("rhsmlib.dbus.facts.FactsClient", autospec=True)
         self.mock_facts_host = facts_host_patcher.start()
         self.mock_facts_host.return_value.GetFacts.return_value = self.set_facts()
 
@@ -255,6 +255,13 @@ class SubManFixture(unittest.TestCase):
         syncedstore_mock = self.syncedstore_patcher.start()
 
         set_up_mock_sp_store(syncedstore_mock)
+
+        # Do not read system files. Even if the tests run in container environment,
+        # report that we are running on bare metal.
+        self.in_container_patcher = patch("rhsm.config.in_container")
+        in_container_mock = self.in_container_patcher.start()
+        in_container_mock.return_value = False
+        self.addCleanup(self.in_container_patcher.stop)
 
         self.files_to_cleanup = []
 
