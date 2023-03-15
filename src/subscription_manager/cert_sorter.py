@@ -151,6 +151,8 @@ class ComplianceManager(object):
         if status is None:
             return
 
+        is_sca = utils.is_simple_content_access(self.cp_provider.get_consumer_auth_cp(), self.identity)
+
         # TODO: we're now mapping product IDs to entitlement cert JSON,
         # previously we mapped to actual entitlement cert objects. However,
         # nothing seems to actually use these, so it may not matter for now.
@@ -188,16 +190,19 @@ class ComplianceManager(object):
         # Lookup product certs for each unentitled product returned by
         # the server:
         unentitled_pids = status['nonCompliantProducts']
-        # Add in any installed products not in the server response. This
-        # could happen if something changes before the certd runs. Log
-        # a warning if it does, and treat it like an unentitled product.
-        for pid in list(self.installed_products.keys()):
-            if pid not in self.valid_products and pid not in \
-                    self.partially_valid_products and pid not in \
-                    unentitled_pids:
-                log.warning("Installed product %s not present in response from "
-                         "server." % pid)
-                unentitled_pids.append(pid)
+        # When using SCA, the compliance status does not include the installed
+        # products.
+        if not is_sca:
+            # Add in any installed products not in the server response. This
+            # could happen if something changes before the certd runs. Log
+            # a warning if it does, and treat it like an unentitled product.
+            for pid in list(self.installed_products.keys()):
+                if pid not in self.valid_products and pid not in \
+                        self.partially_valid_products and pid not in \
+                        unentitled_pids:
+                    log.warning("Installed product %s not present in response from "
+                             "server." % pid)
+                    unentitled_pids.append(pid)
 
         for unentitled_pid in unentitled_pids:
             prod_cert = self.product_dir.find_by_product(unentitled_pid)
