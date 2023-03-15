@@ -51,7 +51,6 @@ class AbstractCLICommand:
     strategy.
     """
 
-    # FIXME Default for aliases should be []
     def __init__(
         self,
         name: str = "cli",
@@ -66,8 +65,7 @@ class AbstractCLICommand:
 
         self.parser: ArgumentParser = self._create_argparser()
 
-    # FIXME What is the type of `args`?
-    def main(self, args=None) -> None:
+    def main(self, args: Optional[List[str]] = None) -> None:
         raise NotImplementedError("Commands must implement: main(self, args=None)")
 
     def _validate_options(self) -> None:

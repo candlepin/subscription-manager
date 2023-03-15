@@ -23,7 +23,7 @@ import os
 import socket
 import threading
 import time
-from typing import Dict, TextIO, Union, Literal, Optional, List, Any, Set, TYPE_CHECKING
+from typing import Dict, TextIO, Literal, Optional, List, Any, Set, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from rhsm.certificate2 import EntitlementCertificate, Product
@@ -137,9 +137,8 @@ class CacheManager:
 
         try:
             f = open(self.CACHE_FILE)
-            data: Optional[Dict] = self._load_data(f)
+            data: dict = self._load_data(f)
             f.close()
-            # FIXME We loaded data, but the code expects optional dictionaries
             return data
         except IOError as err:
             log.error("Unable to read cache: %s" % self.CACHE_FILE)
@@ -276,7 +275,7 @@ class StatusCache(CacheManager):
     def to_dict(self) -> Dict:
         return self.server_status
 
-    def _load_data(self, open_file) -> Dict:
+    def _load_data(self, open_file: TextIO) -> Dict:
         json_str: str = open_file.read()
         return json.loads(json_str)
 

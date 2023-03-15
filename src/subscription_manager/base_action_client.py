@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 import logging
-from typing import List, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING
 
 from rhsm.connection import GoneException, ExpiredIdentityCertException
 
@@ -53,8 +53,8 @@ class BaseActionClient:
         finally:
             self.lock.release()
 
-    def _run_update(self, lib: type) -> "ActionReport":
-        update_report: ActionReport = None
+    def _run_update(self, lib: "BaseActionInvoker") -> "ActionReport":
+        update_report: Optional[ActionReport] = None
 
         try:
             update_report = lib.update()
