@@ -283,8 +283,7 @@ class EntitlementDirectory(CertificateDirectory):
 
             # write the key/cert out again in new style format
             key = Key.read(old_key_path)
-            # FIXME Writer does not take any arguments
-            cert_writer = Writer(self)
+            cert_writer = Writer()
             cert_writer.write(key, cert)
         return True
 
