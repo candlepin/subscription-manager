@@ -51,43 +51,6 @@ class EntCertActionInvoker(certlib.BaseActionInvoker):
         return action.perform()
 
 
-# FIXME These Delete classes are not being used
-#  and it is not clear what the usage and type hints should be
-# this guy is an oddball
-# NOTE: this lib and EntCertDeleteAction are currently
-# unused. Intention is to replace managerlib.clean_all_data
-# with a CertActionClient.delete invocation
-class EntCertDeleteLib:
-    """Invoker for entitlement certificate delete actions."""
-
-    def __init__(self, serial_numbers=None, ent_dir=None):
-        self.locker = certlib.Locker()
-        self.ent_dir = ent_dir
-
-    def delete(self):
-        self.locker.run(self._do_delete)
-
-    def _do_delete(self):
-        action = EntCertDeleteAction(ent_dir=self.ent_dir, serial_numbers=self.serial_numbers)
-        return action.perform()
-
-
-# FIXME: currently unused
-class EntCertDeleteAction:
-    """Action for deleting all entitlement certs."""
-
-    def __init__(self, ent_dir=None):
-        self.ent_dir = ent_dir
-
-    def perform(self, serial_numbers):
-        for sn in serial_numbers:
-            cert = self.ent_dir.find(sn)
-            if cert is None:
-                continue
-            cert.delete()
-        return self
-
-
 class EntCertUpdateAction:
     """Action for syncing entitlement certificates.
 

@@ -21,7 +21,7 @@ import re
 import shutil
 import stat
 import syslog
-from typing import Callable, Dict, Iterable, List, Literal, Optional, Tuple, Union, TYPE_CHECKING
+from typing import Callable, Dict, Iterable, List, Optional, Tuple, Union, TYPE_CHECKING
 
 
 from rhsm.config import get_config_parser
@@ -66,7 +66,6 @@ if TYPE_CHECKING:
     from subscription_manager.identity import Identity
     from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
     from subscription_manager.cp_provider import CPProvider
-    from subscription_manager.entcertlib import EntCertUpdateReport
 
 
 log = logging.getLogger(__name__)
@@ -115,17 +114,6 @@ class CertificateFetchError(Exception):
             self.errors
         )
         return msg
-
-
-# FIXME Does not seem to be used
-def fetch_certificates(certlib) -> Literal[True]:
-    # Force fetch all certs
-    result: EntCertUpdateReport = certlib.update()
-    exceptions: List[Exception] = result.exceptions()
-    if exceptions:
-        raise CertificateFetchError(exceptions)
-
-    return True
 
 
 class PoolFilter:
