@@ -394,18 +394,11 @@ class SyspurposeComplianceStatusCache(StatusCache):
         else:
             return self.syspurpose_service.get_overall_status("unknown")
 
-    # FIXME This is wrong; it should be 'str' and 'self.server_status["status"]' instead
-    def get_overall_status_code(self) -> Union[Dict, str]:
-        if self.server_status is not None:
-            return self.server_status
-        else:
-            return "unknown"
+    def get_overall_status_code(self) -> str:
+        return self.server_status.get("status", "unknown")
 
     def get_status_reasons(self) -> Optional[str]:
-        if self.server_status is not None and "reasons" in self.server_status:
-            return self.server_status["reasons"]
-        else:
-            return None
+        return self.server_status.get("reasons", None)
 
 
 class ProductStatusCache(StatusCache):
@@ -576,26 +569,22 @@ class InstalledProductsManager(CacheManager):
 
     CACHE_FILE = "/var/lib/rhsm/cache/installed_products.json"
 
+    _installed: Dict[str, dict]
+    tags: Set[str]
+
     def __init__(self):
-        self._installed: Dict[str, Dict] = None
-        self.tags: Set[str] = None
-
         self.product_dir: ProductDirectory = inj.require(inj.PROD_DIR)
-
         self._setup_installed()
 
-    def _get_installed(self) -> Dict:
-        if self._installed:
-            return self._installed
-
-        self._setup_installed()
-
+    @property
+    def installed(self) -> Dict:
+        if not self._installed:
+            self._setup_installed()
         return self._installed
 
-    def _set_installed(self, value: Dict) -> None:
+    @installed.setter
+    def installed(self, value: Dict) -> None:
         self._installed = value
-
-    installed = property(_get_installed, _set_installed)
 
     def to_dict(self) -> Dict:
         return {"products": self.installed, "tags": self.tags}
