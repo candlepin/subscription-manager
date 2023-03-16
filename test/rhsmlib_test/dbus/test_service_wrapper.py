@@ -21,37 +21,34 @@ from rhsmlib.dbus import service_wrapper, constants
 class ServiceWrapperTest(unittest.TestCase):
     def test_parse_argv(self):
         opts, args = service_wrapper.parse_argv(
-            ['cmd_name', '--verbose', '--bus-name', 'Hello', 'Foo'], 'Default')
+            ["cmd_name", "--verbose", "--bus-name", "Hello", "Foo"], "Default"
+        )
         self.assertTrue(opts.verbose)
-        self.assertEqual(opts.bus_name, 'Hello')
-        self.assertEqual(args, ['Foo'])
+        self.assertEqual(opts.bus_name, "Hello")
+        self.assertEqual(args, ["Foo"])
 
     def test_uses_default_bus_name(self):
-        opts, args = service_wrapper.parse_argv(['cmd_name', 'Foo'], 'Default')
+        opts, args = service_wrapper.parse_argv(["cmd_name", "Foo"], "Default")
         self.assertFalse(opts.verbose)
         self.assertEqual(opts.bus, dbus.SystemBus)
-        self.assertEqual(opts.bus_name, 'Default')
-        self.assertEqual(args, ['Foo'])
+        self.assertEqual(opts.bus_name, "Default")
+        self.assertEqual(args, ["Foo"])
 
     def test_loads_bus_given(self):
-        opts, args = service_wrapper.parse_argv(['cmd_name', '--bus', 'dbus.SessionBus', 'Foo'], 'Default')
+        opts, args = service_wrapper.parse_argv(["cmd_name", "--bus", "dbus.SessionBus", "Foo"], "Default")
         self.assertEqual(opts.bus, dbus.SessionBus)
 
     @mock.patch("rhsmlib.dbus.service_wrapper.server.Server")
     def test_loads_an_object_class(self, mock_serve):
         # Just use some class we have available
-        service_wrapper.main(['cmd_name', 'mock.MagicMock'])
+        service_wrapper.main(["cmd_name", "mock.MagicMock"])
         mock_serve.assert_called_with(
-            bus_class=dbus.SystemBus,
-            bus_name=constants.BUS_NAME,
-            object_classes=[mock.MagicMock]
+            bus_class=dbus.SystemBus, bus_name=constants.BUS_NAME, object_classes=[mock.MagicMock]
         )
 
     @mock.patch("rhsmlib.dbus.service_wrapper.server.Server")
     def test_loads_from_an_array_of_classes(self, mock_serve):
-        service_wrapper.main(['cmd_name'], [mock.MagicMock])
+        service_wrapper.main(["cmd_name"], [mock.MagicMock])
         mock_serve.assert_called_with(
-            bus_class=dbus.SystemBus,
-            bus_name=constants.BUS_NAME,
-            object_classes=[mock.MagicMock]
+            bus_class=dbus.SystemBus, bus_name=constants.BUS_NAME, object_classes=[mock.MagicMock]
         )

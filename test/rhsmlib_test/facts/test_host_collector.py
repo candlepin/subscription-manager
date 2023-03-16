@@ -19,30 +19,29 @@ from rhsmlib.facts import host_collector
 
 
 class HostCollectorTest(unittest.TestCase):
-
-    @mock.patch('locale.getdefaultlocale')
+    @mock.patch("locale.getdefaultlocale")
     def test_unknown_locale(self, mock_locale):
         collector = host_collector.HostCollector()
         mock_locale.return_value = (None, None)
         facts = collector.get_all()
 
         self.assertTrue(isinstance(facts, dict))
-        self.assertEqual(facts['system.default_locale'], 'Unknown')
+        self.assertEqual(facts["system.default_locale"], "Unknown")
 
-    @mock.patch('locale.getdefaultlocale')
+    @mock.patch("locale.getdefaultlocale")
     def test_en_us_utf8_locale(self, mock_locale):
         collector = host_collector.HostCollector()
-        mock_locale.return_value = ('en_US', 'UTF-8')
+        mock_locale.return_value = ("en_US", "UTF-8")
         facts = collector.get_all()
 
         self.assertTrue(isinstance(facts, dict))
-        self.assertEqual(facts['system.default_locale'], 'en_US.UTF-8')
+        self.assertEqual(facts["system.default_locale"], "en_US.UTF-8")
 
-    @mock.patch('locale.getdefaultlocale')
+    @mock.patch("locale.getdefaultlocale")
     def test_en_us_no_encoding_locale(self, mock_locale):
         collector = host_collector.HostCollector()
-        mock_locale.return_value = ('en_US', None)
+        mock_locale.return_value = ("en_US", None)
         facts = collector.get_all()
 
         self.assertTrue(isinstance(facts, dict))
-        self.assertEqual(facts['system.default_locale'], 'en_US')
+        self.assertEqual(facts["system.default_locale"], "en_US")

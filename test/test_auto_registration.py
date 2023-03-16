@@ -21,7 +21,7 @@ import base64
 from mock import patch, Mock
 
 from subscription_manager.scripts.rhsmcertd_worker import _collect_cloud_info
-from .rhsmlib_test.test_cloud_facts import AWS_METADATA
+from test.rhsmlib_test.facts.test_cloud_facts import AWS_METADATA
 from cloud_what.providers import aws, azure, gcp
 
 AWS_SIGNATURE = """ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz01234567899w0BBwGggCSABIIB
