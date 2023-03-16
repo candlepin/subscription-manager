@@ -15,7 +15,7 @@ import unittest
 
 from rhsm.config import RhsmConfigParser, NoOptionError
 from rhsmlib.services.config import Config, ConfigSection
-from test.rhsmlib_test.base import TestUtilsMixin
+from test.rhsmlib.base import TestUtilsMixin
 
 TEST_CONFIG = """
 [foo]

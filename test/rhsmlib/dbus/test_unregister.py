@@ -15,7 +15,7 @@
 import dbus
 import mock
 
-from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
+from test.rhsmlib.base import DBusObjectTest, InjectionMockingTest
 
 from subscription_manager import injection as inj
 from subscription_manager.cp_provider import CPProvider

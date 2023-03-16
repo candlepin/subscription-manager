@@ -14,7 +14,7 @@ import dbus
 import mock
 import json
 
-from test.rhsmlib_test.base import InjectionMockingTest, DBusObjectTest
+from test.rhsmlib.base import InjectionMockingTest, DBusObjectTest
 
 from subscription_manager import injection as inj
 from subscription_manager.cert_sorter import CertSorter

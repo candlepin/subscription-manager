@@ -16,7 +16,7 @@ import dbus
 from rhsm.config import RhsmConfigParser
 from rhsmlib.dbus import constants
 from rhsmlib.dbus.objects.config import ConfigDBusObject
-from test.rhsmlib_test.base import DBusObjectTest, TestUtilsMixin
+from test.rhsmlib.base import DBusObjectTest, TestUtilsMixin
 
 from test import subman_marker_dbus
 

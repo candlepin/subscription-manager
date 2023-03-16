@@ -10,20 +10,20 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-import dbus
 import mock
-import json
 import datetime
 
-from test.rhsmlib_test.base import DBusObjectTest, InjectionMockingTest
+from test.rhsmlib.base import InjectionMockingTest
 
 from subscription_manager import injection as inj
-from subscription_manager.cp_provider import CPProvider
+from subscription_manager.cert_sorter import CertSorter
+from subscription_manager.validity import ValidProductDateRangeCalculator
 
-from rhsmlib.dbus.objects import ProductsDBusObject
-from rhsmlib.dbus import constants
+from test import stubs
 
-from test import subman_marker_dbus
+from rhsm import connection
+
+from rhsmlib.services import products
 
 
 START_DATE = datetime.datetime.now() - datetime.timedelta(days=100)
@@ -161,33 +161,73 @@ CONTENT_JSON = [
 ]
 
 
-@subman_marker_dbus
-class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
+class TestProductService(InjectionMockingTest):
     def setUp(self):
-        super(TestProductsDBusObject, self).setUp()
-        self.proxy = self.proxy_for(ProductsDBusObject.default_dbus_path)
-        self.interface = dbus.Interface(self.proxy, constants.PRODUCTS_INTERFACE)
-
-        products_patcher = mock.patch("rhsmlib.dbus.objects.products.InstalledProducts")
-        self.mock_products = products_patcher.start().return_value
-        self.addCleanup(products_patcher.stop)
-        self.mock_identity.is_valid.return_value = True
-        self.mock_identity.uuid = "id"
+        super(TestProductService, self).setUp()
+        self.mock_cert_sorter = mock.Mock(spec=CertSorter, name="CertSorter")
+        self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
+        self.mock_calculator = mock.Mock(
+            spec=ValidProductDateRangeCalculator, name="ValidProductDateRangeCalculator"
+        )
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.IDENTITY:
-            return self.mock_identity
-        elif args[0] == inj.CP_PROVIDER:
-            provider = mock.Mock(spec=CPProvider, name="CPProvider")
-            provider.get_consumer_auth_cp.return_value = mock.Mock(name="MockCP")
-            return provider
+        if args[0] == inj.CERT_SORTER:
+            return self.mock_cert_sorter
+        elif args[0] == inj.PRODUCT_DATE_RANGE_CALCULATOR:
+            return self.mock_calculator
         else:
             return None
 
-    def dbus_objects(self):
-        return [ProductsDBusObject]
+    def _create_rhel74_cert(self):
+        return self._create_cert("69", "Red Hat Enterprise Linux Server", "7.4", "rhel-7,rhel-7-server")
+
+    def _create_rhel72_ues_cert(self):
+        return self._create_cert(
+            "70",
+            "Red Hat Enterprise Linux Server - Extended Update Support",
+            "7.2",
+            "rhel-7-eus-server,rhel-7-server",
+        )
+
+    @staticmethod
+    def _create_cert(product_id, name, version, provided_tags):
+        cert = stubs.StubProductCertificate(
+            product=stubs.StubProduct(
+                product_id=product_id, name=name, version=version, provided_tags=provided_tags
+            ),
+            start_date=START_DATE,
+            end_date=END_DATE,
+        )
+        cert.delete = mock.Mock()
+        cert.write = mock.Mock()
+        return cert
+
+    def test_list_no_installed_products(self):
+        self.mock_cp.getConsumer.return_value = NO_CONTENT_JSON
+        self.mock_cert_sorter.installed_products = []
+
+        result = products.InstalledProducts(self.mock_cp).list()
+        self.assertEqual([], result)
 
     def test_list_installed_products_without_filter(self):
+        self.mock_cp.getConsumer.return_value = CONTENT_JSON
+        self.mock_cert_sorter.reasons = mock.Mock()
+        self.mock_cert_sorter.reasons.get_product_reasons = mock.Mock(return_value=[])
+        self.mock_cert_sorter.get_status = mock.Mock(return_value="subscribed")
+        # Mock methods in calculator
+        self.mock_calculator.calculate = mock.Mock()
+
+        self.mock_calculator.calculate.return_value.begin = mock.Mock()
+        self.mock_calculator.calculate.return_value.begin.return_value.astimezone = mock.Mock()
+        self.mock_calculator.calculate.return_value.begin.return_value.astimezone.return_value.strftime = (
+            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=START_DATE))
+        )
+        self.mock_calculator.calculate.return_value.end = mock.Mock()
+        self.mock_calculator.calculate.return_value.end.return_value.astimezone = mock.Mock()
+        self.mock_calculator.calculate.return_value.end.return_value.astimezone.return_value.strftime = (
+            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=END_DATE))
+        )
+
         expected_result = [
             (
                 "Red Hat Enterprise Linux Server",
@@ -196,8 +236,8 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
                 "x86_64",
                 "subscribed",
                 [],
-                START_DATE.strftime("%Y-%m-%d"),
-                END_DATE.strftime("%Y-%m-%d"),
+                "{d.day}.{d.month}.{d.year}".format(d=START_DATE),
+                "{d.day}.{d.month}.{d.year}".format(d=END_DATE),
             ),
             (
                 "Red Hat Enterprise Linux Server - Extended Update Support",
@@ -206,16 +246,57 @@ class TestProductsDBusObject(DBusObjectTest, InjectionMockingTest):
                 "x86_64",
                 "subscribed",
                 [],
-                START_DATE.strftime("%Y-%m-%d"),
-                END_DATE.strftime("%Y-%m-%d"),
+                "{d.day}.{d.month}.{d.year}".format(d=START_DATE),
+                "{d.day}.{d.month}.{d.year}".format(d=END_DATE),
             ),
         ]
 
-        def assertions(*args):
-            result = args[0]
-            self.assertEqual(result, json.dumps(expected_result))
+        self.mock_cert_sorter.installed_products = {
+            "69": self._create_rhel74_cert(),
+            "70": self._create_rhel72_ues_cert(),
+        }
 
-        self.mock_products.list.return_value = expected_result
+        result = products.InstalledProducts(self.mock_cp).list()
 
-        dbus_method_args = ["", {}, ""]
-        self.dbus_request(assertions, self.interface.ListInstalledProducts, dbus_method_args)
+        self.assertEqual(expected_result, result)
+
+    def test_list_installed_products_with_filter(self):
+        self.mock_cp.getConsumer.return_value = CONTENT_JSON
+        self.mock_cert_sorter.reasons = mock.Mock()
+        self.mock_cert_sorter.reasons.get_product_reasons = mock.Mock(return_value=[])
+        self.mock_cert_sorter.get_status = mock.Mock(return_value="subscribed")
+        # Mock methods in calculator
+        self.mock_calculator.calculate = mock.Mock()
+
+        self.mock_calculator.calculate.return_value.begin = mock.Mock()
+        self.mock_calculator.calculate.return_value.begin.return_value.astimezone = mock.Mock()
+        self.mock_calculator.calculate.return_value.begin.return_value.astimezone.return_value.strftime = (
+            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=START_DATE))
+        )
+        self.mock_calculator.calculate.return_value.end = mock.Mock()
+        self.mock_calculator.calculate.return_value.end.return_value.astimezone = mock.Mock()
+        self.mock_calculator.calculate.return_value.end.return_value.astimezone.return_value.strftime = (
+            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=END_DATE))
+        )
+
+        expected_result = [
+            (
+                "Red Hat Enterprise Linux Server - Extended Update Support",
+                "70",
+                "7.2",
+                "x86_64",
+                "subscribed",
+                [],
+                "{d.day}.{d.month}.{d.year}".format(d=START_DATE),
+                "{d.day}.{d.month}.{d.year}".format(d=END_DATE),
+            ),
+        ]
+
+        self.mock_cert_sorter.installed_products = {
+            "69": self._create_rhel74_cert(),
+            "70": self._create_rhel72_ues_cert(),
+        }
+
+        result = products.InstalledProducts(self.mock_cp).list("*Extended*")
+
+        self.assertEqual(expected_result, result)

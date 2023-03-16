@@ -13,7 +13,7 @@
 import datetime
 import mock
 
-from test.rhsmlib_test.base import InjectionMockingTest
+from test.rhsmlib.base import InjectionMockingTest
 
 from subscription_manager import injection as inj
 from subscription_manager.identity import Identity
