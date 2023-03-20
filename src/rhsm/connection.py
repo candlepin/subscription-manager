@@ -911,8 +911,10 @@ class BaseRestLib:
         """
 
         if os.environ.get("SUBMAN_DEBUG_PRINT_RESPONSE", ""):
-            print("%s %s" % (result["status"], result["headers"]))
-            print(result["content"])
+            gray_col = "\033[90m"
+            end_col = "\033[0m"
+            print(gray_col + "%s %s" % (result["status"], result["headers"]))
+            print(result["content"] + end_col)
             print()
 
     def _set_accept_language_in_header(self) -> None:
