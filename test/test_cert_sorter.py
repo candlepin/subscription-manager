@@ -251,6 +251,35 @@ class CertSorterTests(SubManFixture):
         self.assertEqual('Insufficient', self.sorter.get_system_status())
 
 
+class CertSorterSCATests(SubManFixture):
+    @patch("subscription_manager.cert_sorter.utils.is_simple_content_access")
+    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
+    def setUp(self, mock_update, mock_is_simple_content_access):
+        SubManFixture.setUp(self)
+        # Setup mock product and entitlement cert (only one, to simulate SCA)
+        self.prod_dir = StubProductDirectory(pids=[INST_PID_1])
+        self.ent_dir = StubEntitlementDirectory(
+            [
+                StubEntitlementCertificate(PROD_1, ent_id=ENT_ID_1),
+            ]
+        )
+
+        self.mock_uep = StubUEP()
+
+        self.status_mgr = EntitlementStatusCache()
+        self.status_mgr.load_status = Mock(return_value=SAMPLE_COMPLIANCE_SCA_JSON)
+        self.status_mgr.write_cache = Mock()
+        inj.provide(inj.ENTITLEMENT_STATUS_CACHE, self.status_mgr)
+        mock_is_simple_content_access.return_value = True
+        inj.provide(inj.PROD_DIR, self.prod_dir)
+        inj.provide(inj.ENT_DIR, self.ent_dir)
+        self.sorter = CertSorter()
+        self.sorter.is_registered = Mock(return_value=True)
+
+    def test_unentitled_products(self):
+        self.assertEqual({}, self.sorter.unentitled_products)
+
+
 SAMPLE_COMPLIANCE_JSON = json.loads("""
 {
   "date" : "2013-04-26T13:43:12.436+0000",
@@ -754,3 +783,20 @@ SAMPLE_COMPLIANCE_JSON = json.loads("""
   "compliant" : false
 }
 """)
+
+SAMPLE_COMPLIANCE_SCA_JSON = json.loads(
+    """
+{
+  "status": "disabled",
+  "compliant": true,
+  "date": "2023-03-20T11:11:13+0000",
+  "compliantUntil": null,
+  "compliantProducts": {},
+  "partiallyCompliantProducts": {},
+  "partialStacks": {},
+  "nonCompliantProducts": [],
+  "reasons": [],
+  "productComplianceDateRanges": {}
+}
+"""
+)
