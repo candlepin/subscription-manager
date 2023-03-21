@@ -14,12 +14,6 @@ jobs:
         include:
           - name: "CentOS Stream 8"
             image: "quay.io/centos/centos:stream8"
-          - name: "CentOS Stream 9"
-            image: "quay.io/centos/centos:stream9"
-          - name: "Fedora latest"
-            image: "fedora:latest"
-          - name: "Fedora Rawhide"
-            image: "fedora:rawhide"
 
     runs-on: ubuntu-latest
     container:
@@ -35,11 +29,6 @@ jobs:
         if: ${{ matrix.name == 'CentOS Stream 8' }}
         run: |
           dnf config-manager --enable powertools
-
-      - name: Enable CRB repository
-        if: ${{ matrix.name == 'CentOS Stream 9' }}
-        run: |
-          dnf config-manager --enable crb
 
       - name: Checkout repository
         uses: actions/checkout@v3

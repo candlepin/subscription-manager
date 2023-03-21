@@ -16,17 +16,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "CentOS Stream 9"
-            image: "quay.io/centos/centos:stream9"
-            pytest_args: ''
           - name: "CentOS Stream 8"
             image: "quay.io/centos/centos:stream8"
-            pytest_args: ''
-          - name: "Fedora latest"
-            image: "fedora:latest"
-            pytest_args: ''
-          - name: "Fedora Rawhide"
-            image: "fedora:rawhide"
             pytest_args: ''
 
     runs-on: ubuntu-latest

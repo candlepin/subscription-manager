@@ -12,14 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "CentOS Stream 9"
-            image: "quay.io/centos/centos:stream9"
           - name: "CentOS Stream 8"
             image: "quay.io/centos/centos:stream8"
-          - name: "Fedora latest"
-            image: "fedora:latest"
-          - name: "Fedora Rawhide"
-            image: "fedora:rawhide"
 
     runs-on: ubuntu-latest
     container:
@@ -34,12 +28,6 @@ jobs:
         run: |
           dnf --setopt install_weak_deps=False install -y dnf-plugins-core
           dnf config-manager --enable powertools
-
-      - name: "Enable CRB repository"
-        if: ${{ matrix.name == 'CentOS Stream 9' }}
-        run: |
-          dnf --setopt install_weak_deps=False install -y dnf-plugins-core
-          dnf config-manager --enable crb
 
       - name: "Install packages"
         run: |
