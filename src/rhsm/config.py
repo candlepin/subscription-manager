@@ -65,7 +65,7 @@ RHSM_DEFAULTS = {
     "baseurl": "https://" + DEFAULT_CDN_HOSTNAME,
     "repomd_gpg_url": "",
     "ca_cert_dir": DEFAULT_CA_CERT_DIR,
-    "repo_ca_cert": "%(ca_cert_dir)sredhat-uep.pem",
+    "repo_ca_cert": DEFAULT_CA_CERT_DIR + "redhat-uep.pem",
     "productcertdir": "/etc/pki/product",
     "entitlementcertdir": DEFAULT_ENT_CERT_DIR,
     "consumercertdir": "/etc/pki/consumer",
