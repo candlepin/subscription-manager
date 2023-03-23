@@ -35,6 +35,12 @@ class CPProviderTests(unittest.TestCase):
         """
         self.cp_provider = CPProvider()
 
+        # Do not try to perform TCP/TLS handshake during testing
+        self.conn_connect_patcher = patch("http.client.HTTPSConnection.connect")
+        conn_connect_mock = self.conn_connect_patcher.start()
+        conn_connect_mock.return_value = None
+        self.addCleanup(self.conn_connect_patcher.stop)
+
     def test_create_cp_provider(self):
         """
         Simple test of creating instance
