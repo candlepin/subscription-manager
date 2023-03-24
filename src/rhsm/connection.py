@@ -728,6 +728,32 @@ class BaseRestLib:
             log.warning("Unable to load any CA certificate from: %s" % self.ca_dir)
 
     def _create_connection(self, cert_file: str = None, key_file: str = None) -> httplib.HTTPSConnection:
+        """
+        This method tries to return existing connection, when it is possible (timeout, max number of
+        requests). When no connection exists, then this method creates new TLS connection.
+        """
+
+        if self.__conn is not None:
+            # Check if it is still possible to use existing connection
+            now = time.time()
+            if now - self.__conn.last_request_time > self.__conn.keep_alive_timeout:
+                log.debug(f"Connection timeout {self.__conn.keep_alive_timeout}. Closing connection...")
+                self.close_connection()
+            elif (
+                self.__conn.max_requests_num is not None
+                and self.__conn.requests_num > self.__conn.max_requests_num
+            ):
+                log.debug(
+                    f"Maximal number of requests ({self.__conn.max_requests_num}) reached. "
+                    "Closing connection..."
+                )
+                self.close_connection()
+            else:
+                log.debug("Reusing connection: %s", self.__conn.sock)
+                return self.__conn
+
+        log.debug("Creating new connection")
+
         # See https://www.openssl.org/docs/ssl/SSL_CTX_new.html
         # This ends up invoking SSLv23_method, which is the catch all
         # "be compatible" protocol, even though it explicitly is not
@@ -750,26 +776,6 @@ class BaseRestLib:
         if cert_file and os.path.exists(cert_file):
             context.load_cert_chain(cert_file, keyfile=key_file)
 
-        if self.__conn is not None:
-            # Check if it is still possible to use existing connection
-            now = time.time()
-            if now - self.__conn.last_request_time > self.__conn.keep_alive_timeout:
-                log.debug(f"Connection timeout {self.__conn.keep_alive_timeout}. Closing connection...")
-                self.close_connection()
-            elif (
-                self.__conn.max_requests_num is not None
-                and self.__conn.requests_num > self.__conn.max_requests_num
-            ):
-                log.debug(
-                    f"Maximal number of requests ({self.__conn.max_requests_num}) reached. "
-                    "Closing connection..."
-                )
-                self.close_connection()
-            else:
-                log.debug("Reusing connection: %s", self.__conn.sock)
-                return self.__conn
-
-        log.debug("Creating new connection")
         if self.proxy_hostname and self.proxy_port:
             log.debug(
                 "Using proxy: %s:%s" % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port))
@@ -859,6 +865,7 @@ class BaseRestLib:
                 and self.__conn.sock is not None
             ):
                 msg += blue_col + f"{self.__conn.sock}\n" + end_col
+
 
             if self.insecure is True:
                 msg += blue_col + f"Making insecure ({auth}) request:" + end_col
