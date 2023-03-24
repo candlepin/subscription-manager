@@ -10,6 +10,8 @@ from . import stubs
 
 from rhsm import logutil
 
+import unittest
+
 
 # no NullHandler in 2.6, include our own
 class NullHandler(logging.Handler):
@@ -195,6 +197,7 @@ class TestLogutil(fixture.SubManFixture):
         logutil.USER_LOGFILE_DIR = old_dir_path
         logutil.USER_LOGFILE_PATH = old_file_path
 
+    @unittest.skipIf(os.getuid() == 0, "Test cannot be run under root.")
     @mock.patch("os.getuid")
     def test_not_possible_to_create_root_log_dir_due_to_access_perm(self, MockGetUID):
         """
@@ -232,6 +235,7 @@ class TestLogutil(fixture.SubManFixture):
         logutil.LOGFILE_DIR = old_dir_path
         logutil.LOGFILE_PATH = old_file_path
 
+    @unittest.skipIf(os.getuid() == 0, "Test cannot be run under root.")
     @mock.patch("os.getuid")
     def test_not_possible_to_create_user_log_dir_due_to_access_perm(self, MockGetUID):
         """
@@ -269,6 +273,7 @@ class TestLogutil(fixture.SubManFixture):
         logutil.USER_LOGFILE_DIR = old_dir_path
         logutil.USER_LOGFILE_PATH = old_file_path
 
+    @unittest.skipIf(os.getuid() == 0, "Test cannot be run under root.")
     @mock.patch("os.getuid")
     def test_wrong_rhsm_log_priv(self, MockGetUID):
         """

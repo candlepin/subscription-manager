@@ -22,7 +22,7 @@ from rhsmlib.facts.firmware_info import UuidFirmwareInfoCollector
 
 
 class GetArchTest(unittest.TestCase):
-    @mock.patch('platform.machine')
+    @mock.patch("platform.machine")
     def test_returns_arch(self, mock_machine):
         mock_machine.return_value = "hello_arch"
         arch = collector.get_arch()
@@ -43,20 +43,19 @@ class GetArchTest(unittest.TestCase):
 
 class GetNonDmiUuid(unittest.TestCase):
     def test_get_aarch64_firmware_collector(self):
-        firmware_provider_class = firmware_info.get_firmware_collector(arch='aarch64')
+        firmware_provider_class = firmware_info.get_firmware_collector(arch="aarch64")
         self.assertTrue(isinstance(firmware_provider_class, UuidFirmwareInfoCollector))
 
     @mock.patch(OPEN_FUNCTION, mock.mock_open(read_data="356B6CCC-30C4-11B2-A85C-BBB0CCD29F36"))
     def test_get_aarch64_uuid_collection(self):
-        firmware_provider_class = firmware_info.get_firmware_collector(arch='aarch64')
-        firmware_provider_class.arch = 'aarch64'
+        firmware_provider_class = firmware_info.get_firmware_collector(arch="aarch64")
+        firmware_provider_class.arch = "aarch64"
         result = firmware_provider_class.get_all()
-        self.assertTrue(result['dmi.system.uuid'] == '356B6CCC-30C4-11B2-A85C-BBB0CCD29F36')
+        self.assertTrue(result["dmi.system.uuid"] == "356B6CCC-30C4-11B2-A85C-BBB0CCD29F36")
 
-    def test_get_aarch64_uuid_collection_no_file(self):
-        mock.mock_open(read_data="no file")
-        mock.mock_open.side_effect = IOError()
-        firmware_provider_class = firmware_info.get_firmware_collector(arch='aarch64')
-        firmware_provider_class.arch = 'aarch64'
+    @mock.patch(OPEN_FUNCTION, side_effect=IOError("no file"))
+    def test_get_aarch64_uuid_collection_no_file(self, mocked_open):
+        firmware_provider_class = firmware_info.get_firmware_collector(arch="aarch64")
+        firmware_provider_class.arch = "aarch64"
         result = firmware_provider_class.get_all()
-        self.assertTrue('dmi.system.uuid' not in result)
+        self.assertTrue("dmi.system.uuid" not in result)

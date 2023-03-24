@@ -250,6 +250,18 @@ class DomainSocketServer(object):
     session bus since those aren't really locked down. The work-around is the client asks our service
     to open another server on a domain socket, gets socket information back, and then connects and sends
     the register command (with the credentials) to the server on the domain socket."""
+
+    # FIXME Use `dir` instead.
+    # `tmpdir` behaves differently from `dir` on old versions of dbus
+    # (earlier than 1.12.24 and 1.14.4).
+    # In newer versions we are not getting abstract socket anymore.
+    _server_socket_iface: str = "unix:tmpdir="
+    _server_socket_path: str = "/run"
+
+    @property
+    def _server_socket(self):
+        return self._server_socket_iface + self._server_socket_path
+
     @staticmethod
     def connection_added(domain_socket_server, service_class, object_list, conn):
         obj = service_class(
@@ -314,7 +326,7 @@ class DomainSocketServer(object):
 
     def run(self):
         try:
-            self._server = dbus.server.Server("unix:tmpdir=/run")
+            self._server = dbus.server.Server(self._server_socket)
 
             for clazz in self.object_classes:
                 self._server.on_connection_added.append(
