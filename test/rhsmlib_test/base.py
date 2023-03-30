@@ -101,6 +101,13 @@ class DBusServerStubProvider(SubManFixture):
 
     @classmethod
     def setUpClass(cls) -> None:
+        cls.get_cmd_line_patch = mock.patch(
+            "rhsmlib.client_info.DBusSender.get_cmd_line",
+            autospec=True,
+        )
+        cls.patches["get_cmd_line"] = cls.get_cmd_line_patch.start().return_value
+        cls.patches["get_cmd_line"].return_value = "unit-test"
+
         cls.obj = cls.dbus_class(
             conn=None,
             object_path=cls.dbus_class.default_dbus_path,
@@ -121,6 +128,8 @@ class DBusServerStubProvider(SubManFixture):
                 patch.stop()
             except AttributeError as exc:
                 raise RuntimeError(f"Object {patch} cannot be stopped.") from exc
+
+        cls.get_cmd_line_patch.stop()
 
         super().tearDownClass()
 

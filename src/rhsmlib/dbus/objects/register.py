@@ -22,6 +22,7 @@ import subscription_manager.injection as inj
 
 from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
 from rhsmlib.services.register import RegisterService
+from rhsmlib.client_info import DBusSender
 from rhsmlib.services.unregister import UnregisterService
 from rhsmlib.services.attach import AttachService
 from rhsmlib.services.entitlement import EntitlementService
@@ -48,6 +49,7 @@ class RegisterDBusObject(base_object.BaseObject):
         constants.REGISTER_INTERFACE,
         in_signature='s',
         out_signature='s')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Start(self, locale, sender=None):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
@@ -58,17 +60,21 @@ class RegisterDBusObject(base_object.BaseObject):
                 return self.server.address
 
             log.debug('Attempting to create new domain socket server')
+            cmd_line = DBusSender.get_cmd_line(sender)
             self.server = server.DomainSocketServer(
                 object_classes=[DomainSocketRegisterDBusObject],
+                sender=sender,
+                cmd_line=cmd_line
             )
             address = self.server.run()
-            log.debug('DomainSocketServer created and listening on "%s"', address)
+            log.debug('DomainSocketServer for sender %s created and listening on "%s"' % (sender, address))
             return address
 
     @util.dbus_service_method(
         constants.REGISTER_INTERFACE,
         in_signature='s',
         out_signature='b')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Stop(self, locale, sender=None):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
@@ -118,7 +124,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
     interface_name = constants.PRIVATE_REGISTER_INTERFACE
     default_dbus_path = constants.PRIVATE_REGISTER_DBUS_PATH
 
-    def __init__(self, conn=None, object_path=None, bus_name=None):
+    def __init__(self, conn=None, object_path=None, bus_name=None, sender=None, cmd_line=None):
         # On our DomainSocket DBus server since a private connection is not a "bus", we have to treat
         # it slightly differently. In particular there are no names, no discovery and so on.
         super(DomainSocketRegisterDBusObject, self).__init__(
@@ -126,6 +132,8 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             object_path=object_path,
             bus_name=bus_name
         )
+        self.sender = sender
+        self.cmd_line = cmd_line
 
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
@@ -149,10 +157,12 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         connection_options['password'] = dbus_utils.dbus_to_python(password, expected_type=str)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
-        Locale.set(locale)
-        cp = self.build_uep(connection_options, basic_auth_method=True)
-
-        owners = cp.getOwnerList(connection_options['username'])
+        with DBusSender() as dbus_sender:
+            dbus_sender.set_cmd_line(sender=self.sender, cmd_line=self.cmd_line)
+            Locale.set(locale)
+            cp = self.build_uep(connection_options, basic_auth_method=True)
+            owners = cp.getOwnerList(connection_options['username'])
+            dbus_sender.reset_cmd_line()
 
         return json.dumps(owners)
 
@@ -289,6 +299,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
 
         Note this method is registration ONLY.  Auto-attach is a separate process.
         """
+
         org = dbus_utils.dbus_to_python(org, expected_type=str)
         connection_options = dbus_utils.dbus_to_python(connection_options, expected_type=dict)
         connection_options['username'] = dbus_utils.dbus_to_python(username, expected_type=str)
@@ -296,44 +307,48 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         options = dbus_utils.dbus_to_python(options, expected_type=dict)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
-        Locale.set(locale)
-
         force_registration: bool = options.get("force", False)
         system_is_registered: bool = self.is_registered()
         if system_is_registered and not force_registration:
             raise dbus.DBusException("This system is already registered.")
 
-        # If the system is registered and the 'force' option is specified,
-        # Unregister the system and register the system again.
-        if system_is_registered and force_registration:
-            self._unregister(connection_options)
-        cp = self.build_uep(connection_options)
+        with DBusSender() as dbus_sender:
+            dbus_sender.set_cmd_line(sender=self.sender, cmd_line=self.cmd_line)
+            Locale.set(locale)
 
-        register_service = RegisterService(cp)
+            # If the system is registered and the 'force' option is specified,
+            # Unregister the system and register the system again.
+            if system_is_registered and force_registration:
+                self._unregister(connection_options)
+            cp = self.build_uep(connection_options)
 
-        # Try to get organization from the list available organizations, when the list contains
-        # only one item, then register_service.determine_owner_key will return this organization
-        if not org:
-            org = register_service.determine_owner_key(
-                username=connection_options['username'],
-                get_owner_cb=self._get_owner_cb,
-                no_owner_cb=self._no_owner_cb
-            )
+            register_service = RegisterService(cp)
 
-        # When there is more organizations, then signal was triggered in callback method
-        # _get_owner_cb, but some exception has to be raised here to not try registration process
-        if not org:
-            raise OrgNotSpecifiedException(username=connection_options['username'])
+            # Try to get organization from the list available organizations, when the list contains
+            # only one item, then register_service.determine_owner_key will return this organization
+            if not org:
+                org = register_service.determine_owner_key(
+                    username=connection_options['username'],
+                    get_owner_cb=self._get_owner_cb,
+                    no_owner_cb=self._no_owner_cb
+                )
 
-        # Remove 'enable_content' option, because it will not be proceed in register service
-        enable_content = self._remove_enable_content_option(options)
+            # When there is more organizations, then signal was triggered in callback method
+            # _get_owner_cb, but some exception has to be raised here to not try registration process
+            if not org:
+                raise OrgNotSpecifiedException(username=connection_options['username'])
 
-        consumer = register_service.register(org, **options)
+            # Remove 'enable_content' option, because it will not be proceed in register service
+            enable_content = self._remove_enable_content_option(options)
 
-        # When consumer is created, then we can try to enabled content, when it was
-        # requested in options.
-        if enable_content is True:
-            self._enable_content(cp, consumer)
+            consumer = register_service.register(org, **options)
+
+            # When consumer is created, then we can try to enabled content, when it was
+            # requested in options.
+            if enable_content is True:
+                self._enable_content(cp, consumer)
+
+            dbus_sender.reset_cmd_line()
 
         return json.dumps(consumer)
 
@@ -352,24 +367,27 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         org = dbus_utils.dbus_to_python(org, expected_type=str)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
-        Locale.set(locale)
-
         force_registration: bool = options.get("force", False)
         system_is_registered: bool = self.is_registered()
         if system_is_registered and not force_registration:
             raise dbus.DBusException("This system is already registered.")
 
-        # If the system is registered and the 'force' option is specified,
-        # Unregister the system and register the system again.
-        if system_is_registered and force_registration:
-            self._unregister(connection_options)
-        cp = self.build_uep(connection_options)
+        with DBusSender() as dbus_sender:
+            dbus_sender.set_cmd_line(sender=self.sender, cmd_line=self.cmd_line)
+            Locale.set(locale)
 
-        register_service = RegisterService(cp)
-        consumer = register_service.register(org, **options)
+            # If the system is registered and the 'force' option is specified,
+            # Unregister the system and register the system again.
+            if system_is_registered and force_registration:
+                self._unregister(connection_options)
+            cp = self.build_uep(connection_options)
 
-        log.debug("System registered, updating entitlements if needed")
-        ent_cert_lib = EntCertActionInvoker()
-        ent_cert_lib.update()
+            register_service = RegisterService(cp)
+            consumer = register_service.register(org, **options)
+
+            log.debug("System registered, updating entitlements if needed")
+            entcertlib = EntCertActionInvoker()
+            entcertlib.update()
+            dbus_sender.reset_cmd_line()
 
         return json.dumps(consumer)

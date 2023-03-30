@@ -22,6 +22,7 @@ from typing import Optional
 
 import dbus
 import mock
+import pytest
 
 import subscription_manager.injection as inj
 
@@ -36,6 +37,7 @@ from ..fixture import set_up_mock_sp_store
 from rhsm import connection
 
 import rhsmlib
+import rhsmlib.dbus.exceptions
 from rhsmlib.dbus.server import DomainSocketServer
 from rhsmlib.dbus.objects import RegisterDBusObject, DomainSocketRegisterDBusObject
 from rhsmlib.services import register, exceptions
@@ -760,7 +762,7 @@ class RegisterDBusObjectTest(DBusServerStubProvider):
 
     def tearDown(self) -> None:
         """Make sure the domain server is stopped once the test ends."""
-        with contextlib.suppress(rhsmlib.dbus.exceptions.Failed):
+        with contextlib.suppress(rhsmlib.dbus.exceptions.Failed, rhsmlib.dbus.exceptions.RHSM1DBusException):
             self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
 
         super().tearDown()
@@ -792,8 +794,11 @@ class RegisterDBusObjectTest(DBusServerStubProvider):
         self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
 
     def test_Stop__not_running(self):
-        with self.assertRaises(rhsmlib.dbus.exceptions.Failed):
+        try:
             self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
+        except (rhsmlib.dbus.exceptions.RHSM1DBusException, rhsmlib.dbus.exceptions.Failed):
+            return
+        raise pytest.fail("Stop did not raise an exception")
 
 
 class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):

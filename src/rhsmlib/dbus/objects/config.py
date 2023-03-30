@@ -57,6 +57,7 @@ class ConfigDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
         in_signature='svs')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Set(self, property_name, new_value, locale, sender=None):
         """
@@ -113,6 +114,7 @@ class ConfigDBusObject(base_object.BaseObject):
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
         in_signature='a{sv}s')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def SetAll(self, configuration, locale, sender=None):
         """
@@ -170,6 +172,7 @@ class ConfigDBusObject(base_object.BaseObject):
         constants.CONFIG_INTERFACE,
         in_signature='s',
         out_signature='a{sv}')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetAll(self, locale, sender=None):
         """
@@ -193,6 +196,7 @@ class ConfigDBusObject(base_object.BaseObject):
         constants.CONFIG_INTERFACE,
         in_signature='ss',
         out_signature='v')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def Get(self, property_name, locale, sender=None):
         """

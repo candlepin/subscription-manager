@@ -101,6 +101,7 @@ class BaseObject(dbus.service.Object):
         constants.DBUS_PROPERTIES_INTERFACE,
         in_signature='s',
         out_signature='a{sv}')
+    @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetAll(self, _, sender=None):
 
