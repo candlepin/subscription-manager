@@ -363,7 +363,6 @@ BuildRequires: gcc
 BuildRequires: %{py_package_prefix}-setuptools
 BuildRequires: gettext
 BuildRequires: intltool
-BuildRequires: libnotify-devel
 BuildRequires: %{py_package_prefix}-six
 
 %if %{use_subman_gui} || %{use_cockpit}
@@ -381,10 +380,7 @@ BuildRequires: libzypp
 %endif
 
 %if %{use_subman_gui}
-BuildRequires: %{?suse_version:gconf2-devel} %{!?suse_version:GConf2-devel}
 BuildRequires: %{?suse_version:update-desktop-files} %{!?suse_version:scrollkeeper}
-BuildRequires: %{?suse_version:dbus-1-glib-devel} %{!?suse_version:dbus-glib-devel}
-BuildRequires: %{?gtk3:gtk3-devel} %{!?gtk3:gtk2-devel}
 %endif
 
 %if %use_systemd
@@ -470,7 +466,6 @@ Group: System Environment/Base
 Requires: %{name} = %{version}-%{release}
 Requires: gnome-icon-theme
 
-# We need pygtk3 and gtk2 until rhsm-icon is ported to gtk3
 Requires: rhsm-gtk = %{version}-%{release}
 
 # Renamed from -gnome, so obsolete it properly
@@ -818,7 +813,6 @@ cp %{buildroot}%{python_sitearch}/rhsm/*.py %{buildroot}%{python2_sitearch}/rhsm
 %endif
 
 %if %use_subman_gui
-desktop-file-validate %{buildroot}/etc/xdg/autostart/rhsm-icon.desktop
 desktop-file-validate %{buildroot}/usr/share/applications/subscription-manager-gui.desktop
 %else
 
@@ -1000,9 +994,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{completion_dir}/rhn-migrate-classic-to-rhsm
 %endif
 
-%if %use_subman_gui
-%{completion_dir}/rhsm-icon
-%endif
 
 %dir %{python_sitearch}/subscription_manager
 
@@ -1158,7 +1149,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_bindir}/subscription-manager-gui
 %endif
 
-%{_bindir}/rhsm-icon
 
 %doc %{_datadir}/gnome/help/subscription-manager/C/figures/*.png
 %doc %{_datadir}/gnome/help/subscription-manager/C/*.xml
@@ -1167,8 +1157,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_datadir}/applications/subscription-manager-gui.desktop
 %{_datadir}/appdata/subscription-manager-gui.appdata.xml
 
-# desktop config files
-%{_sysconfdir}/xdg/autostart/rhsm-icon.desktop
+
 %if !0%{?suse_version}
 %{_sysconfdir}/pam.d/subscription-manager-gui
 %{_sysconfdir}/security/console.apps/subscription-manager-gui
@@ -1178,7 +1167,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %doc
 %{_mandir}/man8/subscription-manager-gui.8*
-%{_mandir}/man8/rhsm-icon.8*
 %doc LICENSE
 %endif
 

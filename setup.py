@@ -287,14 +287,6 @@ class install_data(_install_data):
     def add_desktop_files(self):
         self.__add_desktop_entry('subscription-manager-gui.desktop')
 
-        # Installing files outside of the "prefix" with setuptools looks to be flakey:
-        # See https://github.com/pypa/setuptools/issues/460.  However, this seems to work
-        # so I'm making an exception to the "everything outside the prefix should be handled
-        # by make" policy.
-        autostart_dir = self.join('/etc', 'xdg', 'autostart')
-        autostart_file = self.join('build', 'autostart', 'rhsm-icon.desktop')
-        self.data_files.append((autostart_dir, [autostart_file]))
-
     def add_migration_doc_files(self):
         """
         Add documentation for subscription-manager-migration
@@ -307,15 +299,15 @@ class install_data(_install_data):
 
     def add_gui_doc_files(self):
         """
-        Add documentation for subscription-manager-gui and rhsm-icon
+        Add documentation for subscription-manager-gui
         """
         self.data_files.append(('share/gnome/help/subscription-manager/C', glob('docs/*.xml')))
         self.data_files.append(('share/gnome/help/subscription-manager/C/figures', glob('docs/figures/*.png')))
         self.data_files.append(('share/omf/subscription-manager', glob('docs/*.omf')))
-        # Add manual pages for subman-gui na rhsm-icon
+        # Add manual pages for subman-gui
         data_files = dict(self.data_files)
         man8_pages = data_files['share/man/man8']
-        man8_pages = man8_pages.union(set(['man/subscription-manager-gui.8', 'man/rhsm-icon.8']))
+        man8_pages = man8_pages.union(set(['man/subscription-manager-gui.8']))
         data_files['share/man/man8'] = man8_pages
         self.data_files = [(item, value) for item, value in data_files.items()]
 
@@ -443,7 +435,7 @@ setup(
             'share/man/man8',
             set(glob('man/*.8')) - \
                 set(['man/sat5to6.8']) - \
-                set(['man/subscription-manager-gui.8', 'man/rhsm-icon.8']) - \
+                set(['man/subscription-manager-gui.8']) - \
                 set(['man/rhn-migrate-classic-to-rhsm.8'])
         ),
         ('share/man/man5', glob('man/*.5')),

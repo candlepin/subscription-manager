@@ -1,4 +1,4 @@
-# Because our project includes some C artifacts like rhsm_icon, the standard
+# Because our project includes some C artifacts like rhsmcertd, the standard
 # Python setup.py doesn't cover all our bases.  Additionally, setuptools does not like
 # to install files outside of /usr (see http://stackoverflow.com/a/13476594/6124862).
 #
@@ -37,7 +37,6 @@ PYTHON_INST_DIR = $(PYTHON_SITELIB)/subscription_manager
 # Where various bits of code live in the git repo
 SRC_DIR := src/subscription_manager
 RCT_SRC_DIR := src/rct
-RHSM_ICON_SRC_DIR := src/rhsm_icon
 DAEMONS_SRC_DIR := src/daemons
 CONTENT_PLUGINS_SRC_DIR := src/content_plugins/
 
@@ -105,8 +104,6 @@ LDFLAGS ?=
 
 RHSMCERTD_CFLAGS = `pkg-config --cflags glib-2.0`
 RHSMCERTD_LDFLAGS = `pkg-config --libs glib-2.0`
-ICON_CFLAGS=`pkg-config --cflags "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
-ICON_LDFLAGS=`pkg-config --libs "gtk+-$(GTK_VERSION).0 libnotify gconf-2.0 dbus-glib-1"`
 
 PYFILES := `find src/ test/ -name "*.py"`
 BIN_FILES := bin/subscription-manager \
@@ -132,15 +129,9 @@ build-subpackages:
 
 # Install doesn't perform a build if it doesn't have too.  Best to clean out
 # any cruft so developers don't end up install old builds.
-ifeq ($(WITH_SUBMAN_GUI),true)
-build: rhsmcertd rhsm-icon build-subpackages
-	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
-	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
-else
 build: rhsmcertd build-subpackages
 	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py clean --all
 	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py build --quiet --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION)
-endif
 
 # we never "remake" this makefile, so add a target so
 # we stop searching for implicit rules on how to remake it
@@ -150,7 +141,6 @@ Makefile: ;
 clean:
 	rm -f *.pyc *.pyo *~ *.bak *.tar.gz
 	rm -f bin/rhsmcertd
-	rm -f bin/rhsm-icon
 	$(PYTHON) ./setup.py clean --all
 	rm -rf cover/ htmlcov/ build/ dist/
 
@@ -161,14 +151,9 @@ mkdir-bin:
 rhsmcertd: mkdir-bin $(DAEMONS_SRC_DIR)/rhsmcertd.c
 	$(CC) $(CFLAGS) $(RHSMCERTD_CFLAGS) -DLIBEXECDIR='"$(LIBEXEC_DIR)"' $(DAEMONS_SRC_DIR)/rhsmcertd.c -o bin/rhsmcertd $(LDFLAGS) $(RHSMCERTD_LDFLAGS)
 
-ifeq ($(WITH_SUBMAN_GUI),true)
-    rhsm-icon: mkdir-bin $(RHSM_ICON_SRC_DIR)/rhsm_icon.c
-	    $(CC) $(CFLAGS) $(ICON_CFLAGS) $(RHSM_ICON_SRC_DIR)/rhsm_icon.c -o bin/rhsm-icon $(LDFLAGS) $(ICON_LDFLAGS)
-endif
-
 .PHONY: check-syntax
 check-syntax:
-	$(CC) -fsyntax-only $(CFLAGS) $(LDFLAGS) $(ICON_FLAGS) `find -name '*.c'`
+	$(CC) -fsyntax-only $(CFLAGS) $(LDFLAGS) `find -name '*.c'`
 
 dbus-common-install:
 	install -d $(DESTDIR)/etc/dbus-1/system.d
@@ -210,7 +195,6 @@ install-conf:
 	    install -m 644 etc-conf/dbus/polkit/com.redhat.SubscriptionManager.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR); \
 		install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml; \
 		install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/subscription-manager-gui; \
-		install -m 644 etc-conf/rhsm-icon.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhsm-icon; \
 	fi;
 	if [[ "$(WITH_SUBMAN_MIGRATION)" == "true" ]]; then \
 	    install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhn-migrate-classic-to-rhsm; \
@@ -398,10 +382,6 @@ install-files: dbus-install install-conf install-plugins install-post-boot insta
 			install -m 644 etc-conf/subscription-manager-gui.pam $(DESTDIR)/etc/pam.d/subscription-manager-gui; \
 			install -m 644 etc-conf/subscription-manager-gui.console $(DESTDIR)/etc/security/console.apps/subscription-manager-gui; \
 		fi; \
-	fi; \
-
-	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
-		install -m 755 bin/rhsm-icon $(DESTDIR)/$(PREFIX)/bin/rhsm-icon; \
 	fi; \
 
 	install -m 755 bin/rhsmcertd $(DESTDIR)/$(PREFIX)/bin/rhsmcertd
