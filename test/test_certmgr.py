@@ -288,7 +288,7 @@ class TestHealingActionClient(TestActionClient):
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
         self.mock_cert_sorter.compliant_until = datetime.now() + timedelta(days=15)
         actionclient = action_client.HealingActionClient()
-        actionclient.update(autoheal=True)
+        actionclient.update()
         self.assertFalse(self.mock_uep.bind.called)
 
     def test_healing_needs_heal(self):
@@ -296,7 +296,7 @@ class TestHealingActionClient(TestActionClient):
         # don't have to mock here since we can actually pass in a product
         self.mock_cert_sorter.is_valid = mock.Mock(return_value=False)
         actionclient = action_client.HealingActionClient()
-        actionclient.update(autoheal=True)
+        actionclient.update()
         self.assertTrue(self.mock_uep.bind.called)
 
     @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, "build_cert")
@@ -308,7 +308,7 @@ class TestHealingActionClient(TestActionClient):
 
         self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
         actionclient = action_client.HealingActionClient()
-        actionclient.update(autoheal=True)
+        actionclient.update()
         # see if we tried to update certs
         self.assertTrue(self.mock_uep.bind.called)
 
@@ -320,7 +320,7 @@ class TestHealingActionClient(TestActionClient):
         # exception is logged and not bubbling up.
         self.mock_cert_sorter.is_valid = mock.Mock(side_effect=TypeError())
         actionclient = action_client.HealingActionClient()
-        actionclient.update(autoheal=True)
+        actionclient.update()
         for call in mock_log.method_calls:
             if call[0] == "exception" and isinstance(call[1][0], TypeError):
                 return

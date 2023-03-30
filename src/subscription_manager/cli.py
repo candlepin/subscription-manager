@@ -51,7 +51,6 @@ class AbstractCLICommand:
     strategy.
     """
 
-    # FIXME Default for aliases should be []
     def __init__(
         self,
         name: str = "cli",
@@ -66,8 +65,7 @@ class AbstractCLICommand:
 
         self.parser: ArgumentParser = self._create_argparser()
 
-    # FIXME What is the type of `args`?
-    def main(self, args=None) -> None:
+    def main(self, args: Optional[List[str]] = None) -> None:
         raise NotImplementedError("Commands must implement: main(self, args=None)")
 
     def _validate_options(self) -> None:
@@ -195,12 +193,8 @@ class CLI:
             flush_stdout_stderr()
             sys.exit(return_code)
 
-        try:
-            return cmd.main()
-        except InvalidCLIOptionError as error:
-            # FIXME Re-raise the exception instead. Returning None
-            #  (a non-integer) results in return code 0, which is not correct.
-            print(error)
+        # Some commands return status codes (e.g. AttachCommand).
+        return cmd.main()
 
 
 def system_exit(code: int, msg: Union[str, Exception, None] = None) -> None:

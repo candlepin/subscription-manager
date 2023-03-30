@@ -13,7 +13,7 @@
 # in this software or its documentation.
 #
 import logging
-from typing import List, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING
 
 from rhsm.connection import GoneException, ExpiredIdentityCertException
 
@@ -31,13 +31,10 @@ class BaseActionClient:
     An object used to update the certificates, DNF repos, and facts for the system.
     """
 
-    # FIXME Default for skips should be []
     def __init__(self, skips: List[type("ActionReport")] = None):
 
         self._libset: List[BaseActionInvoker] = self._get_libset()
         self.lock: ActionLock = inj.require(inj.ACTION_LOCK)
-        # FIXME `report` attribute is not used here
-        self.report: ActionReport = None
         self.update_reports: List[ActionReport] = []
         self.skips: List[type(ActionReport)] = skips or []
 
@@ -45,19 +42,19 @@ class BaseActionClient:
         # FIXME (?) Raise NotImplementedError, to ensure each subclass is using its own function
         return []
 
-    def update(self, autoheal: bool = False) -> None:
+    def update(self) -> None:
         """
-        Update I{entitlement} certificates and corresponding DNF repositories.
+        Update entitlement certificates and corresponding DNF repositories.
         """
         # TODO: move to using a lock context manager
         try:
             self.lock.acquire()
-            self.update_reports = self._run_updates(autoheal)
+            self.update_reports = self._run_updates()
         finally:
             self.lock.release()
 
-    def _run_update(self, lib: type) -> "ActionReport":
-        update_report: ActionReport = None
+    def _run_update(self, lib: "BaseActionInvoker") -> "ActionReport":
+        update_report: Optional[ActionReport] = None
 
         try:
             update_report = lib.update()
@@ -76,9 +73,7 @@ class BaseActionClient:
 
         return update_report
 
-    # FIXME `autoheal` is not used
-    def _run_updates(self, autoheal: bool) -> List["ActionReport"]:
-
+    def _run_updates(self) -> List["ActionReport"]:
         update_reports: List[ActionReport] = []
 
         for lib in self._libset:

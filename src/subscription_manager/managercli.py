@@ -16,7 +16,7 @@
 import logging
 import sys
 
-from typing import List, Optional, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING, Type
 
 if TYPE_CHECKING:
     from subscription_manager.cli_command.cli import CliCommand
@@ -57,7 +57,7 @@ log = logging.getLogger(__name__)
 
 class ManagerCLI(CLI):
     def __init__(self):
-        commands: List[CliCommand] = [
+        commands: List[Type[CliCommand]] = [
             RegisterCommand,
             UnRegisterCommand,
             AddonsCommand,

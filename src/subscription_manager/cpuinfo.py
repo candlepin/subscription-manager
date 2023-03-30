@@ -258,10 +258,12 @@ def fact_sluggify_item(item_tuple: Iterable[str]) -> Tuple[str, str]:
     return (newkey, item_tuple[1])
 
 
-# FIXME Argument shadows variaable name from outer scope
-def split_key_value_generator(file_contents: str, line_splitter: Callable) -> Iterator[List[str]]:
+def split_key_value_generator(
+    file_contents: str,
+    splitter: Callable[[str], Optional[List[str]]],
+) -> Iterator[List[str]]:
     for line in file_contents.splitlines():
-        parts: List[str] = line_splitter(line)
+        parts: List[str] = splitter(line)
         if parts:
             yield parts
 
@@ -360,7 +362,8 @@ class BaseCpuInfo:
 
         return cpu_info
 
-    # FIXME Implement _parse function doing `pass` or raising NotImplementedError
+    def _parse(self, cpuinfo_data: str) -> None:
+        raise NotImplementedError()
 
 
 class Aarch64CpuInfo(BaseCpuInfo):
