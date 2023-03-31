@@ -84,8 +84,12 @@ IMAGE="registry.fedoraproject.org/fedora:rawhide"
 Enter the container (assuming you are in the project root) and run a pre-test script that will set install the dependencies and compile C extensions:
 
 ```bash
-podman run -it --rm --name subscription-manager -v .:/subscription-manager --privileged $IMAGE bash
-cd /subscription-manager/
+NAME="subscription-manager"  # Or something more descriptive, like "rhsm-cs9"
+podman run -it --rm \
+  --name $NAME \
+  -v .:/subscription-manager --workdir /subscription-manager \
+  --env 'SUBMAN_TEST_IN_CONTAINER=1' --privileged \
+  $IMAGE bash
 bash scripts/container-pre-test.sh
 ```
 
@@ -94,6 +98,20 @@ Then you can run the test suite. You have to use `dbus-run-session` wrapper, bec
 ```bash
 SUBMAN_TEST_IN_CONTAINER=1 dbus-run-session python3 -m pytest
 ```
+
+### Local subscription-manager images
+
+If you use Podman frequently, it may be worth creating local image that already has the packages pre-installed.
+
+1. Run the commands above (`podman run ...`, `bash ...`). Do not exit the container.
+2. ```bash
+   IMAGENAME="subscription-manager"  # Or something more descriptive, like "rhsm-cs9-main"
+   podman commit $NAME $IMAGENAME
+   ```
+3. Now exit the container in the first terminal.
+4. Start a new container with `$IMAGENAME` instead of `$IMAGE`.
+5. You can directly run pytest or other commands, no need to run the initial script again.
+
 
 ## Further reading
 
