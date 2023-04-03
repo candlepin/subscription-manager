@@ -75,7 +75,10 @@ option\&.
 .PP
 proxy_scheme
 .RS 4
-This sets the scheme for the reverse proxy when writing out the proxy to repo definitions\&. Set this to a non\-blank value if you want to specify the scheme used by your package manager for subscription\-manager managed repos\&. This defaults to "http"\&.
+This only sets the scheme for the reverse proxy when writing out the proxy to repo definitions\&. Set this to a non\-blank value if you want to specify the scheme used by your package manager for subscription\-manager managed repos\&. This defaults to "http"\&.
+
+\fBNote:\fR
+subscription-manager tooling does not use this option for connecting reverse proxy and HTTPS is always used.
 .RE
 .PP
 proxy_port

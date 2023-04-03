@@ -728,6 +728,33 @@ class BaseRestLib:
             log.warning("Unable to load any CA certificate from: %s" % self.ca_dir)
 
     def _create_connection(self, cert_file: str = None, key_file: str = None) -> httplib.HTTPSConnection:
+        """
+        This method tries to return existing connection, when connection exists and limit of connection
+        has not been reached (timeout, max number of requests). When no connection exists, then this
+        method creates new TCP and TLS connection.
+        """
+
+        if self.__conn is not None:
+            # Check if it is still possible to use existing connection
+            now = time.time()
+            if now - self.__conn.last_request_time > self.__conn.keep_alive_timeout:
+                log.debug(f"Connection timeout {self.__conn.keep_alive_timeout}. Closing connection...")
+                self.close_connection()
+            elif (
+                self.__conn.max_requests_num is not None
+                and self.__conn.requests_num > self.__conn.max_requests_num
+            ):
+                log.debug(
+                    f"Maximal number of requests ({self.__conn.max_requests_num}) reached. "
+                    "Closing connection..."
+                )
+                self.close_connection()
+            else:
+                log.debug("Reusing connection: %s", self.__conn.sock)
+                return self.__conn
+
+        log.debug("Creating new connection")
+
         # See https://www.openssl.org/docs/ssl/SSL_CTX_new.html
         # This ends up invoking SSLv23_method, which is the catch all
         # "be compatible" protocol, even though it explicitly is not
@@ -750,26 +777,6 @@ class BaseRestLib:
         if cert_file and os.path.exists(cert_file):
             context.load_cert_chain(cert_file, keyfile=key_file)
 
-        if self.__conn is not None:
-            # Check if it is still possible to use existing connection
-            now = time.time()
-            if now - self.__conn.last_request_time > self.__conn.keep_alive_timeout:
-                log.debug(f"Connection timeout {self.__conn.keep_alive_timeout}. Closing connection...")
-                self.close_connection()
-            elif (
-                self.__conn.max_requests_num is not None
-                and self.__conn.requests_num > self.__conn.max_requests_num
-            ):
-                log.debug(
-                    f"Maximal number of requests ({self.__conn.max_requests_num}) reached. "
-                    "Closing connection..."
-                )
-                self.close_connection()
-            else:
-                log.debug("Reusing connection: %s", self.__conn.sock)
-                return self.__conn
-
-        log.debug("Creating new connection")
         if self.proxy_hostname and self.proxy_port:
             log.debug(
                 "Using proxy: %s:%s" % (normalized_host(self.proxy_hostname), safe_int(self.proxy_port))
@@ -780,6 +787,10 @@ class BaseRestLib:
             }
             if self.proxy_user and self.proxy_password:
                 proxy_headers["Proxy-Authorization"] = _encode_auth(self.proxy_user, self.proxy_password)
+
+            # Note: we use only HTTPS for connection with proxy server, and we ignore proxy_scheme setting
+            # from rhsm.conf here. The proxy_scheme is used only for generating redhat.repo. It is even worse.
+            # The default value of proxy_scheme is http (not https). It could be very confusing.
             conn = httplib.HTTPSConnection(
                 self.proxy_hostname, self.proxy_port, context=context, timeout=self.timeout
             )
@@ -834,8 +845,9 @@ class BaseRestLib:
         """
 
         if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST", ""):
-            yellow_col = "\033[93m"
+            magenta_col = "\033[95m"
             blue_col = "\033[94m"
+            yellow_col = "\033[93m"
             green_col = "\033[92m"
             red_col = "\033[91m"
             end_col = "\033[0m"
@@ -853,6 +865,7 @@ class BaseRestLib:
             else:
                 auth = "undefined auth"
 
+            # Print information about TCP/IP layer
             if (
                 os.environ.get("SUBMAN_DEBUG_TCP_IP", "")
                 and self.__conn is not None
@@ -860,19 +873,28 @@ class BaseRestLib:
             ):
                 msg += blue_col + f"{self.__conn.sock}\n" + end_col
 
+            # When proxy server is used, then print some additional information about proxy connection
+            if self.proxy_hostname and self.proxy_port:
+                msg += (
+                    blue_col
+                    + "Using proxy: "
+                    + magenta_col
+                    + f"https://{self.proxy_hostname}:{self.proxy_port}"
+                    + end_col
+                )
+                tunel_headers = None
+                if self.__conn is not None and hasattr(self.__conn, "_tunnel_headers"):
+                    tunel_headers = getattr(self.__conn, "_tunnel_headers")
+                if tunel_headers is not None:
+                    msg += blue_col + f" {tunel_headers}" + end_col
+                msg += "\n"
+
             if self.insecure is True:
                 msg += blue_col + f"Making insecure ({auth}) request:" + end_col
             else:
                 msg += blue_col + f"Making ({auth}) request:" + end_col
-            msg += red_col + " %s:%s %s %s" % (self.host, self.ssl_port, request_type, handler) + end_col
-            if self.proxy_hostname and self.proxy_port:
-                msg += (
-                    blue_col
-                    + " using proxy "
-                    + red_col
-                    + f"{self.proxy_hostname}:{self.proxy_port}"
-                    + end_col
-                )
+            msg += red_col + f" https://{self.host}:{self.ssl_port}{handler} {request_type}" + end_col
+
             if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_HEADER", ""):
                 msg += blue_col + " %s" % final_headers + end_col
             if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_BODY", "") and body is not None:
