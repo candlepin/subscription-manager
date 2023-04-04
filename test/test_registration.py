@@ -14,6 +14,7 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import contextlib
 import os
 
 from mock import Mock, NonCallableMock, patch, MagicMock
@@ -228,6 +229,34 @@ class CliRegistrationTests(SubManFixture):
             rc.options.environments = None
             rc._prompt_for_environment = Mock(return_value="somename,othername")
             env_id = rc._process_environments(mock_uep, 'owner')
+            expected = "1234,5678"
+            self.assertEqual(expected, env_id)
+
+    def test_set_multi_environment_id_multi_available_input(self):
+        def env_list(*args, **kwargs):
+            return [{"id": "1234", "name": "some name with space"}, {"id": "5678", "name": "othername"}]
+
+        with contextlib.ExitStack() as stack:
+            mock_uep = stack.enter_context(patch("rhsm.connection.UEPConnection", new_callable=StubUEP))
+            mock_uep.getEnvironmentList = env_list
+            mock_uep.supports_resource = Mock(return_value=True)
+            mock_uep.has_capability = Mock(return_value=True)
+            self.stub_cp_provider.basic_auth_cp = mock_uep
+
+            stack.enter_context(
+                patch("subscription_manager.managercli.is_interactive", return_value=True)
+            )
+
+            stack.enter_context(patch("builtins.input", return_value="some name with space, othername "))
+
+            stack.enter_context(patch("subscription_manager.managercli.readline"))
+
+            rc = RegisterCommand()
+            rc.cp = mock_uep
+            rc.options = Mock()
+            rc.options.activation_keys = None
+            rc.options.environments = None
+            env_id = rc._process_environments(mock_uep, "owner")
             expected = "1234,5678"
             self.assertEqual(expected, env_id)
 
