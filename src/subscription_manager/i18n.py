@@ -15,6 +15,7 @@ from __future__ import print_function, division, absolute_import
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import contextlib
 import gettext
 import locale
 import logging
@@ -95,7 +96,9 @@ def configure_gettext():
     """
     gettext.bindtextdomain(APP, DIR)
     gettext.textdomain(APP)
-    gettext.bind_textdomain_codeset(APP, 'UTF-8')
+    with contextlib.suppress(AttributeError):
+        # This function was removed in Python 3.10
+        gettext.bind_textdomain_codeset(APP, 'UTF-8')
     locale.bind_textdomain_codeset(APP, 'UTF-8')
 
 

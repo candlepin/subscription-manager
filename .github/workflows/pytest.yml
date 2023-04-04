@@ -1,0 +1,57 @@
+name: pytest
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    name: "pytest"
+
+    permissions:
+      issues: write
+      pull-requests: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: "CentOS Stream 8"
+            image: "quay.io/centos/centos:stream8"
+            pytest_args: ''
+
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.image }}
+      volumes:
+        - /tmp:/tmp
+
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "Run container-pre-test.sh"
+        run: |
+          bash scripts/container-pre-test.sh
+
+      - name: "Run pytest"
+        env:
+          SUBMAN_TEST_IN_CONTAINER: "1"
+          PYTEST_ADDOPTS:
+            "--color=yes --code-highlight=yes --showlocals
+            --cov 'src/' --cov-report 'term:skip-covered'
+            --cov-report 'xml:/tmp/coverage.xml' --junitxml '/tmp/pytest.xml'"
+        run: |
+          dbus-run-session \
+            python3 -m pytest ${{ matrix.pytest_args }}
+
+      - name: "Publish coverage"
+        uses: MishaKav/pytest-coverage-comment@main
+        if: |
+          github.event.pull_request.head.repo.full_name == github.repository
+          && matrix.name == 'Fedora latest'
+        with:
+          title: "Coverage (computed on ${{ matrix.name }})"
+          report-only-changed-files: true
+          pytest-xml-coverage-path: /tmp/coverage.xml
+          junitxml-path: /tmp/pytest.xml
