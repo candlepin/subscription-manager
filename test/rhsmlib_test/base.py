@@ -37,6 +37,8 @@ from six.moves import queue
 from rhsmlib.dbus import constants, server
 from subscription_manager.identity import Identity
 
+from nose.plugins.attrib import attr
+
 # Set DBus mainloop early in test run (test import time!)
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 log = logging.getLogger(__name__)
@@ -71,6 +73,7 @@ class InjectionMockingTest(unittest.TestCase):
         raise NotImplementedError("Subclasses should define injected objects")
 
 
+@attr("dbus")
 class DBusObjectTest(unittest.TestCase):
     '''Subclass of unittest.TestCase use for testing DBus methods in the same process.  During setUp this
     class starts a thread that makes a DBus connection and exposes some objects on the bus.  The main thread
