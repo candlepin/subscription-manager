@@ -422,7 +422,7 @@ class TestCmdName(unittest.TestCase):
 class TestWhich(unittest.TestCase):
     def test_which_python(self):
         """Some python command just has to exist :-)"""
-        cmd_path = which('python')
+        cmd_path = which('python3')
         self.assertIsNotNone(cmd_path)
 
     def test_which_bin_sh(self):
