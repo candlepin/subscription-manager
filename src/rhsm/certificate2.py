@@ -500,6 +500,8 @@ class Certificate(object):
         return self.end > other.end
 
     def __eq__(self, other):
+        if not hasattr(other, "serial"):
+            return False
         return self.serial == other.serial
 
     def __ne__(self, other):
