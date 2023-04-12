@@ -505,6 +505,9 @@ class StubUEP(object):
     def getCompliance(self, uuid, on_data=None):
         return {}
 
+    def regenEntitlementCertificates(self, uuid, lazy_regen):
+        return True
+
     def getSyspurposeCompliance(self, uuid, on_date=None):
         return self.syspurpose_compliance_status
 

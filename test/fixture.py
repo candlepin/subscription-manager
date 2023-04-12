@@ -245,6 +245,13 @@ class SubManFixture(unittest.TestCase):
 
         set_up_mock_sp_store(syncedstore_mock)
 
+        # Do not read system files. Even if the tests run in container environment,
+        # report that we are running on bare metal.
+        self.in_container_patcher = patch("rhsm.config.in_container")
+        in_container_mock = self.in_container_patcher.start()
+        in_container_mock.return_value = False
+        self.addCleanup(self.in_container_patcher.stop)
+
         self.files_to_cleanup = []
 
     def tearDown(self):
