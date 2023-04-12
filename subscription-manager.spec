@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.33
+Version: 1.29.34
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -736,6 +736,36 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Apr 12 2023 Pino Toscano <ptoscano@redhat.com> 1.29.34-1
+- Update TESTING.md (mhorky@redhat.com)
+- Improved debug print of http traffic, when proxy is used (jhnidek@redhat.com)
+- ENT-5544: Remove Jenkins jobs, Containers (mhorky@redhat.com)
+- ENT-5549: Remove unused code from entcertlib (mhorky@redhat.com)
+- ENT-5549: Fix issues found when type-hinting (mhorky@redhat.com)
+- ENT-5549: Fix return code handling of CLI (mhorky@redhat.com)
+- ENT-5549: Fix found type hint issues (mhorky@redhat.com)
+- ENT-5549: Fix object instantiation in EntitlementDirectory
+  (mhorky@redhat.com)
+- ENT-5549: Refactor ProductDirectory (mhorky@redhat.com)
+- ENT-5549: Change internal implementation for some Cache methods
+  (mhorky@redhat.com)
+- ENT-5549: Clean up _sync_with_server arguments of cache objects
+  (mhorky@redhat.com)
+- ENT-5549: Remove 'autoheal' argument from Action clients (mhorky@redhat.com)
+- Refactored code a little bit (jhnidek@redhat.com)
+- 2093291: Make locking more reliable (jhnidek@redhat.com)
+- test: add simple test for 2178610 (ptoscano@redhat.com)
+- Small improvement of debugging of http traffic (jhnidek@redhat.com)
+- 2093883: Fix issue with race condition in rhsm.service (jhnidek@redhat.com)
+- 2178610: do not collect unentitled products in SCA mode (ptoscano@redhat.com)
+- 2174297: register: do a simple strip() on environment(s) input
+  (ptoscano@redhat.com)
+- Stop subclassing 'object' (ptoscano@redhat.com)
+- Remove pytest arguments for CentOS 9 Stream image (mhorky@redhat.com)
+- tests: Install dnf-plugins-core every time (mhorky@redhat.com)
+- 2169251: connection: restore UEPConnection.getJob() (ptoscano@redhat.com)
+- ENT-5106: Type-hint subscription_manager/ files (mhorky@redhat.com)
+
 * Thu Feb 16 2023 Pino Toscano <ptoscano@redhat.com> 1.29.33-1
 - Translated using Weblate (French) (ljanda@redhat.com)
 - Translated using Weblate (Chinese (Simplified) (zh_CN)) (suanand@redhat.com)
