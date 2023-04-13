@@ -6,7 +6,6 @@ import sys
 
 class PotFile:
     def __init__(self):
-
         self.msgids = []
         self.po = polib.pofile("po/keys.pot")
         for entry in self.po:

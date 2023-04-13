@@ -396,7 +396,6 @@ class RepoFileBase:
 if HAS_DEB822:
 
     class AptRepoFile(RepoFileBase):
-
         PATH: str = "etc/apt/sources.list.d"
         NAME: str = "rhsm.sources"
         CONTENT_TYPES: List[str] = ["deb"]
@@ -489,7 +488,6 @@ if HAS_DEB822:
 
 
 class YumRepoFile(RepoFileBase, ConfigParser):
-
     PATH = "etc/yum.repos.d/"
     NAME = "redhat.repo"
     CONTENT_TYPES = ["yum"]
@@ -553,7 +551,7 @@ class YumRepoFile(RepoFileBase, ConfigParser):
         # don't use remove section though, as that will reorder sections,
         # and move whitespace around (resulting in more and more whitespace
         # as time progresses).
-        for (k, v) in self.items(repo.id):
+        for k, v in self.items(repo.id):
             self.remove_option(repo.id, k)
 
         for k, v in list(repo.items()):

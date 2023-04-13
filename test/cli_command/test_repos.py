@@ -45,7 +45,7 @@ class TestReposCommand(TestCliCommand):
         """
         lines_set = set(output.splitlines())
         repos_set = set()
-        for (repo_name, repo_enabled) in repos:
+        for repo_name, repo_enabled in repos:
             if repo_enabled:
                 repos_set.add(f"Repository '{repo_name}' is enabled for this system.")
             else:

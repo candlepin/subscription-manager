@@ -1155,7 +1155,6 @@ after
 
 
 class TestSupportedResourcesCache(SubManFixture):
-
     MOCK_CACHE_FILE_CONTENT = '{"a3f43883-315b-4cc4-bfb5-5771946d56d7": {"": "/", "cdn": "/cdn"}}'
 
     MOCK_SUPPORTED_RESOURCES_RESPONSE = {"pools": "/pools", "roles": "/roles", "users": "/users"}
@@ -1212,7 +1211,6 @@ class TestSupportedResourcesCache(SubManFixture):
 
 
 class TestAvailableEntitlementsCache(SubManFixture):
-
     MOCK_CACHE_FILE_CONTENT = """{
     "b1002709-6d67-443e-808b-a7afcbe5b47e": {
         "filter_options": {
@@ -1320,7 +1318,6 @@ class TestAvailableEntitlementsCache(SubManFixture):
 
 
 class TestContentAccessModeCache(SubManFixture):
-
     MOCK_CACHE_FILE_CONTENT = '{"7f85da06-5c35-44ba-931d-f11f6e581f89": "entitlement"}'
 
     def setUp(self):

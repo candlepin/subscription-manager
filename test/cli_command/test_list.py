@@ -278,12 +278,12 @@ class TestListCommand(TestCliProxyCommand):
 
         provide(CERT_SORTER, stub_sorter)
 
-        for (test_num, data) in enumerate(test_data):
+        for test_num, data in enumerate(test_data):
             with Capture() as captured:
                 list_command = managercli.ListCommand()
                 list_command.main(["--installed", "--matches", data[0]])
 
-            for (index, expected) in enumerate(data[1]):
+            for index, expected in enumerate(data[1]):
                 if expected:
                     self.assertTrue(
                         installed_product_certs[index].name in captured.out,
@@ -330,12 +330,12 @@ class TestListCommand(TestCliProxyCommand):
         for stubby in consumed:
             self.ent_dir.certs.append(stubby)
 
-        for (test_num, data) in enumerate(test_data):
+        for test_num, data in enumerate(test_data):
             with Capture() as captured:
                 list_command = managercli.ListCommand()
                 list_command.main(["--consumed", "--matches", data[0]])
 
-            for (index, expected) in enumerate(data[1]):
+            for index, expected in enumerate(data[1]):
                 if expected:
                     self.assertTrue(
                         consumed[index].order.name in captured.out,

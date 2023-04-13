@@ -129,7 +129,6 @@ class ZipExtractAll(ZipFile):
 
 
 class RCTManifestCommand(RCTCliCommand):
-
     INNER_FILE = "consumer_export.zip"
 
     def __init__(self, name="cli", aliases=None, shortdesc=None, primary=False):

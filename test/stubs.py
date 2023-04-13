@@ -150,7 +150,6 @@ class StubProduct(Product):
         os=None,
         brand_name=None,
     ):
-
         # Initialize some defaults:
         if not name:
             name = product_id
@@ -209,7 +208,6 @@ class StubContent(Content):
 
 class StubProductCertificate(ProductCertificate):
     def __init__(self, product, provided_products=None, start_date=None, end_date=None, provided_tags=None):
-
         products = [product]
         if provided_products:
             products = products + provided_products
@@ -271,7 +269,6 @@ class StubEntitlementCertificate(EntitlementCertificate):
         ent_id=None,
         entitlement_type=None,
     ):
-
         # If we're given strings, create stub products for them:
         if isinstance(product, str):
             product = StubProduct(product)

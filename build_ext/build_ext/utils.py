@@ -38,6 +38,7 @@ class clean(_clean):
 
 def memoize(f):
     """Memoization decorator for functions taking one or more arguments."""
+
     # Thanks to http://code.activestate.com/recipes/578231-probably-the-fastest-memoization-decorator-in-the-/
     class memodict(dict):
         def __init__(self, f):

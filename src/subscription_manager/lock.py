@@ -128,7 +128,6 @@ class LockFile:
 
 
 class Lock:
-
     mutex = Mutex()
 
     def __init__(self, path: str):
@@ -275,7 +274,6 @@ class Lock:
 
 
 class ActionLock(Lock):
-
     # Standard path of lock file
     PATH = "/run/rhsm/cert.pid"
 

@@ -201,7 +201,7 @@ class ReposCommand(CliCommand):
             print(_("This system has no repositories available through subscriptions."))
             return 1
 
-        for (status, repoid) in repo_actions:
+        for status, repoid in repo_actions:
             matches = set([repo for repo in repos if fnmatch.fnmatch(repo.id, repoid)])
             if not matches:
                 rc = 1

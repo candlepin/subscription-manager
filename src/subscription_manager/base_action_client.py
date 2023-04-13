@@ -32,7 +32,6 @@ class BaseActionClient:
     """
 
     def __init__(self, skips: List[type("ActionReport")] = None):
-
         self._libset: List[BaseActionInvoker] = self._get_libset()
         self.lock: ActionLock = inj.require(inj.ACTION_LOCK)
         self.update_reports: List[ActionReport] = []

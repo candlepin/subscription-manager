@@ -145,9 +145,9 @@ class PyWarningsLogger(logging.getLoggerClass()):
         self.addFilter(PyWarningsLoggingFilter(name="py.warnings"))
 
 
-def _get_default_rhsm_log_handler() -> Tuple[
-    Union[logging.handlers.RotatingFileHandler, logging.StreamHandler], Optional[str]
-]:
+def _get_default_rhsm_log_handler() -> (
+    Tuple[Union[logging.handlers.RotatingFileHandler, logging.StreamHandler], Optional[str]]
+):
     global _rhsm_log_handler
     error: Optional[Exception] = None
     if not _rhsm_log_handler:

@@ -13,7 +13,6 @@ from test import subman_marker_functional, subman_marker_needs_envvars, subman_m
     "RHSM_USER", "RHSM_PASSWORD", "RHSM_URL", "RHSM_POOL", "RHSM_TEST_REPO", "RHSM_TEST_PACKAGE"
 )
 class TestServicePlugin(TestCase):
-
     SUB_MAN = "PYTHONPATH=./src python -m subscription_manager.scripts.subscription_manager"
 
     def setUp(self):

@@ -48,7 +48,6 @@ class TestRhsmDebugCLI(fixture.SubManFixture):
 
 
 class TestCompileCommand(TestCliCommand):
-
     command_class = debug_commands.SystemCommand
 
     def setUp(self):
@@ -227,7 +226,6 @@ class TestCompileCommand(TestCliCommand):
     # by not creating the destination directory
     # we expect the validation to fail
     def test_archive_to_non_exist_dir(self):
-
         # test path is created in setup, so delete it
         os.rmdir(self.path)
 

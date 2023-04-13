@@ -609,7 +609,7 @@ class TestProductCertificateFilter(fixture.SubManFixture):
             ({"key": "value"}, False),
         ]
 
-        for (index, data) in enumerate(test_data):
+        for index, data in enumerate(test_data):
             cert_filter = ProductCertificateFilter()
             result = cert_filter.set_filter_string(data[0])
 
@@ -657,7 +657,7 @@ class TestProductCertificateFilter(fixture.SubManFixture):
             ("??123456789", prod_cert, False),
         ]
 
-        for (index, data) in enumerate(test_data):
+        for index, data in enumerate(test_data):
             cert_filter = ProductCertificateFilter(filter_string=data[0])
             result = cert_filter.match(data[1])
 
@@ -686,7 +686,7 @@ class TestEntitlementCertificateFilter(fixture.SubManFixture):
             ({"key": "value"}, False),
         ]
 
-        for (index, data) in enumerate(test_data):
+        for index, data in enumerate(test_data):
             cert_filter = EntitlementCertificateFilter()
             result = cert_filter.set_service_level(data[0])
 
@@ -750,7 +750,7 @@ class TestEntitlementCertificateFilter(fixture.SubManFixture):
             (None, "", no_sla_ent_cert, True),
         ]
 
-        for (index, data) in enumerate(test_data):
+        for index, data in enumerate(test_data):
             cert_filter = EntitlementCertificateFilter(filter_string=data[0], service_level=data[1])
             result = cert_filter.match(data[2])
 

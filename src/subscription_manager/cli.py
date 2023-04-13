@@ -128,7 +128,7 @@ class CLI:
 
         name: str
         cmd: AbstractCLICommand
-        for (name, cmd) in items:
+        for name, cmd in items:
             if cmd.primary:
                 items_primary.append(("  " + name, cmd.shortdesc))
             else:

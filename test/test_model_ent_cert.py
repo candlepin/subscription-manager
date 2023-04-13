@@ -89,7 +89,6 @@ class TestEntitlementCertEntitlement(TestEntitlement):
 # Product from the ent cert
 class DefaultStubInstalledProduct(certificate2.Product):
     def __init__(self, id=123, name="Awesome OS", provided_tags=None, brand_type=None, brand_name=None):
-
         tags = provided_tags or ["awesomeos-ostree-1"]
         super(DefaultStubInstalledProduct, self).__init__(
             id=id, name=name, provided_tags=tags, brand_type=brand_type, brand_name=brand_name
@@ -102,7 +101,6 @@ class TestEntitlementDirEntitlementSource(test_model.TestEntitlementSource):
         self._inj_mock_dirs()
 
     def _inj_mock_dirs(self, stub_product=None):
-
         stub_product = stub_product or DefaultStubInstalledProduct()
         mock_prod_dir = mock.NonCallableMock(name="MockProductDir")
         mock_prod_dir.get_installed_products.return_value = [stub_product.id]

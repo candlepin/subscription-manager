@@ -87,7 +87,6 @@ class HealingUpdateAction:
             return 0
 
         try:
-
             today: datetime.datetime = datetime.datetime.now(certificate.GMT())
             tomorrow: datetime.datetime = today + datetime.timedelta(days=1)
             valid_today: bool = False

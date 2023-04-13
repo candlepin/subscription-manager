@@ -38,7 +38,6 @@ class OwnersCommand(UserPassCommand):
         self._add_url_options()
 
     def _do_command(self):
-
         try:
             # get a UEP
             if self.options.token:

@@ -677,7 +677,6 @@ VARIANT_ID=server
     def test_network_interfaces_just_lo_ethtool_no_get_ipv4_addresses(
         self, MockGetInterfacesInfo, MockGetDevices
     ):
-
         hw = hwprobe.HardwareCollector()
         MockGetDevices.return_value = ["lo"]
         mock_info = Mock(

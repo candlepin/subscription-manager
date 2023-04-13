@@ -32,7 +32,6 @@ class TestComparableProductEquality(unittest.TestCase):
     newer = "1.1"
 
     def setUp(self):
-
         self.older_product = self.product(self.older)
         self.newer_product = self.product(self.newer)
         self.same_as_older = self.product(self.older)
@@ -1093,7 +1092,6 @@ class TestProductManager(SubManFixture):
 
     # If Desktop cert exists, delete it and then write Workstation:
     def test_workstation_overrides_desktop(self):
-
         desktop_cert = self._create_desktop_cert()
         self.prod_dir.certs.append(desktop_cert)
         workstation_cert = self._create_workstation_cert()
@@ -1117,7 +1115,6 @@ class TestProductManager(SubManFixture):
 
     # If workstation cert exists, desktop write should be skipped:
     def test_workstation_skips_desktop(self):
-
         desktop_cert = self._create_desktop_cert()
         workstation_cert = self._create_workstation_cert()
         self.prod_dir.certs.append(workstation_cert)
@@ -1149,7 +1146,6 @@ class TestProductManager(SubManFixture):
         self.assertFalse(self.prod_db_mock.delete.called)
 
     def test_workstation_desktop_same_time(self):
-
         desktop_cert = self._create_desktop_cert()
         workstation_cert = self._create_workstation_cert()
         # self.prod_dir.certs.append(workstation_cert)

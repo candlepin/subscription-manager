@@ -259,7 +259,6 @@ class CliCommand(AbstractCLICommand):
         log.debug("Server Versions: {versions}".format(versions=self.server_versions))
 
     def main(self, args: Optional[List[str]] = None) -> Optional[int]:
-
         # TODO: For now, we disable the CLI entirely. We may want to allow some commands in the future.
         if rhsm.config.in_container():
             system_exit(
@@ -408,7 +407,6 @@ class CliCommand(AbstractCLICommand):
 
         # do the work, catch most common errors here:
         try:
-
             return_code = self._do_command()
 
             # Only persist the config changes if there was no exception

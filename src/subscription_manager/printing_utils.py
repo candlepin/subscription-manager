@@ -59,7 +59,7 @@ def columnize(caption_list: List[str], callback: Callable, *args, **kwargs) -> s
 
     lines = list(zip(padded_list, args))
     output: List[str] = []
-    for (caption, value) in lines:
+    for caption, value in lines:
         kwargs["caption"] = caption
         if isinstance(value, dict):
             value = [val for val in value.values()]
