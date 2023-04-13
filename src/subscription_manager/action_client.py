@@ -38,7 +38,6 @@ log = logging.getLogger(__name__)
 
 class ActionClient(base_action_client.BaseActionClient):
     def _get_libset(self) -> List["BaseActionInvoker"]:
-
         # TODO: replace with FSM thats progress through this async and wait/joins if needed
         self.entcertlib = EntCertActionInvoker()
         self.content_client = ContentActionClient()
@@ -66,7 +65,6 @@ class ActionClient(base_action_client.BaseActionClient):
 
 class HealingActionClient(base_action_client.BaseActionClient):
     def _get_libset(self) -> List["BaseActionInvoker"]:
-
         self.entcertlib = EntCertActionInvoker()
         self.installedprodlib = InstalledProductsActionInvoker()
         self.syspurposelib = SyspurposeSyncActionInvoker()
@@ -94,7 +92,6 @@ class UnregisterActionClient(base_action_client.BaseActionClient):
     """
 
     def _get_libset(self) -> List["BaseActionInvoker"]:
-
         self.entcertlib = EntCertActionInvoker()
         self.content_action_client = ContentActionClient()
 
@@ -112,7 +109,6 @@ class ProfileActionClient(base_action_client.BaseActionClient):
     """
 
     def _get_libset(self) -> List["BaseActionInvoker"]:
-
         self.profilelib = PackageProfileActionInvoker()
 
         lib_set: List[BaseActionInvoker] = [self.profilelib]

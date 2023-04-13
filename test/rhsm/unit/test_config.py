@@ -328,7 +328,7 @@ class BlankWithDefaultConfigTest(BaseConfigTests):
 
     def test_get_blank_config_file_entry(self):
         default_returned = False
-        for (name, value) in self.cfgParser.items("rhsm"):
+        for name, value in self.cfgParser.items("rhsm"):
             if name == "manage_repos":
                 default_returned = value == "1"
         self.assertTrue(default_returned)

@@ -717,7 +717,6 @@ def three_way_merge(
     all_keys = set(local.keys()) | set(base.keys()) | set(remote.keys())
 
     for key in all_keys:
-
         local_changed = detect_changed(base=base, other=local, key=key, source="local")
         remote_changed = detect_changed(base=base, other=remote, key=key, source="server")
         changed = local_changed or remote_changed and remote_changed != UNSUPPORTED

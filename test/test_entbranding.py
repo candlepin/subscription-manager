@@ -17,7 +17,6 @@ class StubProduct(certificate2.Product):
 
 class DefaultStubProduct(StubProduct):
     def __init__(self, id=123, name="Awesome OS", brand_type="OS", brand_name="Awesome OS super"):
-
         super(DefaultStubProduct, self).__init__(
             id=id, name=name, brand_type=brand_type, brand_name=brand_name
         )
@@ -27,7 +26,6 @@ class DefaultStubProduct(StubProduct):
 # Product from the ent cert
 class DefaultStubInstalledProduct(StubProduct):
     def __init__(self, id=123, name="Awesome OS", brand_type=None, brand_name=None):
-
         super(DefaultStubInstalledProduct, self).__init__(
             id=id, name=name, brand_type=brand_type, brand_name=brand_name
         )
@@ -449,7 +447,6 @@ class TestRHELBrandPicker(BaseBrandFixture):
         "subscription_manager.rhelentbranding.RHELBrandPicker._get_branded_cert_products", return_value=[]
     )
     def test_branded_certs_returns_empty(self, mock_branded_certs):
-
         brand_picker = rhelentbranding.RHELBrandPicker([])
         brand = brand_picker.get_brand()
 
@@ -524,7 +521,6 @@ class TestRHELBrandPicker(BaseBrandFixture):
         self.assertTrue(brand is None)
 
     def test_get_brand_not_installed(self):
-
         stub_product = DefaultStubProduct()
 
         # note, no 'brand_type' set
@@ -543,7 +539,6 @@ class TestRHELBrandPicker(BaseBrandFixture):
         self.assertTrue(brand is None)
 
     def test_get_brand_branded_unknown_brand_type(self):
-
         stub_installed_product = StubProduct(id=123, name="Stub Product Name")
 
         # note, no 'brand_type' attribute

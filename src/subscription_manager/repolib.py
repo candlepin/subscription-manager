@@ -271,7 +271,6 @@ class YumReleaseverSource:
     default = marker
 
     def __init__(self):
-
         self.release_status_cache = inj.require(inj.RELEASE_STATUS_CACHE)
         self._expansion = None
 

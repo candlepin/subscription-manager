@@ -118,7 +118,7 @@ class ConfigCommand(CliCommand):
                 section = conf[s]
                 print("[{s}]".format(s=s))
                 source_list = sorted(section.items())
-                for (name, value) in source_list:
+                for name, value in source_list:
                     indicator1 = ""
                     indicator2 = ""
                     if value == section.get_default(name):

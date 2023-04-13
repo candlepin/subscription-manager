@@ -14,7 +14,6 @@ from .fixture import SubManFixture
 #  rhel-6-server-resilientstorage
 #  rhel-6-resilientstorage
 class TestRHELProductMatcher(SubManFixture):
-
     matches = [
         "rhel-alt-7,rhel-alt-7-power9",
         "rhel-6,rhel-6-client",

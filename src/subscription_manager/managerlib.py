@@ -986,7 +986,6 @@ def clean_all_data(backup: bool = True) -> None:
     # Delete all entitlement certs rather than the directory itself:
     ent_cert_dir = cfg.get("rhsm", "entitlementCertDir")
     if os.path.exists(ent_cert_dir):
-
         for f in glob.glob("%s/*.pem" % ent_cert_dir):
             certpath = os.path.join(ent_cert_dir, f)
             log.debug("Removing entitlement cert: %s" % f)

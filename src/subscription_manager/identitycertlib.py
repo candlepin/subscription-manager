@@ -66,7 +66,6 @@ class IdentityUpdateAction:
         return self._update_cert(identity)
 
     def _update_cert(self, identity: "Identity") -> certlib.ActionReport:
-
         # to avoid circular imports
         # FIXME: move persist stuff here
         from subscription_manager import managerlib

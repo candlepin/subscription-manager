@@ -100,7 +100,6 @@ class Directory:
 
 
 class CertificateDirectory(Directory):
-
     KEY = "key.pem"
 
     def __init__(self, path: str):
@@ -250,7 +249,6 @@ class ProductDirectory(ProductCertificateDirectory):
 
 
 class EntitlementDirectory(CertificateDirectory):
-
     PATH = conf["rhsm"]["entitlementCertDir"]
     PRODUCT = "product"
 
@@ -349,7 +347,6 @@ class EntitlementDirectory(CertificateDirectory):
 
 
 class Path:
-
     # Used during Anaconda install by the yum pidplugin to ensure we operate
     # beneath /mnt/sysimage/ instead of /.
     ROOT = "/"

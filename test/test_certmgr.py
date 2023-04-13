@@ -61,7 +61,6 @@ class ExceptionalException(Exception):
 
 
 class ActionClientTestBase(SubManFixture):
-
     # on python 2.6+ we could set class decorators, but that doesn't
     # work on python2.4, so this...
     # http://www.voidspace.org.uk/python/mock/patch.html#patch-methods-start-and-stop

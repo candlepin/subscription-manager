@@ -44,7 +44,6 @@ class ContainerContentUpdateActionCommand:
         self.host_cert_dir = host_cert_dir
 
     def perform(self):
-
         report = ContainerUpdateReport()
 
         content_sets = self._find_content()
@@ -78,7 +77,6 @@ class KeyPair:
     """Simple object to hold paths to an entitlement cert and key."""
 
     def __init__(self, cert_path, key_path):
-
         self.cert_path = cert_path
         self.key_path = key_path
 

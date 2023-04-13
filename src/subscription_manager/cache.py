@@ -442,7 +442,6 @@ class ReleaseStatusCache(StatusCache):
         self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
     ) -> None:
         def get_release(uuid: str) -> Dict:
-
             # To mimic connection problems you can raise required exception:
             # raise connection.RemoteServerException(500, "GET", "/release")
             return uep.getRelease(uuid)

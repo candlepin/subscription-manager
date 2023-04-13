@@ -72,7 +72,6 @@ RESTLIB_MESSAGE = _("{message} (HTTP error code {code}: {title})")
 
 class ExceptionMapper:
     def __init__(self):
-
         self.message_map: Dict[str, Callable] = {
             socket_error: (SOCKET_MESSAGE, self.format_using_template),
             socket_gaierror: (GAI_MESSAGE, self.format_generic_oserror),

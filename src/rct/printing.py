@@ -58,7 +58,6 @@ class ProductPrinter:
 
 class OrderPrinter:
     def as_str(self, order):
-
         if order is None:
             return ""
 

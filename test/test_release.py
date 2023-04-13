@@ -42,7 +42,6 @@ class TestReleaseBackend(fixture.SubManFixture):
         self.assertEqual(release.CdnReleaseVersionProvider, provider.__class__)
 
     def test_get_api_release_version_provider(self):
-
         mock_uep = mock.Mock()
         mock_uep.supports_resource = mock.Mock(return_value=True)
         self.set_consumer_auth_cp(mock_uep)
@@ -102,14 +101,12 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         self._release_versions = versions
 
     def _get_cdn_rv_provider(self):
-
         inj.provide(inj.ENT_DIR, self.ent_dir)
         inj.provide(inj.PROD_DIR, self.prod_dir)
 
         return release.CdnReleaseVersionProvider()
 
     def test_get_releases(self):
-
         cdn_rv_provider = self._get_cdn_rv_provider()
         releases = cdn_rv_provider.get_releases()
         self.assertNotEqual([], releases)
@@ -143,7 +140,6 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         self.assertRaises(ValueError, cdn_rv_provider.get_releases)
 
     def test_get_releases_rhel_no_content(self):
-
         stub_content_5 = stubs.StubContent("c5", required_tags="AwesomeOS", gpg=None, enabled="1")
 
         stub_product = stubs.StubProduct("rhel-6")
@@ -157,7 +153,6 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         self.assertEqual([], releases)
 
     def test_get_releases_rhel_no_enabled_content(self):
-
         stub_content_6 = stubs.StubContent("c6", required_tags="rhel-6", gpg=None, enabled="0")
 
         stub_product = stubs.StubProduct("rhel-6")
@@ -171,7 +166,6 @@ class TestCdnReleaseVerionProvider(fixture.SubManFixture):
         self.assertEqual([], releases)
 
     def test_get_releases_rhel_from_sca_ent_cert(self):
-
         stub_content_6 = stubs.StubContent("c6", required_tags="rhel-6", gpg=None, enabled="1")
 
         stub_product = stubs.StubProduct("rhel-6")

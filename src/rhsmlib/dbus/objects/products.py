@@ -58,7 +58,6 @@ class ProductsDBusObject(base_object.BaseObject):
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def ListInstalledProducts(self, filter_string, proxy_options, locale, sender=None):
-
         # We reinitialize dependency injection here for following reason. When new product
         # certificate is installed (or existing is removed), then this change is not propagated to
         # CertSorter and other caches. Calling installed_products.list(filter_string) without

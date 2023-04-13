@@ -133,14 +133,13 @@ class BindRequestTests(unittest.TestCase):
     @patch("rhsm.connection.drift_check", return_value=False)
     @patch("httplib.HTTPSConnection", autospec=True)
     def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
-
         self.cp.bind(self.consumer_uuid)
 
         # verify we called request() with kwargs that include 'body' as None
         # Specifically, we are checking that passing in "" to post_request, as
         # it does by default, results in None here. bin() passes no args there
         # so we use the default, "". See  bz #907536
-        for (name, args, kwargs) in mock_conn.mock_calls:
+        for name, args, kwargs in mock_conn.mock_calls:
             if name == "().request":
                 self.assertEqual(None, kwargs["body"])
 
@@ -151,7 +150,7 @@ class BindRequestTests(unittest.TestCase):
         # this test is just to verify we make the httplib connection with
         # right args, we don't validate the bind here
         self.cp.bindByEntitlementPool(self.consumer_uuid, "123121111", "1")
-        for (name, args, kwargs) in mock_conn.mock_calls:
+        for name, args, kwargs in mock_conn.mock_calls:
             if name == "().request":
                 self.assertEqual(None, kwargs["body"])
 

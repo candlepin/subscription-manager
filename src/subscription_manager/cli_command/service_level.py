@@ -39,7 +39,6 @@ log = logging.getLogger(__name__)
 
 class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
     def __init__(self, subparser=None):
-
         shortdesc = _("Show or modify the system purpose service-level setting")
         super(ServiceLevelCommand, self).__init__(
             "service-level",
@@ -54,7 +53,6 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
         self.identity = inj.require(inj.IDENTITY)
 
     def _validate_options(self):
-
         if self.options.set:
             self.options.set = self.options.set.strip()
 

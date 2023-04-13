@@ -147,7 +147,6 @@ class _CertFactory:
             raise CertificateException(str(e))
 
     def _create_v1_cert(self, version, extensions, x509, path):
-
         cert_type = self._get_v1_cert_type(extensions)
 
         if cert_type == IDENTITY_CERT:
@@ -488,7 +487,7 @@ class _Extensions2(Extensions):
         Override parent method for an X509 object from the new C wrapper.
         """
         extensions: Dict[str, int] = x509.get_all_extensions()
-        for (key, value) in list(extensions.items()):
+        for key, value in list(extensions.items()):
             oid = OID(key)
             self[oid] = value
 
@@ -832,7 +831,6 @@ class Order:
         usage=None,
         addons=None,
     ):
-
         self.name = name
         self.number = number  # order number
         self.sku = sku  # aka the marketing product
@@ -886,7 +884,6 @@ class Content:
         required_tags=None,
         arches=None,
     ):
-
         if (name is None) or (label is None):
             raise CertificateException("Content missing name/label")
 

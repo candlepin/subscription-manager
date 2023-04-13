@@ -224,7 +224,6 @@ class BaseConnection:
         auth_type: Optional[ConnectionType] = None,
         **kwargs,
     ) -> None:
-
         self.host = host or config.get("server", "hostname")
         self.handler = handler or config.get("server", "prefix")
         self.ssl_port = ssl_port or safe_int(config.get("server", "port"))
@@ -1288,7 +1287,6 @@ class BaseRestLib:
 
     @staticmethod
     def _parse_msg_from_error_response_body(body: dict) -> str:
-
         # Old style with a single displayMessage:
         if "displayMessage" in body:
             return body["displayMessage"]

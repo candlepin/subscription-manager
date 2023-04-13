@@ -61,7 +61,6 @@ class ValidProductDateRangeCalculator:
 
             # Found the product ID requested:
             if "startDate" in prod and "endDate" in prod:
-
                 # Unentitled product:
                 if prod["startDate"] is None or prod["endDate"] is None:
                     return None

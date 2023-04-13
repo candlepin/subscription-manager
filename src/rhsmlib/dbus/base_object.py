@@ -102,5 +102,4 @@ class BaseObject(dbus.service.Object):
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetAll(self, _, sender=None):
-
         return dbus.Dictionary({}, signature="sv")

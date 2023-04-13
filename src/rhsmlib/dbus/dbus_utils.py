@@ -199,7 +199,6 @@ def add_properties(xml, interface, props):
     root = Et.fromstring(xml)
 
     if props:
-
         for c in root:
             # print c.attrib['name']
             if c.attrib["name"] == interface:

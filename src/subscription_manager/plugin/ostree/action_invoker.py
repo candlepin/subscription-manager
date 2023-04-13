@@ -55,7 +55,6 @@ class OstreeContentUpdateActionCommand:
         return ostree_core_config
 
     def perform(self):
-
         # see if it has remotes, if so, migrate it
 
         self.migrate_core_config()

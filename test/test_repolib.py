@@ -436,7 +436,6 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         self.assertEqual(None, written_repo["gpgkey"])
 
     def test_no_gpg_key(self):
-
         update_action = RepoUpdateActionCommand()
         content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
         c1 = self._find_content(content, "c1")
@@ -448,7 +447,6 @@ class RepoUpdateActionTests(fixture.SubManFixture):
         self.assertEqual("0", c2["gpgcheck"])
 
     def test_gpg_key(self):
-
         update_action = RepoUpdateActionCommand()
         content = update_action.get_all_content(baseurl="http://example.com", ca_cert=None)
         c4 = self._find_content(content, "c4")

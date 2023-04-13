@@ -37,7 +37,6 @@ log = logging.getLogger(__name__)
 
 
 class DatabaseDirectory(Directory):
-
     PATH = "var/lib/rhsm"
 
     def __init__(self):
@@ -319,7 +318,6 @@ class ProductManager:
     PRODUCTID = "productid"
 
     def __init__(self, product_dir=None, product_db=None):
-
         self.pdir = product_dir
         if not product_dir:
             self.pdir = inj.require(inj.PROD_DIR)
@@ -551,7 +549,7 @@ class ProductManager:
         products_to_update = self._desktop_workstation_cleanup(products_to_update)
 
         db_updated = False
-        for (product, repo) in products_to_update_db:
+        for product, repo in products_to_update_db:
             # known_repos is None means we have no repo info at all
             log.info("Updating product db with %s -> %s" % (product.id, repo))
             # if we don't have a db entry for that prod->repo mapping, add one
@@ -599,7 +597,7 @@ class ProductManager:
 
     def write_product_certs(self, product_certs):
         products_installed = []
-        for (product, cert) in product_certs:
+        for product, cert in product_certs:
             fn = "%s.pem" % product.id
             path = self.pdir.abspath(fn)
             cert.write(path)

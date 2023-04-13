@@ -323,7 +323,6 @@ class CliRegistrationTests(SubManFixture):
                     rc._process_environments(mock_uep, "owner")
 
     def test_registration_with_failed_profile_upload(self):
-
         with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
             profile_mgr = inj.require(inj.PROFILE_MANAGER)
 
