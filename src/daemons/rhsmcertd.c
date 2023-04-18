@@ -58,6 +58,10 @@
 
 #define MAX_AUTO_REGISTER_ATTEMPTS 3
 
+#if !GLIB_CHECK_VERSION(2, 58, 0)
+#define G_SOURCE_FUNC(f) ((GSourceFunc) (void (*)(void)) (f))
+#endif
+
 #if defined(__linux)
 # if LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0)
 #  ifdef HAVE_LINUX_GETRANDOM
