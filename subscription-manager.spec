@@ -242,7 +242,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.36
+Version: 1.28.37
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1468,6 +1468,29 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Apr 19 2023 Pino Toscano <ptoscano@redhat.com> 1.28.37-1
+- 2174887: register: do a simple strip() on environment(s) input
+  (ptoscano@redhat.com)
+- [1.28] Remove source code of rhsm-icon (jhnidek@redhat.com)
+- Fix of unit tests of d-bus register: extended list of exceptions for
+  catching. (jhnidek@redhat.com)
+- [1.28] Include D-Bus sender in User-Agent http header; Singleton
+  (jhnidek@redhat.com)
+- Revert "Try to use --forked for all unit tests." (ptoscano@redhat.com)
+- test: add simple test for 1982670 (ptoscano@redhat.com)
+- 2076948: [1.28] Fix issue with race condition in rhsm.service
+  (jhnidek@redhat.com)
+- 1982670: do not collect unentitled products in SCA mode (ptoscano@redhat.com)
+- Use dmidecode on aarch64 (jhnidek@redhat.com)
+- Fix possible parsing issues of dmidecode output (mhorky@redhat.com)
+- zypper: drop dead python-dmidecode usage (ptoscano@redhat.com)
+- facts: drop DmiFirmwareInfoCollector (ptoscano@redhat.com)
+- facts: switch to DmidecodeFactCollector for DMI facts (ptoscano@redhat.com)
+- facts: add dmidecode parser and facts collector (ptoscano@redhat.com)
+- cloud-what: switch MiniHostCollector to dmidecode(1) (ptoscano@redhat.com)
+- Remove pytest arguments for CentOS 9 Stream image (mhorky@redhat.com)
+- tests: Install dnf-plugins-core every time (mhorky@redhat.com)
+
 * Wed Feb 22 2023 Pino Toscano <ptoscano@redhat.com> 1.28.36-1
 - Translated using Weblate (French) (ljanda@redhat.com)
 - Translated using Weblate (French) (suanand@redhat.com)
