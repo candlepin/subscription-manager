@@ -50,10 +50,20 @@ jobs:
         run: |
           git config --global --add safe.directory '*'
 
-      - name: Install packages
+      - name: Install npm (Fedora)
+        if: ${{ startsWith(matrix.name, 'Fedora') }}
+        run: |
+          dnf --setopt install_weak_deps=False install -y \
+            nodejs-npm
+
+      - name: Install npm (CentOS)
+        if: ${{ startsWith(matrix.name, 'CentOS') }}
         run: |
           dnf --setopt install_weak_deps=False install -y \
             npm
+
+      - name: Install packages
+        run: |
           dnf --setopt install_weak_deps=False builddep -y \
             -D '%global python3_pkgversion 3' \
             subscription-manager.spec
