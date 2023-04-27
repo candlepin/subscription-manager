@@ -59,7 +59,6 @@ try:
 
     from subscription_manager import managercli
     from subscription_manager.cli_command.cli import handle_exception
-    from subscription_manager.cli import InvalidCLIOptionError
 
 
 except KeyboardInterrupt:
@@ -72,8 +71,6 @@ def main():
     # execute
     try:
         return managercli.ManagerCLI().main()
-    except InvalidCLIOptionError as exc:
-        system_exit(1, exc)
     except KeyboardInterrupt:
         system_exit(0, "\nUser interrupted process.")
 

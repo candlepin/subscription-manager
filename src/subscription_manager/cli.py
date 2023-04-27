@@ -193,8 +193,10 @@ class CLI:
             flush_stdout_stderr()
             sys.exit(return_code)
 
-        # Some commands return status codes (e.g. AttachCommand).
-        return cmd.main()
+        try:
+            return cmd.main()
+        except InvalidCLIOptionError as error:
+            system_exit(1, error)
 
 
 def system_exit(code: int, msg: Union[str, Exception, None] = None) -> None:
