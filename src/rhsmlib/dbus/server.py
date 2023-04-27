@@ -327,16 +327,13 @@ class DomainSocketServer:
         self.cmd_line = None
 
     def run(self):
-        try:
-            self._server = dbus.server.Server(self._server_socket)
+        self._server = dbus.server.Server(self._server_socket)
 
-            for clazz in self.object_classes:
-                self._server.on_connection_added.append(
-                    partial(DomainSocketServer.connection_added, self, clazz, self.objects)
-                )
+        for clazz in self.object_classes:
+            self._server.on_connection_added.append(
+                partial(DomainSocketServer.connection_added, self, clazz, self.objects)
+            )
 
-            self._server.on_connection_removed.append(partial(DomainSocketServer.connection_removed, self))
+        self._server.on_connection_removed.append(partial(DomainSocketServer.connection_removed, self))
 
-            return self.address
-        except Exception as e:
-            log.exception(e)
+        return self.address
