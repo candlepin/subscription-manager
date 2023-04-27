@@ -11,6 +11,7 @@
 #
 import unittest
 
+import datetime
 import os
 import logging
 import random
@@ -45,11 +46,17 @@ from subscription_manager.cache import (
     AvailableEntitlementsCache,
     CurrentOwnerCache,
     ContentAccessModeCache,
+    SyspurposeComplianceStatusCache,
 )
 
 from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfile
 
-from rhsm.connection import RestlibException, UnauthorizedException, RateLimitExceededException
+from rhsm.connection import (
+    RestlibException,
+    UnauthorizedException,
+    RateLimitExceededException,
+    ProxyException,
+)
 
 from subscription_manager import injection as inj
 
@@ -1337,3 +1344,19 @@ class TestContentAccessModeCache(SubManFixture):
         data = self.cache.read_cache_only()
         self.assertTrue("7f85da06-5c35-44ba-931d-f11f6e581f89" in data)
         self.assertEqual(data["7f85da06-5c35-44ba-931d-f11f6e581f89"], "entitlement")
+
+
+class TestSyspurposeComplianceStatusCache(SubManFixture):
+    def setUp(self):
+        super(TestSyspurposeComplianceStatusCache, self).setUp()
+        self.syspurpose_cache = SyspurposeComplianceStatusCache()
+
+    def test_status_on_failed_load(self):
+        uep = StubUEP()
+        uep.has_capability = Mock(side_effect=ProxyException("bad-proxy", 1234))
+        uuid = "FAKEUUID"
+        on_date = datetime.datetime.now()
+        self.syspurpose_cache.load_status(uep, uuid, on_date)
+        self.assertEqual(self.syspurpose_cache.get_overall_status(), "Unknown")
+        self.assertEqual(self.syspurpose_cache.get_overall_status_code(), "unknown")
+        self.assertIsNone(self.syspurpose_cache.get_status_reasons())
