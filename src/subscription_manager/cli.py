@@ -196,9 +196,7 @@ class CLI:
         try:
             return cmd.main()
         except InvalidCLIOptionError as error:
-            # FIXME Re-raise the exception instead. Returning None
-            #  (a non-integer) results in return code 0, which is not correct.
-            print(error)
+            system_exit(1, error)
 
 
 def system_exit(code: int, msg: Union[str, Exception, None] = None) -> None:
