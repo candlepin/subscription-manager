@@ -861,7 +861,7 @@ class RefreshCommand(CliCommand):
             _refresh_service.refresh(force=self.options.force)
         except connection.RestlibException as re_err:
             log.error(re_err)
-            mapped_message: str = ExceptionMapper().get_message(re_err)
+            mapped_message = ExceptionMapper().get_message(re_err)
             system_exit(os.EX_SOFTWARE, mapped_message)
         except Exception as e:
             handle_exception(
@@ -2971,7 +2971,7 @@ class StatusCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Show status information for this system's subscriptions and products")
         super(StatusCommand, self).__init__("status", shortdesc, True)
-        self.parser.add_argument(
+        self.parser.add_option(
             "--ondate", dest="on_date",
             help=_("future date to check status on, defaults to today's date (example: %s)")
             % strftime("%Y-%m-%d", localtime())
@@ -3029,7 +3029,7 @@ class StatusCommand(CliCommand):
             status_id = service_status["status_id"]
             if status_id != "disabled":
                 log.debug(
-                    f"Found SCA cert, but status ID is not 'disabled' ({status_id}). Refreshing entitlement certs..."
+                    "Found SCA cert, but status ID is not 'disabled' (%s). Refreshing entitlement certs..." % status_id
                 )
                 refresh_service.refresh()
             else:
