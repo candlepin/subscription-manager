@@ -207,8 +207,6 @@ install-conf:
 install-plugins:
 	install -d $(DESTDIR)/$(RHSM_PLUGIN_DIR)
 	install -d $(DESTDIR)/$(RHSM_PLUGIN_CONF_DIR)
-	install -d $(DESTDIR)/etc/rhsm/ca
-	install -m 644 -p etc-conf/redhat-entitlement-authority.pem $(DESTDIR)/etc/rhsm/ca/redhat-entitlement-authority.pem
 
 	if [ "$(INSTALL_YUM_PLUGINS)" = "true" ] ; then \
 		echo "Installing Yum plugins" ; \
