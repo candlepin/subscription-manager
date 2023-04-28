@@ -27,7 +27,6 @@ import signal
 import socket
 import syslog
 import uuid
-import pkg_resources
 
 from six.moves import urllib
 from rhsm.https import ssl
@@ -280,6 +279,8 @@ def get_client_versions():
     try:
         sm_version = subscription_manager.version.rpm_version
         if sm_version is None or sm_version == "None":
+            import pkg_resources
+
             sm_version = pkg_resources.require("subscription-manager")[0].version
     except Exception as e:
         log.debug("Client Versions: Unable to check client versions")
@@ -607,25 +608,50 @@ def get_process_names():
     for subdir in os.listdir('/proc'):
         if re.match('[0-9]+', subdir):
             process_status_file_path = os.path.join(os.path.sep, 'proc', subdir, 'status')
-            with open(process_status_file_path) as status:
-                lines = "".join(status.readlines())
-                # Find first value of something that looks like "Name: THING"
-                match = re.search(proc_name_expr, lines)
-                if match:
-                    proc_name = match.groupdict().get('proc_name')
-                    if proc_name:
-                        yield proc_name
+            status_file = None
+            lines = ""
+            try:
+                status_file = open(process_status_file_path)
+                lines = "".join(status_file.readlines())
+            except IOError as e:
+                # See https://bugzilla.redhat.com/show_bug.cgi?id=1890080
+                # Sometimes when processes are killed after we have listed the
+                # /proc dir content we can end up trying to open a file which no
+                # longer exists.
+                log.debug("A process has likely ended before it's status could be read for"
+                          " {subdir} : {ex}".format(subdir=subdir, ex=e))
+                continue
+            except Exception as e:
+                log.debug("Unexpected exception while trying to read process names from /proc for"
+                          " {subdir} : {ex}".format(subdir=subdir, ex=e))
+                continue
+            finally:
+                if status_file is not None:
+                    status_file.close()
+
+            # Find first value of something that looks like "Name: THING"
+            match = re.search(proc_name_expr, lines)
+            if match:
+                proc_name = match.groupdict().get('proc_name')
+                proc_id = int(subdir)
+                if proc_name:
+                    yield proc_name, proc_id
 
 
-def is_process_running(process_to_find):
+def is_process_running(process_to_find: str, process_id_to_find: int = None) -> bool:
     """
     Check if process with given name is running
     :param process_to_find: string with process name
+    :param process_id_to_find: int with process ID
     :return: True, when at least one process is running; Otherwise returns False
     """
-    for process_name in get_process_names():
+    for process_name, process_id in get_process_names():
         if process_to_find == process_name:
-            return True
+            if process_id_to_find is None:
+                return True
+            else:
+                if process_id_to_find == process_id:
+                    return True
     return False
 
 

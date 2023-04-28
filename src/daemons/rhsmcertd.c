@@ -19,6 +19,8 @@
 #include <linux/version.h>
 #include <sys/file.h>
 #include <sys/syscall.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <stdio.h>
@@ -27,25 +29,37 @@
 #include <time.h>
 #include <wait.h>
 #include <glib.h>
+#include <glib-unix.h>
 #include <stdbool.h>
 #include <string.h>
 #include <errno.h>
 #include <libintl.h>
 #include <locale.h>
 
-#define LOGFILE "/var/log/rhsm/rhsmcertd.log"
+typedef enum {
+    LOG_LEVEL_ERROR = 0,
+    LOG_LEVEL_WARNING = 1,
+    LOG_LEVEL_INFO = 2,
+    LOG_LEVEL_DEBUG = 3
+} LOG_LEVEL;
+
+#define LOGDIR "/var/log/rhsm"
+#define LOGFILE LOGDIR"/rhsmcertd.log"
 #define LOCKFILE "/var/lock/subsys/rhsmcertd"
 #define NEXT_CERT_UPDATE_FILE "/run/rhsm/next_cert_check_update"
 #define NEXT_AUTO_ATTACH_UPDATE_FILE "/run/rhsm/next_auto_attach_update"
 #define NEXT_AUTO_REGISTER_UPDATE_FILE "/run/rhsm/next_auto_register_update"
 #define WORKER LIBEXECDIR"/rhsmcertd-worker"
 #define WORKER_NAME WORKER
+#define PACKAGE_PROFILE_UPLOADER LIBEXECDIR"/rhsm-package-profile-uploader"
 #define INITIAL_DELAY_SECONDS 120
 #define DEFAULT_AUTO_REG_INTERVAL_SECONDS 3600 /* 1 hour */
 #define DEFAULT_CERT_INTERVAL_SECONDS 14400    /* 4 hours */
 #define DEFAULT_HEAL_INTERVAL_SECONDS 86400    /* 24 hours */
 #define DEFAULT_SPLAY_ENABLED true
 #define DEFAULT_AUTO_REGISTRATION false
+#define DEFAULT_LOG_LEVEL LOG_LEVEL_INFO
+#define DEFAULT_LOG_LEVEL_NAME "INFO"
 #define BUF_MAX 256
 #define RHSM_CONFIG_FILE "/etc/rhsm/rhsm.conf"
 
@@ -54,6 +68,10 @@
 #define CONFIG_KEY_NOT_FOUND (0)
 
 #define MAX_AUTO_REGISTER_ATTEMPTS 3
+
+#if !GLIB_CHECK_VERSION(2, 58, 0)
+#define G_SOURCE_FUNC(f) ((GSourceFunc) (void (*)(void)) (f))
+#endif
 
 #if defined(__linux)
 # if LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0)
@@ -70,6 +88,7 @@
 # endif
 #endif
 
+static LOG_LEVEL log_level = DEFAULT_LOG_LEVEL;
 static gboolean show_debug = FALSE;
 static gboolean run_now = FALSE;
 static gint arg_cert_interval_minutes = -1;
@@ -155,7 +174,14 @@ r_log (const char *level, const char *message, ...)
 {
     bool use_stdout = false;
     va_list argp;
-    FILE *log_file = fopen (LOGFILE, "a");
+    FILE *log_file = NULL;
+    struct stat log_dir_stat;
+
+    /* When log directory does not exist, then try to create this directory */
+    if (stat(LOGDIR, &log_dir_stat) != 0) {
+        mkdir(LOGDIR, 0755);
+    }
+    log_file = fopen (LOGFILE, "a");
     if (!log_file) {
         // redirect message to stdout
         log_file = stdout;
@@ -174,10 +200,10 @@ r_log (const char *level, const char *message, ...)
     va_end(argp);
 }
 
-#define info(msg, ...) r_log ("INFO", msg, ##__VA_ARGS__)
-#define warn(msg, ...) r_log ("WARN", msg, ##__VA_ARGS__)
-#define error(msg, ...) r_log ("ERROR", msg, ##__VA_ARGS__)
-#define debug(msg, ...) if (show_debug) r_log ("DEBUG", msg, ##__VA_ARGS__)
+#define error(msg, ...) if (log_level >= LOG_LEVEL_ERROR) r_log ("ERROR", msg, ##__VA_ARGS__)
+#define warn(msg, ...) if (log_level >= LOG_LEVEL_WARNING) r_log ("WARN", msg, ##__VA_ARGS__)
+#define info(msg, ...) if (log_level >= LOG_LEVEL_INFO) r_log ("INFO", msg, ##__VA_ARGS__)
+#define debug(msg, ...) if (log_level >= LOG_LEVEL_DEBUG) r_log ("DEBUG", msg, ##__VA_ARGS__)
 
 static gboolean
 log_update (int delay, char *path_to_file)
@@ -224,21 +250,136 @@ long long gen_random(long long max) {
     return random_num % true_max;
 }
 
-/* Handle program signals */
-void
-signal_handler(int signo) {
-    if (signo == SIGTERM) {
-        /* Close lock file and release lock on this file */
-        if (fd_lock != -1) {
-            close(fd_lock);
-            fd_lock = -1;
-        }
-        info ("rhsmcertd is shutting down...");
-        signal (signo, SIG_DFL);
-        raise (signo);
+/**
+ * Try to run Python script package-profile-uploader. This script tries to upload DNF profile
+ * to server, when server supports profile. New process is spawned in blocking way.
+ * Note: this script is spawned with --force-upload. Thus report_package_config configuration
+ * option is ignored and this configuration option should be checked before using this approach.
+ * @return Return true, when uploading was successful. Otherwise, return false.
+ */
+static gboolean
+upload_package_profile ()
+{
+    gboolean ret;
+    const char * argv[] = {PACKAGE_PROFILE_UPLOADER, "--force-upload", NULL};
+    gchar *standard_output = NULL;
+    gchar *standard_error = NULL;
+    gint wait_status = 0;
+    GError *error = NULL;
+
+    debug ("Spawning new process of uploading package profile...");
+
+    // Following function will block until process is finished. Other signals
+    // are queued and will be processed, when following process is finished.
+    // It means other signals (SIGTERM) are blocked too. systemd can resolve
+    // this issue. When sending SIGTERM does not terminate daemon, then it
+    // sends SIGKILL signal after some timeout.
+    ret = g_spawn_sync(
+            "/",                // Working directory
+            (gchar**)argv,      // Executable with arguments
+            NULL,               // List of environments is read from parent process
+            G_SPAWN_DEFAULT,    // Default flags
+            NULL,               // No function running before spawning process
+            NULL,               // No argument for such function is needed as well
+            &standard_output,   // stdout if any
+            &standard_error,    // stderr if any
+            &wait_status,       // status if any
+            &error);            // Error if any
+
+    debug ("Spawning of uploading package profile finished: %d", ret);
+
+    // Print stdout/stderr to log file only in the case, when stdout/stderr are not empty strings
+    if (standard_output != NULL && standard_output[0] != 0) {
+        debug ("stdout of uploading package profile: %s", standard_output);
+        g_free(standard_output);
+        standard_output = NULL;
     }
+    if (standard_error != NULL && standard_error[0] != 0) {
+        debug ("stderr of uploading package profile: %s", standard_error);
+        g_free(standard_error);
+        standard_error = NULL;
+    }
+
+    // Error is usually not NULL, when it wasn't possible to span child process
+    // for some reason (e.g. file does not exist)
+    if (error != NULL) {
+        error ("Spawning of child process (uploading profile) failed: %s", error->message);
+        g_error_free(error);
+        error = NULL;
+        return false;
+    }
+
+#if GLIB_MAJOR_VERSION >= 2 && GLIB_MINOR_VERSION >= 70
+    // Following function is available since Fedora 35 (not RHEL7, RHEL8, RHEL9)
+    ret = g_spawn_check_wait_status(wait_status, &error);
+#else
+    // Following function is available on RHEL7, RHEL8, RHEL9 (not RHEL6),
+    // and it was deprecated on Fedora 35
+    ret = g_spawn_check_exit_status(wait_status, &error);
+#endif
+
+    if (error != NULL) {
+        error ("Child process exited abnormally: %s", error->message);
+        g_error_free(error);
+        error = NULL;
+        return false;
+    }
+
+    info ("Uploading of package profile performed successfully");
+
+    return ret;
 }
 
+/**
+ * Callback function for SIGUSR1 signal
+ * @return Always returns G_SOURCE_CONTINUE
+ */
+gboolean
+sigusr1_callback(void) {
+    debug ("Received SIGUSR1 signal");
+    upload_package_profile();
+    // Return this value to signal that this callback function
+    // should remain in main loop
+    return G_SOURCE_CONTINUE;
+}
+
+/**
+ * Callback function for SIGTERM signal
+ * @return Always returns G_SOURCE_REMOVE
+ */
+gboolean
+sigterm_callback(void) {
+    int ret;
+    info ("rhsmcertd is shutting down...");
+    /* Close lock file and release lock on this file */
+    if (fd_lock != -1) {
+        /* Truncate lock file to zero value (delete PID before unlinking),
+         * because unlinking could fail for several reasons. Thus, it should not
+         * contain at least non-valid value of PID. */
+        ret = ftruncate(fd_lock, 0);
+        if (ret == -1) {
+            warn ("Unable to truncate lock file: %s, %s", LOCKFILE, strerror (errno));
+        }
+        close(fd_lock);
+        fd_lock = -1;
+    }
+    /* Try to delete lock file */
+    ret = unlink(LOCKFILE);
+    if (ret == -1) {
+        error ("Unable to unlink lock file: %s, %s", LOCKFILE, strerror(errno));
+    }
+    // Set handler to SIGTERM to default
+    signal (SIGTERM, SIG_DFL);
+    // Raise the signal once again to terminate this process
+    raise (SIGTERM);
+    return G_SOURCE_REMOVE;
+}
+
+/**
+ * Try to lock file /var/lock/subsys/rhsmcertd and write current PID to this file
+ * @return Return 0, when it was possible lock file and write PID to lock file.
+ *         Otherwise, return non-zero value.
+ */
 int
 get_lock ()
 {
@@ -246,12 +387,24 @@ get_lock ()
     int ret = 0;
 
     if (fd_lock == -1) {
+        error ("Unable to open file: %s, %s", LOCKFILE, strerror(errno));
         ret = 1;
     } else {
         if (flock (fd_lock, LOCK_EX | LOCK_NB) == -1) {
+            debug ("Unable to lock file: %s, %s", LOCKFILE, strerror(errno));
             close (fd_lock);
             fd_lock = -1;
-            ret = 1;
+            ret = 2;
+        } else {
+            pid_t pid = getpid ();
+            debug ("Writing PID: %d to lock file: %s", pid, LOCKFILE);
+            /* Lock file in /var/lock should use HDB UUCP lock file format. More details could be found here:
+             * https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch05s09.html */
+            int num = dprintf (fd_lock, "%10d\n", pid);
+            if (num < 0) {
+                error ("Unable to write PID to lock file: %s, %s", LOCKFILE, strerror (errno));
+                ret = 3;
+            }
         }
     }
 
@@ -313,8 +466,10 @@ cert_check (gboolean heal)
     }
     if (pid == 0) {
         if (heal) {
+            debug ("(Auto-attach) executing: %s --autoheal", WORKER);
             execl (WORKER, WORKER_NAME, "--autoheal", NULL);
         } else {
+            debug ("(Cert check) executing: %s", WORKER);
             execl (WORKER, WORKER_NAME, NULL);
         }
         _exit (errno);
@@ -390,6 +545,7 @@ get_int_from_config_file (GKeyFile * key_file, const char *group, const char *ke
     int value = g_key_file_get_integer (key_file, group, key, &error);
     // If key does not exist in config file, return CONFIG_KEY_NOT_FOUND, aka 0
     if (error != NULL && error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND) {
+        debug ("Key %s does not exists in the group %s", key, group);
         value = CONFIG_KEY_NOT_FOUND;
     }
     // Get the integer value from the config file. If value is 0 (due
@@ -411,13 +567,29 @@ get_int_from_config_file (GKeyFile * key_file, const char *group, const char *ke
 
 // Similar to the above,
 bool
-get_bool_from_config_file (GKeyFile * key_file, const char *group, const char *key, bool default_value)
+get_bool_from_config_file (GKeyFile *key_file, const char *group, const char *key, bool default_value)
 {
     GError *error = NULL;
     bool value = g_key_file_get_boolean (key_file, group, key, &error);
-        // If key does not exist in config file, return the default_value given
+    // If key does not exist in config file, return the default_value given
     if (error != NULL && (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND || error->code == G_KEY_FILE_ERROR_INVALID_VALUE)) {
+        debug ("Key %s does not exists in the group %s. Using default value: %d", key, group, default_value);
         value = default_value;
+    }
+    return value;
+}
+
+gchar *
+get_string_from_config_file (GKeyFile *key_file, const char *group, const char *key)
+{
+    GError *error = NULL;
+    gchar *value = g_key_file_get_string (key_file, group, key, &error);
+    if (error != NULL) {
+        if (error->code == G_KEY_FILE_ERROR_GROUP_NOT_FOUND) {
+            debug ("Group %s does not exist", group);
+        } else if (error->code == G_KEY_FILE_ERROR_KEY_NOT_FOUND) {
+            debug ("Key %s does not exists in the group %s", key, group);
+        }
     }
     return value;
 }
@@ -443,6 +615,32 @@ print_argument_error (const char *message, ...)
     vprintf(message, argp);
     printf(N_("For more information run: rhsmcertd --help\n"));
     va_end(argp);
+}
+
+void
+set_log_level (const gchar *conf_log_level, const char *conf_option_name)
+{
+    bool using_default_log_level = false;
+    if (g_strcmp0(conf_log_level, "DEBUG") == 0) {
+        log_level = LOG_LEVEL_DEBUG;
+    } else if (g_strcmp0(conf_log_level, "INFO") == 0) {
+        log_level = LOG_LEVEL_INFO;
+    } else if (g_strcmp0(conf_log_level, "WARN") == 0) {
+        log_level = LOG_LEVEL_WARNING;
+    } else if (g_strcmp0(conf_log_level, "ERROR") == 0) {
+        log_level = LOG_LEVEL_ERROR;
+    } else {
+        warn ("Unsupported log level: %s of configuration option: %s in file: %s",
+              conf_log_level, conf_option_name, RHSM_CONFIG_FILE);
+        log_level = DEFAULT_LOG_LEVEL;
+        using_default_log_level = true;
+    }
+    if (using_default_log_level == false) {
+        debug ("Using log level: %s of configuration option: %s in file: %s",
+               conf_log_level, conf_option_name, RHSM_CONFIG_FILE);
+    } else {
+        info ("Using default log level: %s", DEFAULT_LOG_LEVEL_NAME);
+    }
 }
 
 void
@@ -494,6 +692,37 @@ key_file_init_config (Config * config, GKeyFile * key_file)
             DEFAULT_AUTO_REGISTRATION
             );
     config->auto_registration = auto_registration_enabled;
+
+    gchar *default_log_level = get_string_from_config_file(
+            key_file,
+            "logging",
+            "default_log_level"
+    );
+
+    gchar *rhsmcertd_log_level = get_string_from_config_file(
+            key_file,
+            "logging",
+            "rhsmcertd"
+    );
+
+    if (show_debug) {
+        // When --debug CLI option is used, then ignore configuration options related to logging, and
+        // print debug log about it
+        if (rhsmcertd_log_level != NULL) {
+            debug("Ignoring logging.rhsmcertd configuration option, because --debug CLI option was used");
+        } else if (default_log_level != NULL) {
+            debug("Ignoring logging.default_log_level configuration option, because --debug CLI option was used");
+        }
+    } else {
+        if (rhsmcertd_log_level != NULL) {
+            set_log_level(rhsmcertd_log_level, "logging.rhsmcertd");
+        } else if (default_log_level != NULL) {
+            set_log_level(default_log_level, "logging.default_log_level");
+        }
+    }
+
+    g_free(default_log_level);
+    g_free(rhsmcertd_log_level);
 }
 
 void
@@ -567,7 +796,7 @@ get_config (int argc, char *argv[])
     }
     g_key_file_free (key_file);
 
-    // Set any values provided from the options parser.
+    // Set any values provided from the option parser.
     bool options_provided = opt_parse_init_config (config);
 
     // If there are any args that were ignored by opt_parse, we assume
@@ -617,14 +846,18 @@ parse_cli_args (int *argc, char *argv[])
             exit (EXIT_FAILURE);
         }
     }
+
+    // When --debug CLI option is set, then set log_level to DEBUG now, because
+    // 1. we want to override configuration options from rhsm.conf
+    // 2. we want to see debug messages during parsing of configuration file
+    if (show_debug) {
+        log_level = LOG_LEVEL_DEBUG;
+    }
 }
 
 int
 main (int argc, char *argv[])
 {
-    if (signal(SIGTERM, signal_handler) == SIG_ERR) {
-        warn ("Unable to catch SIGTERM\n");
-    }
     setlocale (LC_ALL, "");
     bindtextdomain ("rhsm", "/usr/share/locale");
     textdomain ("rhsm");
@@ -645,9 +878,27 @@ main (int argc, char *argv[])
         return EXIT_FAILURE;
 
     if (get_lock () != 0) {
-        error ("unable to get lock, exiting");
+        error ("Unable to get lock, exiting");
         return EXIT_FAILURE;
     }
+
+    // NOTE: it is important to create callback function for signals after calling daemon()
+    // Create main context for main loop
+    GMainContext *main_context;
+    main_context = g_main_context_default ();
+
+    // Create sources for handling SIGUSR1 and SIGTERM signal
+    GSource *sigusr1_source, *sigterm_source;
+    sigusr1_source = g_unix_signal_source_new (SIGUSR1);
+    sigterm_source = g_unix_signal_source_new (SIGTERM);
+
+    // Attach callback function to the source. We don't pass any data to callback functions
+    g_source_set_callback (sigusr1_source, G_SOURCE_FUNC(sigusr1_callback), NULL, NULL);
+    g_source_set_callback (sigterm_source, G_SOURCE_FUNC(sigterm_callback), NULL, NULL);
+
+    // Attach signal sources to the main_context
+    g_source_attach (sigusr1_source, main_context);
+    g_source_attach (sigterm_source, main_context);
 
     info ("Starting rhsmcertd...");
     if (auto_reg_enabled) {
@@ -764,7 +1015,7 @@ main (int argc, char *argv[])
     log_update (cert_check_initial_delay, NEXT_CERT_UPDATE_FILE);
     log_update (auto_attach_initial_delay, NEXT_AUTO_ATTACH_UPDATE_FILE);
 
-    GMainLoop *main_loop = g_main_loop_new (NULL, FALSE);
+    GMainLoop *main_loop = g_main_loop_new (main_context, FALSE);
     g_main_loop_run (main_loop);
     // we will never get past here
 

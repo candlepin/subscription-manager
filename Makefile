@@ -2,7 +2,7 @@
 # Python setup.py doesn't cover all our bases.  Additionally, setuptools does not like
 # to install files outside of /usr (see http://stackoverflow.com/a/13476594/6124862).
 #
-# Therefore the Makefile performs the master build, but please keep the following guidelines
+# Therefore the Makefile performs the main build, but please keep the following guidelines
 # in mind when updating it:
 #
 # * If the file goes under /usr, put it in setup.py
@@ -319,6 +319,7 @@ install-via-setup: install-subpackages-via-setup
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsmcertd-worker $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
+	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-package-profile-uploader $(DESTDIR)/$(LIBEXEC_DIR)/
 	if [[ "$(WITH_SUBMAN_GUI)" == "true" ]]; then \
 		mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui $(DESTDIR)/$(PREFIX)/sbin/; \
 	else \
