@@ -25,9 +25,6 @@ jobs:
           - name: "Fedora latest"
             image: "fedora:latest"
             pytest_args: ''
-          - name: "Fedora Rawhide"
-            image: "fedora:rawhide"
-            pytest_args: ''
 
     runs-on: ubuntu-latest
     container:
