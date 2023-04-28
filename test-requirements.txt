@@ -9,11 +9,13 @@
 nose
 nose-capturestderr
 nose-randomly
-coverage
+coverage<6
 polib
 pyinotify
 simplejson
-mock
-Sphinx
+mock<4
 git+https://github.com/alikins/pyqver.git#egg=pyqver
 git+https://github.com/awood/nose-xvfb.git#egg=nose-xvfb
+
+packaging<=20
+pyparsing<=2.4.5

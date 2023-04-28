@@ -4,7 +4,11 @@ from test.fixture import SubManFixture
 import mock
 
 from test import stubs
-from subscription_manager.gui import managergui, registergui
+try:
+    from subscription_manager.gui import managergui, registergui
+except Exception as exc:
+    import unittest
+    unittest.skip("Cannot run tests: %s" % exc)
 from subscription_manager.injection import provide, \
         PRODUCT_DATE_RANGE_CALCULATOR, PROD_DIR
 from nose.plugins.attrib import attr
