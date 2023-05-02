@@ -18,8 +18,6 @@ jobs:
             image: "quay.io/centos/centos:stream9"
           - name: "Fedora latest"
             image: "fedora:latest"
-          - name: "Fedora Rawhide"
-            image: "fedora:rawhide"
 
     runs-on: ubuntu-latest
     container:
