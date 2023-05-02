@@ -22,7 +22,7 @@ from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.utils import chroot, is_simple_content_access
 from subscription_manager.injectioninit import init_dep_injection
-from subscription_manager.i18n import ugettext as _
+from subscription_manager.i18n import ungettext, ugettext as _
 from rhsm import logutil
 from rhsm import config
 
@@ -111,9 +111,12 @@ class SubscriptionManager(dnf.Plugin):
                             repo.disable()
                             disable_count += 1
                     logger.info(
-                        _(
+                        ungettext(
+                            "subscription-manager plugin disabled %d system repository with respect "
+                            "of configuration in /etc/dnf/plugins/subscription-manager.conf",
                             "subscription-manager plugin disabled %d system repositories with respect "
-                            "of configuration in /etc/dnf/plugins/subscription-manager.conf"
+                            "of configuration in /etc/dnf/plugins/subscription-manager.conf",
+                            disable_count,
                         )
                         % disable_count
                     )

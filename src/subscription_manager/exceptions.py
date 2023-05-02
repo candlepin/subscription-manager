@@ -25,7 +25,7 @@ from subscription_manager.certdirectory import DEFAULT_PRODUCT_CERT_DIR
 from subscription_manager.cp_provider import TokenAuthUnsupportedException
 from subscription_manager.entcertlib import Disconnected
 
-from subscription_manager.i18n import ugettext as _
+from subscription_manager.i18n import ungettext, ugettext as _
 from subscription_manager.utils import terminal_printable_content
 
 SOCKET_MESSAGE = _(
@@ -56,9 +56,6 @@ PERROR_NONE_MESSAGE = _("Server URL can not be None")
 PERROR_PORT_MESSAGE = _("Server URL port should be numeric")
 PERROR_SCHEME_MESSAGE = _("Server URL has an invalid scheme. http:// and https:// are supported")
 RATE_LIMIT_MESSAGE = _("The server rate limit has been exceeded, please try again later.")
-RATE_LIMIT_EXPIRATION = _(
-    "The server rate limit has been exceeded, please try again later. (Expires in %s seconds)"
-)
 PRODUCT_CERTIFICATE_LOADING_PATH_ERROR = _("Bad product certificate: {file}: [{library}] {message}")
 CERTIFICATE_LOADING_PATH_ERROR = _("Bad certificate: {file}: [{library}] {message}")
 CERTIFICATE_LOADING_PEM_ERROR = _("Bad certificate: [{library}] {message}\n{data}")
@@ -167,7 +164,13 @@ class ExceptionMapper:
         _: str,
     ):
         if rate_limit_exception.retry_after is not None:
-            return RATE_LIMIT_EXPIRATION % str(rate_limit_exception.retry_after)
+            return ungettext(
+                "The server rate limit has been exceeded, please try again later. "
+                "(Expires in {time} second)",
+                "The server rate limit has been exceeded, please try again later. "
+                "(Expires in {time} seconds)",
+                rate_limit_exception.retry_after,
+            ).format(time=rate_limit_exception.retry_after)
         else:
             return RATE_LIMIT_MESSAGE
 
