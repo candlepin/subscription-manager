@@ -128,10 +128,7 @@ class TestAWSCloudProvider(unittest.TestCase):
     Class used for testing of AWS cloud provider
     """
 
-    def setUp(self) -> None:
-        """
-        Destroy instance of singleton and set instance not initialized
-        """
+    def tearDown(self) -> None:
         aws.AWSCloudProvider._instance = None
         aws.AWSCloudProvider._initialized = False
 
@@ -600,11 +597,13 @@ class TestAzureCloudProvider(unittest.TestCase):
         """
         Patch communication with metadata provider
         """
-        azure.AzureCloudProvider._instance = None
-        azure.AzureCloudProvider._initialized = False
         requests_patcher = patch('cloud_what._base_provider.requests')
         self.requests_mock = requests_patcher.start()
         self.addCleanup(requests_patcher.stop)
+
+    def tearDown(self) -> None:
+        azure.AzureCloudProvider._instance = None
+        azure.AzureCloudProvider._initialized = False
 
     def test_azure_cloud_provider_id(self):
         """
@@ -837,11 +836,13 @@ class TestGCPCloudProvider(unittest.TestCase):
         """
         Patch communication with metadata provider
         """
-        gcp.GCPCloudProvider._instance = None
-        gcp.GCPCloudProvider._initialized = False
         requests_patcher = patch('cloud_what._base_provider.requests')
         self.requests_mock = requests_patcher.start()
         self.addCleanup(requests_patcher.stop)
+
+    def tearDown(self) -> None:
+        gcp.GCPCloudProvider._instance = None
+        gcp.GCPCloudProvider._initialized = False
 
     def test_gcp_cloud_provider_id(self):
         """
@@ -1011,13 +1012,6 @@ class TestCloudProvider(unittest.TestCase):
         """
         Set up two mocks that are used in all tests
         """
-        aws.AWSCloudProvider._instance = None
-        aws.AWSCloudProvider._initialized = False
-        azure.AzureCloudProvider._instance = None
-        azure.AzureCloudProvider._initialized = False
-        gcp.GCPCloudProvider._instance = None
-        gcp.GCPCloudProvider._initialized = False
-
         host_collector_patcher = patch('cloud_what.provider.HostCollector')
         self.host_collector_mock = host_collector_patcher.start()
         self.host_fact_collector_instance = Mock()
@@ -1037,6 +1031,14 @@ class TestCloudProvider(unittest.TestCase):
         self.requests_patcher = patch('cloud_what._base_provider.requests')
         self.azure_requests_mock = self.requests_patcher.start()
         self.addCleanup(self.requests_patcher.stop)
+
+    def tearDown(self) -> None:
+        aws.AWSCloudProvider._instance = None
+        aws.AWSCloudProvider._initialized = False
+        azure.AzureCloudProvider._instance = None
+        azure.AzureCloudProvider._initialized = False
+        gcp.GCPCloudProvider._instance = None
+        gcp.GCPCloudProvider._initialized = False
 
     def test_detect_cloud_provider_aws(self):
         """
