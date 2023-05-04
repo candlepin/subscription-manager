@@ -32,7 +32,6 @@ Similar for other bin scripts:
 
 ```bash
 PYTHONPATH=./src python -m subscription_manager.scripts.rct
-PYTHONPATH=./src python -m subscription_manager.scripts.rhn_migrate_classic_to_rhsm
 # ... etc.
 ```
 

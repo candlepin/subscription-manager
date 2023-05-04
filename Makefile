@@ -65,7 +65,6 @@ INSTALL_CONTAINER_PLUGIN ?= true
 WITH_SYSTEMD ?= true
 WITH_SUBMAN_GUI ?= true
 WITH_COCKPIT ?= true
-WITH_SUBMAN_MIGRATION ?= true
 
 # if OS is empty string, we're on el6 or sles11
 ifeq ($(OS),)
@@ -109,10 +108,6 @@ PYFILES := `find src/ test/ -name "*.py"`
 BIN_FILES := bin/subscription-manager \
 			 bin/rct \
 			 bin/rhsm-debug
-
-ifeq ($(WITH_SUBMAN_MIGRATION),true)
-    BIN_FILES := bin/rhn-migrate-classic-to-rhsm
-endif
 
 STYLEFILES=$(PYFILES) $(BIN_FILES)
 
@@ -195,9 +190,6 @@ install-conf:
 	    install -m 644 etc-conf/dbus/polkit/com.redhat.SubscriptionManager.policy $(DESTDIR)/$(POLKIT_ACTIONS_INST_DIR); \
 		install -m 644 etc-conf/subscription-manager-gui.appdata.xml $(DESTDIR)/$(INSTALL_DIR)/appdata/subscription-manager-gui.appdata.xml; \
 		install -m 644 etc-conf/subscription-manager-gui.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/subscription-manager-gui; \
-	fi;
-	if [[ "$(WITH_SUBMAN_MIGRATION)" == "true" ]]; then \
-	    install -m 644 etc-conf/rhn-migrate-classic-to-rhsm.completion.sh $(DESTDIR)/$(COMPLETION_DIR)/rhn-migrate-classic-to-rhsm; \
 	fi;
 	if [ "$(INSTALL_ZYPPER_PLUGINS)" = "true" ] ; then \
 	    install -m 644 etc-conf/zypper.conf $(DESTDIR)/etc/rhsm/; \
@@ -310,7 +302,7 @@ install-post-boot: install-firstboot install-initial-setup
 install-via-setup: install-subpackages-via-setup
 	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --gtk-version=$(GTK_VERSION) --rpm-version=$(VERSION) --prefix=$(PREFIX) \
 	--with-systemd=$(WITH_SYSTEMD) --with-subman-gui=${WITH_SUBMAN_GUI} --with-cockpit-desktop-entry=${WITH_COCKPIT} \
-	--with-subman-migration=${WITH_SUBMAN_MIGRATION} $(SETUP_PY_INSTALL_PARAMS)
+	$(SETUP_PY_INSTALL_PARAMS)
 	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
 	mkdir -p $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager $(DESTDIR)/$(PREFIX)/sbin/
@@ -323,11 +315,6 @@ install-via-setup: install-subpackages-via-setup
 	else \
 		rm $(DESTDIR)/$(PREFIX)/bin/subscription-manager-gui; \
 	fi; \
-	if [[ "$(WITH_SUBMAN_MIGRATION)" == "true" ]]; then \
-	    mv $(DESTDIR)/$(PREFIX)/bin/rhn-migrate-classic-to-rhsm $(DESTDIR)/$(PREFIX)/sbin/; \
-	else \
-	    rm $(DESTDIR)/$(PREFIX)/bin/rhn-migrate-classic-to-rhsm; \
-	fi;
 	mv $(DESTDIR)/$(PREFIX)/bin/syspurpose $(DESTDIR)/$(PREFIX)/sbin/
 	find $(DESTDIR)/$(PYTHON_SITELIB) -name requires.txt -exec sed -i '/dbus-python/d' {} \;
 
