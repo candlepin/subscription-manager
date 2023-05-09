@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2023-05-01 17:20+0000\n"
+"PO-Revision-Date: 2023-05-06 12:20+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
@@ -97,10 +97,8 @@ msgstr "mostra questo messaggio d'aiuto ed esci"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: /usr/lib64/python3.9/argparse.py:1775
-#, fuzzy
-#| msgid "cannot parse argument: {}"
 msgid "cannot have multiple subparser arguments"
-msgstr "impossibile analizzare l'argomento: {}"
+msgstr "impossibile avere multipli sotto-analizzatori di argomenti"
 
 #: /usr/lib64/python3.9/argparse.py:1827 /usr/lib64/python3.9/argparse.py:2338
 #, python-format
@@ -319,10 +317,7 @@ msgstr ""
 "Non si è root, i repository di Subscription Management non vengono aggiornati"
 
 #: src/plugins/dnf/subscription-manager.py:115
-#, fuzzy, python-format
-#| msgid ""
-#| "subscription-manager plugin disabled %d system repositories with respect "
-#| "of configuration in /etc/dnf/plugins/subscription-manager.conf"
+#, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
@@ -353,11 +348,13 @@ msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
 msgstr ""
+"Invia il profilo combinato al server Satellite (lista degli RPM installati, "
+"dei repository e moduli abilitati)"
 
 #: src/plugins/dnf/upload-profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
 msgid "Force package profile upload"
-msgstr ""
+msgstr "Forza l'invio del profilo di pacchetti"
 
 #: src/plugins/dnf/upload-profile.py:66
 #: src/subscription_manager/scripts/package_profile_upload.py:37
@@ -936,7 +933,7 @@ msgstr "Controllo dello stato della connessione"
 
 #: src/rhsm/connection.py:1489
 msgid "Fetching cloud token"
-msgstr ""
+msgstr "Recupero del token di cloud"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1562
@@ -971,10 +968,8 @@ msgstr "Rimozione dei guest"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1745 src/rhsm/connection.py:1756
-#, fuzzy
-#| msgid "Print certificate information"
 msgid "Updating profile information"
-msgstr "Stampa le informazioni del certificato"
+msgstr "Aggiornamento delle informazioni del profilo"
 
 #: src/rhsm/connection.py:1764
 msgid "Fetching consumer keys"
@@ -991,12 +986,8 @@ msgid "Checking system purpose compliance status"
 msgstr ""
 
 #: src/rhsm/connection.py:1789
-#, fuzzy
-#| msgid "Convenient module for managing all system purpose settings"
 msgid "Fetching available system purpose settings"
-msgstr ""
-"Modulo dedicato per la gestione di tutte le impostazioni dello scopo di "
-"sistema"
+msgstr "Recupero delle impostazioni disponibili dello scopo di sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rhsm/connection.py:1796 src/rhsm/connection.py:1804
@@ -1028,10 +1019,8 @@ msgstr "Aggiornamento delle sottoscrizioni"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rhsm/connection.py:1894 src/rhsm/connection.py:1904
 #: src/rhsm/connection.py:1913
-#, fuzzy
-#| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
-msgstr "Errore di sottoscrizione: %s"
+msgstr "Annullamento della registrazione"
 
 #: src/rhsm/connection.py:1962
 msgid "Fetching pools"
@@ -1195,16 +1184,13 @@ msgid "Error: Unable to load bus '{name}'"
 msgstr "Errore: impossibile caricare il bus '{name}'"
 
 #: src/rhsmlib/services/entitlement.py:52
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-#| "{dateexample})"
+#, python-brace-format
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{date})"
 msgstr ""
 "La data inserita non è valida. La data deve avere un formato AAAA-MM-GG (per "
-"esempio: {dateexample})"
+"esempio: {date})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rhsmlib/services/entitlement.py:57
@@ -1612,12 +1598,12 @@ msgstr "Deprecato, consultare \"syspurpose\""
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:75
 #, python-brace-format
 msgid "set {attr} of system purpose"
-msgstr "impostato \"{attr}\" dello scopo di sistema"
+msgstr "imposta \"{attr}\" dello scopo di sistema"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:82
 #, python-brace-format
 msgid "unset {attr} of system purpose"
-msgstr "rimosso \"{attr}\" dallo scopo di sistema"
+msgstr "rimuovi \"{attr}\" dallo scopo di sistema"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:90
 #, python-brace-format
@@ -1687,17 +1673,15 @@ msgstr[1] ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:264
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Warning: This org does not have any subscriptions with an available "
-#| "\"{attr}\" is empty."
+#, python-brace-format
 msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
 msgstr ""
-"Avviso: questa organizzazione non ha alcuna sottoscrizione con valori "
-"disponibili di \"{attr}\"."
+"Avviso: questa organizzazione non ha alcuna sottoscrizione che fornisce uno "
+"scopo di sistema \"{attr}\". Questa impostazione non avrà effetto "
+"sull'associazione automatica delle sottoscrizioni."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:278
 #, python-brace-format
@@ -1737,6 +1721,8 @@ msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
+"Non ci sono valori disponibili per lo scopo di sistema \"{syspurpose_attr}\" "
+"nelle sottoscrizioni disponibili di questa organizzazione."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:409
 #, python-brace-format
@@ -1744,6 +1730,8 @@ msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
 msgstr ""
+"Impossibile recuperare la lista dei valori validi per lo scopo di sistema \""
+"{syspurpose_attr}\"."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:435
 msgid "Unable to connect to server using token"
@@ -1762,7 +1750,7 @@ msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
 msgstr ""
-"Nota: il server di adesione attualmente configurato non supporta Scopo del "
+"Nota: il server di adesione attualmente configurato non supporta lo scopo di "
 "sistema {attr}."
 
 #: src/subscription_manager/cli_command/addons.py:24
@@ -2205,10 +2193,8 @@ msgstr "Errore: il server non supporta l'aggiornamento degli ambienti."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/environments.py:136
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support multi-environment operations."
-msgstr "Errore: il server non supporta gli ambienti."
+msgstr "Errore: il server non supporta operazioni con ambienti multipli."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/environments.py:154
@@ -2216,10 +2202,8 @@ msgid "Environments"
 msgstr "Ambienti"
 
 #: src/subscription_manager/cli_command/environments.py:167
-#, fuzzy
-#| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
-msgstr "Questa organizzazione non possiede alcun ambiente."
+msgstr "Non c'è alcun ambiente da elencare."
 
 #: src/subscription_manager/cli_command/environments.py:203
 msgid "Error: The same environment may not be listed more than once. "
@@ -2732,8 +2716,8 @@ msgid ""
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
 msgstr ""
-"elenca solo gli ID dei pool per le sottoscrizioni applicabili utilizzate o "
-"disponibili; usato solo con --available e --consumed"
+"elenca solo gli ID dei pool per le sottoscrizioni applicabili disponibili o "
+"usate; usato solo con --available e --consumed"
 
 #: src/subscription_manager/cli_command/list.py:285
 #, python-brace-format
@@ -2826,8 +2810,8 @@ msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
 msgstr ""
-"Nessun pool di sottoscrizione consumato corrisponde all'espressione "
-"\"{filter}\" e al livello di servizio \"{level}\"."
+"Nessun pool di sottoscrizione usato corrisponde all'espressione \"{filter}\" "
+"e al livello di servizio \"{level}\"."
 
 #: src/subscription_manager/cli_command/list.py:541
 #, python-brace-format
@@ -2835,8 +2819,7 @@ msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\"."
 msgstr ""
-"Nessun pool di sottoscrizione consumato corrisponde all'espressione "
-"\"{filter}\"."
+"Nessun pool di sottoscrizione usato corrisponde all'espressione \"{filter}\"."
 
 #: src/subscription_manager/cli_command/list.py:548
 #, python-brace-format
@@ -2844,12 +2827,12 @@ msgid ""
 "No consumed subscription pools were found matching the service level "
 "\"{level}\"."
 msgstr ""
-"Nessun pool di sottoscrizione consumato corrisponde al livello di servizio "
-"\"{level}\"."
+"Nessun pool di sottoscrizione usato corrisponde al livello di servizio \""
+"{level}\"."
 
 #: src/subscription_manager/cli_command/list.py:552
 msgid "No consumed subscription pools were found."
-msgstr "Nessun pool di sottoscrizione consumato è stato trovato."
+msgstr "Nessun pool di sottoscrizione usato è stato trovato."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/org.py:35
@@ -3009,29 +2992,26 @@ msgstr "Visualizza e configura con \"subscription-manager plugins\""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/plugins.py:31
-#, fuzzy, python-brace-format
-#| msgid "list %s plugins"
+#, python-brace-format
 msgid "list {SM} plugins"
-msgstr "elenca i plugin {SM}"
+msgstr "elenca i plugin di {SM}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/plugins.py:34
-#, fuzzy, python-brace-format
-#| msgid "list %s plugin slots"
+#, python-brace-format
 msgid "list {SM} plugin slots"
-msgstr "elenca gli slot per il plugin {SM}"
+msgstr "elenca gli slot per il plugin di {SM}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/plugins.py:37
-#, fuzzy, python-brace-format
-#| msgid "list %s plugin hooks"
+#, python-brace-format
 msgid "list {SM} plugin hooks"
-msgstr "elenca gli hook per il plugin {SM}"
+msgstr "elenca gli hook per i plugin di {SM}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/plugins.py:40
 msgid "show verbose plugin info"
-msgstr "mostra le informazioni dettagliate sul plugin"
+msgstr "mostra le informazioni dettagliate sui plugin"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/plugins.py:53
@@ -3206,10 +3186,8 @@ msgstr ""
 "serie:"
 
 #: src/subscription_manager/cli_command/register.py:220
-#, fuzzy
-#| msgid "Uploading package profile"
 msgid "Uploading DNF profile"
-msgstr "Caricamento profilo pacchetto"
+msgstr "Invio del profilo di DNF"
 
 #: src/subscription_manager/cli_command/register.py:290
 #: src/subscription_manager/cli_command/unregister.py:41
@@ -3444,11 +3422,10 @@ msgstr "Impossibile rimuovere a causa della seguente eccezione: {e}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/remove.py:182
-#, fuzzy, python-brace-format
-#| msgid "{total} subscriptions removed from this system."
+#, python-brace-format
 msgid "{total} subscription removed from this system."
 msgid_plural "{total} subscriptions removed from this system."
-msgstr[0] "{total} sottoscrizioni rimosse da questo sistema."
+msgstr[0] "{total} sottoscrizione rimossa da questo sistema."
 msgstr[1] "{total} sottoscrizioni rimosse da questo sistema."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -3634,7 +3611,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/status.py:145
 #, python-brace-format
 msgid "System Purpose Status: {status}"
-msgstr "Stato scopo del sistema: {status}"
+msgstr "Stato dello scopo di sistema: {status}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
@@ -3644,7 +3621,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/syspurpose.py:59
 msgid "show current system purpose"
-msgstr "mostra lo scopo di sistema corrente"
+msgstr "mostra l'attuale scopo di sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:76
@@ -3889,7 +3866,7 @@ msgstr ""
 
 #: src/subscription_manager/exceptions.py:58
 msgid "The server rate limit has been exceeded, please try again later."
-msgstr "Limite velocità server superato. Riprova in seguito."
+msgstr "Limite velocità server superato, riprova in seguito."
 
 #: src/subscription_manager/exceptions.py:59
 #, python-brace-format
@@ -3930,10 +3907,7 @@ msgid "{message} (HTTP error code {code}: {title})"
 msgstr "{message} (codice d'errore HTTP {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:168
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The server rate limit has been exceeded, please try again later. (Expires "
-#| "in %s seconds)"
+#, python-brace-format
 msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} second)"
@@ -3941,11 +3915,11 @@ msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
 msgstr[0] ""
-"Limite velocità server superato. Riprova in seguito. (%s secondi alla "
-"scadenza)"
+"Limite velocità server superato, riprova in seguito ({time} secondo alla "
+"scadenza)."
 msgstr[1] ""
-"Limite velocità server superato. Riprova in seguito. (%s secondi alla "
-"scadenza)"
+"Limite velocità server superato, riprova in seguito ({time} secondi alla "
+"scadenza)."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:50
@@ -4025,7 +3999,7 @@ msgstr "Cancellato"
 
 #: src/subscription_manager/scripts/package_profile_upload.py:29
 msgid "Upload a package profile"
-msgstr "Carica un profilo di pacchetti"
+msgstr "Invia un profilo di pacchetti"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/scripts/package_profile_upload.py:53
@@ -4037,7 +4011,7 @@ msgstr "Processo interrotto dall'utente."
 #: src/subscription_manager/scripts/package_profile_upload.py:56
 #, python-format
 msgid "Error uploading package profile: %s\n"
-msgstr ""
+msgstr "Errore durante l'invio del profilo di pacchetti: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:198
