@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-26 15:00+0100\n"
+"POT-Creation-Date: 2023-05-02 13:20+0200\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Gujarati\n"
@@ -290,7 +290,7 @@ msgstr "અયોગ્ય વિકલ્પ: %s\n"
 msgid "Invalid argument specified: %s\n"
 msgstr "સ્પષ્ટ થયેલ અયોગ્ય દલીલ: %s\n"
 
-#: src/plugins/dnf/product-id.py:76
+#: src/plugins/dnf/product-id.py:77
 msgid "Installed products updated."
 msgstr ""
 
@@ -340,26 +340,30 @@ msgstr ""
 #: src/plugins/dnf/subscription-manager.py:115
 #, python-format
 msgid ""
+"subscription-manager plugin disabled %d system repository with respect of "
+"configuration in /etc/dnf/plugins/subscription-manager.conf"
+msgid_plural ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
-msgstr ""
+msgstr[0] ""
+msgstr[1] ""
 
-#: src/plugins/dnf/subscription-manager.py:130
+#: src/plugins/dnf/subscription-manager.py:133
 msgid "Updating Subscription Management repositories."
 msgstr ""
 
-#: src/plugins/dnf/subscription-manager.py:135
+#: src/plugins/dnf/subscription-manager.py:138
 msgid "Unable to read consumer identity"
 msgstr ""
 
-#: src/plugins/dnf/subscription-manager.py:138
+#: src/plugins/dnf/subscription-manager.py:141
 msgid "Subscription Manager is operating in container mode."
 msgstr ""
 
 #: src/plugins/dnf/upload-profile.py:37
 msgid ""
-"Upload combined profile to Satellite server (list of installed rpms, enabled "
-"repositories and modules"
+"Upload combined profile to Satellite server (list of installed RPMs, enabled "
+"repositories and modules)"
 msgstr ""
 
 #: src/plugins/dnf/upload-profile.py:49
@@ -489,7 +493,7 @@ msgstr "સાંકેતિક કડીને ટ્રેસ કરવાન
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:139
+#: src/rct/manifest_commands.py:138
 #, fuzzy, python-format, python-brace-format
 #| msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
 msgid "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
@@ -497,188 +501,188 @@ msgstr "%%prog %s [વિકલ્પો] MANIFEST_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:144
+#: src/rct/manifest_commands.py:143
 msgid "You must specify a manifest file."
 msgstr "તમારે મેનિફેસ્ટ ફાઇલને સ્પષ્ટ કરવી જ જોઇએ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:147
+#: src/rct/manifest_commands.py:146
 msgid "The specified manifest file does not exist."
 msgstr "ખાસ મેનિફેસ્ટ ફાઇલ અસ્તિત્વ ધરાવતુ નથી."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:173
+#: src/rct/manifest_commands.py:172
 msgid "Print manifest information"
 msgstr "મેનિફેસ્ટ જાણકારીને છાપો"
 
-#: src/rct/manifest_commands.py:180
+#: src/rct/manifest_commands.py:179
 msgid "skip printing Content Sets"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:201
+#: src/rct/manifest_commands.py:200
 msgid "Server"
 msgstr "સર્વર"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:202
+#: src/rct/manifest_commands.py:201
 msgid "Server Version"
 msgstr "સર્વર આવૃત્તિ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:203
+#: src/rct/manifest_commands.py:202
 msgid "Date Created"
 msgstr "બનાવેલ તારીખ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:204
+#: src/rct/manifest_commands.py:203
 msgid "Creator"
 msgstr "નિર્માતા"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:205
+#: src/rct/manifest_commands.py:204
 msgid "General:"
 msgstr "સામાન્ય:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/manifest_commands.py:212 src/rct/manifest_commands.py:243
-#: src/rct/printing.py:40 src/rct/printing.py:67 src/rct/printing.py:99
+#: src/rct/manifest_commands.py:211 src/rct/manifest_commands.py:242
+#: src/rct/printing.py:40 src/rct/printing.py:66 src/rct/printing.py:98
 msgid "Name"
 msgstr "નામ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:213
+#: src/rct/manifest_commands.py:212
 msgid "UUID"
 msgstr "UUID"
 
-#: src/rct/manifest_commands.py:218
+#: src/rct/manifest_commands.py:217
 msgid "Content Access Mode"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:219 src/rct/printing.py:98
+#: src/rct/manifest_commands.py:218 src/rct/printing.py:97
 msgid "Type"
 msgstr "પ્રકાર"
 
-#: src/rct/manifest_commands.py:220
+#: src/rct/manifest_commands.py:219
 msgid "API URL"
 msgstr ""
 
-#: src/rct/manifest_commands.py:221
+#: src/rct/manifest_commands.py:220
 msgid "Web URL"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:222
+#: src/rct/manifest_commands.py:221
 msgid "Consumer:"
 msgstr "ગ્રાહક:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:236
+#: src/rct/manifest_commands.py:235
 msgid "Subscriptions:"
 msgstr "ઉમેદવારીઓ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/manifest_commands.py:244 src/rct/printing.py:80
+#: src/rct/manifest_commands.py:243 src/rct/printing.py:79
 msgid "Quantity"
 msgstr "ગુણવત્તા"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:245
+#: src/rct/manifest_commands.py:244
 msgid "Created"
 msgstr "બનાવેલ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/manifest_commands.py:246 src/rct/printing.py:122
+#: src/rct/manifest_commands.py:245 src/rct/printing.py:121
 msgid "Start Date"
 msgstr "શરૂઆતની તારીખ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/manifest_commands.py:247 src/rct/printing.py:123
+#: src/rct/manifest_commands.py:246 src/rct/printing.py:122
 msgid "End Date"
 msgstr "અંતિમ તારીખ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/manifest_commands.py:248 src/rct/printing.py:74
+#: src/rct/manifest_commands.py:247 src/rct/printing.py:73
 msgid "Service Level"
 msgstr "સેવા સ્તર"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/manifest_commands.py:249 src/rct/printing.py:72
+#: src/rct/manifest_commands.py:248 src/rct/printing.py:71
 msgid "Service Type"
 msgstr "સેવા પ્રકાર"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:250
+#: src/rct/manifest_commands.py:249
 msgid "Architectures"
 msgstr "આર્કિટેક્ચર"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/manifest_commands.py:251 src/rct/printing.py:69
+#: src/rct/manifest_commands.py:250 src/rct/printing.py:68
 msgid "SKU"
 msgstr "SKU"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:252 src/rct/printing.py:70
+#: src/rct/manifest_commands.py:251 src/rct/printing.py:69
 msgid "Contract"
 msgstr "કરાર"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/manifest_commands.py:253 src/rct/printing.py:66
+#: src/rct/manifest_commands.py:252 src/rct/printing.py:65
 msgid "Order"
 msgstr "ક્રમ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:254 src/rct/printing.py:71
+#: src/rct/manifest_commands.py:253 src/rct/printing.py:70
 msgid "Account"
 msgstr "ખાતુ"
 
-#: src/rct/manifest_commands.py:256
+#: src/rct/manifest_commands.py:255
 msgid "Virt Limit"
 msgstr ""
 
-#: src/rct/manifest_commands.py:260
+#: src/rct/manifest_commands.py:259
 msgid "Requires Virt-who"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:263
+#: src/rct/manifest_commands.py:262
 msgid "Entitlement File"
 msgstr "ઉમેદવારી ફાઇલ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:268
+#: src/rct/manifest_commands.py:267
 msgid "Certificate File"
 msgstr "પ્રમાણપત્ર ફાઇલ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/manifest_commands.py:274
+#: src/rct/manifest_commands.py:273
 #, fuzzy, python-brace-format
 #| msgid "Unable to read certificate file '%s': %s"
 msgid "Unable to read certificate file '{certificate_file}': {exception}"
@@ -686,59 +690,59 @@ msgstr "પ્રમાણપત્ર ફાઇલ '%s' ને વાંચવ�
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:278
+#: src/rct/manifest_commands.py:277
 msgid "Certificate Version"
 msgstr "પ્રમાણપત્ર આવૃત્તિ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:280
+#: src/rct/manifest_commands.py:279
 msgid "Subscription:"
 msgstr "ઉમેદવારી:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:285
+#: src/rct/manifest_commands.py:284
 msgid "Provided Products:"
 msgstr "પૂરી પાડેલ પ્રોડક્ટો:"
 
-#: src/rct/manifest_commands.py:293
+#: src/rct/manifest_commands.py:292
 msgid "Derived Products:"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:298
+#: src/rct/manifest_commands.py:297
 msgid "Content Sets:"
 msgstr "સમાવિષ્ટ સુયોજનો:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:309
+#: src/rct/manifest_commands.py:308
 msgid "\tManifest"
 msgstr "\tમેનિફેસ્ટ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:323
+#: src/rct/manifest_commands.py:322
 msgid "Dump the contents of a manifest"
 msgstr "મેનિફેસ્ટનાં સમાવિષ્ટને ડમ્પ કરો"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:330
+#: src/rct/manifest_commands.py:329
 msgid "directory to extract the manifest to"
 msgstr "તેમાંથી મેનિફેસ્ટને કાઢવા ડિરેક્ટરી"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:338
+#: src/rct/manifest_commands.py:337
 msgid "overwrite files which may exist"
 msgstr "ફાઇલો પર લખો કે જેનું અસ્તિત્વ છે"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:349
+#: src/rct/manifest_commands.py:348
 #, fuzzy, python-brace-format
 #| msgid "File \"%s\" exists. Use -f to force overwriting the file."
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
@@ -746,13 +750,13 @@ msgstr "ફાઇલ \"%s\" અસ્તિત્વમાં છે. ફાઇ�
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:355
+#: src/rct/manifest_commands.py:354
 msgid "Manifest could not be written:"
 msgstr "મેનિફેસ્ટને લખી શક્યા નહિં:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:369
+#: src/rct/manifest_commands.py:368
 #, fuzzy, python-brace-format
 #| msgid "The manifest has been dumped to the %s directory"
 msgid "The manifest has been dumped to the {destination} directory"
@@ -760,7 +764,7 @@ msgstr "મેનિફેસ્ટને %s ડિરેક્ટરીમા�
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/manifest_commands.py:375
+#: src/rct/manifest_commands.py:374
 msgid "The manifest has been dumped to the current directory"
 msgstr "મેનિફેસ્ટને વર્તમાન ડિરેક્ટરીમાં ડમ્પ કરી દેવામાં આવી છે"
 
@@ -778,7 +782,7 @@ msgstr "ID"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:41 src/rct/printing.py:120
+#: src/rct/printing.py:41 src/rct/printing.py:119
 msgid "Version"
 msgstr "આવૃત્તિ"
 
@@ -804,205 +808,205 @@ msgstr "બ્રાન્ડ નામ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:68
+#: src/rct/printing.py:67
 msgid "Number"
 msgstr "નંબર"
 
-#: src/rct/printing.py:73
+#: src/rct/printing.py:72
 msgid "Roles"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:75
+#: src/rct/printing.py:74
 msgid "Usage"
 msgstr "વપરાશ"
 
-#: src/rct/printing.py:76
+#: src/rct/printing.py:75
 msgid "Add-ons"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:79 src/subscription_manager/managerlib.py:417
+#: src/rct/printing.py:78 src/subscription_manager/managerlib.py:431
 msgid "Unlimited"
 msgstr "અમર્યાદિત"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:81
+#: src/rct/printing.py:80
 msgid "Quantity Used"
 msgstr "વાપરેલ ગુણવત્તા"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:82
+#: src/rct/printing.py:81
 msgid "Socket Limit"
 msgstr "સોકેટ મર્યાદા"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:83
+#: src/rct/printing.py:82
 msgid "RAM Limit"
 msgstr "RAM મર્યાદા"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/printing.py:84
+#: src/rct/printing.py:83
 msgid "Core Limit"
 msgstr "કૉર મર્યાદા"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:85
+#: src/rct/printing.py:84
 msgid "Virt Only"
 msgstr "ફક્ત વર્ચ્યુઅલાઇઝેશન"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:86
+#: src/rct/printing.py:85
 msgid "Stacking ID"
 msgstr "સ્ટેકીંગ ID"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:87
+#: src/rct/printing.py:86
 msgid "Warning Period"
 msgstr "ચેતવણી સમયગાળો"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:88
+#: src/rct/printing.py:87
 msgid "Provides Management"
 msgstr "સંચાલનને પૂરુ પાડે છે"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/printing.py:96
+#: src/rct/printing.py:95
 msgid "Content"
 msgstr "સમાવિષ્ટ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:100
+#: src/rct/printing.py:99
 msgid "Label"
 msgstr "લેબલ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:101
+#: src/rct/printing.py:100
 msgid "Vendor"
 msgstr "વિક્રેતા"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/printing.py:102
+#: src/rct/printing.py:101
 msgid "URL"
 msgstr "URL"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:103
+#: src/rct/printing.py:102
 msgid "GPG"
 msgstr "GPG"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:104
+#: src/rct/printing.py:103
 msgid "Enabled"
 msgstr "સક્રિય"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/printing.py:105
+#: src/rct/printing.py:104
 msgid "Expires"
 msgstr "નિવૃત્તિ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:106
+#: src/rct/printing.py:105
 msgid "Required Tags"
 msgstr "જરૂરી ટૅગ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/printing.py:107
+#: src/rct/printing.py:106
 msgid "Arches"
 msgstr "આર્કિટેક્ચર"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:118
+#: src/rct/printing.py:117
 msgid "Certificate:"
 msgstr "પ્રમાણપત્ર:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:119
+#: src/rct/printing.py:118
 msgid "Path"
 msgstr "પાથ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:121
+#: src/rct/printing.py:120
 msgid "Serial"
 msgstr "શ્રેણી"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:134
+#: src/rct/printing.py:133
 msgid "Subject:"
 msgstr "વિષય:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/printing.py:141
+#: src/rct/printing.py:140
 msgid "Issuer:"
 msgstr "રજૂકર્તા:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:163
+#: src/rct/printing.py:162
 msgid "Alt Name"
 msgstr "Alt નામ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/printing.py:218 src/rhsmlib/services/entitlement.py:297
+#: src/rct/printing.py:217 src/rhsmlib/services/entitlement.py:298
 msgid "Not Available"
 msgstr "ઉપલબ્ધ નથી"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rct/printing.py:221
+#: src/rct/printing.py:220
 msgid "Pool ID"
 msgstr "પુલ ID"
 
-#: src/rct/printing.py:225
+#: src/rct/printing.py:224
 msgid "Authorized Content URLs:"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:245
+#: src/rct/printing.py:244
 msgid "Entitlement Certificate"
 msgstr "એંટાઇટેલમેંટ પ્રમાણપત્ર"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:247
+#: src/rct/printing.py:246
 msgid "Product Certificate"
 msgstr "પ્રોડક્ટ પ્રમાણપત્ર"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:249
+#: src/rct/printing.py:248
 msgid "Identity Certificate"
 msgstr "ઓળખ પ્રમાણપત્ર"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rct/printing.py:251
+#: src/rct/printing.py:250
 msgid "Unknown Certificate Type"
 msgstr "અજ્ઞાત પ્રમાણપત્ર પ્રકાર"
 
@@ -1022,37 +1026,37 @@ msgstr ""
 msgid "Valid Values: {valid_str}"
 msgstr ""
 
-#: src/rhsm/connection.py:1380
+#: src/rhsm/connection.py:1402
 msgid "Fetching supported resources"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsm/connection.py:1439
+#: src/rhsm/connection.py:1461
 #, fuzzy
 #| msgid "connectionStatusLabel"
 msgid "Checking connection status"
 msgstr "connectionStatusLabel"
 
-#: src/rhsm/connection.py:1467
+#: src/rhsm/connection.py:1489
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1540
+#: src/rhsm/connection.py:1562
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "સિસ્ટમ રજીસ્ટર કરો"
 
-#: src/rhsm/connection.py:1570 src/rhsm/connection.py:1582
+#: src/rhsm/connection.py:1592 src/rhsm/connection.py:1604
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsm/connection.py:1605
+#: src/rhsm/connection.py:1627
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
@@ -1060,7 +1064,7 @@ msgstr "આવૃત્તિ જાણકારીને છાપો"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsm/connection.py:1680
+#: src/rhsm/connection.py:1702
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
@@ -1068,13 +1072,13 @@ msgstr "ઉમેદવારી રજીસ્ટ્રેશન"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsm/connection.py:1685 src/rhsm/connection.py:1689
+#: src/rhsm/connection.py:1707 src/rhsm/connection.py:1711
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
 msgstr "મેનિફેસ્ટ જાણકારીને છાપો"
 
-#: src/rhsm/connection.py:1693
+#: src/rhsm/connection.py:1715
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
@@ -1082,31 +1086,31 @@ msgstr "દૂર કરી રહ્યા છીએ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1723 src/rhsm/connection.py:1734
+#: src/rhsm/connection.py:1745 src/rhsm/connection.py:1756
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "પ્રમાણપત્ર જાણકારી છાપો"
 
-#: src/rhsm/connection.py:1742
+#: src/rhsm/connection.py:1764
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1751
+#: src/rhsm/connection.py:1773
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1760
+#: src/rhsm/connection.py:1782
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1767
+#: src/rhsm/connection.py:1789
 msgid "Fetching available system purpose settings"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsm/connection.py:1774 src/rhsm/connection.py:1782
+#: src/rhsm/connection.py:1796 src/rhsm/connection.py:1804
 #, fuzzy
 #| msgid "specify organization"
 msgid "Fetching organizations"
@@ -1114,7 +1118,7 @@ msgstr "સંસ્થાને સ્પષ્ટ કરો"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1795
+#: src/rhsm/connection.py:1817
 #, fuzzy
 #| msgid "Register System"
 msgid "Unregistering system"
@@ -1122,23 +1126,23 @@ msgstr "સિસ્ટમ રજીસ્ટર કરો"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1808
+#: src/rhsm/connection.py:1830
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "ઓળખ પ્રમાણપત્ર"
 
-#: src/rhsm/connection.py:1817
+#: src/rhsm/connection.py:1839
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1833
+#: src/rhsm/connection.py:1855
 msgid "Fetching content for a certificate"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1846 src/rhsm/connection.py:1863
+#: src/rhsm/connection.py:1868 src/rhsm/connection.py:1885
 #, fuzzy
 #| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
@@ -1146,20 +1150,20 @@ msgstr "ઉમેદવારીઓ સાથે જોડાઇ રહ્યા
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1872 src/rhsm/connection.py:1882
-#: src/rhsm/connection.py:1891
+#: src/rhsm/connection.py:1894 src/rhsm/connection.py:1904
+#: src/rhsm/connection.py:1913
 #, fuzzy
 #| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
 msgstr "ઉમેદવારી કરતી વખતે ભૂલ: %s"
 
-#: src/rhsm/connection.py:1940
+#: src/rhsm/connection.py:1962
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsm/connection.py:1951
+#: src/rhsm/connection.py:1973
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
@@ -1167,7 +1171,7 @@ msgstr "આવૃત્તિ જાણકારીને છાપો"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1965
+#: src/rhsm/connection.py:1987
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
@@ -1175,7 +1179,7 @@ msgstr "ઉપલબ્ધ પ્રકાશનોની યાદી કરો
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsm/connection.py:1980
+#: src/rhsm/connection.py:2002
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
@@ -1183,7 +1187,7 @@ msgstr "શક્ય પર્યાવરણોની યાદીને લા
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1989
+#: src/rhsm/connection.py:2011
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
@@ -1191,7 +1195,7 @@ msgstr "સેવા સ્તરને વાપરી રહ્યા છે:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsm/connection.py:2000
+#: src/rhsm/connection.py:2022
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
@@ -1199,7 +1203,7 @@ msgstr "શક્ય પર્યાવરણોની યાદીને લા
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:2010
+#: src/rhsm/connection.py:2032
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Updating certificate"
@@ -1207,38 +1211,46 @@ msgstr "ઓળખ પ્રમાણપત્ર"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsm/connection.py:2029
+#: src/rhsm/connection.py:2051
 #, fuzzy
 #| msgid "Import Certificates"
 msgid "Updating certificates"
 msgstr "પ્રમાણપત્રોને આયાત કરો"
 
-#: src/rhsm/connection.py:2048
+#: src/rhsm/connection.py:2070
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2056
+#: src/rhsm/connection.py:2078
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2067
+#: src/rhsm/connection.py:2089
 msgid "Updating content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2080
+#: src/rhsm/connection.py:2102
 #, fuzzy
 #| msgid "Remove All Overrides"
 msgid "Removing content overrides"
 msgstr "બધા ઓવરરાઇડો દૂર કરો"
 
-#: src/rhsm/connection.py:2096
+#: src/rhsm/connection.py:2118
 msgid "Activating"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
+#: src/rhsm/connection.py:2127
+#, fuzzy
+#| msgid "Cancel"
+msgid "Fetching job"
+msgstr "રદ કરો"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
 #: src/rhsm_debug/debug_commands.py:39
-#: src/subscription_manager/cli_command/cli.py:50
+#: src/subscription_manager/cli_command/cli.py:51
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
@@ -1322,88 +1334,94 @@ msgstr[1] ""
 msgid "Error: Unable to load bus '{name}'"
 msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#: src/rhsmlib/services/entitlement.py:51
-msgid "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-msgstr "દાખલ થયેલ તારીખ અયોગ્ય છે. તારીખ YYYY-MM-DD બંધારણમાં હોવી જોઇએ (ઉદાહરણ: "
+#: src/rhsmlib/services/entitlement.py:52
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+#| "{dateexample})"
+msgid ""
+"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+"{date})"
+msgstr ""
+"દાખલ થયેલ તારીથ અયોગ્ય છે. તારીખ YYYY-MM-DD બંધારણમાં હોવી જોઇએ (ઉદાહરણ: "
+"{dateexample})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsmlib/services/entitlement.py:56
+#: src/rhsmlib/services/entitlement.py:57
 msgid "Past dates are not allowed"
 msgstr "ભૂતકાળની તારીખોને પરવાનગી મળેલ નથી"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsmlib/services/entitlement.py:93
-#: src/rhsmlib/services/syspurpose.py:106
-#: src/subscription_manager/cert_sorter.py:283
-#: src/subscription_manager/cli_command/cli.py:232
-#: src/subscription_manager/cli_command/cli.py:236
+#: src/rhsmlib/services/entitlement.py:94
+#: src/rhsmlib/services/syspurpose.py:107
+#: src/subscription_manager/cert_sorter.py:296
+#: src/subscription_manager/cli_command/cli.py:233
 #: src/subscription_manager/cli_command/cli.py:237
 #: src/subscription_manager/cli_command/cli.py:238
+#: src/subscription_manager/cli_command/cli.py:239
 #: src/subscription_manager/cli_command/facts.py:66
 #: src/subscription_manager/cli_command/list.py:54
-#: src/subscription_manager/reasons.py:109
-#: src/subscription_manager/utils.py:252 src/subscription_manager/utils.py:268
-#: src/subscription_manager/utils.py:270 src/subscription_manager/utils.py:290
-#: src/subscription_manager/utils.py:292 src/subscription_manager/utils.py:311
+#: src/subscription_manager/reasons.py:110
+#: src/subscription_manager/utils.py:269 src/subscription_manager/utils.py:285
+#: src/subscription_manager/utils.py:287 src/subscription_manager/utils.py:307
+#: src/subscription_manager/utils.py:309 src/subscription_manager/utils.py:328
 msgid "Unknown"
 msgstr "અજ્ઞાત"
 
-#: src/rhsmlib/services/entitlement.py:123 src/rhsmlib/services/register.py:61
+#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:61
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:288
+#: src/rhsmlib/services/entitlement.py:289
 #: src/subscription_manager/cli_command/list.py:428
 msgid "Virtual"
 msgstr "વર્ચ્યુઅલ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:290
+#: src/rhsmlib/services/entitlement.py:291
 #: src/subscription_manager/cli_command/list.py:430
 msgid "Physical"
 msgstr "ભૌતિક"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsmlib/services/entitlement.py:293
+#: src/rhsmlib/services/entitlement.py:294
 #: src/subscription_manager/cli_command/list.py:433
 msgid "Yes"
 msgstr "હાં"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsmlib/services/entitlement.py:295
+#: src/rhsmlib/services/entitlement.py:296
 #: src/subscription_manager/cli_command/list.py:435
 msgid "No"
 msgstr "ના"
 
-#: src/rhsmlib/services/entitlement.py:315
+#: src/rhsmlib/services/entitlement.py:316
 msgid "Subscription is current"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:318
+#: src/rhsmlib/services/entitlement.py:319
 msgid "Subscription is expired"
 msgstr ""
 
-#: src/rhsmlib/services/entitlement.py:320
+#: src/rhsmlib/services/entitlement.py:321
 msgid "Subscription has not begun"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsmlib/services/entitlement.py:322
+#: src/rhsmlib/services/entitlement.py:323
 msgid "Subscription management service doesn't support Status Details."
 msgstr "ઉમેદવારી સંચાલન સેવા સ્થિતિ વિગતોને આધાર આપતુ નથી."
 
-#: src/rhsmlib/services/entitlement.py:491
+#: src/rhsmlib/services/entitlement.py:492
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
@@ -1411,42 +1429,42 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:496
+#: src/rhsmlib/services/entitlement.py:497
 #: src/subscription_manager/cli_command/list.py:292
 msgid "Error: --all is only applicable with --available"
 msgstr "ભૂલ: --all એ ફક્ત --available સાથે લાગુ પડે તેમ છે"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsmlib/services/entitlement.py:498
+#: src/rhsmlib/services/entitlement.py:499
 #: src/subscription_manager/cli_command/list.py:294
 msgid "Error: --ondate is only applicable with --available"
 msgstr "ભૂલ : --ondate એ ફક્ત --available સાથે લાગુ પડે તેમ છે"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/rhsmlib/services/entitlement.py:503
+#: src/rhsmlib/services/entitlement.py:504
 #: src/subscription_manager/cli_command/list.py:297
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "ભૂલ: --servicelevel એ ફક્ત --available અથવા --consumed સાથે ફક્ત સક્ષમ છે"
 
-#: src/rhsmlib/services/entitlement.py:507
+#: src/rhsmlib/services/entitlement.py:508
 #: src/subscription_manager/cli_command/list.py:302
 msgid "Error: --match-installed is only applicable with --available"
 msgstr "ભૂલ: --match-installed એ ફક્ત --available સાથે સક્ષમ છે"
 
-#: src/rhsmlib/services/entitlement.py:510
+#: src/rhsmlib/services/entitlement.py:511
 #: src/subscription_manager/cli_command/list.py:304
 msgid "Error: --no-overlap is only applicable with --available"
 msgstr "ભૂલ: --no-overlap ફક્ત --available સાથે સક્ષમ છે"
 
-#: src/rhsmlib/services/entitlement.py:515
+#: src/rhsmlib/services/entitlement.py:516
 #: src/subscription_manager/cli_command/list.py:307
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr "ભૂલ: --pool-only એ ફક્ત --available અને/અથવા --consumed સાથે વાપરેલ છે"
 
-#: src/rhsmlib/services/entitlement.py:518
+#: src/rhsmlib/services/entitlement.py:519
 msgid "Error: this system is not registered"
 msgstr ""
 
@@ -1501,25 +1519,26 @@ msgstr "ભૂલ: સ્પષ્ટ કરવા માટે સક્રિ�
 msgid "Error: Missing username or password."
 msgstr ""
 
-#: src/rhsmlib/services/syspurpose.py:99 src/rhsmlib/services/syspurpose.py:102
+#: src/rhsmlib/services/syspurpose.py:100
+#: src/rhsmlib/services/syspurpose.py:103
 msgid "Matched"
 msgstr ""
 
-#: src/rhsmlib/services/syspurpose.py:100
-#: src/rhsmlib/services/syspurpose.py:103
+#: src/rhsmlib/services/syspurpose.py:101
+#: src/rhsmlib/services/syspurpose.py:104
 msgid "Mismatched"
 msgstr ""
 
-#: src/rhsmlib/services/syspurpose.py:101
+#: src/rhsmlib/services/syspurpose.py:102
 msgid "Partial"
 msgstr ""
 
-#: src/rhsmlib/services/syspurpose.py:104
+#: src/rhsmlib/services/syspurpose.py:105
 msgid "Not Specified"
 msgstr ""
 
-#: src/rhsmlib/services/syspurpose.py:105
-#: src/subscription_manager/cert_sorter.py:282
+#: src/rhsmlib/services/syspurpose.py:106
+#: src/subscription_manager/cert_sorter.py:295
 msgid "Disabled"
 msgstr ""
 
@@ -1545,7 +1564,7 @@ msgstr "આ સિસ્ટમ સ્પૅસવોકમાં રજીસ્
 # document keys
 #: src/subscription_manager/branding/__init__.py:81
 #: src/subscription_manager/branding/redhat_branding.py:14
-#: src/subscription_manager/managercli.py:91
+#: src/subscription_manager/managercli.py:96
 msgid "WARNING"
 msgstr "ચેતવણી"
 
@@ -1672,7 +1691,7 @@ msgid ""
 "forgot_password"
 msgstr ""
 
-#: src/subscription_manager/cache.py:162
+#: src/subscription_manager/cache.py:176
 #, python-brace-format
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
@@ -1681,25 +1700,25 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cert_sorter.py:279
+#: src/subscription_manager/cert_sorter.py:292
 msgid "Current"
 msgstr "વર્તમાન"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cert_sorter.py:280
+#: src/subscription_manager/cert_sorter.py:293
 msgid "Insufficient"
 msgstr "અપૂરતુ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cert_sorter.py:281
+#: src/subscription_manager/cert_sorter.py:294
 msgid "Invalid"
 msgstr "અયોગ્ય"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli.py:79
+#: src/subscription_manager/cli.py:83
 #, fuzzy, python-format, python-brace-format
 #| msgid "%prog [OPTIONS]"
 msgid "%(prog)s {name} [OPTIONS]"
@@ -1707,20 +1726,20 @@ msgstr "%prog [વિકલ્પો]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli.py:119
+#: src/subscription_manager/cli.py:123
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
 msgstr "વપરાશ: %s મોડ્યુલ-નામ [મોડ્યુલ-વિકલ્પો] [--help]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cli.py:131
+#: src/subscription_manager/cli.py:138
 msgid "Primary Modules:"
 msgstr "પ્રાથમિક મોડ્યુલો:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli.py:133
+#: src/subscription_manager/cli.py:140
 msgid "Other Modules:"
 msgstr "બીજા મોડ્યુલો:"
 
@@ -1858,7 +1877,7 @@ msgid "Available {syspurpose_attr}"
 msgstr ""
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:401
-#: src/subscription_manager/cli_command/service_level.py:215
+#: src/subscription_manager/cli_command/service_level.py:213
 #, python-brace-format
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
@@ -2095,18 +2114,18 @@ msgstr "સર્વરને અસર કરતા પહેલાં બધ�
 msgid "All local data removed"
 msgstr "દૂર થયેલ બધી સ્થાનિક માહિતી"
 
-#: src/subscription_manager/cli_command/cli.py:130
+#: src/subscription_manager/cli_command/cli.py:131
 #, python-brace-format
 msgid ""
 "Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
 
-#: src/subscription_manager/cli_command/cli.py:151
+#: src/subscription_manager/cli_command/cli.py:152
 msgid "server URL in the form of https://hostname:port/prefix"
 msgstr "https://hostname:port/prefix ની રૂપમાં સર્વર URL"
 
-#: src/subscription_manager/cli_command/cli.py:158
+#: src/subscription_manager/cli_command/cli.py:159
 msgid ""
 "do not check the entitlement server SSL certificate against available "
 "certificate authorities"
@@ -2114,7 +2133,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cli_command/cli.py:169
+#: src/subscription_manager/cli_command/cli.py:170
 #, fuzzy
 #| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
@@ -2122,25 +2141,25 @@ msgstr "proxy_hostname:proxy_port નાં રૂપમાં પ્રોક�
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cli_command/cli.py:175
+#: src/subscription_manager/cli_command/cli.py:176
 msgid "user for HTTP proxy with basic authentication"
 msgstr "મૂળ સત્તાધિકરણ સાથે HTTP પ્રોક્સી માટે વપરાશકર્તા"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cli_command/cli.py:181
+#: src/subscription_manager/cli_command/cli.py:182
 msgid "password for HTTP proxy with basic authentication"
 msgstr "મૂળ સત્તાધિકરમ સાથે HTTP પ્રોક્સી માટે પાસવર્ડ"
 
-#: src/subscription_manager/cli_command/cli.py:187
+#: src/subscription_manager/cli_command/cli.py:188
 msgid "host suffixes that should bypass HTTP proxy"
 msgstr ""
 
-#: src/subscription_manager/cli_command/cli.py:196
+#: src/subscription_manager/cli_command/cli.py:197
 msgid "Do not display progress messages"
 msgstr ""
 
-#: src/subscription_manager/cli_command/cli.py:208
+#: src/subscription_manager/cli_command/cli.py:209
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
@@ -2185,11 +2204,11 @@ msgstr "ભૂલ: ઉમેદવારી સેવા માટે CA પ્�
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:423
+#: src/subscription_manager/cli_command/cli.py:422
 msgid "System certificates corrupted. Please reregister."
 msgstr "સિસ્ટમ પ્રમાણપત્રો બગડી ગયા. મહેરબાની કરીને રજીસ્ટર કરો."
 
-#: src/subscription_manager/cli_command/cli.py:434
+#: src/subscription_manager/cli_command/cli.py:433
 #, python-brace-format
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
@@ -2323,7 +2342,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
 #: src/subscription_manager/cli_command/environments.py:90
-#: src/subscription_manager/cli_command/register.py:458
+#: src/subscription_manager/cli_command/register.py:460
 msgid "Error: Server does not support environments."
 msgstr "ભૂલ: સર્વર પર્યાવરણોને આધાર આપતુ નથી."
 
@@ -2488,8 +2507,8 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/subscription_manager/cli_command/identity.py:107
-#: src/subscription_manager/printing_utils.py:163
-#: src/subscription_manager/printing_utils.py:182
+#: src/subscription_manager/printing_utils.py:165
+#: src/subscription_manager/printing_utils.py:184
 msgid "None"
 msgstr "કંઇ નહિં"
 
@@ -3086,14 +3105,14 @@ msgid "specify an organization"
 msgstr "સંસ્થાને સ્પષ્ટ કરો"
 
 #: src/subscription_manager/cli_command/org.py:46
-#: src/subscription_manager/cli_command/register.py:520
+#: src/subscription_manager/cli_command/register.py:522
 msgid "Error: --org is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
 #: src/subscription_manager/cli_command/org.py:48
-#: src/subscription_manager/cli_command/register.py:525
+#: src/subscription_manager/cli_command/register.py:527
 msgid "Organization: "
 msgstr "સંસ્થા: "
 
@@ -3106,7 +3125,7 @@ msgid "Error: User {username} is not member of any organization."
 msgstr "%s ને કોઇપણ સંસ્થા સાથે રજીસ્ટર કરી શકાતુ નથી."
 
 #: src/subscription_manager/cli_command/org.py:74
-#: src/subscription_manager/cli_command/register.py:511
+#: src/subscription_manager/cli_command/register.py:513
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr ""
@@ -3218,13 +3237,13 @@ msgstr "સંસ્થાઓને દર્શાવો કે જેની �
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cli_command/owners.py:53
+#: src/subscription_manager/cli_command/owners.py:52
 msgid "Organizations"
 msgstr "સંસ્થાઓ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cli_command/owners.py:62
+#: src/subscription_manager/cli_command/owners.py:61
 #, fuzzy, python-brace-format
 #| msgid "%s cannot register with any organizations."
 msgid "{username} cannot register with any organizations."
@@ -3232,7 +3251,7 @@ msgstr "%s ને કોઇપણ સંસ્થા સાથે રજીસ�
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/owners.py:70
+#: src/subscription_manager/cli_command/owners.py:69
 msgid "Error: Unable to retrieve org list from server"
 msgstr "ભૂલ: સર્વરમાંથી સંસ્થા યાદીને પ્રાપ્ત કરવાનું અસમર્થ"
 
@@ -3433,7 +3452,7 @@ msgid "Error: The --type option has been deprecated and may not be used."
 msgstr ""
 
 #: src/subscription_manager/cli_command/register.py:176
-#: src/subscription_manager/cli_command/register.py:489
+#: src/subscription_manager/cli_command/register.py:491
 #, fuzzy
 #| msgid "This org does not have any environments."
 msgid "The entitlement server does not allow multiple environments"
@@ -3512,14 +3531,14 @@ msgstr "પર્યાવરણ: "
 msgid "Environment: "
 msgstr "પર્યાવરણ: "
 
-#: src/subscription_manager/cli_command/register.py:483
+#: src/subscription_manager/cli_command/register.py:485
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cli_command/register.py:499
+#: src/subscription_manager/cli_command/register.py:501
 #, fuzzy, python-brace-format
 #| msgid "%s cannot register with any organizations."
 msgid "{name} cannot register with any organizations."
@@ -3696,7 +3715,7 @@ msgstr[1] "%s ઉમેદવારીઓ સર્વર પર દૂર થ�
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/subscription_manager/cli_command/remove.py:170
-#: src/subscription_manager/cli_command/remove.py:200
+#: src/subscription_manager/cli_command/remove.py:206
 #, fuzzy, python-brace-format
 #| msgid "Unable to perform remove due to the following exception: %s"
 msgid "Unable to perform remove due to the following exception: {e}"
@@ -3704,15 +3723,17 @@ msgstr "નીચેનાં અપવાદ દરમ્યાન હટાવ
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:180
+#: src/subscription_manager/cli_command/remove.py:182
 #, fuzzy, python-brace-format
 #| msgid "%s subscriptions removed from this system."
-msgid "{total} subscriptions removed from this system."
-msgstr "આ સિસ્ટમમાંથી %s ઉમેદવારીઓ હટાવી દીધી."
+msgid "{total} subscription removed from this system."
+msgid_plural "{total} subscriptions removed from this system."
+msgstr[0] "આ સિસ્ટમમાંથી %s ઉમેદવારીઓ હટાવી દીધી."
+msgstr[1] "આ સિસ્ટમમાંથી %s ઉમેદવારીઓ હટાવી દીધી."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:192
+#: src/subscription_manager/cli_command/remove.py:198
 #, fuzzy, python-brace-format
 #| msgid "Subscription with serial number %s removed from this system"
 msgid "Subscription with serial number {serial} removed from this system"
@@ -3794,17 +3815,17 @@ msgstr "રિપોઝીટરી '%s' એ આ સિસ્ટમ માટે
 msgid "Show or modify the system purpose role setting"
 msgstr ""
 
-#: src/subscription_manager/cli_command/service_level.py:43
+#: src/subscription_manager/cli_command/service_level.py:42
 msgid "Show or modify the system purpose service-level setting"
 msgstr ""
 
-#: src/subscription_manager/cli_command/service_level.py:72
+#: src/subscription_manager/cli_command/service_level.py:70
 msgid "Error: --org is only supported with the --list or --set option"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cli_command/service_level.py:80
+#: src/subscription_manager/cli_command/service_level.py:78
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
@@ -3812,7 +3833,7 @@ msgstr ""
 "ભૂલ: તમારે રજીસ્ટર કરવુ જ જોઇએ અથવા સેવા સ્તરોની યાદી કરવા માટે --username અને --"
 "password ને સ્પષ્ટ કરો"
 
-#: src/subscription_manager/cli_command/service_level.py:101
+#: src/subscription_manager/cli_command/service_level.py:99
 msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
@@ -3820,33 +3841,33 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:128
+#: src/subscription_manager/cli_command/service_level.py:126
 msgid "Error: Unable to retrieve service levels."
 msgstr "ભૂલ: સેવા સ્તરને પાછુ લાવવાનું અસમર્થ."
 
-#: src/subscription_manager/cli_command/service_level.py:159
+#: src/subscription_manager/cli_command/service_level.py:157
 #, python-brace-format
 msgid "Service level set to: \"{val}\"."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cli_command/service_level.py:167
+#: src/subscription_manager/cli_command/service_level.py:165
 msgid "Service level preference has been unset"
 msgstr "સેવા સ્તર પસંદગી અસુયોજિત કરી દેવામાં આવી છે"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cli_command/service_level.py:174
-#: src/subscription_manager/cli_command/service_level.py:190
-#: src/subscription_manager/cli_command/service_level.py:224
-#: src/subscription_manager/cli_command/service_level.py:231
+#: src/subscription_manager/cli_command/service_level.py:172
+#: src/subscription_manager/cli_command/service_level.py:188
+#: src/subscription_manager/cli_command/service_level.py:222
+#: src/subscription_manager/cli_command/service_level.py:229
 msgid "Error: The service-level command is not supported by the server."
 msgstr "ભૂલ: સેવા-સ્તર આદેશ સર્વર દ્દારા આધારભૂત નથી."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:194
+#: src/subscription_manager/cli_command/service_level.py:192
 #, fuzzy, python-brace-format
 #| msgid "Current service level: %s"
 msgid "Current service level: {level}"
@@ -3854,13 +3875,13 @@ msgstr "વર્તમાન સેવા સ્તર: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/cli_command/service_level.py:196
+#: src/subscription_manager/cli_command/service_level.py:194
 msgid "Service level preference not set"
 msgstr "સેવા સ્તર પસંદગી સુયોજિત નથી"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:208
+#: src/subscription_manager/cli_command/service_level.py:206
 msgid "Available Service Levels"
 msgstr "ઉપલબ્ધ સેવા સ્તરો"
 
@@ -3941,7 +3962,7 @@ msgstr "%prog [વિકલ્પો]"
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/subscription_manager/cli_command/unregister.py:38
-#: src/subscription_manager/utils.py:269
+#: src/subscription_manager/utils.py:286
 msgid "This system is currently not registered."
 msgstr "આ સિસ્ટમ હાલમાં રજીસ્ટર થયેલ નથી."
 
@@ -4013,7 +4034,7 @@ msgstr "લવાજમ સંચાલન નિયમો: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/entcertlib.py:313
+#: src/subscription_manager/entcertlib.py:295
 #, python-format
 msgid "%s local certificate has been deleted."
 msgid_plural "%s local certificates have been deleted."
@@ -4022,41 +4043,41 @@ msgstr[1] "%s સ્થાનિક પ્રમાણપત્રને કા�
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:470
+#: src/subscription_manager/entcertlib.py:452
 #, python-format
 msgid "Total updates: %d"
 msgstr "કુલ સુધારાઓ: %d"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:471
+#: src/subscription_manager/entcertlib.py:453
 #, python-format
 msgid "Found (local) serial# %s"
 msgstr "(સ્થાનિક) શ્રેણી# %s મળી"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:472
+#: src/subscription_manager/entcertlib.py:454
 #, python-format
 msgid "Expected (UEP) serial# %s"
 msgstr "ઇચ્છિત (UEP) શ્રેણી# %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:473
-#: src/subscription_manager/repolib.py:674
+#: src/subscription_manager/entcertlib.py:455
+#: src/subscription_manager/repolib.py:682
 msgid "Added (new)"
 msgstr "ઉમેરાયેલ (નવું)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:474
+#: src/subscription_manager/entcertlib.py:456
 msgid "Deleted (rogue):"
 msgstr "કાઢી નાંખેલ (ઠગ):"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/exceptions.py:30
+#: src/subscription_manager/exceptions.py:32
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
@@ -4064,59 +4085,59 @@ msgstr ""
 "નેટવર્ક ભૂલ, સર્વર સાથે જોડાવામાં અસમર્થ. મહેરબાની કરીને વધારે જાણકારી માટે /var/log/"
 "rhsm/rhsm.log જુઓ."
 
-#: src/subscription_manager/exceptions.py:32
+#: src/subscription_manager/exceptions.py:34
 #, python-brace-format
 msgid "Network error: {message} (error code {code})"
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:33
+#: src/subscription_manager/exceptions.py:35
 #, python-brace-format
 msgid "Connection error: {message} (error code {code})"
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:34
+#: src/subscription_manager/exceptions.py:36
 #, python-brace-format
 msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:35
+#: src/subscription_manager/exceptions.py:37
 #, python-brace-format
 msgid "Unknown server reply (HTTP error code {code}: {title})"
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:37
+#: src/subscription_manager/exceptions.py:39
 #, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:39
+#: src/subscription_manager/exceptions.py:41
 #, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}: {message}"
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:40
+#: src/subscription_manager/exceptions.py:42
 #, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}"
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:41
+#: src/subscription_manager/exceptions.py:43
 msgid "Unauthorized: Invalid credentials for request."
 msgstr "બિનસત્તાધિકારી: અરજી માટે અયોગ્ય પરિમાણો."
 
-#: src/subscription_manager/exceptions.py:42
+#: src/subscription_manager/exceptions.py:44
 msgid "Token authentication not supported by the entitlement server"
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:43
+#: src/subscription_manager/exceptions.py:45
 msgid "Forbidden: Invalid credentials for request."
 msgstr "ભૂલાઇ ગયેલું: અરજી માટે અયોગ્ય પરિમાણો."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/exceptions.py:45
+#: src/subscription_manager/exceptions.py:47
 msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
@@ -4126,7 +4147,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/exceptions.py:48
+#: src/subscription_manager/exceptions.py:50
 #, fuzzy, python-brace-format
 #| msgid "Bad CA certificate: %s"
 msgid "Bad CA certificate: {file}: {reason}"
@@ -4134,71 +4155,64 @@ msgstr "ખરાબ CA પ્રમાણપત્ર: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/exceptions.py:49
+#: src/subscription_manager/exceptions.py:51
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:218
 msgid "Your identity certificate has expired"
 msgstr "તમારું ઓળખાણ પ્રમાણપત્ર નિવૃત્ત થઇ ગયુ છે"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/exceptions.py:50
+#: src/subscription_manager/exceptions.py:52
 #, python-format
 msgid "Unable to verify server's identity: %s"
 msgstr "સર્વરનાં ઓળખાણને ચકાસવાનું અસમર્થ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/exceptions.py:51
+#: src/subscription_manager/exceptions.py:53
 msgid "Server URL can not be empty"
 msgstr "સર્વર URL ને ખાલી રાખી શકાતી નથી"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/exceptions.py:52
+#: src/subscription_manager/exceptions.py:54
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
 msgstr "સર્વર URL ફક્ત યોજના છે. યજમાનનામ, અને/અથવા પોર્ટ અને પાથ ને સમાવવુ જોઇએ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/exceptions.py:53
+#: src/subscription_manager/exceptions.py:55
 msgid "Server URL can not be None"
 msgstr "સર્વર URL ને ખાલી રાખી શકાતી નથી"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/exceptions.py:54
+#: src/subscription_manager/exceptions.py:56
 msgid "Server URL port should be numeric"
 msgstr "સર્વર URL પોર્ટ આંકડાકીય હોવુ જોઇએ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/exceptions.py:55
+#: src/subscription_manager/exceptions.py:57
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
 msgstr "સર્વર URL પાસે અમાન્ય યોજના છે. http:// and https:// આધારભૂત નથી"
 
-#: src/subscription_manager/exceptions.py:56
+#: src/subscription_manager/exceptions.py:58
 msgid "The server rate limit has been exceeded, please try again later."
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:58
-#, python-format
-msgid ""
-"The server rate limit has been exceeded, please try again later. (Expires in "
-"%s seconds)"
-msgstr ""
-
-#: src/subscription_manager/exceptions.py:60
+#: src/subscription_manager/exceptions.py:59
 #, python-brace-format
 msgid "Bad product certificate: {file}: [{library}] {message}"
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:61
+#: src/subscription_manager/exceptions.py:60
 #, python-brace-format
 msgid "Bad certificate: {file}: [{library}] {message}"
 msgstr ""
 
-#: src/subscription_manager/exceptions.py:62
+#: src/subscription_manager/exceptions.py:61
 #, python-brace-format
 msgid ""
 "Bad certificate: [{library}] {message}\n"
@@ -4207,7 +4221,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/exceptions.py:63
+#: src/subscription_manager/exceptions.py:62
 #, fuzzy, python-brace-format
 #| msgid "Bad CA certificate: %s"
 msgid "Bad certificate: [{library}] {message}"
@@ -4215,7 +4229,7 @@ msgstr "ખરાબ CA પ્રમાણપત્ર: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/exceptions.py:64
+#: src/subscription_manager/exceptions.py:63
 #, fuzzy, python-brace-format
 #| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to reach the server at {host}: {message}"
@@ -4223,10 +4237,21 @@ msgstr "%s:%s%s પર સર્વર સુધી પહોંચવાનુ 
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
-#: src/subscription_manager/exceptions.py:68
+#: src/subscription_manager/exceptions.py:67
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
 msgstr ""
+
+#: src/subscription_manager/exceptions.py:168
+#, python-brace-format
+msgid ""
+"The server rate limit has been exceeded, please try again later. (Expires in "
+"{time} second)"
+msgid_plural ""
+"The server rate limit has been exceeded, please try again later. (Expires in "
+"{time} seconds)"
+msgstr[0] ""
+msgstr[1] ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -4236,49 +4261,49 @@ msgstr ""
 msgid "{prog}: error: {msg}"
 msgstr "%s: ભૂલ: %s"
 
-#: src/subscription_manager/plugin/container/__init__.py:230
-#: src/subscription_manager/plugin/ostree/action_invoker.py:143
+#: src/subscription_manager/plugin/container/__init__.py:228
+#: src/subscription_manager/plugin/ostree/action_invoker.py:142
 msgid "Added:"
 msgstr "ઉમેરાયેલ:"
 
-#: src/subscription_manager/plugin/container/__init__.py:232
+#: src/subscription_manager/plugin/container/__init__.py:230
 msgid "Removed:"
 msgstr "દૂર થયેલ:"
 
-#: src/subscription_manager/plugin/ostree/action_invoker.py:141
+#: src/subscription_manager/plugin/ostree/action_invoker.py:140
 msgid "Updates:"
 msgstr "સુધારા:"
 
-#: src/subscription_manager/plugin/ostree/action_invoker.py:145
+#: src/subscription_manager/plugin/ostree/action_invoker.py:144
 msgid "Deleted:"
 msgstr "કાઢી નાંખેલ:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/reasons.py:101
+#: src/subscription_manager/reasons.py:102
 msgid "Product "
 msgstr "પ્રોડક્ટ "
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/reasons.py:103
+#: src/subscription_manager/reasons.py:104
 msgid "Subscription "
 msgstr "ઉમેદવારી "
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/reasons.py:105
+#: src/subscription_manager/reasons.py:106
 msgid "Stack "
 msgstr "સ્ટેક "
 
-#: src/subscription_manager/release.py:50
+#: src/subscription_manager/release.py:60
 #, python-format
 msgid ""
 "Error: More than one release product certificate installed. Certificate "
 "paths: %s"
 msgstr ""
 
-#: src/subscription_manager/repolib.py:85
+#: src/subscription_manager/repolib.py:94
 #, python-format
 msgid ""
 "The yum/dnf plugins: %s were automatically enabled for the benefit of Red "
@@ -4286,20 +4311,20 @@ msgid ""
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
 
-#: src/subscription_manager/repolib.py:670
+#: src/subscription_manager/repolib.py:678
 msgid "Repo updates"
 msgstr ""
 
-#: src/subscription_manager/repolib.py:671
+#: src/subscription_manager/repolib.py:679
 #, python-format
 msgid "Total repo updates: %d"
 msgstr "કુલ રિપો સુધારા: %d"
 
-#: src/subscription_manager/repolib.py:672
+#: src/subscription_manager/repolib.py:680
 msgid "Updated"
 msgstr "સુધારેલ"
 
-#: src/subscription_manager/repolib.py:676
+#: src/subscription_manager/repolib.py:684
 msgid "Deleted"
 msgstr "કાઢી નાંખેલ"
 
@@ -4334,7 +4359,7 @@ msgstr "એંટાઇટેલમેંટ પ્રમાણપત્રો �
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
-#: src/subscription_manager/utils.py:369
+#: src/subscription_manager/utils.py:386
 msgid "and"
 msgstr "અને"
 
@@ -4350,6 +4375,13 @@ msgstr ""
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys
+#~ msgid ""
+#~ "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+#~ msgstr ""
+#~ "દાખલ થયેલ તારીખ અયોગ્ય છે. તારીખ YYYY-MM-DD બંધારણમાં હોવી જોઇએ (ઉદાહરણ: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author swkothar
@@ -4434,13 +4466,6 @@ msgstr ""
 #~| msgid "Unknown"
 #~ msgid "Updating job status"
 #~ msgstr "અજ્ઞાત"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys
-#, fuzzy
-#~| msgid "Cancel"
-#~ msgid "Canceling job"
-#~ msgstr "રદ કરો"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
