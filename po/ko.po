@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2023-01-31 07:20+0000\n"
+"PO-Revision-Date: 2023-05-04 14:20+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
@@ -307,10 +307,7 @@ msgid "Not root, Subscription Management repositories not updated"
 msgstr "root가 아니며, 서브스크립션 관리 저장소가 최신화되지 않습니다"
 
 #: src/plugins/dnf/subscription-manager.py:115
-#, fuzzy, python-format
-#| msgid ""
-#| "subscription-manager plugin disabled %d system repositories with respect "
-#| "of configuration in /etc/dnf/plugins/subscription-manager.conf"
+#, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
@@ -334,15 +331,10 @@ msgid "Subscription Manager is operating in container mode."
 msgstr "서비스크립션 관리자는 컨테이너 모드에서 작동하고 있습니다."
 
 #: src/plugins/dnf/upload-profile.py:37
-#, fuzzy
-#| msgid ""
-#| "Upload combined profile to Satellite server (list of installed rpms, "
-#| "enabled repositories and modules"
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
-msgstr ""
-"결합된 프로파일을 Satellite 서버 (설치된 rpm, 활성화된 저장소 및 모듈 목록)"
+msgstr "결합된 프로파일을 Satellite 서버 (설치된 RPM, 활성화된 저장소 및 모듈 목록)"
 "에 업로드합니다"
 
 #: src/plugins/dnf/upload-profile.py:49
@@ -1159,16 +1151,12 @@ msgid "Error: Unable to load bus '{name}'"
 msgstr "오류: bus '{name}'을 적재 할 수 없음"
 
 #: src/rhsmlib/services/entitlement.py:52
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-#| "{dateexample})"
+#, python-brace-format
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{date})"
-msgstr ""
-"입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 주십시"
-"오. (예: {dateexample})"
+msgstr "입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 "
+"주십시오. (예: {date})"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:57
@@ -3315,11 +3303,10 @@ msgstr "다음과 같은 예외로 인해 삭제를 실행할 수 없습니다: 
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/remove.py:182
-#, fuzzy, python-brace-format
-#| msgid "{total} subscriptions removed from this system."
+#, python-brace-format
 msgid "{total} subscription removed from this system."
 msgid_plural "{total} subscriptions removed from this system."
-msgstr[0] "{total} 서브스크립션을 시스템에서 삭제했습니다."
+msgstr[0] "{total} 서브스크립션을 이 시스템에서 제거했습니다."
 
 #: src/subscription_manager/cli_command/remove.py:198
 #, python-brace-format
@@ -3780,19 +3767,15 @@ msgid "{message} (HTTP error code {code}: {title})"
 msgstr "{message} (HTTP 오류 코드 {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:168
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The server rate limit has been exceeded, please try again later. (Expires "
-#| "in %s seconds)"
+#, python-brace-format
 msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} second)"
 msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
-msgstr[0] ""
-"서버 속도 제한을 초과했습니다. 나중에 다시 시도하십시오. (%s 초 후에 만료됩니"
-"다)"
+msgstr[0] "서버 속도 제한을 초과했습니다. 나중에 다시 시도하십시오. ( {time} 초 후에 "
+"만료됩니다)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/i18n_argparse.py:50
