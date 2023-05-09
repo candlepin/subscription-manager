@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2023-01-13 00:20+0000\n"
+"PO-Revision-Date: 2023-05-04 04:16+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -897,10 +897,8 @@ msgid "Activating"
 msgstr "აქტივაცია"
 
 #: src/rhsm/connection.py:2127
-#, fuzzy
-#| msgid "Canceling job"
 msgid "Fetching job"
-msgstr "დავალების გაუქმება"
+msgstr "დავალების გამოთხოვა"
 
 #: src/rhsm_debug/debug_commands.py:39
 #: src/subscription_manager/cli_command/cli.py:51
