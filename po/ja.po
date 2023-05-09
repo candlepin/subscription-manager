@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2023-02-01 07:17+0000\n"
-"Last-Translator: Transtats <suanand@redhat.com>\n"
+"PO-Revision-Date: 2023-05-09 12:20+0000\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ja/>\n"
 "Language: ja\n"
@@ -311,10 +311,7 @@ msgstr ""
 "root ではありません。サブスクリプション管理リポジトリーは更新されていません"
 
 #: src/plugins/dnf/subscription-manager.py:115
-#, fuzzy, python-format
-#| msgid ""
-#| "subscription-manager plugin disabled %d system repositories with respect "
-#| "of configuration in /etc/dnf/plugins/subscription-manager.conf"
+#, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
@@ -323,7 +320,7 @@ msgid_plural ""
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr[0] ""
 "subscription-manager プラグインは /etc/dnf/plugins/subscription-manager.conf "
-"の設定を参照して %d システムリポジトリを無効にします"
+"の設定を参照して %d システムリポジトリーを無効にします"
 
 #: src/plugins/dnf/subscription-manager.py:133
 msgid "Updating Subscription Management repositories."
@@ -338,16 +335,12 @@ msgid "Subscription Manager is operating in container mode."
 msgstr "サブスクリプションマネージャーがコンテナーモードで動作しています。"
 
 #: src/plugins/dnf/upload-profile.py:37
-#, fuzzy
-#| msgid ""
-#| "Upload combined profile to Satellite server (list of installed rpms, "
-#| "enabled repositories and modules"
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
 msgstr ""
-"結合されたプロファイルを Satellite サーバーにアップロードします (インストール"
-"済みの RPM、有効なリポジトリーとモジュールのリスト)"
+"結合されたプロファイルを Satellite サーバーにアップロードします ("
+"インストール済みの RPM、有効なリポジトリーとモジュールのリスト)"
 
 #: src/plugins/dnf/upload-profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
@@ -1163,16 +1156,11 @@ msgid "Error: Unable to load bus '{name}'"
 msgstr "エラー: バス '{name}' をロードできません"
 
 #: src/rhsmlib/services/entitlement.py:52
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-#| "{dateexample})"
+#, python-brace-format
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{date})"
-msgstr ""
-"入力した日付は無効です。日付は YYYY-MM-DD の形式にしてください (例: "
-"{dateexample})"
+msgstr "入力した日付は無効です。日付は YYYY-MM-DD の形式にしてください (例: {date})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rhsmlib/services/entitlement.py:57
@@ -3350,11 +3338,10 @@ msgstr "次の例外のため、削除することができません: {e}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/remove.py:182
-#, fuzzy, python-brace-format
-#| msgid "{total} subscriptions removed from this system."
+#, python-brace-format
 msgid "{total} subscription removed from this system."
 msgid_plural "{total} subscriptions removed from this system."
-msgstr[0] "このシステムから {total} サブスクリプションが削除されました。"
+msgstr[0] "このシステムから {total} 件のサブスクリプションが削除されました。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/remove.py:198
@@ -3831,19 +3818,15 @@ msgid "{message} (HTTP error code {code}: {title})"
 msgstr "{message} (HTTP エラーコード {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:168
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The server rate limit has been exceeded, please try again later. (Expires "
-#| "in %s seconds)"
+#, python-brace-format
 msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} second)"
 msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
-msgstr[0] ""
-"サーバーレートの制限を超えました。後で再試行してください。(%s 秒後に期限が切"
-"れます)"
+msgstr[0] "サーバーレートの制限を超えました。後で再試行してください。({time} "
+"秒後に期限が切れます)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:50

@@ -3,7 +3,7 @@
 # John Sefler <jsefler@redhat.com>, 2018. #zanata, 2021.
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # tfu <tfu@redhat.com>, 2018. #zanata
-# Ludek Janda <ljanda@redhat.com>, 2021, 2022.
+# Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023.
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
 # Transtats <suanand@redhat.com>, 2022, 2023.
@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2023-02-01 07:17+0000\n"
-"Last-Translator: Transtats <suanand@redhat.com>\n"
+"PO-Revision-Date: 2023-05-09 12:20+0000\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -303,10 +303,7 @@ msgid "Not root, Subscription Management repositories not updated"
 msgstr "不是 root 用户，未更新 Subscription Management 软件仓库"
 
 #: src/plugins/dnf/subscription-manager.py:115
-#, fuzzy, python-format
-#| msgid ""
-#| "subscription-manager plugin disabled %d system repositories with respect "
-#| "of configuration in /etc/dnf/plugins/subscription-manager.conf"
+#, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
@@ -330,16 +327,11 @@ msgid "Subscription Manager is operating in container mode."
 msgstr "订阅管理器在容器模式中运行。"
 
 #: src/plugins/dnf/upload-profile.py:37
-#, fuzzy
-#| msgid ""
-#| "Upload combined profile to Satellite server (list of installed rpms, "
-#| "enabled repositories and modules"
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
-msgstr ""
-"将组合的配置文件上传到 Satellite 服务器（已安装的rpm、已启用的仓库和模块的列"
-"表）"
+msgstr "将组合的配置文件上传到 Satellite 服务器（已安装的 "
+"RPM、已启用的仓库和模块的列表）"
 
 #: src/plugins/dnf/upload-profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
@@ -1149,14 +1141,11 @@ msgid "Error: Unable to load bus '{name}'"
 msgstr "错误：无法加载总线 '{name}'"
 
 #: src/rhsmlib/services/entitlement.py:52
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-#| "{dateexample})"
+#, python-brace-format
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{date})"
-msgstr "输入的日期无效。日期格式应为 YYYY-MM-DD（例如：{dateexample}）"
+msgstr "输入的日期无效。日期格式应为 YYYY-MM-DD（例如：{date}）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:57
@@ -3234,8 +3223,7 @@ msgstr "因为以下例外无法执行删除：{e}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/remove.py:182
-#, fuzzy, python-brace-format
-#| msgid "{total} subscriptions removed from this system."
+#, python-brace-format
 msgid "{total} subscription removed from this system."
 msgid_plural "{total} subscriptions removed from this system."
 msgstr[0] "从这个系统中删除了 {total} 个订阅。"
@@ -3691,17 +3679,14 @@ msgid "{message} (HTTP error code {code}: {title})"
 msgstr "{message} （HTTP 错误码 {code} ：{title}）"
 
 #: src/subscription_manager/exceptions.py:168
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The server rate limit has been exceeded, please try again later. (Expires "
-#| "in %s seconds)"
+#, python-brace-format
 msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} second)"
 msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
-msgstr[0] "已超过该服务器速率限制，请稍后再试（%s 秒后即超过限制）"
+msgstr[0] "已超过该服务器速率限制，请稍后再试（{time} 秒后即超过限制）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/i18n_argparse.py:50

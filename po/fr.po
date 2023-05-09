@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2023-02-01 11:20+0000\n"
+"PO-Revision-Date: 2023-05-09 12:20+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
@@ -321,10 +321,7 @@ msgstr ""
 "pas mis à jour"
 
 #: src/plugins/dnf/subscription-manager.py:115
-#, fuzzy, python-format
-#| msgid ""
-#| "subscription-manager plugin disabled %d system repositories with respect "
-#| "of configuration in /etc/dnf/plugins/subscription-manager.conf"
+#, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
@@ -332,8 +329,8 @@ msgid_plural ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr[0] ""
-"Un greffon de subscription-manager a désactivé %d référentiels système au "
-"niveau de la configuration dans /etc/dnf/plugins/subscription-manager.conf"
+"plugin subscription-manager désactivé %d référentiel système avec la "
+"configuration dans /etc/dnf/plugins/subscription-manager.conf"
 msgstr[1] ""
 "Un greffon de subscription-manager a désactivé %d référentiels système au "
 "niveau de la configuration dans /etc/dnf/plugins/subscription-manager.conf"
@@ -351,16 +348,12 @@ msgid "Subscription Manager is operating in container mode."
 msgstr "Le Gestionnaire des abonnements exécute en mode de conteneur."
 
 #: src/plugins/dnf/upload-profile.py:37
-#, fuzzy
-#| msgid ""
-#| "Upload combined profile to Satellite server (list of installed rpms, "
-#| "enabled repositories and modules"
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
 msgstr ""
-"Téléchargement du profil combiné sur le serveur satellite (liste des rpms "
-"installés, des référentiels et des modules activés"
+"Téléchargement du profil combiné sur le serveur Satellite (liste des RPMs "
+"installés, des référentiels et modules activés)"
 
 #: src/plugins/dnf/upload-profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
@@ -1190,16 +1183,13 @@ msgid "Error: Unable to load bus '{name}'"
 msgstr "Erreur : Impossible de charger le bus '{name}'"
 
 #: src/rhsmlib/services/entitlement.py:52
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-#| "{dateexample})"
+#, python-brace-format
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{date})"
 msgstr ""
-"La date saisie n'est pas valide. La date doit être sous le format YYYY-MM-DD "
-"(exemple : {dateexample})"
+"La date saisie n'est pas valide. La date doit être au format AAAA-MM-JJ ("
+"exemple : {date})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/rhsmlib/services/entitlement.py:57
@@ -3455,11 +3445,10 @@ msgstr "Échec de la suppression dû à l'exception suivante : {e}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/remove.py:182
-#, fuzzy, python-brace-format
-#| msgid "{total} subscriptions removed from this system."
+#, python-brace-format
 msgid "{total} subscription removed from this system."
 msgid_plural "{total} subscriptions removed from this system."
-msgstr[0] "{total} abonnements supprimés de ce système."
+msgstr[0] "{total} abonnement supprimé de ce système."
 msgstr[1] "{total} abonnements supprimés de ce système."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -3945,10 +3934,7 @@ msgid "{message} (HTTP error code {code}: {title})"
 msgstr "{message} (Code d'erreur HTTP {code} : {title})"
 
 #: src/subscription_manager/exceptions.py:168
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The server rate limit has been exceeded, please try again later. (Expires "
-#| "in %s seconds)"
+#, python-brace-format
 msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} second)"
@@ -3956,11 +3942,11 @@ msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
 msgstr[0] ""
-"La limite de taux de serveur a été dépassée, veuillez essayer à nouveau un "
-"peu plus tard. (Expire dans %s secondes)"
+"La limite de débit du serveur a été dépassée, veuillez réessayer plus tard. ("
+"Expire dans {time} seconde)"
 msgstr[1] ""
-"La limite de taux de serveur a été dépassée, veuillez essayer à nouveau un "
-"peu plus tard. (Expire dans %s secondes)"
+"La limite de débit du serveur a été dépassée, veuillez réessayer plus tard. ("
+"Expire dans {time} secondes)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:50
