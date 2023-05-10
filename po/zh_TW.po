@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2021-08-10 19:35+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2023-05-10 05:38+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 #, fuzzy
@@ -299,9 +299,8 @@ msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
-msgstr ""
-"此系統尚未在 Red Hat 訂閱管理程式註冊，您可以使用 subscription-manager 進行註"
-"冊。"
+msgstr "此系統尚未在 Red Hat 訂閱管理程式註冊，您可以使用 subscription-manager "
+"進行註冊。"
 
 #: src/plugins/dnf/subscription-manager.py:52
 #, fuzzy
@@ -313,8 +312,7 @@ msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
-msgstr ""
-"系統已在 Red Hat 訂閱管理程式註冊，但沒有接收更新，您可以使用 subscription-"
+msgstr "系統已在 Red Hat 訂閱管理程式註冊，但沒有接收更新，您可以使用 subscription-"
 "manager 指派訂閱項。"
 
 #: src/plugins/dnf/subscription-manager.py:87
@@ -1130,9 +1128,8 @@ msgstr "取消"
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
-msgstr ""
-"這部系統尚未註冊。請嘗試 'subscription-manager register --help' 以取得更多資"
-"訊。"
+msgstr "這部系統尚未註冊。請嘗試 'subscription-manager register --help' "
+"以取得更多資訊。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:53
@@ -1173,9 +1170,8 @@ msgstr "'--destination'指定的目錄必須已存在。"
 msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
-msgstr ""
-"若要使用 no-archive 選項，目的地目錄「%s」必須存在與資料組建目錄「%s」相同的"
-"檔案系統上。"
+msgstr "若要使用 no-archive "
+"選項，目的地目錄「%s」必須存在與資料組建目錄「%s」相同的檔案系統上。"
 
 #: src/rhsm_debug/debug_commands.py:212
 #, python-brace-format
@@ -1302,9 +1298,8 @@ msgstr "訂閱管理服務並不支援「狀態的詳細資料」。"
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
-msgstr ""
-"錯誤：提供了無效的序列類型。僅允許使用「installed」、「consumed」，或"
-"「available」"
+msgstr "錯誤：提供了無效的序列類型。僅允許使用「installed」、「consumed」，或「availa"
+"ble」"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:497
@@ -1491,17 +1486,15 @@ msgstr "這部系統已透過 RHN Classic 向 Red Hat 註冊。"
 msgid ""
 "Your system is being registered again using Red Hat Subscription Management. "
 "Red Hat recommends that customers only register once."
-msgstr ""
-"您的系統將會透過 Red Hat Subscription Management，再次進行註冊。Red Hat 建議"
-"客戶僅註冊一次即可。"
+msgstr "您的系統將會透過 Red Hat Subscription Management，再次進行註冊。Red Hat "
+"建議客戶僅註冊一次即可。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:24
 msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
-msgstr ""
-"欲知如何由這些服務取消註冊，請參閱此知識庫文件：https://access.redhat.com/kb/"
+msgstr "欲知如何由這些服務取消註冊，請參閱此知識庫文件：https://access.redhat.com/kb/"
 "docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -1554,8 +1547,7 @@ msgstr "提示：忘記帳號或密碼？請參閱 https://redhat.com/forgot_pas
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
-msgstr ""
-"consumer_uuid=%s 不是合於規定的 consumer_uuid。不會試圖與伺服器同步 %s 快取。"
+msgstr "consumer_uuid=%s 不是合於規定的 consumer_uuid。不會試圖與伺服器同步 %s 快取。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cert_sorter.py:292
@@ -1850,9 +1842,8 @@ msgstr "錯誤：認證檔案「%s」不存在或無法讀取。"
 msgid ""
 "Ignoring the request to attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr ""
-"忽略自动附加的请求。 因为内容访问模式的设置 ，组织“ {owner_id}”禁用了这个功"
-"能。"
+msgstr "忽略自动附加的请求。 因为内容访问模式的设置 ，组织“ "
+"{owner_id}”禁用了这个功能。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:201
@@ -1953,9 +1944,8 @@ msgstr "所有本機資料皆已移除"
 msgid ""
 "Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr ""
-"忽略自动附加的请求。 因为内容访问模式的设置 ，组织“ {owner_id}”禁用了这个功"
-"能。"
+msgstr "忽略自动附加的请求。 因为内容访问模式的设置 ，组织“ "
+"{owner_id}”禁用了这个功能。"
 
 #: src/subscription_manager/cli_command/cli.py:152
 msgid "server URL in the form of https://hostname:port/prefix"
@@ -2001,9 +1991,8 @@ msgstr "訂閱使用者的身份不存在或是已損毀。請嘗試 register --
 msgid ""
 "subscription-manager is disabled when running inside a container. Please "
 "refer to your host system for subscription management.\n"
-msgstr ""
-"在 container 中執行時，subscription-manager 會被停用。請使用主機系統進行訂閱"
-"管理。\n"
+msgstr "在 container 中執行時，subscription-manager "
+"會被停用。請使用主機系統進行訂閱管理。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:282
@@ -2047,9 +2036,8 @@ msgstr "系統憑證已損毀。請進行註冊。"
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
-msgstr ""
-"消耗者設定檔 \"%s\" 已從伺服器上刪除。您可以使用 clean 或 unregister 指令來移"
-"除本地設定檔。"
+msgstr "消耗者設定檔 \"%s\" 已從伺服器上刪除。您可以使用 clean 或 unregister "
+"指令來移除本地設定檔。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:28
@@ -2677,8 +2665,7 @@ msgstr "顯示此系統正在使用的訂閱服務"
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
-msgstr ""
-"僅顯示與特定服務等級相符的訂閱服務；僅能與 --available 和 --consumed 搭配使用"
+msgstr "僅顯示與特定服務等級相符的訂閱服務；僅能與 --available 和 --consumed 搭配使用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:251
@@ -2699,16 +2686,14 @@ msgid ""
 "lists only subscriptions or products containing the specified expression in "
 "the subscription or product information, varying with the list requested and "
 "the server version (case-insensitive)."
-msgstr ""
-"僅列出訂閱或產品資訊中，包含特定表示式的訂閱服務與產品；與所要求的清單與伺服"
+msgstr "僅列出訂閱或產品資訊中，包含特定表示式的訂閱服務與產品；與所要求的清單與伺服"
 "器版本（大小寫有別）不同。"
 
 #: src/subscription_manager/cli_command/list.py:277
 msgid ""
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
-msgstr ""
-"僅列出可用或已消耗的訂閱服務之集區 ID；只能與 --available 與 --consumed 合用"
+msgstr "僅列出可用或已消耗的訂閱服務之集區 ID；只能與 --available 與 --consumed 合用"
 
 #: src/subscription_manager/cli_command/list.py:285
 #, fuzzy, python-brace-format
@@ -2881,8 +2866,7 @@ msgstr "要移除的覆蓋項目之名稱（可以指定多個）；與 --repo �
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
-msgstr ""
-"要覆寫的選項之名稱與值，用冒號隔開（可以指定多個）；與 --repo 選項合用。"
+msgstr "要覆寫的選項之名稱與值，用冒號隔開（可以指定多個）；與 --repo 選項合用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:63
@@ -3478,9 +3462,8 @@ msgstr "這部系統沒有可透過訂閱服務使用的軟體庫。"
 msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
-msgstr ""
-"錯誤：「%s」與有效的軟體庫 ID 不符。請使用「subscription-manager repos --"
-"list」查看有效的軟體庫。"
+msgstr "錯誤：「%s」與有效的軟體庫 ID 不符。請使用「subscription-manager repos "
+"--list」查看有效的軟體庫。"
 
 #: src/subscription_manager/cli_command/repos.py:265
 #, fuzzy, python-brace-format
@@ -3733,8 +3716,7 @@ msgstr "已刪除（rogue）"
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
-msgstr ""
-"發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr "發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
@@ -3796,9 +3778,8 @@ msgstr "禁止：需求的身份認證無效。"
 msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
-msgstr ""
-"遠端伺服器錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資"
-"訊。"
+msgstr "遠端伺服器錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log "
+"以取得更多資訊。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:50
