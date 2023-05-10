@@ -374,6 +374,8 @@ BuildRequires: systemd-rpm-macros
 BuildRequires: systemd
 %endif
 
+Obsoletes: subscription-manager-migration <= %{version}-%{release}
+
 %if !%{use_container_plugin}
 Obsoletes: subscription-manager-plugin-container
 %endif
