@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
 "PO-Revision-Date: 2023-05-10 05:38+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -1219,8 +1219,7 @@ msgstr "订阅管理服务不支持状态详情。"
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
-msgstr ""
-"错误：无效的列出类型。只允许 \"installed\"、\"consumed\" 或 \"available\""
+msgstr "错误：无效的列出类型。只允许 \"installed\"、\"consumed\" 或 \"available\""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:497
@@ -1407,8 +1406,7 @@ msgstr "已经使用 RHN 传统订阅在 Red Hat 注册这个系统。"
 msgid ""
 "Your system is being registered again using Red Hat Subscription Management. "
 "Red Hat recommends that customers only register once."
-msgstr ""
-"您正在使用红帽订阅管理（Red Hat Subscription Management）再次注册您的系统。"
+msgstr "您正在使用红帽订阅管理（Red Hat Subscription Management）再次注册您的系统。"
 "Red Hat 建议客户只注册一次。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -1435,8 +1433,7 @@ msgstr "请输入您的 Red Hat 帐户信息："
 msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
-msgstr ""
-"这个系统同时使用 RHN 传统技术和红帽订阅管理（Red Hat Subscription "
+msgstr "这个系统同时使用 RHN 传统技术和红帽订阅管理（Red Hat Subscription "
 "Management）注册。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -1462,8 +1459,7 @@ msgstr "RHN 传统订阅和 Red Hat 订阅管理注册"
 msgid ""
 "Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password"
-msgstr ""
-"提示：忘记您的登录名或者密码？请访问 https://redhat.com/forgot_password"
+msgstr "提示：忘记您的登录名或者密码？请访问 https://redhat.com/forgot_password"
 
 #: src/subscription_manager/cache.py:176
 #, python-brace-format
@@ -1902,8 +1898,7 @@ msgstr "消费者 ID 不存在或已被破坏。请尝试 register --help"
 msgid ""
 "subscription-manager is disabled when running inside a container. Please "
 "refer to your host system for subscription management.\n"
-msgstr ""
-"在容器内运行时禁用 subscription-manager。请参考主机系统进行订阅管理。\n"
+msgstr "在容器内运行时禁用 subscription-manager。请参考主机系统进行订阅管理。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:282
@@ -3734,9 +3729,9 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"yum/dnf plugins: %s 会为 Red Hat Subscription Management 自动启用。如果不需"
-"要，使用 \"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" 来"
-"禁用它。"
+"yum/dnf plugins: %s 会为 Red Hat Subscription Management "
+"自动启用。如果不需要，使用 \"subscription-manager config --rhsm."
+"auto_enable_yum_plugins=0\" 来禁用它。"
 
 #: src/subscription_manager/repolib.py:678
 msgid "Repo updates"
