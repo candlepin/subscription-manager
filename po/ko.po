@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2023-05-04 14:20+0000\n"
-"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"PO-Revision-Date: 2023-05-10 05:37+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
 "Language: ko\n"
@@ -1103,8 +1103,8 @@ msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
 msgstr ""
-"아카이브하지 않은 옵션을 사용하려면 대상 디렉토리 '{destination}'가 데이터 어"
-"셈블리 디렉토리 '{assembly}'와 동일한 파일 시스템에 존재해야 합니다."
+"아카이브하지 않은 옵션을 사용하려면 대상 디렉토리 '{destination}'가 데이터 "
+"어셈블리 디렉토리 '{assembly}'와 동일한 파일 시스템에 존재해야 합니다."
 
 #: src/rhsm_debug/debug_commands.py:212
 #, python-brace-format
@@ -1141,8 +1141,7 @@ msgid ""
 msgid_plural ""
 "Warning: The following fields were recently set for this system by the "
 "entitlement server administrator: {conflict_msg}"
-msgstr[0] ""
-"경고: 최근 인타이틀먼트 서버 관리자가 다음 필드를 이 시스템에 설정했습니다: "
+msgstr[0] "경고: 최근 인타이틀먼트 서버 관리자가 다음 필드를 이 시스템에 설정했습니다: "
 "{conflict_msg}"
 
 #: src/rhsmlib/dbus/service_wrapper.py:47
@@ -1293,9 +1292,9 @@ msgid ""
 "with consumerid. Please use --force without --consumerid to re-register or "
 "use the clean command and try again without --force."
 msgstr ""
-"오류: consumerid로 등록을 복원하면서 등록을 강제 실행할 수 없습니다. 재등록하"
-"려면 --consumerid없이 --force를 사용하거나 clean 명령을 사용하여 --force 없"
-"이 다시 실행합니다."
+"오류: consumerid로 등록을 복원하면서 등록을 강제 실행할 수 없습니다. "
+"재등록하려면 --consumerid없이 --force를 사용하거나 clean 명령을 사용하여 --"
+"force 없이 다시 실행합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:209
@@ -1466,8 +1465,8 @@ msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"RHN 등록 및 기술에 대한 보다 자세한 내용은 Knowledge Base 문서를 참조하십시"
-"오: https://access.redhat.com/kb/docs/DOC-45563"
+"RHN 등록 및 기술에 대한 보다 자세한 내용은 Knowledge Base 문서를 "
+"참조하십시오: https://access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:41
@@ -1478,8 +1477,7 @@ msgstr "RHN Classic 및 Red Hat 서브스크립션 관리"
 msgid ""
 "Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password"
-msgstr ""
-"정보: 로그인 또는 암호를 잊어버리셨습니까? https://redhat.com/"
+msgstr "정보: 로그인 또는 암호를 잊어버리셨습니까? https://redhat.com/"
 "forgot_password 에서 찾아보십시오"
 
 #: src/subscription_manager/cache.py:176
@@ -1488,8 +1486,8 @@ msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
 msgstr ""
-"consumer_uuid={consumer_uuid}는 유효한 consumer_uuid가 아닙니다. "
-"{class_name} 캐시를 서버와 동기화하려고 시도하지 않습니다."
+"consumer_uuid={consumer_uuid}는 유효한 consumer_uuid가 아닙니다. {class_name}"
+" 캐시를 서버와 동기화하려고 시도하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cert_sorter.py:292
@@ -1734,9 +1732,8 @@ msgstr ""
 msgid ""
 "A file from which to read pool IDs. If a hyphen is provided, pool IDs will "
 "be read from stdin."
-msgstr ""
-"풀 ID를 읽어올 파일입니다. 하이픈이 지정되어 있을 경우 풀 ID는 stdin에서 읽"
-"게 됩니다."
+msgstr "풀 ID를 읽어올 파일입니다. 하이픈이 지정되어 있을 경우 풀 ID는 stdin에서 "
+"읽게 됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:85
@@ -1829,9 +1826,8 @@ msgstr ""
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
-msgstr ""
-"오류: --servicelevel 옵션은 서버에서 지원되지 않습니다. 요청을 완료하지 못했"
-"습니다."
+msgstr "오류: --servicelevel 옵션은 서버에서 지원되지 않습니다. 요청을 완료하지 "
+"못했습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:271
@@ -1910,8 +1906,7 @@ msgstr "https://hostname:port/prefix 형식의 서버 URL"
 msgid ""
 "do not check the entitlement server SSL certificate against available "
 "certificate authorities"
-msgstr ""
-"사용 가능한 인증 기관에 대해 인타이틀먼트 서버 SSL 인증서를 확인하지 않습니다"
+msgstr "사용 가능한 인증 기관에 대해 인타이틀먼트 서버 SSL 인증서를 확인하지 않습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:170
@@ -2174,8 +2169,7 @@ msgstr "새 인증서 생성을 요청합니다"
 msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
-msgstr ""
-"강제로 인증서를 다시 생성합니다 (사용자 이름 및 암호 필요); --regenerate와만 "
+msgstr "강제로 인증서를 다시 생성합니다 (사용자 이름 및 암호 필요); --regenerate와만 "
 "함께 사용 가능"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -2287,8 +2281,7 @@ msgstr ""
 msgid ""
 "An error occurred while importing the certificate. Please check log file for "
 "more information."
-msgstr ""
-"인증서를 가져오기하는 동안 오류가 발생했습니다. 자세한 내용은 로그 파일에서 "
+msgstr "인증서를 가져오기하는 동안 오류가 발생했습니다. 자세한 내용은 로그 파일에서 "
 "확인하십시오."
 
 #: src/subscription_manager/cli_command/import_cert.py:96
@@ -2653,9 +2646,8 @@ msgstr "오류: --afterdate는 --ondate와 함께 사용할 수 없습니다"
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{dateexample})"
-msgstr ""
-"입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 주십시"
-"오. (예: {dateexample})"
+msgstr "입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 "
+"주십시오. (예: {dateexample})"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:355
@@ -2828,8 +2820,7 @@ msgstr "오류: 수정하려는 저장소를 지정해야 합니다"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:94
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
-msgstr ""
-"오류: --remove-all 및 --list와 함께 --add 또는 --remove를 사용할 수 없습니다"
+msgstr "오류: --remove-all 및 --list와 함께 --add 또는 --remove를 사용할 수 없습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:97
@@ -3036,8 +3027,7 @@ msgstr "이 시스템에 호환 가능한 서브스크립션을 자동 첨부합
 msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
-msgstr ""
-"새로운 시스템 식별을 등록하기 전에 등록해제에 암묵적인 시도를 포함합니다"
+msgstr "새로운 시스템 식별을 등록하기 전에 등록해제에 암묵적인 시도를 포함합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:129
@@ -3255,8 +3245,7 @@ msgstr ""
 msgid ""
 "Error: This command requires that you specify one of --serial, --pool or --"
 "all."
-msgstr ""
-"오류: 이 명령에서는 --serial, --pool 또는 --all 중 하나를 지정해야 합니다."
+msgstr "오류: 이 명령에서는 --serial, --pool 또는 --all 중 하나를 지정해야 합니다."
 
 #: src/subscription_manager/cli_command/remove.py:93
 msgid "The entitlement server successfully removed these pools:"
@@ -3614,9 +3603,8 @@ msgstr "삭제됨 (결함이 있음):"
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
-msgstr ""
-"네트워크 오류, 서버에 연결할 수 없음. 보다 자세한 정보는 /var/log/rhsm/rhsm."
-"log에서 확인하십시오."
+msgstr "네트워크 오류, 서버에 연결할 수 없음. 보다 자세한 정보는 /var/log/rhsm/"
+"rhsm.log에서 확인하십시오."
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
