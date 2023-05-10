@@ -7,15 +7,16 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2015-09-25 02:52-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
-"Language-Team: Hindi <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2023-05-10 05:37+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Hindi <https://translate.fedoraproject.org/projects/"
+"subscription-manager/subscription-manager-main/hi/>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Zanata 3.9.6\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Weblate 4.15.2\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -319,7 +320,8 @@ msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
-msgstr "RHN Classic और Red Hat सदस्यता प्रबंधन के उपयोग से यह तंत्र पंजीकृत हुआ."
+msgstr ""
+"RHN Classic और Red Hat सदस्यता प्रबंधन के उपयोग से यह तंत्र पंजीकृत हुआ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -332,7 +334,8 @@ msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
-msgstr "RHN Classic और Red Hat सदस्यता प्रबंधन के उपयोग से यह तंत्र पंजीकृत हुआ."
+msgstr ""
+"RHN Classic और Red Hat सदस्यता प्रबंधन के उपयोग से यह तंत्र पंजीकृत हुआ."
 
 #: src/plugins/dnf/subscription-manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
@@ -1258,8 +1261,8 @@ msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
 msgstr ""
-"यह तंत्र अभी तक पंजीकृत नहीं है. 'subscription-manager register --help' को अधिक "
-"सूचना के लिए देखें."
+"यह तंत्र अभी तक पंजीकृत नहीं है. 'subscription-manager register --help' को "
+"अधिक सूचना के लिए देखें."
 
 #: src/rhsm_debug/debug_commands.py:53
 msgid "Assemble system information as a tar file or directory"
@@ -1451,7 +1454,8 @@ msgstr "त्रुटि: --ondate केवल --available के साथ �
 #: src/rhsmlib/services/entitlement.py:504
 #: src/subscription_manager/cli_command/list.py:297
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr "त्रुटि: --servicelevel केवल --available या --consumed के साथ अनुप्रयुक्त है"
+msgstr ""
+"त्रुटि: --servicelevel केवल --available या --consumed के साथ अनुप्रयुक्त है"
 
 #: src/rhsmlib/services/entitlement.py:508
 #: src/subscription_manager/cli_command/list.py:302
@@ -1511,14 +1515,17 @@ msgstr "त्रुटि: सक्रिय करण कुंजी के 
 #: src/rhsmlib/services/register.py:214
 #: src/subscription_manager/cli_command/register.py:147
 msgid "Error: Activation keys can not be used with previously registered IDs."
-msgstr "त्रुटि: सक्रियकरण कुंजी पहले से प्रतिबंधित आईडी के साथ प्रयोग नहीं किया जा सकता है."
+msgstr ""
+"त्रुटि: सक्रियकरण कुंजी पहले से प्रतिबंधित आईडी के साथ प्रयोग नहीं किया जा "
+"सकता है."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
 #: src/rhsmlib/services/register.py:218
 #: src/subscription_manager/cli_command/register.py:150
 msgid "Error: Activation keys do not allow environments to be specified."
-msgstr "त्रुटि: सक्रियकरण कुँजी निर्दिष्ट करने के लिए वातावरण को अनुमति नहीं देता है."
+msgstr ""
+"त्रुटि: सक्रियकरण कुँजी निर्दिष्ट करने के लिए वातावरण को अनुमति नहीं देता है."
 
 #: src/rhsmlib/services/register.py:225
 msgid "Error: Missing username or password."
@@ -1591,7 +1598,8 @@ msgstr "कृपया अपना खाता सूचना दर्ज �
 msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
-msgstr "अपने तंत्र प्रशासक से संपर्क करें यदि आप अपना लॉगिन या कूटशब्द भूल गए हैं"
+msgstr ""
+"अपने तंत्र प्रशासक से संपर्क करें यदि आप अपना लॉगिन या कूटशब्द भूल गए हैं"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -1606,7 +1614,8 @@ msgstr "Red Hat सदस्यता प्रबंधन"
 msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
-msgstr "ग्राहक पोर्टल में इस तंत्र को या अन्य सदस्यता प्रबंधन सेवा में पंजीयन करें"
+msgstr ""
+"ग्राहक पोर्टल में इस तंत्र को या अन्य सदस्यता प्रबंधन सेवा में पंजीयन करें"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -1614,7 +1623,8 @@ msgstr "ग्राहक पोर्टल में इस तंत्र �
 msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
-msgstr "ग्राहक पोर्टल से इस तंत्र को या अन्य सदस्यता प्रबंधन सेवा से गैर पंजीकृत करें"
+msgstr ""
+"ग्राहक पोर्टल से इस तंत्र को या अन्य सदस्यता प्रबंधन सेवा से गैर पंजीकृत करें"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -1635,8 +1645,8 @@ msgid ""
 "Your system is being registered again using Red Hat Subscription Management. "
 "Red Hat recommends that customers only register once."
 msgstr ""
-"आपका तंत्र Red Hat सदस्यता प्रबंधन के उपयोग से पंजीकृत किया जा रहा है. Red Hat की "
-"अनुशंसा का ग्राहक केवल एक बार पंजीकृत करें."
+"आपका तंत्र Red Hat सदस्यता प्रबंधन के उपयोग से पंजीकृत किया जा रहा है. Red "
+"Hat की अनुशंसा का ग्राहक केवल एक बार पंजीकृत करें."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -1645,8 +1655,8 @@ msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"दोनों में से किसी सेवा से पंजीयन वापसी के लिए इस नॉलेजबेस आलेख को देखें:  https://access."
-"redhat.com/kb/docs/DOC-45563"
+"दोनों में से किसी सेवा से पंजीयन वापसी के लिए इस नॉलेजबेस आलेख को देखें:  "
+"https://access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -1666,7 +1676,8 @@ msgstr "कृपया अपना Red Hat खाता सूचना दर
 msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
-msgstr "RHN Classic और Red Hat सदस्यता प्रबंधन के उपयोग से यह तंत्र पंजीकृत हुआ."
+msgstr ""
+"RHN Classic और Red Hat सदस्यता प्रबंधन के उपयोग से यह तंत्र पंजीकृत हुआ."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -1681,8 +1692,8 @@ msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
-"RHN पंजीयन और प्रौद्योगिकी के बारे में अधिक जानने के लिए इस नॉलेजबेस आलेख को देखें:  "
-"https://access.redhat.com/kb/docs/DOC-45563"
+"RHN पंजीयन और प्रौद्योगिकी के बारे में अधिक जानने के लिए इस नॉलेजबेस आलेख को "
+"देखें:  https://access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -1944,7 +1955,8 @@ msgstr ""
 msgid ""
 "A file from which to read pool IDs. If a hyphen is provided, pool IDs will "
 "be read from stdin."
-msgstr "पूल ID पढ़ने के लिए फाइल. यदि हाइफन दिया जाता है, पूल ID stdin से पढ़ेगा."
+msgstr ""
+"पूल ID पढ़ने के लिए फाइल. यदि हाइफन दिया जाता है, पूल ID stdin से पढ़ेगा."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -1970,7 +1982,8 @@ msgstr "पंजीकृत तंत्र में एक निर्द�
 
 #: src/subscription_manager/cli_command/attach.py:111
 msgid "Error: --auto may not be used when specifying pools."
-msgstr "त्रुटि: --auto का प्रयोग पूल निर्दिष्ट करने के लिए नहीं किया जा सकता है."
+msgstr ""
+"त्रुटि: --auto का प्रयोग पूल निर्दिष्ट करने के लिए नहीं किया जा सकता है."
 
 #: src/subscription_manager/cli_command/attach.py:114
 msgid "Error: The --servicelevel option cannot be used when specifying pools."
@@ -2027,7 +2040,8 @@ msgstr "इसके लिए सदस्यता सफलतापूर्
 # document keys, author rajesh
 #: src/subscription_manager/cli_command/attach.py:239
 msgid "No Installed products on system. No need to attach subscriptions."
-msgstr "तंत्र पर कोई संस्थापित उत्पाद नहीं. सदस्यता संलग्न करने की कोई जरूरत नहीं है."
+msgstr ""
+"तंत्र पर कोई संस्थापित उत्पाद नहीं. सदस्यता संलग्न करने की कोई जरूरत नहीं है."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2036,8 +2050,8 @@ msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
 msgstr ""
-"वैध एंटाइटेलमेंट के द्वारा सभी संस्थापित उत्पाद कवर किए गए जाते हैं. इस समय सदस्यता अद्यतन "
-"करने की कोई जरूरत नहीं."
+"वैध एंटाइटेलमेंट के द्वारा सभी संस्थापित उत्पाद कवर किए गए जाते हैं. इस समय "
+"सदस्यता अद्यतन करने की कोई जरूरत नहीं."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2047,8 +2061,8 @@ msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
 msgstr ""
-"त्रुटि: --servicelevel विकल्प सर्वर के द्वारा समर्थित नहीं है. आपके आग्रह को पूरा नहीं "
-"किया."
+"त्रुटि: --servicelevel विकल्प सर्वर के द्वारा समर्थित नहीं है. आपके आग्रह को "
+"पूरा नहीं किया."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2078,7 +2092,8 @@ msgstr "सदस्यता के स्वतः संलग्नन क�
 # document keys, author rajesh
 #: src/subscription_manager/cli_command/autoheal.py:35
 msgid "try to attach subscriptions for uncovered products each check-in"
-msgstr "हर चेकइन के लिए खुले उत्पादों के लिए सदस्यता संलग्न करने की कोशिश करता है"
+msgstr ""
+"हर चेकइन के लिए खुले उत्पादों के लिए सदस्यता संलग्न करने की कोशिश करता है"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -2173,8 +2188,8 @@ msgid ""
 "subscription-manager is disabled when running inside a container. Please "
 "refer to your host system for subscription management.\n"
 msgstr ""
-"subscription-manager को निष्क्रिय किया जाता है जब किसी कंटेनर के अंदर चलता है. कृपया "
-"सदस्यता प्रबंधक के लिए अपने मेजबान तंत्र का संदर्भ लें.\n"
+"subscription-manager को निष्क्रिय किया जाता है जब किसी कंटेनर के अंदर चलता है"
+". कृपया सदस्यता प्रबंधक के लिए अपने मेजबान तंत्र का संदर्भ लें.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2223,7 +2238,9 @@ msgstr ""
 # document keys
 #: src/subscription_manager/cli_command/config.py:28
 msgid "List, set, or remove the configuration parameters in use by this system"
-msgstr "इस तंत्र के द्वारा उपयोग में आए विन्यास पैरामीटर की सूची दें, सेट करें या हटाएँ"
+msgstr ""
+"इस तंत्र के द्वारा उपयोग में आए विन्यास पैरामीटर की सूची दें, सेट करें या "
+"हटाएँ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -2252,8 +2269,8 @@ msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
 msgstr ""
-"त्रुटि: --list को किसी विकल्प के साथ प्रयोग नहीं किया जाना चाहिए विन्यास के सेटिंग या "
-"हटाए जाने के लिए."
+"त्रुटि: --list को किसी विकल्प के साथ प्रयोग नहीं किया जाना चाहिए विन्यास के "
+"सेटिंग या हटाए जाने के लिए."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -2262,8 +2279,8 @@ msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
 msgstr ""
-"त्रुटि: हटाए जाने के लिए विन्यास प्रविष्टि पदनाम इस प्रारूप [section.name] का होना "
-"चाहिए"
+"त्रुटि: हटाए जाने के लिए विन्यास प्रविष्टि पदनाम इस प्रारूप [section.name] का"
+" होना चाहिए"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2456,8 +2473,8 @@ msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
 msgstr ""
-"बलपूर्वक प्रमाणपत्र पुनर्जनन (उपयोक्तानाम और कूटशब्द जरूरी); केवल --regenerate से फिर "
-"जनित होता है"
+"बलपूर्वक प्रमाणपत्र पुनर्जनन (उपयोक्तानाम और कूटशब्द जरूरी); केवल --"
+"regenerate से फिर जनित होता है"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2564,7 +2581,8 @@ msgid ""
 "Error: This command requires that you specify a certificate with --"
 "certificate."
 msgstr ""
-"त्रुटि: इस कमांड के लिए जरूरी है कि आप --certificate के साथ एक प्रमाणपत्र निर्दिष्ट करें."
+"त्रुटि: इस कमांड के लिए जरूरी है कि आप --certificate के साथ एक प्रमाणपत्र "
+"निर्दिष्ट करें."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -2580,7 +2598,8 @@ msgstr "%s प्रमाणपत्र को सफलतापूर्व�
 #, fuzzy, python-brace-format
 #| msgid "%s is not a valid certificate file. Please use a valid certificate."
 msgid "{file} is not a valid certificate file. Please use a valid certificate."
-msgstr "%s एक वैध प्रमाणपत्र फ़ाइल नहीं है. कृपया एक वैध प्रमाणपत्र का उपयोग करें."
+msgstr ""
+"%s एक वैध प्रमाणपत्र फ़ाइल नहीं है. कृपया एक वैध प्रमाणपत्र का उपयोग करें."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -2589,7 +2608,8 @@ msgid ""
 "An error occurred while importing the certificate. Please check log file for "
 "more information."
 msgstr ""
-"प्रमाणपत्र आयात करने के लिए दौरान त्रुटि आयी. अधिक जानकारी के लिए कृपया लॉग चेक करें."
+"प्रमाणपत्र आयात करने के लिए दौरान त्रुटि आयी. अधिक जानकारी के लिए कृपया लॉग "
+"चेक करें."
 
 #: src/subscription_manager/cli_command/import_cert.py:96
 #, python-brace-format
@@ -2911,7 +2931,8 @@ msgstr "उन सदस्यताओं को दिखाएँ जो उ�
 #: src/subscription_manager/cli_command/list.py:225
 msgid "used with --available to ensure all subscriptions are returned"
 msgstr ""
-"--available के साथ प्रयुक्त सुनिश्चित करने के लिए सभी सदस्यता को वापस किया जाता है"
+"--available के साथ प्रयुक्त सुनिश्चित करने के लिए सभी सदस्यता को वापस किया "
+"जाता है"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -2924,8 +2945,8 @@ msgid ""
 "date to search on, defaults to today's date, only used with --available "
 "(example: {example})"
 msgstr ""
-"तिथि जिसपर खोजना है, आज की तिथि में तयशुदा, केवल --available के साथ प्रयुक्त (उदाहरण: "
-"%s)"
+"तिथि जिसपर खोजना है, आज की तिथि में तयशुदा, केवल --available के साथ प्रयुक्त "
+"(उदाहरण: %s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2940,24 +2961,24 @@ msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
 msgstr ""
-"निर्दिष्ट सेवा स्तर को मेल खाता केवल सदस्यता दिखाएँ; केवल --available और --consumed के "
-"साथ प्रयुक्त"
+"निर्दिष्ट सेवा स्तर को मेल खाता केवल सदस्यता दिखाएँ; केवल --available और --"
+"consumed के साथ प्रयुक्त"
 
 #: src/subscription_manager/cli_command/list.py:251
 msgid ""
 "shows pools which provide products that are not already covered; only used "
 "with --available"
 msgstr ""
-"पूल को दिखाता है जो उत्पाद प्रदान करते हैं जो पहले से कवर नहीं किए हुए हैं; केवल --"
-"available के साथ प्रयुक्त हैं"
+"पूल को दिखाता है जो उत्पाद प्रदान करते हैं जो पहले से कवर नहीं किए हुए हैं; "
+"केवल --available के साथ प्रयुक्त हैं"
 
 #: src/subscription_manager/cli_command/list.py:259
 msgid ""
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
 msgstr ""
-"केवल मिलान किए उत्पाद की सदस्यता दिखाता है जो अभी संस्थापित है; जो केवल --available "
-"के साथ उपयोग होता है"
+"केवल मिलान किए उत्पाद की सदस्यता दिखाता है जो अभी संस्थापित है; जो केवल --"
+"available के साथ उपयोग होता है"
 
 #: src/subscription_manager/cli_command/list.py:267
 msgid ""
@@ -2965,16 +2986,17 @@ msgid ""
 "the subscription or product information, varying with the list requested and "
 "the server version (case-insensitive)."
 msgstr ""
-"केवल वही सदस्यता या उत्पाद की सूची दें जो सदस्यता या उत्पाद जानकारी में निर्दिष्ट "
-"अभिव्यक्ति को समाहित करता है, निवेदित सूची के साथ अंतर रखता (केस सेंसेटिव)."
+"केवल वही सदस्यता या उत्पाद की सूची दें जो सदस्यता या उत्पाद जानकारी में "
+"निर्दिष्ट अभिव्यक्ति को समाहित करता है, निवेदित सूची के साथ अंतर रखता (केस "
+"सेंसेटिव)."
 
 #: src/subscription_manager/cli_command/list.py:277
 msgid ""
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
 msgstr ""
-"अनुप्रयुक्त उपलब्ध या खपत हुआ सदस्यता के लिए केवल पुल ID की सूची दें; केवल --available और "
-"--consumed के साथ प्रयुक्त"
+"अनुप्रयुक्त उपलब्ध या खपत हुआ सदस्यता के लिए केवल पुल ID की सूची दें; केवल --"
+"available और --consumed के साथ प्रयुक्त"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -2987,8 +3009,8 @@ msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: {example})"
 msgstr ""
-"तिथि जिसपर खोजना है, आज की तिथि में तयशुदा, केवल --available के साथ प्रयुक्त (उदाहरण: "
-"%s)"
+"तिथि जिसपर खोजना है, आज की तिथि में तयशुदा, केवल --available के साथ प्रयुक्त "
+"(उदाहरण: %s)"
 
 #: src/subscription_manager/cli_command/list.py:310
 msgid "Error: --afterdate is only applicable with --available"
@@ -3040,7 +3062,8 @@ msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
 msgstr ""
-"अभिव्यक्ति \"%s\" से मेल खाता कोई उपलब्ध सदस्यता पुल और सर्विस स्तर \"%s\" नहीं मिला."
+"अभिव्यक्ति \"%s\" से मेल खाता कोई उपलब्ध सदस्यता पुल और सर्विस स्तर \"%s\" "
+"नहीं मिला."
 
 #: src/subscription_manager/cli_command/list.py:478
 #, fuzzy, python-brace-format
@@ -3082,7 +3105,8 @@ msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
 msgstr ""
-"अभिव्यक्ति \"%s\" से मेल खाता कोई खपत हुआ सदस्यता पुल और सर्विस स्तर \"%s\" नहीं मिला."
+"अभिव्यक्ति \"%s\" से मेल खाता कोई खपत हुआ सदस्यता पुल और सर्विस स्तर \"%s\" "
+"नहीं मिला."
 
 #: src/subscription_manager/cli_command/list.py:541
 #, fuzzy, python-brace-format
@@ -3154,26 +3178,28 @@ msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
 msgstr ""
-"अधिरोहन के लिए हटाने के लिए नाम (एकाधिक बार निर्दिष्ट किया जा सकता है); --repo "
-"विकल्प के साथ प्रयुक्त."
+"अधिरोहन के लिए हटाने के लिए नाम (एकाधिक बार निर्दिष्ट किया जा सकता है); --"
+"repo विकल्प के साथ प्रयुक्त."
 
 #: src/subscription_manager/cli_command/override.py:56
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
 msgstr ""
-"कालन से अलग अधिरोहन के लिए नाम और मान (एकाधिक बार निर्दिष्ट किया जा सकता है); --"
-"repo विकल्प के साथ प्रयुक्त."
+"कालन से अलग अधिरोहन के लिए नाम और मान (एकाधिक बार निर्दिष्ट किया जा सकता है);"
+" --repo विकल्प के साथ प्रयुक्त."
 
 #: src/subscription_manager/cli_command/override.py:63
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
-msgstr "सभी अधिरोहन हटाएँ; --repo प्रदान करके किसी रेपो में निर्दिष्ट किया जा सकता है"
+msgstr ""
+"सभी अधिरोहन हटाएँ; --repo प्रदान करके किसी रेपो में निर्दिष्ट किया जा सकता है"
 
 #: src/subscription_manager/cli_command/override.py:68
 msgid "list all overrides; can be specific to a repository by providing --repo"
 msgstr ""
-"सभी अधिरोहन सूचीबद्ध करें; --repo प्रदान करके किसी रेपो में निर्दिष्ट किया जा सकता है"
+"सभी अधिरोहन सूचीबद्ध करें; --repo प्रदान करके किसी रेपो में निर्दिष्ट किया जा"
+" सकता है"
 
 #: src/subscription_manager/cli_command/override.py:76
 msgid "You must specify an override in the form of \"name:value\" with --add."
@@ -3190,7 +3216,8 @@ msgstr "त्रुटि: आपको किसी रिपोजिटर�
 #: src/subscription_manager/cli_command/override.py:94
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
-"त्रुटि: आप --add या --remove को --remove-all और --list के साथ उपयोग नहीं कर सकते हैं"
+"त्रुटि: आप --add या --remove को --remove-all और --list के साथ उपयोग नहीं कर "
+"सकते हैं"
 
 #: src/subscription_manager/cli_command/override.py:97
 msgid "Error: You may not use --list with --remove-all"
@@ -3333,15 +3360,17 @@ msgid ""
 "optional language to use for email notification when subscription redemption "
 "is complete (Examples: en-us, de-de)"
 msgstr ""
-"ईमेल अधिसूचना के लिए वैकल्पिक भाषा जब सदस्यता की पूर्णता समाप्त हो जाती है. (उदाहरण: "
-"en-us, de-de)"
+"ईमेल अधिसूचना के लिए वैकल्पिक भाषा जब सदस्यता की पूर्णता समाप्त हो जाती है. "
+"(उदाहरण: en-us, de-de)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
 #: src/subscription_manager/cli_command/redeem.py:52
 msgid ""
 "Error: This command requires that you specify an email address with --email."
-msgstr "त्रुटि: इस कमांड के लिए जरूरी है कि आप --email के साथ एक ईमेल पता निर्दिष्ट करें."
+msgstr ""
+"त्रुटि: इस कमांड के लिए जरूरी है कि आप --email के साथ एक ईमेल पता निर्दिष्ट "
+"करें."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author mospina
@@ -3397,7 +3426,8 @@ msgstr "मौजूदा तंत्र आँकड़ा को सर्�
 msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
-msgstr "संगठन कुँजी के उपयोग से उपयोक्ता के लिए कई संगठनों में से एक से पंजीकृत करें"
+msgstr ""
+"संगठन कुँजी के उपयोग से उपयोक्ता के लिए कई संगठनों में से एक से पंजीकृत करें"
 
 #: src/subscription_manager/cli_command/register.py:99
 msgid ""
@@ -3440,7 +3470,9 @@ msgstr "पंजीयन के उपयोग के लिए सक्र�
 #: src/subscription_manager/cli_command/register.py:134
 msgid ""
 "system preference used when subscribing automatically, requires --auto-attach"
-msgstr "स्वतः सदस्यता लेने के दौरान प्रयुक्त तंत्र वरीयताएँ, के लिए --auto-attach चाहिए"
+msgstr ""
+"स्वतः सदस्यता लेने के दौरान प्रयुक्त तंत्र वरीयताएँ, के लिए --auto-attach "
+"चाहिए"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -3452,7 +3484,8 @@ msgstr "यह तंत्र पर से पंजीकृत है.  --fo
 # document keys
 #: src/subscription_manager/cli_command/register.py:152
 msgid "Error: Activation keys cannot be used with --auto-attach."
-msgstr "त्रुटि: सक्रियकरण कुँजी को --auto-attach के साथ नहीं प्रयोग किया जा सकता है."
+msgstr ""
+"त्रुटि: सक्रियकरण कुँजी को --auto-attach के साथ नहीं प्रयोग किया जा सकता है."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -3627,7 +3660,8 @@ msgstr "रिलीज वरीयता अनसेट किया गय�
 #| "No releases match '%s'.  Consult 'release --list' for a full listing."
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
-msgstr "कोई रिलीज मैच '%s नहीं'. 'release --list' की सलाह पूरी लिस्टिंग के लिए लें."
+msgstr ""
+"कोई रिलीज मैच '%s नहीं'. 'release --list' की सलाह पूरी लिस्टिंग के लिए लें."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -3780,16 +3814,16 @@ msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"सक्रिय करने के लिए रिपोजिटरी (एक से अधिक बार निर्दिष्ट किया जा सकता है). वाइल्ड कार्ड "
-"(* और ?) समर्थित हैं."
+"सक्रिय करने के लिए रिपोजिटरी (एक से अधिक बार निर्दिष्ट किया जा सकता है). "
+"वाइल्ड कार्ड (* और ?) समर्थित हैं."
 
 #: src/subscription_manager/cli_command/repos.py:96
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"निष्क्रिय करने के लिए रेपोजिटरी (एकाधिक बार निर्दिष्ट किया जा सकता है). वाइल्ड कार्ड "
-"(* और ?) समर्थित हैं."
+"निष्क्रिय करने के लिए रेपोजिटरी (एकाधिक बार निर्दिष्ट किया जा सकता है). वाइल्"
+"ड कार्ड (* और ?) समर्थित हैं."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -3848,8 +3882,8 @@ msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
 msgstr ""
-"त्रुटि: आप जरूर पंजीकृत करें या निर्दिष्ट करें --username और --password ताकि सर्विस लेवल "
-"सूचीबद्ध किया जा सके"
+"त्रुटि: आप जरूर पंजीकृत करें या निर्दिष्ट करें --username और --password ताकि "
+"सर्विस लेवल सूचीबद्ध किया जा सके"
 
 #: src/subscription_manager/cli_command/service_level.py:99
 msgid ""
@@ -3917,7 +3951,8 @@ msgstr "इस तंत्र के सदस्यता और उत्प�
 #| "future date to check status on, defaults to today's date (example: %s)"
 msgid ""
 "future date to check status on, defaults to today's date (example: {example})"
-msgstr "स्थिति चालू जाँचने के लिए भविष्य की तिथि, आज के तिथि का तयशुदा (उदाहरण: %s)"
+msgstr ""
+"स्थिति चालू जाँचने के लिए भविष्य की तिथि, आज के तिथि का तयशुदा (उदाहरण: %s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
@@ -4100,8 +4135,8 @@ msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
 msgstr ""
-"संजाल त्रुटि, सर्वर में कनेक्ट करने में असमर्थ. कृपया देखें /var/log/rhsm/rhsm.log अधिक सूचना "
-"के लिए."
+"संजाल त्रुटि, सर्वर में कनेक्ट करने में असमर्थ. कृपया देखें /var/log/rhsm/"
+"rhsm.log अधिक सूचना के लिए."
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
@@ -4160,8 +4195,8 @@ msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
-"दूरस्थ सर्वर त्रुटि. कृपया कनेक्शन विवरण की जाँच करें या देखें /var/log/rhsm/rhsm.log अधिक "
-"सूचना के लिए."
+"दूरस्थ सर्वर त्रुटि. कृपया कनेक्शन विवरण की जाँच करें या देखें /var/log/rhsm/"
+"rhsm.log अधिक सूचना के लिए."
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
