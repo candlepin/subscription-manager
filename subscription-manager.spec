@@ -201,6 +201,8 @@ BuildRequires: %{py_package_prefix}-dateutil
 
 BuildRequires: systemd
 
+Obsoletes: subscription-manager-migration <= %{version}-%{release}
+
 Obsoletes: subscription-manager-initial-setup-addon <= %{version}-%{release}
 
 Obsoletes: rhsm-gtk <= %{version}-%{release}
