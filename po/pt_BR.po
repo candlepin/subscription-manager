@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2021-08-10 19:35+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2023-05-10 05:38+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 #, fuzzy
@@ -464,8 +464,7 @@ msgstr "Zip de manifesto tentou extrair fora do diretório de base."
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:114
 msgid "Unable to trace symbolic link.  Possibly circular linkage."
-msgstr ""
-"Incapaz de rastrear o link simbólico. Possivelmente é um link circular."
+msgstr "Incapaz de rastrear o link simbólico. Possivelmente é um link circular."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:138
@@ -1355,8 +1354,7 @@ msgstr "Erro: --no-overlap é aplicável somente com --available"
 #: src/subscription_manager/cli_command/list.py:307
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
-msgstr ""
-"Erro: --pool-only é aplicável somente com o --available e/ou --consumed"
+msgstr "Erro: --pool-only é aplicável somente com o --available e/ou --consumed"
 
 #: src/rhsmlib/services/entitlement.py:519
 msgid "Error: this system is not registered"
@@ -1566,8 +1564,8 @@ msgid ""
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
 "Para aprender mais sobre como se registrar no RHN e sobre as tecnologias, "
-"por favor consulte este Artigo de Base de Conhecimento: https://access."
-"redhat.com/kb/docs/DOC-45563"
+"por favor consulte este Artigo de Base de Conhecimento: https://access.redhat"
+".com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:41
@@ -2046,8 +2044,8 @@ msgstr ""
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
-"A identidade do consumidor não existe ou está corrompida. Tente  register --"
-"help"
+"A identidade do consumidor não existe ou está corrompida. Tente  register "
+"--help"
 
 #: src/subscription_manager/cli_command/cli.py:267
 msgid ""
@@ -2055,8 +2053,8 @@ msgid ""
 "refer to your host system for subscription management.\n"
 msgstr ""
 "subscription-manager é desabilitado ao ser executado dentro de um container. "
-"Por favor, consulte seu sistema host para obter gerenciamento de "
-"subscrição.\n"
+"Por favor, consulte seu sistema host para obter gerenciamento de subscrição."
+"\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:282
@@ -2421,8 +2419,8 @@ msgid ""
 "Error: This command requires that you specify a certificate with --"
 "certificate."
 msgstr ""
-"Erro: Este comando requer que você especifique um certificado com  --"
-"certificate."
+"Erro: Este comando requer que você especifique um certificado com  "
+"--certificate."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/import_cert.py:69
@@ -2837,8 +2835,8 @@ msgstr "    Estado de Produtos Instalados"
 #| msgid "No installed products were found matching the expression \"%s\"."
 msgid "No installed products were found matching the expression \"{filter}\"."
 msgstr ""
-"Não foi encontrado nenhum produto instalado coincidindo com a  expressão \"%s"
-"\"."
+"Não foi encontrado nenhum produto instalado coincidindo com a  expressão \"%"
+"s\"."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:396
@@ -3173,8 +3171,8 @@ msgstr ""
 msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr ""
-"Erro: Este comando requer que você especifique um endereço de email com o  --"
-"email."
+"Erro: Este comando requer que você especifique um endereço de email com o  "
+"--email."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:74
@@ -3490,8 +3488,8 @@ msgid ""
 "Error: The registered entitlement server does not support remove --pool.\n"
 "Instead, use the remove --serial option."
 msgstr ""
-"Erro: O servidor intitulado registrado não fornece suporte a remove --"
-"pool. \n"
+"Erro: O servidor intitulado registrado não fornece suporte a remove --pool. "
+"\n"
 "No lugar disto, use a opção remove --serial."
 
 #: src/subscription_manager/cli_command/remove.py:87
@@ -3584,8 +3582,8 @@ msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"repositório a habilitar (pode ser especificado mais de uma vez). Wildcards "
-"(* and ?) são suportados."
+"repositório a habilitar (pode ser especificado mais de uma vez). Wildcards (*"
+" and ?) são suportados."
 
 #: src/subscription_manager/cli_command/repos.py:96
 msgid ""
