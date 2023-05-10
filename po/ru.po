@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2021-08-10 19:35+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2023-05-10 05:38+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.7.2\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 #, fuzzy
@@ -1356,8 +1356,8 @@ msgstr "Ошибка. «--no-overlap» используется вместе с 
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr ""
-"Ошибка. «--pool-only» может использоваться только с «--available» и «--"
-"consumed»"
+"Ошибка. «--pool-only» может использоваться только с «--available» и "
+"«--consumed»"
 
 #: src/rhsmlib/services/entitlement.py:519
 msgid "Error: this system is not registered"
@@ -1383,9 +1383,9 @@ msgid ""
 "use the clean command and try again without --force."
 msgstr ""
 "Ошибка. Принудительная регистрация невозможна, если вы пытаетесь извлечь "
-"информацию о регистрации с помощью consumerid. Используйте параметр «--"
-"force» без «--consumerid» или выполните команду «subscription-manager clean» "
-"и повторите попытку без параметра «--force»."
+"информацию о регистрации с помощью consumerid. Используйте параметр «--force»"
+" без «--consumerid» или выполните команду «subscription-manager clean» и "
+"повторите попытку без параметра «--force»."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:209
@@ -1490,8 +1490,7 @@ msgstr "Управление подписками Red Hat"
 msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
-msgstr ""
-"Регистрация на портале пользователей или в службе управления подписками"
+msgstr "Регистрация на портале пользователей или в службе управления подписками"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:10
@@ -1923,8 +1922,8 @@ msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
 msgstr ""
-"Запрос не может быть обработан: сервер не поддерживает параметр --"
-"servicelevel."
+"Запрос не может быть обработан: сервер не поддерживает параметр "
+"--servicelevel."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:271
@@ -1980,8 +1979,7 @@ msgstr "Автоматический выбор: выключен"
 #: src/subscription_manager/cli_command/clean.py:25
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr ""
-"Удаление локальных данных подписки без отражения результатов на сервере"
+msgstr "Удаление локальных данных подписки без отражения результатов на сервере"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/clean.py:31
@@ -2425,8 +2423,7 @@ msgstr "Недопустимый сертификат: %s. Выберите др
 msgid ""
 "An error occurred while importing the certificate. Please check log file for "
 "more information."
-msgstr ""
-"Ошибка импорта сертификата. Подробную информацию можно найти в журнале."
+msgstr "Ошибка импорта сертификата. Подробную информацию можно найти в журнале."
 
 #: src/subscription_manager/cli_command/import_cert.py:96
 #, fuzzy, python-brace-format
@@ -2734,8 +2731,8 @@ msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
 msgstr ""
-"возвращает подписки для выбранного уровня обслуживания. Используется с «--"
-"available» и «--consumed»"
+"возвращает подписки для выбранного уровня обслуживания. Используется с "
+"«--available» и «--consumed»"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:251
@@ -2958,8 +2955,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/override.py:63
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
-msgstr ""
-"удалить переопределения (чтобы выбрать репозиторий, используйте --repo)"
+msgstr "удалить переопределения (чтобы выбрать репозиторий, используйте --repo)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:68
@@ -2986,8 +2982,8 @@ msgstr "Ошибка. Необходимо выбрать репозиторий
 #: src/subscription_manager/cli_command/override.py:94
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
-"Ошибка. --add и --remove не могут использоваться вместе с --remove-all и --"
-"list"
+"Ошибка. --add и --remove не могут использоваться вместе с --remove-all и "
+"--list"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:97
@@ -2998,8 +2994,8 @@ msgstr "Ошибка. --list не может использоваться вме
 #: src/subscription_manager/cli_command/override.py:102
 msgid "Error: The --repo option must be used with --list or --add or --remove."
 msgstr ""
-"Ошибка. Параметр --repo должен использоваться вместе с --list, --add или --"
-"remove."
+"Ошибка. Параметр --repo должен использоваться вместе с --list, --add или "
+"--remove."
 
 #: src/subscription_manager/cli_command/override.py:107
 msgid "Error: You must specify an override name with --remove."
@@ -3222,8 +3218,8 @@ msgstr "ключ активации (может быть указан повто
 msgid ""
 "system preference used when subscribing automatically, requires --auto-attach"
 msgstr ""
-"при автоматической подписке учитывать настроенные предпочтения (требует --"
-"auto-attach)"
+"при автоматической подписке учитывать настроенные предпочтения (требует "
+"--auto-attach)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:140
@@ -3235,8 +3231,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:152
 msgid "Error: Activation keys cannot be used with --auto-attach."
-msgstr ""
-"Ошибка. Ключи активации не могут использоваться вместе с --auto-attach."
+msgstr "Ошибка. Ключи активации не могут использоваться вместе с --auto-attach."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:157
@@ -3442,8 +3437,8 @@ msgid ""
 "Error: The registered entitlement server does not support remove --pool.\n"
 "Instead, use the remove --serial option."
 msgstr ""
-"Ошибка. Зарегистрированный сервер полномочий не поддерживает «remove --"
-"pool».\n"
+"Ошибка. Зарегистрированный сервер полномочий не поддерживает «remove --pool»."
+"\n"
 "Вместо этого используйте «remove --serial»."
 
 #: src/subscription_manager/cli_command/remove.py:87
@@ -3451,8 +3446,8 @@ msgid ""
 "Error: This command requires that you specify one of --serial, --pool or --"
 "all."
 msgstr ""
-"Ошибка. Необходимо указать один из аргументов: «--serial», «--pool» или «--"
-"all»."
+"Ошибка. Необходимо указать один из аргументов: «--serial», «--pool» или "
+"«--all»."
 
 #: src/subscription_manager/cli_command/remove.py:93
 msgid "The entitlement server successfully removed these pools:"
