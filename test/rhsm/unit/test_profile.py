@@ -15,6 +15,8 @@ import unittest
 from unittest import mock
 from unittest.mock import patch
 
+from cloud_what.providers import aws, azure, gcp
+
 from rhsm.profile import ModulesProfile, EnabledReposProfile
 
 
@@ -37,6 +39,14 @@ class TestModulesProfile(unittest.TestCase):
         self.cloud_provider_mock = cloud_provider_patcher.start()
         self.cloud_provider_mock.get_cloud_provider = mock.Mock(return_value=None)
         self.addCleanup(cloud_provider_patcher.stop)
+
+    def tearDown(self) -> None:
+        aws.AWSCloudProvider._instance = None
+        aws.AWSCloudProvider._initialized = False
+        azure.AzureCloudProvider._instance = None
+        azure.AzureCloudProvider._initialized = False
+        gcp.GCPCloudProvider._instance = None
+        gcp.GCPCloudProvider._initialized = False
 
     def test_default_status(self) -> None:
         """

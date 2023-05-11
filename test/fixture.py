@@ -9,6 +9,8 @@ import unittest
 # just log py.warnings (and pygtk warnings in particular)
 import logging
 
+from cloud_what.providers import aws, azure, gcp
+
 try:
     # 2.7+
     logging.captureWarnings(True)
@@ -272,6 +274,13 @@ class SubManFixture(unittest.TestCase):
             # Assuming these are tempfile.NamedTemporaryFile, created with
             # the write_tempfile() method in this class.
             f.close()
+
+        aws.AWSCloudProvider._instance = None
+        aws.AWSCloudProvider._initialized = False
+        azure.AzureCloudProvider._instance = None
+        azure.AzureCloudProvider._initialized = False
+        gcp.GCPCloudProvider._instance = None
+        gcp.GCPCloudProvider._initialized = False
 
     def write_tempfile(self, contents):
         """
