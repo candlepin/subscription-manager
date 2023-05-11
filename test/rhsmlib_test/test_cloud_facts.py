@@ -161,12 +161,6 @@ def mock_prepare_request(request):
 
 class TestCloudCollector(unittest.TestCase):
     def setUp(self):
-        aws.AWSCloudProvider._instance = None
-        aws.AWSCloudProvider._initialized = False
-        azure.AzureCloudProvider._instance = None
-        azure.AzureCloudProvider._initialized = False
-        gcp.GCPCloudProvider._instance = None
-        gcp.GCPCloudProvider._initialized = False
         super(TestCloudCollector, self).setUp()
         self.mock_facts = mock.Mock()
         inj.provide(inj.FACTS, self.mock_facts)
@@ -174,6 +168,14 @@ class TestCloudCollector(unittest.TestCase):
         self.requests_patcher = patch('cloud_what._base_provider.requests')
         self.requests_mock = self.requests_patcher.start()
         self.addCleanup(self.requests_patcher.stop)
+
+    def tearDown(self) -> None:
+        aws.AWSCloudProvider._instance = None
+        aws.AWSCloudProvider._initialized = False
+        azure.AzureCloudProvider._instance = None
+        azure.AzureCloudProvider._initialized = False
+        gcp.GCPCloudProvider._instance = None
+        gcp.GCPCloudProvider._initialized = False
 
     @patch('cloud_what.providers.aws.requests.Session', name='test_get_aws_facts.mock_session_class')
     def test_get_aws_facts(self, mock_session_class):

@@ -8,6 +8,8 @@ import six
 import sys
 import tempfile
 
+from cloud_what.providers import aws, azure, gcp
+
 try:
     import unittest2 as unittest
 except ImportError:
@@ -296,6 +298,13 @@ class SubManFixture(unittest.TestCase):
             # Assuming these are tempfile.NamedTemporaryFile, created with
             # the write_tempfile() method in this class.
             f.close()
+
+        aws.AWSCloudProvider._instance = None
+        aws.AWSCloudProvider._initialized = False
+        azure.AzureCloudProvider._instance = None
+        azure.AzureCloudProvider._initialized = False
+        gcp.GCPCloudProvider._instance = None
+        gcp.GCPCloudProvider._initialized = False
 
     def write_tempfile(self, contents):
         """
