@@ -98,7 +98,7 @@ def mock_prepare_request(request):
 
 
 class TestAutomaticRegistration(unittest.TestCase):
-    def setUp(self):
+    def tearDown(self):
         aws.AWSCloudProvider._instance = None
         aws.AWSCloudProvider._initialized = False
         azure.AzureCloudProvider._instance = None

@@ -32,13 +32,6 @@ class TestCloudProvider(unittest.TestCase):
         """
         Set up two mocks that are used in all tests
         """
-        aws.AWSCloudProvider._instance = None
-        aws.AWSCloudProvider._initialized = False
-        azure.AzureCloudProvider._instance = None
-        azure.AzureCloudProvider._initialized = False
-        gcp.GCPCloudProvider._instance = None
-        gcp.GCPCloudProvider._initialized = False
-
         custom_facts_collector_patcher = patch("cloud_what.provider.CustomFactsCollector")
         self.custom_facts_collector_mock = custom_facts_collector_patcher.start()
         self.custom_facts_collector_instance = Mock()
