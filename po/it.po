@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2023-05-06 12:20+0000\n"
+"PO-Revision-Date: 2023-05-12 10:21+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
@@ -1765,8 +1765,8 @@ msgstr ""
 #: src/subscription_manager/cli_command/attach.py:57
 msgid "Number of subscriptions to attach. May not be used with an auto-attach."
 msgstr ""
-"Numero di sottoscrizioni da associare. Non può essere utilizzata con un auto-"
-"attach."
+"Numero di sottoscrizioni da associare. Non può essere utilizzata con "
+"l'associazione automatica."
 
 #: src/subscription_manager/cli_command/attach.py:63
 msgid ""
@@ -1828,7 +1828,8 @@ msgstr "Errore: la quantità deve essere un valore intero positivo."
 
 #: src/subscription_manager/cli_command/attach.py:122
 msgid "Error: --quantity may not be used with an auto-attach"
-msgstr "Errore: --quantity non può essere utilizzata con auto-attach"
+msgstr ""
+"Errore: --quantity non può essere utilizzata con l'associazione automatica"
 
 #: src/subscription_manager/cli_command/attach.py:132
 msgid "Error: Received data does not contain any pool IDs."
