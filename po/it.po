@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-05 09:03+0200\n"
-"PO-Revision-Date: 2023-05-03 06:03+0000\n"
+"PO-Revision-Date: 2023-05-16 23:21+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/it/>\n"
@@ -1018,7 +1018,7 @@ msgstr "Il file zip del manifest non è valido."
 #: src/rct/manifest_commands.py:85
 #, python-format
 msgid "Unable to find file \"%s\" in manifest."
-msgstr "Impossibile trovare il file \"%s\" nel manifesto."
+msgstr "Impossibile trovare il file \"%s\" nel manifest."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rct/manifest_commands.py:109
@@ -1262,7 +1262,7 @@ msgstr "Impossibile scrivere il manifest:"
 #: src/rct/manifest_commands.py:344
 #, python-format
 msgid "The manifest has been dumped to the %s directory"
-msgstr "È stato eseguito il dump del manifesto nella directory %s"
+msgstr "È stato eseguito il dump del manifest nella directory %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rct/manifest_commands.py:347
@@ -3124,7 +3124,7 @@ msgstr "autoheal_checkbox"
 #: src/subscription_manager/gui/data/glade/preferences.glade:81
 #: src/subscription_manager/gui/data/ui/preferences.ui:84
 msgid "Enable auto-attach preference"
-msgstr "Abilita preferenze di auto-attach"
+msgstr "Abilita associazione automatica"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/gui/data/glade/preferences.glade:105
@@ -3134,7 +3134,7 @@ msgid ""
 "a schedule (default of daily).</small>"
 msgstr ""
 "<small>Se abilitato, per qualsiasi prodotto non incluso le sottoscrizioni "
-"verranno assegnate ad una programmazione (impostazione predefinita: "
+"saranno associate periodicamente (impostazione predefinita: "
 "giornaliero).</small>"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
@@ -4098,12 +4098,11 @@ msgstr "Il sistema '%s' è stato registrato con successo.\n"
 
 #: src/subscription_manager/gui/registergui.py:661
 msgid "<b>Attaching</b>"
-msgstr "<b>Allega</b>"
+msgstr "<b>Associazione</b>"
 
 #: src/subscription_manager/gui/registergui.py:808
-#, fuzzy
 msgid "Subscription Attachment"
-msgstr "Allegato sottoscrizione"
+msgstr "Associazione sottoscrizioni"
 
 #: src/subscription_manager/gui/registergui.py:1039
 #, python-format
@@ -4137,7 +4136,6 @@ msgid "_Attach"
 msgstr "_Associa"
 
 #: src/subscription_manager/gui/registergui.py:1239
-#, fuzzy
 msgid "Finding suitable subscriptions"
 msgstr "Ricerca di sottoscrizioni adatte"
 
@@ -4145,8 +4143,8 @@ msgstr "Ricerca di sottoscrizioni adatte"
 #: src/subscription_manager/gui/registergui.py:1248
 msgid "Unable to auto-attach, server does not support service levels."
 msgstr ""
-"Impossibile eseguire una associazione automatica, il server non supporta i "
-"livelli di servizio."
+"Impossibile associare automaticamente, il server non supporta i livelli di "
+"servizio."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/registergui.py:1257
@@ -4154,8 +4152,8 @@ msgid ""
 "No installed products on system. No need to attach subscriptions at this "
 "time."
 msgstr ""
-"Nessun prodotto installato sul sistema. Ora non è necessario associare le "
-"sottoscrizioni."
+"Nessun prodotto installato sul sistema. Al momento non è necessario "
+"associare sottoscrizioni."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/registergui.py:1263
@@ -4163,8 +4161,8 @@ msgid ""
 "All installed products are covered by valid entitlements. No need to attach "
 "subscriptions at this time."
 msgstr ""
-"Tutti i prodotti installati hanno entitlement validi. Ora non è necessario "
-"associare le sottoscrizioni."
+"Tutti i prodotti installati hanno entitlement validi. Al momento non è "
+"necessario associare sottoscrizioni."
 
 #: src/subscription_manager/gui/registergui.py:1272
 msgid "Consumer has been deleted."
@@ -4288,13 +4286,12 @@ msgid "Server supports environments, but none are available."
 msgstr "Il server supporta gli ambienti, ma nessun ambiente è disponibile."
 
 #: src/subscription_manager/gui/registergui.py:2076
-#, fuzzy
 msgid ""
 "Not all expected subscriptions were attached, see /var/log/rhsm/rhsm.log for "
 "more details."
 msgstr ""
-"Non tutti gli abbonamenti previsti sono stati allegati, consultare /var/log/"
-"rhsm/rhsm.log per maggiori dettagli."
+"Non tutte le sottoscrizioni previste sono state associate, consultare /var/"
+"log/rhsm/rhsm.log per maggiori dettagli."
 
 #: src/subscription_manager/gui/reposgui.py:54
 msgid "Attached subscriptions do not provide any repositories."
@@ -4302,7 +4299,7 @@ msgstr "Le sottoscrizioni associate non forniscono alcun repository."
 
 #: src/subscription_manager/gui/reposgui.py:55
 msgid "No repositories are available without an attached subscription."
-msgstr "Nessun repository è disponibile senza una sottoscrizione associata."
+msgstr "Non è disponibile alcun repository senza una sottoscrizione associata."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/gui/reposgui.py:56
@@ -5214,10 +5211,8 @@ msgid "Environments"
 msgstr "Ambienti"
 
 #: src/subscription_manager/managercli.py:1524
-#, fuzzy
-#| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
-msgstr "Questa organizzazione non possiede alcun ambiente."
+msgstr "Non c'è alcun ambiente da elencare."
 
 #: src/subscription_manager/managercli.py:1561
 msgid "Error: The same environment may not be listed more than once. "
@@ -5275,10 +5270,8 @@ msgstr "Associazione automatica: disabilitata"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1618
-#, fuzzy
-#| msgid "show this system's current service level"
 msgid "Show or modify the system purpose service-level setting"
-msgstr "mostra il livello del servizio corrente di questo sistema"
+msgstr ""
 
 #: src/subscription_manager/managercli.py:1645
 msgid "Error: --org is only supported with the --list or --set option"
@@ -5638,8 +5631,8 @@ msgstr ""
 #: src/subscription_manager/managercli.py:2414
 msgid "Number of subscriptions to attach. May not be used with an auto-attach."
 msgstr ""
-"Numero di sottoscrizioni da associare. Non può essere utilizzata con un auto-"
-"attach."
+"Numero di sottoscrizioni da associare. Non può essere utilizzata con "
+"l'associazione automatica."
 
 #: src/subscription_manager/managercli.py:2416
 msgid ""
@@ -5701,7 +5694,8 @@ msgstr "Errore: la quantità deve essere un valore intero positivo."
 
 #: src/subscription_manager/managercli.py:2461
 msgid "Error: --quantity may not be used with an auto-attach"
-msgstr "Errore: --quantity non può essere utilizzata con auto-attach"
+msgstr ""
+"Errore: --quantity non può essere utilizzata con l'associazione automatica"
 
 #: src/subscription_manager/managercli.py:2471
 msgid "Error: Received data does not contain any pool IDs."
@@ -5733,7 +5727,7 @@ msgstr "Inserire un ID numerico valido di pool."
 #: src/subscription_manager/managercli.py:2537
 #, python-format
 msgid "Successfully attached a subscription for: %s"
-msgstr "Assegnata una sottoscrizione con successo per: %s"
+msgstr "Associata correttamente una sottoscrizione per: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:2559
@@ -6203,8 +6197,8 @@ msgid ""
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
 msgstr ""
-"elenca solo gli ID dei pool per le sottoscrizioni applicabili utilizzate o "
-"disponibili; usato solo con --available e --consumed"
+"elenca solo gli ID dei pool per le sottoscrizioni applicabili disponibili o "
+"usate; usato solo con --available e --consumed"
 
 #: src/subscription_manager/managercli.py:3288
 #, python-format
@@ -6313,7 +6307,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:3517
 msgid "No consumed subscription pools were found."
-msgstr "Nessun pool di sottoscrizione consumato è stato trovato."
+msgstr "Nessun pool di sottoscrizione usato è stato trovato."
 
 #: src/subscription_manager/managercli.py:3522
 msgid "Manage custom content repository settings"
@@ -6409,10 +6403,8 @@ msgid "Repository: %s"
 msgstr "Repository: %s"
 
 #: src/subscription_manager/managercli.py:3655
-#, fuzzy
-#| msgid "Modify system purpose role"
 msgid "Show or modify the system purpose role setting"
-msgstr "Modifica il ruolo dello scopo del sistema"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:3669
