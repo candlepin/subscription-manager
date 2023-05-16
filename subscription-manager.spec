@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.34
+Version: 1.29.35
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -738,6 +738,31 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Tue May 16 2023 Pino Toscano <ptoscano@redhat.com> 1.29.35-1
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Clean up tests using Cloud What detectors properly (mhorky@redhat.com)
+- spec: Obsolete subscription-manager-migration (ptoscano@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (ljanda@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Typo fixes (ptoscano@redhat.com)
+- Avoid string puzzle (ptoscano@redhat.com)
+- Properly use ungettext for plural forms (ptoscano@redhat.com)
+- 2189664: cache: fix SyspurposeComplianceStatusCache on failed load
+  (ptoscano@redhat.com)
+- dbus: don't catch exceptions in DomainSocketServer.run()
+  (ptoscano@redhat.com)
+- cli: directly exit on InvalidCLIOptionError (ptoscano@redhat.com)
+- Revert "ENT-5549: Fix return code handling of CLI" (ptoscano@redhat.com)
+- ci: add dependabot config for GitHub Actions (ptoscano@redhat.com)
+- Update .git-blame-ignore-revs (mhorky@redhat.com)
+- Format code with black==23.3.0 (mhorky@redhat.com)
+- ENT-5535: Update black to version 23.3.0 (mhorky@redhat.com)
+
 * Wed Apr 12 2023 Pino Toscano <ptoscano@redhat.com> 1.29.34-1
 - Update TESTING.md (mhorky@redhat.com)
 - Improved debug print of http traffic, when proxy is used (jhnidek@redhat.com)
