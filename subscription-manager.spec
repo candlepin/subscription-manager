@@ -225,7 +225,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.37
+Version: 1.28.38
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1381,6 +1381,32 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed May 17 2023 Pino Toscano <ptoscano@redhat.com> 1.28.38-1
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Update translation files (noreply@weblate.org)
+- Clean up tests using Cloud What detectors properly (mhorky@redhat.com)
+- spec: Obsolete subscription-manager-migration (ptoscano@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- 2150814: Drop RHN migration (ptoscano@redhat.com)
+- ci: stop testing on Fedora Rawhide (ptoscano@redhat.com)
+- Drop redhat-uep.pem (ptoscano@redhat.com)
+- Move redhat-entitlement-authority.pem to container plugin
+  (ptoscano@redhat.com)
+- Drop subscription-manager-rhsm-certificates package (ptoscano@redhat.com)
+- utils: import pkg_resources only when needed (ptoscano@redhat.com)
+- ENT-5532: Call rhsm-package-profile-uploader with --force-upload
+  (jhnidek@redhat.com)
+- rhsmcertd reads default_log_level from rhsm.conf (jhnidek@redhat.com)
+- Create log dir by rhsmcertd, when log dir does not exist (jhnidek@redhat.com)
+- Fix issue with old glib not containing one macro (jhnidek@redhat.com)
+- 2132242: [1.28] Outsource uploading DNF profile to rhsmcertd
+  (jhnidek@redhat.com)
+- 1890080: Handle IOErrors and Exceptions when looking for process names
+  (csnyder@redhat.com)
+- ci: install nodejs-npm on Fedora (ptoscano@redhat.com)
+- tito: add centos-8-stream releaser (ptoscano@redhat.com)
+
 * Wed Apr 19 2023 Pino Toscano <ptoscano@redhat.com> 1.28.37-1
 - 2174887: register: do a simple strip() on environment(s) input
   (ptoscano@redhat.com)
