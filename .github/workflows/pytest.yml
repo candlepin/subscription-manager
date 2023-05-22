@@ -42,7 +42,6 @@ jobs:
 
       - name: "Run pytest"
         env:
-          SUBMAN_TEST_IN_CONTAINER: "1"
           PYTEST_ADDOPTS:
             "--color=yes --code-highlight=yes --showlocals
             --cov 'src/' --cov-report 'term:skip-covered'

@@ -87,8 +87,7 @@ Enter the container (assuming you are in the project root) and run a pre-test sc
 NAME="subscription-manager"  # Or something more descriptive, like "rhsm-cs9"
 podman run -it --rm \
   --name $NAME \
-  -v .:/subscription-manager --workdir /subscription-manager \
-  --env 'SUBMAN_TEST_IN_CONTAINER=1' --privileged \
+  -v .:/subscription-manager --workdir /subscription-manager --privileged \
   $IMAGE bash
 bash scripts/container-pre-test.sh
 ```
@@ -96,7 +95,7 @@ bash scripts/container-pre-test.sh
 Then you can run the test suite. You have to use `dbus-run-session` wrapper, because D-Bus is not running in containers:
 
 ```bash
-SUBMAN_TEST_IN_CONTAINER=1 dbus-run-session python3 -m pytest
+dbus-run-session python3 -m pytest
 ```
 
 ### Local subscription-manager images

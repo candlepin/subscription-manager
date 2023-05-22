@@ -17,7 +17,6 @@ from iniparse.compat import (
     InterpolationDepthError,
     NoSectionError,
 )
-import os
 from tempfile import NamedTemporaryFile
 import unittest
 
@@ -403,57 +402,31 @@ class NoCaCertDirTests(BaseConfigTests):
 
 
 class InContainerTests(unittest.TestCase):
-    def test_in_container_off(self):
-        # This must be set in the test environment by CI in order to know for
-        # sure one way or the other whether we really are in a container.
-        # It must NOT be set to something other than the truth of whether we are
-        # in a container otherwise this test will no longer be meaningful
-        really_in_container = True if os.environ.get("SUBMAN_TEST_IN_CONTAINER", False) else False
-        with patch.dict(os.environ, {"SMDEV_CONTAINER_OFF": "True"}):
-            self.assertFalse(in_container())
-        self.assertEqual(in_container(), really_in_container)
+    """Test that config.is_container() detects container system via /etc/rhsm-host/.
 
-    @patch.dict("os.environ", {}, clear=True)
-    @patch("os.path.exists")
-    def test_existing_dotcontainer(self, exists_mock):
-        def exists_file(path):
-            return path == "/run/.containerenv"
+    In previous versions of subscription-manager (starting with 1.29), the
+    container detection was extended to also cover files like
+    - /.dockerenv
+    - /run/.containerenv
+    and environment variables like
+    - KUBERNETES_*
+    - container == 'oci'
 
-        exists_mock.side_effect = exists_file
-        self.assertTrue(in_container())
+    This, however, broke many workflows that relied on registering containers
+    during build or runtime, and required poorly supportable workarounds, so it
+    was reverted back to 'simple' detection.
+    """
 
-    @patch.dict("os.environ", {}, clear=True)
-    @patch("os.path.exists")
-    def test_existing_dotdockerenv(self, exists_mock):
-        def exists_file(path):
-            return path == "/.dockerenv"
+    @patch("os.path.isdir")
+    def test_etc_rhsm_host_exists(self, os_path_isdir_mock):
+        os_path_isdir_mock.side_effect = lambda path: path == "/etc/rhsm-host/"
 
-        exists_mock.side_effect = exists_file
-        self.assertTrue(in_container())
+        exists: bool = in_container()
+        self.assertTrue(exists)
 
-    @patch.dict("os.environ", {}, clear=True)
-    @patch("os.path.exists")
-    def test_existing_rhsm_host(self, exists_mock):
-        def exists_file(path):
-            return path == "/etc/rhsm-host/"
+    @patch("os.path.isdir")
+    def test_etc_rhsm_host_does_not_exist(self, os_path_isdir_mock):
+        os_path_isdir_mock.side_effect = lambda path: path != "/etc/rhsm-host/"
 
-        exists_mock.side_effect = exists_file
-        self.assertTrue(in_container())
-
-    @patch.dict(
-        "os.environ",
-        {
-            "KUBERNETES_PORT": "tcp://10.0.0.1:443",
-            "KUBERNETES_SERVICE_HOST": "10.0.0.1",
-            "KUBERNETES_SERVICE_PORT": "443",
-            "container": "oci",
-        },
-        clear=True,
-    )
-    @patch("os.path.exists")
-    def test_ocp(self, exists_mock):
-        def exists_file(path):
-            return path == "/run/.containerenv"
-
-        exists_mock.side_effect = exists_file
-        self.assertFalse(in_container())
+        exists: bool = in_container()
+        self.assertFalse(exists)
