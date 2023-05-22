@@ -16,10 +16,8 @@ from unittest import mock
 from rhsmlib.dbus.objects.unregister import UnregisterDBusImplementation
 
 from test.rhsmlib.base import SubManDBusFixture
-from test import subman_marker_dbus
 
 
-@subman_marker_dbus
 class TestUnregisterDBusObject(SubManDBusFixture):
     def setUp(self) -> None:
         super().setUp()

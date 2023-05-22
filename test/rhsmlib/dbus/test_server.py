@@ -16,7 +16,6 @@ import logging
 
 from rhsmlib.dbus.server import DomainSocketServer
 
-from test import subman_marker_dbus
 from test.fixture import SubManFixture
 
 # Set DBus mainloop early in test run (test import time!)
@@ -24,11 +23,10 @@ dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 log = logging.getLogger(__name__)
 
 
-@subman_marker_dbus
 class TestDomainSocketServer(SubManFixture):
     def test_unix_socket_invalid_path(self):
         server = DomainSocketServer()
-        # force an unix socket in all the cases
+        # force a unix socket in all the cases
         server._server_socket_iface = "unix:dir="
         # force an invalid path
         server._server_socket_path = "/i-dont-exists/really"
