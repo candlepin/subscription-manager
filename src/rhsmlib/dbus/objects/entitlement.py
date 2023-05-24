@@ -64,7 +64,7 @@ class EntitlementDBusObject(base_object.BaseObject):
 
         try:
             # get_status doesn't need a Candlepin connection
-            status = EntitlementService(None).get_status(on_date)
+            status = EntitlementService(None).get_status(on_date=on_date, force=True)
         except Exception as e:
             log.exception(e)
             raise dbus.DBusException(str(e))

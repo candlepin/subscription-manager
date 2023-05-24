@@ -120,7 +120,8 @@ class CertSorterTests(SubManFixture):
         self.status_mgr.server_status = None
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=True)
-        expected = subscription_manager.cert_sorter.STATUS_MAP['unknown']
+        status_map = subscription_manager.cert_sorter.ComplianceManager.get_status_map()
+        expected = status_map[subscription_manager.cert_sorter.UNKNOWN]
         self.assertEqual(expected, sorter.get_system_status())
 
     @patch('subscription_manager.cache.InstalledProductsManager.update_check')
@@ -130,7 +131,8 @@ class CertSorterTests(SubManFixture):
         self.status_mgr.server_status = None
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=False)
-        expected = subscription_manager.cert_sorter.STATUS_MAP['unknown']
+        status_map = subscription_manager.cert_sorter.ComplianceManager.get_status_map()
+        expected = status_map[subscription_manager.cert_sorter.UNKNOWN]
         self.assertEqual(expected, sorter.get_system_status())
 
     def test_unentitled_products(self):
