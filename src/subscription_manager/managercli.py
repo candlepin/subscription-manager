@@ -262,6 +262,21 @@ def show_autosubscribe_output(uep, identity):
     return subscribed
 
 
+def get_current_owner(uep=None, identity=None):
+    """
+    This function tries to get information about current owner.
+    :param uep: connection to candlepin server
+    :param identity: current identity of registered system
+    :return: information about current owner
+    """
+
+    try:
+        owner = uep.getOwner(identity.uuid)
+    except Exception as err:
+        handle_exception(_("Error: Unable to retrieve org list from server"), err)
+    return owner
+
+
 class CliCommand(AbstractCLICommand):
     """ Base class for all sub-commands. """
 
@@ -910,7 +925,7 @@ class IdentityCommand(UserPassCommand):
             consumerid = self.identity.uuid
             consumer_name = self.identity.name
             if not self.options.regenerate:
-                owner = self.cp.getOwner(consumerid)
+                owner = get_current_owner(self.cp, self.identity)
                 ownername = owner['displayName']
                 ownerid = owner['key']
 
@@ -1823,20 +1838,16 @@ class AttachCommand(CliCommand):
         # BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1826300
         if self.auto_attach is True:
             if is_simple_content_access(uep=self.cp, identity=self.identity):
-                try:
-                    owner = self.cp.getOwner(self.identity.uuid)
-                except Exception as err:
-                    handle_exception(_("Error: Unable to retrieve org list from server"), err)
-                else:
-                    # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
-                    # was not consistent with rest of subscription-manager
-                    # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
-                    owner_id = owner['key']
-                    print(_(
-                            'Ignoring request to auto-attach. '
-                            'It is disabled for org "{owner_id}" because of the content access mode setting.'
-                            ).format(owner_id=owner_id)
-                         )
+                owner = get_current_owner(self.cp, self.identity)
+                # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
+                # was not consistent with rest of subscription-manager
+                # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
+                owner_id = owner['key']
+                print(_(
+                        'Ignoring request to auto-attach. '
+                        'It is disabled for org "{owner_id}" because of the content access mode setting.'
+                        ).format(owner_id=owner_id)
+                     )
                 return 0
 
         installed_products_num = 0
