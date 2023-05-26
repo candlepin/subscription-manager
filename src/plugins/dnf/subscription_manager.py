@@ -20,7 +20,6 @@ import signal
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.entcertlib import EntCertActionInvoker
-from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager.utils import chroot, is_simple_content_access, is_process_running
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.i18n import ungettext, ugettext as _
@@ -204,8 +203,6 @@ class SubscriptionManager(dnf.Plugin):
         Either output a warning, or a usage message
         """
         msg = ""
-        if ClassicCheck().is_registered_with_classic():
-            return
         try:
             identity = inj.require(inj.IDENTITY)
             ent_dir = inj.require(inj.ENT_DIR)
