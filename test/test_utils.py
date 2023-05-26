@@ -382,21 +382,8 @@ class TestGetServerVersions(fixture.SubManFixture):
         self.mock_get_resources.return_value = ["status"]
         self.addCleanup(self.mock_get_resources.stop)
 
-    @patch("subscription_manager.utils.ClassicCheck")
-    def test_get_server_versions_classic(self, MockClassicCheck):
-        self._inject_mock_invalid_consumer()
-        instance = MockClassicCheck.return_value
-        instance.is_registered_with_classic.return_value = True
-
-        sv = get_server_versions(None)
-        self.assertEqual(sv["server-type"], "RHN Classic")
-        self.assertEqual(sv["candlepin"], "Unknown")
-
     @patch("rhsm.connection.UEPConnection")
-    @patch("subscription_manager.utils.ClassicCheck")
-    def test_get_server_versions_cp_no_status(self, mock_classic, MockUep):
-        instance = mock_classic.return_value
-        instance.is_registered_with_classic.return_value = False
+    def test_get_server_versions_cp_no_status(self, MockUep):
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = False
         sv = get_server_versions(MockUep)
@@ -404,10 +391,7 @@ class TestGetServerVersions(fixture.SubManFixture):
         self.assertEqual(sv["candlepin"], "Unknown")
 
     @patch("rhsm.connection.UEPConnection")
-    @patch("subscription_manager.utils.ClassicCheck")
-    def test_get_server_versions_cp_with_status(self, mock_classic, MockUep):
-        instance = mock_classic.return_value
-        instance.is_registered_with_classic.return_value = False
+    def test_get_server_versions_cp_with_status(self, MockUep):
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
         MockUep.getStatus.return_value = {"version": "101", "release": "23423c", "rulesVersion": "6.1"}
@@ -417,10 +401,7 @@ class TestGetServerVersions(fixture.SubManFixture):
         self.assertEqual(sv["rules-version"], "6.1")
 
     @patch("rhsm.connection.UEPConnection")
-    @patch("subscription_manager.utils.ClassicCheck")
-    def test_get_server_versions_cp_with_status_no_rules_version(self, mock_classic, MockUep):
-        instance = mock_classic.return_value
-        instance.is_registered_with_classic.return_value = False
+    def test_get_server_versions_cp_with_status_no_rules_version(self, MockUep):
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
         MockUep.getStatus.return_value = {"version": "101", "release": "23423c"}
@@ -430,10 +411,7 @@ class TestGetServerVersions(fixture.SubManFixture):
         self.assertEqual(sv["rules-version"], "Unknown")
 
     @patch("rhsm.connection.UEPConnection")
-    @patch("subscription_manager.utils.ClassicCheck")
-    def test_get_server_versions_cp_with_status_no_keys(self, mock_classic, MockUep):
-        instance = mock_classic.return_value
-        instance.is_registered_with_classic.return_value = False
+    def test_get_server_versions_cp_with_status_no_keys(self, MockUep):
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
         MockUep.getStatus.return_value = {}
@@ -443,10 +421,7 @@ class TestGetServerVersions(fixture.SubManFixture):
         self.assertEqual(sv["rules-version"], "Unknown")
 
     @patch("rhsm.connection.UEPConnection")
-    @patch("subscription_manager.utils.ClassicCheck")
-    def test_get_server_versions_cp_with_status_bad_data(self, mock_classic, MockUep):
-        instance = mock_classic.return_value
-        instance.is_registered_with_classic.return_value = False
+    def test_get_server_versions_cp_with_status_bad_data(self, MockUep):
         self._inject_mock_valid_consumer()
         MockUep.supports_resource.return_value = True
 
@@ -469,46 +444,15 @@ class TestGetServerVersions(fixture.SubManFixture):
             self.assertEqual(sv["rules-version"], "Unknown")
 
     @patch("rhsm.connection.UEPConnection")
-    @patch("subscription_manager.utils.ClassicCheck")
-    def test_get_server_versions_cp_with_status_and_classic(self, mock_classic, MockUep):
-        instance = mock_classic.return_value
-        instance.is_registered_with_classic.return_value = True
-        self._inject_mock_valid_consumer()
-        MockUep.supports_resource.return_value = True
-        MockUep.getStatus.return_value = {"version": "101", "release": "23423c", "rulesVersion": "6.1"}
-        sv = get_server_versions(MockUep)
-        self.assertEqual(sv["server-type"], "RHN Classic and Red Hat Subscription Management")
-        self.assertEqual(sv["candlepin"], "101-23423c")
-        self.assertEqual(sv["rules-version"], "6.1")
-
-    @patch("rhsm.connection.UEPConnection")
-    @patch("subscription_manager.utils.ClassicCheck")
-    def test_get_server_versions_cp_exception(self, mock_classic, MockUep):
+    def test_get_server_versions_cp_exception(self, MockUep):
         def raise_exception(arg):
             raise Exception("boom")
 
-        instance = mock_classic.return_value
-        instance.is_registered_with_classic.return_value = False
         self._inject_mock_valid_consumer()
         self.mock_get_resources.side_effect = raise_exception
         MockUep.getStatus.return_value = {"version": "101", "release": "23423c"}
         sv = get_server_versions(MockUep)
         self.assertEqual(sv["server-type"], "Red Hat Subscription Management")
-        self.assertEqual(sv["candlepin"], "Unknown")
-
-    @patch("rhsm.connection.UEPConnection")
-    @patch("subscription_manager.utils.ClassicCheck")
-    def test_get_server_versions_cp_exception_and_classic(self, mock_classic, MockUep):
-        def raise_exception(arg):
-            raise Exception("boom")
-
-        instance = mock_classic.return_value
-        instance.is_registered_with_classic.return_value = True
-        self._inject_mock_invalid_consumer()
-        self.mock_get_resources.side_effect = raise_exception
-        MockUep.getStatus.return_value = {"version": "101", "release": "23423c"}
-        sv = get_server_versions(MockUep)
-        self.assertEqual(sv["server-type"], "RHN Classic")
         self.assertEqual(sv["candlepin"], "Unknown")
 
 

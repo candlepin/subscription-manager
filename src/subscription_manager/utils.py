@@ -32,7 +32,6 @@ from rhsm.https import ssl
 
 from subscription_manager.branding import get_branding
 from subscription_manager.certdirectory import Path
-from rhsmlib.facts.hwprobe import ClassicCheck
 from subscription_manager import injection as inj
 
 # we moved quite a bit of code from this module to rhsm.
@@ -292,15 +291,8 @@ def get_server_versions(cp: "UEPConnection", exception_on_timeout: bool = False)
 
     identity = inj.require(inj.IDENTITY)
 
-    # check for Classic before doing anything else
-    if ClassicCheck().is_registered_with_classic():
-        if identity.is_valid():
-            server_type = get_branding().REGISTERED_TO_BOTH_SUMMARY
-        else:
-            server_type = get_branding().REGISTERED_TO_OTHER_SUMMARY
-    else:
-        if identity.is_valid():
-            server_type = get_branding().REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY
+    if identity.is_valid():
+        server_type = get_branding().REGISTERED_TO_SUBSCRIPTION_MANAGEMENT_SUMMARY
 
     if cp:
         try:

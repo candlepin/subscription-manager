@@ -32,17 +32,6 @@ from typing import Callable, Dict, Optional, List, TextIO, Tuple, Union
 log = logging.getLogger(__name__)
 
 
-class ClassicCheck:
-    def is_registered_with_classic(self) -> bool:
-        try:
-            sys.path.append("/usr/share/rhn")
-            from up2date_client import up2dateAuth
-        except ImportError:
-            return False
-
-        return up2dateAuth.getSystemId() is not None
-
-
 # take a string like '1-4' and returns a list of
 # ints like [1,2,3,4]
 # 31-37 return [31,32,33,34,35,36,37]
