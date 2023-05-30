@@ -250,9 +250,6 @@ BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
 BuildRequires: libdnf-devel >= 0.22.5
-Requires: json-c
-Requires: libdnf >= 0.22.5
-Requires: dnf >= 1.0.0
 
 Obsoletes: dnf-plugin-subscription-manager < 1.29.0
 
