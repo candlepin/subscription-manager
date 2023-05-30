@@ -164,7 +164,7 @@ Requires:  %{py_package_prefix}-setuptools
 
 %if %{use_dnf}
 %if %{create_libdnf_rpm}
-Requires: dnf >= 1.0.0
+Requires: python3-dnf
 Requires: python3-dnf-plugins-core
 Requires: python3-librepo
 %else
