@@ -102,7 +102,7 @@ Summary: Tools and libraries for subscription and repository management
 Group:   Productivity/Networking/System
 License: GPL-2.0
 %else
-License: GPLv2
+License: GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-or-later
 %endif
 URL:     http://www.candlepinproject.org/
 
