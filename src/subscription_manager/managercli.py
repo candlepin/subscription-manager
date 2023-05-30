@@ -59,12 +59,12 @@ from subscription_manager.utils import parse_server_info, \
         parse_baseurl_info, format_baseurl, is_valid_server_info, \
         MissingCaCertException, get_client_versions, get_server_versions, \
         restart_virt_who, get_terminal_width, print_error, unique_list_items, \
-        is_simple_content_access
+        is_simple_content_access, \
+        generate_correlation_id
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.exceptions import ExceptionMapper
 from subscription_manager.printing_utils import columnize, format_name, \
         none_wrap_columnize_callback, echo_columnize_callback, highlight_by_filter_string_columnize_cb
-from subscription_manager.utils import generate_correlation_id
 from subscription_manager.syspurposelib import save_sla_to_syspurpose_metadata
 from subscription_manager.packageprofilelib import PackageProfileActionInvoker
 
@@ -262,6 +262,21 @@ def show_autosubscribe_output(uep, identity):
     return subscribed
 
 
+def get_current_owner(uep=None, identity=None):
+    """
+    This function tries to get information about current owner.
+    :param uep: connection to candlepin server
+    :param identity: current identity of registered system
+    :return: information about current owner
+    """
+
+    try:
+        owner = uep.getOwner(identity.uuid)
+    except Exception as err:
+        handle_exception(_("Error: Unable to retrieve org list from server"), err)
+    return owner
+
+
 class CliCommand(AbstractCLICommand):
     """ Base class for all sub-commands. """
 
@@ -298,6 +313,25 @@ class CliCommand(AbstractCLICommand):
         self.identity = inj.require(inj.IDENTITY)
 
         self.correlation_id = generate_correlation_id()
+
+    def _print_ignore_auto_attach_message(self):
+        """
+        This message is shared by attach command and register command, because
+        both commands can do auto-attach.
+        :return: None
+        """
+        owner = get_current_owner(self.cp, self.identity)
+        # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
+        # was not consistent with rest of subscription-manager
+        # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
+        owner_id = owner['key']
+        print(
+            _(
+                "Ignoring the request to auto-attach. "
+                'Attaching subscriptions is disabled for organization "{owner_id}" '
+                "because Simple Content Access (SCA) is enabled."
+            ).format(owner_id=owner_id)
+        )
 
     def _get_logger(self):
         return logging.getLogger('rhsm-app.%s.%s' % (self.__module__, self.__class__.__name__))
@@ -910,7 +944,7 @@ class IdentityCommand(UserPassCommand):
             consumerid = self.identity.uuid
             consumer_name = self.identity.name
             if not self.options.regenerate:
-                owner = self.cp.getOwner(consumerid)
+                owner = get_current_owner(self.cp, self.identity)
                 ownername = owner['displayName']
                 ownerid = owner['key']
 
@@ -1295,6 +1329,36 @@ class RegisterCommand(UserPassCommand):
         """
         return True
 
+    def _do_auto_attach(self, consumer):
+        """
+        Try to do auto-attach, when it was requested using --auto-attach CLI option
+        :return: None
+        """
+
+        # Do not try to do auto-attach, when simple content access mode is used
+        # Only print info message to stdout
+        if is_simple_content_access(uep=self.cp, identity=self.identity):
+            self._print_ignore_auto_attach_message()
+            return
+
+        if 'serviceLevel' not in consumer and self.options.service_level:
+            system_exit(
+                os.EX_UNAVAILABLE,
+                _(
+                    "Error: The --servicelevel option is not supported "
+                    "by the server. Did not complete your request."
+                )
+            )
+        try:
+            # We don't call auto_attach with self.option.service_level, because it has been already
+            # set during service.register() call
+            attach.AttachService(self.cp).attach_auto(service_level=None)
+        except connection.RestlibException as rest_lib_err:
+            print_error(rest_lib_err.msg)
+        except Exception:
+            log.exception("Auto-attach failed")
+            raise
+
     def _do_command(self):
         """
         Executes the command.
@@ -1416,20 +1480,7 @@ class RegisterCommand(UserPassCommand):
             self.cp.updateConsumer(consumer['uuid'], release=self.options.release)
 
         if self.autoattach:
-            if 'serviceLevel' not in consumer and self.options.service_level:
-                system_exit(os.EX_UNAVAILABLE, _("Error: The --servicelevel option is not supported "
-                                 "by the server. Did not complete your request."))
-            try:
-                attach.AttachService(self.cp).attach_auto(self.options.service_level)
-            except connection.RestlibException as re:
-                print_error(re.msg)
-            except Exception:
-                log.exception("Auto-attach failed")
-                raise
-            else:
-                if self.options.service_level is not None:
-                    save_sla_to_syspurpose_metadata(self.options.service_level)
-                    print(_("Service level set to: %s") % self.options.service_level)
+            self._do_auto_attach(consumer)
 
         if self.options.consumerid or self.options.activation_keys or self.autoattach or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY):
             log.debug("System registered, updating entitlements if needed")
@@ -1749,11 +1800,14 @@ class AttachCommand(CliCommand):
         self.parser.add_option("--quantity", dest="quantity",
             help=_("Number of subscriptions to attach. May not be used with an auto-attach."))
         self.parser.add_option("--auto", action='store_true',
-            help=_("Automatically attach compatible subscriptions to this system. This is the default action."))
+            help=_("Automatically attach compatible subscriptions to this system. "
+                   "This is the default action."))
         self.parser.add_option("--servicelevel", dest="service_level",
-                               help=_("Automatically attach only subscriptions matching the specified service level; only used with --auto"))
+                               help=_("Automatically attach only subscriptions matching the specified service level; "
+                                      "only used with --auto"))
         self.parser.add_option("--file", dest="file",
-                                help=_("A file from which to read pool IDs. If a hyphen is provided, pool IDs will be read from stdin."))
+                                help=_("A file from which to read pool IDs. If a hyphen is provided, pool IDs will be "
+                                       "read from stdin."))
 
         # re bz #864207
         _("All installed products are covered by valid entitlements.")
@@ -1768,7 +1822,10 @@ class AttachCommand(CliCommand):
                 self.options.pool.append(pool)
 
     def _short_description(self):
-        return _("Attach a specified subscription to the registered system")
+        return _(
+            "Attach a specified subscription to the registered system, when system does not use "
+            "Simple Content Access mode"
+        )
 
     def _command_name(self):
         return "attach"
@@ -1808,6 +1865,21 @@ class AttachCommand(CliCommand):
             else:
                 system_exit(os.EX_DATAERR, _("Error: The file \"%s\" does not exist or cannot be read.") % self.options.file)
 
+    def _print_ignore_attach_message(self):
+        """
+        Print message about ignoring attach request
+        :return: None
+        """
+        owner = get_current_owner(self.cp, self.identity)
+        owner_id = owner['key']
+        print(
+            _(
+                "Ignoring the request to attach. "
+                'Attaching subscriptions is disabled for organization "{owner_id}" '
+                "because Simple Content Access (SCA) is enabled."
+            ).format(owner_id=owner_id)
+        )
+
     def _do_command(self):
         """
         Executes the command.
@@ -1821,23 +1893,13 @@ class AttachCommand(CliCommand):
 
         # Do not try to do auto-attach, when simple content access mode is used
         # BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1826300
-        if self.auto_attach is True:
-            if is_simple_content_access(uep=self.cp, identity=self.identity):
-                try:
-                    owner = self.cp.getOwner(self.identity.uuid)
-                except Exception as err:
-                    handle_exception(_("Error: Unable to retrieve org list from server"), err)
-                else:
-                    # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
-                    # was not consistent with rest of subscription-manager
-                    # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
-                    owner_id = owner['key']
-                    print(_(
-                            'Ignoring request to auto-attach. '
-                            'It is disabled for org "{owner_id}" because of the content access mode setting.'
-                            ).format(owner_id=owner_id)
-                         )
-                return 0
+        #
+        if is_simple_content_access(uep=self.cp, identity=self.identity):
+            if self.auto_attach is True:
+                self._print_ignore_auto_attach_message()
+            else:
+                self._print_ignore_attach_message()
+            return 0
 
         installed_products_num = 0
         return_code = 0

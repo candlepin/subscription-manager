@@ -991,7 +991,23 @@ class ContentAccessModeCache(ConsumerCache):
         if uep is None:
             cp_provider = inj.require(inj.CP_PROVIDER)
             uep = cp_provider.get_consumer_auth_cp()
-        if hasattr(uep.conn, 'is_consumer_cert_key_valid') and uep.conn.is_consumer_cert_key_valid is True:
-            return False
+
+        if hasattr(uep.conn, 'is_consumer_cert_key_valid'):
+            if uep.conn.is_consumer_cert_key_valid is None:
+                log.debug(
+                    'Cache file %s cannot be considered as valid, because no connection has '
+                    'been created yet',
+                    self.CACHE_FILE
+                )
+                return True
+            elif uep.conn.is_consumer_cert_key_valid is True:
+                return False
+            else:
+                log.debug(
+                    'Cache file %s cannot be considered as valid, because consumer certificate '
+                    'probably is not valid',
+                    self.CACHE_FILE
+                )
+                return True
         else:
             return True

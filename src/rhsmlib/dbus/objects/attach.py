@@ -23,6 +23,7 @@ from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services.attach import AttachService
 
 from subscription_manager.injectioninit import init_dep_injection
+from subscription_manager.utils import is_simple_content_access
 
 init_dep_injection()
 
@@ -55,6 +56,15 @@ class AttachDBusObject(base_object.BaseObject):
         Locale.set(locale)
 
         cp = self.build_uep(proxy_options, proxy_only=True)
+
+        # TODO: Change log.info() to:
+        # raise dbus.DBusException('Auto-attaching is not allowed in simple content access mode')
+        # in the next minor release of subscription-manager
+        if is_simple_content_access(uep=cp) is True:
+            log.info('Calling D-Bus method AutoAttach() is deprecated, when Simple Content Access mode '
+                     'is used and it will be not be supported in the next minor release of '
+                     'subscription-manager')
+
         attach_service = AttachService(cp)
 
         try:
@@ -85,6 +95,15 @@ class AttachDBusObject(base_object.BaseObject):
             raise dbus.DBusException("Quantity must be a positive number.")
 
         cp = self.build_uep(proxy_options, proxy_only=True)
+
+        # TODO: Change log.info() to:
+        # raise dbus.DBusException('Attaching of pool(s) is not allowed in simple content access mode')
+        # in the next minor release of subscription-manager
+        if is_simple_content_access(uep=cp) is True:
+            log.info('Calling D-Bus method PoolAttach() is deprecated, when Simple Content Access mode '
+                     'is used and it will be not be supported in the next minor release of '
+                     'subscription-manager')
+
         attach_service = AttachService(cp)
 
         try:
