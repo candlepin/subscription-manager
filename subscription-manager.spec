@@ -164,7 +164,7 @@ Requires:  %{py_package_prefix}-setuptools
 
 %if %{use_dnf}
 %if %{create_libdnf_rpm}
-Requires: dnf >= 1.0.0
+Requires: python3-dnf
 Requires: python3-dnf-plugins-core
 Requires: python3-librepo
 %else
@@ -250,9 +250,6 @@ BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
 BuildRequires: libdnf-devel >= 0.22.5
-Requires: json-c
-Requires: libdnf >= 0.22.5
-Requires: dnf >= 1.0.0
 
 Obsoletes: dnf-plugin-subscription-manager < 1.29.0
 
