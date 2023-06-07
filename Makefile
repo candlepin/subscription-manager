@@ -160,7 +160,12 @@ install-plugins:
 		echo "Installing DNF plugins" ; \
 		install -d $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/ ; \
 		install -d $(DESTDIR)/etc/dnf/plugins/ ; \
-		install -m 644 -p src/plugins/dnf/*.py $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/ ; \
+		install -m 644 -p src/plugins/dnf/product_id.py \
+		    $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/product-id.py ; \
+		install -m 644 -p src/plugins/dnf/subscription_manager.py \
+		    $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/subscription-manager.py ; \
+		install -m 644 -p src/plugins/dnf/upload_profile.py \
+		    $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/upload-profile.py ; \
 		install -m 644 etc-conf/plugin/product-id.conf $(DESTDIR)/etc/dnf/plugins/ ; \
 		install -m 644 etc-conf/plugin/subscription-manager.conf $(DESTDIR)/etc/dnf/plugins/ ; \
 	fi;

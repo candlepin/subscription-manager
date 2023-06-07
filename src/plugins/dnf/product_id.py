@@ -33,8 +33,6 @@ from rhsm import ourjson as json, logutil
 
 log = logging.getLogger("rhsm-app." + __name__)
 
-log = logging.getLogger("rhsm-app." + __name__)
-
 
 class ProductId(dnf.Plugin):
     name = "product-id"
@@ -166,30 +164,50 @@ class DnfProductManager(ProductManager):
         return available
 
     @staticmethod
-    def __write_cache_file(data, file_name):
-        try:
-            dir_name = os.path.dirname(file_name)
-            if not os.access(dir_name, os.R_OK):
-                log.debug("Try to create directory: %s" % dir_name)
+    def _write_cache_file(data, file_name: str) -> None:
+        """
+        Try to write data to cache file
+        """
+        dir_name = os.path.dirname(file_name)
+        cache_dir_exists: bool = False
+        if os.path.exists(dir_name):
+            cache_dir_exists = True
+        else:
+            log.debug("Try to create directory: %s" % dir_name)
+            try:
                 os.makedirs(dir_name)
-            with open(file_name, "w") as file:
-                json.dump(data, file, default=json.encode)
-            log.debug("Wrote cache: %s" % file_name)
-        except IOError as err:
-            log.error("Unable to write cache: %s" % file_name)
-            log.exception(err)
+            except PermissionError as err:
+                log.warning(f"Unable to create directory {dir_name}: {err}")
+            else:
+                cache_dir_exists = True
+        if cache_dir_exists is True:
+            try:
+                with open(file_name, "w") as file:
+                    json.dump(data, file, default=json.encode)
+            except PermissionError as err:
+                log.warning(f"Unable to write to cache file {file_name}: {err}")
+            except IOError as err:
+                log.error("Unable to write cache: %s" % file_name)
+                log.exception(err)
+            else:
+                log.debug("Wrote cache: %s" % file_name)
 
     @staticmethod
-    def __read_cache_file(file_name):
+    def _read_cache_file(file_name: str):
+        """
+        Try to load data from cache file
+        """
         try:
             with open(file_name) as file:
                 json_str = file.read()
                 data = json.loads(json_str)
             return data
+        except PermissionError as err:
+            log.warning(f"Unable to open cache file {file_name}: {err}")
         except IOError as err:
             # if the file does not exist we'll create it later
             if err.errno != errno.ENOENT:
-                log.error("Unable to read cache: %s" % file_name)
+                log.warning("Unable to read cache: %s" % file_name)
                 log.exception(err)
         except ValueError:
             # ignore json file parse errors, we are going to generate
@@ -198,10 +216,10 @@ class DnfProductManager(ProductManager):
         return None
 
     def write_productid_cache(self, product_ids):
-        self.__write_cache_file(product_ids, self.PRODUCTID_CACHE_FILE)
+        self._write_cache_file(product_ids, self.PRODUCTID_CACHE_FILE)
 
     def read_productid_cache(self):
-        return self.__read_cache_file(self.PRODUCTID_CACHE_FILE)
+        return self._read_cache_file(self.PRODUCTID_CACHE_FILE)
 
     def get_active(self) -> Set[str]:
         """
