@@ -19,12 +19,6 @@ jobs:
           - name: "CentOS Stream 9"
             image: "quay.io/centos/centos:stream9"
             pytest_args: ''
-          - name: "Fedora latest"
-            image: "fedora:latest"
-            pytest_args: ''
-          - name: "Fedora Rawhide"
-            image: "fedora:rawhide"
-            pytest_args: ''
 
     runs-on: ubuntu-latest
     container:
@@ -55,7 +49,7 @@ jobs:
         uses: MishaKav/pytest-coverage-comment@main
         if: |
           github.event.pull_request.head.repo.full_name == github.repository
-          && matrix.name == 'Fedora latest'
+          && matrix.name == 'CentOS Stream 9'
         with:
           title: "Coverage (computed on ${{ matrix.name }})"
           report-only-changed-files: true
