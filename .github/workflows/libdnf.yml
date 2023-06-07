@@ -12,14 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "CentOS Stream 9"
-            image: "quay.io/centos/centos:stream9"
           - name: "CentOS Stream 8"
             image: "quay.io/centos/centos:stream8"
-          - name: "Fedora latest"
-            image: "fedora:latest"
-          - name: "Fedora Rawhide"
-            image: "fedora:rawhide"
 
     runs-on: ubuntu-latest
     container:
