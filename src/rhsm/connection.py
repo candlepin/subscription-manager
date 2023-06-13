@@ -15,6 +15,8 @@
 #
 
 import base64
+import inspect
+
 from rhsm import certificate
 import datetime
 import dateutil.parser
@@ -752,7 +754,19 @@ class BaseRestLib:
                 log.debug("Reusing connection: %s", self.__conn.sock)
                 return self.__conn
 
-        log.debug("Creating new connection")
+        # The original code is always six function calls deep:
+        # _create_connection()
+        #   _make_request()
+        #     _request()
+        #       _request_post()/_request_get()/...
+        #         API wrapper function
+        #           ...the code we are interested in...
+        #             two frozen functions
+        call_frames = inspect.stack()[6:-2]
+        log.debug(
+            "Creating new connection:\n"
+            + "\n".join(f"  {frame.filename}:{frame.function}:{frame.lineno}" for frame in call_frames)
+        )
 
         # See https://www.openssl.org/docs/ssl/SSL_CTX_new.html
         # This ends up invoking SSLv23_method, which is the catch all
