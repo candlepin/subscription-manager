@@ -895,8 +895,7 @@ class RefreshCommand(CliCommand):
             _refresh_service.refresh(force=self.options.force)
         except connection.RestlibException as re_err:
             log.error(re_err)
-            mapped_message = ExceptionMapper().get_message(re_err)
-            system_exit(os.EX_SOFTWARE, mapped_message)
+            system_exit(os.EX_SOFTWARE, re_err.msg)
         except Exception as e:
             handle_exception(
                 _("Unable to perform refresh due to the following exception: {e}").format(e=e), e
