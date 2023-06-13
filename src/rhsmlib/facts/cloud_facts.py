@@ -116,7 +116,8 @@ class CloudFactsCollector(collector.FactsCollector):
             {
                 "azure_instance_id": some_instance_ID,
                 "azure_offer": some_offer,
-                "azure_sku": some_sku
+                "azure_sku": some_sku,
+                "azure_subscription_id": some_subscription_ID
             }
         :return: dictionary containing Azure facts, when the machine is able to gather metadata
             from Azure cloud provider; otherwise returns empty dictionary {}
@@ -134,6 +135,8 @@ class CloudFactsCollector(collector.FactsCollector):
                     facts["azure_sku"] = values["compute"]["sku"]
                 if "offer" in values["compute"]:
                     facts["azure_offer"] = values["compute"]["offer"]
+                if "offer" in values["compute"]:
+                    facts["azure_subscription_id"] = values["compute"]["subscriptionId"]
         return facts
 
     def get_gcp_facts(self) -> Dict[str, str]:

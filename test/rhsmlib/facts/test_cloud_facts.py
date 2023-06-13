@@ -165,6 +165,7 @@ AWS_BILLING_PRODUCTS = "bp-0124abcd bp-63a5400a"
 AZURE_INSTANCE_ID = "12345678-1234-1234-1234-123456789abc"
 AZURE_SKU = "8.1-ci"
 AZURE_OFFER = "RHEL"
+AZURE_SUBSCRRIPTION_ID = "01234567-0123-0123-0123-012345679abc"
 
 
 def mock_prepare_request(request):
@@ -306,6 +307,8 @@ class TestCloudCollector(unittest.TestCase):
         self.assertEqual(facts["azure_sku"], AZURE_SKU)
         self.assertIn("azure_offer", facts)
         self.assertEqual(facts["azure_offer"], AZURE_OFFER)
+        self.assertIn("azure_subscription_id", facts)
+        self.assertEqual(facts["azure_subscription_id"], AZURE_SUBSCRRIPTION_ID)
 
     @patch("cloud_what.providers.gcp.GCPCloudProvider._write_token_to_cache_file")
     @patch("cloud_what.providers.gcp.GCPCloudProvider._get_metadata_from_cache")
