@@ -135,7 +135,7 @@ class CloudFactsCollector(collector.FactsCollector):
                     facts["azure_sku"] = values["compute"]["sku"]
                 if "offer" in values["compute"]:
                     facts["azure_offer"] = values["compute"]["offer"]
-                if "offer" in values["compute"]:
+                if "subscriptionId" in values["compute"]:
                     facts["azure_subscription_id"] = values["compute"]["subscriptionId"]
         return facts
 
