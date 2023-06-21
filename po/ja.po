@@ -301,7 +301,7 @@ msgid ""
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"このシステムは、エンタイトルメントーバーに登録されていますが、更新は受信して"
+"このシステムは、エンタイトルメントサーバーに登録されていますが、更新は受信して"
 "いません。subscription-manager でサブスクリプションを割り当てることができま"
 "す。\n"
 
@@ -3712,7 +3712,7 @@ msgstr "未承認: 要求に対して無効な認証情報です。"
 
 #: src/subscription_manager/exceptions.py:44
 msgid "Token authentication not supported by the entitlement server"
-msgstr "エンタイトルメントサーバがサポートしていないトークン認証"
+msgstr "エンタイトルメントサーバーがサポートしていないトークン認証"
 
 #: src/subscription_manager/exceptions.py:45
 msgid "Forbidden: Invalid credentials for request."
