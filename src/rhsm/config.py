@@ -114,19 +114,30 @@ def in_container() -> bool:
         return False
 
     # If the path exists, we are in a container.
-    # In UBI containers (RHEL, CentOS), path HOST_CONFIG_DIR='/etc/rhsm-host/'
-    # is a symlink to /run/secrets/rhsm. That path is a symlink/Podman secret
-    # specified in /usr/share/containers/mounts.conf, pointing to host's directory
-    # /usr/share/rhel/secrets. The directories inside are themselves symlinks
-    # to other host directories populated by subscription-manager.
-    # If this secret (= the container directory /etc/rhsm-host/) exists,
-    #   the system is considered to be a container.
-    # If this secret does not exist,
-    #   the system is considered to be a non-container.
-    if os.path.isdir(HOST_CONFIG_DIR):
-        log.debug(f"Container detected: found certificate directory {HOST_CONFIG_DIR}.")
+    #
+    # In UBI containers (RHEL, CentOS), paths HOST_CONFIG_DIR and HOST_ENT_CERT_DIR
+    # are symlinks to container's directories:
+    #   /etc/rhsm-host            -> /run/secrets/rhsm/
+    #   /etc/pki/entitlement-host -> /run/secrets/etc-pki-entitlement/
+    #
+    # The container secrets are bind-mounted to a directory on the host:
+    #   /run/secrets (container)  -> /usr/share/rhel/secrets (host)
+    # which is specified in '/usr/share/containers/mounts.conf' (= Podman secret).
+    #
+    # The directories inside this host's directory are themselves
+    # symlinks to other host directories populated by subscription-manager:
+    #   /usr/share/rhel/secrets/etc-pki-entitlement -> /etc/pki/entitlement
+    #   /usr/share/rhel/secrets/redhat.repo         -> /etc/yum.repos.d/redhat.repo
+    #   /usr/share/rhel/secrets/rhsm                -> /etc/rhsm
+    #
+    # If the container secrets exists, the system is considered to be a container:
+    #   /etc/rhsm-host/            exists
+    #   /etc/pki/entitlement/host/ exists and is not empty
+    if os.path.isdir(HOST_CONFIG_DIR) and (
+        os.path.isdir(HOST_ENT_CERT_DIR) and any(os.walk(HOST_ENT_CERT_DIR))
+    ):
+        log.debug(f"Container detected: found directories {HOST_CONFIG_DIR} and {HOST_ENT_CERT_DIR}.")
         return True
-
     return False
 
 

@@ -402,7 +402,9 @@ class NoCaCertDirTests(BaseConfigTests):
 
 
 class InContainerTests(unittest.TestCase):
-    """Test that config.is_container() detects container system via /etc/rhsm-host/.
+    """Test that config.is_container() detects container system:
+    - /etc/rhsm-host/ exists,
+    - /etc/pki/entitlement-host/ exists and is not empty.
 
     In previous versions of subscription-manager (starting with 1.29), the
     container detection was extended to also cover files like
@@ -417,16 +419,103 @@ class InContainerTests(unittest.TestCase):
     was reverted back to 'simple' detection.
     """
 
+    @patch("os.walk")
     @patch("os.path.isdir")
-    def test_etc_rhsm_host_exists(self, os_path_isdir_mock):
-        os_path_isdir_mock.side_effect = lambda path: path == "/etc/rhsm-host/"
+    def test_etc_directories_exist(self, is_dir_mock, walk_mock):
+        """If both directories exist and contain entitlements, container is on RHEL host"""
 
-        exists: bool = in_container()
-        self.assertTrue(exists)
+        def custom_is_dir(path: str) -> bool:
+            path = path.rstrip("/")
+            if path == "/etc/rhsm-host":
+                return True
+            if path == "/etc/pki/entitlement-host":
+                return True
+            return False
 
+        is_dir_mock.side_effect = custom_is_dir
+
+        def custom_walk(path: str):
+            path = path.rstrip("/")
+            if path == "/etc/pki/entitlement-host":
+                return ("foo", "bar")
+            return tuple()
+
+        walk_mock.side_effect = custom_walk
+
+        result: bool = in_container()
+        self.assertTrue(result)
+
+    @patch("os.walk")
     @patch("os.path.isdir")
-    def test_etc_rhsm_host_does_not_exist(self, os_path_isdir_mock):
-        os_path_isdir_mock.side_effect = lambda path: path != "/etc/rhsm-host/"
+    def test_etc_rhsm_host_does_not_exist(self, is_dir_mock, walk_mock):
+        """If /etc/rhsm-host/ does not exist, container is not on RHEL host"""
 
-        exists: bool = in_container()
-        self.assertFalse(exists)
+        def custom_is_dir(path: str) -> bool:
+            path = path.rstrip("/")
+            if path == "/etc/rhsm-host":
+                return False
+            if path == "/etc/pki/entitlement-host":
+                return True
+            return False
+
+        is_dir_mock.side_effect = custom_is_dir
+
+        def custom_walk(path: str):
+            path = path.rstrip("/")
+            if path == "/etc/pki/entitlement-host":
+                return ("foo", "bar")
+            return tuple()
+
+        walk_mock.side_effect = custom_walk
+
+        result: bool = in_container()
+        self.assertFalse(result)
+
+    @patch("os.walk")
+    @patch("os.path.isdir")
+    def test_etc_pki_entitlement_host_does_not_exist(self, is_dir_mock, walk_mock):
+        """If /etc/pki/entitlement-host/ does not exist, container is not on RHEL host"""
+
+        def custom_is_dir(path: str) -> bool:
+            path = path.rstrip("/")
+            if path == "/etc/rhsm-host":
+                return True
+            if path == "/etc/pki/entitlement-host":
+                return False
+            return False
+
+        is_dir_mock.side_effect = custom_is_dir
+
+        def custom_walk(path: str):
+            path = path.rstrip("/")
+            if path == "/etc/pki/entitlement-host":
+                return ("foo", "bar")
+            return tuple()
+
+        walk_mock.side_effect = custom_walk
+
+        result: bool = in_container()
+        self.assertFalse(result)
+
+    @patch("os.walk")
+    @patch("os.path.isdir")
+    def test_etc_pki_entitlement_host_is_empty(self, is_dir_mock, walk_mock):
+        """If /etc/pki/entitlement-host/ is empty, container is not on RHEL host"""
+
+        def custom_is_dir(path: str) -> bool:
+            path = path.rstrip("/")
+            if path == "/etc/rhsm-host":
+                return True
+            if path == "/etc/pki/entitlement-host":
+                return True
+            return False
+
+        is_dir_mock.side_effect = custom_is_dir
+
+        def custom_walk(_: str):
+            return tuple()
+
+        walk_mock.side_effect = custom_walk
+
+        result: bool = in_container()
+        self.assertFalse(result)
