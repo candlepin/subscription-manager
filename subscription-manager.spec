@@ -133,7 +133,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.51
+Version: 1.24.52
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1170,6 +1170,38 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Jun 27 2023 Pino Toscano <ptoscano@redhat.com> 1.24.52-1
+- tito: update rhel-7.9 releaser (ptoscano@redhat.com)
+- managercli: fix RestlibException reporting for get_current_owner()
+  (ptoscano@redhat.com)
+- refresh: avoid ExceptionMapper in case of RestlibException
+  (ptoscano@redhat.com)
+- tests: repair attach cases in SCA mode (ptoscano@redhat.com)
+- 2097672: Fixed expected message for manual attach case (jajerome@redhat.com)
+- 2097672: [1.28] Improve warning message (auto-attach in SCA mode)
+  (jhnidek@redhat.com)
+- 2097672: [RFE][1.28] Improve the message, when SCA is enabled
+  (jhnidek@redhat.com)
+- Reverting disabling AutoAttach() and PoolAttach() in SCA mode
+  (jhnidek@redhat.com)
+- cache: fix typo in debug message (ptoscano@redhat.com)
+- 2182768: Disallowed attaching using D-Bus in SCA mode (jhnidek@redhat.com)
+- 2182768: Disallowed attaching pool in SCA mode: (jhnidek@redhat.com)
+- 1928072: Print warning message and don't do auto-attach (jhnidek@redhat.com)
+- managercli: add a local get_current_owner() helper (ptoscano@redhat.com)
+- [1.24] Fix issue with locale and D-Bus method GetStatus; (jhnidek@redhat.com)
+- Make code Python 2 compatible. (jhnidek@redhat.com)
+- 2060101: [1.24] Print correct status, when access mode has changed
+  (jhnidek@redhat.com)
+- ENT-5542: Build package using GitHub Actions (mhorky@redhat.com)
+- Fix failing tests (mhorky@redhat.com)
+- tests: drop test_po_files.py (ptoscano@redhat.com)
+- Ignore failing tests (mhorky@redhat.com)
+- ENT-3759: Test on GitHub Actions (mhorky@redhat.com)
+- Alter import of rhsm.config functions (mhorky@redhat.com)
+- Add dependency constraints (mhorky@redhat.com)
+- Handle tests in containers better (mhorky@redhat.com)
+
 * Mon Apr 18 2022 Christopher Snyder <csnyder@redhat.com> 1.24.51-1
 - 1.24 Add gcp_license_codes to system facts. (jhnidek@redhat.com)
 - 1.24 Fix of automatic registration (jhnidek@redhat.com)
