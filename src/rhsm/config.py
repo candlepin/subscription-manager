@@ -109,10 +109,6 @@ def in_container() -> bool:
     """
     Are we running in a container or not?
     """
-    # For development in containers we must be able to turn container detection off
-    if os.environ.get("SMDEV_CONTAINER_OFF", ""):
-        return False
-
     # If the path exists, we are in a container.
     # In UBI containers (RHEL, CentOS), path HOST_CONFIG_DIR='/etc/rhsm-host/'
     # is a symlink to /run/secrets/rhsm. That path is a symlink/Podman secret
