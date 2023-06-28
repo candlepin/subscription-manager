@@ -264,8 +264,8 @@ class CliCommand(AbstractCLICommand):
             system_exit(
                 os.EX_CONFIG,
                 _(
-                    "subscription-manager is disabled when running inside a container. "
-                    "Please refer to your host system for subscription management.\n"
+                    "subscription-manager is operating in container mode. "
+                    "Use your host system to manage subscriptions.\n"
                 ),
             )
 
