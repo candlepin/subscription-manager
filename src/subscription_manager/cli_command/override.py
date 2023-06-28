@@ -18,12 +18,12 @@ import os
 
 import rhsm.connection as connection
 
+from rhsm.repofile import manage_repos_enabled
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.overrides import Overrides, Override
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
-from subscription_manager.repofile import manage_repos_enabled
 from subscription_manager.utils import get_supported_resources
 
 

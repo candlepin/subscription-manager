@@ -19,13 +19,13 @@ import os
 import sys
 
 from subscription_manager import injection as inj
-from subscription_manager.repofile import ZypperRepoFile
 from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.certlib import Locker
 from subscription_manager.injectioninit import init_dep_injection
 from rhsm import connection, logutil
 from rhsm import config
+from rhsm.repofile import ZypperRepoFile
 
 from configparser import ConfigParser
 
