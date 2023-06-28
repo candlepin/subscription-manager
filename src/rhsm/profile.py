@@ -92,7 +92,7 @@ class ModulesProfile:
         return list(ret.values())
 
     @staticmethod
-    def fix_aws_rhui_repos(base: "dnf.Base") -> None:
+    def fix_aws_rhui_repos(base) -> None:
         """
         Try to fix RHUI repos on AWS systems. When the system is running on AWS, then we have
         to fix repository URL. See: https://bugzilla.redhat.com/show_bug.cgi?id=1924126
@@ -397,7 +397,7 @@ class DebProfile(object):
         return self._deb_profile
 
 
-def get_profile(profile_type: str) -> Union[RPMProfile, EnabledRepos, ModulesProfile]:
+def get_profile(profile_type: str):
     """
     Returns an instance of a Profile object
     @param profile_type: profile type
