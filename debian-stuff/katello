@@ -1,4 +1,4 @@
-#! /usr/bin/python -u
+#! /usr/bin/python3 -u
 #
 # The katello Acquire Method
 #
@@ -29,7 +29,7 @@ import re
 import hashlib
 import requests
 from urllib.parse import quote
-from configparser import SafeConfigParser
+from configparser import ConfigParser
 
 
 class pkg_acquire_method:
@@ -138,7 +138,7 @@ class katello_method(pkg_acquire_method):
         Return the proxy server config from /etc/rhsm/rhsm.conf as dict
         Adapted from https://github.com/Katello/katello-client-bootstrap/blob/master/bootstrap.py
         """
-        rhsmconfig = SafeConfigParser()
+        rhsmconfig = ConfigParser()
         rhsmconfig.read('/etc/rhsm/rhsm.conf')
 
         proxy_options = [option for option in rhsmconfig.options('server') if option.startswith('proxy')]
