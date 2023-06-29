@@ -20,11 +20,9 @@ import logging
 import os
 import platform
 import re
-import socket
 import subprocess
 import sys
 
-from collections import defaultdict
 from datetime import datetime, timedelta
 from rhsmlib.facts import cpuinfo
 from rhsmlib.facts import collector
@@ -32,13 +30,6 @@ from rhsmlib.facts import collector
 from typing import Callable, Dict, Optional, List, TextIO, Tuple, Union
 
 log = logging.getLogger(__name__)
-
-# There is no python3 version of python-ethtool
-try:
-    import ethtool
-except ImportError:
-    log.warning("Unable to import the 'ethtool' module.")
-    ethtool = None
 
 
 class ClassicCheck:
@@ -117,8 +108,6 @@ class HardwareCollector(collector.FactsCollector):
             self.get_proc_stat,
             self.get_cpu_info,
             self.get_ls_cpu_info,
-            self.get_network_info,
-            self.get_network_interfaces,
         ]
 
     def get_uname_info(self) -> Dict[str, str]:
@@ -713,228 +702,6 @@ class HardwareCollector(collector.FactsCollector):
         parse_list(main_object)
 
         return lscpu_info
-
-    def _get_ipv4_addr_list(self) -> List[str]:
-        """
-        When DNS record is not configured properly for the system, then try to
-        get list of all IPv4 addresses from all devices. Return 127.0.0.1 only
-        in situation when there is only loopback device.
-        :return: list of IPv4 addresses
-        """
-        addr_list: List[str] = []
-        interface_info: List[ethtool.etherinfo] = ethtool.get_interfaces_info(ethtool.get_devices())
-        for info in interface_info:
-            for addr in info.get_ipv4_addresses():
-                if addr.address != "127.0.0.1":
-                    addr_list.append(addr.address)
-        if len(addr_list) == 0:
-            addr_list = ["127.0.0.1"]
-        return addr_list
-
-    def _get_ipv6_addr_list(self) -> List[str]:
-        """
-        When DNS record is not configured properly for the system, then try to
-        get list of all IPv6 addresses from all devices. Return ::1 only
-        in situation when there no device with valid global IPv6 address.
-        :return: list of IPv6 addresses
-        """
-        addr_list: List[str] = []
-        interface_info: List[ethtool.etherinfo] = ethtool.get_interfaces_info(ethtool.get_devices())
-        for info in interface_info:
-            for addr in info.get_ipv6_addresses():
-                if addr.scope == "universe":
-                    addr_list.append(addr.address)
-        if len(addr_list) == 0:
-            addr_list = ["::1"]
-        return addr_list
-
-    def get_network_info(self) -> Dict[str, str]:
-        """
-        Try to get information about network: hostname, FQDN, IPv4, IPv6 addresses
-        """
-        net_info: Dict[str, str] = {}
-        try:
-            hostname: str = socket.gethostname()
-            net_info["network.hostname"] = hostname
-
-            try:
-                # We do not use socket.getfqdn(), because we need
-                # to mimic behaviour of 'hostname -f' command and be
-                # compatible with puppet and katello
-                infolist: List[tuple] = socket.getaddrinfo(
-                    hostname,  # (host) hostname
-                    None,  # (port) no need to specify port
-                    socket.AF_UNSPEC,  # (family) IPv4/IPv6
-                    socket.SOCK_DGRAM,  # (type) hostname uses SOCK_DGRAM
-                    0,  # (proto) no need to specify transport protocol
-                    socket.AI_CANONNAME,  # (flags) we DO NEED to get canonical name
-                )
-            except Exception:
-                net_info["network.fqdn"] = hostname
-            else:
-                # getaddrinfo has to return at least one item
-                # and canonical name can't be empty string.
-                # Note: when hostname is for some reason equal to
-                # one of CNAME in DNS record, then canonical name
-                # (FQDN) will be different from hostname
-                if len(infolist) > 0 and infolist[0][3] != "":
-                    net_info["network.fqdn"] = infolist[0][3]
-                else:
-                    net_info["network.fqdn"] = hostname
-
-            try:
-                info: List[tuple] = socket.getaddrinfo(hostname, None, socket.AF_INET, socket.SOCK_STREAM)
-                ip_list = set([x[4][0] for x in info])
-                net_info["network.ipv4_address"] = ", ".join(ip_list)
-            except Exception as err:
-                log.debug("Error during resolving IPv4 address of hostname: %s, %s" % (hostname, err))
-                net_info["network.ipv4_address"] = ", ".join(self._get_ipv4_addr_list())
-
-            try:
-                info: List[tuple] = socket.getaddrinfo(hostname, None, socket.AF_INET6, socket.SOCK_STREAM)
-                ip_list = set([x[4][0] for x in info])
-                net_info["network.ipv6_address"] = ", ".join(ip_list)
-            except Exception as err:
-                log.debug("Error during resolving IPv6 address of hostname: %s, %s" % (hostname, err))
-                net_info["network.ipv6_address"] = ", ".join(self._get_ipv6_addr_list())
-
-        except Exception as err:
-            log.warning("Error reading networking information: %s", err)
-
-        return net_info
-
-    def _should_get_mac_address(self, device: str) -> bool:
-        return not (device.startswith("sit") or device.startswith("lo"))
-
-    def get_network_interfaces(self) -> Dict[str, str]:
-        netinfdict: Dict[str, str] = {}
-        old_ipv4_metakeys: List[str] = ["ipv4_address", "ipv4_netmask", "ipv4_broadcast"]
-        ipv4_metakeys: List[str] = ["address", "netmask", "broadcast"]
-        ipv6_metakeys: List[str] = ["address", "netmask"]
-        try:
-            interfaces_info: List[ethtool.etherinfo] = ethtool.get_interfaces_info(ethtool.get_devices())
-            for info in interfaces_info:
-                mac_address: str = info.mac_address
-                device: str = info.device
-                # Omit mac addresses for sit and lo device types. See BZ838123
-                # mac address are per interface, not per address
-                if self._should_get_mac_address(device):
-                    key: str = ".".join(["net.interface", device, "mac_address"])
-                    netinfdict[key] = mac_address
-
-                # collect the IPv6 information by device, and by scope
-                ipv6_values: Dict[str, Dict[str, List[str]]] = defaultdict(lambda: defaultdict(list))
-                # all of our supported versions of python-ethtool support
-                # get_ipv6_addresses
-                for addr in info.get_ipv6_addresses():
-                    # ethtool returns a different scope for "public" IPv6 addresses
-                    # on different versions of RHEL.  EL5 is "global", while EL6 is
-                    # "universe".  Make them consistent.
-                    scope: str = addr.scope
-                    if scope == "universe":
-                        scope = "global"
-
-                    for mkey in ipv6_metakeys:
-                        # we could specify a default here... that could hide
-                        # api breakage though and unit testing hw detect is... meh
-                        attr = getattr(addr, mkey) or "Unknown"
-                        ipv6_values[mkey][scope].append(str(attr))
-                for meta_key, mapping_values in ipv6_values.items():
-                    for scope, values in mapping_values.items():
-                        key: str = "net.interface.{device}.ipv6_{key}.{scope}".format(
-                            device=info.device, key=meta_key, scope=scope
-                        )
-                        list_key = key + "_list"
-                        netinfdict[key] = values[0]
-                        netinfdict[list_key] = ", ".join(values)
-
-                # However, old version of python-ethtool do not support
-                # get_ipv4_address
-                #
-                # python-ethtool's api changed between rhel6.3 and rhel6.4
-                # (0.6-1.el6 to 0.6-2.el6)
-                # (without revving the upstream version... bad python-ethtool!)
-                # note that 0.6-5.el5 (from rhel5.9) has the old api
-                #
-                # previously, we got the 'ipv4_address' from the etherinfo object
-                # directly. In the new api, that isn't exposed, so we get the list
-                # of addresses on the interface, and populate the info from there.
-                #
-                # That api change as to address bz #759150. The bug there was that
-                # python-ethtool only showed one ip address per interface. To
-                # accomdate the finer grained info, the api changed...
-                if hasattr(info, "get_ipv4_addresses"):
-                    # collect the IPv4 information by device
-                    ipv4_values: Dict[str, List[str]] = defaultdict(list)
-                    for addr in info.get_ipv4_addresses():
-                        for mkey in ipv4_metakeys:
-                            attr: str = getattr(addr, mkey) or "Unknown"
-                            ipv4_values[mkey].append(str(attr))
-                    for meta_key, values in ipv4_values.items():
-                        # append 'ipv4_' to match the older interface and keeps facts
-                        # consistent
-                        key: str = "net.interface.{device}.ipv4_{key}".format(
-                            device=info.device, key=meta_key
-                        )
-                        list_key: str = key + "_list"
-                        netinfdict[key] = values[0]
-                        netinfdict[list_key] = ", ".join(values)
-                # check to see if we are actually an ipv4 interface
-                elif hasattr(info, "ipv4_address"):
-                    for mkey in old_ipv4_metakeys:
-                        key = ".".join(["net.interface", device, mkey])
-                        attr = getattr(info, mkey) or "Unknown"
-                        netinfdict[key] = attr
-                # otherwise we are ipv6 and we handled that already
-
-                # Bonded devices can have their hardware address changed.
-                #
-                # Here the 'bond_interface' refers to the name of device bonding other
-                # network interfaces under single virtual one.
-                #
-                # If we find the bond link (if the file exists), we are a bonded device
-                # and we need to check the /proc/net/bonding information to see what the
-                # 'permanent' hardware address for this bonded device is.
-                bond_interface: Optional[str]
-                try:
-                    bond_link: str = os.readlink("/sys/class/net/%s/master" % info.device)
-                    bond_interface = os.path.basename(bond_link)
-                # FIXME
-                except Exception:
-                    bond_interface = None
-
-                if bond_interface:
-                    address: str = self._get_permanent_hardware_address(bond_interface, info.device)
-                    key: str = ".".join(["net.interface", info.device, "permanent_mac_address"])
-                    netinfdict[key] = address
-
-        except Exception as e:
-            log.exception(e)
-            log.warning("Error reading network interface information: %s", e)
-        return netinfdict
-
-    # from rhn-client-tools  hardware.py
-    # see bz#785666
-    def _get_permanent_hardware_address(self, bond_interface: str, seeked_interface: str) -> str:
-        address: str = ""
-        try:
-            bond_interface_file: TextIO = open("/proc/net/bonding/%s" % bond_interface, "r")
-        except OSError:
-            return address
-
-        permanent_interface_found: bool = False
-        for line in bond_interface_file.readlines():
-            if permanent_interface_found and line.find("Permanent HW addr: ") != -1:
-                address = line.split()[3].upper()
-                break
-
-            if line.find("Slave Interface: ") != -1:
-                interface_name: str = line.split()[2]
-                if interface_name == seeked_interface:
-                    permanent_interface_found = True
-
-        bond_interface_file.close()
-        return address
 
 
 if __name__ == "__main__":
