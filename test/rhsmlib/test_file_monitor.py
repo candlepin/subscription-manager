@@ -19,9 +19,15 @@ from threading import Thread
 import configparser
 from rhsmlib import file_monitor
 
+import unittest
 from unittest.mock import Mock, patch
 
 from test import fixture
+
+
+# we could probably try to import 'pyinotify' ourselves here to check
+# that it is present; shamelessly rely on the import logic in file_monitor
+HAS_PYINOTIFY = file_monitor.pyinotify is not None
 
 
 class TestFilesystemWatcher(fixture.SubManFixture):
@@ -37,7 +43,8 @@ class TestFilesystemWatcher(fixture.SubManFixture):
         self.dw3 = file_monitor.DirectoryWatch(self.testpath2, [self.mock_cb1, self.mock_cb2], is_glob=False)
         self.dir_list = {"DW1": self.dw1, "DW2": self.dw2, "DW3": self.dw3}
         self.fsw1 = file_monitor.FilesystemWatcher(self.dir_list)
-        self.fsw2 = file_monitor.InotifyFilesystemWatcher(self.dir_list)
+        if HAS_PYINOTIFY:
+            self.fsw2 = file_monitor.InotifyFilesystemWatcher(self.dir_list)
 
         now: float = time.time()
         self.future = now + 120.0
@@ -74,12 +81,20 @@ class TestFilesystemWatcher(fixture.SubManFixture):
         fsw = file_monitor.create_filesystem_watcher(self.dir_list)
         self.assertIsInstance(fsw, file_monitor.FilesystemWatcher)
 
+    @patch("rhsmlib.file_monitor.is_inotify_config")
+    def test_create_fsw_real(self, mock_config):
+        mock_config.return_value = True
+        fsw = file_monitor.create_filesystem_watcher(self.dir_list)
+        self.assertIsInstance(
+            fsw, file_monitor.InotifyFilesystemWatcher if HAS_PYINOTIFY else file_monitor.FilesystemWatcher
+        )
+
     @patch("rhsmlib.file_monitor.pyinotify", new=None)
     def test_inotify_None(self):
         self.assertFalse(file_monitor.is_inotify_available())
 
     def test_inotify_avail(self):
-        self.assertTrue(file_monitor.is_inotify_available(), "expected: inotify is available")
+        self.assertEqual(file_monitor.is_inotify_available(), HAS_PYINOTIFY, "expected: inotify is available")
 
     @patch("rhsmlib.file_monitor.conf")
     def test_inotify_config(self, mock_config):
@@ -157,15 +172,18 @@ class TestFilesystemWatcher(fixture.SubManFixture):
         loop_thread.join(5.0)
         self.assertTrue(test_loop.stopped)
 
+    @unittest.skipIf(not HAS_PYINOTIFY, "'pyinotify' is not available")
     def test_inotify_stop_value_change(self):
         self.assertFalse(self.fsw2.should_stop)
         self.fsw2.stop()
         self.assertTrue(self.fsw2.should_stop)
 
+    @unittest.skipIf(not HAS_PYINOTIFY, "'pyinotify' is not available")
     def test_inotify_no_loop_when_stopped(self):
         self.fsw2.should_stop = True
         self.fsw2.loop()
 
+    @unittest.skipIf(not HAS_PYINOTIFY, "'pyinotify' is not available")
     @patch("rhsmlib.file_monitor.DirectoryWatch.notify")
     @patch("pyinotify.Event")
     def test_handle_event(self, mock_event, mock_notify):
@@ -226,6 +244,7 @@ class TestDirectoryWatch(fixture.SubManFixture):
         self.mock_cb1.assert_called_once()
         self.mock_cb2.assert_called_once()
 
+    @unittest.skipIf(not HAS_PYINOTIFY, "'pyinotify' is not available")
     @patch("pyinotify.Event")
     def test_paths_match(self, mock_event):
         mock_event.path = self.testpath2
@@ -239,6 +258,7 @@ class TestDirectoryWatch(fixture.SubManFixture):
         mock_event.pathname = self.testpath1
         self.assertFalse(self.dw3.paths_match(mock_event.path, mock_event.pathname))
 
+    @unittest.skipIf(not HAS_PYINOTIFY, "'pyinotify' is not available")
     @patch("pyinotify.Event")
     def test_file_modified(self, mock_event):
         mock_event.mask = 1
