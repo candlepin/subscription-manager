@@ -11,6 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import collections
+from typing import List
 
 from rhsm.connection import UEPConnection
 
@@ -32,14 +33,14 @@ class InstalledProducts:
         self.plugin_manager = inj.require(inj.PLUGIN_MANAGER)
         self.cp = cp
 
-    def list(self, filter_string: str = None, iso_dates: bool = False) -> list:
+    def list(self, filter_string: str = None, iso_dates: bool = False) -> List[tuple]:
         """
         Method for listening installed products in the system
         :param filter_string: String for filtering out products
         :param iso_dates: Whether output dates in ISO 8601 format
         :return: List of installed products.
         """
-        product_status = []
+        product_status: List[tuple] = []
 
         # It is important to gather data from certificates of installed
         # products at the first time: sorter = inj.require(inj.CERT_SORTER)

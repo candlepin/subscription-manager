@@ -10,17 +10,24 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+import argparse
 import os
 import sys
-import argparse
+from typing import List, Optional, TYPE_CHECKING, Type
+
 import dbus
 import dbus.mainloop.glib
 import rhsmlib
 import logging
 
+import rhsmlib.dbus.constants
 from rhsmlib.dbus import server
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.cli import system_exit
+
+if TYPE_CHECKING:
+    import dbus.service
+    from rhsmlib.dbus.base_object import BaseObject
 
 log = logging.getLogger(__name__)
 
@@ -49,7 +56,11 @@ def parse_argv(argv, default_dbus_name):
     return opts, args
 
 
-def main(argv=sys.argv, object_classes=None, default_bus_name=None):
+def main(
+    argv=sys.argv,
+    object_classes: List[Type["BaseObject"]] = None,
+    default_bus_name: Optional[str] = None,
+) -> int:
     # Set default mainloop
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 

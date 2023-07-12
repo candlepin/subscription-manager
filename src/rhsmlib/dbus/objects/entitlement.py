@@ -10,11 +10,14 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+import datetime
+from typing import List, Union
 
 import dbus
 import json
 import logging
 
+from rhsm.connection import UEPConnection
 from rhsmlib.dbus import constants, base_object, util, dbus_utils
 from rhsmlib.services.entitlement import EntitlementService
 
@@ -25,6 +28,88 @@ from subscription_manager.i18n import Locale
 init_dep_injection()
 
 log = logging.getLogger(__name__)
+
+
+class EntitlementDBusImplementation(base_object.BaseImplementation):
+    def get_status(self, on_date: str) -> dict:
+        """Get status of entitlements."""
+        on_date: Union[str, datetime.datetime] = None if on_date == "" else self._parse_date(on_date)
+
+        uep: UEPConnection = self.build_uep(options={})
+        service = EntitlementService(uep)
+        try:
+            status: dict = service.get_status(on_date=on_date, force=True)
+        except Exception as exc:
+            log.exception(exc)
+            raise dbus.DBusException(str(exc))
+
+        return status
+
+    def get_pools(self, options: dict, proxy_options: dict) -> dict:
+        """Get pools that are installed, available and consumed by this system."""
+        on_date: str = options.setdefault("on_date", "")
+        if on_date != "":
+            options["on_date"] = self._parse_date(on_date)
+
+        after_date: str = options.setdefault("after_date", "")
+        if after_date != "":
+            options["after_date"] = self._parse_date(after_date)
+
+        future: str = options.setdefault("future", "")
+        if future != "":
+            options["future"] = future
+
+        uep: UEPConnection = self.build_uep(proxy_options, proxy_only=True)
+        service = EntitlementService(uep)
+        pools: dict = service.get_pools(**options)
+
+        return pools
+
+    def remove_all_entitlements(self, proxy_options: dict) -> dict:
+        uep: UEPConnection = self.build_uep(proxy_options, proxy_only=True)
+        service = EntitlementService(uep)
+        result: dict = service.remove_all_entitlements()
+
+        return result
+
+    def remove_entitlements_by_pool_ids(self, pool_ids: List[str], proxy_options: dict) -> List[str]:
+        """Remove entitlements by Pool IDs
+
+        :return: List of removed serials.
+        """
+        uep: UEPConnection = self.build_uep(proxy_options, proxy_only=True)
+        service = EntitlementService(uep)
+        _, _, removed_serials = service.remove_entitlements_by_pool_ids(pool_ids)
+
+        return removed_serials
+
+    def remove_entitlements_by_serials(self, serials: List[str], proxy_options: dict) -> List[str]:
+        """Remove entitlements by serials.
+
+        :return: List of removed serials.
+        """
+        uep: UEPConnection = self.build_uep(proxy_options, proxy_only=True)
+        service = EntitlementService(uep)
+        removed_serials, _ = service.remove_entitlements_by_serials(serials)
+
+        return removed_serials
+
+    def _parse_date(self, date_string: str) -> datetime.datetime:
+        """
+        Return new datetime parsed from date.
+
+        This is a wrapper around EntitlementService.parse_date that raises
+        a D-Bus exception instead of ValueError.
+
+        :param date_string: String representing date
+        :return: datetime.datetime structure representing date
+        :raises dbus.DBusException: String cannot be converted
+        """
+        try:
+            date = EntitlementService.parse_date(date_string)
+        except ValueError as err:
+            raise dbus.DBusException(err)
+        return date
 
 
 class EntitlementDBusObject(base_object.BaseObject):
@@ -38,6 +123,7 @@ class EntitlementDBusObject(base_object.BaseObject):
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
         super(EntitlementDBusObject, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.impl = EntitlementDBusImplementation()
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
@@ -57,19 +143,9 @@ class EntitlementDBusObject(base_object.BaseObject):
         on_date = dbus_utils.dbus_to_python(on_date, expected_type=str)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
-        if on_date == "":
-            on_date = None
-        else:
-            on_date = self._parse_date(on_date)
         Locale.set(locale)
 
-        try:
-            cp = self.build_uep(options={})
-            status = EntitlementService(cp).get_status(on_date=on_date, force=True)
-        except Exception as e:
-            log.exception(e)
-            raise dbus.DBusException(str(e))
-
+        status: dict = self.impl.get_status(on_date)
         return json.dumps(status)
 
     @util.dbus_service_signal(
@@ -108,35 +184,8 @@ class EntitlementDBusObject(base_object.BaseObject):
 
         Locale.set(locale)
 
-        on_date = options.setdefault("on_date", "")
-        if on_date != "":
-            options["on_date"] = self._parse_date(on_date)
-
-        after_date = options.setdefault("after_date", "")
-        if after_date != "":
-            options["after_date"] = self._parse_date(after_date)
-
-        future = options.setdefault("future", "")
-        if future != "":
-            options["future"] = future
-
-        cp = self.build_uep(proxy_options, proxy_only=True)
-        entitlement_service = EntitlementService(cp)
-        pools = entitlement_service.get_pools(**options)
+        pools: dict = self.impl.get_pools(options, proxy_options)
         return json.dumps(pools)
-
-    @staticmethod
-    def _parse_date(on_date):
-        """
-        Return new datetime parsed from date
-        :param on_date: String representing date
-        :return It returns datetime.datime structure representing date
-        """
-        try:
-            on_date = EntitlementService.parse_date(on_date)
-        except ValueError as err:
-            raise dbus.DBusException(err)
-        return on_date
 
     @util.dbus_service_method(
         constants.ENTITLEMENT_INTERFACE,
@@ -154,12 +203,11 @@ class EntitlementDBusObject(base_object.BaseObject):
         :return: Json string containing response
         """
         proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
-        cp = self.build_uep(proxy_options, proxy_only=True)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
+
         Locale.set(locale)
 
-        entitlement_service = EntitlementService(cp)
-        result = entitlement_service.remove_all_entitlements()
+        result: dict = self.impl.remove_all_entitlements(proxy_options)
         return json.dumps(result)
 
     @util.dbus_service_method(
@@ -184,12 +232,7 @@ class EntitlementDBusObject(base_object.BaseObject):
 
         Locale.set(locale)
 
-        cp = self.build_uep(proxy_options, proxy_only=True)
-        entitlement_service = EntitlementService(cp)
-        removed_pools, unremoved_pools, removed_serials = entitlement_service.remove_entitlements_by_pool_ids(
-            pool_ids
-        )
-
+        removed_serials = self.impl.remove_entitlements_by_pool_ids(pool_ids, proxy_options)
         return json.dumps(removed_serials)
 
     @util.dbus_service_method(
@@ -214,10 +257,7 @@ class EntitlementDBusObject(base_object.BaseObject):
 
         Locale.set(locale)
 
-        cp = self.build_uep(proxy_options, proxy_only=True)
-        entitlement_service = EntitlementService(cp)
-        removed_serials, unremoved_serials = entitlement_service.remove_entitlements_by_serials(serials)
-
+        removed_serials = self.impl.remove_entitlements_by_serials(serials, proxy_options)
         return json.dumps(removed_serials)
 
     @staticmethod

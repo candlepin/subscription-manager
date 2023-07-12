@@ -13,28 +13,27 @@
 import dbus
 from unittest import mock
 
-from rhsmlib.dbus.objects import UnregisterDBusObject
+from rhsmlib.dbus.objects.unregister import UnregisterDBusImplementation
 
-from test.rhsmlib.base import DBusServerStubProvider
+from test.rhsmlib.base import SubManDBusFixture
+from test import subman_marker_dbus
 
 
-class TestUnregisterDBusObject_(DBusServerStubProvider):
-    dbus_class = UnregisterDBusObject
-    dbus_class_kwargs = {}
+@subman_marker_dbus
+class TestUnregisterDBusObject(SubManDBusFixture):
+    def setUp(self) -> None:
+        super().setUp()
+        self.impl = UnregisterDBusImplementation()
 
-    @classmethod
-    def setUpClass(cls) -> None:
         is_registered_patch = mock.patch(
-            "rhsmlib.dbus.base_object.BaseObject.is_registered",
+            "rhsmlib.dbus.base_object.BaseImplementation.is_registered",
             name="is_registered",
         )
-        cls.patches["is_registered"] = is_registered_patch.start()
-        cls.addClassCleanup(is_registered_patch.stop)
-
-        super().setUpClass()
+        self.patches["is_registered"] = is_registered_patch.start()
+        self.addCleanup(is_registered_patch.stop)
 
     def test_Unregister__must_be_registered(self):
         self.patches["is_registered"].return_value = False
 
         with self.assertRaisesRegex(dbus.DBusException, r"requires the consumer to be registered.*"):
-            self.obj.Unregister.__wrapped__(self.obj, {}, self.LOCALE)
+            self.impl.unregister({})

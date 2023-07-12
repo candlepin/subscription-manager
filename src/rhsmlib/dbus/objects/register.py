@@ -14,6 +14,8 @@
 import json
 import logging
 import threading
+from typing import Callable, List, Optional, TYPE_CHECKING
+
 import dbus
 import dbus.service
 import subscription_manager.injection as inj
@@ -24,12 +26,58 @@ from rhsmlib.services.unregister import UnregisterService
 from rhsmlib.services.attach import AttachService
 from rhsmlib.services.entitlement import EntitlementService
 from rhsmlib.client_info import DBusSender
+from subscription_manager.cp_provider import CPProvider
 
 from subscription_manager.i18n import Locale
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.entcertlib import EntCertActionInvoker
 
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
+
 log = logging.getLogger(__name__)
+
+
+class RegisterDBusImplementation(base_object.BaseImplementation):
+    def __init__(self):
+        self.server: Optional[server.DomainSocketServer] = None
+        self.lock = threading.Lock()
+        self.started_event = threading.Event()
+        self.stopped_event = threading.Event()
+
+    def start(self, sender: str) -> str:
+        """Start a D-Bus server listening on a domain socket instead of a System bus.
+
+        :return: Server address.
+        """
+        with self.lock:
+            if self.server is not None:
+                return self.server.address
+
+            log.debug("Trying to create new domain socket server.")
+            self.server = server.DomainSocketServer(
+                object_classes=[DomainSocketRegisterDBusObject],
+                sender=sender,
+                cmd_line=DBusSender.get_cmd_line(sender),
+            )
+            address: str = self.server.run()
+            log.debug(
+                f"Domain socket server for sender {sender} is created and listens on address '{address}'."
+            )
+            return address
+
+    def stop(self) -> None:
+        """Stop the server running on the domain socket.
+
+        :raises exceptions.Failed: No domain socket server is running.
+        """
+        with self.lock:
+            if self.server is None:
+                raise exceptions.Failed("No domain socket server is running")
+
+            self.server.shutdown()
+            self.server = None
+            log.debug("Domain socket server stopped.")
 
 
 class RegisterDBusObject(base_object.BaseObject):
@@ -37,11 +85,8 @@ class RegisterDBusObject(base_object.BaseObject):
     interface_name = constants.REGISTER_INTERFACE
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(RegisterDBusObject, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
-        self.started_event = threading.Event()
-        self.stopped_event = threading.Event()
-        self.server = None
-        self.lock = threading.Lock()
+        super().__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.impl = RegisterDBusImplementation()
 
     @util.dbus_service_method(
         constants.REGISTER_INTERFACE,
@@ -54,18 +99,8 @@ class RegisterDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        with self.lock:
-            if self.server:
-                return self.server.address
-
-            log.debug("Attempting to create new domain socket server")
-            cmd_line = DBusSender.get_cmd_line(sender)
-            self.server = server.DomainSocketServer(
-                object_classes=[DomainSocketRegisterDBusObject], sender=sender, cmd_line=cmd_line
-            )
-            address = self.server.run()
-            log.debug('DomainSocketServer for sender %s created and listening on "%s"' % (sender, address))
-            return address
+        address: str = self.impl.start(sender)
+        return address
 
     @util.dbus_service_method(
         constants.REGISTER_INTERFACE,
@@ -77,14 +112,8 @@ class RegisterDBusObject(base_object.BaseObject):
     def Stop(self, locale, sender=None):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
-        with self.lock:
-            if self.server:
-                self.server.shutdown()
-                self.server = None
-                log.debug("Stopped DomainSocketServer")
-                return True
-            else:
-                raise exceptions.Failed("No domain socket server is running")
+
+        self.impl.stop()
 
 
 class OrgNotSpecifiedException(dbus.DBusException):
@@ -120,6 +149,163 @@ class NoOrganizationException(dbus.DBusException):
         return _("User %s is not member of any organization") % self.username
 
 
+class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
+    _multiple_organizations_signal: Callable[[object, str], None] = lambda self, organizations: None
+    """A callback function to call by _on_multiple_organizations.
+
+    An actual implementation is provided by DomainSocketRegisterDBusObject,
+    where a D-Bus signal is emitted.
+    """
+
+    def get_organizations(self, options: dict) -> List[dict]:
+        """Get user account organizations.
+
+        :param options: Connection options including the 'username' and 'password' keys.
+        :return: List of organizations.
+        """
+        uep: UEPConnection = self.build_uep(options, basic_auth_method=True)
+        owners: List[dict] = uep.getOwnerList(options["username"])
+        return owners
+
+    def register_with_credentials(
+        self, organization: Optional[str], register_options: dict, connection_options: dict
+    ) -> dict:
+        """Register the system.
+
+        :param organization: An organization user is part of, if they is more than one.
+        :param register_options: Registration options passed to the RegisterService.
+        :param connection_options: Connection options including the 'username' and 'password' keys.
+
+        :raises dbus.DBusException: The system is already registered.
+        :raises OrgNotSpecifiedException: User is part of multiple organizations, but none was specified.
+        """
+        if self.is_registered():
+            if connection_options.get("force", False) is True:
+                self._unregister(connection_options)
+            else:
+                raise dbus.DBusException("This system is already registered.")
+
+        uep: UEPConnection = self.build_uep(connection_options)
+        service = RegisterService(uep)
+
+        if not organization:
+            organization: str = service.determine_owner_key(
+                username=connection_options["username"],
+                get_owner_cb=self._on_multiple_organizations,
+                no_owner_cb=self._on_no_organization,
+            )
+
+        # If there is more organizations, a signal was triggered in _get_owner_cb, and None was returned.
+        # However, we still have to raise something to prevent the registration.
+        if not organization:
+            raise OrgNotSpecifiedException(username=connection_options["username"])
+
+        enable_content: bool = self._remove_enable_content_option(register_options)
+        consumer: dict = service.register(organization, **register_options)
+
+        # When consumer is created, we can try to enable content, if requested.
+        if enable_content:
+            self._enable_content(uep, consumer)
+
+        return consumer
+
+    def register_with_activation_keys(
+        self, organization: Optional[str], register_options: dict, connection_options: dict
+    ) -> dict:
+        """Register the system.
+
+        :param organization: An organization user is part of, if there is more than one.
+        :param register_options: Registration options passed to the RegisterService.
+        :param connection_options: Connection options.
+        """
+
+        if self.is_registered() and not connection_options.get("force", False):
+            raise dbus.DBusException("This system is already registered.")
+
+        if self.is_registered():
+            self._unregister(connection_options)
+
+        uep: UEPConnection = self.build_uep(connection_options)
+        service = RegisterService(uep)
+
+        consumer: dict = service.register(organization, **register_options)
+
+        ent_cert_lib = EntCertActionInvoker()
+        ent_cert_lib.update()
+
+        return consumer
+
+    def _on_multiple_organizations(self, owners: List[dict]) -> None:
+        """A function to call when a member is part of multiple organizations.
+
+        Invokes a callback.
+        """
+        organizations: str = json.dumps(owners)
+        self._multiple_organizations_signal(organizations)
+
+    def _on_no_organization(self, username: str) -> None:
+        """A function to call when a member is not part of any organization.
+
+        :raises NoOrganizationException:
+        """
+        raise NoOrganizationException(username=username)
+
+    def _remove_enable_content_option(self, options: dict) -> bool:
+        """Try to remove enable_content option from options dictionary.
+
+        :returns: The value of 'enable_content' key.
+        """
+        if "enable_content" not in options:
+            return False
+
+        return bool(options.pop("enable_content"))
+
+    def _enable_content(self, uep: "UEPConnection", consumer: dict) -> None:
+        """Try to enable content: Auto-attach in non-SCA or refresh in SCA mode."""
+        content_access: str = consumer["owner"]["contentAccessMode"]
+        enabled_content = None
+
+        if content_access == "entitlement":
+            log.debug("Auto-attaching since 'enable_content' is true.")
+            service = AttachService(uep)
+            enabled_content = service.attach_auto()
+            if len(enabled_content) > 0:
+                log.debug("Updating entitlement certificates")
+                # FIXME: The enabled_content contains all data necessary for generating entitlement
+                # certificate and private key. Thus we could save few REST API calls, when the data was used.
+                EntCertActionInvoker().update()
+            else:
+                log.debug("No content was enabled, entitlement certificates not updated.")
+
+        elif content_access == "org_environment":
+            log.debug("Refreshing since 'enable_content' is true.")
+            service = EntitlementService(uep)
+            # TODO: try get anything useful from refresh result. It is not possible atm.
+            service.refresh(remove_cache=False, force=False)
+
+        else:
+            log.error(f"Unable to enable content due to unsupported content access mode: '{content_access}'")
+
+        if enabled_content is not None:
+            consumer["enabledContent"] = enabled_content
+
+    def _unregister(self, options: dict) -> None:
+        """Unregister the system and clean CPProvider.
+
+        :param options: Connection options.
+        """
+        self.ensure_registered()
+        log.info("This system is already registered, attempting to unregister.")
+
+        uep: UEPConnection = self.build_uep(options)
+        UnregisterService(uep).unregister()
+
+        # The CPProvider must be cleaned and CP object must be reinitialized to
+        # handle authorization after unregistration.
+        cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+        cp_provider.clean()
+
+
 class DomainSocketRegisterDBusObject(base_object.BaseObject):
     interface_name = constants.PRIVATE_REGISTER_INTERFACE
     default_dbus_path = constants.PRIVATE_REGISTER_DBUS_PATH
@@ -127,9 +313,10 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
     def __init__(self, conn=None, object_path=None, bus_name=None, sender=None, cmd_line=None):
         # On our DomainSocket DBus server since a private connection is not a "bus", we have to treat
         # it slightly differently. In particular there are no names, no discovery and so on.
-        super(DomainSocketRegisterDBusObject, self).__init__(
-            conn=conn, object_path=object_path, bus_name=bus_name
-        )
+        super().__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.impl = DomainSocketRegisterDBusImplementation()
+        self.impl._multiple_organizations_signal = self.UserMemberOfOrgs
+
         self.sender = sender
         self.cmd_line = cmd_line
 
@@ -158,8 +345,9 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         with DBusSender() as dbus_sender:
             dbus_sender.set_cmd_line(sender=self.sender, cmd_line=self.cmd_line)
             Locale.set(locale)
-            cp = self.build_uep(connection_options, basic_auth_method=True)
-            owners = cp.getOwnerList(connection_options["username"])
+
+            owners = self.impl.get_organizations(connection_options)
+
             dbus_sender.reset_cmd_line()
 
         return json.dumps(owners)
@@ -182,106 +370,6 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
             % (constants.PRIVATE_REGISTER_INTERFACE, orgs)
         )
         return None
-
-    def _no_owner_cb(self, username):
-        """
-        Callback method that is triggered, when given user is not member of any organization.
-        In this case exception is raised.
-        :return: None
-        """
-        raise NoOrganizationException(username=username)
-
-    def _get_owner_cb(self, owners):
-        """
-        When there is necessary to select one organization by user, then signal is triggered.
-        :param owners: The list of owner objects
-        :return: None
-        """
-        # We use string of json.dumped dictionary, because D-Bus API does not work
-        # properly with dictionaries
-        orgs = json.dumps(owners)
-
-        # NOTE: use only position argument. Do not change it to keyed argument, because
-        # D-Bus wrapper does NOT work with keyed argument
-        self.UserMemberOfOrgs(orgs)
-
-        # We return None here, because we cannot know what will be selected by user
-        return None
-
-    @staticmethod
-    def _enable_content(cp, consumer: dict) -> None:
-        """
-        Try to enable content. Try to do auto-attach in non-SCA mode or try to do refresh SCA mode.
-        :param cp: Object representing connection to candlepin server
-        :param consumer: Dictionary representing consumer
-        :return: None
-        """
-        content_access_mode = consumer["owner"]["contentAccessMode"]
-        enabled_content = None
-
-        if content_access_mode == "entitlement":
-            log.debug("Auto-attaching due to enable_content option")
-            attach_service = AttachService(cp)
-            enabled_content = attach_service.attach_auto()
-            if len(enabled_content) > 0:
-                log.debug("Updating entitlement certificates")
-                # FIXME: The enabled_content contains all data necessary for generating entitlement
-                # certificate and private key. Thus we could save few REST API calls, when the data was used.
-                EntCertActionInvoker().update()
-            else:
-                log.debug("Skipping updating entitlement certificates, because no content was enabled")
-        elif content_access_mode == "org_environment":
-            log.debug("Refreshing due to enabled_content option and simple content access mode")
-            entitlement_service = EntitlementService(cp)
-            # TODO: try get anything useful from refresh result. It is not possible atm.
-            entitlement_service.refresh(remove_cache=False, force=False)
-        else:
-            log.error(
-                f"Unable to enable content due to unsupported content access mode: " f"{content_access_mode}"
-            )
-
-        # When it was possible to enable content, then extend consumer
-        # with information about enabled content
-        if enabled_content is not None:
-            consumer["enabledContent"] = enabled_content
-
-    @staticmethod
-    def _remove_enable_content_option(options: dict) -> bool:
-        """
-        Try to remove enable_content option from options used in Register() and
-        RegisterWithActivationKeys() methods
-        :param options: dictionary with options
-        :return: Value of enable_options
-        """
-        if "enable_content" in options:
-            log.debug(
-                f"Value and type of enable_content: '{options['enable_content']}' "
-                f"({type(options['enable_content'])})"
-            )
-            enable_content = bool(options.pop("enable_content"))
-            log.debug(f"Value of converted enable_content: {enable_content}")
-        else:
-            enable_content = False
-        return enable_content
-
-    def _unregister(self, connection_options: dict) -> None:
-        """
-        Unregisters a system that is currently registered and
-        cleans the cp_provider to handle authorization after un-registering.
-        :param connection_options: dictionary with connection options
-        :return: None
-        """
-        self.ensure_registered()
-        log.info("This system is already registered, attempting to un-register...")
-
-        cp_provider = inj.require(inj.CP_PROVIDER)
-
-        cp = self.build_uep(connection_options)
-        UnregisterService(cp).unregister()
-
-        # The CPProvider object must be cleaned and the cp object must
-        # be re-initialized to handle authorization after un-registration.
-        cp_provider.clean()
 
     @dbus.service.method(
         dbus_interface=constants.PRIVATE_REGISTER_INTERFACE,
@@ -307,48 +395,11 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         options = dbus_utils.dbus_to_python(options, expected_type=dict)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
-        force_registration: bool = options.get("force", False)
-        system_is_registered: bool = self.is_registered()
-        if system_is_registered and not force_registration:
-            raise dbus.DBusException("This system is already registered.")
-
         with DBusSender() as dbus_sender:
             dbus_sender.set_cmd_line(sender=self.sender, cmd_line=self.cmd_line)
             Locale.set(locale)
 
-            # If the system is registered and the 'force' option is specified,
-            # Unregister the system and register the system again.
-            if system_is_registered and force_registration:
-                self._unregister(connection_options)
-            cp = self.build_uep(connection_options)
-
-            register_service = RegisterService(cp)
-
-            # Try to get organization from the list available organizations, when the list contains
-            # only one item, then register_service.determine_owner_key will return this organization
-            if not org:
-                org = register_service.determine_owner_key(
-                    username=connection_options["username"],
-                    get_owner_cb=self._get_owner_cb,
-                    no_owner_cb=self._no_owner_cb,
-                )
-
-            # When there is more organizations, then signal was triggered in callback method
-            # _get_owner_cb, but some exception has to be raised here to not try registration process
-            if not org:
-                raise OrgNotSpecifiedException(username=connection_options["username"])
-
-            # Remove 'enable_content' option, because it will not be proceed in register service
-            enable_content = self._remove_enable_content_option(options)
-
-            consumer = register_service.register(org, **options)
-
-            # When consumer is created, then we can try to enabled content, when it was
-            # requested in options.
-            if enable_content is True:
-                self._enable_content(cp, consumer)
-
-            dbus_sender.reset_cmd_line()
+            consumer: dict = self.impl.register_with_credentials(org, options, connection_options)
 
         return json.dumps(consumer)
 
@@ -368,28 +419,10 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         org = dbus_utils.dbus_to_python(org, expected_type=str)
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
 
-        force_registration: bool = options.get("force", False)
-        system_is_registered: bool = self.is_registered()
-        if system_is_registered and not force_registration:
-            raise dbus.DBusException("This system is already registered.")
-
         with DBusSender() as dbus_sender:
             dbus_sender.set_cmd_line(sender=self.sender, cmd_line=self.cmd_line)
             Locale.set(locale)
 
-            # If the system is registered and the 'force' option is specified,
-            # Unregister the system and register the system again.
-            if system_is_registered and force_registration:
-                self._unregister(connection_options)
-            cp = self.build_uep(connection_options)
-
-            register_service = RegisterService(cp)
-            consumer = register_service.register(org, **options)
-
-            log.debug("System registered, updating entitlements if needed")
-            ent_cert_lib = EntCertActionInvoker()
-            ent_cert_lib.update()
-
-            dbus_sender.reset_cmd_line()
+            consumer: dict = self.impl.register_with_activation_keys(org, options, connection_options)
 
         return json.dumps(consumer)

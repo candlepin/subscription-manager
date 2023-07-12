@@ -11,16 +11,13 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 
-from rhsmlib.dbus.objects.consumer import ConsumerDBusObject
+from rhsmlib.dbus.objects.consumer import ConsumerDBusImplementation
 
 from unittest import mock
-from test.rhsmlib.base import DBusServerStubProvider
+from test.rhsmlib.base import SubManDBusFixture
 
 
-class TestConsumerDBusObject(DBusServerStubProvider):
-    dbus_class = ConsumerDBusObject
-    dbus_class_kwargs = {}
-
+class TestConsumerDBusObject(SubManDBusFixture):
     @classmethod
     def setUpClass(cls) -> None:
         get_consumer_uuid_patch = mock.patch(
@@ -30,11 +27,13 @@ class TestConsumerDBusObject(DBusServerStubProvider):
         cls.patches["get_consumer_uuid"] = get_consumer_uuid_patch.start()
         cls.addClassCleanup(get_consumer_uuid_patch)
 
+        cls.impl = ConsumerDBusImplementation()
+
         super().setUpClass()
 
     def test_GetUuid(self):
         self.patches["get_consumer_uuid"].return_value = "fake-uuid"
 
         expected = "fake-uuid"
-        result = self.obj.GetUuid.__wrapped__(self.obj, self.LOCALE)
+        result = self.impl.get_uuid()
         self.assertEqual(expected, result)

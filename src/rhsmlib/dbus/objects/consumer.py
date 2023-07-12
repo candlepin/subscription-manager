@@ -33,6 +33,17 @@ init_dep_injection()
 log = logging.getLogger(__name__)
 
 
+class ConsumerDBusImplementation(base_object.BaseImplementation):
+    def get_uuid(self) -> str:
+        try:
+            return Consumer().get_consumer_uuid()
+        except Exception as exc:
+            raise dbus.DBusException(str(exc))
+
+    def get_org(self) -> dict:
+        return get_current_owner()
+
+
 class ConsumerDBusObject(base_object.BaseObject):
     """
     A D-Bus object interacting with subscription-manager to get
@@ -43,7 +54,8 @@ class ConsumerDBusObject(base_object.BaseObject):
     interface_name = constants.CONSUMER_INTERFACE
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(ConsumerDBusObject, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        super().__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.impl = ConsumerDBusImplementation()
 
     @util.dbus_service_method(
         constants.CONSUMER_INTERFACE,
@@ -63,13 +75,8 @@ class ConsumerDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        consumer = Consumer()
-        try:
-            uuid = consumer.get_consumer_uuid()
-        except Exception as err:
-            raise dbus.DBusException(str(err))
-
-        return str(uuid)
+        result: str = self.impl.get_uuid()
+        return result
 
     @util.dbus_service_method(
         constants.CONSUMER_INTERFACE,
@@ -88,9 +95,8 @@ class ConsumerDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        org = get_current_owner()
-
-        return json.dumps(org)
+        organization: dict = self.impl.get_org()
+        return json.dumps(organization)
 
     @util.dbus_service_signal(
         constants.CONSUMER_INTERFACE,

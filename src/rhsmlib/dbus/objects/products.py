@@ -10,6 +10,8 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+from typing import List, TYPE_CHECKING
+
 import dbus
 import json
 import logging
@@ -20,9 +22,26 @@ from rhsmlib.services.products import InstalledProducts
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.i18n import Locale
 
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
+
+
 init_dep_injection()
 
 log = logging.getLogger(__name__)
+
+
+class ProductsDBusImplementation(base_object.BaseImplementation):
+    def list_installed_products(self, filter_string: str, proxy_options: dict) -> List[tuple]:
+        uep: UEPConnection = self.build_uep(proxy_options, proxy_only=True)
+        installed_products = InstalledProducts(uep)
+
+        try:
+            products: List[tuple] = installed_products.list(filter_string, iso_dates=True)
+        except Exception as exc:
+            raise dbus.DBusException(str(exc))
+
+        return products
 
 
 class ProductsDBusObject(base_object.BaseObject):
@@ -35,7 +54,8 @@ class ProductsDBusObject(base_object.BaseObject):
     interface_name = constants.PRODUCTS_INTERFACE
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(ProductsDBusObject, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        super().__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.impl = ProductsDBusImplementation()
 
     @util.dbus_service_signal(
         constants.PRODUCTS_INTERFACE,
@@ -71,13 +91,5 @@ class ProductsDBusObject(base_object.BaseObject):
 
         Locale.set(locale)
 
-        cp = self.build_uep(proxy_options, proxy_only=True)
-
-        installed_products = InstalledProducts(cp)
-
-        try:
-            response = installed_products.list(filter_string, iso_dates=True)
-        except Exception as err:
-            raise dbus.DBusException(str(err))
-
-        return json.dumps(response)
+        products = self.impl.list_installed_products(filter_string, proxy_options)
+        return json.dumps(products)
