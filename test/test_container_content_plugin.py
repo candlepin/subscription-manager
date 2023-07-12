@@ -15,11 +15,12 @@ from unittest import mock
 from . import fixture
 import tempfile
 import shutil
+import sys
 import os.path
 
 from os.path import exists, join
 
-import imp
+import importlib
 from subscription_manager.model import Content
 from subscription_manager.plugin.container import (
     ContainerContentUpdateActionCommand,
@@ -111,11 +112,12 @@ class TestContainerContentUpdateActionCommand(fixture.SubManFixture):
 
     def test_post_install_main(self):
         plugin_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src", "content_plugins"))
-        fp, pathname, description = imp.find_module("container_content", [plugin_path])
-        try:
-            container_content = imp.load_module("container_content", fp, pathname, description)
-        finally:
-            fp.close()
+        spec = importlib.util.spec_from_file_location(
+            "container_content", os.path.join(plugin_path, "container_content.py")
+        )
+        container_content = importlib.util.module_from_spec(spec)
+        sys.modules["container_content"] = container_content
+        spec.loader.exec_module(container_content)
         plugin_manager = PluginManager(search_path=plugin_path, plugin_conf_path=plugin_path)
         plugin_class = plugin_manager.get_plugins()["container_content.ContainerContentPlugin"]
         with mock.patch.object(plugin_class, "HOSTNAME_CERT_DIR", self.host_cert_dir):
