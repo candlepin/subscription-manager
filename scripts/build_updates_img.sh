@@ -67,7 +67,7 @@ make -e install
 PYTHON_SITE_PACKAGE_DIRS=`${PYTHON_BIN} -c "import site; print(' '.join(site.getsitepackages()))"`
 
 # List of required Python packages
-PY_PACKAGES="dateutil ethtool"
+PY_PACKAGES="dateutil"
 
 # Copy required Python modules to updates.img too
 for pkg in `echo ${PY_PACKAGES}`
@@ -94,7 +94,7 @@ do
 done
 
 # List of Python eggs (yes, names can be different from package names)
-PY_PACKAGES="python_dateutil ethtool"
+PY_PACKAGES="python_dateutil"
 
 # Copy required Python eggs to updates.img too
 for pkg in `echo ${PY_PACKAGES}`

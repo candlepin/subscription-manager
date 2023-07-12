@@ -18,7 +18,7 @@ dnf --setopt install_weak_deps=False install -y \
   python3-setuptools \
   openssl-devel glib2-devel libdnf-devel \
   python3-rpm python3-librepo python3-gobject python3-gobject python3-dbus \
-  python3-dateutil python3-requests python3-iniparse python3-ethtool \
+  python3-dateutil python3-requests python3-iniparse \
   glibc-langpack-en glibc-langpack-de glibc-langpack-ja
 
 # Install test packages

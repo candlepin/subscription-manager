@@ -229,7 +229,6 @@ setup_requires = []
 install_requires = [
     "iniparse",
     "python-dateutil",
-    "ethtool",
     "dbus-python",
 ]
 
