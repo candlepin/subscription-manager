@@ -12,26 +12,40 @@
 # in this software or its documentation.
 #
 import logging
+from typing import TYPE_CHECKING, Dict, Type
+
 import dbus
 
 from rhsmlib.facts import collector, host_collector, hwprobe, custom, all
+from rhsmlib.facts.collector import FactsCollector
 from rhsmlib.dbus import util, base_object
 from rhsmlib.dbus.facts import constants
 
+if TYPE_CHECKING:
+    from rhsmlib.facts.collection import FactsCollection
+
 log = logging.getLogger(__name__)
+
+
+class FactsImplementation(base_object.BaseImplementation):
+    def __init__(self, collector_class: Type["FactsCollector"]):
+        self.collector: FactsCollector = collector_class()
+
+    def get_facts(self) -> Dict[str, str]:
+        collection: FactsCollection = self.collector.collect()
+        cleaned = dict([(str(key), str(value)) for key, value in list(collection.data.items())])
+        return cleaned
 
 
 class BaseFacts(base_object.BaseObject):
     interface_name = constants.FACTS_DBUS_INTERFACE
     default_dbus_path = constants.FACTS_DBUS_PATH
     default_props_data = {}
-    facts_collector_class = collector.FactsCollector
+    collector_class: Type[FactsCollector] = collector.FactsCollector
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(BaseFacts, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
-
-        # Default is an empty FactsCollector
-        self.facts_collector = self.facts_collector_class()
+        super().__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.impl = FactsImplementation(self.collector_class)
 
     @util.dbus_service_method(
         dbus_interface=constants.FACTS_DBUS_INTERFACE,
@@ -39,23 +53,25 @@ class BaseFacts(base_object.BaseObject):
     )
     @util.dbus_handle_exceptions
     def GetFacts(self, sender=None):
-        collection = self.facts_collector.collect()
-        cleaned = dict([(str(key), str(value)) for key, value in list(collection.data.items())])
-        return dbus.Dictionary(cleaned, signature="ss")
+        facts = self.impl.get_facts()
+        return dbus.Dictionary(facts, signature="ss")
 
 
-def class_factory(name, facts_collector=None):
-    """Function used for creating subclasses of class BaseFact"""
-
-    def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(self.__class__, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
-        self.facts_collector = facts_collector
-
-    return type(name, (BaseFacts,), {"__init__": __init__})
+class AllFacts(BaseFacts):
+    collector_class = all.AllFactsCollector
 
 
-AllFacts = class_factory("AllFacts", all.AllFactsCollector())
-HostFacts = class_factory("HostFacts", host_collector.HostCollector())
-HardwareFacts = class_factory("HardwareFacts", hwprobe.HardwareCollector())
-CustomFacts = class_factory("CustomFacts", custom.CustomFactsCollector())
-StaticFacts = class_factory("StaticFacts", collector.StaticFactsCollector())
+class HostFacts(BaseFacts):
+    collector_class = host_collector.HostCollector
+
+
+class HardwareFacts(BaseFacts):
+    collector_class = hwprobe.HardwareCollector
+
+
+class CustomFacts(BaseFacts):
+    collector_class = custom.CustomFactsCollector
+
+
+class StaticFacts(BaseFacts):
+    collector_class = collector.StaticFactsCollector

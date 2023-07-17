@@ -10,46 +10,19 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-from unittest import mock
 
-from rhsmlib.dbus.facts.base import AllFacts
+import rhsmlib.facts.all
+from rhsmlib.dbus.facts.base import FactsImplementation
 
-from test.rhsmlib.base import DBusServerStubProvider
+from test.rhsmlib.base import SubManDBusFixture
 
 
-class TestFactsDBusObject(DBusServerStubProvider):
-    dbus_class = AllFacts
-    dbus_class_kwargs = {}
-
-    @classmethod
-    def setUpClass(cls) -> None:
-        # Do not try to use system virt-what
-        get_virt_info_patch = mock.patch(
-            "rhsmlib.facts.virt.VirtWhatCollector.get_virt_info",
-            name="get_virt_info",
-        )
-        cls.patches["get_virt_info"] = get_virt_info_patch.start()
-        cls.patches["get_virt_info"].return_value = {"virt.is_guest": "Unknown"}
-        cls.addClassCleanup(get_virt_info_patch.stop)
-
-        # Do not collect network facts, as they can cause issues in containers
-        get_network_patch = mock.patch(
-            "rhsmlib.facts.network.NetworkCollector.get_network", name="get_network"
-        )
-        cls.patches["get_network"] = get_network_patch.start()
-        cls.patches["get_network"].return_value = {}
-        cls.addClassCleanup(get_network_patch.stop)
-
-        get_interfaces_patch = mock.patch(
-            "rhsmlib.facts.network.NetworkCollector.get_interfaces", name="get_interfaces"
-        )
-        cls.patches["get_interfaces"] = get_interfaces_patch.start()
-        cls.patches["get_interfaces"].return_value = {}
-        cls.addClassCleanup(get_interfaces_patch.stop)
-
-        super().setUpClass()
+class TestFactsDBusObject(SubManDBusFixture):
+    def setUp(self) -> None:
+        super().setUp()
+        self.impl = FactsImplementation(collector_class=rhsmlib.facts.all.AllFactsCollector)
 
     def test_GetFacts(self):
         expected = "uname.machine"
-        result = self.obj.GetFacts.__wrapped__(self.obj)
+        result = self.impl.get_facts()
         self.assertIn(expected, result)

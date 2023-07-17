@@ -12,6 +12,8 @@
 # in this software or its documentation.
 
 import logging
+from typing import Any, Dict, List, Optional, TYPE_CHECKING, Type
+
 import dbus.service
 import dbus.server
 import dbus.mainloop.glib
@@ -23,6 +25,7 @@ from rhsm import connection
 
 from gi.repository import GLib
 from functools import partial
+
 from rhsmlib.services import config
 from rhsm.config import get_config_parser
 from rhsmlib.file_monitor import create_filesystem_watcher, DirectoryWatch
@@ -35,6 +38,10 @@ from rhsmlib.file_monitor import (
 )
 from subscription_manager import injection as inj
 from rhsm.logutil import init_logger
+
+if TYPE_CHECKING:
+    import dbus._dbus
+    from rhsmlib.dbus.base_object import BaseObject
 
 
 log = logging.getLogger(__name__)
@@ -57,7 +64,13 @@ class Server:
         cls.INSTANCE = object.__new__(cls)
         return cls.INSTANCE
 
-    def __init__(self, bus_class=None, bus_name=None, object_classes=None, bus_kwargs=None):
+    def __init__(
+        self,
+        bus_class: Optional["dbus._dbus.Bus"] = None,
+        bus_name: Optional[str] = None,
+        object_classes: List[Type["BaseObject"]] = None,
+        bus_kwargs: Optional[dict] = None,
+    ):
         """
         Create a connection to a bus defined by bus_class and bus_kwargs; instantiate objects in
         object_classes; expose them under bus_name and enter a GLib mainloop.  bus_kwargs are generally
@@ -100,13 +113,15 @@ class Server:
         self.mainloop = GLib.MainLoop()
 
         for item in object_classes:
+            clazz: Type[BaseObject]
+            kwargs: Dict[str, Any]
             try:
                 clazz, kwargs = item[0], item[1]
             except TypeError:
                 clazz = item
                 kwargs = {}
 
-            clazz_instance = clazz(
+            clazz_instance: BaseObject = clazz(
                 object_path=clazz.default_dbus_path, bus_name=self.connection_name, **kwargs
             )
             self.objects.append(clazz_instance)
@@ -126,7 +141,7 @@ class Server:
         if "ConsumerDBusObject" in self.object_map:
             consumer_dir_list.append(self.object_map["ConsumerDBusObject"].ConsumerChanged)
         if "ConfigDBusObject" in self.object_map:
-            config_dir_list.append(self.object_map["ConfigDBusObject"].reload)
+            config_dir_list.append(self.object_map["ConfigDBusObject"].impl.reload)
             config_dir_list.append(self.object_map["ConfigDBusObject"].ConfigChanged)
         if "ProductsDBusObject" in self.object_map:
             products_dir_list.append(self.object_map["ProductsDBusObject"].InstalledProductsChanged)

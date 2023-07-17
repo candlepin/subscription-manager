@@ -16,6 +16,7 @@
 This module containst class of D-Bus object used for unregistering
 system from Candlepin server.
 """
+from typing import TYPE_CHECKING
 
 import dbus
 import logging
@@ -27,9 +28,30 @@ from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.utils import restart_virt_who
 from subscription_manager.i18n import Locale
 
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
+
 init_dep_injection()
 
 log = logging.getLogger(__name__)
+
+
+class UnregisterDBusImplementation(base_object.BaseImplementation):
+    def unregister(self, proxy_options: dict) -> None:
+        """Unregister the system.
+
+        :raises dbus.DBusException: System cannot be unregistered.
+        """
+        self.ensure_registered()
+
+        uep: UEPConnection = self.build_uep(proxy_options, proxy_only=True)
+        try:
+            UnregisterService(uep).unregister()
+        except Exception as exc:
+            raise dbus.DBusException(str(exc))
+
+        # The system is now unregistered, restart virt-who to stop sending host-to-guest mapping
+        restart_virt_who()
 
 
 class UnregisterDBusObject(base_object.BaseObject):
@@ -42,7 +64,8 @@ class UnregisterDBusObject(base_object.BaseObject):
     interface_name = constants.UNREGISTER_INTERFACE
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
-        super(UnregisterDBusObject, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        super().__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.impl = UnregisterDBusImplementation()
 
     @util.dbus_service_method(
         constants.UNREGISTER_INTERFACE,
@@ -63,15 +86,4 @@ class UnregisterDBusObject(base_object.BaseObject):
 
         Locale.set(locale)
 
-        self.ensure_registered()
-
-        uep = self.build_uep(proxy_options, proxy_only=True)
-
-        try:
-            UnregisterService(uep).unregister()
-        except Exception as err:
-            raise dbus.DBusException(str(err))
-
-        # The system is unregistered now, restart virt-who to stop sending
-        # host-to-guest mapping.
-        restart_virt_who()
+        self.impl.unregister(proxy_options)

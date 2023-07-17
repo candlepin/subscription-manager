@@ -11,12 +11,13 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+from typing import TYPE_CHECKING, Union
+
 import dbus
 import logging
 from iniparse import ini
 
 import rhsm
-import rhsm.config
 import rhsm.logutil
 
 from subscription_manager.i18n import Locale
@@ -28,16 +29,139 @@ from rhsmlib.dbus.server import Server
 
 from dbus import DBusException
 
+if TYPE_CHECKING:
+    from rhsm.config import RhsmConfigParser
+
 log = logging.getLogger(__name__)
+
+
+class ConfigDBusImplementation(base_object.BaseImplementation):
+    def __init__(self, parser: "RhsmConfigParser"):
+        self.config = Config(parser)
+
+    def set(self, section_and_key: str, value: str) -> None:
+        """Set one value.
+
+        :param section_and_key: Specific configuration in 'section.key' format.
+        :param value: New value.
+        :raises DBusException: Only section has been specified.
+        """
+        section, _, key = section_and_key.partition(".")
+        if not key:
+            raise DBusException("Setting an entire section is not supported. Use 'section.property' format.")
+
+        self.config[section][key] = value
+
+        logging_changed: bool = section == "logging"
+
+        # Temporarily disable directory watcher, because 'self.config.persist()' writes down the file.
+        # It would trigger file system monitor callback and saved values would be read again. It may cause
+        # race conditions, when 'Set()' is called multiple times.
+        Server.temporary_disable_dir_watchers({CONFIG_WATCHER})
+
+        self.config.persist()
+
+        if logging_changed:
+            parser = rhsm.config.get_config_parser()
+            self.config = Config(parser)
+
+            # Iniparse is not thread-safe and race conditions can cause unexpected exceptions.
+            # This is very rare. For this reason we try to catch all exceptions, because it is not critical.
+            # See BZs 2076948, 2093883
+            try:
+                rhsm.logutil.init_logger(parser)
+            except Exception as exc:
+                log.warning(f"Re-initialization of logger failed: {exc}")
+
+        # Enable watchers after the logger has been updated
+        Server.enable_dir_watchers({CONFIG_WATCHER})
+
+    def set_all(self, configuration: dict) -> None:
+        """Set multiple values.
+
+        :param configuration: Mapping of 'section.key' formats to their 'value's.
+        """
+        log.debug(f"Setting new configuration values: {configuration}")
+
+        logging_changed: bool = False
+        for section_and_key, value in configuration.items():
+            section, _, key = section_and_key.partition(".")
+            if not key:
+                raise DBusException(
+                    "Setting an entire section is not supported. Use 'section.property' format."
+                )
+
+            self.config[section][key] = value
+            if section == "logging":
+                logging_changed = True
+
+        # Temporarily disable directory watcher, because 'self.config.persist()' writes down the file.
+        # It would trigger file system monitor callback and saved values would be read again. It may cause
+        # race conditions, when 'Set()' is called multiple times.
+        Server.temporary_disable_dir_watchers({CONFIG_WATCHER})
+
+        self.config.persist()
+
+        if logging_changed:
+            parser = rhsm.config.get_config_parser()
+            self.config = Config(parser)
+
+            # Iniparse is not thread-safe and race conditions can cause unexpected exceptions.
+            # This is very rare. For this reason we try to catch all exceptions, because it is not critical.
+            # See BZs 2076948, 2093883
+            try:
+                rhsm.logutil.init_logger(parser)
+            except Exception as exc:
+                log.warning(f"Re-initialization of logger failed: {exc}")
+
+        # Enable watchers after the logger has been updated
+        Server.enable_dir_watchers({CONFIG_WATCHER})
+
+    def get_all(self) -> dict:
+        """Get all values."""
+        return dict(self.config)
+
+    def get(self, section_maybe_key: str) -> Union[str, dict]:
+        """Get configuration section or specific value.
+
+        :param: Section or specific configuration in 'section.key' format.
+        """
+        section, _, key = section_maybe_key.partition(".")
+        if key:
+            return self.config[section][key]
+        else:
+            return dict(self.config[section])
+
+    def reload(self):
+        """
+        When some change of rhsm.conf is detected (via i-notify or periodical polling),
+        it is reloaded so new values can be used.
+        """
+        parser = rhsm.config.get_config_parser()
+
+        # We are going to read configuration file again, but we have to clean all data in parser object
+        # this way, because iniparse module doesn't provide better method to do that.
+        parser.data = ini.INIConfig(None, optionxformsource=parser)
+
+        # We have to read parser again to get fresh data from the file
+        files_read = parser.read()
+
+        if len(files_read) > 0:
+            log.debug("files read: %s" % str(files_read))
+            self.config = Config(parser)
+            rhsm.logutil.init_logger(parser)
+            log.debug("Configuration file: %s reloaded: %s" % (parser.config_file, str(self.config)))
+        else:
+            log.warning("Unable to read configuration file: %s" % parser.config_file)
 
 
 class ConfigDBusObject(base_object.BaseObject):
     default_dbus_path = constants.CONFIG_DBUS_PATH
     interface_name = constants.CONFIG_INTERFACE
 
-    def __init__(self, conn=None, object_path=None, bus_name=None, parser=None):
-        self.config = Config(parser)
-        super(ConfigDBusObject, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+    def __init__(self, conn=None, object_path=None, bus_name=None, parser: "RhsmConfigParser" = None):
+        super().__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.impl = ConfigDBusImplementation(parser)
 
     @util.dbus_service_signal(
         constants.CONFIG_INTERFACE,
@@ -74,41 +198,7 @@ class ConfigDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        section, _dot, property_name = property_name.partition(".")
-
-        if not property_name:
-            raise DBusException("Setting an entire section is not supported.  Use 'section.property' format.")
-
-        self.config[section][property_name] = new_value
-
-        if section == "logging":
-            logging_changed = True
-        else:
-            logging_changed = False
-
-        # Try to temporarily disable dir watcher, because 'self.config.persist()' writes configuration
-        # file, and it would trigger file system monitor callback function and saved values would be
-        # read again. It can cause race conditions, when Set() is called multiple times
-        Server.temporary_disable_dir_watchers({CONFIG_WATCHER})
-
-        # Write new config value to configuration file
-        self.config.persist()
-
-        # When anything in logging section was just changed, then we have to re-initialize logger
-        if logging_changed is True:
-            parser = rhsm.config.get_config_parser()
-            self.config = Config(parser)
-            # The iniparse is not thread-safe and some unexpected exceptions can happen due to
-            # race conditions. This is very rare. For this reason we try to catch all exceptions here,
-            # because it is not critical.
-            # See BZ: 2076948, 2093883
-            try:
-                rhsm.logutil.init_logger(parser)
-            except Exception as err:
-                log.warning(f"Re-initialization of logger failed: {err}")
-
-        # Enable watchers after re-initialization of logger to minimize race conditions
-        Server.enable_dir_watchers({CONFIG_WATCHER})
+        self.impl.set(property_name, new_value)
 
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
@@ -129,46 +219,7 @@ class ConfigDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        log.debug("Setting new configuration values: %s" % str(configuration))
-
-        logging_changed = False
-
-        for property_name, new_value in configuration.items():
-            section_name, _dot, property_name = property_name.partition(".")
-
-            if not property_name:
-                raise DBusException(
-                    "Setting an entire section is not supported.  Use 'section.property' format."
-                )
-
-            self.config[section_name][property_name] = new_value
-
-            if section_name == "logging":
-                logging_changed = True
-
-        # Try to temporarily disable dir watcher, because 'self.config.persist()' writes configuration
-        # file, and it would trigger file system monitor callback function and saved values would be
-        # read again. It can cause race conditions, when SetAll() is called multiple times
-        Server.temporary_disable_dir_watchers({CONFIG_WATCHER})
-
-        # Write new config value to configuration file
-        self.config.persist()
-
-        # When anything in logging section was just changed, then we have to re-initialize logger
-        if logging_changed is True:
-            parser = rhsm.config.get_config_parser()
-            self.config = Config(parser)
-            # The iniparse is not thread-safe and some unexpected exceptions can happen due to
-            # race conditions. This is very rare. For this reason we try to catch all exceptions here,
-            # because it is not critical.
-            # See BZ: 2076948, 2093883
-            try:
-                rhsm.logutil.init_logger(parser)
-            except Exception as err:
-                log.warning(f"Re-initialization of logger failed: {err}")
-
-        # Enable watchers after re-initialization of logger to minimize race conditions
-        Server.enable_dir_watchers({CONFIG_WATCHER})
+        self.impl.set_all(configuration)
 
     @util.dbus_service_method(
         constants.CONFIG_INTERFACE,
@@ -188,7 +239,7 @@ class ConfigDBusObject(base_object.BaseObject):
         Locale.set(locale)
 
         d = dbus.Dictionary({}, signature="sv")
-        for k, v in self.config.items():
+        for k, v in self.impl.get_all().items():
             d[k] = dbus.Dictionary({}, signature="ss")
             for kk, vv in v.items():
                 d[k][kk] = vv
@@ -213,31 +264,9 @@ class ConfigDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        section, _dot, property_name = property_name.partition(".")
+        result: Union[str, dict] = self.impl.get(property_name)
 
-        if property_name:
-            return self.config[section][property_name]
-        else:
-            return dbus.Dictionary(self.config[section], signature="sv")
+        if type(result) is dict:
+            result = dbus.Dictionary(result, signature="sv")
 
-    def reload(self):
-        """
-        This callback method is called, when i-notify or periodical directory polling detects
-        any change of rhsm.conf file. Thus, configuration file is reloaded and new values are used.
-        """
-        parser = rhsm.config.get_config_parser()
-
-        # We are going to read configuration file again, but we have to clean all data in parser object
-        # this way, because iniparse module doesn't provide better method to do that.
-        parser.data = ini.INIConfig(None, optionxformsource=parser)
-
-        # We have to read parser again to get fresh data from the file
-        files_read = parser.read()
-
-        if len(files_read) > 0:
-            log.debug("files read: %s" % str(files_read))
-            self.config = Config(parser)
-            rhsm.logutil.init_logger(parser)
-            log.debug("Configuration file: %s reloaded: %s" % (parser.config_file, str(self.config)))
-        else:
-            log.warning("Unable to read configuration file: %s" % parser.config_file)
+        return result

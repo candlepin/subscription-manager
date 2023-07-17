@@ -10,19 +10,18 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+from rhsmlib.dbus.objects.entitlement import EntitlementDBusImplementation
+
 from unittest import mock
-import json
-
-from rhsmlib.dbus.objects import EntitlementDBusObject
-
-from test.rhsmlib.base import DBusServerStubProvider
+from test.rhsmlib.base import SubManDBusFixture
 
 
-class TestEntitlementDBusObject(DBusServerStubProvider):
-    dbus_class = EntitlementDBusObject
-    dbus_class_kwargs = {}
+class TestEntitlementDBusObject(SubManDBusFixture):
+    def setUp(self):
+        super().setUp()
+        self.impl = EntitlementDBusImplementation()
 
-    def test_GetStatus(self):
+    def test_get_status(self):
         get_status_patch = mock.patch(
             "rhsmlib.services.entitlement.EntitlementService.get_status",
             name="get_status",
@@ -30,14 +29,13 @@ class TestEntitlementDBusObject(DBusServerStubProvider):
         self.patches["get_status_patch"] = get_status_patch.start()
         self.addCleanup(get_status_patch.stop)
 
-        status = {"status": "Unknown", "reasons": {}, "valid": False}
-        self.patches["get_status_patch"].return_value = status
+        expected = {"status": "Unknown", "reasons": {}, "valid": False}
+        self.patches["get_status_patch"].return_value = expected
 
-        expected = json.dumps(status)
-        result = self.obj.GetStatus.__wrapped__(self.obj, "", self.LOCALE)
+        result = self.impl.get_status("")
         self.assertEqual(expected, result)
 
-    def test_RemoveEntitlementsBySerials(self):
+    def test_remove_entitlements_by_serials(self):
         remove_entitlements_by_serials_patch = mock.patch(
             "rhsmlib.services.entitlement.EntitlementService.remove_entitlements_by_serials",
             name="remove_entitlements_by_serials",
@@ -48,11 +46,11 @@ class TestEntitlementDBusObject(DBusServerStubProvider):
         removed_nonremoved = (["123"], [])
         self.patches["remove_entitlements_by_serials"].return_value = removed_nonremoved
 
-        expected = json.dumps(removed_nonremoved[0])
-        result = self.obj.RemoveEntitlementsBySerials.__wrapped__(self.obj, ["123"], {}, self.LOCALE)
+        expected = removed_nonremoved[0]
+        result = self.impl.remove_entitlements_by_serials(["123"], {})
         self.assertEqual(expected, result)
 
-    def test_RemoveEntitlementsBySerials__multiple(self):
+    def test_remove_entitlements_by_serials__multiple(self):
         remove_entitlements_by_serials_patch = mock.patch(
             "rhsmlib.services.entitlement.EntitlementService.remove_entitlements_by_serials",
             name="remove_entitlements_by_serials",
@@ -63,11 +61,11 @@ class TestEntitlementDBusObject(DBusServerStubProvider):
         removed_nonremoved = (["123", "456"], [])
         self.patches["remove_entitlements_by_serials"].return_value = removed_nonremoved
 
-        expected = json.dumps(removed_nonremoved[0])
-        result = self.obj.RemoveEntitlementsBySerials.__wrapped__(self.obj, ["123", "456"], {}, self.LOCALE)
+        expected = removed_nonremoved[0]
+        result = self.impl.remove_entitlements_by_serials(["123", "456"], {})
         self.assertEqual(expected, result)
 
-    def test_RemoveEntitlementsBySerials__good_and_bad(self):
+    def test_remove_entitlements_by_serials__good_and_bad(self):
         remove_entitlements_by_serials_patch = mock.patch(
             "rhsmlib.services.entitlement.EntitlementService.remove_entitlements_by_serials",
             name="remove_entitlements_by_serials",
@@ -78,11 +76,11 @@ class TestEntitlementDBusObject(DBusServerStubProvider):
         removed_nonremoved = (["123"], ["456"])
         self.patches["remove_entitlements_by_serials"].return_value = removed_nonremoved
 
-        expected = json.dumps(removed_nonremoved[0])
-        result = self.obj.RemoveEntitlementsBySerials.__wrapped__(self.obj, ["123", "789"], {}, self.LOCALE)
+        expected = removed_nonremoved[0]
+        result = self.impl.remove_entitlements_by_serials(["123", "789"], {})
         self.assertEqual(expected, result)
 
-    def test_RemoveEntitlementsByPoolIds(self):
+    def test_remove_entitlements_by_pool_ids(self):
         remove_entitlements_by_pool_ids_patch = mock.patch(
             "rhsmlib.services.entitlement.EntitlementService.remove_entitlements_by_pool_ids",
             name="remove_entitlements_by_pool_ids",
@@ -93,11 +91,11 @@ class TestEntitlementDBusObject(DBusServerStubProvider):
         removed_nonremoved_serials = (["123"], [], ["456"])
         self.patches["remove_entitlements_by_pool_ids"].return_value = removed_nonremoved_serials
 
-        expected = json.dumps(removed_nonremoved_serials[2])
-        result = self.obj.RemoveEntitlementsByPoolIds.__wrapped__(self.obj, ["123"], {}, self.LOCALE)
+        expected = removed_nonremoved_serials[2]
+        result = self.impl.remove_entitlements_by_pool_ids(["123"], {})
         self.assertEqual(expected, result)
 
-    def test_RemoveAllEntitlements(self):
+    def test_remove_all_entitlements(self):
         remove_all_entitlements_patch = mock.patch(
             "rhsmlib.services.entitlement.EntitlementService.remove_all_entitlements",
             name="remove_all_entitlements",
@@ -108,6 +106,5 @@ class TestEntitlementDBusObject(DBusServerStubProvider):
         records = {"deletedRecords": 1}
         self.patches["remove_all_entitlements"].return_value = records
 
-        expected = json.dumps(records)
-        result = self.obj.RemoveAllEntitlements.__wrapped__(self.obj, {}, self.LOCALE)
-        self.assertEqual(expected, result)
+        result = self.impl.remove_all_entitlements({})
+        self.assertEqual(records, result)

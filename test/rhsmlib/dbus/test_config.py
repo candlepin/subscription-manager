@@ -11,36 +11,32 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import tempfile
-from typing import Any, Dict
 
 import dbus
 
 from rhsm.config import RhsmConfigParser
-from rhsmlib.dbus.objects.config import ConfigDBusObject
-from test.rhsmlib.base import DBusServerStubProvider
+from rhsmlib.dbus.objects.config import ConfigDBusImplementation
+from test.rhsmlib.base import SubManDBusFixture
 
 from test.rhsmlib.services.test_config import TEST_CONFIG
 
 
-class TestConfigDBusObject(DBusServerStubProvider):
-    dbus_class = ConfigDBusObject
-    dbus_class_kwargs: Dict[str, Any] = {"parser": None}
-
+class TestConfigDBusObject(SubManDBusFixture):
     config_file = None
     """Attribute referencing file containing test configuration text."""
-
     parser = None
     """Attribute referencing configuration's parser object."""
 
     @classmethod
     def setUpClass(cls) -> None:
+        super().setUpClass()
+
         cls.config_file = tempfile.NamedTemporaryFile()
         with open(cls.config_file.name, "w") as handle:
             handle.write(TEST_CONFIG)
         cls.parser = RhsmConfigParser(cls.config_file.name)
-        cls.dbus_class_kwargs["parser"] = cls.parser
 
-        super().setUpClass()
+        cls.impl = ConfigDBusImplementation(cls.parser)
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -48,25 +44,25 @@ class TestConfigDBusObject(DBusServerStubProvider):
         super().tearDownClass()
 
     def test_GetAll(self):
-        result = self.obj.GetAll.__wrapped__(self.obj, self.LOCALE)
+        result = self.impl.get_all()
         self.assertIn("server", result.keys())
 
     def test_Get__property(self):
-        result = self.obj.Get.__wrapped__(self.obj, "server.hostname", self.LOCALE)
+        result = self.impl.get("server.hostname")
         self.assertEqual("server.example.com", result)
 
     def test_Get__section(self):
-        result = self.obj.Get.__wrapped__(self.obj, "server", self.LOCALE)
+        result = self.impl.get("server")
         self.assertIn("hostname", result.keys())
 
     def test_Set(self):
         original: str = self.parser.get("server", "hostname")
 
-        self.obj.Set.__wrapped__(self.obj, "server.hostname", "new", self.LOCALE)
+        self.impl.set("server.hostname", "new")
         self.assertEqual("new", self.parser.get("server", "hostname"))
 
         self.parser.set("server", "hostname", original)
 
     def test_Set__section_fails(self):
         with self.assertRaisesRegex(dbus.DBusException, "Setting an entire section is not supported.*"):
-            self.obj.Set.__wrapped__(self.obj, "server", "new", self.LOCALE)
+            self.impl.set("server", "new")

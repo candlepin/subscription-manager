@@ -16,6 +16,7 @@ This module contains implementation of D-Bus object representing system purpose.
 It uses interface: com.redhat.RHSM1.Syspurpose and path:
 /com/redhat/RHSM1/Syspurpose
 """
+from typing import TYPE_CHECKING
 
 import dbus
 import json
@@ -28,6 +29,9 @@ from syspurpose.files import SyspurposeStore
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.i18n import ungettext
 from subscription_manager.i18n import Locale
+
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
 
 init_dep_injection()
 
@@ -76,6 +80,59 @@ class ThreeWayMergeConflict(dbus.DBusException):
         ).format(conflict_msg=conflict_msg)
 
 
+class SyspurposeDBusImplementation(base_object.BaseImplementation):
+    def get_system_purpose(self) -> dict:
+        system_purpose_path: str = "/etc/rhsm/syspurpose/syspurpose.json"
+        store = SyspurposeStore.read(system_purpose_path)
+
+        try:
+            contents: dict = store.contents
+        except Exception as exc:
+            raise dbus.DBusException(str(exc))
+
+        return contents
+
+    def get_system_purpose_status(self) -> str:
+        uep: "UEPConnection" = self.build_uep({})
+        system_purpose = syspurpose.Syspurpose(uep)
+
+        raw_status: str = system_purpose.get_syspurpose_status()["status"]
+        status: str = system_purpose.get_overall_status(raw_status)
+
+        return status
+
+    def get_valid_fields(self) -> dict:
+        uep: "UEPConnection" = self.build_uep({})
+        system_purpose = syspurpose.Syspurpose(uep)
+
+        valid_fields: dict = system_purpose.get_owner_syspurpose_valid_fields()
+        # FIXME The call never returns None, but it may return empty dictionary
+        if valid_fields is None:
+            if self.is_registered():
+                raise dbus.DBusException("Unable to get valid system purpose fields.")
+            else:
+                raise dbus.DBusException(
+                    "Unable to get valid system purpose fields. The system is not registered."
+                )
+
+        return valid_fields
+
+    def set_system_purpose(self, values: dict) -> dict:
+        uep: "UEPConnection" = self.build_uep({})
+        system_purpose = syspurpose.Syspurpose(uep)
+
+        new_values: dict = system_purpose.set_syspurpose_values(values)
+
+        conflicts = {}
+        for key, value in new_values.items():
+            if key in values and values[key] != value:
+                conflicts[key] = value
+        if conflicts:
+            raise ThreeWayMergeConflict(conflict_fields=conflicts)
+
+        return new_values
+
+
 class SyspurposeDBusObject(base_object.BaseObject):
     """
     A D-Bus object interacting with subscription-manager to get
@@ -87,6 +144,7 @@ class SyspurposeDBusObject(base_object.BaseObject):
 
     def __init__(self, conn=None, object_path=None, bus_name=None):
         super(SyspurposeDBusObject, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+        self.impl = SyspurposeDBusImplementation()
 
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
@@ -102,19 +160,11 @@ class SyspurposeDBusObject(base_object.BaseObject):
         :param sender:
         :return: json representation of system purpose contents
         """
-        syspurpose_path = "/etc/rhsm/syspurpose/syspurpose.json"
-
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        syspurpose_store = SyspurposeStore.read(syspurpose_path)
-
-        try:
-            contents = syspurpose_store.contents
-        except Exception as err:
-            raise dbus.DBusException(str(err))
-
-        return json.dumps(contents)
+        system_purpose: dict = self.impl.get_system_purpose()
+        return json.dumps(system_purpose)
 
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
@@ -131,10 +181,9 @@ class SyspurposeDBusObject(base_object.BaseObject):
         """
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
-        cp = self.build_uep({})
-        system_purpose = syspurpose.Syspurpose(cp)
-        syspurpose_status = system_purpose.get_syspurpose_status()["status"]
-        return system_purpose.get_overall_status(syspurpose_status)
+
+        status = self.impl.get_system_purpose_status()
+        return status
 
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
@@ -151,21 +200,9 @@ class SyspurposeDBusObject(base_object.BaseObject):
         """
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
-        cp = self.build_uep({})
-        system_purpose = syspurpose.Syspurpose(cp)
-        valid_fields = system_purpose.get_owner_syspurpose_valid_fields()
-        if valid_fields is None:
-            # When it is not possible to get valid fields, then raise exception
-            if self.is_registered() is False:
-                raise dbus.DBusException(
-                    "Unable to get system purpose valid fields. System is not registered.",
-                )
-            else:
-                raise dbus.DBusException(
-                    "Unable to get system purpose valid fields.",
-                )
-        else:
-            return json.dumps(valid_fields)
+
+        valid_fields = self.impl.get_valid_fields()
+        return json.dumps(valid_fields)
 
     @util.dbus_service_method(
         constants.SYSPURPOSE_INTERFACE,
@@ -186,19 +223,8 @@ class SyspurposeDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
-        cp = self.build_uep({})
-        system_purpose = syspurpose.Syspurpose(cp)
-        new_syspurpose_values = system_purpose.set_syspurpose_values(syspurpose_values)
-
-        # Check if there was any conflict during three-way merge
-        conflicts = {}
-        for key, value in new_syspurpose_values.items():
-            if key in syspurpose_values and syspurpose_values[key] != value:
-                conflicts[key] = value
-        if len(conflicts) > 0:
-            raise ThreeWayMergeConflict(conflict_fields=conflicts)
-
-        return json.dumps(new_syspurpose_values)
+        new_values = self.impl.set_system_purpose(syspurpose_values)
+        return json.dumps(new_values)
 
     @util.dbus_service_signal(
         constants.SYSPURPOSE_INTERFACE,

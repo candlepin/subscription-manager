@@ -13,62 +13,70 @@
 #
 import logging
 import dbus.service
-
-from rhsmlib.dbus import constants, exceptions, util
+from typing import TYPE_CHECKING
 
 from subscription_manager import utils
 from subscription_manager import injection as inj
 from subscription_manager.injectioninit import init_dep_injection
 
+from rhsmlib.dbus import constants, exceptions, util
 from rhsmlib.services import config
 import rhsm.config
+
+if TYPE_CHECKING:
+    from dbus.service import BusName
+    from rhsm.connection import UEPConnection
+    from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.identity import Identity
 
 init_dep_injection()
 
 log = logging.getLogger(__name__)
 
 
-class BaseObject(dbus.service.Object):
-    # Name of the DBus interface provided by this object
-    interface_name = constants.INTERFACE_BASE
-    default_dbus_path = constants.ROOT_DBUS_PATH
+class BaseImplementation:
+    """Core implementation for subscription-manager D-Bus API.
 
-    def __init__(self, conn=None, object_path=None, bus_name=None):
-        if object_path is None:
-            object_path = self.default_dbus_path
-        super(BaseObject, self).__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+    This base class allows us to contain useful functions in one place, without
+    having to duplicate the work. Individual D-Bus object implementations
+    subclass this base.
+    """
 
-    def _check_interface(self, interface_name):
-        if interface_name != self.interface_name:
-            raise exceptions.UnknownInterface(interface_name)
+    def is_registered(self) -> bool:
+        """Uses the Identity class to determine if the system is registered or not."""
+        identity: Identity = inj.require(inj.IDENTITY)
+        return identity.is_valid()
 
-    def validate_only_proxy_options(self, proxy_options):
-        error_msg = None
-        for k in proxy_options.keys():
-            if k not in ["proxy_hostname", "proxy_port", "proxy_user", "proxy_password", "no_proxy"]:
-                error_msg = "Error: %s is not a valid proxy option" % k
-                break
-
-        if error_msg:
-            raise exceptions.Failed(msg=error_msg)
-
-        return proxy_options
-
-    def is_registered(self):
-        return inj.require(inj.IDENTITY).is_valid()
-
-    def ensure_registered(self):
+    def ensure_registered(self) -> None:
+        """Raise a D-Bus exception if the system is not registered."""
         if not self.is_registered():
             raise dbus.DBusException(
                 "This object requires the consumer to be registered before it can be used."
             )
 
-    def build_uep(self, options, proxy_only=False, basic_auth_method=False):
+    def _validate_only_proxy_options(self, proxy_options: dict) -> None:
+        """Ensure that the dictionary only contains keys related to proxy configuration.
+
+        :raises exceptions.Failed: Some key is not a proxy option.
+        """
+        for key in proxy_options.keys():
+            if key not in ["proxy_hostname", "proxy_port", "proxy_user", "proxy_password", "no_proxy"]:
+                raise exceptions.Failed(f"Error: {key} is not a valid proxy option")
+
+    def build_uep(
+        self, options: dict, proxy_only: bool = False, basic_auth_method: bool = False
+    ) -> "UEPConnection":
+        """Create a UEPConnection object.
+
+        Takes connection options and returns appropriate connection object,
+        depending on the system registration status and the options provided
+        in the dictionary.
+        """
         conf = config.Config(rhsm.config.get_config_parser())
         # Some commands/services only allow manipulation of the proxy information for a connection
-        cp_provider = inj.require(inj.CP_PROVIDER)
+        cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
         if proxy_only:
-            self.validate_only_proxy_options(options)
+            self._validate_only_proxy_options(options)
 
         connection_info = {}
 
@@ -94,6 +102,23 @@ class BaseObject(dbus.service.Object):
         else:
             return cp_provider.get_no_auth_cp()
 
+
+class BaseObject(dbus.service.Object):
+    """Core implementation for subscription-manager D-Bus API.
+
+    This base class provides a common way of publishing the individual D-Bus
+    objects to the API. Individual D-Bus objects subclass this base.
+    """
+
+    # Name of the DBus interface provided by this object
+    interface_name = constants.INTERFACE_BASE
+    default_dbus_path = constants.ROOT_DBUS_PATH
+
+    def __init__(self, conn=None, object_path: str = None, bus_name: "BusName" = None):
+        if object_path is None:
+            object_path = self.default_dbus_path
+        super().__init__(conn=conn, object_path=object_path, bus_name=bus_name)
+
     @util.dbus_service_method(
         constants.DBUS_PROPERTIES_INTERFACE,
         in_signature="s",
@@ -102,4 +127,12 @@ class BaseObject(dbus.service.Object):
     @util.dbus_handle_sender
     @util.dbus_handle_exceptions
     def GetAll(self, _, sender=None):
+        """Announce that our API does not have any properties/attributes.
+
+        This is part of the specification:
+        > If org.freedesktop.DBus.Properties.GetAll is called with a valid
+        > interface name which contains no properties, an empty array should
+        > be returned.
+        https://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties
+        """
         return dbus.Dictionary({}, signature="sv")

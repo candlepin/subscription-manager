@@ -11,22 +11,19 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import contextlib
+import dbus
 import json
+import socket
 import tempfile
 from typing import Optional
 
-from unittest import mock
-import socket
-import dbus
-
-
 from rhsm import connection
-
 import rhsmlib.dbus.exceptions
+from rhsmlib.dbus.objects.register import DomainSocketRegisterDBusImplementation, RegisterDBusImplementation
 from rhsmlib.dbus.server import DomainSocketServer
-from rhsmlib.dbus.objects import RegisterDBusObject, DomainSocketRegisterDBusObject
 
-from test.rhsmlib.base import DBusServerStubProvider
+from unittest import mock
+from test.rhsmlib.base import SubManDBusFixture
 
 
 CONSUMER_CONTENT_JSON = """{"hypervisorId": "foo",
@@ -318,12 +315,13 @@ OWNERS_CONTENT_JSON = """[
 """
 
 
-class RegisterDBusObjectTest(DBusServerStubProvider):
-    dbus_class = RegisterDBusObject
-    dbus_class_kwargs = {}
+class RegisterDBusObjectTest(SubManDBusFixture):
     socket_dir: Optional[tempfile.TemporaryDirectory] = None
 
     def setUp(self) -> None:
+        super().setUp()
+        self.impl = RegisterDBusImplementation()
+
         self.socket_dir = tempfile.TemporaryDirectory()
         self.addCleanup(self.socket_dir.cleanup)
 
@@ -335,28 +333,35 @@ class RegisterDBusObjectTest(DBusServerStubProvider):
         socket_iface_patch = mock.patch.object(DomainSocketServer, "_server_socket_iface", "unix:dir=")
         socket_iface_patch.start()
 
-        super().setUp()
+        get_cmd_line_patch = mock.patch(
+            "rhsmlib.client_info.DBusSender.get_cmd_line",
+            autospec=True,
+        )
+        get_cmd_line_mock = get_cmd_line_patch.start()
+        get_cmd_line_mock.return_value = "unit-test sender"
+
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
     def tearDown(self) -> None:
         """Make sure the domain server is stopped once the test ends."""
         with contextlib.suppress(rhsmlib.dbus.exceptions.Failed):
-            self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
+            self.impl.stop()
 
         super().tearDown()
 
     def test_Start(self):
         substring = self.socket_dir.name + "/dbus.*"
-        result = self.obj.Start.__wrapped__(self.obj, self.LOCALE)
+        result = self.impl.start("sender")
         self.assertRegex(result, substring)
 
     def test_Start__two_starts(self):
         """Test that opening the server twice returns the same address"""
-        result_1 = self.obj.Start.__wrapped__(self.obj, self.LOCALE)
-        result_2 = self.obj.Start.__wrapped__(self.obj, self.LOCALE)
+        result_1 = self.impl.start("sender")
+        result_2 = self.impl.start("sender")
         self.assertEqual(result_1, result_2)
 
     def test_Start__can_connect(self):
-        result = self.obj.Start.__wrapped__(self.obj, self.LOCALE)
+        result = self.impl.start("sender")
         prefix, _, data = result.partition("=")
         address, _, guid = data.partition(",")
 
@@ -367,75 +372,70 @@ class RegisterDBusObjectTest(DBusServerStubProvider):
             sock.close()
 
     def test_Stop(self):
-        self.obj.Start.__wrapped__(self.obj, self.LOCALE)
-        self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
+        self.impl.start("sender")
+        self.impl.stop()
 
     def test_Stop__not_running(self):
         with self.assertRaises(rhsmlib.dbus.exceptions.Failed):
-            self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
+            self.impl.stop()
 
 
-class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
-    dbus_class = DomainSocketRegisterDBusObject
-    dbus_class_kwargs = {}
+class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
+    def setUp(self) -> None:
+        super().setUp()
+        self.impl = DomainSocketRegisterDBusImplementation()
 
-    @classmethod
-    def setUpClass(cls) -> None:
         register_patch = mock.patch(
             "rhsmlib.dbus.objects.register.RegisterService.register",
             name="register",
         )
-        cls.patches["register"] = register_patch.start()
-        cls.addClassCleanup(register_patch.stop)
+        self.patches["register"] = register_patch.start()
+        self.addCleanup(register_patch.stop)
 
         unregister_patch = mock.patch(
             "rhsmlib.services.unregister.UnregisterService.unregister", name="unregister"
         )
-        cls.patches["unregister"] = unregister_patch.start()
-        cls.addClassCleanup(unregister_patch.stop)
+        self.patches["unregister"] = unregister_patch.start()
+        self.addCleanup(unregister_patch.stop)
 
         is_registered_patch = mock.patch(
-            "rhsmlib.dbus.base_object.BaseObject.is_registered",
+            "rhsmlib.dbus.base_object.BaseImplementation.is_registered",
             name="is_registered",
         )
-        cls.patches["is_registered"] = is_registered_patch.start()
-        cls.addClassCleanup(is_registered_patch.stop)
+        self.patches["is_registered"] = is_registered_patch.start()
+        self.addCleanup(is_registered_patch.stop)
 
         update_patch = mock.patch(
             "rhsmlib.dbus.objects.register.EntCertActionInvoker.update",
             name="update",
         )
-        cls.patches["update"] = update_patch.start()
-        cls.addClassCleanup(update_patch.stop)
+        self.patches["update"] = update_patch.start()
+        self.addCleanup(update_patch.stop)
 
         attach_auto_patch = mock.patch(
             "rhsmlib.dbus.objects.register.AttachService.attach_auto",
             name="attach_auto",
         )
-        cls.patches["attach_auto"] = attach_auto_patch.start()
-        cls.addClassCleanup(attach_auto_patch.stop)
+        self.patches["attach_auto"] = attach_auto_patch.start()
+        self.addCleanup(attach_auto_patch.stop)
 
         build_uep_patch = mock.patch(
-            "rhsmlib.dbus.base_object.BaseObject.build_uep",
+            "rhsmlib.dbus.base_object.BaseImplementation.build_uep",
             name="build_uep",
         )
-        cls.patches["build_uep"] = build_uep_patch.start()
-        cls.addClassCleanup(build_uep_patch.stop)
-
-        super().setUpClass()
-
-    def setUp(self) -> None:
+        self.patches["build_uep"] = build_uep_patch.start()
+        self.addCleanup(build_uep_patch.stop)
         self.patches["update"].return_value = None
-
-        super().setUp()
 
     def test_Register(self):
         expected = json.loads(CONSUMER_CONTENT_JSON)
         self.patches["register"].return_value = expected
         self.patches["is_registered"].return_value = False
 
-        result = self.obj.Register.__wrapped__(self.obj, "org", "username", "password", {}, {}, self.LOCALE)
-        self.assertEqual(expected, json.loads(result))
+        result = self.impl.register_with_credentials(
+            "org", {"username": "username", "password": "password"}, {}
+        )
+        self.assertEqual(expected, result)
 
     def test_Register__with_force_option(self):
         expected = json.loads(CONSUMER_CONTENT_JSON)
@@ -443,10 +443,10 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
         self.patches["unregister"].return_value = None
         self.patches["is_registered"].return_value = True
 
-        result = self.obj.Register.__wrapped__(
-            self.obj, "org", "username", "password", {"force": True}, {}, self.LOCALE
+        result = self.impl.register_with_credentials(
+            "org", {"username": "username", "password": "password"}, {"force": True}
         )
-        self.assertEqual(expected, json.loads(result))
+        self.assertEqual(expected, result)
 
     def test_Register__already_registered(self):
         expected = json.loads(CONSUMER_CONTENT_JSON)
@@ -455,7 +455,7 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
         self.patches["is_registered"].return_value = True
 
         with self.assertRaisesRegex(dbus.DBusException, "This system is already registered."):
-            self.obj.Register.__wrapped__(self.obj, "org", "username", "password", {}, {}, self.LOCALE)
+            self.impl.register_with_credentials("org", {"username": "username", "password": "password"}, {})
 
     def test_Register__enable_content(self):
         """Test including 'enable_content' in entitlement mode with no content."""
@@ -464,10 +464,10 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
         self.patches["attach_auto"].return_value = []
         self.patches["is_registered"].return_value = False
 
-        result = self.obj.Register.__wrapped__(
-            self.obj, "org", "username", "password", {"enable_content": "1"}, {}, self.LOCALE
+        result = self.impl.register_with_credentials(
+            "org", {"username": "username", "password": "password", "enable_content": "1"}, {"force": True}
         )
-        self.assertEqual(expected, json.loads(result))
+        self.assertEqual(expected, result)
 
     def test_Register__enable_content_with_content(self):
         """Test including 'enable_content' in entitlement mode with some content."""
@@ -476,10 +476,10 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
         self.patches["attach_auto"].return_value = expected
         self.patches["is_registered"].return_value = False
 
-        result = self.obj.Register.__wrapped__(
-            self.obj, "org", "username", "password", {"enable_content": "1"}, {}, self.LOCALE
+        result = self.impl.register_with_credentials(
+            "org", {"username": "username", "password": "password", "enable_content": "1"}, {}
         )
-        self.assertEqual(expected, json.loads(result)["enabledContent"])
+        self.assertEqual(expected, result["enabledContent"])
 
     def test_Register__enable_content__sca(self):
         """Test including 'enable_content' in SCA mode."""
@@ -487,10 +487,10 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
         self.patches["register"].return_value = expected
         self.patches["is_registered"].return_value = False
 
-        result = self.obj.Register.__wrapped__(
-            self.obj, "org", "username", "password", {"enable_content": "1"}, {}, self.LOCALE
+        result = self.impl.register_with_credentials(
+            "org", {"username": "username", "password": "password", "enable_content": "1"}, {}
         )
-        self.assertEqual(expected, json.loads(result))
+        self.assertEqual(expected, result)
 
     def test_GetOrgs(self):
         self.patches["is_registered"].return_value = False
@@ -502,23 +502,20 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
         self.patches["build_uep"].return_value = mock_cp
 
         expected = json.loads(OWNERS_CONTENT_JSON)
-        result = self.obj.GetOrgs.__wrapped__(self.obj, "username", "password", {}, self.LOCALE)
-        self.assertEqual(expected, json.loads(result))
+        result = self.impl.get_organizations({"username": "username", "password": "password"})
+        self.assertEqual(expected, result)
 
     def test_RegisterWithActivationKeys(self):
         expected = json.loads(CONSUMER_CONTENT_JSON)
         self.patches["is_registered"].return_value = False
         self.patches["register"].return_value = expected
 
-        result = self.obj.RegisterWithActivationKeys.__wrapped__(
-            self.obj,
+        result = self.impl.register_with_activation_keys(
             "username",
-            ["key1", "key2"],
-            {},
+            {"keys": ["key1", "key2"]},
             {"host": "localhost", "port": "8443", "handler": "/candlepin"},
-            self.LOCALE,
         )
-        self.assertEqual(expected, json.loads(result))
+        self.assertEqual(expected, result)
 
     def test_RegisterWithActivationKeys__already_registered(self):
         expected = json.loads(CONSUMER_CONTENT_JSON)
@@ -526,13 +523,10 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
         self.patches["register"].return_value = expected
 
         with self.assertRaisesRegex(dbus.DBusException, "This system is already registered."):
-            self.obj.RegisterWithActivationKeys.__wrapped__(
-                self.obj,
+            self.impl.register_with_activation_keys(
                 "username",
-                ["key1", "key2"],
-                {},
+                {"keys": ["key1", "key2"]},
                 {"host": "localhost", "port": "8443", "handler": "/candlepin"},
-                self.LOCALE,
             )
 
     def test_RegisterWithActivationKeys__with_force_option(self):
@@ -541,12 +535,9 @@ class DomainSocketRegisterDBusObjectTest(DBusServerStubProvider):
         self.patches["unregister"].return_value = None
         self.patches["register"].return_value = expected
 
-        result = self.obj.RegisterWithActivationKeys.__wrapped__(
-            self.obj,
+        result = self.impl.register_with_activation_keys(
             "username",
-            ["key1", "key2"],
-            {"force": True},
-            {"host": "localhost", "port": "8443", "handler": "/candlepin"},
-            self.LOCALE,
+            {"keys": ["key1", "key2"]},
+            {"force": True, "host": "localhost", "port": "8443", "handler": "/candlepin"},
         )
-        self.assertEqual(expected, json.loads(result))
+        self.assertEqual(expected, result)

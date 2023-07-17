@@ -11,12 +11,11 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 from unittest import mock
-import json
 import datetime
 
-from rhsmlib.dbus.objects import ProductsDBusObject
+from rhsmlib.dbus.objects.products import ProductsDBusImplementation
 
-from test.rhsmlib.base import DBusServerStubProvider
+from test.rhsmlib.base import SubManDBusFixture
 
 
 START_DATE = datetime.datetime.now() - datetime.timedelta(days=100)
@@ -24,20 +23,19 @@ NOW_DATE = datetime.datetime.now()
 END_DATE = datetime.datetime.now() + datetime.timedelta(days=265)
 
 
-class TestProductsDBusObject(DBusServerStubProvider):
-    dbus_class = ProductsDBusObject
-    dbus_class_kwargs = {}
-
+class TestProductsDBusObject(SubManDBusFixture):
     @classmethod
     def setUpClass(cls) -> None:
+        super().setUpClass()
+
         list_patch = mock.patch(
-            "rhsmlib.dbus.objects.products.InstalledProducts.list",
+            "rhsmlib.services.products.InstalledProducts.list",
             name="list",
         )
         cls.patches["list"] = list_patch.start()
         cls.addClassCleanup(list_patch.stop)
 
-        super().setUpClass()
+        cls.impl = ProductsDBusImplementation()
 
     def test_ListInstalledProducts__no_filter(self):
         expected = [
@@ -65,5 +63,5 @@ class TestProductsDBusObject(DBusServerStubProvider):
 
         self.patches["list"].return_value = expected
 
-        result = self.obj.ListInstalledProducts.__wrapped__(self.obj, "", {}, self.LOCALE)
-        self.assertEqual(json.dumps(expected), result)
+        result = self.impl.list_installed_products("", {})
+        self.assertEqual(expected, result)
