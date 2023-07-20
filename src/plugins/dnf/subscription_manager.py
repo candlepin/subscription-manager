@@ -138,7 +138,7 @@ class SubscriptionManager(dnf.Plugin):
             logger.info(_("Unable to read consumer identity"))
 
         if config.in_container():
-            logger.info(_("Subscription Manager is operating in container mode."))
+            logger.info(_("subscription-manager is operating in container mode."))
 
         if cache_only is True:
             log.debug("DNF subscription-manager operates in cache-only mode")
