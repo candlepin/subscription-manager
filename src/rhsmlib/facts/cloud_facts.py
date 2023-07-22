@@ -110,7 +110,8 @@ class CloudFactsCollector(collector.FactsCollector):
             {
                 "azure_instance_id": some_instance_ID,
                 "azure_offer": some_offer,
-                "azure_sku": some_sku
+                "azure_sku": some_sku,
+                "azure_subscription_id": some_subscription_ID
             }
         :return: dictionary containing Azure facts, when the machine is able to gather metadata
             from Azure cloud provider; otherwise returns empty dictionary {}
@@ -128,6 +129,8 @@ class CloudFactsCollector(collector.FactsCollector):
                     facts['azure_sku'] = values['compute']['sku']
                 if 'offer' in values['compute']:
                     facts['azure_offer'] = values['compute']['offer']
+                if "subscriptionId" in values["compute"]:
+                    facts["azure_subscription_id"] = values["compute"]["subscriptionId"]
         return facts
 
     def get_gcp_facts(self):
@@ -156,6 +159,16 @@ class CloudFactsCollector(collector.FactsCollector):
                         facts["gcp_license_codes"] = " ".join(gcp_license_codes)
                     else:
                         log.debug("GCP license codes not found in JWT token")
+                    # ID of project
+                    if "project_id" in values["google"]["compute_engine"]:
+                        facts["gcp_project_id"] = values["google"]["compute_engine"]["project_id"]
+                    else:
+                        log.debug("GCP project_id not found in JWT token")
+                    # number of project
+                    if "project_number" in values["google"]["compute_engine"]:
+                        facts["gcp_project_number"] = values["google"]["compute_engine"]["project_number"]
+                    else:
+                        log.debug("GCP project_number not found in JWT token")
                 else:
                     log.debug("GCP google.compute_engine on found in JWT token")
         return facts
