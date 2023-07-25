@@ -44,8 +44,13 @@ from nose import SkipTest
 # for some exceptions
 from rhsm import connection
 from rhsm.https import ssl
+HAS_M2CRYPTO = False
 if six.PY2:
-    from M2Crypto import SSL
+    try:
+        from M2Crypto import SSL
+        HAS_M2CRYPTO = True
+    except ImportError:
+        pass
 
 
 class InstalledProductStatusTests(SubManFixture):
@@ -2218,7 +2223,7 @@ class HandleExceptionTests(unittest.TestCase):
             self.assertEqual(e.code, os.EX_SOFTWARE)
 
     def test_he_ssl_wrong_host(self):
-        if not six.PY2:
+        if not HAS_M2CRYPTO:
             raise SkipTest("M2Crypto-specific interface. Not used with Python 3.")
         e = SSL.Checker.WrongHost("expectedHost.example.com",
                                    "actualHost.example.com",
