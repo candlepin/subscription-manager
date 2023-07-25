@@ -280,6 +280,8 @@ class CloudFactsCollector(collector.FactsCollector):
                     facts['azure_sku'] = values['compute']['sku']
                 if 'offer' in values['compute']:
                     facts['azure_offer'] = values['compute']['offer']
+                if "subscriptionId" in values["compute"]:
+                    facts["azure_subscription_id"] = values["compute"]["subscriptionId"]
         return facts
 
     def is_gcp(self):
@@ -381,8 +383,18 @@ class CloudFactsCollector(collector.FactsCollector):
                         facts["gcp_license_codes"] = " ".join(gcp_license_codes)
                     else:
                         log.debug("GCP google.compute_engine on found in JWT token")
+                    # ID of project
+                    if "project_id" in values["google"]["compute_engine"]:
+                        facts["gcp_project_id"] = values["google"]["compute_engine"]["project_id"]
+                    else:
+                        log.debug("GCP project_id not found in JWT token")
+                    # number of project
+                    if "project_number" in values["google"]["compute_engine"]:
+                        facts["gcp_project_number"] = values["google"]["compute_engine"]["project_number"]
+                    else:
+                        log.debug("GCP project_number not found in JWT token")
                 else:
-                    log.debug('GCP instance_id not found in JWT token')
+                    log.debug("GCP google.compute_engine on found in JWT token")
         return facts
 
     @staticmethod
