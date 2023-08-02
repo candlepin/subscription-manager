@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.35
+Version: 1.29.36
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,31 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Aug 02 2023 Pino Toscano <ptoscano@redhat.com> 1.29.36-1
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- ENT-5581: Update messaging around the "container mode" (mhorky@redhat.com)
+- Remove 'dbus' marker for pytest (mhorky@redhat.com)
+- Rewrite D-Bus tests to be testable without pytest-forked (mhorky@redhat.com)
+- Drop further ethtool dependency mentions (mhorky@redhat.com)
+- tests: fix test_file_monitor without pyinotify (ptoscano@redhat.com)
+- tests: switch from imp to importlib (ptoscano@redhat.com)
+- Fix the order of user env var checking for translations.
+  (tkuratom@redhat.com)
+- 2215974: Collect network facts using 'ip' (mhorky@redhat.com)
+- ENT-5582: Remove container detection envvar overwrite (mhorky@redhat.com)
+- ENT-5603: Explicitly check for provided entitlement certificates
+  (mhorky@redhat.com)
+- fix test case (chambrid@redhat.com)
+- Collect GCP Project information as cloud facts (chambrid@redhat.com)
+- Collect Azure Subscription ID as a cloud fact (#3285) (chambrid@redhat.com)
+- ENT-5580: Disable the proper container detection (mhorky@redhat.com)
+- spec: convert License to SPDX (ptoscano@redhat.com)
+- 2093291: Make reading of cache file more reliable (jhnidek@redhat.com)
+- 2093291: Make code of DNF plugins testable (jhnidek@redhat.com)
+- spec: change subscription-manager dnf dep (ptoscano@redhat.com)
+- spec: update libdnf-plugin-subscription-manager deps (ptoscano@redhat.com)
+- tests: repair attach cases in SCA mode (ptoscano@redhat.com)
+
 * Tue May 16 2023 Pino Toscano <ptoscano@redhat.com> 1.29.35-1
 - Translated using Weblate (Italian) (toscano.pino@tiscali.it)
 - Clean up tests using Cloud What detectors properly (mhorky@redhat.com)
