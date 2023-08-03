@@ -21,7 +21,7 @@ import os
 import tempfile
 from threading import RLock as Mutex
 import time
-from typing import Union, Optional, TextIO
+from typing import Union
 
 import logging
 log = logging.getLogger(__name__)

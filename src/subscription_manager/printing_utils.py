@@ -125,7 +125,7 @@ def format_name(name, indent, max_length):
             # If the word will not fit, break it
             if indent + utf8_width(word) > max_length:
                 split_index = 0
-                while(utf8_width(word[:split_index + 1]) + indent <= max_length):
+                while (utf8_width(word[:split_index + 1]) + indent <= max_length):
                     split_index += 1
                 words.insert(0, word[split_index:])
                 word = word[:split_index]

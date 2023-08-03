@@ -3002,7 +3002,7 @@ class ReposCommand(CliCommand):
         Allows for --list to perform identically to --list-enabled --list-disabled
         """
         # covers the default case if no list options are specified
-        default_list = not(self.options.list or self.options.list_enabled or self.options.list_disabled)
+        default_list = not (self.options.list or self.options.list_enabled or self.options.list_disabled)
         repo_actions = self.options.repo_actions is not None
         self.list_enabled = (self.options.list or self.options.list_enabled or default_list) and not repo_actions
         self.list_disabled = (self.options.list or self.options.list_disabled or default_list) and not repo_actions

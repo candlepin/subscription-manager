@@ -29,7 +29,5 @@ class RctCLI(CLI):
 def xstr(value):
     if value is None:
         return ''
-    elif isinstance(value, unicode):
-        return value.encode('utf-8')
-    else:
-        return str(value)
+
+    return value.encode('utf-8')

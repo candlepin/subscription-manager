@@ -50,8 +50,6 @@ ignore =
     # E741: ambiguous variable name '*'
     # mostly for variables 'l', which ought to get more specific names
     E741,
-    # F821: undefined name '*'
-    F821,
     # F841: local variable '*' is assigned to but never used
     # possibly either mistakes (variables that were supposed to be used),
     # or really no more needed variables
@@ -62,3 +60,8 @@ ignore =
     # W605: invalid escape sequence '*'
     # it is a DeprecationWarning since Python 3.6, will become SyntaxError
     W605
+per-file-ignores =
+    # we need to mock some modules before importing additional files
+    test/test_repolib.py: E402
+    # trailing whitespace in test data
+    test/certdata.py: W291

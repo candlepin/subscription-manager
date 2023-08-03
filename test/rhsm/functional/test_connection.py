@@ -22,7 +22,7 @@ import unittest
 
 from test import subman_marker_functional
 
-from rhsm.connection import ContentConnection, UEPConnection, Restlib,\
+from rhsm.connection import ContentConnection, UEPConnection, Restlib, \
     UnauthorizedException, ForbiddenException, RestlibException
 from mock import patch
 

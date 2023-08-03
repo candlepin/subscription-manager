@@ -22,10 +22,6 @@ from __future__ import print_function, division, absolute_import
 # Without this, for example, "Формат: %s\n" % u"foobar" will fail with UnicodeDecodeError
 # See http://stackoverflow.com/a/29832646/6124862 for more details
 import sys
-import six
-if six.PY2:
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
 
 import signal
 import logging

@@ -20,11 +20,7 @@ from __future__ import print_function, division, absolute_import
 # hack to allow bytes/strings to be interpolated w/ unicode values (gettext gives us bytes)
 # Without this, for example, "Формат: %s\n" % u"foobar" will fail with UnicodeDecodeError
 # See http://stackoverflow.com/a/29832646/6124862 for more details
-import six
 import sys
-if six.PY2:
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
 
 from subscription_manager.i18n import configure_i18n, ugettext as _
 configure_i18n()

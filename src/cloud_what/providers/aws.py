@@ -122,7 +122,7 @@ class AWSCloudProvider(BaseCloudProvider):
         found_amazon_ec2 = False
         found_aws = False
         for hw_item in self.hw_info.values():
-            if type(hw_item) != str:
+            if type(hw_item) is not str:
                 continue
             if 'amazon ec2' in hw_item.lower():
                 found_amazon_ec2 = True
