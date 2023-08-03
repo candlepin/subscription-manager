@@ -36,6 +36,11 @@ class DBusSender:
     @rhsm.utils.call_once
     def __init__(self):
         self._cmd_line = None
+        self._sender = None
+
+    @property
+    def sender(self):
+        return self._sender
 
     @property
     def cmd_line(self):
@@ -70,6 +75,7 @@ class DBusSender:
         """
         if cmd_line is None:
             self.cmd_line = self.get_cmd_line(sender, bus)
+            self._sender = sender
         else:
             self.cmd_line = cmd_line
         log.debug("D-Bus sender: %s (cmd-line: %s)" % (sender, self.cmd_line))

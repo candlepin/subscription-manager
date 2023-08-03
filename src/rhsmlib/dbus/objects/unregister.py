@@ -73,6 +73,7 @@ class UnregisterDBusObject(base_object.BaseObject):
         out_signature="",
     )
     @util.dbus_handle_sender
+    @util.dbus_admin_auth_policy
     @util.dbus_handle_exceptions
     def Unregister(self, proxy_options, locale, sender=None):
         """
