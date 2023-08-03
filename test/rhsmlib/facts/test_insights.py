@@ -40,15 +40,21 @@ class TestInsightsCollector(unittest.TestCase):
         self.assertIn("insights_id", fact)
         self.assertEqual(fact["insights_id"], INSIGHT_TEST_UUID)
 
+    @patch("builtins.open")
     @patch("rhsmlib.facts.insights.insights_constants")
-    def test_not_get_machine_id(self, consts):
+    def test_not_get_machine_id(self, consts, mocked_open):
         consts.machine_id_file = "/not/existing/file/machine_id"
+        mocked_open.side_effect = IOError("open() is mocked to raise an exception")
+
         fact = self.collector.get_all()
         self.assertEqual(fact, {})
 
+    @patch("builtins.open")
     @patch("rhsmlib.facts.insights.insights_constants", spec=["InsightsConstants"])
-    def test_old_insights_api(self, consts):
+    def test_old_insights_api(self, consts, mocked_open):
         # Try to mimic old version of insights client without consts.machine_id_file
+        mocked_open.side_effect = IOError("open() is mocked to raise an exception")
+
         self.assertFalse(hasattr(consts, "machine_id_file"))
         fact = self.collector.get_all()
         self.assertEqual(fact, {})
