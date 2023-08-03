@@ -737,7 +737,7 @@ class ProductManager(object):
             f = open(filename)
         try:
             pem = f.read()
-            if type(pem) == bytes:
+            if type(pem) is bytes:
                 pem = pem.decode('utf-8')
             cert = create_from_pem(pem)
             cert.pem = pem

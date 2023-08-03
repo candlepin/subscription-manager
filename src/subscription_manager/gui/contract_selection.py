@@ -196,7 +196,7 @@ class ContractSelectionWindow(widgets.SubmanBaseWidget):
         sort_column, sort_type = model.get_sort_column_id()
         str1 = model.get_value(row1, sort_column)
         str2 = model.get_value(row2, sort_column)
-        return cmp(str1, str2)
+        return cmp(str1, str2)  # noqa: F821
 
     def _sort_machine_type(self, model, row1, row2, col):
         # Machine type is actually a boolean denoting whether the type is

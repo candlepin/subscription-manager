@@ -22,9 +22,6 @@ from __future__ import print_function, division, absolute_import
 # See http://stackoverflow.com/a/29832646/6124862 for more details
 import six
 import sys
-if six.PY2:
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
 import os
 
 

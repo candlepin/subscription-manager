@@ -29,7 +29,7 @@ from subscription_manager.gui import progress
 from subscription_manager.async_utils import AsyncRepoOverridesUpdate
 from subscription_manager.injection import IDENTITY, ENT_DIR, require
 from subscription_manager.gui.storage import MappedListStore
-from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn,\
+from subscription_manager.gui.widgets import TextTreeViewColumn, CheckBoxColumn, \
     SelectionWrapper, HasSortableWidget, OverridesTable
 from subscription_manager.gui.messageWindow import YesNoDialog
 from subscription_manager.overrides import Override
