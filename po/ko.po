@@ -7,14 +7,14 @@
 # simmon <simmon@nplob.com>, 2021, 2022.
 # Ludek Janda <ljanda@redhat.com>, 2021.
 # Kim InSoo <simmon@nplob.com>, 2022.
-# 김인수 <simmon@nplob.com>, 2022.
+# 김인수 <simmon@nplob.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-05 09:03+0200\n"
-"PO-Revision-Date: 2023-01-26 21:20+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2023-08-08 18:21+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
 "Language: ko\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -188,7 +188,7 @@ msgstr "%(prog)s: 오류: %(message)s\n"
 #: src/subscription_manager/gui/data/ui/installed.ui:93
 #: src/subscription_manager/gui/registergui.py:249
 msgid "Register"
-msgstr "시스템 등록"
+msgstr "등록"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/index.js:100
@@ -293,7 +293,7 @@ msgstr "마지막 Insights 데이터 업로드에 실패했습니다."
 
 #: cockpit/src/insights.jsx:415
 msgid "Connected to Red Hat Insights"
-msgstr "Red Hat Insights에 연결"
+msgstr "Red Hat Insights에 연결됨"
 
 #: cockpit/src/insights.jsx:421
 msgid "Next Insights data upload"
@@ -400,7 +400,7 @@ msgstr "설정 저장 중..."
 
 #: cockpit/src/subscriptions-client.js:431
 msgid "Updating status ..."
-msgstr "상태 업데이트 중 ..."
+msgstr "상태 최신화 중 ..."
 
 #: cockpit/src/subscriptions-client.js:449
 #: cockpit/src/subscriptions-view.jsx:415
@@ -462,7 +462,7 @@ msgstr "사용자 이름"
 
 #: cockpit/src/subscriptions-register.jsx:112
 msgid "Password"
-msgstr "암호"
+msgstr "비밀번호"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-register.jsx:117
@@ -683,7 +683,7 @@ msgstr "서브스크립션 상태"
 
 #: cockpit/src/subscriptions-view.jsx:491
 msgid "Updating"
-msgstr "업데이트 중"
+msgstr "최신화 중"
 
 #: cockpit/src/subscriptions-view.jsx:492
 msgid "Retrieving subscription status..."
@@ -1326,7 +1326,7 @@ msgstr "컨텐츠"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:111
 msgid "Label"
-msgstr "레이블"
+msgstr "이름표"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:112
@@ -1892,7 +1892,7 @@ msgstr[0] "%s 로컬 인증서가 삭제되었습니다."
 #: src/subscription_manager/entcertlib.py:474
 #, python-format
 msgid "Total updates: %d"
-msgstr "모든 업데이트: %d"
+msgstr "총 최신화: %d"
 
 #: src/subscription_manager/entcertlib.py:475
 #, python-format
@@ -2297,7 +2297,7 @@ msgstr "<b>활성화된 서브스크립션 보기:</b>"
 #: src/subscription_manager/gui/data/glade/allsubs.glade:55
 #: src/subscription_manager/gui/data/ui/allsubs.ui:56
 msgid "Update"
-msgstr "업데이트"
+msgstr "최신화"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/allsubs.glade:63
@@ -2311,7 +2311,7 @@ msgstr "검색"
 #: src/subscription_manager/gui/data/ui/allsubs.ui:77
 #: src/subscription_manager/gui/data/ui/installed.ui:75
 msgid "label"
-msgstr "레이블"
+msgstr "이름표"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/allsubs.glade:88
@@ -2463,7 +2463,7 @@ msgstr "선택된 서브스크립션 표"
 #: src/subscription_manager/gui/data/glade/confirmsubs.glade:109
 #: src/subscription_manager/gui/data/ui/confirmsubs.ui:127
 msgid "Core repositories will be enabled for each product."
-msgstr "각 제품에 대해 주요 레포지터리가 활성화됩니다."
+msgstr "각 제품에 대해 주요 저장소가 활성화됩니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/contract_selection.glade:7
@@ -2508,7 +2508,7 @@ msgstr "SLA 선택 표"
 #: src/subscription_manager/gui/data/glade/credentials.glade:140
 #: src/subscription_manager/gui/data/ui/credentials.ui:91
 msgid "_Password:"
-msgstr "암호(_P):"
+msgstr "비밀번호(_P):"
 
 #: src/subscription_manager/gui/data/glade/credentials.glade:162
 #: src/subscription_manager/gui/data/ui/credentials.ui:48
@@ -2613,19 +2613,19 @@ msgstr "정보 보기(_v)"
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:207
 #: src/subscription_manager/gui/data/ui/factsdialog.ui:212
 msgid "Last Update:"
-msgstr "마지막 업데이트:"
+msgstr "마지막 최신화:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:224
 #: src/subscription_manager/gui/data/ui/factsdialog.ui:232
 msgid "Update Time"
-msgstr "업데이트 시간"
+msgstr "최신화 시간"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:247
 #: src/subscription_manager/gui/data/ui/factsdialog.ui:276
 msgid "Update Facts"
-msgstr "정보 업데이트"
+msgstr "정보 최신화"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:270
@@ -2819,7 +2819,7 @@ msgstr "시스템 정보 보기 (_F)"
 #: src/subscription_manager/gui/data/glade/mainwindow.glade:70
 #: src/subscription_manager/gui/data/ui/mainwindow.ui:166
 msgid "Repo_sitories"
-msgstr "레포지터리 (_S)"
+msgstr "저장소 (_S)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/mainwindow.glade:79
@@ -3236,8 +3236,8 @@ msgid ""
 "with Red Hat to receive software updates and other benefits. You will need "
 "the following to register:"
 msgstr ""
-"다음에서는 소프트웨어 업데이트 및 기타 혜택을 받기 위해 시스템을 Red Hat에 등"
-"록하는 절차에 대해 설명합니다. 등록하려면 다음과 같은 절차가 필요합니다:"
+"다음에서는 소프트웨어 최신화 및 기타 혜택을 받기 위해 시스템을 Red Hat에 "
+"등록하는 절차에 대해 설명합니다. 등록하려면 다음과 같은 절차가 필요합니다:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:53
@@ -3322,7 +3322,7 @@ msgstr "종료(_C)"
 #: src/subscription_manager/gui/data/glade/registration_info.glade:295
 #: src/subscription_manager/gui/data/ui/registration_info.ui:390
 msgid "<b>Security &amp; Updates:</b>"
-msgstr "<b>보안 &amp; 업데이트:</b>"
+msgstr "<b>보안 &amp; 최신화:</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:333
@@ -3331,9 +3331,8 @@ msgid ""
 "Receive the latest software updates, including security updates, keeping "
 "this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
 msgstr ""
-"보안 업데이트가 포함된 최신 소프트웨어를 업데이트하여 Red Hat Enterprise "
-"Linux 시스템을 지속적으로 <b>업데이트</b>하고 <b>보안</b>을 유지하시기 바랍니"
-"다."
+"보안 최신화가 포함된 최신 소프트웨어를 최신화하여 Red Hat Enterprise Linux "
+"시스템을 지속적으로 <b>최신화</b>하고 <b>보안</b>을 유지하시기 바랍니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:357
@@ -3405,7 +3404,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/repositories.glade:8
 #: src/subscription_manager/gui/data/ui/repositories.ui:8
 msgid "Manage Repositories"
-msgstr "레포지터리 관리"
+msgstr "저장소 관리"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/repositories.glade:19
@@ -3419,15 +3418,14 @@ msgstr "manage_repositories_dialog"
 msgid ""
 "Manage the repositories your subscriptions grant you access to by enabling, "
 "disabling and overriding certain fields."
-msgstr ""
-"특정 필드를 활성화, 비활성화, 재정의하여 서브스크립션을 통해 액세스가 허용된 "
-"레포지터리를 관리합니다."
+msgstr "특정 필드를 활성화, 비활성화, 재정에 의해 서브스크립션을 통해 접근이 허용된 "
+"저장소를 관리합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/repositories.glade:88
 #: src/subscription_manager/gui/data/ui/repositories.ui:151
 msgid "<b>Repository Details</b>"
-msgstr "<b>레포지터리 정보</b>"
+msgstr "<b>저장소 상세정보</b>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/repositories.glade:109
@@ -3665,9 +3663,8 @@ msgstr "register_notebook"
 msgid ""
 "This assistant will guide you through the process of registering your system "
 "with Red Hat to receive software updates and other benefits. "
-msgstr ""
-"다음에서는 소프트웨어 업데이트 및 기타 혜택을 받기 위해 시스템을 Red Hat에 등"
-"록하는 절차에 대해 설명합니다. "
+msgstr "다음에서는 소프트웨어 최신화 및 기타 혜택을 받기 위해 시스템을 Red Hat에 "
+"등록하는 절차에 대해 설명합니다. "
 
 #: src/subscription_manager/gui/data/ui/registration_info.ui:64
 msgid " You will need the following to register:"
@@ -3691,7 +3688,7 @@ msgstr "값"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/factsgui.py:105
 msgid "No previous update"
-msgstr "이전 업데이트가 없음"
+msgstr "이전 최신화가 없음"
 
 #: src/subscription_manager/gui/factsgui.py:140
 #, python-format
@@ -3902,9 +3899,8 @@ msgstr ""
 msgid ""
 "Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
-msgstr ""
-"레포지터리 대화에 오류가 발생했습니다. 자세한 내용은 /var/log/rhsm/rhsm.log에"
-"서 참조하십시오."
+msgstr "저장소 대화에 오류가 발생했습니다. 자세한 내용은 /var/log/rhsm/rhsm.log에서 "
+"참조하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/managergui.py:522
@@ -4256,12 +4252,12 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:54
 msgid "Attached subscriptions do not provide any repositories."
-msgstr "첨부된 서브스크립션은 레포지터리를 제공하지 않습니다."
+msgstr "첨부된 서브스크립션은 저장소를 제공하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:55
 msgid "No repositories are available without an attached subscription."
-msgstr "첨부된 서브스크립션이 없으면 사용 가능한 레포지터리가 없습니다."
+msgstr "첨부된 서브스크립션이 없으면 사용 가능한 저장소가 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:56
@@ -4277,7 +4273,7 @@ msgstr "Gpgcheck"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:136
 msgid "Repository ID"
-msgstr "레포지터리 ID"
+msgstr "저장소 ID"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/reposgui.py:142
@@ -4286,15 +4282,15 @@ msgstr "수정됨"
 
 #: src/subscription_manager/gui/reposgui.py:166
 msgid "Loading Repository Data"
-msgstr "레포지터리 자료 불러오기"
+msgstr "저장소 자료 불러오기"
 
 #: src/subscription_manager/gui/reposgui.py:166
 msgid "Retrieving repository data from server."
-msgstr "서버에서 레포지터리 자료를 검색하고 있습니다."
+msgstr "서버에서 저장소 자료를 검색하고 있습니다."
 
 #: src/subscription_manager/gui/reposgui.py:178
 msgid "Unable to load repository data."
-msgstr "레포지터리 자료를 불러올 수 없습니다."
+msgstr "저장소 자료를 불러올 수 없습니다."
 
 #: src/subscription_manager/gui/reposgui.py:312
 #, python-format
@@ -4307,32 +4303,32 @@ msgstr "모든 덮어쓰기 삭제 확인"
 
 #: src/subscription_manager/gui/reposgui.py:328
 msgid "Removing Repository Overrides"
-msgstr "레포지터리 덮어쓰기 삭제 중"
+msgstr "저장소 재정의 제거 중"
 
 #: src/subscription_manager/gui/reposgui.py:328
 #, python-format
 msgid "Removing all overrides for repository <b>%s</b>"
-msgstr "레포지터리 <b>%s</b>의 모든 덮어쓰기 삭제 중"
+msgstr "저장소 <b>%s</b>의 모든 재정의 제거 중"
 
 #: src/subscription_manager/gui/reposgui.py:362
 msgid "Unable to reset repository overrides."
-msgstr "레포지터리 덮어쓰기를 다시 설정할 수 없습니다."
+msgstr "저장소 재정의를 다시 설정 할 수 없습니다."
 
 #: src/subscription_manager/gui/reposgui.py:398
 msgid "Applying override changes to repositories."
-msgstr "레포지터리에 덮어쓰기 변경 사항을 적용하고 있습니다."
+msgstr "저장소에 재정의 변경 사항을 적용 중."
 
 #: src/subscription_manager/gui/reposgui.py:398
 msgid "Updating Repository Overrides"
-msgstr "레포지터리 덮어쓰기 업데이트 중"
+msgstr "저장소 재지정 최신화 중"
 
 #: src/subscription_manager/gui/reposgui.py:407
 msgid "Unable to update overrides."
-msgstr "덮어쓰기 사항을 업데이트할 수 없습니다."
+msgstr "재지정 사항을 최신화 할 수 없습니다."
 
 #: src/subscription_manager/gui/reposgui.py:417
 msgid "Repositories have changes. Save changes?"
-msgstr "레포지터리가 변경되었습니다. 변경 사항을 저장하시겠습니까?"
+msgstr "저장소가 변경되었습니다. 변경 사항을 저장하시겠습니까?"
 
 #: src/subscription_manager/gui/reposgui.py:418
 msgid "Save Changes"
@@ -5649,7 +5645,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:2594
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
-msgstr "다음과 같은 이유로 인타이틀먼트 인증서 업데이트에 실패했습니다:"
+msgstr "다음과 같은 이유로 자격 인증서 최신화에 실패했습니다:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2628
@@ -5758,7 +5754,7 @@ msgstr "사용 권장되지 않음, remove 참조"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2793
 msgid "View or update the detected system information"
-msgstr "검색된 시스템 정보를 표시하거나 업데이트"
+msgstr "검색된 시스템 정보를 보거나 최신화합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2797
@@ -5768,7 +5764,7 @@ msgstr "이 시스템의 알려진 정보를 나열"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2799
 msgid "update the system facts"
-msgstr "시스템 정보 업데이트"
+msgstr "시스템 정보 최신화"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:2834
@@ -5898,7 +5894,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:3056
 #, python-format
 msgid "    Available Repositories in %s"
-msgstr "    %s에서 사용 가능한 레포지터리"
+msgstr "    %s에서 사용 가능한 저장소"
 
 #: src/subscription_manager/managercli.py:3066
 msgid "There were no available repositories matching the specified criteria."
@@ -5916,18 +5912,18 @@ msgid ""
 "Error: '%s' does not match a valid repository ID. Use \"subscription-manager "
 "repos --list\" to see valid repositories."
 msgstr ""
-"오류: '%s'는 유효한 레포지터리 ID와 일치하지 않습니다. \"subscription-"
-"manager repos --list\"를 사용하여 유효한 레포지터리를 확인합니다."
+"오류: '%s'는 유효한 저장소 ID와 일치하지 않습니다. \"subscription-manager "
+"repos --list\"를 사용하여 유효한 저장소를 확인합니다."
 
 #: src/subscription_manager/managercli.py:3141
 #, python-format
 msgid "Repository '%s' is enabled for this system."
-msgstr "레포지터리 '%s'이/가 이 시스템에 대해 활성화되어 있습니다."
+msgstr "저장소 '%s'가 이 시스템에서 활성화되어 있습니다."
 
 #: src/subscription_manager/managercli.py:3143
 #, python-format
 msgid "Repository '%s' is disabled for this system."
-msgstr "레포지터리 '%s'가 이 시스템에 대해 비활성화되어 있습니다."
+msgstr "저장소 '%s'가 이 시스템에서 비활성화 되어 있습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3150
@@ -6268,7 +6264,7 @@ msgstr "이 시스템에 적용되는 컨텐츠 재정의가 없습니다."
 #, python-format
 msgid ""
 "Repository '%s' does not currently exist, but the override has been added."
-msgstr "현재 레포지터리 '%s'가 존재하지 않지만 덮어쓰기가 추가되어 있습니다."
+msgstr "현재 저장소 '%s'가 존재하지 않지만 덮어쓰기가 추가되어 있습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3640
@@ -6280,7 +6276,7 @@ msgstr "'%s'에 대해 아무것도 알 수 없습니다"
 #: src/subscription_manager/managercli.py:3645
 #, python-format
 msgid "Repository: %s"
-msgstr "레포지터리: %s"
+msgstr "저장소: %s"
 
 #: src/subscription_manager/managercli.py:3655
 msgid "Show or modify the system purpose role setting"
@@ -6347,11 +6343,11 @@ msgstr "추가됨:"
 
 #: src/subscription_manager/plugin/container/__init__.py:236
 msgid "Removed:"
-msgstr "삭제됨:"
+msgstr "제거됨:"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:145
 msgid "Updates:"
-msgstr "업데이트:"
+msgstr "최신화:"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:149
 msgid "Deleted:"
