@@ -262,7 +262,7 @@ class RhsmConfigParser(SafeConfigParser):
         if value not in valid + ["NOTSET"]:
             if print_warning is True:
                 print(
-                    _("Invalid Log Level: {lvl}, setting to INFO for this run.".format(lvl=value)),
+                    _("Invalid Log Level: {lvl}, setting to INFO for this run.").format(lvl=value),
                     file=sys.stderr,
                 )
                 print(
@@ -273,7 +273,7 @@ class RhsmConfigParser(SafeConfigParser):
                     file=sys.stderr,
                 )
                 valid_str = ", ".join(valid)
-                print(_("Valid Values: {valid_str}".format(valid_str=valid_str)), file=sys.stderr)
+                print(_("Valid Values: {valid_str}").format(valid_str=valid_str), file=sys.stderr)
             return False
         return True
 
