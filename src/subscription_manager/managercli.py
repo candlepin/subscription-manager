@@ -987,7 +987,7 @@ class AbstractSyspurposeCommand(CliCommand):
 
     def check_syspurpose_support(self, attr):
         if self.is_registered() and not self.cp.has_capability('syspurpose'):
-            print(_("Note: The currently configured entitlement server does not support System Purpose {attr}.".format(attr=attr)))
+            print(_("Note: The currently configured entitlement server does not support System Purpose {attr}.").format(attr=attr))
 
     def _check_result(self, expectation, success_msg, command, attr):
         if self.store:
@@ -998,7 +998,7 @@ class AbstractSyspurposeCommand(CliCommand):
         if result and not expectation(result):
             advice = SP_ADVICE.format(command=command)
             value = result[attr]
-            msg = _(SP_CONFLICT_MESSAGE.format(attr=attr, download_value=value, advice=advice))
+            msg = SP_CONFLICT_MESSAGE.format(attr=attr, download_value=value, advice=advice)
             system_exit(os.EX_SOFTWARE, msg)
         else:
             print(success_msg)
