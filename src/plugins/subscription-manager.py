@@ -102,7 +102,7 @@ def update(conduit, cache_only):
     # In containers we have no identity, but we may have entitlements inherited
     # from the host, which need to generate a redhat.repo.
     if config.in_container():
-        conduit.info(3, "Subscription Manager is operating in container mode.")
+        conduit.info(3, "subscription-manager is operating in container mode.")
 
     if not cache_only and not config.in_container():
         cert_action_invoker = EntCertActionInvoker(locker=YumRepoLocker(conduit=conduit))
