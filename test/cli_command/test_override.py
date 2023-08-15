@@ -50,6 +50,24 @@ class TestOverrideCommand(TestCliProxyCommand):
         self.cc._validate_options()
         self.assertTrue(self.cc.options.list)
 
+    def test_proxy_user_and_pass_from_url_overridden_by_cli_options(self):
+        """
+        Test that --proxyuser and --proxypassword have higher priority than --proxy
+        """
+        self.cc.main(
+            [
+                "--proxy",
+                "https://foo:bar@www.example.com",
+                "--proxyuser",
+                "other-user",
+                "--proxypassword",
+                "other-password",
+            ]
+        )
+        self.cc._validate_options()
+        self.assertEqual(self.cc.proxy_user, "other-user")
+        self.assertEqual(self.cc.proxy_password, "other-password")
+
     def test_add_with_multiple_colons(self):
         self.cc.main(["--repo", "x", "--add", "url:http://example.com"])
         self.cc._validate_options()
