@@ -409,7 +409,7 @@ class CliCommand(AbstractCLICommand):
 
         # TODO: For now, we disable the CLI entirely. We may want to allow some commands in the future.
         if rhsm.config.in_container():
-            system_exit(os.EX_CONFIG, _("subscription-manager is disabled when running inside a container. Please refer to your host system for subscription management.\n"))
+            system_exit(os.EX_CONFIG, _("subscription-manager is operating in container mode. Use your host system to manage subscriptions.\n"))
 
         config_changed = False
 
