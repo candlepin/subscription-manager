@@ -174,16 +174,20 @@ class TestParseServerInfo(SubManFixture):
                           local_url)
 
     def test_colon_but_no_port(self):
+        # This is also correct!
         local_url = "https://myhost.example.com:/myapp"
-        self.assertRaises(ServerUrlParseErrorPort,
-                          parse_server_info,
-                          local_url)
+        hostname, port, prefix = parse_server_info(local_url)
+        self.assertEqual(hostname, "myhost.example.com")
+        self.assertEqual(port, DEFAULT_PORT)
+        self.assertEqual(prefix, "/myapp")
 
     def test_colon_but_no_port_no_scheme(self):
+        # This is also correct!
         local_url = "myhost.example.com:/myapp"
-        self.assertRaises(ServerUrlParseErrorPort,
-                          parse_server_info,
-                          local_url)
+        hostname, port, prefix = parse_server_info(local_url)
+        self.assertEqual(hostname, "myhost.example.com")
+        self.assertEqual(port, DEFAULT_PORT)
+        self.assertEqual(prefix, "/myapp")
 
     def test_colon_slash_slash_but_nothing_else(self):
         local_url = "http://"
