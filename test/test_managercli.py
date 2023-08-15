@@ -279,7 +279,7 @@ class TestCliCommand(SubManFixture):
         with patch.object(sys, 'argv', ['subscription-manager', 'version']):
             mock_in_container.return_value = True
             err_msg = 'subscription-manager is operating in container mode.'\
-                      ' Please refer to your host system for subscription management.\n\n'
+                      ' Use your host system to manage subscriptions.\n\n'
             with Capture() as cap:
                 try:
                     self.cc.main()
