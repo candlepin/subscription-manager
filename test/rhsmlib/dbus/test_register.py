@@ -444,7 +444,7 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
         self.patches["is_registered"].return_value = True
 
         result = self.impl.register_with_credentials(
-            "org", {"username": "username", "password": "password"}, {"force": True}
+            "org", {"username": "username", "password": "password", "force": True}, {}
         )
         self.assertEqual(expected, result)
 
@@ -537,7 +537,7 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
 
         result = self.impl.register_with_activation_keys(
             "username",
-            {"keys": ["key1", "key2"]},
-            {"force": True, "host": "localhost", "port": "8443", "handler": "/candlepin"},
+            {"keys": ["key1", "key2"], "force": True},
+            {"host": "localhost", "port": "8443", "handler": "/candlepin"},
         )
         self.assertEqual(expected, result)

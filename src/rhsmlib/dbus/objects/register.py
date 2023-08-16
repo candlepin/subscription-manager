@@ -179,11 +179,7 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
         :raises dbus.DBusException: The system is already registered.
         :raises OrgNotSpecifiedException: User is part of multiple organizations, but none was specified.
         """
-        if self.is_registered():
-            if connection_options.get("force", False) is True:
-                self._unregister(connection_options)
-            else:
-                raise dbus.DBusException("This system is already registered.")
+        self._check_force_handling(register_options, connection_options)
 
         uep: UEPConnection = self.build_uep(connection_options)
         service = RegisterService(uep)
@@ -219,11 +215,7 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
         :param connection_options: Connection options.
         """
 
-        if self.is_registered() and not connection_options.get("force", False):
-            raise dbus.DBusException("This system is already registered.")
-
-        if self.is_registered():
-            self._unregister(connection_options)
+        self._check_force_handling(register_options, connection_options)
 
         uep: UEPConnection = self.build_uep(connection_options)
         service = RegisterService(uep)
@@ -288,6 +280,23 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
 
         if enabled_content is not None:
             consumer["enabledContent"] = enabled_content
+
+    def _check_force_handling(self, register_options: dict, connection_options: dict) -> None:
+        """
+        Handles "force=true" in the registration options
+
+        :param register_options: Registration options passed to the RegisterService.
+        :param connection_options: Connection options.
+
+        :raises dbus.DBusException: The system is already registered, or the unregistration failed.
+        """
+        if not self.is_registered():
+            return
+
+        if register_options.get("force", False):
+            self._unregister(connection_options)
+        else:
+            raise dbus.DBusException("This system is already registered.")
 
     def _unregister(self, options: dict) -> None:
         """Unregister the system and clean CPProvider.
