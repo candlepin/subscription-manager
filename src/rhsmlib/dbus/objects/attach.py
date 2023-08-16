@@ -86,6 +86,8 @@ class AttachDBusImplementation(base_object.BaseImplementation):
             log.exception(exc)
             raise dbus.DBusException(str(exc))
 
+        # TODO This should probably be called only if something is actually attached
+        entcertlib.EntCertActionInvoker().update()
         return results
 
 
