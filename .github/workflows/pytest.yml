@@ -47,8 +47,7 @@ jobs:
             --cov 'src/' --cov-report 'term:skip-covered'
             --cov-report 'xml:/tmp/coverage.xml' --junitxml '/tmp/pytest.xml'"
         run: |
-          dbus-run-session \
-            python3 -m pytest ${{ matrix.pytest_args }}
+          python3 -m pytest ${{ matrix.pytest_args }}
 
       - name: "Publish coverage"
         uses: MishaKav/pytest-coverage-comment@main

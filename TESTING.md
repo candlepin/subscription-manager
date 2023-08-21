@@ -42,12 +42,6 @@ pytest -k cache
 pytest -k cache --no-summary
 ```
 
-To run tests in virtual machine or container without GUI, where DBus is not running, you can start it on-demand:
-
-```bash
-dbus-run-session pytest
-```
-
 To disable pytest-randomly plugin, run
 
 ```bash
