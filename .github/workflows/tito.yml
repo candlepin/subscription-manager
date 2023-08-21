@@ -15,9 +15,9 @@ jobs:
           - name: "CentOS Stream 9"
             image: "quay.io/centos/centos:stream9"
           - name: "Fedora latest"
-            image: "fedora:latest"
+            image: "registry.fedoraproject.org/fedora:latest"
           - name: "Fedora Rawhide"
-            image: "fedora:rawhide"
+            image: "registry.fedoraproject.org/fedora:rawhide"
 
     runs-on: ubuntu-latest
     container:

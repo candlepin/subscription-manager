@@ -20,10 +20,10 @@ jobs:
             image: "quay.io/centos/centos:stream9"
             pytest_args: ''
           - name: "Fedora latest"
-            image: "fedora:latest"
+            image: "registry.fedoraproject.org/fedora:latest"
             pytest_args: ''
           - name: "Fedora Rawhide"
-            image: "fedora:rawhide"
+            image: "registry.fedoraproject.org/fedora:rawhide"
             pytest_args: ''
 
     runs-on: ubuntu-latest
