@@ -14,10 +14,9 @@ fi
 
 # Install system, build and runtime packages
 dnf --setopt install_weak_deps=False install -y \
-  intltool dbus-daemon dbus-devel \
-  python3-setuptools \
-  openssl-devel glib2-devel libdnf-devel \
-  python3-rpm python3-librepo python3-gobject python3-gobject python3-dbus \
+  intltool python3-setuptools \
+  openssl-devel libdnf-devel \
+  python3-rpm python3-librepo python3-gobject \
   python3-dateutil python3-requests python3-iniparse \
   glibc-langpack-en glibc-langpack-de glibc-langpack-ja
 
