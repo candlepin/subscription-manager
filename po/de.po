@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-05 09:03+0200\n"
+"POT-Creation-Date: 2023-08-22 08:09+0200\n"
 "PO-Revision-Date: 2023-01-20 19:20+0000\n"
 "Last-Translator: Pino Toscano <ptoscano@redhat.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
@@ -913,7 +913,9 @@ msgid "Unable to read consumer identity"
 msgstr "Lesen der Verbraucheridentität fehlgeschlagen"
 
 #: src/dnf-plugins/subscription-manager.py:136
-msgid "Subscription Manager is operating in container mode."
+#, fuzzy
+#| msgid "Subscription Manager is operating in container mode."
+msgid "subscription-manager is operating in container mode."
 msgstr "Subscription Manager läuft im Containermodus."
 
 #: src/dnf-plugins/upload-profile.py:36
@@ -925,12 +927,12 @@ msgstr ""
 "installierten RPMs, aktivierten Repositorys und Module"
 
 #: src/dnf-plugins/upload-profile.py:44
-#: src/subscription_manager/scripts/package_profile_upload.py:39
+#: src/subscription_manager/scripts/package_profile_upload.py:34
 msgid "Force package profile upload"
 msgstr "Paketprofil-Upload erzwingen"
 
 #: src/dnf-plugins/upload-profile.py:60
-#: src/subscription_manager/scripts/package_profile_upload.py:46
+#: src/subscription_manager/scripts/package_profile_upload.py:41
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 "Keine Aktualisierungen durchgeführt. Weitere Informationen finden Sie unter /"
@@ -1557,7 +1559,7 @@ msgstr ""
 "Berechtigungsserver-Administrator für dieses System festgelegt.\n"
 "{advice}"
 
-#: src/rhsmlib/dbus/objects/syspurpose.py:78
+#: src/rhsmlib/dbus/objects/syspurpose.py:76
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "Warning: A {attr} of \"{download_value}\" was recently set for this "
@@ -2076,7 +2078,7 @@ msgstr "Fehlerhaftes CA-Zertifikat: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
 #: src/subscription_manager/exceptions.py:47
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:223
 msgid "Your identity certificate has expired"
 msgstr "Ihr Identitätszertifikat ist abgelaufen"
 
@@ -4229,8 +4231,8 @@ msgstr ""
 #: src/subscription_manager/gui/registergui.py:1340
 msgid ""
 "No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available Subscriptions"
-"\" tab or purchase additional subscriptions."
+"subscribe using multiple service levels via the \"All Available "
+"Subscriptions\" tab or purchase additional subscriptions."
 msgstr ""
 "Kein Service-Level deckt alle installierten Produkte ab. Bitte subskribieren "
 "Sie manuell unter Verwendung mehrerer Service-Levels über den Reiter \"Alle "
@@ -4763,9 +4765,13 @@ msgstr ""
 "register --help"
 
 #: src/subscription_manager/managercli.py:412
+#, fuzzy
+#| msgid ""
+#| "subscription-manager is disabled when running inside a container. Please "
+#| "refer to your host system for subscription management.\n"
 msgid ""
-"subscription-manager is disabled when running inside a container. Please "
-"refer to your host system for subscription management.\n"
+"subscription-manager is operating in container mode. Use your host system to "
+"manage subscriptions.\n"
 msgstr ""
 "subscription-manager ist deaktiviert, wenn innerhalb eines Containers "
 "ausgeführt. Bitte nutzen Sie Ihr Hostsystem zur Subskriptionsverwaltung.\n"
@@ -6595,41 +6601,41 @@ msgstr "Aktualisiert"
 msgid "Deleted"
 msgstr "Gelöscht"
 
-#: src/subscription_manager/scripts/package_profile_upload.py:38
+#: src/subscription_manager/scripts/package_profile_upload.py:33
 msgid "Upload a package profile"
 msgstr "Laden Sie ein Paketprofil hoch"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
-#: src/subscription_manager/scripts/package_profile_upload.py:62
-#: src/subscription_manager/scripts/rct.py:56
-#: src/subscription_manager/scripts/rhsm_debug.py:74
+#: src/subscription_manager/scripts/package_profile_upload.py:57
+#: src/subscription_manager/scripts/rct.py:52
+#: src/subscription_manager/scripts/rhsm_debug.py:70
 msgid "User interrupted process."
 msgstr "Benutzer hat den Prozess unterbrochen."
 
-#: src/subscription_manager/scripts/package_profile_upload.py:65
+#: src/subscription_manager/scripts/package_profile_upload.py:60
 #, python-format
 msgid "Error uploading package profile: %s\n"
 msgstr "Fehler beim Hochladen des Paketprofils: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgromans
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:204
 msgid "Updating entitlement certificates & repositories"
 msgstr "Berechtigungszertifikate & Repositorys aktualisieren"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgromans
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:282
 msgid "Unable to update entitlement certificates and repositories"
 msgstr ""
 "Berechtigungszertifikate und Repositorys konnten nicht aktualisiert werden"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author hedda
-#: src/subscription_manager/scripts/subscription_manager_gui.py:172
+#: src/subscription_manager/scripts/subscription_manager_gui.py:168
 #, python-format
 msgid "%s is already running"
 msgstr "%s läuft bereits"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
-#: src/subscription_manager/scripts/subscription_manager_gui.py:180
+#: src/subscription_manager/scripts/subscription_manager_gui.py:176
 msgid "launches the registration dialog on startup"
 msgstr "Startet den Registrierungsdialog beim Systemstart"
 
@@ -7181,8 +7187,8 @@ msgstr "Red Hat Subscription Manager"
 #, fuzzy
 #~| msgid "This org does not have any subscriptions with service levels."
 #~ msgid ""
-#~ "This org does not have any subscriptions with an available \"service-level"
-#~ "\"."
+#~ "This org does not have any subscriptions with an available \"service-"
+#~ "level\"."
 #~ msgstr "Diese Organisation hat keine Subskriptionen mit Servicelevels."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys

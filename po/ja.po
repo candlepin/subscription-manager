@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-05 09:03+0200\n"
+"POT-Creation-Date: 2023-08-22 08:09+0200\n"
 "PO-Revision-Date: 2022-12-19 12:20+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
@@ -875,7 +875,9 @@ msgid "Unable to read consumer identity"
 msgstr "コンシューマー識別子を読み込めません"
 
 #: src/dnf-plugins/subscription-manager.py:136
-msgid "Subscription Manager is operating in container mode."
+#, fuzzy
+#| msgid "Subscription Manager is operating in container mode."
+msgid "subscription-manager is operating in container mode."
 msgstr "サブスクリプションマネージャーがコンテナーモードで動作しています。"
 
 #: src/dnf-plugins/upload-profile.py:36
@@ -887,12 +889,12 @@ msgstr ""
 "済みの RPM、有効なリポジトリーとモジュールのリスト)"
 
 #: src/dnf-plugins/upload-profile.py:44
-#: src/subscription_manager/scripts/package_profile_upload.py:39
+#: src/subscription_manager/scripts/package_profile_upload.py:34
 msgid "Force package profile upload"
 msgstr "パッケージプロファイルのアップロードを強制します"
 
 #: src/dnf-plugins/upload-profile.py:60
-#: src/subscription_manager/scripts/package_profile_upload.py:46
+#: src/subscription_manager/scripts/package_profile_upload.py:41
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 "実行された更新はありません。詳細は /var/log/rhsm/rhsm.log を参照してくださ"
@@ -1512,7 +1514,7 @@ msgstr ""
 "警告: {conflict_msg} は最近、エンタイトルメントサーバーの管理者によってこのシ"
 "ステムに設定されました。"
 
-#: src/rhsmlib/dbus/objects/syspurpose.py:78
+#: src/rhsmlib/dbus/objects/syspurpose.py:76
 #, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
@@ -1595,8 +1597,8 @@ msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
 msgstr ""
-"エラー: 無効な一覧表示タイプが指定されました。\"installed\"、\"consumed"
-"\"、\"available\" だけが利用できます"
+"エラー: 無効な一覧表示タイプが指定されまし"
+"た。\"installed\"、\"consumed\"、\"available\" だけが利用できます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:453
@@ -2015,7 +2017,7 @@ msgstr "不適切な CA 証明書: {file}: {reason}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/exceptions.py:47
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:223
 msgid "Your identity certificate has expired"
 msgstr "ユーザーの識別証明書は期限が切れています"
 
@@ -4147,8 +4149,8 @@ msgstr ""
 #: src/subscription_manager/gui/registergui.py:1340
 msgid ""
 "No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available Subscriptions"
-"\" tab or purchase additional subscriptions."
+"subscribe using multiple service levels via the \"All Available "
+"Subscriptions\" tab or purchase additional subscriptions."
 msgstr ""
 "インストールしている全製品に適用されるサービスレベルはありません。「利用でき"
 "る全サブスクリプション」タブから、各製品に対してサービスレベルを選択して手動"
@@ -4672,9 +4674,13 @@ msgstr ""
 "ください"
 
 #: src/subscription_manager/managercli.py:412
+#, fuzzy
+#| msgid ""
+#| "subscription-manager is disabled when running inside a container. Please "
+#| "refer to your host system for subscription management.\n"
 msgid ""
-"subscription-manager is disabled when running inside a container. Please "
-"refer to your host system for subscription management.\n"
+"subscription-manager is operating in container mode. Use your host system to "
+"manage subscriptions.\n"
 msgstr ""
 "subscription-manager は、コンテナー内部で実行すると無効になります。サブスクリ"
 "プション管理についてはホストのシステムを参照してください。\n"
@@ -6432,40 +6438,40 @@ msgstr "更新済み"
 msgid "Deleted"
 msgstr "削除済み"
 
-#: src/subscription_manager/scripts/package_profile_upload.py:38
+#: src/subscription_manager/scripts/package_profile_upload.py:33
 msgid "Upload a package profile"
 msgstr "パッケージプロファイルをアップロードします"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/subscription_manager/scripts/package_profile_upload.py:62
-#: src/subscription_manager/scripts/rct.py:56
-#: src/subscription_manager/scripts/rhsm_debug.py:74
+#: src/subscription_manager/scripts/package_profile_upload.py:57
+#: src/subscription_manager/scripts/rct.py:52
+#: src/subscription_manager/scripts/rhsm_debug.py:70
 msgid "User interrupted process."
 msgstr "ユーザーによる割り込みプロセスです。"
 
-#: src/subscription_manager/scripts/package_profile_upload.py:65
+#: src/subscription_manager/scripts/package_profile_upload.py:60
 #, python-format
 msgid "Error uploading package profile: %s\n"
 msgstr "パッケージプロファイルのアップロード中にエラー発生: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:204
 msgid "Updating entitlement certificates & repositories"
 msgstr "エンタイトルメント証明書とリポジトリーを更新中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:282
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "エンタイトルメント証明書とリポジトリーを更新できません"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author noriko
-#: src/subscription_manager/scripts/subscription_manager_gui.py:172
+#: src/subscription_manager/scripts/subscription_manager_gui.py:168
 #, python-format
 msgid "%s is already running"
 msgstr "%s はすでに実行しています"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
-#: src/subscription_manager/scripts/subscription_manager_gui.py:180
+#: src/subscription_manager/scripts/subscription_manager_gui.py:176
 msgid "launches the registration dialog on startup"
 msgstr "起動時に登録のダイアログを開始する"
 
@@ -7004,8 +7010,8 @@ msgstr "Red Hat サブスクリプションマネージャー"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid ""
-#~ "This org does not have any subscriptions with an available \"service-level"
-#~ "\"."
+#~ "This org does not have any subscriptions with an available \"service-"
+#~ "level\"."
 #~ msgstr ""
 #~ "この組織には、利用できる \"service-level\" のあるサブスクリプションがあり"
 #~ "ません。"

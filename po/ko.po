@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-05 09:03+0200\n"
+"POT-Creation-Date: 2023-08-22 08:09+0200\n"
 "PO-Revision-Date: 2023-08-08 18:21+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
@@ -866,7 +866,9 @@ msgid "Unable to read consumer identity"
 msgstr "소비자 ID를 읽을 수 없습니다"
 
 #: src/dnf-plugins/subscription-manager.py:136
-msgid "Subscription Manager is operating in container mode."
+#, fuzzy
+#| msgid "Subscription Manager is operating in container mode."
+msgid "subscription-manager is operating in container mode."
 msgstr "서비스크립션 관리자는 컨테이너 모드에서 작동하고 있습니다."
 
 #: src/dnf-plugins/upload-profile.py:36
@@ -878,12 +880,12 @@ msgstr ""
 "에 업로드합니다"
 
 #: src/dnf-plugins/upload-profile.py:44
-#: src/subscription_manager/scripts/package_profile_upload.py:39
+#: src/subscription_manager/scripts/package_profile_upload.py:34
 msgid "Force package profile upload"
 msgstr "꾸러미 프로필 업로드 작업을 강제 실행합니다"
 
 #: src/dnf-plugins/upload-profile.py:60
-#: src/subscription_manager/scripts/package_profile_upload.py:46
+#: src/subscription_manager/scripts/package_profile_upload.py:41
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 "실행된 최신화가 없습니다. 보다 자세한 내용은 /var/log/rhsm/rhsm.log에서 참조"
@@ -1502,7 +1504,7 @@ msgid ""
 msgstr ""
 "경고: 최근 자격 서버 관리자가 이 시스템에 대해 {conflict_msg}를 설정했습니다."
 
-#: src/rhsmlib/dbus/objects/syspurpose.py:78
+#: src/rhsmlib/dbus/objects/syspurpose.py:76
 #, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
@@ -1995,7 +1997,7 @@ msgstr "잘못된 CA 인증서: {file}: {reason}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:47
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:223
 msgid "Your identity certificate has expired"
 msgstr "ID 인증서가 만료되었습니다"
 
@@ -3236,8 +3238,8 @@ msgid ""
 "with Red Hat to receive software updates and other benefits. You will need "
 "the following to register:"
 msgstr ""
-"다음에서는 소프트웨어 최신화 및 기타 혜택을 받기 위해 시스템을 Red Hat에 "
-"등록하는 절차에 대해 설명합니다. 등록하려면 다음과 같은 절차가 필요합니다:"
+"다음에서는 소프트웨어 최신화 및 기타 혜택을 받기 위해 시스템을 Red Hat에 등록"
+"하는 절차에 대해 설명합니다. 등록하려면 다음과 같은 절차가 필요합니다:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:53
@@ -3331,8 +3333,8 @@ msgid ""
 "Receive the latest software updates, including security updates, keeping "
 "this Red Hat Enterprise Linux system <b>updated</b> and <b>secure</b>."
 msgstr ""
-"보안 최신화가 포함된 최신 소프트웨어를 최신화하여 Red Hat Enterprise Linux "
-"시스템을 지속적으로 <b>최신화</b>하고 <b>보안</b>을 유지하시기 바랍니다."
+"보안 최신화가 포함된 최신 소프트웨어를 최신화하여 Red Hat Enterprise Linux 시"
+"스템을 지속적으로 <b>최신화</b>하고 <b>보안</b>을 유지하시기 바랍니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/data/glade/registration_info.glade:357
@@ -3418,7 +3420,8 @@ msgstr "manage_repositories_dialog"
 msgid ""
 "Manage the repositories your subscriptions grant you access to by enabling, "
 "disabling and overriding certain fields."
-msgstr "특정 필드를 활성화, 비활성화, 재정에 의해 서브스크립션을 통해 접근이 허용된 "
+msgstr ""
+"특정 필드를 활성화, 비활성화, 재정에 의해 서브스크립션을 통해 접근이 허용된 "
 "저장소를 관리합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -3663,8 +3666,9 @@ msgstr "register_notebook"
 msgid ""
 "This assistant will guide you through the process of registering your system "
 "with Red Hat to receive software updates and other benefits. "
-msgstr "다음에서는 소프트웨어 최신화 및 기타 혜택을 받기 위해 시스템을 Red Hat에 "
-"등록하는 절차에 대해 설명합니다. "
+msgstr ""
+"다음에서는 소프트웨어 최신화 및 기타 혜택을 받기 위해 시스템을 Red Hat에 등록"
+"하는 절차에 대해 설명합니다. "
 
 #: src/subscription_manager/gui/data/ui/registration_info.ui:64
 msgid " You will need the following to register:"
@@ -3899,7 +3903,8 @@ msgstr ""
 msgid ""
 "Error in repos dialog. Please see /var/log/rhsm/rhsm.log for more "
 "information."
-msgstr "저장소 대화에 오류가 발생했습니다. 자세한 내용은 /var/log/rhsm/rhsm.log에서 "
+msgstr ""
+"저장소 대화에 오류가 발생했습니다. 자세한 내용은 /var/log/rhsm/rhsm.log에서 "
 "참조하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -4152,8 +4157,8 @@ msgstr ""
 #: src/subscription_manager/gui/registergui.py:1340
 msgid ""
 "No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available Subscriptions"
-"\" tab or purchase additional subscriptions."
+"subscribe using multiple service levels via the \"All Available "
+"Subscriptions\" tab or purchase additional subscriptions."
 msgstr ""
 "설치된 모든 제품에 적용되는 서비스 레벨이 없습니다. \"사용 가능한 모든 서브스"
 "크립션\" 탭에서 여러 서비스 레벨을 사용하여 수동으로 등록하거나 추가 서브스크"
@@ -4676,9 +4681,13 @@ msgid ""
 msgstr "소비자 ID가 없거나 손상되었습니다. register --help를 사용해 보십시오"
 
 #: src/subscription_manager/managercli.py:412
+#, fuzzy
+#| msgid ""
+#| "subscription-manager is disabled when running inside a container. Please "
+#| "refer to your host system for subscription management.\n"
 msgid ""
-"subscription-manager is disabled when running inside a container. Please "
-"refer to your host system for subscription management.\n"
+"subscription-manager is operating in container mode. Use your host system to "
+"manage subscriptions.\n"
 msgstr ""
 "컨테이너 내부에서 실행하면 subscription-manager가 비활성화됩니다. 서브스크립"
 "션 관리의 경우 호스트 시스템에서 참조하십시오.\n"
@@ -6403,40 +6412,40 @@ msgstr "최신화됩니다"
 msgid "Deleted"
 msgstr "삭제됨"
 
-#: src/subscription_manager/scripts/package_profile_upload.py:38
+#: src/subscription_manager/scripts/package_profile_upload.py:33
 msgid "Upload a package profile"
 msgstr "꾸러미 프로파일을 적재합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/package_profile_upload.py:62
-#: src/subscription_manager/scripts/rct.py:56
-#: src/subscription_manager/scripts/rhsm_debug.py:74
+#: src/subscription_manager/scripts/package_profile_upload.py:57
+#: src/subscription_manager/scripts/rct.py:52
+#: src/subscription_manager/scripts/rhsm_debug.py:70
 msgid "User interrupted process."
 msgstr "사용자가 프로세스를 중단했습니다."
 
-#: src/subscription_manager/scripts/package_profile_upload.py:65
+#: src/subscription_manager/scripts/package_profile_upload.py:60
 #, python-format
 msgid "Error uploading package profile: %s\n"
 msgstr "꾸러미 프로파일 적재 중 오류 발생: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:204
 msgid "Updating entitlement certificates & repositories"
 msgstr "자격 인증서 & 저장소를 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:282
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "자격 인증서 및 저장소를 최신화 할 수 없음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author eukim
-#: src/subscription_manager/scripts/subscription_manager_gui.py:172
+#: src/subscription_manager/scripts/subscription_manager_gui.py:168
 #, python-format
 msgid "%s is already running"
 msgstr "%s가 이미 실행되고 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/subscription_manager_gui.py:180
+#: src/subscription_manager/scripts/subscription_manager_gui.py:176
 msgid "launches the registration dialog on startup"
 msgstr "시작 시 등록 대화 상자를 실행"
 
@@ -6964,8 +6973,8 @@ msgstr "Red Hat 서브스크립션 관리자"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid ""
-#~ "This org does not have any subscriptions with an available \"service-level"
-#~ "\"."
+#~ "This org does not have any subscriptions with an available \"service-"
+#~ "level\"."
 #~ msgstr "이 조직에는 사용 가능한 \"서비스-레벨\"에 서브스크립션이 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys

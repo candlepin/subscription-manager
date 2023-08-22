@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-05 09:03+0200\n"
+"POT-Creation-Date: 2023-08-22 08:09+0200\n"
 "PO-Revision-Date: 2015-09-25 03:38-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Malayalam\n"
@@ -974,7 +974,7 @@ msgid "Unable to read consumer identity"
 msgstr ""
 
 #: src/dnf-plugins/subscription-manager.py:136
-msgid "Subscription Manager is operating in container mode."
+msgid "subscription-manager is operating in container mode."
 msgstr ""
 
 #: src/dnf-plugins/upload-profile.py:36
@@ -984,12 +984,12 @@ msgid ""
 msgstr ""
 
 #: src/dnf-plugins/upload-profile.py:44
-#: src/subscription_manager/scripts/package_profile_upload.py:39
+#: src/subscription_manager/scripts/package_profile_upload.py:34
 msgid "Force package profile upload"
 msgstr ""
 
 #: src/dnf-plugins/upload-profile.py:60
-#: src/subscription_manager/scripts/package_profile_upload.py:46
+#: src/subscription_manager/scripts/package_profile_upload.py:41
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
@@ -1708,7 +1708,7 @@ msgid ""
 "entitlement server administrator."
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/syspurpose.py:78
+#: src/rhsmlib/dbus/objects/syspurpose.py:76
 #, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
@@ -2240,8 +2240,8 @@ msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
-"റിമോട്ട് സര്‍വര്‍ പിശക്്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍ കൂടുതല്‍ വിവരങ്ങള്‍"
-"ക്കായി/var/log/rhsm/rhsm.log കാണുക."
+"റിമോട്ട് സര്‍വര്‍ പിശക്്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍ കൂടുതല്‍ "
+"വിവരങ്ങള്‍ക്കായി/var/log/rhsm/rhsm.log കാണുക."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2254,7 +2254,7 @@ msgstr "തെറ്റായ സിഎ സര്‍ട്ടിഫിക്ക�
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/exceptions.py:47
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:223
 msgid "Your identity certificate has expired"
 msgstr "നിങ്ങളുടെ തിരിച്ചറിയല്‍ സര്‍ട്ടിഫിക്കേറ്റിന്റെ കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു."
 
@@ -3478,8 +3478,8 @@ msgid ""
 "<small>If enabled, subscriptions are attached for any uncovered products on "
 "a schedule (default of daily).</small>"
 msgstr ""
-"<small>പ്രവര്‍ത്തന സജ്ജമെങ്കില്‍, നിശ്ചിതസമയത്തു് (സ്വതവേ എന്നും) ആനുകൂല്യങ്ങളില്ലാത്ത ഏതു് ഉല്‍പന്നങ്ങള്‍"
-"ക്കും സബ്സ്ക്രിപ്ഷനുകള്‍ ഘടിപ്പിച്ചിരിയ്ക്കുന്നു.</small>"
+"<small>പ്രവര്‍ത്തന സജ്ജമെങ്കില്‍, നിശ്ചിതസമയത്തു് (സ്വതവേ എന്നും) ആനുകൂല്യങ്ങളില്ലാത്ത ഏതു് "
+"ഉല്‍പന്നങ്ങള്‍ക്കും സബ്സ്ക്രിപ്ഷനുകള്‍ ഘടിപ്പിച്ചിരിയ്ക്കുന്നു.</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3503,8 +3503,8 @@ msgid ""
 "<small>Your system's release preference is followed when installing and "
 "updating packages.</small>"
 msgstr ""
-"<small>പാക്കേജുകള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്യുമ്പോഴും പരിഷ്കരിയ്ക്കുമ്പോഴും നിങ്ങളുടെ സിസ്റ്റത്തിന്റെ മുന്‍"
-"ഗണനകള്‍ തുടരുന്നു.</small>"
+"<small>പാക്കേജുകള്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്യുമ്പോഴും പരിഷ്കരിയ്ക്കുമ്പോഴും നിങ്ങളുടെ സിസ്റ്റത്തിന്റെ "
+"മുന്‍ഗണനകള്‍ തുടരുന്നു.</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3828,8 +3828,8 @@ msgid ""
 "Manage subscriptions and systems registered to Customer Portal via access."
 "redhat.com or through one of our other subscription management services."
 msgstr ""
-"access.redhat.com അല്ലെങ്കില്‍ മറ്റൊരു സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വീസുകളിലൂടെ കസ്റ്റമര്‍ പോര്‍"
-"ട്ടലില്‍ രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്ന സബ്സ്ക്രിപ്ഷനുകളും സിസ്റ്റങ്ങളും കൈകാര്യം ചെയ്യുക."
+"access.redhat.com അല്ലെങ്കില്‍ മറ്റൊരു സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വീസുകളിലൂടെ കസ്റ്റമര്‍ "
+"പോര്‍ട്ടലില്‍ രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്ന സബ്സ്ക്രിപ്ഷനുകളും സിസ്റ്റങ്ങളും കൈകാര്യം ചെയ്യുക."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys, author anipeter
@@ -4649,8 +4649,8 @@ msgid ""
 "No installed products on system. No need to attach subscriptions at this "
 "time."
 msgstr ""
-"സിസ്റ്റത്തില്‍ ഒരു പ്രൊഡക്ടുകളും ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല. ഇപ്പോള്‍ സിസ്റ്റത്തിലേക്കു് സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍"
-"ക്കേണ്ടതില്ല."
+"സിസ്റ്റത്തില്‍ ഒരു പ്രൊഡക്ടുകളും ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല. ഇപ്പോള്‍ സിസ്റ്റത്തിലേക്കു് സബ്സ്ക്രിപ്ഷനുകള്‍ "
+"ചേര്‍ക്കേണ്ടതില്ല."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4659,8 +4659,8 @@ msgid ""
 "All installed products are covered by valid entitlements. No need to attach "
 "subscriptions at this time."
 msgstr ""
-"ഇന്‍സ്റ്റോള്‍ ചെയ്ത എല്ലാ പ്രൊഡക്ടുകള്‍ക്കും ശരിയായ എന്റൈറ്റില്‍മെന്റുകളുണ്ടു്. ഇപ്പോള്‍ സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍"
-"ക്കേണ്ടതില്ല."
+"ഇന്‍സ്റ്റോള്‍ ചെയ്ത എല്ലാ പ്രൊഡക്ടുകള്‍ക്കും ശരിയായ എന്റൈറ്റില്‍മെന്റുകളുണ്ടു്. ഇപ്പോള്‍ സബ്സ്ക്രിപ്ഷനുകള്‍ "
+"ചേര്‍ക്കേണ്ടതില്ല."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4683,14 +4683,14 @@ msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually attach subscriptions."
 msgstr ""
-"നിലവിലുള്ള സര്‍വീസ് ലവലില്‍ ഒരു സബ്സ്ക്രിപ്ഷനുകളും ലഭ്യമല്ല: %s. സ്വയമായി സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍"
-"ക്കുന്നതിനായി ദയവായി \"ലഭ്യായ എല്ലാ സബ്സ്ക്രിപ്ഷനുകളും\" എന്ന റ്റാബ് ഉപയോഗിയ്ക്കുക."
+"നിലവിലുള്ള സര്‍വീസ് ലവലില്‍ ഒരു സബ്സ്ക്രിപ്ഷനുകളും ലഭ്യമല്ല: %s. സ്വയമായി സബ്സ്ക്രിപ്ഷനുകള്‍ "
+"ചേര്‍ക്കുന്നതിനായി ദയവായി \"ലഭ്യായ എല്ലാ സബ്സ്ക്രിപ്ഷനുകളും\" എന്ന റ്റാബ് ഉപയോഗിയ്ക്കുക."
 
 #: src/subscription_manager/gui/registergui.py:1340
 msgid ""
 "No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available Subscriptions"
-"\" tab or purchase additional subscriptions."
+"subscribe using multiple service levels via the \"All Available "
+"Subscriptions\" tab or purchase additional subscriptions."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5275,9 +5275,13 @@ msgid ""
 msgstr ""
 
 #: src/subscription_manager/managercli.py:412
+#, fuzzy
+#| msgid ""
+#| "subscription-manager is disabled when running inside a container. Please "
+#| "refer to your host system for subscription management.\n"
 msgid ""
-"subscription-manager is disabled when running inside a container. Please "
-"refer to your host system for subscription management.\n"
+"subscription-manager is operating in container mode. Use your host system to "
+"manage subscriptions.\n"
 msgstr ""
 "ഒരു കണ്ടെയിനറില്‍ പ്രവര്‍ത്തിയ്ക്കുമ്പോള്‍ subscription-manager പ്രവര്‍ത്തന രഹിതമാക്കുന്നു. "
 "സബസ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റിന് ഹോസ്റ്റ് സിസ്റ്റം കാണുക.\n"
@@ -7198,45 +7202,45 @@ msgstr "പരിഷ്കരിച്ചിരിയ്ക്കുന്നു
 msgid "Deleted"
 msgstr "വെട്ടിനീക്കിയിരിയ്ക്കുന്നു"
 
-#: src/subscription_manager/scripts/package_profile_upload.py:38
+#: src/subscription_manager/scripts/package_profile_upload.py:33
 msgid "Upload a package profile"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/package_profile_upload.py:62
-#: src/subscription_manager/scripts/rct.py:56
-#: src/subscription_manager/scripts/rhsm_debug.py:74
+#: src/subscription_manager/scripts/package_profile_upload.py:57
+#: src/subscription_manager/scripts/rct.py:52
+#: src/subscription_manager/scripts/rhsm_debug.py:70
 msgid "User interrupted process."
 msgstr "ഉപയോക്താവു് തടസ്സപ്പെടുത്തിയ പ്രക്രിയ."
 
-#: src/subscription_manager/scripts/package_profile_upload.py:65
+#: src/subscription_manager/scripts/package_profile_upload.py:60
 #, python-format
 msgid "Error uploading package profile: %s\n"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:204
 msgid "Updating entitlement certificates & repositories"
 msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകളും റിപ്പോസിറ്ററികളും പരിഷ്കരിയ്ക്കുന്നു"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:282
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകളും റിപ്പോസിറ്ററികളും പരിഷ്കരിയ്ക്കുവാന്‍ സാധ്യമല്ല"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys, author anipeter
-#: src/subscription_manager/scripts/subscription_manager_gui.py:172
+#: src/subscription_manager/scripts/subscription_manager_gui.py:168
 #, python-format
 msgid "%s is already running"
 msgstr "%s പ്രവര്‍ത്തനത്തില്‍"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/subscription_manager_gui.py:180
+#: src/subscription_manager/scripts/subscription_manager_gui.py:176
 msgid "launches the registration dialog on startup"
 msgstr "ആരംഭത്തില്‍ രജിസ്ട്രേഷന്‍ ഡയലോഗ് ലഭ്യമാക്കുന്നു"
 
@@ -7612,8 +7616,8 @@ msgstr "Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജര
 #~ "Network error. Please check the connection details, or see /var/log/rhsm/"
 #~ "rhsm.log for more information."
 #~ msgstr ""
-#~ "നെറ്റ്‌വര്‍ക്ക് പിശക്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍ കൂടുതല്‍ വിവരങ്ങള്‍"
-#~ "ക്കായി /var/log/rhsm/rhsm.log കാണുക."
+#~ "നെറ്റ്‌വര്‍ക്ക് പിശക്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍ കൂടുതല്‍ "
+#~ "വിവരങ്ങള്‍ക്കായി /var/log/rhsm/rhsm.log കാണുക."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -7692,8 +7696,8 @@ msgstr "Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജര
 #~ "specify an organization when listing available service levels using the "
 #~ "organization key, only used with --list"
 #~ msgstr ""
-#~ "ലഭ്യമായ സര്‍വീസ് ലവലുകള്‍ സ്ഥാപത്തിനുള്ള കീ ഉപയോഗിച്ചു് ലഭ്യമാക്കുമ്പോള്‍, ഒരു സ്ഥാപനം നിഷ്കര്‍"
-#~ "ഷിയ്ക്കുക, --list-നൊപ്പം മാത്രം ഉപയോഗിയ്ക്കുന്നു"
+#~ "ലഭ്യമായ സര്‍വീസ് ലവലുകള്‍ സ്ഥാപത്തിനുള്ള കീ ഉപയോഗിച്ചു് ലഭ്യമാക്കുമ്പോള്‍, ഒരു സ്ഥാപനം "
+#~ "നിഷ്കര്‍ഷിയ്ക്കുക, --list-നൊപ്പം മാത്രം ഉപയോഗിയ്ക്കുന്നു"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -7709,8 +7713,8 @@ msgstr "Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജര
 #, fuzzy
 #~| msgid "This org does not have any subscriptions with service levels."
 #~ msgid ""
-#~ "This org does not have any subscriptions with an available \"service-level"
-#~ "\"."
+#~ "This org does not have any subscriptions with an available \"service-"
+#~ "level\"."
 #~ msgstr "സര്‍വീസ് ലവലുകളുള്ള ഒരു സബ്സ്ക്രിപ്ഷുകളും ഈ സ്ഥാപനത്തിനു് ലഭ്യമല്ല."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
