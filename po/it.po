@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 13:20+0200\n"
+"POT-Creation-Date: 2023-07-21 12:27+0200\n"
 "PO-Revision-Date: 2023-05-12 10:21+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
@@ -255,11 +255,11 @@ msgstr "Opzione non valida: %s\n"
 msgid "Invalid argument specified: %s\n"
 msgstr "Argomento non valido specificato: %s\n"
 
-#: src/plugins/dnf/product-id.py:77
+#: src/plugins/dnf/product_id.py:75
 msgid "Installed products updated."
 msgstr "Prodotti installati aggiornati."
 
-#: src/plugins/dnf/subscription-manager.py:35
+#: src/plugins/dnf/subscription_manager.py:35
 #, python-format
 msgid ""
 "\n"
@@ -281,7 +281,7 @@ msgstr ""
 "non si dispone di altre sottoscrizioni attive è possibile rinnovare la "
 "sottoscrizione scaduta.  "
 
-#: src/plugins/dnf/subscription-manager.py:46
+#: src/plugins/dnf/subscription_manager.py:46
 #, fuzzy
 #| msgid ""
 #| "This system is not registered to Red Hat Subscription Management. You can "
@@ -295,7 +295,7 @@ msgstr ""
 "Questo sistema non è registrato a Red Hat Subscription Management. È "
 "possibile utilizzare subscription-manager per effettuare la registrazione.\n"
 
-#: src/plugins/dnf/subscription-manager.py:52
+#: src/plugins/dnf/subscription_manager.py:52
 #, fuzzy
 #| msgid ""
 #| "This system is registered to Red Hat Subscription Management, but is not "
@@ -311,12 +311,12 @@ msgstr ""
 "ricevendo gli aggiornamenti. È possibile utilizzare subscription-manager per "
 "assegnare le sottoscrizioni.\n"
 
-#: src/plugins/dnf/subscription-manager.py:87
+#: src/plugins/dnf/subscription_manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 "Non si è root, i repository di Subscription Management non vengono aggiornati"
 
-#: src/plugins/dnf/subscription-manager.py:115
+#: src/plugins/dnf/subscription_manager.py:115
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
@@ -331,19 +331,21 @@ msgstr[1] ""
 "il plugin subscription-manager ha disabilitato %d repository di sistema "
 "seguendo la configurazione in /etc/dnf/plugins/subscription-manager.conf"
 
-#: src/plugins/dnf/subscription-manager.py:133
+#: src/plugins/dnf/subscription_manager.py:133
 msgid "Updating Subscription Management repositories."
 msgstr "Aggiornamento repository di Subscription Management."
 
-#: src/plugins/dnf/subscription-manager.py:138
+#: src/plugins/dnf/subscription_manager.py:138
 msgid "Unable to read consumer identity"
 msgstr "Impossibile leggere l'identità dell'utente"
 
-#: src/plugins/dnf/subscription-manager.py:141
-msgid "Subscription Manager is operating in container mode."
+#: src/plugins/dnf/subscription_manager.py:141
+#, fuzzy
+#| msgid "Subscription Manager is operating in container mode."
+msgid "subscription-manager is operating in container mode."
 msgstr "Subscription Manager sta funzionando in modalità per container."
 
-#: src/plugins/dnf/upload-profile.py:37
+#: src/plugins/dnf/upload_profile.py:37
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
@@ -351,12 +353,12 @@ msgstr ""
 "Invia il profilo combinato al server Satellite (lista degli RPM installati, "
 "dei repository e moduli abilitati)"
 
-#: src/plugins/dnf/upload-profile.py:49
+#: src/plugins/dnf/upload_profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
 msgid "Force package profile upload"
 msgstr "Forza l'invio del profilo di pacchetti"
 
-#: src/plugins/dnf/upload-profile.py:66
+#: src/plugins/dnf/upload_profile.py:66
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
@@ -902,14 +904,14 @@ msgstr "Certificato dell'identità"
 msgid "Unknown Certificate Type"
 msgstr "Tipo di certificato sconosciuto"
 
-#: src/rhsm/config.py:265
+#: src/rhsm/config.py:244
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
 msgstr ""
 "Livello di log non valido: {lvl}, viene impostato a INFO per questa "
 "esecuzione."
 
-#: src/rhsm/config.py:270
+#: src/rhsm/config.py:249
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
@@ -917,7 +919,7 @@ msgstr ""
 "Usare:  subscription-manager config --logging.default_log_level=<livello> "
 "per impostare default_log_level ad un valore valido."
 
-#: src/rhsm/config.py:276
+#: src/rhsm/config.py:255
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
 msgstr "Valori validi: {valid_str}"
@@ -1154,7 +1156,7 @@ msgstr "Scritto: {destination_dir_name}"
 msgid "Unable to create zip file of system information: {error}"
 msgstr "Impossibile creare il file zip con informazioni del sistema: {error}"
 
-#: src/rhsmlib/dbus/objects/register.py:104
+#: src/rhsmlib/dbus/objects/register.py:133
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
@@ -1162,12 +1164,12 @@ msgstr ""
 "L'utente %s è parte di più organizzazioni, ma non è stata selezionata alcuna "
 "organizzazione"
 
-#: src/rhsmlib/dbus/objects/register.py:120
+#: src/rhsmlib/dbus/objects/register.py:149
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr "L'utente %s non è parte di alcuna organizzazione"
 
-#: src/rhsmlib/dbus/objects/syspurpose.py:69
+#: src/rhsmlib/dbus/objects/syspurpose.py:73
 #, python-brace-format
 msgid ""
 "Warning: The following field was recently set for this system by the "
@@ -1178,7 +1180,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/rhsmlib/dbus/service_wrapper.py:47
+#: src/rhsmlib/dbus/service_wrapper.py:54
 #, python-brace-format
 msgid "Error: Unable to load bus '{name}'"
 msgstr "Errore: impossibile caricare il bus '{name}'"
@@ -1730,8 +1732,8 @@ msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
 msgstr ""
-"Impossibile recuperare la lista dei valori validi per lo scopo di sistema \""
-"{syspurpose_attr}\"."
+"Impossibile recuperare la lista dei valori validi per lo scopo di sistema "
+"\"{syspurpose_attr}\"."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:435
 msgid "Unable to connect to server using token"
@@ -2005,9 +2007,13 @@ msgstr ""
 "help"
 
 #: src/subscription_manager/cli_command/cli.py:267
+#, fuzzy
+#| msgid ""
+#| "subscription-manager is disabled when running inside a container. Please "
+#| "refer to your host system for subscription management.\n"
 msgid ""
-"subscription-manager is disabled when running inside a container. Please "
-"refer to your host system for subscription management.\n"
+"subscription-manager is operating in container mode. Use your host system to "
+"manage subscriptions.\n"
 msgstr ""
 "Se eseguito all'interno di un container subscription-manager risulterà "
 "disabilitato. Per la gestione delle sottoscrizioni usare il sistema host.\n"
@@ -2828,8 +2834,8 @@ msgid ""
 "No consumed subscription pools were found matching the service level "
 "\"{level}\"."
 msgstr ""
-"Nessun pool di sottoscrizione usato corrisponde al livello di servizio \""
-"{level}\"."
+"Nessun pool di sottoscrizione usato corrisponde al livello di servizio "
+"\"{level}\"."
 
 #: src/subscription_manager/cli_command/list.py:552
 msgid "No consumed subscription pools were found."
@@ -6485,8 +6491,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid ""
-#~ "This org does not have any subscriptions with an available \"service level"
-#~ "\"."
+#~ "This org does not have any subscriptions with an available \"service "
+#~ "level\"."
 #~ msgstr ""
 #~ "Questa organizzazione non ha alcuna sottoscrizione con un \"livello di "
 #~ "servizio\" disponibile."
