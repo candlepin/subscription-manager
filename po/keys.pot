@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-05 09:03+0200\n"
+"POT-Creation-Date: 2023-08-22 08:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -790,7 +790,7 @@ msgid "Unable to read consumer identity"
 msgstr ""
 
 #: src/dnf-plugins/subscription-manager.py:136
-msgid "Subscription Manager is operating in container mode."
+msgid "subscription-manager is operating in container mode."
 msgstr ""
 
 #: src/dnf-plugins/upload-profile.py:36
@@ -800,12 +800,12 @@ msgid ""
 msgstr ""
 
 #: src/dnf-plugins/upload-profile.py:44
-#: src/subscription_manager/scripts/package_profile_upload.py:39
+#: src/subscription_manager/scripts/package_profile_upload.py:34
 msgid "Force package profile upload"
 msgstr ""
 
 #: src/dnf-plugins/upload-profile.py:60
-#: src/subscription_manager/scripts/package_profile_upload.py:46
+#: src/subscription_manager/scripts/package_profile_upload.py:41
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
@@ -1319,7 +1319,7 @@ msgid ""
 "entitlement server administrator."
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/syspurpose.py:78
+#: src/rhsmlib/dbus/objects/syspurpose.py:76
 #, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
@@ -1729,7 +1729,7 @@ msgid "Bad CA certificate: {file}: {reason}"
 msgstr ""
 
 #: src/subscription_manager/exceptions.py:47
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:223
 msgid "Your identity certificate has expired"
 msgstr ""
 
@@ -3992,8 +3992,8 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:412
 msgid ""
-"subscription-manager is disabled when running inside a container. Please "
-"refer to your host system for subscription management.\n"
+"subscription-manager is operating in container mode. Use your host system to "
+"manage subscriptions.\n"
 msgstr ""
 
 #: src/subscription_manager/managercli.py:424
@@ -5452,35 +5452,35 @@ msgstr ""
 msgid "Deleted"
 msgstr ""
 
-#: src/subscription_manager/scripts/package_profile_upload.py:38
+#: src/subscription_manager/scripts/package_profile_upload.py:33
 msgid "Upload a package profile"
 msgstr ""
 
-#: src/subscription_manager/scripts/package_profile_upload.py:62
-#: src/subscription_manager/scripts/rct.py:56
-#: src/subscription_manager/scripts/rhsm_debug.py:74
+#: src/subscription_manager/scripts/package_profile_upload.py:57
+#: src/subscription_manager/scripts/rct.py:52
+#: src/subscription_manager/scripts/rhsm_debug.py:70
 msgid "User interrupted process."
 msgstr ""
 
-#: src/subscription_manager/scripts/package_profile_upload.py:65
+#: src/subscription_manager/scripts/package_profile_upload.py:60
 #, python-format
 msgid "Error uploading package profile: %s\n"
 msgstr ""
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:204
 msgid "Updating entitlement certificates & repositories"
 msgstr ""
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:282
 msgid "Unable to update entitlement certificates and repositories"
 msgstr ""
 
-#: src/subscription_manager/scripts/subscription_manager_gui.py:172
+#: src/subscription_manager/scripts/subscription_manager_gui.py:168
 #, python-format
 msgid "%s is already running"
 msgstr ""
 
-#: src/subscription_manager/scripts/subscription_manager_gui.py:180
+#: src/subscription_manager/scripts/subscription_manager_gui.py:176
 msgid "launches the registration dialog on startup"
 msgstr ""
 
