@@ -14,8 +14,8 @@ extend-exclude = [
 ]
 
 select = [
-    # "E",    # pycodestyle (errors)
-    # "W",    # pycodestyle (warnings)
+    "E",      # pycodestyle (errors)
+    "W",      # pycodestyle (warnings)
     # "F",    # pyflakes (formatting)
     # "I",    # imports (missing required import)
     # "UP",   # pyupgrade

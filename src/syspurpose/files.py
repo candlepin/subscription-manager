@@ -784,7 +784,7 @@ def detect_changed(base: dict, other: dict, key: str, source: str = "server") ->
         return bool(base_val)
 
     # Handle "addons" (the lists might be out of order from the server)
-    if type(base_val) == list and type(other_val) == list:
+    if type(base_val) is list and type(other_val) is list:
         return sorted(base_val) != sorted(other_val)
 
     # When value is removed from server, then it is set to empty string, but

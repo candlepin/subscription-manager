@@ -126,7 +126,7 @@ class AzureCloudProvider(BaseCloudProvider):
         found_microsoft = False
         found_azure = False
         for hw_item in self.hw_info.values():
-            if type(hw_item) != str:
+            if type(hw_item) is not str:
                 continue
             if "microsoft" in hw_item.lower():
                 found_microsoft = True
