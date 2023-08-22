@@ -6,19 +6,21 @@ on:
 
 jobs:
   stylish:
-    name: "black & flake8 & rpmlint"
+    name: "black & flake8 & ruff & rpmlint"
     runs-on: ubuntu-latest
     container:
       image: fedora:latest
 
     steps:
-    - name: Base setup
+    - name: Install testing packages
       run: |
         dnf --setopt install_weak_deps=False install -y \
             git-core \
             python3-flake8 \
             python3-pip \
             rpmlint
+        python3 -m pip install --upgrade pip wheel
+        python3 -m pip install ruff
 
     - uses: actions/checkout@v3
 
@@ -32,6 +34,10 @@ jobs:
     - name: Run flake8
       run: |
         flake8
+
+    - name: Run ruff
+      run: |
+        ruff src/ test/
 
     - name: Run rpmlint
       run: |
