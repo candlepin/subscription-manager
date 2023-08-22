@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-22 08:09+0200\n"
-"PO-Revision-Date: 2023-08-08 18:21+0000\n"
+"PO-Revision-Date: 2023-08-22 14:41+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
@@ -866,10 +866,8 @@ msgid "Unable to read consumer identity"
 msgstr "소비자 ID를 읽을 수 없습니다"
 
 #: src/dnf-plugins/subscription-manager.py:136
-#, fuzzy
-#| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
-msgstr "서비스크립션 관리자는 컨테이너 모드에서 작동하고 있습니다."
+msgstr "서비스크립션-관리자는 컨테이너 방식에서 작동하고 있습니다."
 
 #: src/dnf-plugins/upload-profile.py:36
 msgid ""
@@ -4681,16 +4679,11 @@ msgid ""
 msgstr "소비자 ID가 없거나 손상되었습니다. register --help를 사용해 보십시오"
 
 #: src/subscription_manager/managercli.py:412
-#, fuzzy
-#| msgid ""
-#| "subscription-manager is disabled when running inside a container. Please "
-#| "refer to your host system for subscription management.\n"
 msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
-msgstr ""
-"컨테이너 내부에서 실행하면 subscription-manager가 비활성화됩니다. 서브스크립"
-"션 관리의 경우 호스트 시스템에서 참조하십시오.\n"
+msgstr "서비스크립션-관리자는 컨테이너 방식에서 작동하고 있습니다. 자신의 호스트 "
+"시스템을 사용하여 서브스크립션을 관리하세요.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:424
