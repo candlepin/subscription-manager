@@ -225,7 +225,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.38
+Version: 1.28.39
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1381,6 +1381,27 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed Aug 23 2023 Pino Toscano <ptoscano@redhat.com> 1.28.39-1
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Update translation files (noreply@weblate.org)
+- 2225443: [1.28] Hotfix of D-Bus policy (jhnidek@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Translated using Weblate (Punjabi) (jsefler@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- [1.28] Update messaging around the "container mode" (#3310)
+  (34436146+grunwmar@users.noreply.github.com)
+- ENT-5624: Properly translate error strings (mhorky@redhat.com)
+- ENT-5610: Explicitly check for provided entitlement certificates
+  (mhorky@redhat.com)
+- Fix flake8 errors (mhorky@redhat.com)
+- Run flake8 and rpmlint on CI (mhorky@redhat.com)
+- Mock IOError for Insights fact collection tests (mhorky@redhat.com)
+- Collect GCP Project information as cloud facts (chambrid@redhat.com)
+- Collect Azure Subscription ID as a cloud fact (#3285) (chambrid@redhat.com)
+- Update cockpit test lib for Chromium 113 fix (martin@piware.de)
+- tests: repair attach cases in SCA mode (ptoscano@redhat.com)
+- 2091269: Make locking more reliable (jhnidek@redhat.com)
+
 * Wed May 17 2023 Pino Toscano <ptoscano@redhat.com> 1.28.38-1
 - Translated using Weblate (Italian) (toscano.pino@tiscali.it)
 - Update translation files (noreply@weblate.org)
