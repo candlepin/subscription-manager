@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 13:20+0200\n"
-"PO-Revision-Date: 2023-06-25 08:20+0000\n"
+"POT-Creation-Date: 2023-07-21 12:27+0200\n"
+"PO-Revision-Date: 2023-08-22 14:40+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -258,11 +258,11 @@ msgstr "잘못된 옵션: %s\n"
 msgid "Invalid argument specified: %s\n"
 msgstr "잘못된 인수가 지정됨: %s\n"
 
-#: src/plugins/dnf/product-id.py:77
+#: src/plugins/dnf/product_id.py:75
 msgid "Installed products updated."
 msgstr "설치된 제품이 최신화되었습니다."
 
-#: src/plugins/dnf/subscription-manager.py:35
+#: src/plugins/dnf/subscription_manager.py:35
 #, python-format
 msgid ""
 "\n"
@@ -282,7 +282,7 @@ msgstr ""
 "대한 최신화에 접근하려면 활성 서브스크립션이 필요합니다. 활성 서브스크립션이 "
 "없을 경우, 만료된 서브스크립션을 갱신 할 수 있습니다.  "
 
-#: src/plugins/dnf/subscription-manager.py:46
+#: src/plugins/dnf/subscription_manager.py:46
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
@@ -292,7 +292,7 @@ msgstr ""
 "이 시스템은 Red Hat 관리서버에 등록되어 있지 않습니다. subscription-manager"
 "를 사용하여 등록 할 수 있습니다.\n"
 
-#: src/plugins/dnf/subscription-manager.py:52
+#: src/plugins/dnf/subscription_manager.py:52
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
@@ -302,11 +302,11 @@ msgstr ""
 "이 시스템은 자격 서버로 등록되어 있지만, 최신화를 받지 않습니다. "
 "subscription-manager를 사용하여 서브스크립션을 할당 할 수 있습니다.\n"
 
-#: src/plugins/dnf/subscription-manager.py:87
+#: src/plugins/dnf/subscription_manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
 msgstr "root가 아니며, 서브스크립션 관리 저장소가 최신화되지 않습니다"
 
-#: src/plugins/dnf/subscription-manager.py:115
+#: src/plugins/dnf/subscription_manager.py:115
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
@@ -318,31 +318,32 @@ msgstr[0] ""
 "subscription-manager 플러그인이 /etc/dnf/plugins/subscription-manager.conf의 "
 "구성과 관련된 %d 시스템 저장소를 비활성화했습니다"
 
-#: src/plugins/dnf/subscription-manager.py:133
+#: src/plugins/dnf/subscription_manager.py:133
 msgid "Updating Subscription Management repositories."
 msgstr "서브스크립션 관리 저장소를 최신화하기."
 
-#: src/plugins/dnf/subscription-manager.py:138
+#: src/plugins/dnf/subscription_manager.py:138
 msgid "Unable to read consumer identity"
 msgstr "소비자 ID를 읽을 수 없습니다"
 
-#: src/plugins/dnf/subscription-manager.py:141
-msgid "Subscription Manager is operating in container mode."
-msgstr "서비스크립션 관리자는 컨테이너 모드에서 작동하고 있습니다."
+#: src/plugins/dnf/subscription_manager.py:141
+msgid "subscription-manager is operating in container mode."
+msgstr "서비스크립션-관리자는 컨테이너 방식에서 작동하고 있습니다."
 
-#: src/plugins/dnf/upload-profile.py:37
+#: src/plugins/dnf/upload_profile.py:37
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
-msgstr "결합된 프로파일을 Satellite 서버 (설치된 RPM, 활성화된 저장소 및 모듈 목록)"
+msgstr ""
+"결합된 프로파일을 Satellite 서버 (설치된 RPM, 활성화된 저장소 및 모듈 목록)"
 "에 업로드합니다"
 
-#: src/plugins/dnf/upload-profile.py:49
+#: src/plugins/dnf/upload_profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
 msgid "Force package profile upload"
 msgstr "꾸러미 프로필 업로드 작업을 강제 실행합니다"
 
-#: src/plugins/dnf/upload-profile.py:66
+#: src/plugins/dnf/upload_profile.py:66
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
@@ -880,12 +881,12 @@ msgstr "ID 인증서"
 msgid "Unknown Certificate Type"
 msgstr "알 수 없는 인증서 유형"
 
-#: src/rhsm/config.py:265
+#: src/rhsm/config.py:244
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
 msgstr "잘못된 로그 레벨: {lvl}, 이와 같은 실행을 위해 INFO로 설정합니다."
 
-#: src/rhsm/config.py:270
+#: src/rhsm/config.py:249
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
@@ -893,7 +894,7 @@ msgstr ""
 "사용해 주세요:  subscription-manager config --logging.default_log_level=<Log "
 "Level>는 default_log_level을 유효한 값으로 설정합니다."
 
-#: src/rhsm/config.py:276
+#: src/rhsm/config.py:255
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
 msgstr "유효 값: {valid_str}"
@@ -1122,18 +1123,18 @@ msgstr "작성됨: {destination_dir_name}"
 msgid "Unable to create zip file of system information: {error}"
 msgstr "시스템 정보의 zip 파일을 생성할 수 없음: {error}"
 
-#: src/rhsmlib/dbus/objects/register.py:104
+#: src/rhsmlib/dbus/objects/register.py:133
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr "사용자 %s은(는) 더 많은 조직의 멤버이지만, 조직이 선택되지 않았습니다"
 
-#: src/rhsmlib/dbus/objects/register.py:120
+#: src/rhsmlib/dbus/objects/register.py:149
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr "사용자 %s은(는) 조직의 멤버가 아닙니다"
 
-#: src/rhsmlib/dbus/objects/syspurpose.py:69
+#: src/rhsmlib/dbus/objects/syspurpose.py:73
 #, python-brace-format
 msgid ""
 "Warning: The following field was recently set for this system by the "
@@ -1145,7 +1146,7 @@ msgstr[0] ""
 "경고: 최근 인타이틀먼트 서버 관리자가 다음 필드를 이 시스템에 설정했습니다: "
 "{conflict_msg}"
 
-#: src/rhsmlib/dbus/service_wrapper.py:47
+#: src/rhsmlib/dbus/service_wrapper.py:54
 #, python-brace-format
 msgid "Error: Unable to load bus '{name}'"
 msgstr "오류: bus '{name}'을 적재 할 수 없음"
@@ -1155,8 +1156,9 @@ msgstr "오류: bus '{name}'을 적재 할 수 없음"
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{date})"
-msgstr "입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 "
-"주십시오. (예: {date})"
+msgstr ""
+"입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 주십시"
+"오. (예: {date})"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:57
@@ -1840,7 +1842,7 @@ msgstr "서비스 레벨 설정: {}"
 
 #: src/subscription_manager/cli_command/attach.py:280
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
-msgstr "다음과 같은 이유로 인타이틀먼트 인증서 업데이트에 실패했습니다:"
+msgstr "다음과 같은 이유로 자격 인증서 최신화에 실패했습니다:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/autoheal.py:27
@@ -1943,11 +1945,10 @@ msgstr "소비자 ID가 없거나 손상되었습니다. register --help를 사�
 
 #: src/subscription_manager/cli_command/cli.py:267
 msgid ""
-"subscription-manager is disabled when running inside a container. Please "
-"refer to your host system for subscription management.\n"
-msgstr ""
-"컨테이너 내부에서 실행하면 subscription-manager가 비활성화됩니다. 서브스크립"
-"션 관리의 경우 호스트 시스템에서 참조하십시오.\n"
+"subscription-manager is operating in container mode. Use your host system to "
+"manage subscriptions.\n"
+msgstr "서비스크립션-관리자는 컨테이너 방식에서 작동하고 있습니다. 자신의 호스트 "
+"시스템을 사용하여 서브스크립션을 관리하세요.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:282
@@ -2143,7 +2144,7 @@ msgstr[0] "해당 환경이 없음: {names}"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/facts.py:32
 msgid "View or update the detected system information"
-msgstr "검색된 시스템 정보를 표시하거나 업데이트"
+msgstr "검색된 시스템 정보를 보거나 최신화합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/facts.py:38
@@ -2153,7 +2154,7 @@ msgstr "이 시스템의 알려진 정보를 나열"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/facts.py:43
 msgid "update the system facts"
-msgstr "시스템 정보 업데이트"
+msgstr "시스템 정보 최신화"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/facts.py:80
@@ -3585,7 +3586,7 @@ msgstr[0] "%s 로컬 인증서가 삭제되었습니다."
 #: src/subscription_manager/entcertlib.py:452
 #, python-format
 msgid "Total updates: %d"
-msgstr "모든 업데이트: %d"
+msgstr "총 최신화: %d"
 
 #: src/subscription_manager/entcertlib.py:453
 #, python-format
@@ -3774,8 +3775,9 @@ msgid ""
 msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
-msgstr[0] "서버 속도 제한을 초과했습니다. 나중에 다시 시도하십시오. ( {time} 초 후에 "
-"만료됩니다)"
+msgstr[0] ""
+"서버 속도 제한을 초과했습니다. 나중에 다시 시도하십시오. ( {time} 초 후에 만"
+"료됩니다)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/i18n_argparse.py:50
@@ -3794,7 +3796,7 @@ msgstr "제거됨:"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:140
 msgid "Updates:"
-msgstr "업데이트:"
+msgstr "최신화:"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:144
 msgid "Deleted:"
@@ -6286,8 +6288,8 @@ msgstr "경고: 제공된 키 \"{key}\"는 유효 키 목록에 포함되지 않
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid ""
-#~ "This org does not have any subscriptions with an available \"service level"
-#~ "\"."
+#~ "This org does not have any subscriptions with an available \"service "
+#~ "level\"."
 #~ msgstr ""
 #~ "이 조직에는 이용 가능한 “서비스 레벨”이 있는 서브스크립션이 없습니다."
 

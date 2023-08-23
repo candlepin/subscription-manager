@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 13:20+0200\n"
+"POT-Creation-Date: 2023-07-21 12:27+0200\n"
 "PO-Revision-Date: 2023-01-25 22:20+0000\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Kannada <https://translate.fedoraproject.org/projects/"
@@ -291,11 +291,11 @@ msgstr "ಅಮಾನ್ಯವಾದ ಆಯ್ಕೆ: %s\n"
 msgid "Invalid argument specified: %s\n"
 msgstr "ಅಸಿಂಧುವಾದ ಆರ್ಗ್ಯುಮೆಂಟ್‌ ಅನ್ನು ಸೂಚಿಸಲಾಗಿದೆ: %s\n"
 
-#: src/plugins/dnf/product-id.py:77
+#: src/plugins/dnf/product_id.py:75
 msgid "Installed products updated."
 msgstr ""
 
-#: src/plugins/dnf/subscription-manager.py:35
+#: src/plugins/dnf/subscription_manager.py:35
 #, python-format
 msgid ""
 "\n"
@@ -310,7 +310,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/plugins/dnf/subscription-manager.py:46
+#: src/plugins/dnf/subscription_manager.py:46
 #, fuzzy
 #| msgid ""
 #| "This system is registered using both RHN Classic and Red Hat Subscription "
@@ -325,7 +325,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/plugins/dnf/subscription-manager.py:52
+#: src/plugins/dnf/subscription_manager.py:52
 #, fuzzy
 #| msgid ""
 #| "This system is registered using both RHN Classic and Red Hat Subscription "
@@ -338,11 +338,11 @@ msgstr ""
 "ಈ ವ್ಯವಸ್ಥೆಯನ್ನು RHN Classic ಮತ್ತು Red Hat ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾವನ್ನು ಬಳಸಿಕೊಂಡು "
 "ನೋಂದಾಯಿಸಲಾಗಿದೆ."
 
-#: src/plugins/dnf/subscription-manager.py:87
+#: src/plugins/dnf/subscription_manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 
-#: src/plugins/dnf/subscription-manager.py:115
+#: src/plugins/dnf/subscription_manager.py:115
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
@@ -353,30 +353,30 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/plugins/dnf/subscription-manager.py:133
+#: src/plugins/dnf/subscription_manager.py:133
 msgid "Updating Subscription Management repositories."
 msgstr ""
 
-#: src/plugins/dnf/subscription-manager.py:138
+#: src/plugins/dnf/subscription_manager.py:138
 msgid "Unable to read consumer identity"
 msgstr ""
 
-#: src/plugins/dnf/subscription-manager.py:141
-msgid "Subscription Manager is operating in container mode."
+#: src/plugins/dnf/subscription_manager.py:141
+msgid "subscription-manager is operating in container mode."
 msgstr ""
 
-#: src/plugins/dnf/upload-profile.py:37
+#: src/plugins/dnf/upload_profile.py:37
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
 msgstr ""
 
-#: src/plugins/dnf/upload-profile.py:49
+#: src/plugins/dnf/upload_profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
 msgid "Force package profile upload"
 msgstr ""
 
-#: src/plugins/dnf/upload-profile.py:66
+#: src/plugins/dnf/upload_profile.py:66
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
@@ -1023,18 +1023,18 @@ msgstr "ಗುರುತು ಪ್ರಮಾಣಪತ್ರ"
 msgid "Unknown Certificate Type"
 msgstr "ಅಜ್ಞಾತ ಪ್ರಮಾಣಪತ್ರದ ಬಗೆ"
 
-#: src/rhsm/config.py:265
+#: src/rhsm/config.py:244
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
 msgstr ""
 
-#: src/rhsm/config.py:270
+#: src/rhsm/config.py:249
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
 
-#: src/rhsm/config.py:276
+#: src/rhsm/config.py:255
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
 msgstr ""
@@ -1336,18 +1336,18 @@ msgstr ""
 msgid "Unable to create zip file of system information: {error}"
 msgstr "ವ್ಯವಸ್ಥೆಯ ಮಾಹಿತಿಯ ಜಿಪ್ ಕಡತವನ್ನು ರಚಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ: %s"
 
-#: src/rhsmlib/dbus/objects/register.py:104
+#: src/rhsmlib/dbus/objects/register.py:133
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/register.py:120
+#: src/rhsmlib/dbus/objects/register.py:149
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/syspurpose.py:69
+#: src/rhsmlib/dbus/objects/syspurpose.py:73
 #, python-brace-format
 msgid ""
 "Warning: The following field was recently set for this system by the "
@@ -1358,7 +1358,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/rhsmlib/dbus/service_wrapper.py:47
+#: src/rhsmlib/dbus/service_wrapper.py:54
 #, python-brace-format
 msgid "Error: Unable to load bus '{name}'"
 msgstr ""
@@ -2222,9 +2222,13 @@ msgid ""
 msgstr ""
 
 #: src/subscription_manager/cli_command/cli.py:267
+#, fuzzy
+#| msgid ""
+#| "subscription-manager is disabled when running inside a container. Please "
+#| "refer to your host system for subscription management.\n"
 msgid ""
-"subscription-manager is disabled when running inside a container. Please "
-"refer to your host system for subscription management.\n"
+"subscription-manager is operating in container mode. Use your host system to "
+"manage subscriptions.\n"
 msgstr ""
 "ಒಂದು ಕಂಟೇನರಿನ ಒಳಗೆ ಚಲಾಯಿಸುವಾಗ subscription-manager ಅನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ. "
 "ದಯವಿಟ್ಟು ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನೆಗಾಗಿ ನಿಮ್ಮ ಆತಿಥೇಯ ವ್ಯವಸ್ಥೆಯನ್ನು ಸಂಪರ್ಕಿಸಿ.\n"
@@ -3134,8 +3138,8 @@ msgstr ""
 #: src/subscription_manager/cli_command/list.py:484
 #, fuzzy, python-brace-format
 #| msgid ""
-#| "No available subscription pools were found matching the service level \"%s"
-#| "\"."
+#| "No available subscription pools were found matching the service level "
+#| "\"%s\"."
 msgid ""
 "No available subscription pools were found matching the service level "
 "\"{level}\"."
@@ -3181,8 +3185,8 @@ msgstr ""
 #: src/subscription_manager/cli_command/list.py:548
 #, fuzzy, python-brace-format
 #| msgid ""
-#| "No consumed subscription pools were found matching the service level \"%s"
-#| "\"."
+#| "No consumed subscription pools were found matching the service level "
+#| "\"%s\"."
 msgid ""
 "No consumed subscription pools were found matching the service level "
 "\"{level}\"."
@@ -6920,8 +6924,8 @@ msgstr ""
 #, fuzzy
 #~| msgid "This org does not have any subscriptions with service levels."
 #~ msgid ""
-#~ "This org does not have any subscriptions with an available \"service level"
-#~ "\"."
+#~ "This org does not have any subscriptions with an available \"service "
+#~ "level\"."
 #~ msgstr "ಈ ಸಂಸ್ಥೆಯು ಸೇವೆಯ ಮಟ್ಟಗಳಲ್ಲಿ ಯಾವುದೆ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಹೊಂದಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,

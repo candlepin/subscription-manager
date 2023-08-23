@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 13:20+0200\n"
+"POT-Creation-Date: 2023-07-21 12:27+0200\n"
 "PO-Revision-Date: 2023-05-09 12:20+0000\n"
 "Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
@@ -259,11 +259,11 @@ msgstr "無効なオプション: %s\n"
 msgid "Invalid argument specified: %s\n"
 msgstr "無効な引数が指定されています: %s\n"
 
-#: src/plugins/dnf/product-id.py:77
+#: src/plugins/dnf/product_id.py:75
 msgid "Installed products updated."
 msgstr "インストール済みの製品が更新されています。"
 
-#: src/plugins/dnf/subscription-manager.py:35
+#: src/plugins/dnf/subscription_manager.py:35
 #, python-format
 msgid ""
 "\n"
@@ -284,7 +284,7 @@ msgstr ""
 "プションを適用する必要があります。他にアクティブなサブスクリプションがない場"
 "合は、有効期限の切れたサブスクリプションを更新してください。  "
 
-#: src/plugins/dnf/subscription-manager.py:46
+#: src/plugins/dnf/subscription_manager.py:46
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
@@ -294,7 +294,7 @@ msgstr ""
 "このシステムは、エンタイトルメントサーバーに登録されていません。subscription-"
 "manager で登録できます。\n"
 
-#: src/plugins/dnf/subscription-manager.py:52
+#: src/plugins/dnf/subscription_manager.py:52
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
@@ -305,12 +305,12 @@ msgstr ""
 "いません。subscription-manager でサブスクリプションを割り当てることができま"
 "す。\n"
 
-#: src/plugins/dnf/subscription-manager.py:87
+#: src/plugins/dnf/subscription_manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 "root ではありません。サブスクリプション管理リポジトリーは更新されていません"
 
-#: src/plugins/dnf/subscription-manager.py:115
+#: src/plugins/dnf/subscription_manager.py:115
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
@@ -322,32 +322,34 @@ msgstr[0] ""
 "subscription-manager プラグインは /etc/dnf/plugins/subscription-manager.conf "
 "の設定を参照して %d システムリポジトリーを無効にします"
 
-#: src/plugins/dnf/subscription-manager.py:133
+#: src/plugins/dnf/subscription_manager.py:133
 msgid "Updating Subscription Management repositories."
 msgstr "サブスクリプション管理リポジトリーを更新しています。"
 
-#: src/plugins/dnf/subscription-manager.py:138
+#: src/plugins/dnf/subscription_manager.py:138
 msgid "Unable to read consumer identity"
 msgstr "コンシューマー識別子を読み込めません"
 
-#: src/plugins/dnf/subscription-manager.py:141
-msgid "Subscription Manager is operating in container mode."
+#: src/plugins/dnf/subscription_manager.py:141
+#, fuzzy
+#| msgid "Subscription Manager is operating in container mode."
+msgid "subscription-manager is operating in container mode."
 msgstr "サブスクリプションマネージャーがコンテナーモードで動作しています。"
 
-#: src/plugins/dnf/upload-profile.py:37
+#: src/plugins/dnf/upload_profile.py:37
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
 msgstr ""
-"結合されたプロファイルを Satellite サーバーにアップロードします ("
-"インストール済みの RPM、有効なリポジトリーとモジュールのリスト)"
+"結合されたプロファイルを Satellite サーバーにアップロードします (インストール"
+"済みの RPM、有効なリポジトリーとモジュールのリスト)"
 
-#: src/plugins/dnf/upload-profile.py:49
+#: src/plugins/dnf/upload_profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
 msgid "Force package profile upload"
 msgstr "パッケージプロファイルのアップロードを強制します"
 
-#: src/plugins/dnf/upload-profile.py:66
+#: src/plugins/dnf/upload_profile.py:66
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
@@ -889,12 +891,12 @@ msgstr "識別証明書"
 msgid "Unknown Certificate Type"
 msgstr "不明な証明書タイプ"
 
-#: src/rhsm/config.py:265
+#: src/rhsm/config.py:244
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
 msgstr "無効なログレベル: {lvl}、この実行では INFO に設定します。"
 
-#: src/rhsm/config.py:270
+#: src/rhsm/config.py:249
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
@@ -902,7 +904,7 @@ msgstr ""
 "使用: subscription-manager config --logging.default_log_level=<Log Level> を"
 "使用して default_log_level を有効な値に設定してください。"
 
-#: src/rhsm/config.py:276
+#: src/rhsm/config.py:255
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
 msgstr "有効な値: {valid_str}"
@@ -1126,19 +1128,19 @@ msgstr "書き込み済み: {destination_dir_name}"
 msgid "Unable to create zip file of system information: {error}"
 msgstr "システム情報の zip ファイルを作成できません: {error}"
 
-#: src/rhsmlib/dbus/objects/register.py:104
+#: src/rhsmlib/dbus/objects/register.py:133
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
 "ユーザー %s はより多くの組織に所属していますが、選択された組織はありません"
 
-#: src/rhsmlib/dbus/objects/register.py:120
+#: src/rhsmlib/dbus/objects/register.py:149
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr "ユーザー %s は、いかなる組織のメンバーでもありません"
 
-#: src/rhsmlib/dbus/objects/syspurpose.py:69
+#: src/rhsmlib/dbus/objects/syspurpose.py:73
 #, python-brace-format
 msgid ""
 "Warning: The following field was recently set for this system by the "
@@ -1150,7 +1152,7 @@ msgstr[0] ""
 "警告: 以下のフィールドは、エンタイトルメントサーバー管理者によってこのシステ"
 "ムに最近設定されました: {conflict_msg}"
 
-#: src/rhsmlib/dbus/service_wrapper.py:47
+#: src/rhsmlib/dbus/service_wrapper.py:54
 #, python-brace-format
 msgid "Error: Unable to load bus '{name}'"
 msgstr "エラー: バス '{name}' をロードできません"
@@ -1160,7 +1162,8 @@ msgstr "エラー: バス '{name}' をロードできません"
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{date})"
-msgstr "入力した日付は無効です。日付は YYYY-MM-DD の形式にしてください (例: {date})"
+msgstr ""
+"入力した日付は無効です。日付は YYYY-MM-DD の形式にしてください (例: {date})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rhsmlib/services/entitlement.py:57
@@ -1235,8 +1238,8 @@ msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
 msgstr ""
-"エラー: 無効な一覧表示タイプが指定されました。\"installed\"、\"consumed"
-"\"、\"available\" だけが利用できます"
+"エラー: 無効な一覧表示タイプが指定されまし"
+"た。\"installed\"、\"consumed\"、\"available\" だけが利用できます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:497
@@ -1969,9 +1972,13 @@ msgstr ""
 "ください"
 
 #: src/subscription_manager/cli_command/cli.py:267
+#, fuzzy
+#| msgid ""
+#| "subscription-manager is disabled when running inside a container. Please "
+#| "refer to your host system for subscription management.\n"
 msgid ""
-"subscription-manager is disabled when running inside a container. Please "
-"refer to your host system for subscription management.\n"
+"subscription-manager is operating in container mode. Use your host system to "
+"manage subscriptions.\n"
 msgstr ""
 "subscription-manager は、コンテナー内部で実行すると無効になります。サブスクリ"
 "プション管理についてはホストのシステムを参照してください。\n"
@@ -3825,8 +3832,9 @@ msgid ""
 msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
-msgstr[0] "サーバーレートの制限を超えました。後で再試行してください。({time} "
-"秒後に期限が切れます)"
+msgstr[0] ""
+"サーバーレートの制限を超えました。後で再試行してください。({time} 秒後に期限"
+"が切れます)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:50
@@ -6330,8 +6338,8 @@ msgstr "警告: 指定された値 \"{key}\" は有効なキーのリストに�
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid ""
-#~ "This org does not have any subscriptions with an available \"service level"
-#~ "\"."
+#~ "This org does not have any subscriptions with an available \"service "
+#~ "level\"."
 #~ msgstr ""
 #~ "この組織には、利用できる \"service level\" のあるサブスクリプションがあり"
 #~ "ません。"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-02 13:20+0200\n"
+"POT-Creation-Date: 2023-07-21 12:27+0200\n"
 "PO-Revision-Date: 2021-08-10 19:35+0000\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/"
@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.7.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
@@ -272,11 +272,11 @@ msgstr "Недопустимый параметр: %s\n"
 msgid "Invalid argument specified: %s\n"
 msgstr "Неверный аргумент: %s\n"
 
-#: src/plugins/dnf/product-id.py:77
+#: src/plugins/dnf/product_id.py:75
 msgid "Installed products updated."
 msgstr "Установленные продукты обновлены."
 
-#: src/plugins/dnf/subscription-manager.py:35
+#: src/plugins/dnf/subscription_manager.py:35
 #, python-format
 msgid ""
 "\n"
@@ -297,7 +297,7 @@ msgstr ""
 "требуется активная подписка. Если у вас нет других активных подписок, вы "
 "можете продлить просроченную.  "
 
-#: src/plugins/dnf/subscription-manager.py:46
+#: src/plugins/dnf/subscription_manager.py:46
 #, fuzzy
 #| msgid ""
 #| "This system is not registered to Red Hat Subscription Management. You can "
@@ -310,7 +310,7 @@ msgstr ""
 "Система не зарегистрирована в службе управления подписками Red Hat. "
 "Используйте subscription-manager для регистрации."
 
-#: src/plugins/dnf/subscription-manager.py:52
+#: src/plugins/dnf/subscription_manager.py:52
 #, fuzzy
 #| msgid ""
 #| "This system is registered to Red Hat Subscription Management, but is not "
@@ -325,12 +325,12 @@ msgstr ""
 "получает обновления. Используйте subscription-manager для назначения "
 "подписок."
 
-#: src/plugins/dnf/subscription-manager.py:87
+#: src/plugins/dnf/subscription_manager.py:87
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 "Не пользователь root, репозитории службы управления подписками не обновлены"
 
-#: src/plugins/dnf/subscription-manager.py:115
+#: src/plugins/dnf/subscription_manager.py:115
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
@@ -342,30 +342,32 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/plugins/dnf/subscription-manager.py:133
+#: src/plugins/dnf/subscription_manager.py:133
 msgid "Updating Subscription Management repositories."
 msgstr "Обновление репозиториев службы управления подписками."
 
-#: src/plugins/dnf/subscription-manager.py:138
+#: src/plugins/dnf/subscription_manager.py:138
 msgid "Unable to read consumer identity"
 msgstr "Невозможно прочитать идентификатор клиента"
 
-#: src/plugins/dnf/subscription-manager.py:141
-msgid "Subscription Manager is operating in container mode."
+#: src/plugins/dnf/subscription_manager.py:141
+#, fuzzy
+#| msgid "Subscription Manager is operating in container mode."
+msgid "subscription-manager is operating in container mode."
 msgstr "Менеджер подписок работает в режиме контейнера."
 
-#: src/plugins/dnf/upload-profile.py:37
+#: src/plugins/dnf/upload_profile.py:37
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
 msgstr ""
 
-#: src/plugins/dnf/upload-profile.py:49
+#: src/plugins/dnf/upload_profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
 msgid "Force package profile upload"
 msgstr ""
 
-#: src/plugins/dnf/upload-profile.py:66
+#: src/plugins/dnf/upload_profile.py:66
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
@@ -914,18 +916,18 @@ msgstr "Сертификат удостоверения"
 msgid "Unknown Certificate Type"
 msgstr "Неизвестный тип сертификата"
 
-#: src/rhsm/config.py:265
+#: src/rhsm/config.py:244
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
 msgstr ""
 
-#: src/rhsm/config.py:270
+#: src/rhsm/config.py:249
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
 
-#: src/rhsm/config.py:276
+#: src/rhsm/config.py:255
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
 msgstr ""
@@ -1206,18 +1208,18 @@ msgstr ""
 msgid "Unable to create zip file of system information: {error}"
 msgstr "Не удалось создать zip: %s"
 
-#: src/rhsmlib/dbus/objects/register.py:104
+#: src/rhsmlib/dbus/objects/register.py:133
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/register.py:120
+#: src/rhsmlib/dbus/objects/register.py:149
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/syspurpose.py:69
+#: src/rhsmlib/dbus/objects/syspurpose.py:73
 #, python-brace-format
 msgid ""
 "Warning: The following field was recently set for this system by the "
@@ -1229,7 +1231,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/rhsmlib/dbus/service_wrapper.py:47
+#: src/rhsmlib/dbus/service_wrapper.py:54
 #, python-brace-format
 msgid "Error: Unable to load bus '{name}'"
 msgstr ""
@@ -2039,9 +2041,13 @@ msgstr ""
 "Попробуйте  register --help"
 
 #: src/subscription_manager/cli_command/cli.py:267
+#, fuzzy
+#| msgid ""
+#| "subscription-manager is disabled when running inside a container. Please "
+#| "refer to your host system for subscription management.\n"
 msgid ""
-"subscription-manager is disabled when running inside a container. Please "
-"refer to your host system for subscription management.\n"
+"subscription-manager is operating in container mode. Use your host system to "
+"manage subscriptions.\n"
 msgstr ""
 "В контейнере subscription-manager отключается. Используйте инструменты "
 "управления подписками его хост-системы.\n"
@@ -2843,8 +2849,8 @@ msgstr "Нет результатов для «%s»"
 #: src/subscription_manager/cli_command/list.py:484
 #, fuzzy, python-brace-format
 #| msgid ""
-#| "No available subscription pools were found matching the service level \"%s"
-#| "\"."
+#| "No available subscription pools were found matching the service level "
+#| "\"%s\"."
 msgid ""
 "No available subscription pools were found matching the service level "
 "\"{level}\"."
@@ -2884,8 +2890,8 @@ msgstr "Нет результатов для «%s»"
 #: src/subscription_manager/cli_command/list.py:548
 #, fuzzy, python-brace-format
 #| msgid ""
-#| "No consumed subscription pools were found matching the service level \"%s"
-#| "\"."
+#| "No consumed subscription pools were found matching the service level "
+#| "\"%s\"."
 msgid ""
 "No consumed subscription pools were found matching the service level "
 "\"{level}\"."
@@ -6429,8 +6435,8 @@ msgstr ""
 #, fuzzy
 #~| msgid "This org does not have any subscriptions with service levels."
 #~ msgid ""
-#~ "This org does not have any subscriptions with an available \"service level"
-#~ "\"."
+#~ "This org does not have any subscriptions with an available \"service "
+#~ "level\"."
 #~ msgstr "В организации нет подписок с уровнями обслуживания."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
