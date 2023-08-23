@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-05 09:03+0200\n"
+"POT-Creation-Date: 2023-08-22 08:09+0200\n"
 "PO-Revision-Date: 2015-09-25 03:35-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -975,7 +975,7 @@ msgid "Unable to read consumer identity"
 msgstr ""
 
 #: src/dnf-plugins/subscription-manager.py:136
-msgid "Subscription Manager is operating in container mode."
+msgid "subscription-manager is operating in container mode."
 msgstr ""
 
 #: src/dnf-plugins/upload-profile.py:36
@@ -985,12 +985,12 @@ msgid ""
 msgstr ""
 
 #: src/dnf-plugins/upload-profile.py:44
-#: src/subscription_manager/scripts/package_profile_upload.py:39
+#: src/subscription_manager/scripts/package_profile_upload.py:34
 msgid "Force package profile upload"
 msgstr ""
 
 #: src/dnf-plugins/upload-profile.py:60
-#: src/subscription_manager/scripts/package_profile_upload.py:46
+#: src/subscription_manager/scripts/package_profile_upload.py:41
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
 
@@ -1709,7 +1709,7 @@ msgid ""
 "entitlement server administrator."
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/syspurpose.py:78
+#: src/rhsmlib/dbus/objects/syspurpose.py:76
 #, python-brace-format
 msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
@@ -2260,7 +2260,7 @@ msgstr "மோசமான CA சான்றிதழ்: %s"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/exceptions.py:47
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:227
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:223
 msgid "Your identity certificate has expired"
 msgstr "உங்கள் அடையாள சான்றிதழ் காலாவதியாகிவிட்டது"
 
@@ -4700,14 +4700,14 @@ msgid ""
 "No available subscriptions at the current service level: %s. Please use the "
 "\"All Available Subscriptions\" tab to manually attach subscriptions."
 msgstr ""
-"நடப்பு சேவை நிலையில் சந்தாக்கள் எதுவும் இல்லை: %s. கைமுறையாக சந்தாக்களை இணைக்க"
-"\"கிடைக்கும் அனைத்து சந்தாக்களும்\" தாவலைப் பயன்படுத்தவும்."
+"நடப்பு சேவை நிலையில் சந்தாக்கள் எதுவும் இல்லை: %s. கைமுறையாக சந்தாக்களை "
+"இணைக்க\"கிடைக்கும் அனைத்து சந்தாக்களும்\" தாவலைப் பயன்படுத்தவும்."
 
 #: src/subscription_manager/gui/registergui.py:1340
 msgid ""
 "No service level will cover all installed products. Please manually "
-"subscribe using multiple service levels via the \"All Available Subscriptions"
-"\" tab or purchase additional subscriptions."
+"subscribe using multiple service levels via the \"All Available "
+"Subscriptions\" tab or purchase additional subscriptions."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
@@ -5294,9 +5294,13 @@ msgid ""
 msgstr ""
 
 #: src/subscription_manager/managercli.py:412
+#, fuzzy
+#| msgid ""
+#| "subscription-manager is disabled when running inside a container. Please "
+#| "refer to your host system for subscription management.\n"
 msgid ""
-"subscription-manager is disabled when running inside a container. Please "
-"refer to your host system for subscription management.\n"
+"subscription-manager is operating in container mode. Use your host system to "
+"manage subscriptions.\n"
 msgstr ""
 "ஒரு கன்டெய்னருக்குள் இயங்கும் போது subscription-manager முடக்கப்படும். சந்தா "
 "நிர்வாகத்திற்கு உங்கள் வழங்கி கணினியைப் பார்க்கவும்.\n"
@@ -7248,45 +7252,45 @@ msgstr "புதுப்பிக்கப்பட்டது"
 msgid "Deleted"
 msgstr "நீக்கப்பட்டது"
 
-#: src/subscription_manager/scripts/package_profile_upload.py:38
+#: src/subscription_manager/scripts/package_profile_upload.py:33
 msgid "Upload a package profile"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/package_profile_upload.py:62
-#: src/subscription_manager/scripts/rct.py:56
-#: src/subscription_manager/scripts/rhsm_debug.py:74
+#: src/subscription_manager/scripts/package_profile_upload.py:57
+#: src/subscription_manager/scripts/rct.py:52
+#: src/subscription_manager/scripts/rhsm_debug.py:70
 msgid "User interrupted process."
 msgstr "பயனர் செயலாக்கத்தில் குறுக்கிட்டார்."
 
-#: src/subscription_manager/scripts/package_profile_upload.py:65
+#: src/subscription_manager/scripts/package_profile_upload.py:60
 #, python-format
 msgid "Error uploading package profile: %s\n"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:208
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:204
 msgid "Updating entitlement certificates & repositories"
 msgstr "உரிம சான்றிதழ்களையும் தொகுப்பதிவகங்களையும் புதுப்பிக்கிறது"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:286
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:282
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "உரிம சான்றிதழ்களையும் தொகுப்பதிவகங்களையும் புதுப்பிக்க முடியவில்லை"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys, author John Sefler
-#: src/subscription_manager/scripts/subscription_manager_gui.py:172
+#: src/subscription_manager/scripts/subscription_manager_gui.py:168
 #, python-format
 msgid "%s is already running"
 msgstr "%s ஏற்கனவே இயக்கத்தில் உள்ளது"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/subscription_manager_gui.py:180
+#: src/subscription_manager/scripts/subscription_manager_gui.py:176
 msgid "launches the registration dialog on startup"
 msgstr "தொடக்கத்தில் பதிவுசெய்தல் உரையாடலைத் துவக்கும்"
 
@@ -7764,8 +7768,8 @@ msgstr "Red Hat சந்தாபடுத்தல் மேலாளர்"
 #, fuzzy
 #~| msgid "This org does not have any subscriptions with service levels."
 #~ msgid ""
-#~ "This org does not have any subscriptions with an available \"service-level"
-#~ "\"."
+#~ "This org does not have any subscriptions with an available \"service-"
+#~ "level\"."
 #~ msgstr "இந்த org சேவை நிலைகளுடன் எந்த சந்தாக்களையும் கொண்டிருக்க வில்லை."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
