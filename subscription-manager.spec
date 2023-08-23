@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.36
+Version: 1.29.37
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,19 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Aug 23 2023 Pino Toscano <ptoscano@redhat.com> 1.29.37-1
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Update translation files (noreply@weblate.org)
+- 2225446: Hotfix of D-Bus policy (jhnidek@redhat.com)
+- TESTING: Update testing requirements (mhorky@redhat.com)
+- Use Fedora registry to pull container images (mhorky@redhat.com)
+- 2232316: dbus: check "force" again from the registration option
+  (ptoscano@redhat.com)
+- dbus: run EntCertActionInvoker on PoolAttach (ptoscano@redhat.com)
+- ENT-5624: Properly translate error strings (mhorky@redhat.com)
+- Mock IOError for Insights fact collection tests (mhorky@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+
 * Wed Aug 02 2023 Pino Toscano <ptoscano@redhat.com> 1.29.36-1
 - Translated using Weblate (Korean) (simmon@nplob.com)
 - ENT-5581: Update messaging around the "container mode" (mhorky@redhat.com)
