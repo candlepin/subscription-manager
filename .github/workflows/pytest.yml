@@ -18,18 +18,6 @@ jobs:
         include:
           - name: "CentOS Stream 9"
             image: "quay.io/centos/centos:stream9"
-            pytest_args: '--deselect test/rhsmlib/facts/test_hwprobe.py::HardwareProbeTest::test_networkinfo --deselect test/rhsmlib/test_facts.py::TestFactsDBusObject::test_GetFacts'
-            # The 'test_networkinfo' breaks in CentOS container because it has IPv6 disabled.
-            # Because of a bug in Python, collecting 'socket.AF_INET6' via 'socket.getaddrinfo()' causes
-            # segfaults instead of exceptions when the IPv6 network is not available.
-            # This deselect is a workaround until it is fixed or until we switch to a different way of
-            # collecting network facts.
-            # 'test_GetFacts' triggers full fact collection and causes the same error.
-          - name: "Fedora latest"
-            image: "fedora:latest"
-            pytest_args: ''
-          - name: "Fedora Rawhide"
-            image: "fedora:rawhide"
             pytest_args: ''
 
     runs-on: ubuntu-latest
@@ -61,7 +49,7 @@ jobs:
         uses: MishaKav/pytest-coverage-comment@main
         if: |
           github.event.pull_request.head.repo.full_name == github.repository
-          && matrix.name == 'Fedora latest'
+          && matrix.name == 'CentOS Stream 9'
         with:
           title: "Coverage (computed on ${{ matrix.name }})"
           report-only-changed-files: true
