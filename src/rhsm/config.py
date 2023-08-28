@@ -126,9 +126,9 @@ def in_container() -> bool:
     #   /usr/share/rhel/secrets/redhat.repo         -> /etc/yum.repos.d/redhat.repo
     #   /usr/share/rhel/secrets/rhsm                -> /etc/rhsm
     #
-    # If the container secrets exists, the system is considered to be a container:
+    # If the container secrets exist, the system is considered to be a container:
     #   /etc/rhsm-host/            exists
-    #   /etc/pki/entitlement/host/ exists and is not empty
+    #   /etc/pki/entitlement-host/ exists and is not empty
     if os.path.isdir(HOST_CONFIG_DIR) and (
         os.path.isdir(HOST_ENT_CERT_DIR) and any(os.walk(HOST_ENT_CERT_DIR))
     ):
