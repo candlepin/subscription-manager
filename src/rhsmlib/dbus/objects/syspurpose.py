@@ -69,17 +69,13 @@ class ThreeWayMergeConflict(dbus.DBusException):
         if len(conflicts) == 1:
             return _(
                 'Warning: A {conflict_msg} was recently set '
-                'for this system by the entitlement server administrator.'.format(
-                    conflict_msg=conflict_msg
-                )
-            )
+                'for this system by the entitlement server administrator.'
+            ).format(conflict_msg=conflict_msg)
         else:
             return _(
                 'Warning: A {conflict_msg} were recently set '
-                'for this system by the entitlement server administrator.'.format(
-                    conflict_msg=conflict_msg
-                )
-            )
+                'for this system by the entitlement server administrator.'
+            ).format(conflict_msg=conflict_msg)
 
 
 class SyspurposeDBusObject(base_object.BaseObject):
