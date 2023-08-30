@@ -465,7 +465,7 @@ class MigrationEngine(object):
         for prod_id, mappings in list(collisions.items()):
             single_key = sorted(mappings.keys())[0]
             applicable_certs[prod_id] = {single_key: mappings[single_key]}
-            print(_("Mapping product '%s' to certificate '%s'." % (prod_id, single_key)))
+            print(_("Mapping product '%s' to certificate '%s'.") % (prod_id, single_key))
 
     def deploy_prod_certificates(self, subscribed_channels):
         release = self.get_release()
