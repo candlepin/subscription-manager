@@ -20,7 +20,7 @@ jobs:
             python3-pip \
             rpmlint
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup flake8 annotations
       uses: rbialon/flake8-annotations@v1
