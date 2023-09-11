@@ -11,13 +11,14 @@
 # Jérôme Fenal <jfenal@free.fr>, 2022.
 # Transtats <suanand@redhat.com>, 2022, 2023.
 # blutch112 <vincent.lefebvre59@gmail.com>, 2022.
+# Pino Toscano <ptoscano@redhat.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-21 12:27+0200\n"
-"PO-Revision-Date: 2023-05-09 12:20+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2023-09-11 09:17+0000\n"
+"Last-Translator: Pino Toscano <ptoscano@redhat.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
 "Language: fr\n"
@@ -25,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -344,10 +345,8 @@ msgid "Unable to read consumer identity"
 msgstr "Identité du consommateur illisible"
 
 #: src/plugins/dnf/subscription_manager.py:141
-#, fuzzy
-#| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
-msgstr "Le Gestionnaire des abonnements exécute en mode de conteneur."
+msgstr "Le subscription-manager exécute en mode de conteneur."
 
 #: src/plugins/dnf/upload_profile.py:37
 msgid ""
@@ -2027,10 +2026,6 @@ msgstr ""
 "commande register --help"
 
 #: src/subscription_manager/cli_command/cli.py:267
-#, fuzzy
-#| msgid ""
-#| "subscription-manager is disabled when running inside a container. Please "
-#| "refer to your host system for subscription management.\n"
 msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
