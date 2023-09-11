@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.33.1
+Version: 1.29.33.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -736,6 +736,14 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Mon Sep 11 2023 Pino Toscano <ptoscano@redhat.com> 1.29.33.2-1
+- test: add simple test for 2221711 (ptoscano@redhat.com)
+- 2221711: do not collect unentitled products in SCA mode (ptoscano@redhat.com)
+- ENT-5624: Properly translate error strings (mhorky@redhat.com)
+- 2225445: [1.29.33] Hotfix of D-Bus policy (jhnidek@redhat.com)
+- ci: run jobs only on CentOS Stream 9 (ptoscano@redhat.com)
+- Remove pytest arguments for CentOS 9 Stream image (mhorky@redhat.com)
+
 * Thu Mar 02 2023 Pino Toscano <ptoscano@redhat.com> 1.29.33.1-1
 - tito: add rhel 9.2 releaser (ptoscano@redhat.com)
 - 2169251: connection: restore UEPConnection.getJob() (ptoscano@redhat.com)
