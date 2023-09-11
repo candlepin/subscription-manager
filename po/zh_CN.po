@@ -6,13 +6,14 @@
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022.
 # Transtats <suanand@redhat.com>, 2022.
+# Pino Toscano <ptoscano@redhat.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-22 08:09+0200\n"
-"PO-Revision-Date: 2022-12-19 12:20+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"PO-Revision-Date: 2023-09-11 09:21+0000\n"
+"Last-Translator: Pino Toscano <ptoscano@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-1-28/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -856,8 +857,6 @@ msgid "Unable to read consumer identity"
 msgstr "无法读取客户身份"
 
 #: src/dnf-plugins/subscription-manager.py:136
-#, fuzzy
-#| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
 msgstr "订阅管理器在容器模式中运行。"
 
@@ -4627,15 +4626,10 @@ msgid ""
 msgstr "消费者 ID 不存在或已被破坏。请尝试 register --help"
 
 #: src/subscription_manager/managercli.py:412
-#, fuzzy
-#| msgid ""
-#| "subscription-manager is disabled when running inside a container. Please "
-#| "refer to your host system for subscription management.\n"
 msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
-msgstr ""
-"在容器内运行时禁用 subscription-manager。请参考主机系统进行订阅管理。\n"
+msgstr "订阅管理器在容器模式中运行。使用您的主机系统管理订阅。\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:424
