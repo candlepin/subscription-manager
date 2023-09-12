@@ -244,7 +244,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.36
+Version: 1.28.36.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1483,6 +1483,14 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Sep 12 2023 Pino Toscano <ptoscano@redhat.com> 1.28.36.1-1
+- test: add simple test for 2221709 (ptoscano@redhat.com)
+- 2221709: do not collect unentitled products in SCA mode (ptoscano@redhat.com)
+- ENT-5624: Properly translate error strings (mhorky@redhat.com)
+- 2225442: [1.28.36] Hotfix of D-Bus policy (jhnidek@redhat.com)
+- ci: run jobs only on CentOS Stream 8 (ptoscano@redhat.com)
+- Update cockpit test lib for Chromium 113 fix (martin@piware.de)
+
 * Wed Feb 22 2023 Pino Toscano <ptoscano@redhat.com> 1.28.36-1
 - Translated using Weblate (French) (ljanda@redhat.com)
 - Translated using Weblate (French) (suanand@redhat.com)
