@@ -225,7 +225,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.39
+Version: 1.28.40
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1381,6 +1381,9 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Sep 14 2023 Pino Toscano <ptoscano@redhat.com> 1.28.40-1
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (ptoscano@redhat.com)
+
 * Wed Aug 23 2023 Pino Toscano <ptoscano@redhat.com> 1.28.39-1
 - Translated using Weblate (Korean) (simmon@nplob.com)
 - Update translation files (noreply@weblate.org)
