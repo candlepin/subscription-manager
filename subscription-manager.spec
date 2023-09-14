@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.37
+Version: 1.29.38
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,12 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Sep 14 2023 Pino Toscano <ptoscano@redhat.com> 1.29.38-1
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (ptoscano@redhat.com)
+- ci: bump actions/checkout from 3 to 4
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- ENT-5603: Fix a typo in a comment (mhorky@redhat.com)
+
 * Wed Aug 23 2023 Pino Toscano <ptoscano@redhat.com> 1.29.37-1
 - Translated using Weblate (Korean) (simmon@nplob.com)
 - Update translation files (noreply@weblate.org)
