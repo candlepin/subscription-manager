@@ -133,7 +133,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.52
+Version: 1.24.53
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1170,6 +1170,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Fri Sep 22 2023 Pino Toscano <ptoscano@redhat.com> 1.24.53-1
+- 2229752: [1.24] Hotfix of D-Bus policy (jhnidek@redhat.com)
+- Collect GCP Project information as cloud facts (chambrid@redhat.com)
+- Collect Azure Subscription ID as a cloud fact (#3285) (chambrid@redhat.com)
+- Stop requiring M2crypto (ptoscano@redhat.com)
+- tests: make M2Crypto optional (ptoscano@redhat.com)
+
 * Tue Jun 27 2023 Pino Toscano <ptoscano@redhat.com> 1.24.52-1
 - tito: update rhel-7.9 releaser (ptoscano@redhat.com)
 - managercli: fix RestlibException reporting for get_current_owner()
