@@ -40,7 +40,7 @@ from rhsm.https import ssl
 import rhsm.config
 import rhsm.connection as connection
 from rhsm.connection import ProxyException, UnauthorizedException, ConnectionException, RemoteServerException, ConnectionOSErrorException
-from rhsm.utils import cmd_name, remove_scheme, ServerUrlParseError
+from rhsm.utils import cmd_name, ServerUrlParseError
 
 from subscription_manager import identity
 from subscription_manager.branding import get_branding
@@ -462,17 +462,13 @@ class CliCommand(AbstractCLICommand):
                 baseurl_server_prefix)
             config_changed = True
 
-        # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
-            parts = remove_scheme(self.options.proxy_url).split(':')
-            self.proxy_hostname = parts[0]
-            # no ':'
-            if len(parts) > 1:
-                self.proxy_port = int(parts[1])
-            else:
-                # if no port specified, use the one from the config, or fallback to the default
-                self.proxy_port = conf['server'].get_int('proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
-            config_changed = True
+            default_proxy_port = conf["server"].get_int("proxy_port") or rhsm.config.DEFAULT_PROXY_PORT
+            proxy_user, proxy_pass, proxy_hostname, proxy_port, proxy_prefix = rhsm.utils.parse_url(
+                self.options.proxy_url, default_port=default_proxy_port
+            )
+            self.proxy_hostname = proxy_hostname
+            self.proxy_port = int(proxy_port)
 
         if hasattr(self.options, "proxy_user") and self.options.proxy_user:
             self.proxy_user = self.options.proxy_user
