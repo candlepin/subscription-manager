@@ -327,6 +327,8 @@ class CliCommand(AbstractCLICommand):
             proxy_user, proxy_pass, proxy_hostname, proxy_port, proxy_prefix = rhsm.utils.parse_url(
                 self.options.proxy_url, default_port=default_proxy_port
             )
+            self.proxy_user = proxy_user
+            self.proxy_password = proxy_pass
             self.proxy_hostname = proxy_hostname
             self.proxy_port = int(proxy_port)
 
