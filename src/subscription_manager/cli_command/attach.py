@@ -210,6 +210,22 @@ class AttachCommand(CliCommand):
                                     name=pool_json["productName"]
                                 )
                             )
+                            '''
+                            ***************** OpenRefactory Warning *****************
+                            Possible Log injection!
+                            Path:
+                            	File: attach.py, Line: 204
+                            		ents = attach_service.attach_pool(pool, self.options.quantity)
+                            		Variable ents is assigned a tainted value.
+                            	File: attach.py, Line: 207
+                            		pool_json = ent["pool"]
+                            		Variable pool_json is assigned a tainted value.
+                            	File: attach.py, Line: 213
+                            		log.debug(
+                            		                                "Attached a subscription for {name}".format(name=pool_json["productName"])
+                            		                            )
+                            		Tainted information is passed through a method invocation and is used in a sink.
+                            '''
                             log.debug(
                                 "Attached a subscription for {name}".format(name=pool_json["productName"])
                             )
