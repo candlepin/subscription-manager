@@ -175,10 +175,14 @@ class ConnectionOSErrorException(ConnectionException):
     """
 
     def __init__(self, host: str, port: int, handler: str, exc: OSError):
-        self.host = host
+        self._host = host
         self.port = port
         self.handler = handler
         self.exc = exc
+
+    @property
+    def host(self) -> str:
+        return normalized_host(self._host)
 
 
 class ConnectionType(enum.Enum):
