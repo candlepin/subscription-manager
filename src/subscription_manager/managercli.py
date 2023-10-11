@@ -524,7 +524,7 @@ class CliCommand(AbstractCLICommand):
                     # this tries to actually connect to the server and ping it
                     if not is_valid_server_info(self.no_auth_cp):
                         system_exit(os.EX_UNAVAILABLE, _("Unable to reach the server at %s:%s%s") % (
-                            self.no_auth_cp.host,
+                            connection.normalized_host(self.no_auth_cp.host),
                             self.no_auth_cp.ssl_port,
                             self.no_auth_cp.handler
                         ))
