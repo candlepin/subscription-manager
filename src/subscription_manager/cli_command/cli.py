@@ -386,7 +386,7 @@ class CliCommand(AbstractCLICommand):
                         system_exit(
                             os.EX_UNAVAILABLE,
                             _("Unable to reach the server at {host}:{port}{handler}").format(
-                                host=self.no_auth_cp.host,
+                                host=connection.normalized_host(self.no_auth_cp.host),
                                 port=self.no_auth_cp.ssl_port,
                                 handler=self.no_auth_cp.handler,
                             ),
