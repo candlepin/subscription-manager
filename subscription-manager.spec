@@ -156,10 +156,9 @@ Requires: python3-gobject-base
 %endif
 
 # rhel 8 has different naming for setuptools going forward
+# on newer rhels and Fedora setuptools is not needed on runtime at all
 %if (0%{?rhel} && 0%{?rhel} == 8)
 Requires:  platform-python-setuptools
-%else
-Requires:  %{py_package_prefix}-setuptools
 %endif
 
 %if %{use_dnf}
