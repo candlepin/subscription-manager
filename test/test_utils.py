@@ -290,6 +290,22 @@ class TestParseBaseUrlInfo(fixture.SubManFixture):
         self.assertEqual(prefix, DEFAULT_CDN_PREFIX)
         self.assertEqual("https://foo-bar:8088", format_baseurl(hostname, port, prefix))
 
+    def test_ipv4(self):
+        result = format_baseurl(hostname="127.0.0.1", port="8080", prefix="/foo")
+        self.assertEqual("https://127.0.0.1:8080/foo", result)
+
+    def test_ipv6(self):
+        result = format_baseurl(hostname="::1", port="8080", prefix="/foo")
+        self.assertEqual("https://[::1]:8080/foo", result)
+
+    def test_ipv6_default_port(self):
+        result = format_baseurl(hostname="::1", port="443", prefix="/foo")
+        self.assertEqual("https://[::1]/foo", result)
+
+    def test_ipv6_no_prefix(self):
+        result = format_baseurl(hostname="::1", port="8080", prefix="/")
+        self.assertEqual("https://[::1]:8080", result)
+
 
 class TestUrlBaseJoinEmptyBase(fixture.SubManFixture):
     def test_blank_base_blank_url(self):
