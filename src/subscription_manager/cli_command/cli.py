@@ -331,6 +331,7 @@ class CliCommand(AbstractCLICommand):
             self.proxy_password = proxy_pass
             self.proxy_hostname = proxy_hostname
             self.proxy_port = int(proxy_port)
+            config_changed = True
 
         if hasattr(self.options, "proxy_user") and self.options.proxy_user:
             self.proxy_user = self.options.proxy_user
