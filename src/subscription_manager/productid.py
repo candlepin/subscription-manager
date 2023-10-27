@@ -682,7 +682,7 @@ class ProductManager:
             # If productid database does not know about the the product,
             # ie, repo is None (basically, return from a db.content.get(),
             # don't delete the cert because we don't know anything about it
-            if repos is None or repos is []:
+            if repos is None or repos == []:
                 # FIXME: this can also mean we need to update the product cert
                 #        for prod_hash, since it is installed, but no longer maps to a repo
                 # no repos to check, go to next cert
