@@ -18,7 +18,7 @@ Module for testing automatic registration on public cloud
 
 import unittest
 import base64
-from unittest.mock import patch, Mock
+from unittest.mock import Mock
 
 from subscription_manager.scripts.rhsmcertd_worker import _collect_cloud_info
 from .rhsmlib.facts.test_cloud_facts import AWS_METADATA
@@ -93,11 +93,17 @@ def send_only_imds_v2_is_supported(request, *args, **kwargs):
     return mock_result
 
 
-def mock_prepare_request(request):
-    return request
-
-
 class TestAutomaticRegistration(unittest.TestCase):
+    def setUp(self):
+        _ = aws.AWSCloudProvider({})
+        aws.AWSCloudProvider._instance._get_metadata_from_cache = Mock(return_value=None)
+        aws.AWSCloudProvider._instance._get_token_from_cache_file = Mock(return_value=None)
+        aws.AWSCloudProvider._instance._write_token_to_cache_file = Mock()
+
+        _ = azure.AzureCloudProvider({})
+        azure.AzureCloudProvider._instance._get_metadata_from_cache = Mock(return_value=None)
+        azure.AzureCloudProvider._instance.get_api_versions = Mock(return_value="")
+
     def tearDown(self):
         aws.AWSCloudProvider._instance = None
         aws.AWSCloudProvider._initialized = False
@@ -106,17 +112,16 @@ class TestAutomaticRegistration(unittest.TestCase):
         gcp.GCPCloudProvider._instance = None
         gcp.GCPCloudProvider._initialized = False
 
-    @patch("cloud_what.providers.aws.requests.Session")
-    def test_collect_cloud_info_one_cloud_provider_detected(self, mock_session_class):
+    def test_collect_cloud_info_one_cloud_provider_detected(self):
         """
         Test the case, when we try to collect cloud info only for
         one detected cloud provider
         """
         mock_session = Mock()
-        mock_session.send = send_only_imds_v2_is_supported
-        mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
+        mock_session.send = send_only_imds_v2_is_supported()
+        mock_session.prepare_request = Mock(side_effect=lambda request: request)
         mock_session.hooks = {"response": []}
-        mock_session_class.return_value = mock_session
+        aws.AWSCloudProvider._instance._session = mock_session
 
         cloud_list = ["aws"]
         cloud_info = _collect_cloud_info(cloud_list, Mock())
@@ -136,18 +141,18 @@ class TestAutomaticRegistration(unittest.TestCase):
         signature = base64.b64decode(b64_signature).decode("utf-8")
         self.assertEqual(signature, "-----BEGIN PKCS7-----\n" + AWS_SIGNATURE + "\n-----END PKCS7-----")
 
-    @patch("cloud_what.providers.aws.requests.Session")
-    def test_collect_cloud_info_more_cloud_providers_detected(self, mock_session_class):
+    def test_collect_cloud_info_more_cloud_providers_detected(self):
         """
         Test the case, when we try to collect cloud info only for
         more than one cloud providers, because more than one cloud
         providers were detected
         """
         mock_session = Mock()
-        mock_session.send = send_only_imds_v2_is_supported
-        mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
+        mock_session.send = send_only_imds_v2_is_supported()
+        mock_session.prepare_request = Mock(side_effect=lambda request: request)
         mock_session.hooks = {"response": []}
-        mock_session_class.return_value = mock_session
+        aws.AWSCloudProvider._instance._session = mock_session
+        azure.AzureCloudProvider._instance._session = Mock()
 
         # More cloud providers detected
         cloud_list = ["azure", "aws"]
