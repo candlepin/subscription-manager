@@ -55,6 +55,13 @@ def pid_of_sender(bus, sender):
         pid = int(dbus_iface.GetConnectionUnixProcessID(sender))
     except ValueError:
         return None
+    # It seems that Python D-Bus implementation contains error. This should not happen,
+    # when we try to call GetConnectionUnixProcessID() with sender that does not exist
+    # anymore
+    except dbus.exceptions.DBusException as err:
+        log.debug(f"D-Bus raised exception: {err}")
+        return None
+
     return pid
 
 
