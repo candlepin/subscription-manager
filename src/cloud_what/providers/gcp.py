@@ -138,7 +138,7 @@ class GCPCloudProvider(BaseCloudProvider):
         found_google = False
         found_gcp = False
         for hw_item in self.hw_info.values():
-            if type(hw_item) != str:
+            if not (type(hw_item) is str):
                 continue
             if "google" in hw_item.lower():
                 found_google = True

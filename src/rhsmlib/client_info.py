@@ -58,7 +58,7 @@ class DBusSender:
         if bus is None:
             bus = dbus.SystemBus()
         cmd_line = dbus_utils.command_of_sender(bus, sender)
-        if cmd_line is not None and type(cmd_line) == str:
+        if cmd_line is not None and type(cmd_line) is str:
             # Store only first argument of command line (no argument including username or password)
             cmd_line = cmd_line.split()[0]
         return cmd_line
