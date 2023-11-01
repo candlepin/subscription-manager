@@ -27,6 +27,7 @@ from gi.repository import GLib
 from functools import partial
 
 from rhsmlib.services import config
+from rhsmlib.dbus.dbus_utils import pid_of_sender
 from rhsm.config import get_config_parser
 from rhsmlib.file_monitor import create_filesystem_watcher, DirectoryWatch
 from rhsmlib.file_monitor import (
@@ -323,12 +324,52 @@ class DomainSocketServer:
         self.object_classes = object_classes or []
         self.objects = []
         self._server = None
-        self.sender = sender
+        self.sender = sender  # sender created the server
+        self._senders = set()  # other senders using server
+        log.debug(f"Adding sender {sender} to the set of senders")
+        self._senders.add(sender)
         self.cmd_line = cmd_line
 
         self.lock = threading.Lock()
         with self.lock:
             self.connection_count = 0
+
+    def add_sender(self, sender: str) -> None:
+        """
+        Add sender to the list of senders
+        """
+        self._senders.add(sender)
+
+    def remove_sender(self, sender: str) -> bool:
+        """
+        Try to remove sender from the set of sender
+        """
+        try:
+            self._senders.remove(sender)
+        except KeyError:
+            log.debug(f"Sender {sender} wasn't removed from the set of senders (not member of the set)")
+            return False
+        else:
+            log.debug(f"Sender {sender} removed from the set of senders")
+            return True
+
+    def are_other_senders_still_running(self) -> bool:
+        """
+        Check if other users are still running. It sender in the set is not
+        running, then remove sender from the set, because sender could
+        crash, or it was terminated since it called Start() method.
+        """
+        is_one_sender_running = False
+        not_running = set()
+        bus = dbus.SystemBus()
+        for sender in self._senders:
+            pid = pid_of_sender(bus, sender)
+            if pid is None:
+                not_running.add(sender)
+            else:
+                is_one_sender_running = True
+        self._senders = self._senders.difference(not_running)
+        return is_one_sender_running
 
     def shutdown(self):
         for o in self.objects:
