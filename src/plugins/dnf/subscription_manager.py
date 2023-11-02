@@ -14,17 +14,19 @@
 
 import os
 import logging
+import signal
 
 from subscription_manager import injection as inj
-from subscription_manager.action_client import ProfileActionClient
 from subscription_manager.repolib import RepoActionInvoker
 from subscription_manager.entcertlib import EntCertActionInvoker
 from rhsmlib.facts.hwprobe import ClassicCheck
-from subscription_manager.utils import chroot, is_simple_content_access
+from subscription_manager.utils import chroot, is_simple_content_access, is_process_running
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.i18n import ungettext, ugettext as _
 from rhsm import logutil
 from rhsm import config
+from rhsm.utils import LiveStatusMessage
+from rhsm.connection import RemoteServerException
 
 from dnfpluginscore import logger
 import dnf
@@ -196,7 +198,44 @@ class SubscriptionManager(dnf.Plugin):
         cfg = config.get_config_parser()
         if "1" == cfg.get("rhsm", "package_profile_on_trans"):
             log.debug("Uploading package profile")
-            package_profile_client = ProfileActionClient()
-            package_profile_client.update()
+            self._upload_profile()
         else:
             log.debug("Uploading package profile disabled in configuration file")
+
+    def _upload_profile_blocking(self) -> None:
+        """
+        Try to upload DNF profile to server
+        """
+        with LiveStatusMessage("Uploading DNF profile"):
+            try:
+                profile_mgr = inj.require(inj.PROFILE_MANAGER)
+                identity = inj.require(inj.IDENTITY)
+                # 767265: always force an upload of the packages when registering
+                profile_mgr.update_check(self.cp, identity.uuid, True)
+            except RemoteServerException as err:
+                # When it is not possible to upload profile ATM, then print only error about this
+                # to rhsm.log. The rhsmcertd will try to upload it next time.
+                log.error("Unable to upload profile: {err}".format(err=str(err)))
+
+    def _upload_profile(self) -> None:
+        """
+        Try to upload DNF profile to server, when it is supported by server. This method
+        tries to "outsource" this activity to rhsmcertd first. When it is not possible due to
+        various reasons, then we try to do it ourselves in blocking way.
+        """
+        # First try to get PID of rhsmcertd from lock file
+        try:
+            with open("/var/lock/subsys/rhsmcertd", "r") as lock_file:
+                rhsmcertd_pid = int(lock_file.readline())
+        except Exception as err:
+            log.info(f"Unable to read rhsmcertd lock file: {err}")
+        else:
+            if is_process_running("rhsmcertd", rhsmcertd_pid) is True:
+                # This will only send SIGUSR1 signal, which triggers gathering and uploading
+                # of DNF profile by rhsmcertd. We try to "outsource" this activity to rhsmcertd
+                # server to not block registration process
+                log.debug("Sending SIGUSR1 signal to rhsmcertd process")
+                os.kill(rhsmcertd_pid, signal.SIGUSR1)
+            else:
+                log.info(f"rhsmcertd process with given PID: {rhsmcertd_pid} is not running")
+                self._upload_profile_blocking()
