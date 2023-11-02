@@ -509,7 +509,7 @@ def merge_pools(pools: List[dict]) -> Dict:
     merged_pools: dict = {}
 
     for pool in pools:
-        if not pool["productId"] in merged_pools:
+        if pool["productId"] not in merged_pools:
             merged_pools[pool["productId"]] = MergedPools(pool["productId"], pool["productName"])
         merged_pools[pool["productId"]].add_pool(pool)
 
@@ -585,7 +585,7 @@ class PoolStash:
             list_all=True,
             active_on=active_on,
         ):
-            if not pool["id"] in self.compatible_pools:
+            if pool["id"] not in self.compatible_pools:
                 self.incompatible_pools[pool["id"]] = pool
                 self.all_pools[pool["id"]] = pool
 
