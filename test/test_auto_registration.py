@@ -18,7 +18,7 @@ Module for testing automatic registration on public cloud
 
 import unittest
 import base64
-from unittest.mock import patch, Mock
+from unittest.mock import Mock
 
 from subscription_manager.scripts.rhsmcertd_worker import _collect_cloud_info
 from .rhsmlib.facts.test_cloud_facts import AWS_METADATA
@@ -47,57 +47,72 @@ tGbafapTj+6KnJAfP0sW7ZbzKclaCPHXQ37z9mc8vtCxEQmCbGL6sj2wtpi4rmRlAAAAAAAA"""
 AWS_TOKEN = "ABCDEFGHIJKLMNOPQRSTVWXYZabcdefghijklmnopqrstvwxyz0123=="
 
 
-def send_only_imds_v2_is_supported(request, *args, **kwargs):
+def send__aws_imdsv2_only(request, *args, **kwargs):
     """
-    Mock result, when we try to get metadata using GET method against
-    AWS metadata provider. This mock is for the case, when only IMDSv2
-    is supported by instance.
+    Mock result for metadata request on AWS where only IMDSv2 is supported.
+    This function should be used to replace function `requests.Session.send()`.
+
     :param request: HTTP request
-    :return: Mock with result
+    :return: Mocked server result.
     """
-    mock_result = Mock()
+    result = Mock()
 
     if request.method == "PUT":
-        if request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_URL:
-            if "X-aws-ec2-metadata-token-ttl-seconds" in request.headers:
-                mock_result.status_code = 200
-                mock_result.text = AWS_TOKEN
-            else:
-                mock_result.status_code = 400
-                mock_result.text = "Error: TTL for token not specified"
-        else:
-            mock_result.status_code = 400
-            mock_result.text = "Error: Invalid URL"
-    elif request.method == "GET":
-        if "X-aws-ec2-metadata-token" in request.headers.keys():
-            if request.headers["X-aws-ec2-metadata-token"] == AWS_TOKEN:
-                if request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_METADATA_URL:
-                    mock_result.status_code = 200
-                    mock_result.text = AWS_METADATA
-                elif request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_SIGNATURE_URL:
-                    mock_result.status_code = 200
-                    mock_result.text = AWS_SIGNATURE
-                else:
-                    mock_result.status_code = 400
-                    mock_result.text = "Error: Invalid URL"
-            else:
-                mock_result.status_code = 400
-                mock_result.text = "Error: Invalid metadata token provided"
-        else:
-            mock_result.status_code = 400
-            mock_result.text = "Error: IMDSv1 is not supported on this instance"
-    else:
-        mock_result.status_code = 400
-        mock_result.text = "Error: not supported request method"
+        if request.url != aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_URL:
+            result.status_code = 400
+            result.text = "Error: Invalid URL"
+            return result
 
-    return mock_result
+        if "X-aws-ec2-metadata-token-ttl-seconds" not in request.headers:
+            result.status_code = 400
+            result.text = "Error: TTL for token not specified"
+            return result
 
+        result.status_code = 200
+        result.text = AWS_TOKEN
+        return result
 
-def mock_prepare_request(request):
-    return request
+    if request.method == "GET":
+        if "X-aws-ec2-metadata-token" not in request.headers.keys():
+            result.status_code = 400
+            result.text = "Error: IMDSv1 is not supported on this instance"
+            return result
+
+        if request.headers["X-aws-ec2-metadata-token"] != AWS_TOKEN:
+            result.status_code = 400
+            result.text = "Error: Invalid metadata token provided"
+            return result
+
+        if request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_METADATA_URL:
+            result.status_code = 200
+            result.text = AWS_METADATA
+            return result
+
+        if request.url == aws.AWSCloudProvider.CLOUD_PROVIDER_SIGNATURE_URL:
+            result.status_code = 200
+            result.text = AWS_SIGNATURE
+            return result
+
+        result.status_code = 400
+        result.text = "Error: Invalid URL"
+        return result
+
+    result.status_code = 400
+    result.text = "Error: not supported request method"
+    return result
 
 
 class TestAutomaticRegistration(unittest.TestCase):
+    def setUp(self):
+        _ = aws.AWSCloudProvider({})
+        aws.AWSCloudProvider._instance._get_metadata_from_cache = Mock(return_value=None)
+        aws.AWSCloudProvider._instance._get_token_from_cache_file = Mock(return_value=None)
+        aws.AWSCloudProvider._instance._write_token_to_cache_file = Mock()
+
+        _ = azure.AzureCloudProvider({})
+        azure.AzureCloudProvider._instance._get_metadata_from_cache = Mock(return_value=None)
+        azure.AzureCloudProvider._instance.get_api_versions = Mock(return_value="")
+
     def tearDown(self):
         aws.AWSCloudProvider._instance = None
         aws.AWSCloudProvider._initialized = False
@@ -106,17 +121,16 @@ class TestAutomaticRegistration(unittest.TestCase):
         gcp.GCPCloudProvider._instance = None
         gcp.GCPCloudProvider._initialized = False
 
-    @patch("cloud_what.providers.aws.requests.Session")
-    def test_collect_cloud_info_one_cloud_provider_detected(self, mock_session_class):
+    def test_collect_cloud_info_one_cloud_provider_detected(self):
         """
         Test the case, when we try to collect cloud info only for
         one detected cloud provider
         """
         mock_session = Mock()
-        mock_session.send = send_only_imds_v2_is_supported
-        mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
+        mock_session.send = send__aws_imdsv2_only
+        mock_session.prepare_request = Mock(side_effect=lambda request: request)
         mock_session.hooks = {"response": []}
-        mock_session_class.return_value = mock_session
+        aws.AWSCloudProvider._instance._session = mock_session
 
         cloud_list = ["aws"]
         cloud_info = _collect_cloud_info(cloud_list, Mock())
@@ -136,18 +150,18 @@ class TestAutomaticRegistration(unittest.TestCase):
         signature = base64.b64decode(b64_signature).decode("utf-8")
         self.assertEqual(signature, "-----BEGIN PKCS7-----\n" + AWS_SIGNATURE + "\n-----END PKCS7-----")
 
-    @patch("cloud_what.providers.aws.requests.Session")
-    def test_collect_cloud_info_more_cloud_providers_detected(self, mock_session_class):
+    def test_collect_cloud_info_more_cloud_providers_detected(self):
         """
         Test the case, when we try to collect cloud info only for
         more than one cloud providers, because more than one cloud
         providers were detected
         """
         mock_session = Mock()
-        mock_session.send = send_only_imds_v2_is_supported
-        mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
+        mock_session.send = send__aws_imdsv2_only
+        mock_session.prepare_request = Mock(side_effect=lambda request: request)
         mock_session.hooks = {"response": []}
-        mock_session_class.return_value = mock_session
+        aws.AWSCloudProvider._instance._session = mock_session
+        azure.AzureCloudProvider._instance._session = Mock()
 
         # More cloud providers detected
         cloud_list = ["azure", "aws"]

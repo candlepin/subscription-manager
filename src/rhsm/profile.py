@@ -86,7 +86,7 @@ class ModulesProfile:
         return list(ret.values())
 
     @staticmethod
-    def fix_aws_rhui_repos(base: dnf.Base) -> None:
+    def fix_aws_rhui_repos(base: "dnf.Base") -> None:
         """
         Try to fix RHUI repos on AWS systems. When the system is running on AWS, then we have
         to fix repository URL. See: https://bugzilla.redhat.com/show_bug.cgi?id=1924126

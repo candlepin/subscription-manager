@@ -281,25 +281,20 @@ class AWSCloudProvider(BaseCloudProvider):
 
     def _get_metadata_from_server(self) -> Union[str, None]:
         """
-        Try to get metadata from server as is described in this document:
+        Try to get metadata from server as described in these documents:
+        - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html
+        - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-metadata-v2-how-it-works.html
 
-        https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html
+        IMDSv2 requires two HTTP requests (first requests a token, second obtains the metadata).
+        If that fails, try to fall back to IDMSv1 (which is older and can be disabled in the AWS console).
 
-        It is possible to use two versions. We will try to use version IMDSv1 first (this version requires
-        only one HTTP request), when the usage of IMDSv1 is forbidden, then we will try to use IMDSv2 version.
-        The version requires two requests (get session TOKEN and then get own metadata using token)
         :return: String with metadata or None
         """
+        metadata = self._get_metadata_from_server_imds_v2()
+        if metadata is not None:
+            return metadata
 
-        if self._token_exists() is False:
-            # First try to get metadata using IMDSv1
-            metadata = self._get_metadata_from_server_imds_v1()
-
-            if metadata is not None:
-                return metadata
-
-        # When it wasn't possible to get metadata using IMDSv1, then try to get metadata using IMDSv2
-        return self._get_metadata_from_server_imds_v2()
+        return self._get_metadata_from_server_imds_v1()
 
     def _get_signature_from_cache_file(self) -> None:
         """
