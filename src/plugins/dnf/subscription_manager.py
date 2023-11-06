@@ -14,6 +14,7 @@
 
 import os
 import logging
+import shutil
 
 from subscription_manager import injection as inj
 from subscription_manager.action_client import ProfileActionClient
@@ -45,6 +46,13 @@ subscriptions, you can renew the expired subscription.  """
 not_registered_warning = _(
     """
 This system is not registered with an entitlement server. You can use subscription-manager to register.
+"""
+)
+
+not_registered_warning_rhc = _(
+    """
+This system is not registered with an entitlement server. \
+You can use "rhc" or "subscription-manager" to register.
 """
 )
 
@@ -182,7 +190,10 @@ class SubscriptionManager(dnf.Plugin):
             ent_dir = inj.require(inj.ENT_DIR)
             # Don't warn people to register if we see entitlements, but no identity:
             if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
-                msg = not_registered_warning
+                if shutil.which("rhc") is not None:
+                    msg = not_registered_warning_rhc
+                else:
+                    msg = not_registered_warning
             elif len(ent_dir.list_valid()) == 0 and not is_simple_content_access(identity=identity):
                 msg = no_subs_warning
         finally:
