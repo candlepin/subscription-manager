@@ -281,6 +281,24 @@ class TestHasGoodScheme(unittest.TestCase):
 
 class TestParseUrl(unittest.TestCase):
 
+    def test_ipv4_url(self):
+        local_url = "http://user:pass@192.168.0.10:3128/prefix"
+        (username, password, hostname, port, prefix) = parse_url(local_url)
+        self.assertEqual("user", username)
+        self.assertEqual("pass", password)
+        self.assertEqual("192.168.0.10", hostname)
+        self.assertEqual("3128", port)
+        self.assertEqual("/prefix", prefix)
+
+    def test_ipv6_url(self):
+        local_url = "http://user:pass@[2001:db8::dead:beef:1]:3128/prefix"
+        (username, password, hostname, port, prefix) = parse_url(local_url)
+        self.assertEqual("user", username)
+        self.assertEqual("pass", password)
+        self.assertEqual("2001:db8::dead:beef:1", hostname)
+        self.assertEqual("3128", port)
+        self.assertEqual("/prefix", prefix)
+
     def test_username_password(self):
         local_url = "http://user:pass@hostname:1111/prefix"
         (username, password, hostname, port, prefix) = parse_url(local_url)
