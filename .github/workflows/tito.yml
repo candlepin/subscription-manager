@@ -16,8 +16,6 @@ jobs:
             image: "quay.io/centos/centos:stream8"
           - name: "CentOS Stream 9"
             image: "quay.io/centos/centos:stream9"
-          - name: "Fedora latest"
-            image: "fedora:latest"
 
     runs-on: ubuntu-latest
     container:
