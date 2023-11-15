@@ -97,6 +97,11 @@ def format_baseurl(hostname, port, prefix):
     if prefix == DEFAULT_CDN_PREFIX:
         prefix = prefix[:-1]
 
+    # Handle raw IPv6 addresses.
+    # RFC 1035 only allows characters `a-zA-Z0-9.`, we can do this.
+    if ":" in hostname:
+        hostname = f"[{hostname}]"
+
     # just so we match how we format this by
     # default
     if port == DEFAULT_CDN_PORT:

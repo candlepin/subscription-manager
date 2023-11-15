@@ -164,10 +164,14 @@ class ConnectionOSErrorException(ConnectionException):
     """
 
     def __init__(self, host: str, port: int, handler: str, exc: OSError):
-        self.host = host
+        self._host = host
         self.port = port
         self.handler = handler
         self.exc = exc
+
+    @property
+    def host(self) -> str:
+        return normalized_host(self._host)
 
 
 class BaseConnection(object):
@@ -305,8 +309,12 @@ class BaseConnection(object):
         connection_description = ""
         if proxy_description:
             connection_description += proxy_description
-        connection_description += "host=%s port=%s handler=%s %s" % (self.host, self.ssl_port,
-                                                                     self.handler, auth_description)
+        connection_description += "host=%s port=%s handler=%s %s" % (
+            normalized_host(self.host),
+            safe_int(self.ssl_port),
+            self.handler,
+            auth_description,
+        )
         log.debug("Connection built: %s", connection_description)
 
 
@@ -679,6 +687,7 @@ class BaseRestLib(object):
 
         if 'SUBMAN_DEBUG_PRINT_REQUEST' in os.environ:
             yellow_col = '\033[93m'
+            magenta_col = "\033[95m"
             blue_col = '\033[94m'
             green_col = '\033[92m'
             red_col = '\033[91m'
@@ -687,9 +696,24 @@ class BaseRestLib(object):
                 msg = blue_col + "Making insecure request:" + end_col
             else:
                 msg = blue_col + "Making request:" + end_col
-            msg += red_col + " %s:%s %s %s" % (self.host, self.ssl_port, request_type, handler) + end_col
+            msg += (
+                    red_col +
+                    " https://" +
+                    f"{normalized_host(self.host)}:{safe_int(self.ssl_port)}{handler} {request_type}" +
+                    end_col
+            )
             if self.proxy_hostname and self.proxy_port:
-                msg += blue_col + " using proxy " + red_col + f"{self.proxy_hostname}:{self.proxy_port}" + end_col
+                # Note: using only https:// is not a mistake. We use only https for proxy connection.
+                msg += blue_col + " Using proxy: " + magenta_col + "https://"
+                # Print username and eventually password
+                if self.proxy_user:
+                    if self.proxy_user and self.proxy_password:
+                        msg += f"{self.proxy_user}:{self.proxy_password}@"
+                    elif self.proxy_user and not self.proxy_password:
+                        msg += f"{self.proxy_user}@"
+                # Print hostname and port
+                msg += f"{normalized_host(self.proxy_hostname)}:{safe_int(self.proxy_port)}"
+                msg += end_col
             if 'SUBMAN_DEBUG_PRINT_REQUEST_HEADER' in os.environ:
                 msg += blue_col + " %s" % final_headers + end_col
             if 'SUBMAN_DEBUG_PRINT_REQUEST_BODY' in os.environ and body is not None:
@@ -810,7 +834,7 @@ class BaseRestLib(object):
                     break  # this client cert worked, no need to try more
                 elif self.cert_dir:
                     log.debug("Unable to get valid response: %s from CDN: %s" %
-                              (result, self.host))
+                              (result, normalized_host(self.host)))
 
             except ssl.SSLError:
                 if self.cert_file and not self.cert_dir:
@@ -849,7 +873,7 @@ class BaseRestLib(object):
             if self.cert_dir:
                 raise NoValidEntitlement(
                     "Cannot access CDN content on: %s using any of entitlement cert-key pair: %s" %
-                    (self.host, cert_key_pairs)
+                    (normalized_host(self.host), cert_key_pairs)
                 )
 
         self._print_debug_info_about_response(result)

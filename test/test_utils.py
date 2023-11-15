@@ -174,16 +174,20 @@ class TestParseServerInfo(SubManFixture):
                           local_url)
 
     def test_colon_but_no_port(self):
+        # This is also correct!
         local_url = "https://myhost.example.com:/myapp"
-        self.assertRaises(ServerUrlParseErrorPort,
-                          parse_server_info,
-                          local_url)
+        hostname, port, prefix = parse_server_info(local_url)
+        self.assertEqual(hostname, "myhost.example.com")
+        self.assertEqual(port, DEFAULT_PORT)
+        self.assertEqual(prefix, "/myapp")
 
     def test_colon_but_no_port_no_scheme(self):
+        # This is also correct!
         local_url = "myhost.example.com:/myapp"
-        self.assertRaises(ServerUrlParseErrorPort,
-                          parse_server_info,
-                          local_url)
+        hostname, port, prefix = parse_server_info(local_url)
+        self.assertEqual(hostname, "myhost.example.com")
+        self.assertEqual(port, DEFAULT_PORT)
+        self.assertEqual(prefix, "/myapp")
 
     def test_colon_slash_slash_but_nothing_else(self):
         local_url = "http://"
@@ -292,6 +296,22 @@ class TestParseBaseUrlInfo(fixture.SubManFixture):
         (hostname, port, prefix) = parse_baseurl_info(local_url)
         self.assertEqual(prefix, DEFAULT_CDN_PREFIX)
         self.assertEqual("https://foo-bar:8088", format_baseurl(hostname, port, prefix))
+
+    def test_ipv4(self):
+        result = format_baseurl(hostname="127.0.0.1", port="8080", prefix="/foo")
+        self.assertEqual("https://127.0.0.1:8080/foo", result)
+
+    def test_ipv6(self):
+        result = format_baseurl(hostname="::1", port="8080", prefix="/foo")
+        self.assertEqual("https://[::1]:8080/foo", result)
+
+    def test_ipv6_default_port(self):
+        result = format_baseurl(hostname="::1", port="443", prefix="/foo")
+        self.assertEqual("https://[::1]/foo", result)
+
+    def test_ipv6_no_prefix(self):
+        result = format_baseurl(hostname="::1", port="8080", prefix="/")
+        self.assertEqual("https://[::1]:8080", result)
 
 
 class TestUrlBaseJoinEmptyBase(fixture.SubManFixture):

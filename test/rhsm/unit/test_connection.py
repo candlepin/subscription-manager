@@ -165,7 +165,7 @@ class ConnectionTests(unittest.TestCase):
     def test_https_proxy_info_allcaps(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444'}):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
-                uep = UEPConnection(username="dummy", password="dummy",
+                uep = UEPConnection(host="dummy", username="dummy", password="dummy",
                     handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
@@ -177,7 +177,7 @@ class ConnectionTests(unittest.TestCase):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host:4444',
                                        'http_proxy': 'http://notme:orme@host:2222'}):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
-                uep = UEPConnection(username="dummy", password="dummy",
+                uep = UEPConnection(host="dummy", username="dummy", password="dummy",
                     handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
@@ -187,7 +187,7 @@ class ConnectionTests(unittest.TestCase):
     def test_no_port(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://u:p@host'}):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
-                uep = UEPConnection(username="dummy", password="dummy",
+                uep = UEPConnection(host="dummy", username="dummy", password="dummy",
                     handler="/Test/", insecure=True)
                 self.assertEqual("u", uep.proxy_user)
                 self.assertEqual("p", uep.proxy_password)
@@ -197,7 +197,7 @@ class ConnectionTests(unittest.TestCase):
     def test_no_user_or_password(self):
         with patch.dict('os.environ', {'HTTPS_PROXY': 'http://host:1111'}):
             with patch.object(connection.config, 'get', self.mock_config_without_proxy_settings):
-                uep = UEPConnection(username="dummy", password="dummy",
+                uep = UEPConnection(host="dummy", username="dummy", password="dummy",
                     handler="/Test/", insecure=True)
                 self.assertEqual(None, uep.proxy_user)
                 self.assertEqual(None, uep.proxy_password)

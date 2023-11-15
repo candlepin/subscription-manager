@@ -116,7 +116,6 @@ def parse_url(local_server_entry,
     :param default_port: default_port
     :return: a tuple of (username, password, hostname, port, path)
     """
-    # Adding http:// onto the front of the hostname
 
     if local_server_entry == "":
         raise ServerUrlParseErrorEmpty(local_server_entry)
@@ -142,65 +141,37 @@ def parse_url(local_server_entry,
     if not good_url:
         good_url = "https://%s" % local_server_entry
 
-    #FIXME: need a try except here? docs
-    # don't seem to indicate any expected exceptions
+    # FIXME: need a try except here? docs
+    #        don't seem to indicate any expected exceptions
     result = six.moves.urllib.parse.urlparse(good_url)
-    username = default_username
-    password = default_password
-    #netloc = result[1].split(":")
 
-    # to support username and password, let's split on @
-    # since the format will be username:password@hostname:port
-    foo = result[1].split("@")
+    username = result.username
+    if username is None or username == "":
+        username = default_username
 
-    # handle username/password portion, then deal with host:port
-    # just in case someone passed in @hostname without
-    # a username,  we default to the default_username
-    if len(foo) > 1:
-        creds = foo[0].split(":")
-        netloc = foo[1].split(":")
+    password = result.password
+    if password is None:
+        password = default_password
 
-        if len(creds) > 1:
-            password = creds[1]
-        if creds[0] is not None and len(creds[0]) > 0:
-            username = creds[0]
-    else:
-        netloc = foo[0].split(":")
-
-    # in some cases, if we try the attr accessors, we'll
-    # get a ValueError deep down in urlparse, particular if
-    # port ends up being None
-    #
-    # So maybe check result.port/path/hostname for None, and
-    # throw an exception in those cases.
-    # adding the schem seems to avoid this though
-    port = default_port
-    if len(netloc) > 1:
-        if netloc[1] != "":
-            port = str(netloc[1])
-        else:
-            raise ServerUrlParseErrorPort(local_server_entry)
-
-    # path can be None?
-    prefix = default_prefix
-    if result[2] is not None:
-        if result[2] != '':
-            prefix = result[2]
-
-    hostname = default_hostname
-    if netloc[0] is not None:
-        if netloc[0] != "":
-            hostname = netloc[0]
+    hostname = result.hostname
+    if hostname is None:
+        hostname = default_hostname
 
     try:
-        if port:
-            int(port)
-    except TypeError:
-        raise ServerUrlParseErrorPort(local_server_entry)
+        port = result.port
     except ValueError:
         raise ServerUrlParseErrorPort(local_server_entry)
 
-    return (username, password, hostname, port, prefix)
+    if port is None:
+        port = default_port
+    else:
+        port = str(port)
+
+    prefix = result.path
+    if prefix is None or prefix == "":
+        prefix = default_prefix
+
+    return username, password, hostname, port, prefix
 
 
 def get_env_proxy_info():

@@ -40,7 +40,7 @@ from rhsm.https import ssl
 import rhsm.config
 import rhsm.connection as connection
 from rhsm.connection import ProxyException, UnauthorizedException, ConnectionException, RemoteServerException, ConnectionOSErrorException
-from rhsm.utils import cmd_name, remove_scheme, ServerUrlParseError
+from rhsm.utils import cmd_name, ServerUrlParseError
 
 from subscription_manager import identity
 from subscription_manager.branding import get_branding
@@ -462,16 +462,15 @@ class CliCommand(AbstractCLICommand):
                 baseurl_server_prefix)
             config_changed = True
 
-        # support foo.example.com:3128 format
         if hasattr(self.options, "proxy_url") and self.options.proxy_url:
-            parts = remove_scheme(self.options.proxy_url).split(':')
-            self.proxy_hostname = parts[0]
-            # no ':'
-            if len(parts) > 1:
-                self.proxy_port = int(parts[1])
-            else:
-                # if no port specified, use the one from the config, or fallback to the default
-                self.proxy_port = conf['server'].get_int('proxy_port') or rhsm.config.DEFAULT_PROXY_PORT
+            default_proxy_port = conf["server"].get_int("proxy_port") or rhsm.config.DEFAULT_PROXY_PORT
+            proxy_user, proxy_pass, proxy_hostname, proxy_port, proxy_prefix = rhsm.utils.parse_url(
+                self.options.proxy_url, default_port=default_proxy_port
+            )
+            self.proxy_user = proxy_user
+            self.proxy_password = proxy_pass
+            self.proxy_hostname = proxy_hostname
+            self.proxy_port = int(proxy_port)
             config_changed = True
 
         if hasattr(self.options, "proxy_user") and self.options.proxy_user:
@@ -526,7 +525,7 @@ class CliCommand(AbstractCLICommand):
                     # this tries to actually connect to the server and ping it
                     if not is_valid_server_info(self.no_auth_cp):
                         system_exit(os.EX_UNAVAILABLE, _("Unable to reach the server at %s:%s%s") % (
-                            self.no_auth_cp.host,
+                            connection.normalized_host(self.no_auth_cp.host),
                             self.no_auth_cp.ssl_port,
                             self.no_auth_cp.handler
                         ))

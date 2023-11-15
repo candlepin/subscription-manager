@@ -137,16 +137,24 @@ class TestParseServerInfo(unittest.TestCase):
                           local_url)
 
     def test_colon_but_no_port(self):
+        # This is correct URL
         local_url = "https://myhost.example.com:/myapp"
-        self.assertRaises(ServerUrlParseErrorPort,
-                          parse_url,
-                          local_url)
+        username, password, hostname, port, prefix = parse_url(local_url)
+        self.assertIsNone(username)
+        self.assertIsNone(password)
+        self.assertEqual(hostname, "myhost.example.com")
+        self.assertIsNone(port)
+        self.assertEqual(prefix, "/myapp")
 
     def test_colon_but_no_port_no_scheme(self):
+        # This is correct URL
         local_url = "myhost.example.com:/myapp"
-        self.assertRaises(ServerUrlParseErrorPort,
-                          parse_url,
-                          local_url)
+        username, password, hostname, port, prefix = parse_url(local_url)
+        self.assertIsNone(username)
+        self.assertIsNone(password)
+        self.assertEqual(hostname, "myhost.example.com")
+        self.assertIsNone(port)
+        self.assertEqual(prefix, "/myapp")
 
     def test_colon_slash_slash_but_nothing_else(self):
         local_url = "http://"
@@ -272,6 +280,24 @@ class TestHasGoodScheme(unittest.TestCase):
 
 
 class TestParseUrl(unittest.TestCase):
+
+    def test_ipv4_url(self):
+        local_url = "http://user:pass@192.168.0.10:3128/prefix"
+        (username, password, hostname, port, prefix) = parse_url(local_url)
+        self.assertEqual("user", username)
+        self.assertEqual("pass", password)
+        self.assertEqual("192.168.0.10", hostname)
+        self.assertEqual("3128", port)
+        self.assertEqual("/prefix", prefix)
+
+    def test_ipv6_url(self):
+        local_url = "http://user:pass@[2001:db8::dead:beef:1]:3128/prefix"
+        (username, password, hostname, port, prefix) = parse_url(local_url)
+        self.assertEqual("user", username)
+        self.assertEqual("pass", password)
+        self.assertEqual("2001:db8::dead:beef:1", hostname)
+        self.assertEqual("3128", port)
+        self.assertEqual("/prefix", prefix)
 
     def test_username_password(self):
         local_url = "http://user:pass@hostname:1111/prefix"
