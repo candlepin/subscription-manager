@@ -94,8 +94,10 @@ class RegisterDBusObject(base_object.BaseObject):
         out_signature="s",
     )
     @util.dbus_handle_sender
+    @util.dbus_admin_auth_policy
     @util.dbus_handle_exceptions
     def Start(self, locale, sender=None):
+        log.debug(f"D-Bus method: Start({locale}, {sender})")
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
@@ -108,8 +110,10 @@ class RegisterDBusObject(base_object.BaseObject):
         out_signature="b",
     )
     @util.dbus_handle_sender
+    @util.dbus_admin_auth_policy
     @util.dbus_handle_exceptions
     def Stop(self, locale, sender=None):
+        log.debug(f"D-Bus method: Stop({locale}, {sender})")
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
 
