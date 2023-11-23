@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.38
+Version: 1.29.39
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -734,6 +734,28 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Nov 23 2023 Pino Toscano <ptoscano@redhat.com> 1.29.39-1
+- tito: drop bz requirement (ptoscano@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (jsefler@redhat.com)
+- RHEL-7206: Small change of message printed by dnf plugin (jhnidek@redhat.com)
+- CCT-118: Fix flake8 error E721 (mhorky@redhat.com)
+- Fix type hint in rhsm (mhorky@redhat.com)
+- Simplify autoregistration test setup (mhorky@redhat.com)
+- RHEL-9435: Get AWS metadata via IMDSv2 (mhorky@redhat.com)
+- Fixed inappropriate logical expression (ataf@openrefactory.com)
+- CCT-71: Try to ping server, when --proxy is used (jhnidek@redhat.com)
+- CCT-10: Ensure IPv6-based URLs are properly formatted (mhorky@redhat.com)
+- RPM: Avoid needless runtime requirement on python3-setuptools
+  (miro@hroncok.cz)
+- cli: normalize hostname in error message (ptoscano@redhat.com)
+- connection: normalize hostname in ConnectionOSErrorException
+  (ptoscano@redhat.com)
+- Improved printing of addresses and URLs (jhnidek@redhat.com)
+- Use username and password from --proxy=URL (jhnidek@redhat.com)
+- Use parse_url() from utils.py for parsing URL, when --proxy is used.
+  (jhnidek@redhat.com)
+- 2225403: Parse URL properly (jhnidek@redhat.com)
+
 * Thu Sep 14 2023 Pino Toscano <ptoscano@redhat.com> 1.29.38-1
 - Translated using Weblate (Chinese (Simplified) (zh_CN)) (ptoscano@redhat.com)
 - ci: bump actions/checkout from 3 to 4
