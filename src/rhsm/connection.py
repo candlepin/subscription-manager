@@ -15,12 +15,15 @@
 #
 
 import base64
+import math
+
 from rhsm import certificate
 import datetime
 import dateutil.parser
 import locale
 import logging
 import os
+import signal
 import socket
 import sys
 import time
@@ -60,6 +63,13 @@ config = get_config_parser()
 MULTI_ENV = "multi_environment"
 
 REUSE_CONNECTION = True
+
+FALLBACK_RESPONSE_TIME: float = 0.5
+"""Fallback value representing the response time to the server.
+
+It is used for connection timeouts in case the smoothed response time we usually
+measure is not available.
+"""
 
 
 def safe_int(value: Any, safe_value: Any = None) -> Union[int, None, Any]:
@@ -666,23 +676,53 @@ class BaseRestLib:
             self.headers["Authorization"] = "Bearer " + token
 
     def close_connection(self) -> None:
+        """Try to close connection to the server.
+
+        Because the server's TLS stack may misbehave (there are behavioral
+        differences between 1.2 and 1.3, for example), we handle timeouts of
+        closing TLS connection manually. If the server does not respond within
+        '3 * average return time' seconds, we force the connection down.
+
+        After TLS connection has been closed, we close the TCP connection.
         """
-        Try to close connection to server
-        :return: None
-        """
-        if self.__conn is not None:
-            # Do proper TLS shutdown handshake (TLS tear down) first
-            if self.__conn.sock is not None:
-                log.debug(f"Closing HTTPS connection {self.__conn.sock}")
-                try:
-                    self.__conn.sock.unwrap()
-                except ssl.SSLError as err:
-                    log.debug(f"Unable to close TLS connection properly: {err}")
-                else:
-                    log.debug("TLS connection closed")
-            # Then it is possible to close TCP connection
+        if self.__conn is None:
+            return
+
+        if self.__conn.sock is None:
+            log.debug(f"Closing TCP connection to {self.__conn.host}")
             self.__conn.close()
+            self.__conn = None
+            log.debug("TCP connection has been closed")
+            return
+
+        log.debug(f"Closing TLS connection {self.__conn.sock}")
+
+        # The server may not send the `close_notify` alert when it closes the
+        # connection on its side.
+        # Here we set a timeout equal to three times the measured response time
+        # to prevent the connection from waiting until TCP timeout.
+        # See RHEL-17345.
+        response_time: float = self.smoothed_rt or FALLBACK_RESPONSE_TIME
+        timeout_time: int = math.ceil(response_time * 3)
+
+        def on_timeout(signum, frame) -> None:
+            raise TimeoutError(f"Did not get response in {timeout_time}s")
+
+        signal.signal(signalnum=signal.SIGALRM, handler=on_timeout)
+        signal.alarm(timeout_time)
+
+        try:
+            self.__conn.sock.unwrap()
+        except (ssl.SSLError, TimeoutError) as err:
+            log.debug(f"TLS connection could not be closed: {err}")
+        else:
+            signal.alarm(0)
+            log.debug("TLS connection has been closed")
+
+        log.debug(f"Closing TCP connection to {self.__conn.host}")
+        self.__conn.close()
         self.__conn = None
+        log.debug("TCP connection has been closed")
 
     def _get_cert_key_list(self) -> List[Tuple[str, str]]:
         """
@@ -1227,7 +1267,10 @@ class BaseRestLib:
             self.smoothed_rt = response_time
         else:
             self.smoothed_rt = (self.ALPHA * self.smoothed_rt) + ((1 - self.ALPHA) * response_time)
-        log.debug("Response time: %s, Smoothed response time: %s" % (response_time, self.smoothed_rt))
+        log.debug(
+            f"Latest response time was {response_time:.5f}s, "
+            f"smoothed response time is {self.smoothed_rt:.5f}s"
+        )
 
     def validateResult(self, result: dict, request_type: str = None, handler: str = None) -> None:
         """
