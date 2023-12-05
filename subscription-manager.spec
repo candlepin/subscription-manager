@@ -225,7 +225,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.40
+Version: 1.28.41
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1381,6 +1381,23 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Tue Dec 05 2023 Pino Toscano <ptoscano@redhat.com> 1.28.41-1
+- tito: drop bz requirement (ptoscano@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (jsefler@redhat.com)
+- CCT-71: Try to ping server, when --proxy is used (jhnidek@redhat.com)
+- CCT-10: Ensure IPv6-based URLs are properly formatted (mhorky@redhat.com)
+- cli: normalize hostname in error message (ptoscano@redhat.com)
+- connection: normalize hostname in ConnectionOSErrorException
+  (ptoscano@redhat.com)
+- Improved printing of addresses and URLs (jhnidek@redhat.com)
+- Use username and password from --proxy=URL (jhnidek@redhat.com)
+- Use parse_url() from utils.py for parsing URL, when --proxy is used.
+  (jhnidek@redhat.com)
+- RHEL-13375: 1.28 Parse URL properly (jhnidek@redhat.com)
+- ci: stop testing on Fedora (ptoscano@redhat.com)
+- Simplify autoregistration test setup (mhorky@redhat.com)
+- RHEL-9435: Get AWS metadata via IMDSv2 (mhorky@redhat.com)
+
 * Thu Sep 14 2023 Pino Toscano <ptoscano@redhat.com> 1.28.40-1
 - Translated using Weblate (Chinese (Simplified) (zh_CN)) (ptoscano@redhat.com)
 
