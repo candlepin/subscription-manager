@@ -11,7 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-
+import enum
 import functools
 import os
 import re
@@ -33,6 +33,19 @@ Please note that they can be also disabled via rhsm.conf file or with
 environment variable (when debugging is turned on), this variable (working as
 module singleton) is used for turning it off dynamically via CLI option.
 """
+
+
+class COLOR(enum.Enum):
+    RED = "\033[91m"
+    YELLOW = "\033[93m"
+    GREEN = "\033[92m"
+    MAGENTA = "\033[95m"
+    BLUE = "\033[94m"
+    RESET = "\033[0m"
+
+
+def colorize(text: str, color: COLOR) -> str:
+    return color.value + text + COLOR.RESET.value
 
 
 def remove_scheme(uri: str) -> str:

@@ -17,6 +17,7 @@ This module contains base class for generic cloud provider. This module
 should not be imported outside this package.
 """
 
+import enum
 import requests
 import logging
 import json
@@ -26,6 +27,19 @@ import time
 from typing import Union
 
 log = logging.getLogger(__name__)
+
+
+class COLOR(enum.Enum):
+    RED = "\033[91m"
+    YELLOW = "\033[93m"
+    GREEN = "\033[92m"
+    MAGENTA = "\033[95m"
+    BLUE = "\033[94m"
+    RESET = "\033[0m"
+
+
+def colorize(text: str, color: COLOR) -> str:
+    return color.value + text + COLOR.RESET.value
 
 
 class BaseCloudProvider:
@@ -345,19 +359,17 @@ class BaseCloudProvider:
         :param request: prepared HTTP request
         :return: None
         """
-        yellow_col = "\033[93m"
-        blue_col = "\033[94m"
-        red_col = "\033[91m"
-        end_col = "\033[0m"
-        msg = blue_col + "Making request: " + end_col
-        msg += red_col + request.method + " " + request.url + end_col
+        print(colorize("Request:", COLOR.GREEN))
+        print(colorize(f"{request.method} {request.url}", COLOR.RED))
+
         if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_HEADER", ""):
-            headers = ", ".join("{}: {}".format(k, v) for k, v in request.headers.items())
-            msg += blue_col + " {{{headers}}}".format(headers=headers) + end_col
+            print(colorize("Request headers:", COLOR.GREEN))
+            print(colorize(f"{request.headers}", COLOR.BLUE))
+
         if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_BODY", "") and request.body is not None:
-            msg += yellow_col + f" {request.body}" + end_col
-        print()
-        print(msg)
+            print(colorize("Request body:", COLOR.GREEN))
+            print(colorize(f"{request.body}", COLOR.YELLOW))
+
         print()
 
     @staticmethod
@@ -369,15 +381,15 @@ class BaseCloudProvider:
         :param **kwargs: Not used
         :return: Instance of response
         """
-        print(
-            "\n{code} {{{headers}}}\n{body}\n".format(
-                code=response.status_code,
-                headers=", ".join(
-                    "{key}: {value}".format(key=k, value=v) for k, v in response.headers.items()
-                ),
-                body=response.text,
-            )
-        )
+        print(colorize("Response:", COLOR.GREEN))
+        print(colorize(f"{response.status_code}", COLOR.RED))
+
+        print(colorize("Response headers:", COLOR.GREEN))
+        print(colorize(f"{response.headers}", COLOR.BLUE))
+
+        print(colorize("Response content:", COLOR.GREEN))
+        print(colorize(f"{response.text}", COLOR.YELLOW))
+
         return response
 
     def _get_data_from_server(self, data_type: str, url: str, headers: dict = None) -> Union[str, None]:
