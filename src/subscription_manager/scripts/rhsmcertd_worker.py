@@ -10,11 +10,6 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-#
-
-# hack to allow bytes/strings to be interpolated w/ unicode values (gettext gives us bytes)
-# Without this, for example, "Формат: %s\n" % "foobar" will fail with UnicodeDecodeError
-# See http://stackoverflow.com/a/29832646/6124862 for more details
 import sys
 
 import signal
