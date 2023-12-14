@@ -847,94 +847,105 @@ class BaseRestLib:
         :return: None
         """
 
-        if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST", ""):
-            magenta_col = "\033[95m"
-            blue_col = "\033[94m"
-            yellow_col = "\033[93m"
-            green_col = "\033[92m"
-            red_col = "\033[91m"
-            end_col = "\033[0m"
+        if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST", "") == "":
+            return
 
-            msg = ""
+        print()
 
-            if self.auth_type == ConnectionType.KEYCLOAK_AUTH:
-                auth = "keycloak auth"
-            elif self.auth_type == ConnectionType.BASIC_AUTH:
-                auth = "basic auth"
-            elif self.auth_type == ConnectionType.CONSUMER_CERT_AUTH:
-                auth = "consumer auth"
-            elif self.auth_type == ConnectionType.NO_AUTH:
-                auth = "no auth"
-            else:
-                auth = "undefined auth"
+        # Print information about TCP/IP layer
+        if (
+            os.environ.get("SUBMAN_DEBUG_TCP_IP", "")
+            and self.__conn is not None
+            and self.__conn.sock is not None
+        ):
+            print(utils.colorize("TCP socket:", utils.COLOR.GREEN))
+            print(utils.colorize(f"{self.__conn.sock}", utils.COLOR.BLUE))
 
-            # Print information about TCP/IP layer
-            if (
-                os.environ.get("SUBMAN_DEBUG_TCP_IP", "")
-                and self.__conn is not None
-                and self.__conn.sock is not None
-            ):
-                msg += blue_col + f"{self.__conn.sock}\n" + end_col
+        # When proxy server is used, then print some additional information about proxy connection
+        if self.proxy_hostname and self.proxy_port:
+            print(utils.colorize("Proxy:", utils.COLOR.GREEN))
+            # Note: using only https:// is not a mistake. We use only https for proxy connection.
+            proxy_msg: str = "https://"
+            # Print username and eventually password
+            if self.proxy_user:
+                if self.proxy_user and self.proxy_password:
+                    proxy_msg += f"{self.proxy_user}:{self.proxy_password}@"
+                elif self.proxy_user and not self.proxy_password:
+                    proxy_msg += f"{self.proxy_user}@"
+            # Print hostname and port
+            proxy_msg += f"{normalized_host(self.proxy_hostname)}:{safe_int(self.proxy_port)}"
+            print(utils.colorize(proxy_msg, utils.COLOR.MAGENTA))
 
-            # When proxy server is used, then print some additional information about proxy connection
-            if self.proxy_hostname and self.proxy_port:
-                # Note: using only https:// is not a mistake. We use only https for proxy connection.
-                msg += blue_col + "Using proxy: " + magenta_col + "https://"
-                # Print username and eventually password
-                if self.proxy_user:
-                    if self.proxy_user and self.proxy_password:
-                        msg += f"{self.proxy_user}:{self.proxy_password}@"
-                    elif self.proxy_user and not self.proxy_password:
-                        msg += f"{self.proxy_user}@"
-                # Print hostname and port
-                msg += f"{normalized_host(self.proxy_hostname)}:{safe_int(self.proxy_port)}"
-                msg += end_col
-                # Print HTTP headers used for proxy connection
-                tunel_headers = None
-                if self.__conn is not None and hasattr(self.__conn, "_tunnel_headers"):
-                    tunel_headers = getattr(self.__conn, "_tunnel_headers")
-                if tunel_headers is not None:
-                    msg += blue_col + f" {tunel_headers}" + end_col
-                msg += "\n"
+            # Print HTTP headers used for proxy connection
+            tunnel_msg = ""
+            tunnel_headers = None
+            if self.__conn is not None and hasattr(self.__conn, "_tunnel_headers"):
+                tunnel_headers = getattr(self.__conn, "_tunnel_headers")
+            if tunnel_headers is not None:
+                tunnel_msg = f"{tunnel_headers}"
+            if tunnel_msg:
+                print(utils.colorize(tunnel_msg, utils.COLOR.BLUE))
 
-            if self.insecure is True:
-                msg += blue_col + f"Making insecure ({auth}) request:" + end_col
-            else:
-                msg += blue_col + f"Making ({auth}) request:" + end_col
-            msg += (
-                red_col
-                + " https://"
-                + f"{normalized_host(self.host)}:{safe_int(self.ssl_port)}{handler} {request_type}"
-                + end_col
+        auth = ""
+        if self.insecure:
+            auth = "insecure "
+        if self.auth_type == ConnectionType.KEYCLOAK_AUTH:
+            auth += "keycloak auth"
+        elif self.auth_type == ConnectionType.BASIC_AUTH:
+            auth += "basic auth"
+        elif self.auth_type == ConnectionType.CONSUMER_CERT_AUTH:
+            auth += "consumer auth"
+        elif self.auth_type == ConnectionType.NO_AUTH:
+            auth += "no auth"
+        else:
+            auth += "undefined auth"
+
+        print(utils.colorize("Request:", utils.COLOR.GREEN))
+        print(
+            utils.colorize(
+                f"{request_type} "
+                + "https://"
+                + f"{normalized_host(self.host)}:{safe_int(self.ssl_port)}{handler}",
+                utils.COLOR.RED,
             )
+            + " using "
+            + utils.colorize(f"{auth}", utils.COLOR.BLUE)
+        )
 
-            if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_HEADER", ""):
-                msg += blue_col + " %s" % final_headers + end_col
-            if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_BODY", "") and body is not None:
-                msg += yellow_col + " %s" % body + end_col
-            print()
-            print(msg)
-            print()
-            if os.environ.get("SUBMAN_DEBUG_SAVE_TRACEBACKS", ""):
-                debug_dir = Path("/tmp/rhsm/")
-                debug_dir.mkdir(exist_ok=True)
+        if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_HEADER", ""):
+            print(utils.colorize("Request headers:", utils.COLOR.GREEN))
+            print(utils.colorize(f"{final_headers}", utils.COLOR.BLUE))
 
-                timestamp: str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_BODY", "") and body is not None:
+            print(utils.colorize("Request body:", utils.COLOR.GREEN))
+            print(utils.colorize(f"{body}", utils.COLOR.YELLOW))
 
-                # make sure we don't overwrite previous logs
-                i = 0
-                while True:
-                    filename = Path(f"{timestamp}_{i}.log")
-                    debug_log = debug_dir / filename
-                    if not debug_log.exists():
-                        break
-                    i += 1
+        if os.environ.get("SUBMAN_DEBUG_PRINT_TRACEBACKS", ""):
+            print(utils.colorize("Current call stack:", utils.COLOR.GREEN))
+            traceback.print_stack(file=sys.stdout)
 
-                with debug_log.open("w", encoding="utf-8") as handle:
-                    traceback.print_stack(file=handle)
+        if os.environ.get("SUBMAN_DEBUG_SAVE_TRACEBACKS", ""):
+            debug_dir = Path("/tmp/rhsm/")
+            debug_dir.mkdir(exist_ok=True)
 
-                print(green_col + f"Traceback saved to {str(debug_log)}." + end_col)
-                print()
+            timestamp: str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+            # make sure we don't overwrite previous logs
+            i = 0
+            while True:
+                filename = Path(f"{timestamp}_{i}.log")
+                debug_log = debug_dir / filename
+                if not debug_log.exists():
+                    break
+                i += 1
+
+            with debug_log.open("w", encoding="utf-8") as handle:
+                traceback.print_stack(file=handle)
+
+            print(utils.colorize("Call stack file:", utils.COLOR.GREEN))
+            print(f"{str(debug_log)}")
+
+        print()
 
     @staticmethod
     def _print_debug_info_about_response(result: dict) -> None:
@@ -946,10 +957,16 @@ class BaseRestLib:
         """
 
         if os.environ.get("SUBMAN_DEBUG_PRINT_RESPONSE", ""):
-            gray_col = "\033[90m"
-            end_col = "\033[0m"
-            print(gray_col + "%s %s" % (result["status"], result["headers"]))
-            print(result["content"] + end_col)
+            print(utils.colorize("Response:", utils.COLOR.GREEN))
+            print(utils.colorize(f"{result['status']}", utils.COLOR.RED))
+
+            print(utils.colorize("Response headers:", utils.COLOR.GREEN))
+            print(utils.colorize(f"{result['headers']}", utils.COLOR.BLUE))
+
+            if result["content"]:
+                print(utils.colorize("Response body:", utils.COLOR.GREEN))
+                print(utils.colorize(f"{result['content']}", utils.COLOR.YELLOW))
+
             print()
 
     def _set_accept_language_in_header(self) -> None:
