@@ -366,7 +366,7 @@ class BaseCloudProvider:
             print(colorize("Request headers:", COLOR.GREEN))
             print(colorize(f"{request.headers}", COLOR.BLUE))
 
-        if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_BODY", "") and request.body is not None:
+        if os.environ.get("SUBMAN_DEBUG_PRINT_REQUEST_BODY", "") and hasattr(request, "body"):
             print(colorize("Request body:", COLOR.GREEN))
             print(colorize(f"{request.body}", COLOR.YELLOW))
 
