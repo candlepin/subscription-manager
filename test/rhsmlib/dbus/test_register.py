@@ -340,12 +340,26 @@ class RegisterDBusObjectTest(SubManDBusFixture):
         get_cmd_line_mock = get_cmd_line_patch.start()
         get_cmd_line_mock.return_value = "unit-test sender"
 
+        pid_of_sender_patch = mock.patch(
+            "rhsmlib.dbus.server.pid_of_sender",
+            autospec=True,
+        )
+        pid_of_sender_mock = pid_of_sender_patch.start()
+        pid_of_sender_mock.return_value = 123456
+
+        are_others_running_path = mock.patch(
+            "rhsmlib.dbus.server.DomainSocketServer.are_other_senders_still_running",
+            autospec=True,
+        )
+        are_others_running_mock = are_others_running_path.start()
+        are_others_running_mock.return_value = False
+
         dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
     def tearDown(self) -> None:
         """Make sure the domain server is stopped once the test ends."""
         with contextlib.suppress(rhsmlib.dbus.exceptions.Failed):
-            self.impl.stop()
+            self.impl.stop("sender")
 
         super().tearDown()
 
@@ -373,11 +387,11 @@ class RegisterDBusObjectTest(SubManDBusFixture):
 
     def test_Stop(self):
         self.impl.start("sender")
-        self.impl.stop()
+        self.impl.stop("sender")
 
     def test_Stop__not_running(self):
         with self.assertRaises(rhsmlib.dbus.exceptions.Failed):
-            self.impl.stop()
+            self.impl.stop("sender")
 
 
 class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
