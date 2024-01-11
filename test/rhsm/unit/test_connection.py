@@ -1067,7 +1067,7 @@ class DatetimeFormattingTests(unittest.TestCase):
         self.cp = UEPConnection(username="dummy", password="dummy", handler="/Test/", insecure=True)
 
     def tearDown(self):
-        locale.resetlocale()
+        locale.setlocale(category=locale.LC_ALL, locale="")
 
     @patch("subscription_manager.cache.open", MOCK_OPEN_CACHE)
     def test_date_formatted_properly_with_japanese_locale(self):
