@@ -534,14 +534,14 @@ class Certificate:
         self.issuer: Optional[dict] = issuer
 
     def is_valid(self, on_date: Optional[datetime.datetime] = None):
-        gmt = datetime.datetime.utcnow()
+        gmt = datetime.datetime.now(datetime.timezone.utc)
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
         return self.valid_range.has_date(gmt)
 
     def is_expired(self, on_date: Optional[datetime.datetime] = None):
-        gmt = datetime.datetime.utcnow()
+        gmt = datetime.datetime.now(datetime.timezone.utc)
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
@@ -658,7 +658,7 @@ class EntitlementCertificate(ProductCertificate):
         return paths
 
     def is_expiring(self, on_date=None):
-        gmt = datetime.datetime.utcnow()
+        gmt = datetime.datetime.now(datetime.timezone.utc)
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())

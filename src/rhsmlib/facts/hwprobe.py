@@ -23,7 +23,7 @@ import re
 import subprocess
 import sys
 
-from datetime import datetime, timedelta
+import datetime
 from rhsmlib.facts import cpuinfo
 from rhsmlib.facts import collector
 
@@ -230,9 +230,9 @@ class HardwareCollector(collector.FactsCollector):
         # spacewalk/blob/master/client/rhel/rhn-client-tools/src/bin/rhn_check.py
         try:
             uptime = float(open("/proc/uptime", "r").read().split()[0])
-            uptime_delta = timedelta(seconds=uptime)
-            now = datetime.utcnow()
-            last_boot_date: datetime = now - uptime_delta
+            uptime_delta = datetime.timedelta(seconds=uptime)
+            now = datetime.datetime.now(datetime.timezone.utc)
+            last_boot_date: datetime.datetime = now - uptime_delta
             last_boot: str = last_boot_date.strftime("%Y-%m-%d %H:%M:%S") + " UTC"
         except Exception as e:
             log.warning("Error reading uptime information %s", e)

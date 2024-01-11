@@ -13,7 +13,7 @@
 #
 
 from collections import defaultdict
-from datetime import datetime, timedelta
+import datetime
 import io
 from unittest import mock
 import random
@@ -228,9 +228,9 @@ class StubProductCertificate(ProductCertificate):
             self.provided_tags = set(provided_tags)
 
         if not start_date:
-            start_date = datetime.now() - timedelta(days=100)
+            start_date = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=100)
         if not end_date:
-            end_date = datetime.now() + timedelta(days=365)
+            end_date = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=365)
 
         path = "/path/to/fake_product.pem"
 
@@ -285,9 +285,9 @@ class StubEntitlementCertificate(EntitlementCertificate):
             products = products + provided_products
 
         if not start_date:
-            start_date = datetime.utcnow()
+            start_date = datetime.datetime.now(datetime.timezone.utc)
         if not end_date:
-            end_date = start_date + timedelta(days=365)
+            end_date = start_date + datetime.timedelta(days=365)
 
         # to simulate a cert with no product
         sku = None
@@ -344,11 +344,11 @@ class StubEntitlementCertificate(EntitlementCertificate):
         self.is_deleted = True
 
     def is_expiring(self, on_date=None):
-        gmt = datetime.utcnow()
+        gmt = datetime.datetime.now(datetime.timezone.utc)
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
-        warning_time = timedelta(days=int(self.order.warning_period))
+        warning_time = datetime.timedelta(days=int(self.order.warning_period))
         return self.valid_range.end() - warning_time < gmt
 
 

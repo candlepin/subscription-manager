@@ -194,7 +194,7 @@ class Certificate:
         :return: True if valid.
         """
         valid_range = self.validRange()
-        gmt = datetime.datetime.utcnow()
+        gmt = datetime.datetime.now(datetime.timezone.utc)
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
@@ -207,7 +207,7 @@ class Certificate:
         :return: True if valid.
         """
         valid_range = self.validRange()
-        gmt = datetime.datetime.utcnow()
+        gmt = datetime.datetime.now(datetime.timezone.utc)
         if on_date:
             gmt = on_date
         gmt = gmt.replace(tzinfo=GMT())
@@ -612,7 +612,7 @@ class DateRange:
 
         :return: True if valid.
         """
-        gmt: datetime.datetime = datetime.datetime.utcnow()
+        gmt: datetime.datetime = datetime.datetime.now(datetime.timezone.utc)
         gmt = gmt.replace(tzinfo=GMT())
         return self.has_date(gmt)
 

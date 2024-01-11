@@ -83,24 +83,21 @@ def normalized_host(host: str) -> str:
         return host
 
 
-def drift_check(utc_time_string: str, hours: int = 1) -> bool:
-    """
-    Takes in a RFC 1123 date and returns True if the current time
-    is greater than the supplied number of hours
-    """
-    drift = False
-    if utc_time_string:
-        try:
-            # This may have a timezone (utc)
-            utc_datetime = dateutil.parser.parse(utc_time_string)
-            # This should not have a timezone, but we know it will be utc.
-            # We need our timezones to match in order to compare
-            local_datetime = datetime.datetime.utcnow().replace(tzinfo=utc_datetime.tzinfo)
-            delta = datetime.timedelta(hours=hours)
-            drift = abs((utc_datetime - local_datetime)) > delta
-        except Exception as e:
-            log.error(e)
+def get_time_drift(timestamp: str) -> datetime.timedelta:
+    """Get a difference between server and local clock.
 
+    :param timestamp: A timezone-unaware timestamp in RFC 1123 format.
+    :returns: Absolute difference between server and local time.
+    """
+    # RFC 1123: 'Fri, 12 Jan 2024 08:10:46 GMT'
+    timestamp: datetime.datetime = dateutil.parser.parse(timestamp)
+    if timestamp.tzinfo.tzname(timestamp) != "UTC":
+        log.warning(f"Expected UTC timestamp, got '{timestamp}', drift check may be off.")
+    # dateutil has its own tzinfo object representing UTC
+    timestamp = timestamp.replace(tzinfo=datetime.timezone.utc)
+
+    now = datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0)
+    drift: datetime.timedelta = abs(timestamp - now)
     return drift
 
 
@@ -1198,9 +1195,22 @@ class BaseRestLib:
                 self.__conn.max_request_num = max_requests_num
                 log.debug(f"Max number of requests: {max_requests_num} is used from 'Keep-Alive' HTTP header")
 
-        # Look for server drift, and log a warning
-        if drift_check(response.getheader("date")):
-            log.warning("Clock skew detected, please check your system time")
+        # Look for a time drift and log if the system is significantly different from server clock
+        response_sent_at: Optional[str] = response.getheader("date")
+        if response_sent_at is not None:
+            try:
+                drift: datetime.timedelta = get_time_drift(response_sent_at)
+                message: str = (
+                    f"Local system clock seems to be off by {drift}, please check your system time."
+                )
+                if drift > datetime.timedelta(hours=1):
+                    log.warning(message)
+                elif drift > datetime.timedelta(minutes=15):
+                    log.debug(message)
+            except Exception:
+                log.exception(
+                    f"Could not check if local clock is off from server's time '{response_sent_at}'"
+                )
 
         # FIXME: we should probably do this in a wrapper method
         # so we can use the request method for normal http
