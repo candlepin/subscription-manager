@@ -186,6 +186,7 @@ BuildRequires: openssl-devel
 BuildRequires: gcc
 BuildRequires: %{py_package_prefix}-setuptools
 BuildRequires: gettext
+BuildRequires: glib2-devel
 
 %if 0%{?suse_version}
 BuildRequires: distribution-release
