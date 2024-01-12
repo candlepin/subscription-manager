@@ -23,6 +23,7 @@ import os
 import re
 import string
 import sys
+from importlib import util as importlib_util
 
 try:
     import apt
@@ -49,6 +50,11 @@ try:
     import zypp
 except ImportError:
     zypp = None
+
+if importlib_util.find_spec("zypp_plugin") is not None:
+    HAS_ZYPP = True
+else:
+    HAS_ZYPP = False
 
 from subscription_manager import utils
 from subscription_manager.certdirectory import Path
@@ -687,15 +693,17 @@ class YumRepoFile(RepoFileBase, ConfigParser):
         return {"$releasever": yb.conf.yumvar["releasever"], "$basearch": yb.conf.yumvar["basearch"]}
 
 
-class ZypperRepoFile(YumRepoFile):
-    """
-    Class for manipulation of repo file on systems using Zypper (SuSE, OpenSuse).
-    """
+if HAS_ZYPP:
 
-    ZYPP_RHSM_PLUGIN_CONFIG_FILE = "/etc/rhsm/zypper.conf"
-    PATH = "etc/rhsm/zypper.repos.d"
-    NAME = "redhat.repo"
-    REPOFILE_HEADER = """#
+    class ZypperRepoFile(YumRepoFile):
+        """
+        Class for manipulation of repo file on systems using Zypper (SuSE, OpenSuse).
+        """
+
+        ZYPP_RHSM_PLUGIN_CONFIG_FILE = "/etc/rhsm/zypper.conf"
+        PATH = "etc/rhsm/zypper.repos.d"
+        NAME = "redhat.repo"
+        REPOFILE_HEADER = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
 #
@@ -707,114 +715,114 @@ class ZypperRepoFile(YumRepoFile):
 #
 """
 
-    def __init__(self, path: Optional[str] = None, name: Optional[str] = None):
-        super(ZypperRepoFile, self).__init__(path, name)
-        self.gpgcheck: bool = False
-        self.repo_gpgcheck: bool = False
-        self.autorefresh: bool = False
-        # According to
-        # https://github.com/openSUSE/libzypp/blob/67f55b474d67f77c1868955da8542a7acfa70a9f/zypp/media/MediaManager.h#L394
-        #   the following values are valid: "yes", "no", "host", "peer"
-        self.gpgkey_ssl_verify: Optional[str] = None
-        self.repo_ssl_verify: Optional[str] = None
+        def __init__(self, path: Optional[str] = None, name: Optional[str] = None):
+            super(ZypperRepoFile, self).__init__(path, name)
+            self.gpgcheck: bool = False
+            self.repo_gpgcheck: bool = False
+            self.autorefresh: bool = False
+            # According to
+            # https://github.com/openSUSE/libzypp/blob/67f55b474d67f77c1868955da8542a7acfa70a9f/zypp/media/MediaManager.h#L394
+            #   the following values are valid: "yes", "no", "host", "peer"
+            self.gpgkey_ssl_verify: Optional[str] = None
+            self.repo_ssl_verify: Optional[str] = None
 
-    def read_zypp_conf(self):
-        """
-        Read configuration file for zypper plugin
-        :return: None
-        """
-        zypp_cfg = configparser.ConfigParser()
-        zypp_cfg.read(self.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
-        if zypp_cfg.has_option("rhsm-plugin", "gpgcheck"):
-            self.gpgcheck = zypp_cfg.getboolean("rhsm-plugin", "gpgcheck")
-        if zypp_cfg.has_option("rhsm-plugin", "repo_gpgcheck"):
-            self.repo_gpgcheck = zypp_cfg.getboolean("rhsm-plugin", "repo_gpgcheck")
-        if zypp_cfg.has_option("rhsm-plugin", "autorefresh"):
-            self.autorefresh = zypp_cfg.getboolean("rhsm-plugin", "autorefresh")
-        if zypp_cfg.has_option("rhsm-plugin", "gpgkey-ssl-verify"):
-            self.gpgkey_ssl_verify = zypp_cfg.get("rhsm-plugin", "gpgkey-ssl-verify")
-        if zypp_cfg.has_option("rhsm-plugin", "repo-ssl-verify"):
-            self.repo_ssl_verify = zypp_cfg.get("rhsm-plugin", "repo-ssl-verify")
+        def read_zypp_conf(self):
+            """
+            Read configuration file for zypper plugin
+            :return: None
+            """
+            zypp_cfg = configparser.ConfigParser()
+            zypp_cfg.read(self.ZYPP_RHSM_PLUGIN_CONFIG_FILE)
+            if zypp_cfg.has_option("rhsm-plugin", "gpgcheck"):
+                self.gpgcheck = zypp_cfg.getboolean("rhsm-plugin", "gpgcheck")
+            if zypp_cfg.has_option("rhsm-plugin", "repo_gpgcheck"):
+                self.repo_gpgcheck = zypp_cfg.getboolean("rhsm-plugin", "repo_gpgcheck")
+            if zypp_cfg.has_option("rhsm-plugin", "autorefresh"):
+                self.autorefresh = zypp_cfg.getboolean("rhsm-plugin", "autorefresh")
+            if zypp_cfg.has_option("rhsm-plugin", "gpgkey-ssl-verify"):
+                self.gpgkey_ssl_verify = zypp_cfg.get("rhsm-plugin", "gpgkey-ssl-verify")
+            if zypp_cfg.has_option("rhsm-plugin", "repo-ssl-verify"):
+                self.repo_ssl_verify = zypp_cfg.get("rhsm-plugin", "repo-ssl-verify")
 
-    def fix_content(self, content: "Content") -> str:
-        self.read_zypp_conf()
-        zypper_cont = content.copy()
-        sslverify = zypper_cont["sslverify"]
-        sslcacert = zypper_cont["sslcacert"]
-        sslclientkey = zypper_cont["sslclientkey"]
-        sslclientcert = zypper_cont["sslclientcert"]
-        proxy = zypper_cont["proxy"]
-        proxy_username = zypper_cont["proxy_username"]
-        proxy_password = zypper_cont["proxy_password"]
+        def fix_content(self, content: "Content") -> str:
+            self.read_zypp_conf()
+            zypper_cont = content.copy()
+            sslverify = zypper_cont["sslverify"]
+            sslcacert = zypper_cont["sslcacert"]
+            sslclientkey = zypper_cont["sslclientkey"]
+            sslclientcert = zypper_cont["sslclientcert"]
+            proxy = zypper_cont["proxy"]
+            proxy_username = zypper_cont["proxy_username"]
+            proxy_password = zypper_cont["proxy_password"]
 
-        del zypper_cont["sslverify"]
-        del zypper_cont["sslcacert"]
-        del zypper_cont["sslclientkey"]
-        del zypper_cont["sslclientcert"]
-        del zypper_cont["proxy"]
-        del zypper_cont["proxy_username"]
-        del zypper_cont["proxy_password"]
-        # NOTE looks like metadata_expire and ui_repoid_vars are ignored by zypper
+            del zypper_cont["sslverify"]
+            del zypper_cont["sslcacert"]
+            del zypper_cont["sslclientkey"]
+            del zypper_cont["sslclientcert"]
+            del zypper_cont["proxy"]
+            del zypper_cont["proxy_username"]
+            del zypper_cont["proxy_password"]
+            # NOTE looks like metadata_expire and ui_repoid_vars are ignored by zypper
 
-        # clean up data for zypper
-        if zypper_cont["gpgkey"] in ["https://", "http://"]:
-            del zypper_cont["gpgkey"]
+            # clean up data for zypper
+            if zypper_cont["gpgkey"] in ["https://", "http://"]:
+                del zypper_cont["gpgkey"]
 
-        # make sure gpg key download doesn't fail because of private certs
-        if zypper_cont["gpgkey"] and self.gpgkey_ssl_verify:
-            zypper_cont["gpgkey"] += "?ssl_verify=%s" % self.gpgkey_ssl_verify
+            # make sure gpg key download doesn't fail because of private certs
+            if zypper_cont["gpgkey"] and self.gpgkey_ssl_verify:
+                zypper_cont["gpgkey"] += "?ssl_verify=%s" % self.gpgkey_ssl_verify
 
-        # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1764265
-        if self.gpgcheck is False:
-            zypper_cont["gpgcheck"] = "0"
+            # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1764265
+            if self.gpgcheck is False:
+                zypper_cont["gpgcheck"] = "0"
 
-        # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1858231
-        if self.repo_gpgcheck is True:
-            zypper_cont["repo_gpgcheck"] = "1"
-        else:
-            zypper_cont["repo_gpgcheck"] = "0"
-
-        # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1797386
-        if self.autorefresh is True:
-            zypper_cont["autorefresh"] = "1"
-        else:
-            zypper_cont["autorefresh"] = "0"
-
-        baseurl = zypper_cont["baseurl"]
-        parsed = urlparse(baseurl)
-        zypper_query_args: Dict[str, str] = parse_qs(parsed.query)
-
-        if sslverify and sslverify in ["1"]:
-            if self.repo_ssl_verify:
-                zypper_query_args["ssl_verify"] = self.repo_ssl_verify
+            # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1858231
+            if self.repo_gpgcheck is True:
+                zypper_cont["repo_gpgcheck"] = "1"
             else:
-                zypper_query_args["ssl_verify"] = "host"
+                zypper_cont["repo_gpgcheck"] = "0"
 
-        if sslcacert:
-            zypper_query_args["ssl_capath"] = os.path.dirname(sslcacert)
-        if sslclientkey:
-            zypper_query_args["ssl_clientkey"] = sslclientkey
-        if sslclientcert:
-            zypper_query_args["ssl_clientcert"] = sslclientcert
-        if proxy:
-            zypper_query_args["proxy"] = proxy
-        if proxy_username:
-            zypper_query_args["proxyuser"] = proxy_username
-        if proxy_password:
-            zypper_query_args["proxypass"] = proxy_password
-        zypper_query = urlencode(zypper_query_args)
+            # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1797386
+            if self.autorefresh is True:
+                zypper_cont["autorefresh"] = "1"
+            else:
+                zypper_cont["autorefresh"] = "0"
 
-        new_url = urlunparse(
-            (parsed.scheme, parsed.netloc, parsed.path, parsed.params, zypper_query, parsed.fragment)
-        )
-        zypper_cont["baseurl"] = new_url
+            baseurl = zypper_cont["baseurl"]
+            parsed = urlparse(baseurl)
+            zypper_query_args: Dict[str, str] = parse_qs(parsed.query)
 
-        return zypper_cont
+            if sslverify and sslverify in ["1"]:
+                if self.repo_ssl_verify:
+                    zypper_query_args["ssl_verify"] = self.repo_ssl_verify
+                else:
+                    zypper_query_args["ssl_verify"] = "host"
 
-    # We need to overwrite this, to avoid name clashes with yum's server_val_repo_file
-    @classmethod
-    def server_value_repo_file(cls) -> "ZypperRepoFile":
-        return cls("var/lib/rhsm/repo_server_val/", "zypper_{}".format(cls.NAME))
+            if sslcacert:
+                zypper_query_args["ssl_capath"] = os.path.dirname(sslcacert)
+            if sslclientkey:
+                zypper_query_args["ssl_clientkey"] = sslclientkey
+            if sslclientcert:
+                zypper_query_args["ssl_clientcert"] = sslclientcert
+            if proxy:
+                zypper_query_args["proxy"] = proxy
+            if proxy_username:
+                zypper_query_args["proxyuser"] = proxy_username
+            if proxy_password:
+                zypper_query_args["proxypass"] = proxy_password
+            zypper_query = urlencode(zypper_query_args)
+
+            new_url = urlunparse(
+                (parsed.scheme, parsed.netloc, parsed.path, parsed.params, zypper_query, parsed.fragment)
+            )
+            zypper_cont["baseurl"] = new_url
+
+            return zypper_cont
+
+        # We need to overwrite this, to avoid name clashes with yum's server_val_repo_file
+        @classmethod
+        def server_value_repo_file(cls) -> "ZypperRepoFile":
+            return cls("var/lib/rhsm/repo_server_val/", "zypper_{}".format(cls.NAME))
 
     def _obtain_mappings(self):
         db = zypp.ZConfig.instance()
@@ -822,9 +830,13 @@ class ZypperRepoFile(YumRepoFile):
 
 
 def init_repo_file_classes() -> List[Tuple[type(RepoFileBase), str]]:
-    repo_file_classes: List[type(RepoFileBase)] = [YumRepoFile, ZypperRepoFile]
+    repo_file_classes: List[type(RepoFileBase)] = []
     if HAS_DEB822:
         repo_file_classes.append(AptRepoFile)
+    elif HAS_ZYPP:
+        repo_file_classes.append(ZypperRepoFile)
+    else:
+        repo_file_classes.append(YumRepoFile)
     _repo_files: List[Tuple[type(RepoFileBase), type(RepoFileBase)]] = [
         (RepoFile, RepoFile.server_value_repo_file) for RepoFile in repo_file_classes if RepoFile.installed()
     ]

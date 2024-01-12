@@ -25,10 +25,16 @@ from subscription_manager.model import ent_cert
 from subscription_manager.utils import get_supported_resources
 
 from rhsm.repofile import Repo, manage_repos_enabled, get_repo_file_classes
-from rhsm.repofile import YumRepoFile
+from rhsm.repofile import YumRepoFile, RepoFileBase
+from rhsm.repofile import HAS_DEB822, HAS_ZYPP
 import rhsm.config
 import configparser
 from rhsmlib.facts.hwprobe import HardwareCollector
+
+if HAS_DEB822:
+    from rhsm.repofile import AptRepoFile
+if HAS_ZYPP:
+    from rhsm.repofile import ZypperRepoFile
 
 # FIXME: local imports
 
@@ -217,12 +223,12 @@ class RepoActionInvoker(BaseActionInvoker):
 
         current = set()
         # Add the current repo data
-        yum_repo_file = YumRepoFile()
-        yum_repo_file.read()
+        repo_file = self.get_system_repo_file()
+        repo_file.read()
         server_value_repo_file = YumRepoFile("var/lib/rhsm/repo_server_val/")
         server_value_repo_file.read()
         for repo in repos:
-            existing = yum_repo_file.section(repo.id)
+            existing = repo_file.section(repo.id)
             server_value_repo = server_value_repo_file.section(repo.id)
             # we need a repo in the server val file to match any in
             # the main repo definition file
@@ -237,9 +243,18 @@ class RepoActionInvoker(BaseActionInvoker):
 
         return current
 
+    def get_system_repo_file(self) -> "RepoFileBase":
+        if HAS_DEB822:
+            repo = AptRepoFile()
+        elif HAS_ZYPP:
+            repo = ZypperRepoFile()
+        else:
+            repo = YumRepoFile()
+        return repo
+
     def get_repo_file(self) -> str:
-        yum_repo_file = YumRepoFile()
-        return yum_repo_file.path
+        repo_file = self.get_system_repo_file()
+        return repo_file.path
 
     @classmethod
     def delete_repo_file(cls) -> None:

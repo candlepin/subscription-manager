@@ -33,7 +33,7 @@ deb_mock = MagicMock()
 deb_mock.Deb822 = dict
 with patch.dict("rhsm.repofile.sys.modules", {"debian.deb822": deb_mock}):
     reload(repofile)
-    from subscription_manager.repofile import AptRepoFile
+    from rhsm.repofile import AptRepoFile
 reload(repofile)
 
 from .stubs import (
