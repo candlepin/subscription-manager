@@ -1152,34 +1152,6 @@ class UEPConnection(BaseConnection):
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
 
-    def getJWToken(self, cloud_id, metadata, signature):
-        """
-        When automatic registration is enabled in rhsm.conf and it was possible
-        to gather cloud metadata, then it is possible to try to get JSON Web Token
-        for automatic registration. When candlepin does not provide automatic
-        registration, then raise exception.
-        :param cloud_id: ID of cloud provider, e.g. "aws", "azure", "gcp"
-        :param metadata: string with base64 encoded metadata
-        :param signature: string with base64 encoded signature
-        :return: string with JWT
-        """
-        params = {
-            "type": cloud_id,
-            "metadata": metadata,
-            "signature": signature
-        }
-        # "Accept" http header has to be text/plain, because candlepin return
-        # token as simple text and it is not wrapped in json document
-        headers = {
-            "Content-type": "application/json",
-            "Accept": "text/plain"
-        }
-        return self.conn.request_post(
-            method="/cloud/authorize",
-            params=params,
-            headers=headers
-        )
-
     def getCloudJWT(self, cloud_id: str, metadata: str, signature: str) -> Dict[str, Any]:
         """Obtain cloud JWT.
 
