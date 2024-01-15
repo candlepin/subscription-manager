@@ -133,7 +133,7 @@ class TestAutomaticRegistration(unittest.TestCase):
         aws.AWSCloudProvider._instance._session = mock_session
 
         cloud_list = ["aws"]
-        cloud_info = _collect_cloud_info(cloud_list, Mock())
+        cloud_info = _collect_cloud_info(cloud_list)
 
         self.assertIsNotNone(cloud_info)
         self.assertTrue(len(cloud_info) > 0)
@@ -166,7 +166,7 @@ class TestAutomaticRegistration(unittest.TestCase):
         # More cloud providers detected
         cloud_list = ["azure", "aws"]
 
-        cloud_info = _collect_cloud_info(cloud_list, Mock())
+        cloud_info = _collect_cloud_info(cloud_list)
 
         self.assertIsNotNone(cloud_info)
         self.assertTrue(len(cloud_info) > 0)

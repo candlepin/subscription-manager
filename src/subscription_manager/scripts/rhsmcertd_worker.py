@@ -46,16 +46,17 @@ if TYPE_CHECKING:
 
 init_dep_injection()
 
+log = logging.getLogger(f"rhsm-app.{__name__}")
+
 
 def exit_on_signal(_signumber, _stackframe):
     sys.exit(0)
 
 
-def _collect_cloud_info(cloud_list: list, log) -> dict:
+def _collect_cloud_info(cloud_list: list) -> dict:
     """
     Try to collect cloud information: metadata and signature provided by cloud provider.
     :param cloud_list: The list of detected cloud providers. In most cases the list contains only one item.
-    :param log: logging object
     :return: The dictionary with metadata and signature (when signature is provided by cloud provider).
         Metadata and signature are base64 encoded. Empty dictionary is returned, when it wasn't
         possible to collect any metadata
@@ -106,11 +107,10 @@ def _collect_cloud_info(cloud_list: list, log) -> dict:
     return result
 
 
-def _auto_register(cp_provider: "CPProvider", log: logging.Logger) -> None:
+def _auto_register(cp_provider: "CPProvider") -> None:
     """Try to perform auto-registration.
 
     :param cp_provider: provider of connection to candlepin server
-    :param log: logging object
     :return: None
     """
     log.debug("Trying to do auto-registration of this system")
@@ -132,7 +132,7 @@ def _auto_register(cp_provider: "CPProvider", log: logging.Logger) -> None:
 
     # When some cloud provider(s) was detected, then try to collect metadata
     # and signature
-    cloud_info = _collect_cloud_info(cloud_list, log)
+    cloud_info = _collect_cloud_info(cloud_list)
     if len(cloud_info) == 0:
         log.warning("It was not possible to collect any cloud metadata. Unable to perform auto-registration")
         sys.exit(-1)
@@ -186,7 +186,7 @@ def _main(options: "argparse.Namespace", log: logging.Logger):
 
     # Was script executed with --auto-register option
     if options.auto_register is True:
-        _auto_register(cp_provider, log)
+        _auto_register(cp_provider)
 
     if not ConsumerIdentity.existsAndValid():
         log.error(
@@ -258,7 +258,6 @@ def _main(options: "argparse.Namespace", log: logging.Logger):
 
 def main():
     logutil.init_logger()
-    log = logging.getLogger("rhsm-app." + __name__)
 
     parser = ArgumentParser(usage=USAGE)
     parser.add_argument(
@@ -281,7 +280,7 @@ def main():
     args: List[str]
     (options, args) = parser.parse_known_args()
     try:
-        _main(options, log)
+        _main(options)
     except SystemExit as se:
         # sys.exit triggers an exception in older Python versions, which
         # in this case  we can safely ignore as we do not want to log the
