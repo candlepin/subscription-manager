@@ -13,7 +13,7 @@
 
 import logging
 import socket
-from typing import Callable
+from typing import Callable, Optional
 
 from rhsm.connection import UEPConnection
 
@@ -37,7 +37,7 @@ class RegisterService:
 
     def register(
         self,
-        org: str,
+        org: Optional[str],
         activation_keys: list = None,
         environments: list = None,
         force: bool = False,
