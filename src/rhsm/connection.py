@@ -1518,6 +1518,31 @@ class UEPConnection(BaseConnection):
             description=_("Fetching cloud token"),
         )
 
+    def getCloudJWT(self, cloud_id: str, metadata: str, signature: str) -> Dict[str, Any]:
+        """Obtain cloud JWT.
+
+        This method is part of the Cloud registration v2: standard or anonymous flow.
+
+        :param cloud_id: Cloud provider, e.g. 'aws', 'azure' or 'gcp'.
+        :param metadata: Base64 encoded public cloud metadata.
+        :param signature: Base64 encoded public cloud signature.
+        """
+        data = {
+            "type": cloud_id,
+            "metadata": metadata,
+            "signature": signature,
+        }
+        headers = {
+            "Content-Type": "application/json",
+        }
+
+        return self.conn.request_post(
+            method="/cloud/authorize?version=2",
+            params=data,
+            headers=headers,
+            description=_("Fetching cloud token"),
+        )
+
     def registerConsumer(
         self,
         name: str = "unknown",
@@ -1845,18 +1870,29 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s" % self.sanitize(consumerId)
         return self.conn.request_delete(method, description=_("Unregistering system")) is None
 
-    def getCertificates(self, consumer_uuid: str, serials: Optional[list] = None) -> List[dict]:
+    def getCertificates(
+        self,
+        consumer_uuid: str,
+        serials: Optional[list] = None,
+        jwt: Optional[str] = None,
+    ) -> List[dict]:
         """
         Fetch all entitlement certificates for this consumer. Specify a list of serial numbers to
         filter if desired
+
         :param consumer_uuid: consumer UUID
         :param serials: list of entitlement serial numbers
+        :param jwt: JWT identifying an anonymous system
         """
         method = "/consumers/%s/certificates" % (self.sanitize(consumer_uuid))
         if serials:
             serials_str = ",".join(serials)
             method = "%s?serials=%s" % (method, serials_str)
-        return self.conn.request_get(method, description=_("Fetching certificates"))
+        headers: Dict[str, str] = {}
+        if jwt:
+            headers["Authorization"] = f"Bearer {jwt}"
+
+        return self.conn.request_get(method, headers=headers, description=_("Fetching certificates"))
 
     def getCertificateSerials(self, consumerId: str) -> List[dict]:
         """
