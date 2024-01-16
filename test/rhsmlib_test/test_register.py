@@ -758,12 +758,26 @@ class RegisterDBusObjectTest(DBusServerStubProvider):
         socket_iface_patch = mock.patch.object(DomainSocketServer, "_server_socket_iface", "unix:dir=")
         socket_iface_patch.start()
 
+        pid_of_sender_patch = mock.patch(
+            "rhsmlib.dbus.server.pid_of_sender",
+            autospec=True,
+        )
+        pid_of_sender_mock = pid_of_sender_patch.start()
+        pid_of_sender_mock.return_value = 123456
+
+        are_others_running_path = mock.patch(
+            "rhsmlib.dbus.server.DomainSocketServer.are_other_senders_still_running",
+            autospec=True,
+        )
+        are_others_running_mock = are_others_running_path.start()
+        are_others_running_mock.return_value = False
+
         super().setUp()
 
     def tearDown(self) -> None:
         """Make sure the domain server is stopped once the test ends."""
         with contextlib.suppress(rhsmlib.dbus.exceptions.Failed, rhsmlib.dbus.exceptions.RHSM1DBusException):
-            self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
+            self.obj.Stop.__wrapped__(self.obj, self.LOCALE, "sender")
 
         super().tearDown()
 
@@ -791,11 +805,11 @@ class RegisterDBusObjectTest(DBusServerStubProvider):
 
     def test_Stop(self):
         self.obj.Start.__wrapped__(self.obj, self.LOCALE)
-        self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
+        self.obj.Stop.__wrapped__(self.obj, self.LOCALE, "sender")
 
     def test_Stop__not_running(self):
         try:
-            self.obj.Stop.__wrapped__(self.obj, self.LOCALE)
+            self.obj.Stop.__wrapped__(self.obj, self.LOCALE, "sender")
         except (rhsmlib.dbus.exceptions.RHSM1DBusException, rhsmlib.dbus.exceptions.Failed):
             return
         raise pytest.fail("Stop did not raise an exception")

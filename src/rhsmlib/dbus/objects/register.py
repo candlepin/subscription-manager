@@ -56,7 +56,13 @@ class RegisterDBusObject(base_object.BaseObject):
         Locale.set(locale)
 
         with self.lock:
-            if self.server:
+            # When some other application already started domain socket listener, then
+            # write log message and return existing address
+            if self.server is not None:
+                log.debug(f"Domain socket listener already running, started by: {self.server.sender}")
+                # Add sender to the list of senders using server
+                log.debug(f"Adding another sender {sender} to the set of senders")
+                self.server.add_sender(sender)
                 return self.server.address
 
             log.debug('Attempting to create new domain socket server')
@@ -80,13 +86,21 @@ class RegisterDBusObject(base_object.BaseObject):
         locale = dbus_utils.dbus_to_python(locale, expected_type=str)
         Locale.set(locale)
         with self.lock:
-            if self.server:
-                self.server.shutdown()
-                self.server = None
-                log.debug("Stopped DomainSocketServer")
-                return True
-            else:
+            if self.server is None:
                 raise exceptions.Failed("No domain socket server is running")
+
+            # Remove current sender and check if other senders are still running.
+            # If there is at least one sender using this server still running, then
+            # only return False
+            self.server.remove_sender(sender)
+            if self.server.are_other_senders_still_running() is True:
+                log.debug("Not stopping domain socket server, because some senders still uses it.")
+                return False
+
+            self.server.shutdown()
+            self.server = None
+            log.debug("Domain socket server stopped.")
+            return True
 
 
 class OrgNotSpecifiedException(dbus.DBusException):
