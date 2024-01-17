@@ -21,8 +21,30 @@ jobs:
       image: ${{ matrix.image }}
 
     steps:
+      - name: "Enable EPEL repository"
+        run: |
+          yum -y install epel-release
+
+      - name: "Install core packages"
+        run: |
+          yum install -y \
+            git-core gcc make python python-devel python-setuptools python-pip
+
       - name: "Checkout repository"
         uses: actions/checkout@v3
+
+      # We need to initiate the repository manually because Actions fallback
+      # to REST API with Git < 2.18; CentOS 7/RHEL 7 have 1.8.
+      # See https://github.com/actions/checkout#checkout-v3
+      # See https://github.com/actions/checkout/issues/766
+      - name: "Initiate new git repository"
+        run: |
+          git config --global user.email "chainsaw@redhat.com"
+          git config --global user.name "RHSM for RHEL 7 at GitHub Actions"
+          git init
+          git add .
+          git commit -m "Detached commit"
+          git config --global --add safe.directory '*'
 
       - name: "Run container-pre-test.sh"
         run: |

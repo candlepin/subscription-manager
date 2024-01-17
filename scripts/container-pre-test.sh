@@ -1,11 +1,5 @@
 #!/bin/bash
 
-yum install -y epel-release
-
-# Install essential packages
-yum install -y \
-  git gcc make python python-devel python-setuptools python-pip
-
 # Install system, build and runtime packages
 yum install -y \
   gtk3-devel python-ethtool \
