@@ -178,7 +178,8 @@ Requires:  virt-what
 Requires:  %{rhsm_package_name} = %{version}
 Requires:  %{py_package_prefix}-six
 Requires:  %{py_package_prefix}-dateutil
-Requires: %{py_package_prefix}-syspurpose
+Requires:  %{py_package_prefix}-syspurpose
+Requires:  %{py_package_prefix}-requests
 
 # rhel 8 has different naming for setuptools going forward
 %if (0%{?rhel} && 0%{?rhel} >= 8)
