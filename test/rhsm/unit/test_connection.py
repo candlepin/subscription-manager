@@ -593,7 +593,7 @@ class ConnectionTests(unittest.TestCase):
         restlib = BaseRestLib("somehost", "123", "somehandler")
         restlib.ca_dir = self.temp_ent_dir.name
         with self.assertRaises(BadCertificateException):
-            restlib._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_SSLv23))
+            restlib._load_ca_certificates(ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT))
 
     def test_hypervisor_check_in_capability_and_reporter(self):
         self.cp.conn = Mock()
