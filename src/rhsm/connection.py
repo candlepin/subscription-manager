@@ -758,20 +758,12 @@ class BaseRestLib:
 
         log.debug("Creating new connection")
 
-        # See https://www.openssl.org/docs/ssl/SSL_CTX_new.html
-        # This ends up invoking SSLv23_method, which is the catch all
-        # "be compatible" protocol, even though it explicitly is not
-        # using sslv2. This will by default potentially include sslv3
-        # if not used with post-poodle openssl. If however, the server
-        # intends to not offer sslv3, it's workable.
-        #
-        # So this supports tls1.2, 1.1, 1.0, and/or sslv3 if supported.
-        context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+        # Select the highest TLS version supported by both the client and the server.
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
 
-        # Disable SSLv2 and SSLv3 support to avoid poodles.
-        context.options = ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3
-
-        if self.insecure:  # allow clients to work insecure mode if required..
+        if self.insecure:
+            # Allow clients to connect to servers with missing or invalid certificates.
+            context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
         else:
             context.verify_mode = ssl.CERT_REQUIRED
