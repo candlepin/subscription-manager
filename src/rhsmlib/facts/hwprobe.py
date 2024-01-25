@@ -653,12 +653,10 @@ class HardwareCollector(collector.FactsCollector):
             log.warning("Failed to run 'lscpu --json': %s", e)
             return {}
 
-        log.debug("Parsing lscpu JSON: %s", output)
-
         try:
             output_json: dict = json.loads(output)
-        except json.JSONDecodeError as e:
-            log.warning("Failed to load the lscpu JSON: %s", e)
+        except json.JSONDecodeError:
+            log.exception("Failed to load the lscpu JSON: %s", output)
             return {}
 
         try:
