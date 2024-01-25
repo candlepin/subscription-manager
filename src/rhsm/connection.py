@@ -1219,7 +1219,9 @@ class BaseRestLib:
             self.smoothed_rt = response_time
         else:
             self.smoothed_rt = (self.ALPHA * self.smoothed_rt) + ((1 - self.ALPHA) * response_time)
-        log.debug("Response time: %s, Smoothed response time: %s" % (response_time, self.smoothed_rt))
+        log.debug(
+            f"Response time statistics: {response_time:.4f}s (latest), {self.smoothed_rt:.4f}s (smoothed)"
+        )
 
     def validateResult(self, result: dict, request_type: str = None, handler: str = None) -> None:
         """
