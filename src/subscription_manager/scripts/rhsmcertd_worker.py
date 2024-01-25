@@ -16,6 +16,7 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
+import enum
 import sys
 
 import signal
@@ -53,6 +54,39 @@ if TYPE_CHECKING:
     from rhsm.connection import UEPConnection
     from subscription_manager.cp_provider import CPProvider
     from subscription_manager.identity import Identity
+
+
+class ExitStatus(enum.IntEnum):
+    """Well-known exit codes.
+
+    WARNING: THIS IS NOT A PUBLIC API.
+    Values of these errors should not be used by any external applications, they are subject
+    to change at any time without warning.
+    External applications should only differentiate between zero and non-zero exit codes.
+    """
+
+    OK = 0
+
+    RHSMCERTD_DISABLED = 5
+    """rhsmcertd has been disabled through the config file."""
+    LOCAL_CORRUPTION = 6
+    """Local data have been corrupted."""
+
+    NO_CLOUD_PROVIDER = 10
+    """No public cloud provider has been detected."""
+    NO_CLOUD_METADATA = 11
+    """Public cloud provider has been detected, but metadata could not be obtained."""
+
+    NO_REGISTRATION_TOKEN = 20
+    """Registration token could not be obtained: server or cache are unavailable or broken."""
+    BAD_TOKEN_TYPE = 21
+    """Registration token was received, but is not recognized."""
+
+    REGISTRATION_FAILED = 30
+    """The system registration was not successful."""
+
+    UNKNOWN_ERROR = -1
+    """An unknown error occurred."""
 
 
 init_dep_injection()
