@@ -225,7 +225,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.41
+Version: 1.28.42
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1381,6 +1381,15 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Jan 25 2024 Pino Toscano <ptoscano@redhat.com> 1.28.42-1
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN))
+  (mariocanfly@hotmail.com)
+- RHEL-21049: [1.28] RegisterServer is stopped, when not needed
+  (jhnidek@redhat.com)
+- RHEL-21049: [1.28] Fix issue with registration using gsd-subman
+  (jhnidek@redhat.com)
+
 * Tue Dec 05 2023 Pino Toscano <ptoscano@redhat.com> 1.28.41-1
 - tito: drop bz requirement (ptoscano@redhat.com)
 - Translated using Weblate (Chinese (Simplified) (zh_CN)) (jsefler@redhat.com)
