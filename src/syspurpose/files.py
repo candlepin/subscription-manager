@@ -649,6 +649,7 @@ class SyncedStore:
             f.flush()
             f.close()
             log.debug("Successfully updated syspurpose values at '%s'." % path)
+            return
         log.debug("Failed to update syspurpose values at '%s'." % path)
 
     def get_valid_fields(self) -> Union[dict, None]:
