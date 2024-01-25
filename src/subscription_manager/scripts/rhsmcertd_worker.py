@@ -14,7 +14,6 @@ import sys
 
 import signal
 import logging
-import dbus.mainloop.glib
 import base64
 from typing import List, Union, TYPE_CHECKING
 
@@ -43,7 +42,6 @@ if TYPE_CHECKING:
     from rhsm.connection import UEPConnection
     from subscription_manager.cp_provider import CPProvider
     from subscription_manager.identity import Identity
-
 
 
 init_dep_injection()
@@ -169,9 +167,6 @@ def _auto_register(cp_provider: "CPProvider", log: logging.Logger) -> None:
 
 
 def _main(options: "argparse.Namespace", log: logging.Logger):
-    # Set default mainloop
-    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-
     # exit on SIGTERM, otherwise finally statements don't run
     # (one explanation: http://stackoverflow.com/a/41840796)
     # SIGTERM happens for example when systemd wants the service to stop
