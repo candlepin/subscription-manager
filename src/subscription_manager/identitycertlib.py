@@ -13,7 +13,7 @@
 #
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from subscription_manager import certlib
 from subscription_manager import injection as inj
@@ -21,7 +21,7 @@ from subscription_manager import injection as inj
 if TYPE_CHECKING:
     from rhsm.connection import UEPConnection
     from subscription_manager.cp_provider import CPProvider
-    from subscription_manager.identity import ConsumerIdentity, Identity
+    from subscription_manager.identity import Identity
 
 log = logging.getLogger(__name__)
 
@@ -70,16 +70,23 @@ class IdentityUpdateAction:
         # FIXME: move persist stuff here
         from subscription_manager import managerlib
 
-        idcert: ConsumerIdentity = identity.consumer
+        local_serial: int = identity.consumer.getSerialNumber()
+        local_owner: str = identity.owner
 
-        consumer: dict = self._get_consumer(identity)
+        consumer: dict = self.uep.getConsumer(identity.uuid)
+        actual_serial: int = consumer["idCert"]["serial"]["serial"]
+        actual_owner: str = consumer.get("owner", {}).get("key", "")
 
-        # only write the cert if the serial has changed
-        # FIXME: this would be a good place to have a Consumer/ConsumerCert
-        # model.
-        # FIXME: and this would be a ConsumerCert model '!='
-        if idcert.getSerialNumber() != consumer["idCert"]["serial"]["serial"]:
-            log.debug("identity certificate changed, writing new one")
+        # Only update the certificate if the serial has changed
+        if local_serial != actual_serial:
+            diff: List[str] = [f"{local_serial} => {actual_serial}"]
+            if local_owner != actual_owner:
+                diff += [f"{local_owner} => {actual_owner}"]
+
+            log.info(
+                f"Serial number of the identity certificate changed ({', '.join(diff)}), "
+                "new identity certificate will be saved."
+            )
 
             # FIXME: should be in this module? managerlib is an odd place
             managerlib.persist_consumer_cert(consumer)
@@ -87,8 +94,3 @@ class IdentityUpdateAction:
         # updated the cert, or at least checked
         self.report._status = 1
         return self.report
-
-    def _get_consumer(self, identity: "Identity") -> dict:
-        # FIXME: not much for error handling here
-        consumer: dict = self.uep.getConsumer(identity.uuid)
-        return consumer
