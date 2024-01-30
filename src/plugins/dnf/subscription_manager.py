@@ -15,6 +15,7 @@
 import os
 import logging
 import shutil
+from typing import Optional
 
 from subscription_manager import injection as inj
 from subscription_manager.action_client import ProfileActionClient
@@ -90,7 +91,8 @@ class SubscriptionManager(dnf.Plugin):
             if os.getuid() == 0:
                 # Try to update entitlement certificates and redhat.repo file
                 self._update(cache_only)
-                self._warn_or_give_usage_message()
+                if not config.in_container():
+                    self._warn_or_give_usage_message()
             else:
                 dnf_log.info(_("Not root, Subscription Management repositories not updated"))
             self._warn_expired()
@@ -142,7 +144,7 @@ class SubscriptionManager(dnf.Plugin):
 
         identity = inj.require(inj.IDENTITY)
 
-        if not identity.is_valid():
+        if not config.in_container() and identity.is_valid():
             dnf_log.info(_("Unable to read consumer identity"))
 
         if config.in_container():
@@ -151,7 +153,7 @@ class SubscriptionManager(dnf.Plugin):
         if cache_only is True:
             log.debug("DNF subscription-manager operates in cache-only mode")
 
-        if not cache_only and not config.in_container():
+        if not config.in_container() and not cache_only:
             log.debug("Trying to update entitlement certificates and redhat.repo")
             cert_action_invoker = EntCertActionInvoker()
             cert_action_invoker.update()
@@ -182,23 +184,24 @@ class SubscriptionManager(dnf.Plugin):
         """
         Either output a warning, or a usage message
         """
-        msg = ""
         if ClassicCheck().is_registered_with_classic():
             return
+
+        message: Optional[str] = None
         try:
             identity = inj.require(inj.IDENTITY)
             ent_dir = inj.require(inj.ENT_DIR)
             # Don't warn people to register if we see entitlements, but no identity:
             if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
                 if shutil.which("rhc") is not None:
-                    msg = not_registered_warning_rhc
+                    message = not_registered_warning_rhc
                 else:
-                    msg = not_registered_warning
+                    message = not_registered_warning
             elif len(ent_dir.list_valid()) == 0 and not is_simple_content_access(identity=identity):
-                msg = no_subs_warning
+                message = no_subs_warning
         finally:
-            if msg:
-                dnf_log.info(msg)
+            if message:
+                dnf_log.info(message)
 
     def transaction(self):
         """
