@@ -27,7 +27,7 @@ from subscription_manager.i18n import ungettext, ugettext as _
 from rhsm import logutil
 from rhsm import config
 
-from dnfpluginscore import logger
+from dnfpluginscore import logger as dnf_log
 import dnf
 
 from configparser import ConfigParser
@@ -92,7 +92,7 @@ class SubscriptionManager(dnf.Plugin):
                 self._update(cache_only)
                 self._warn_or_give_usage_message()
             else:
-                logger.info(_("Not root, Subscription Management repositories not updated"))
+                dnf_log.info(_("Not root, Subscription Management repositories not updated"))
             self._warn_expired()
         except Exception as e:
             log.error(str(e))
@@ -118,7 +118,7 @@ class SubscriptionManager(dnf.Plugin):
                         if os.path.basename(repo.repofile) != "redhat.repo":
                             repo.disable()
                             disable_count += 1
-                    logger.info(
+                    dnf_log.info(
                         ungettext(
                             "subscription-manager plugin disabled %d system repository with respect "
                             "of configuration in /etc/dnf/plugins/subscription-manager.conf",
@@ -129,7 +129,7 @@ class SubscriptionManager(dnf.Plugin):
                         % disable_count
                     )
         else:
-            logger.debug("Configuration file %s does not exist." % default_config_file)
+            dnf_log.debug("Configuration file %s does not exist." % default_config_file)
 
     @staticmethod
     def _update(cache_only):
@@ -138,15 +138,15 @@ class SubscriptionManager(dnf.Plugin):
         :param cache_only: is True, when rhsm.full_refresh_on_yum is set to 0 in rhsm.conf
         """
 
-        logger.info(_("Updating Subscription Management repositories."))
+        dnf_log.info(_("Updating Subscription Management repositories."))
 
         identity = inj.require(inj.IDENTITY)
 
         if not identity.is_valid():
-            logger.info(_("Unable to read consumer identity"))
+            dnf_log.info(_("Unable to read consumer identity"))
 
         if config.in_container():
-            logger.info(_("subscription-manager is operating in container mode."))
+            dnf_log.info(_("subscription-manager is operating in container mode."))
 
         if cache_only is True:
             log.debug("DNF subscription-manager operates in cache-only mode")
@@ -175,7 +175,7 @@ class SubscriptionManager(dnf.Plugin):
                 products.add(m)
         if products:
             msg = expired_warning % "\n".join(sorted(products))
-            logger.info(msg)
+            dnf_log.info(msg)
 
     @staticmethod
     def _warn_or_give_usage_message():
@@ -198,7 +198,7 @@ class SubscriptionManager(dnf.Plugin):
                 msg = no_subs_warning
         finally:
             if msg:
-                logger.info(msg)
+                dnf_log.info(msg)
 
     def transaction(self):
         """
