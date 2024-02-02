@@ -619,7 +619,7 @@ class YumRepoFile(RepoFileBase, ConfigParser):
     def enabled_repos(self):
         result = []
         try:
-            enabled_sections = [section for section in self.sections() if config.getboolean(section, "enabled")]
+            enabled_sections = [section for section in self.sections() if self.getboolean(section, "enabled")]
             for section in enabled_sections:
                 result.append(
                     {"repositoryid": section, "baseurl": [self._replace_vars(self.get(section, "baseurl"))]}
