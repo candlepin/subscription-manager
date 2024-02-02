@@ -259,6 +259,7 @@ def _smoke_tests():
     """
     # Gather only information about hardware and virtualization
     from rhsmlib.facts.host_collector import HostCollector
+    from rhsmlib.facts.custom import CustomFactsCollector
 
     import sys
 
@@ -273,6 +274,13 @@ def _smoke_tests():
 
     facts = {}
     facts.update(HostCollector().get_all())
+    # To test Azure cloud provider on localhost create following file
+    # /etc/rhsm/facts/azure.facts
+    # {
+    #   "virt.is_guest": true,
+    #   "dmi.chassis.asset_tag": "7783-7084-3265-9085-8269-3286-77"
+    # }
+    facts.update(CustomFactsCollector().get_all())
     azure_cloud_provider = AzureCloudProvider(facts)
     result = azure_cloud_provider.is_running_on_cloud()
     probability = azure_cloud_provider.is_likely_running_on_cloud()

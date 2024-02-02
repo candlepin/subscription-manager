@@ -349,6 +349,7 @@ def _smoke_test():
     """
     # Gather only information about hardware and virtualization
     from rhsmlib.facts.host_collector import HostCollector
+    from rhsmlib.facts.custom import CustomFactsCollector
 
     import sys
 
@@ -363,6 +364,10 @@ def _smoke_test():
 
     facts = {}
     facts.update(HostCollector().get_all())
+    # To test Azure cloud provider on localhost create following file
+    # /etc/rhsm/facts/gcp.facts
+    #
+    facts.update(CustomFactsCollector().get_all())
     gcp_cloud_provider = GCPCloudProvider(facts)
     result = gcp_cloud_provider.is_running_on_cloud()
     probability = gcp_cloud_provider.is_likely_running_on_cloud()
