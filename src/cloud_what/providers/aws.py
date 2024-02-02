@@ -383,6 +383,7 @@ def _smoke_tests():
     """
     # Gather only information about hardware and virtualization
     from rhsmlib.facts.host_collector import HostCollector
+    from rhsmlib.facts.custom import CustomFactsCollector
     import sys
 
     root = logging.getLogger()
@@ -396,6 +397,15 @@ def _smoke_tests():
 
     facts = {}
     facts.update(HostCollector().get_all())
+    # To test AWS cloud provider on localhost create following file
+    # /etc/rhsm/facts/aws.facts
+    # {
+    #   "virt.is_guest": true,
+    #   "dmi.bios.version": "amazon",
+    #   "dmi.bios.vendor": "Amazon EC2",
+    #   "virt.host_type": "aws"
+    # }
+    facts.update(CustomFactsCollector().get_all())
     aws_cloud_provider = AWSCloudProvider(facts)
     result = aws_cloud_provider.is_running_on_cloud()
     probability = aws_cloud_provider.is_likely_running_on_cloud()
