@@ -38,6 +38,13 @@ if six.PY3:
 else:
     from ConfigParser import ConfigParser
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from subscription_manager.certdirectory import EntitlementDirectory
+    from subscription_manager.identity import Identity
+
+
 expired_warning = _("""
 *** WARNING ***
 The subscription for following product(s) has expired:
@@ -124,12 +131,15 @@ class SubscriptionManager(dnf.Plugin):
         Update entitlement certificates and redhat.repo
         :param cache_only: is True, when rhsm.full_refresh_on_yum is set to 0 in rhsm.conf
         """
+        logger.info(_("Updating Subscription Management repositories."))
+        identity: Identity = inj.require(inj.IDENTITY)
+        ent_dir: EntitlementDirectory = inj.require(inj.ENT_DIR)
 
-        logger.info(_('Updating Subscription Management repositories.'))
-
-        identity = inj.require(inj.IDENTITY)
-
-        if not identity.is_valid():
+        # During first phase of anonymous cloud registration the system has
+        # valid entitlement certificates, but does not yet have any identity.
+        # We have access to the content, so we shouldn't be reporting missing
+        # identity certificate.
+        if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
             logger.info(_("Unable to read consumer identity"))
 
         if config.in_container():
