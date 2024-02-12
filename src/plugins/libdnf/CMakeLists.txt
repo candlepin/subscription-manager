@@ -65,7 +65,7 @@ include_directories(${ZLIB_INCLUDE_DIRS})
 include_directories(${OPENSSL_INCLUDE_DIR})
 include_directories(${JSONC_INCLUDE_DIR})
 
-add_library(product-id SHARED product-id.c util.c productdb.c test-product-id.c)
+add_library(product-id SHARED product-id.c util.c productdb.c)
 
 # Don't put "lib" on the front
 set_target_properties(product-id PROPERTIES PREFIX "")
