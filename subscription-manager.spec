@@ -133,7 +133,7 @@
 %global subpackages SUBPACKAGES="%{?include_syspurpose:syspurpose}"
 
 Name: subscription-manager
-Version: 1.24.53
+Version: 1.24.54
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 Group:   System Environment/Base
@@ -1171,6 +1171,13 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Mon Feb 12 2024 Pino Toscano <ptoscano@redhat.com>
+- tito: drop bz requirement (ptoscano@redhat.com)
+- fix: 1.24 Add python-requests to the list of required RPMs
+  (jhnidek@redhat.com)
+- fix: Pin lxml to last version supporting Python 2 (mhorky@redhat.com)
+- fix: Add missing package intltool to test script (jhnidek@redhat.com)
+
 * Fri Sep 22 2023 Pino Toscano <ptoscano@redhat.com> 1.24.53-1
 - 2229752: [1.24] Hotfix of D-Bus policy (jhnidek@redhat.com)
 - Collect GCP Project information as cloud facts (chambrid@redhat.com)
