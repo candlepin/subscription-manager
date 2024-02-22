@@ -1107,11 +1107,12 @@ class UEPConnection(BaseConnection):
 
         return self.resources
 
-    def supports_resource(self, resource_name):
-        """
-        Check if the server we're connecting too supports a particular
-        resource. For our use cases this is generally the plural form
-        of the resource.
+    def supports_resource(self, resource_name: Optional[str]):
+        """Check if the server supports a particular resource.
+
+        :param resource_name:
+            Resource to be requested.
+            When `None`, API call `GET /` is made to cache all supported resources.
         """
         if self.resources is None:
             self._load_supported_resources()
