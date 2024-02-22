@@ -22,7 +22,7 @@ import signal
 import logging
 import dbus.mainloop.glib
 import base64
-from typing import Union
+from typing import List, Union, TYPE_CHECKING
 
 import subscription_manager.injection as inj
 
@@ -45,6 +45,14 @@ from subscription_manager.i18n import ugettext as _
 
 from cloud_what.provider import detect_cloud_provider, CLOUD_PROVIDERS, BaseCloudProvider
 from rhsmlib.services.register import RegisterService
+
+
+if TYPE_CHECKING:
+    import argparse
+    from rhsm.config import RhsmConfigParser
+    from rhsm.connection import UEPConnection
+    from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.identity import Identity
 
 
 def exit_on_signal(_signumber, _stackframe):
@@ -108,16 +116,16 @@ def _collect_cloud_info(cloud_list: list, log) -> dict:
     return result
 
 
-def _auto_register(cp_provider, log):
-    """
-    Try to perform auto-registration
+def _auto_register(cp_provider: "CPProvider", log: logging.Logger) -> None:
+    """Try to perform auto-registration.
+
     :param cp_provider: provider of connection to candlepin server
     :param log: logging object
     :return: None
     """
     log.debug("Trying to do auto-registration of this system")
 
-    identity = inj.require(inj.IDENTITY)
+    identity: Identity = inj.require(inj.IDENTITY)
     if identity.is_valid() is True:
         log.debug('System already registered. Skipping auto-registration')
         return
@@ -168,7 +176,7 @@ def _auto_register(cp_provider, log):
         sys.exit(0)
 
 
-def _main(options, log):
+def _main(options: "argparse.Namespace", log: logging.Logger):
     # Set default mainloop
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
@@ -177,15 +185,15 @@ def _main(options, log):
     # without finally statements, we get confusing behavior (ex. see bz#1431659)
     signal.signal(signal.SIGTERM, exit_on_signal)
 
-    cp_provider = inj.require(inj.CP_PROVIDER)
-    correlation_id = generate_correlation_id()
-    log.debug('X-Correlation-ID: %s', correlation_id)
+    cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
+    correlation_id: str = generate_correlation_id()
+    log.debug("X-Correlation-ID: %s", correlation_id)
     cp_provider.set_correlation_id(correlation_id)
-    cfg = config.get_config_parser()
 
-    log.debug('check for rhsmcertd disable')
-    if '1' == cfg.get('rhsmcertd', 'disable') and not options.force:
-        log.warning('The rhsmcertd process has been disabled by configuration.')
+    cfg: RhsmConfigParser = config.get_config_parser()
+    log.debug("check for rhsmcertd disable")
+    if "1" == cfg.get("rhsmcertd", "disable") and not options.force:
+        log.warning("The rhsmcertd process has been disabled by configuration.")
         sys.exit(-1)
 
     # Was script executed with --auto-register option
@@ -198,8 +206,9 @@ def _main(options, log):
         sys.exit(-1)
     print(_('Updating entitlement certificates & repositories'))
 
-    cp = cp_provider.get_consumer_auth_cp()
-    cp.supports_resource(None)  # pre-load supported resources; serves as a way of failing before locking the repos
+    cp: UEPConnection = cp_provider.get_consumer_auth_cp()
+    # pre-load supported resources; serves as a way of failing before locking the repos
+    cp.supports_resource(None)
 
     try:
         if options.autoheal:
@@ -262,6 +271,8 @@ def main():
             default=False, help="perform auto-registration"
     )
 
+    options: argparse.Namespace
+    args: List[str]
     (options, args) = parser.parse_known_args()
     try:
         _main(options, log)
