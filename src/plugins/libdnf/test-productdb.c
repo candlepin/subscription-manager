@@ -179,6 +179,8 @@ void testReadCorruptedFile(dbFixture *fixture, gconstpointer ignored) {
     g_assert_nonnull(err);
     g_clear_error(&err);
     g_assert_cmpint(g_hash_table_size(db->repoMap), ==, 0);
+    g_free(path);
+    g_object_unref(testJsonFile);
 }
 
 void testReadFileWrongData(dbFixture *fixture, gconstpointer ignored) {
@@ -222,6 +224,8 @@ void testReadFileWrongData(dbFixture *fixture, gconstpointer ignored) {
     g_clear_error(&err);
 
     g_io_stream_close((GIOStream*) ioStream, NULL, &err);
+    g_free(path);
+    g_object_unref(testJsonFile);
 }
 
 void testWriteFile(dbFixture *fixture, gconstpointer ignored) {
