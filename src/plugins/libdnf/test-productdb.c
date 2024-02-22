@@ -14,7 +14,6 @@
  */
 
 #include <glib.h>
-#include <stdio.h>
 #include <gio/gio.h>
 #include <string.h>
 

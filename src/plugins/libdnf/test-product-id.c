@@ -13,7 +13,6 @@
  * in this software or its documentation.
  */
 
-#include <stdlib.h>
 #include <glib.h>
 #include <stdio.h>
 #include <gio/gio.h>
