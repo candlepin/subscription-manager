@@ -117,7 +117,7 @@ void testReadMissingFile(dbFixture *fixture, gconstpointer ignored) {
     GError *err = NULL;
     readProductDb(db, &err);
     g_assert_nonnull(err);
-    g_error_free(err);
+    g_clear_error(&err);
 }
 
 void testReadFile(dbFixture *fixture, gconstpointer ignored) {
@@ -151,7 +151,7 @@ void testReadFile(dbFixture *fixture, gconstpointer ignored) {
     g_object_unref(ioStream);
     g_object_unref(testJsonFile);
     if(err != NULL) {
-        g_error_free(err);
+        g_clear_error(&err);
     }
 }
 
@@ -178,7 +178,7 @@ void testReadCorruptedFile(dbFixture *fixture, gconstpointer ignored) {
     readProductDb(db, &err);
 
     g_assert_nonnull(err);
-    g_error_free(err);
+    g_clear_error(&err);
     g_assert_cmpint(g_hash_table_size(db->repoMap), ==, 0);
 }
 
@@ -204,7 +204,7 @@ void testReadFileWrongData(dbFixture *fixture, gconstpointer ignored) {
     g_output_stream_write_all(outStream, testJson01, strlen(testJson01), NULL, NULL, &err);
     readProductDb(db, &err);
     g_assert_nonnull(err);
-    g_error_free(err);
+    g_clear_error(&err);
 
     // Key is not string, but it is integer
     gchar *testJson02 = "{69: ['rhel']}\n";
@@ -212,7 +212,7 @@ void testReadFileWrongData(dbFixture *fixture, gconstpointer ignored) {
     g_output_stream_write_all(outStream, testJson02, strlen(testJson02), NULL, NULL, &err);
     readProductDb(db, &err);
     g_assert_nonnull(err);
-    g_error_free(err);
+    g_clear_error(&err);
 
     // Value in array is not string, but it is integer
     gchar *testJson03 = "{'69': [100]}\n";
@@ -220,7 +220,7 @@ void testReadFileWrongData(dbFixture *fixture, gconstpointer ignored) {
     g_output_stream_write_all(outStream, testJson03, strlen(testJson03), NULL, NULL, &err);
     readProductDb(db, &err);
     g_assert_nonnull(err);
-    g_error_free(err);
+    g_clear_error(&err);
 
     g_io_stream_close((GIOStream*) ioStream, NULL, &err);
 }
