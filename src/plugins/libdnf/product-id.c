@@ -160,7 +160,7 @@ gchar *strHookId(PluginHookId id) {
     }
 }
 
-RepoProductId *initRepoProductId() {
+RepoProductId *initRepoProductId(void) {
     RepoProductId *repoProductId = (RepoProductId*) malloc(sizeof(RepoProductId));
     repoProductId->repo = NULL;
     repoProductId->productIdPath = NULL;

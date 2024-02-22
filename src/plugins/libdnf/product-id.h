@@ -68,7 +68,7 @@ typedef struct {
     bool isInstalled;
 } RepoProductId;
 
-RepoProductId *initRepoProductId();
+RepoProductId *initRepoProductId(void);
 void freeRepoProductId(RepoProductId *repoProductId);
 void printError(const char *msg, GError *err);
 void getEnabled(const GPtrArray *repos, GPtrArray *enabledRepos);
