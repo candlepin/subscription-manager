@@ -16,36 +16,34 @@ from __future__ import print_function, division, absolute_import
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-import enum
-import sys
-
-import signal
-import logging
-import dbus.mainloop.glib
 import base64
-from typing import List, Union, TYPE_CHECKING
+import enum
+import logging
+import random
+import signal
+import sys
+import time
+from argparse import SUPPRESS
+from typing import Dict, List, Union, TYPE_CHECKING
 
-import subscription_manager.injection as inj
+import dbus.mainloop.glib
+
+from cloud_what.provider import detect_cloud_provider, CLOUD_PROVIDERS, BaseCloudProvider
 
 from rhsm import connection, config, logutil
 
-from subscription_manager import ga_loader
-ga_loader.init_ga()
-
-from subscription_manager.injectioninit import init_dep_injection
-init_dep_injection()
-
-from subscription_manager.action_client import HealingActionClient, ActionClient
-from subscription_manager import managerlib
-from subscription_manager.identity import ConsumerIdentity
-from subscription_manager.i18n_argparse import ArgumentParser, USAGE
-from argparse import SUPPRESS
-from subscription_manager.utils import generate_correlation_id
-
-from subscription_manager.i18n import ugettext as _
-
-from cloud_what.provider import detect_cloud_provider, CLOUD_PROVIDERS, BaseCloudProvider
 from rhsmlib.services.register import RegisterService
+
+import subscription_manager.utils
+import subscription_manager.injection as inj
+from subscription_manager import cache
+from subscription_manager import entcertlib
+from subscription_manager import managerlib
+from subscription_manager.action_client import HealingActionClient, ActionClient
+from subscription_manager.i18n import ugettext as _
+from subscription_manager.i18n_argparse import ArgumentParser, USAGE
+from subscription_manager.identity import Identity, ConsumerIdentity
+from subscription_manager.injectioninit import init_dep_injection
 
 
 if TYPE_CHECKING:
@@ -53,7 +51,6 @@ if TYPE_CHECKING:
     from rhsm.config import RhsmConfigParser
     from rhsm.connection import UEPConnection
     from subscription_manager.cp_provider import CPProvider
-    from subscription_manager.identity import Identity
 
 
 class ExitStatus(enum.IntEnum):
@@ -95,22 +92,44 @@ log = logging.getLogger(f"rhsm-app.{__name__}")
 
 
 def exit_on_signal(_signumber, _stackframe):
-    sys.exit(0)
+    sys.exit(ExitStatus.OK)
 
 
-def _collect_cloud_info(cloud_list: list) -> dict:
+def _is_enabled() -> bool:
+    """Check if rhsmcertd is enabled or disabled."""
+    cfg: RhsmConfigParser = config.get_config_parser()
+    if cfg.get("rhsmcertd", "disable") == "1":
+        return False
+    return True
+
+
+def _is_registered() -> bool:
+    """Check if the system is registered."""
+    identity: Identity = inj.require(inj.IDENTITY)
+    return identity.is_valid()
+
+
+def _create_cp_provider() -> "CPProvider":
+    """Create a CPProvider with unique correlation ID."""
+    provider: CPProvider = inj.require(inj.CP_PROVIDER)
+    provider.set_correlation_id(correlation_id=subscription_manager.utils.generate_correlation_id())
+    log.debug(f"X-Correlation-ID: {provider.correlation_id}")
+    return provider
+
+
+def _collect_cloud_info(cloud_list: List[str]) -> dict:
     """
     Try to collect cloud information: metadata and signature provided by cloud provider.
     :param cloud_list: The list of detected cloud providers. In most cases the list contains only one item.
-    :return: The dictionary with metadata and signature (when signature is provided by cloud provider).
-        Metadata and signature are base64 encoded. Empty dictionary is returned, when it wasn't
-        possible to collect any metadata
+    :return:
+        Dictionary with 'metadata' and 'signature' (if it is provided by cloud provider),
+        both encoded in base64.
+        Empty dictionary is returned if metadata cannot be collected.
     """
+    log.debug(f"Collecting metadata from cloud provider(s): {cloud_list}")
 
     # Create dispatcher dictionary from the list of supported cloud providers
-    cloud_providers = {
-        provider_cls.CLOUD_PROVIDER_ID: provider_cls for provider_cls in CLOUD_PROVIDERS
-    }
+    cloud_providers = {provider_cls.CLOUD_PROVIDER_ID: provider_cls for provider_cls in CLOUD_PROVIDERS}
 
     result = {}
     # Go through the list of detected cloud providers and try to collect
@@ -139,81 +158,170 @@ def _collect_cloud_info(cloud_list: list) -> dict:
 
         log.info(f'Metadata and signature gathered for cloud provider: {cloud_provider_id}')
 
-        # Encode metadata and signature using base64 encoding. Because base64.b64encode
-        # returns values as bytes, then we decode it to string using ASCII encoding.
-        b64_metadata: str = base64.b64encode(bytes(metadata, 'utf-8')).decode('ascii')
-        b64_signature: str = base64.b64encode(bytes(signature, 'utf-8')).decode('ascii')
-
         result = {
-            'cloud_id': cloud_provider_id,
-            'metadata': b64_metadata,
-            'signature': b64_signature
+            "cloud_id": cloud_provider_id,
+            "metadata": base64.b64encode(bytes(metadata, "utf-8")).decode("ascii"),
+            "signature": base64.b64encode(bytes(signature, "utf-8")).decode("ascii"),
         }
         break
 
     return result
 
 
-def _auto_register(cp_provider: "CPProvider") -> None:
-    """Try to perform auto-registration.
+def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
+    """Try to perform automatic registration.
 
-    :param cp_provider: provider of connection to candlepin server
-    :return: None
+    :param cp_provider: Provider of connection to Candlepin.
+    :returns: ExitStatus describing the result of a registration otherwise.
     """
-    log.debug("Trying to do auto-registration of this system")
+    log.info("Starting automatic registration.")
 
-    identity: Identity = inj.require(inj.IDENTITY)
-    if identity.is_valid() is True:
-        log.debug('System already registered. Skipping auto-registration')
-        return
-
-    log.debug('Trying to detect cloud provider')
-
-    # Try to detect cloud provider first. Use lower threshold in this case,
-    # because we want to have more sensitive detection in this case
-    # (automatic registration is more important than reporting of facts)
+    log.debug("Detecting cloud provider.")
+    # Try to detect cloud provider first. We use lower threshold in this case, not the
+    # default, because we want to have more sensitive detection in this case;
+    # automatic registration is more important than reporting of facts.
     cloud_list = detect_cloud_provider(threshold=0.3)
     if len(cloud_list) == 0:
-        log.warning('This system does not run on any supported cloud provider. Skipping auto-registration')
-        sys.exit(-1)
+        log.warning(
+            "This system does not run on any supported cloud provider. "
+            "Automatic registration cannot be performed."
+        )
+        return ExitStatus.NO_CLOUD_PROVIDER
 
-    # When some cloud provider(s) was detected, then try to collect metadata
-    # and signature
+    # When some cloud provider(s) were detected, then try to collect metadata and signature
     cloud_info = _collect_cloud_info(cloud_list)
     if len(cloud_info) == 0:
-        log.warning('It was not possible to collect any cloud metadata. Unable to perform auto-registration')
-        sys.exit(-1)
+        log.warning("Cloud metadata could not be collected. Unable to perform automatic registration.")
+        return ExitStatus.NO_CLOUD_METADATA
 
     # Get connection not using any authentication
-    cp = cp_provider.get_no_auth_cp()
+    uep: UEPConnection = cp_provider.get_no_auth_cp()
 
-    # Try to get JWT token from candlepin (cloud registration adapter)
+    # Obtain automatic registration token
     try:
-        jwt_token = cp.getJWToken(
-            cloud_id=cloud_info['cloud_id'],
-            metadata=cloud_info['metadata'],
-            signature=cloud_info['signature']
+        token: Dict[str, str] = cache.CloudTokenCache.get(
+            uep=uep,
+            cloud_id=cloud_info["cloud_id"],
+            metadata=cloud_info["metadata"],
+            signature=cloud_info["signature"],
         )
-    except Exception as err:
-        log.error('Unable to get JWT token: {err}'.format(err=str(err)))
-        log.warning('Canceling auto-registration')
-        sys.exit(-1)
+    except Exception:
+        log.exception("Cloud token could not be obtained. Unable to perform automatic registration.")
+        return ExitStatus.NO_REGISTRATION_TOKEN
 
-    # Try to register using JWT token
-    register_service = RegisterService(cp=cp)
-    # Organization ID is set to None, because organization ID is
-    # included in JWT token
-    try:
-        register_service.register(org=None, jwt_token=jwt_token)
-    except Exception as err:
-        log.error("Unable to auto-register: {err}".format(err=err))
-        sys.exit(-1)
+    if token["tokenType"] == "CP-Cloud-Registration":
+        try:
+            _auto_register_standard(uep=uep, token=token)
+        except Exception:
+            log.exception("Standard automatic registration failed.")
+            return ExitStatus.REGISTRATION_FAILED
+        else:
+            log.info("Standard automatic registration was successful.")
+            return ExitStatus.OK
+
+    if token["tokenType"] == "CP-Anonymous-Cloud-Registration":
+        try:
+            _auto_register_anonymous(uep=uep, token=token)
+            cache.CloudTokenCache.delete_cache()
+        except Exception:
+            log.exception("Anonymous automatic registration failed.")
+            return ExitStatus.REGISTRATION_FAILED
+        else:
+            log.info("Anonymous automatic registration was successful.")
+            return ExitStatus.OK
+
+    log.error(f"Unsupported token type for automatic registration: {token['tokenType']}.")
+    return ExitStatus.BAD_TOKEN_TYPE
+
+
+def _auto_register_standard(uep: "UEPConnection", token: Dict[str, str]) -> None:
+    """Perform standard automatic registration.
+
+    The service will download identity certificate and entitlement certificates.
+
+    :raises Exception: The system could not be registered.
+    """
+    log.debug("Registering the system through standard automatic registration.")
+
+    service = RegisterService(cp=uep)
+    service.register(org=None, jwt_token=token["token"])
+
+
+def _auto_register_anonymous(uep: "UEPConnection", token: Dict[str, str]) -> None:
+    """Perform anonymous automatic registration.
+
+    First we download the anonymous entitlement certificates and install them.
+
+    Then we wait the 'splay' period. This makes sure we give the cloud backend
+    enough time to create all the various objects in the Candlepin database.
+
+    Then we perform the registration to obtain identity certificate and proper
+    entitlement certificates.
+
+    :raises TimeoutError: JWT expired, the system could be registered.
+    :raises Exception: The system could not be registered.
+    """
+    log.debug("Registering the system through anonymous automatic registration.")
+
+    # Step 1: Get the anonymous entitlement certificates
+    manager = entcertlib.AnonymousCertificateManager(uep=uep)
+    manager.install_temporary_certificates(uuid=token["anonymousConsumerUuid"], jwt=token["token"])
+
+    # Step 2: Wait
+    cfg = config.get_config_parser()
+    if cfg.get("rhsmcertd", "splay") == "0":
+        log.debug("Trying to obtain the identity immediately, splay is disabled.")
     else:
-        log.debug("Auto-registration performed successfully")
-        sys.exit(0)
+        registration_interval = int(cfg.get("rhsmcertd", "auto_registration_interval"))
+        splay_interval: int = random.randint(60, registration_interval * 60)
+        log.debug(
+            f"Waiting a period of {splay_interval} seconds "
+            f"(about {splay_interval // 60} minutes) before attempting to obtain the identity."
+        )
+        time.sleep(splay_interval)
+
+    # Step 3: Obtain the identity certificate
+    log.debug("Obtaining system identity")
+
+    service = RegisterService(cp=uep)
+    while cache.CloudTokenCache.is_valid():
+        # While the server prepares the identity, it keeps sending status code 429
+        # and a Retry-After header.
+        try:
+            service.register(org=None, jwt_token=token["token"])
+            cache.CloudTokenCache.delete_cache()
+            # The anonymous organization will have different entitlement certificates,
+            # we need to refresh them.
+            log.debug(
+                "Replacing anonymous entitlement certificates "
+                "with entitlement certificates linked to an anonymous organization."
+            )
+            report = entcertlib.EntCertUpdateAction().perform()
+            log.debug(report)
+            return
+        except connection.RateLimitExceededException as exc:
+            if exc.headers.get("Retry-After", None) is None:
+                raise
+            delay = int(exc.headers["Retry-After"])
+            log.debug(
+                f"Got response with status code {exc.code} and Retry-After header, "
+                f"will try again in {delay} seconds."
+            )
+            time.sleep(delay)
+        except Exception:
+            raise
+
+    # In theory, this should not happen, it means that something has gone wrong server-side.
+    raise TimeoutError("The Candlepin JWT expired before we were able to register the system.")
 
 
-def _main(options: "argparse.Namespace", log: logging.Logger):
+def _main(args: "argparse.Namespace"):
+    if not _is_enabled() and not args.force:
+        log.info("The rhsmcertd process has been disabled by configuration.")
+        sys.exit(ExitStatus.RHSMCERTD_DISABLED)
+
+    log.debug("Running rhsmcertd worker.")
+
     # Set default mainloop
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 
@@ -222,38 +330,37 @@ def _main(options: "argparse.Namespace", log: logging.Logger):
     # without finally statements, we get confusing behavior (ex. see bz#1431659)
     signal.signal(signal.SIGTERM, exit_on_signal)
 
-    cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
-    correlation_id: str = generate_correlation_id()
-    log.debug("X-Correlation-ID: %s", correlation_id)
-    cp_provider.set_correlation_id(correlation_id)
+    cp_provider: CPProvider = _create_cp_provider()
 
-    cfg: RhsmConfigParser = config.get_config_parser()
-    log.debug("check for rhsmcertd disable")
-    if "1" == cfg.get("rhsmcertd", "disable") and not options.force:
-        log.warning("The rhsmcertd process has been disabled by configuration.")
-        sys.exit(-1)
-
-    # Was script executed with --auto-register option
-    if options.auto_register is True:
-        _auto_register(cp_provider)
+    if args.auto_register is True:
+        if _is_registered():
+            print(_("This system is already registered, ignoring request to automatically register."))
+            log.debug("This system is already registered, skipping automatic registration.")
+        else:
+            print(_("Registering the system"))
+            status: ExitStatus = _auto_register(cp_provider)
+            sys.exit(status.value)
 
     if not ConsumerIdentity.existsAndValid():
-        log.error('Either the consumer is not registered or the certificates' +
-                  ' are corrupted. Certificate update using daemon failed.')
-        sys.exit(-1)
-    print(_('Updating entitlement certificates & repositories'))
+        log.error(
+            "Either the consumer is not registered or the certificates" +
+            " are corrupted. Certificate update using daemon failed."
+        )
+        sys.exit(ExitStatus.LOCAL_CORRUPTION)
 
-    cp: UEPConnection = cp_provider.get_consumer_auth_cp()
-    # pre-load supported resources; serves as a way of failing before locking the repos
-    cp.supports_resource(None)
+    print(_("Updating entitlement certificates & repositories."))
+
+    uep: UEPConnection = cp_provider.get_consumer_auth_cp()
+    # preload supported resources; serves as a way of failing before locking the repos
+    uep.supports_resource(None)
 
     try:
-        if options.autoheal:
+        if args.autoheal:
             action_client = HealingActionClient()
         else:
             action_client = ActionClient()
 
-        action_client.update(options.autoheal)
+        action_client.update()
 
         for update_report in action_client.update_reports:
             # FIXME: make sure we don't get None reports
@@ -261,35 +368,21 @@ def _main(options: "argparse.Namespace", log: logging.Logger):
                 print(update_report)
 
     except connection.ExpiredIdentityCertException as e:
-        log.critical(_("Your identity certificate has expired"))
+        log.critical("System's identity certificate has expired.")
         raise e
     except connection.GoneException as ge:
         uuid = ConsumerIdentity.read().getConsumerId()
-
-        # This code is to prevent an errant 410 response causing consumer cert deletion.
+        # The GoneException carries information about a consumer deleted on the server.
         #
-        # If a server responds with a 410, we want to very that it's not just a 410 http status, but
-        # also that the response is from candlepin, and include the right info about the consumer.
-        #
-        # A connection to the entitlement server could get an unintentional 410 response. A common
-        # cause for that kind of error would be a bug or crash or misconfiguration of a reverse proxy
-        # in front of candlepin. Most error codes we treat as temporary and transient, and they don't
-        # cause any action to be taken (aside from error handling). But since consumer deletion is tied
-        # to the 410 status code, and that is difficult to recover from, we try to be a little bit
-        # more paranoid about that case.
-        #
-        # So we look for both the 410 status, and the expected response body. If we get those
-        # then python-rhsm will create a GoneException that includes the deleted_id. If we get
-        # A GoneException and the deleted_id matches, then we actually delete the consumer.
-        #
-        # However... If we get a GoneException and it's deleted_id does not match the current
-        # consumer uuid, we do not delete the consumer. That would require using a valid consumer
-        # cert, but making a request for a different consumer uuid, so unlikely. Could register
-        # with --consumerid get there?
+        # If this exception is raised and the `deleted_id` matches the current UUID,
+        # we clean up the system. In theory, we could use a valid consumer certificate
+        # to make a request for a different consumer UUID.
         if ge.deleted_id == uuid:
-            log.critical("Consumer profile \"%s\" has been deleted from the server. Its local certificates will now be archived", uuid)
+            log.info(
+                f"Consumer profile '{uuid}' has been deleted from the server. "
+                "Its local certificates will be archived to '/etc/pki/consumer.old/'."
+            )
             managerlib.clean_all_data()
-            log.critical("Certificates archived to '/etc/pki/consumer.old'. Contact your system administrator if you need more information.")
 
         raise ge
 
@@ -298,13 +391,20 @@ def main():
     logutil.init_logger()
 
     parser = ArgumentParser(usage=USAGE)
-    parser.add_argument("--autoheal", dest="autoheal", action="store_true",
-            default=False, help="perform an autoheal check")
-    parser.add_argument("--force", dest="force", action="store_true",
-            default=False, help=SUPPRESS)
     parser.add_argument(
-            "--auto-register", dest="auto_register", action="store_true",
-            default=False, help="perform auto-registration"
+        "--autoheal",
+        dest="autoheal",
+        action="store_true",
+        default=False,
+        help="perform an autoheal check",
+    )
+    parser.add_argument("--force", dest="force", action="store_true", default=False, help=SUPPRESS)
+    parser.add_argument(
+        "--auto-register",
+        dest="auto_register",
+        action="store_true",
+        default=False,
+        help="perform auto-registration",
     )
 
     options: argparse.Namespace
@@ -318,12 +418,11 @@ def main():
         # stack trace. We need to check the code, since we want to signal
         # exit with failure to the caller. Otherwise, we will exit with 0
         if se.code:
-            sys.exit(-1)
-    except Exception as e:
-        log.error("Error while updating certificates using daemon")
-        print(_('Unable to update entitlement certificates and repositories'))
-        log.exception(e)
-        sys.exit(-1)
+            sys.exit(ExitStatus.UNKNOWN_ERROR)
+    except Exception:
+        log.exception("Error while updating certificates using daemon")
+        print(_("Unable to update entitlement certificates and repositories"))
+        sys.exit(ExitStatus.UNKNOWN_ERROR)
 
 
 if __name__ == '__main__':
