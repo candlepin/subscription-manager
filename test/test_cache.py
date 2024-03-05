@@ -14,10 +14,8 @@ from __future__ import print_function, division, absolute_import
 # have received a copy of GPLv2 along with this software; if not, see
 # http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
 #
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest
+import base64
+import unittest
 
 import os
 import logging
@@ -26,7 +24,7 @@ import shutil
 import socket
 import tempfile
 import time
-from mock import Mock, patch, mock_open
+from unittest.mock import Mock, patch, mock_open
 
 # used to get a user readable cfg class for test cases
 from .stubs import StubProduct, StubProductCertificate, StubCertificateDirectory, \
@@ -42,8 +40,12 @@ from subscription_manager.cache import ProfileManager, \
 
 from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfile
 
-from rhsm.connection import RestlibException, UnauthorizedException, \
-    RateLimitExceededException
+from rhsm.connection import (
+    UEPConnection,
+    RestlibException,
+    UnauthorizedException,
+    RateLimitExceededException,
+)
 
 from subscription_manager import injection as inj
 
@@ -1307,3 +1309,142 @@ class TestAvailableEntitlementsCache(SubManFixture):
         uep.conn.smoothed_rt = 20.0
         timeout = self.cache.timeout()
         self.assertEqual(timeout, self.cache.UBOUND)
+
+
+class TestCloudTokenCache(SubManFixture):
+    original_path = None
+
+    @classmethod
+    def setUpClass(cls):
+        cls.original_path = cache.CloudTokenCache.CACHE_FILE
+
+    @classmethod
+    def tearDownClass(cls):
+        # Ensure we have cleaned up properly
+        assert (
+            cls.original_path == cache.CloudTokenCache.CACHE_FILE
+        ), f"{cls.__name__} did not clean up after itself"
+
+    def setUp(self):
+        self.actual_path: str = cache.CloudTokenCache.CACHE_FILE
+        self.test_path = tempfile.NamedTemporaryFile(prefix="cloud_token_cache.", suffix=".json")
+        cache.CloudTokenCache.CACHE_FILE = self.test_path.name
+
+    def tearDown(self):
+        cache.CloudTokenCache.CACHE_FILE = self.actual_path
+        del self.actual_path
+        del self.test_path
+
+    @staticmethod
+    def _get_uep(jwt_response: dict) -> Mock:
+        """Create mock UEPConnection object with custom `getCloudJWT()`."""
+        uep = Mock(spec=UEPConnection)
+        uep.getCloudJWT.return_value = jwt_response
+        return uep
+
+    @staticmethod
+    def _create_jwt(expired: bool = False):
+        """Create fake JWT.
+
+        :param expired: When True, the token will have the expiration date in the past.
+        """
+        now = int(time.time())
+        expiration: int = (now + 60) if not expired else (now - 60)
+
+        jwt_header: str = base64.b64encode(b"{}").decode("utf-8")
+        jwt_body: str = base64.b64encode(json.dumps({"exp": expiration}).encode("utf-8")).decode("utf-8")
+        jwt_signature: str = base64.b64encode(b"{}").decode("utf-8")
+
+        return {
+            "anonymousConsumerUuid": "fake-uuid",
+            "token": f"{jwt_header}.{jwt_body}.{jwt_signature}".replace("=", ""),
+            "tokenType": "Fake-CP-Cloud-Registration",
+            "__is_expired": expired,
+        }
+
+    def test_no_cache(self):
+        """Call the server if we don't have any cache file. Cache the result."""
+        expected = self._create_jwt(expired=False)
+        uep = self._get_uep(jwt_response=expected)
+        jwt = cache.CloudTokenCache.get(
+            uep=uep, cloud_id="fake-cloud", metadata="fake metadata", signature="fake signature"
+        )
+
+        # We have called the server
+        self.assertTrue(uep.getCloudJWT.called)
+        uep.getCloudJWT.assert_called_once_with("fake-cloud", "fake metadata", "fake signature")
+        # The cache returned the response
+        self.assertIsNotNone(jwt)
+        # The response was cached into a file
+        self.assertTrue(os.path.isfile(cache.CloudTokenCache.CACHE_FILE))
+        with open(cache.CloudTokenCache.CACHE_FILE, "r") as f:
+            self.assertEqual(json.load(f), expected)
+
+    def test_is_valid__when_valid(self):
+        """Check that cache is reported as valid if the expiration date is in the future."""
+        cache.CloudTokenCache._save_to_file(token=self._create_jwt(expired=False))
+        self.assertTrue(cache.CloudTokenCache.is_valid())
+
+    def test_is_valid__when_invalid(self):
+        """Check that cache is reported as invalid if the expiration date is in the past."""
+        cache.CloudTokenCache._save_to_file(token=self._create_jwt(expired=True))
+        self.assertFalse(cache.CloudTokenCache.is_valid())
+
+    def test_expired_cache(self):
+        """Call the server if we have a cache file, but its content is expired."""
+        # Simulate old expired cache
+        cache.CloudTokenCache._save_to_file(token=self._create_jwt(expired=True))
+
+        expected = self._create_jwt(expired=False)
+        uep = self._get_uep(jwt_response=expected)
+        jwt = cache.CloudTokenCache.get(
+            uep=uep, cloud_id="fake-cloud", metadata="fake metadata", signature="fake signature"
+        )
+
+        # We have called the server
+        self.assertTrue(uep.getCloudJWT.called)
+        uep.getCloudJWT.assert_called_once_with("fake-cloud", "fake metadata", "fake signature")
+        # The cache returned the response
+        self.assertIsNotNone(jwt)
+        # The response was cached into a file
+        self.assertTrue(os.path.isfile(cache.CloudTokenCache.CACHE_FILE))
+        with open(cache.CloudTokenCache.CACHE_FILE, "r") as f:
+            self.assertEqual(json.load(f), expected)
+
+    def test_valid_cache(self):
+        """Return the cached value."""
+        expected = self._create_jwt(expired=False)
+        # Simulate existing cache
+        cache.CloudTokenCache._save_to_file(token=expected)
+
+        uep = self._get_uep(jwt_response={})
+        jwt = cache.CloudTokenCache.get(
+            uep=uep, cloud_id="fake-cloud", metadata="fake metadata", signature="fake signature"
+        )
+
+        # We have not called the server
+        self.assertFalse(uep.getCloudJWT.called)
+        # The cache returned the response
+        self.assertIsNotNone(jwt)
+        # The cache file still exists
+        self.assertTrue(os.path.isfile(cache.CloudTokenCache.CACHE_FILE))
+        with open(cache.CloudTokenCache.CACHE_FILE, "r") as f:
+            self.assertEqual(json.load(f), expected)
+
+    def test_delete(self):
+        """Delete existing cache file."""
+        # Simulate existing cache
+        cache.CloudTokenCache._save_to_file(token=self._create_jwt(expired=False))
+
+        cache.CloudTokenCache.delete_cache()
+
+        # The cache file does not exist
+        self.assertFalse(os.path.isfile(cache.CloudTokenCache.CACHE_FILE))
+
+    def test_delete_no_cache(self):
+        """Try to delete cache file that does not exist."""
+        # Delete the empty file
+        os.remove(cache.CloudTokenCache.CACHE_FILE)
+
+        cache.CloudTokenCache.delete_cache()
+        self.assertFalse(os.path.isfile(cache.CloudTokenCache.CACHE_FILE))

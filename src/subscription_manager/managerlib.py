@@ -933,6 +933,7 @@ def clean_all_data(backup=True):
     require(POOL_STATUS_CACHE).delete_cache()
     require(OVERRIDE_STATUS_CACHE).delete_cache()
     require(RELEASE_STATUS_CACHE).delete_cache()
+    cache.CloudTokenCache.delete_cache()
 
     RepoActionInvoker.delete_repo_file()
     log.debug("Cleaned local data")

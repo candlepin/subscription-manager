@@ -20,6 +20,7 @@ Classes here track various information last sent to the server, compare
 this with the current state, and perform an update on the server if
 necessary.
 """
+import base64
 import logging
 import os
 import socket
@@ -40,6 +41,11 @@ from subscription_manager.syspurposelib import post_process_received_data
 from rhsmlib.services import config, syspurpose
 
 from subscription_manager.i18n import ugettext as _
+
+from typing import TYPE_CHECKING, Dict
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
+
 
 log = logging.getLogger(__name__)
 
@@ -1146,3 +1152,97 @@ class AvailableEntitlementsCache(CacheManager):
         except ValueError:
             # Ignore json file parse error
             pass
+
+
+class CloudTokenCache:
+    """A cache for Candlepin's JWT used during automatic registration.
+
+    This is used by rhsmcertd worker.
+    """
+
+    CACHE_FILE = "/var/lib/rhsm/cache/cloud_token_cache.json"
+
+    @classmethod
+    def get(cls, uep: "UEPConnection", cloud_id: str, metadata: str, signature: str) -> Dict[str, str]:
+        """Get a JWT from the Candlepin server.
+
+        If cached token already exists and is still valid, it will be used
+        without contacting the server.
+        """
+        try:
+            token: Dict[str, str] = cls._get_from_file()
+            log.debug("JWT cache contains valid token, no need to contact the server.")
+            return token
+        except LookupError as exc:
+            log.debug(f"JWT cache doesn't contain valid token, contacting the server ({exc}).")
+        except Exception as exc:
+            log.debug(f"JWT cache couldn't be read (got {type(exc).__name__}), contacting the server.")
+
+        token: Dict[str, str] = cls._get_from_server(uep, cloud_id, metadata, signature)
+        cls._save_to_file(token)
+        return token
+
+    @classmethod
+    def is_valid(cls) -> bool:
+        """Check if the cached JWT is valid.
+
+        :returns:
+            `True` if the locally cached JWT is valid,
+            `False` if the locally cached JWT is expired or does not exist.
+        """
+        # 'exp' key: https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4
+        expiration: int = cls._get_payload()["exp"]
+
+        now = int(time.time())
+        return expiration > now
+
+    @classmethod
+    def _get_payload(cls) -> Dict:
+        """Get the body of the JWT.
+
+        :returns: The body of the JWT as a dictionary.
+        :raises Exception: The file is missing or malformed.
+        """
+        with open(cls.CACHE_FILE, "r") as f:
+            content: Dict[str, str] = json.load(f)
+
+        payload: str = content["token"].split(".")[1]
+        # JWT does not use the padding, base64.b64decode requires it.
+        payload = f"{payload}==="
+
+        return json.loads(base64.b64decode(payload).decode("utf-8"))
+
+    @classmethod
+    def _get_from_file(cls) -> Dict[str, str]:
+        """Get a JWT from a cache file.
+
+        :raises LookupError: The token is expired.
+        :raises Exception: The file is missing or malformed.
+        """
+        if not cls.is_valid():
+            cls.delete_cache()
+            raise LookupError("Candlepin JWT is expired.")
+
+        with open(cls.CACHE_FILE, "r") as f:
+            return json.load(f)
+
+    @classmethod
+    def _get_from_server(
+        cls, uep: "UEPConnection", cloud_id: str, metadata: str, signature: str
+    ) -> Dict[str, str]:
+        """Get a JWT from the Candlepin server."""
+        log.debug("Obtaining Candlepin JWT.")
+        result: Dict[str, str] = uep.getCloudJWT(cloud_id, metadata, signature)
+        return result
+
+    @classmethod
+    def delete_cache(cls):
+        if os.path.exists(cls.CACHE_FILE):
+            os.remove(cls.CACHE_FILE)
+            log.debug(f"Candlepin JWT cache file ({cls.CACHE_FILE}) was deleted.")
+
+    @classmethod
+    def _save_to_file(cls, token: Dict[str, str]) -> None:
+        with open(cls.CACHE_FILE, "w") as f:
+            json.dump(token, f)
+        log.debug(f"Candlepin JWT was saved to a cache file ({cls.CACHE_FILE}).")
