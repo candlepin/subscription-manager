@@ -101,6 +101,7 @@ void readProductDb(ProductDb *productDb, GError **err) {
             if (repoIds == NULL) {
                 *err = g_error_new_literal(quark, 0, error_string);
                 g_free(productId);
+                json_object_put(dbJson);
                 return;
             }
             GSList *repoList = NULL;
@@ -109,6 +110,7 @@ void readProductDb(ProductDb *productDb, GError **err) {
             if (idArray == NULL) {
                 *err = g_error_new_literal(quark, 0, error_string);
                 g_free(productId);
+                json_object_put(dbJson);
                 return;
             }
             int len = array_list_length(idArray);
@@ -119,6 +121,7 @@ void readProductDb(ProductDb *productDb, GError **err) {
                 if (repoId == NULL) {
                     *err = g_error_new_literal(quark, 0, error_string);
                     g_free(productId);
+                    json_object_put(dbJson);
                     return;
                 }
                 repoList = g_slist_prepend(repoList, (gpointer) repoId);

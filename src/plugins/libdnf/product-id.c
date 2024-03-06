@@ -21,11 +21,8 @@
 #include <openssl/x509.h>
 #include <openssl/err.h>
 
-#include <json-c/json.h>
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <string.h>
 #include <errno.h>
 #include <zlib.h>
@@ -163,7 +160,7 @@ gchar *strHookId(PluginHookId id) {
     }
 }
 
-RepoProductId *initRepoProductId() {
+RepoProductId *initRepoProductId(void) {
     RepoProductId *repoProductId = (RepoProductId*) malloc(sizeof(RepoProductId));
     repoProductId->repo = NULL;
     repoProductId->productIdPath = NULL;
