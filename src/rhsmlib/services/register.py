@@ -101,7 +101,7 @@ class RegisterService:
         facts_dict = self.facts.get_facts()
 
         # Default to the hostname if no name is given
-        consumer_name = options["name"] or socket.gethostname()
+        consumer_name = options["name"] or socket.getfqdn()
 
         self.plugin_manager.run("pre_register_consumer", name=consumer_name, facts=facts_dict)
 
