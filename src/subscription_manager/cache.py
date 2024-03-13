@@ -316,7 +316,7 @@ class StatusCache(CacheManager):
 
     def read_status(
         self, uep: connection.UEPConnection, uuid: str, on_date: Optional[datetime.datetime] = None
-    ) -> Optional[str]:
+    ) -> Optional[dict]:
         """
         Return status, from cache if it exists, otherwise load_status
         and write cache and return it.
