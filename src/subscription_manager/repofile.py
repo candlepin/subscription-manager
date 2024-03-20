@@ -286,7 +286,6 @@ def manage_repos_enabled() -> bool:
 
 
 class TidyWriter:
-
     """
     ini file reader that removes successive newlines,
     and adds a trailing newline to the end of a file.

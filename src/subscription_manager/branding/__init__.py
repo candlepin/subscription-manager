@@ -67,7 +67,6 @@ class Branding:
 
 
 class DefaultBranding:
-
     """
     Default branding. values are defined in init to help with i18n/l10n
     ordering.

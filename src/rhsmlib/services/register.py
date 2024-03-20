@@ -144,9 +144,9 @@ class RegisterService:
             syspurposelib.write_syspurpose(syspurpose)
 
         syspurpose_dict = {
-            "service_level_agreement": consumer["serviceLevel"]
-            if "serviceLevel" in list(consumer.keys())
-            else "",
+            "service_level_agreement": (
+                consumer["serviceLevel"] if "serviceLevel" in list(consumer.keys()) else ""
+            ),
             "role": consumer["role"] if "role" in list(consumer.keys()) else "",
             "usage": consumer["usage"] if "usage" in list(consumer.keys()) else "",
             "addons": consumer["addOns"] if "addOns" in list(consumer.keys()) else [],
