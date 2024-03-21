@@ -11,6 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
+import datetime
 import locale
 import unittest
 import os
@@ -28,7 +29,7 @@ from rhsm.connection import (
     GoneException,
     UnknownContentException,
     RemoteServerException,
-    drift_check,
+    get_time_drift,
     ExpiredIdentityCertException,
     UnauthorizedException,
     ForbiddenException,
@@ -43,7 +44,6 @@ import subscription_manager.injection as inj
 
 from unittest.mock import Mock, patch, mock_open
 from datetime import date
-from time import strftime, gmtime
 from rhsm import ourjson as json
 from collections import namedtuple
 
@@ -1013,11 +1013,14 @@ class DriftTest(unittest.TestCase):
     def test_big_drift(self):
         # let's move this back to just a few hours before the
         # end of time, so this test doesn't fail on 32bit machines
-        self.assertTrue(drift_check("Mon, 18 Jan 2038 19:10:56 GMT", 6))
+        drift = get_time_drift("Mon, 18 Jan 2038 19:10:56 GMT")
+        self.assertTrue(drift > datetime.timedelta(hours=6))
 
     def test_no_drift(self):
-        header = strftime("%a, %d %b %Y %H:%M:%S GMT", gmtime())
-        self.assertFalse(drift_check(header))
+        now = datetime.datetime.now(datetime.timezone.utc)
+        header = now.strftime("%a, %d %b %Y %H:%M:%S GMT")
+        drift = get_time_drift(header)
+        self.assertTrue(drift < datetime.timedelta(seconds=1))
 
 
 class GoneExceptionTest(ExceptionTest):
