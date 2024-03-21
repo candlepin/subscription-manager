@@ -8,13 +8,13 @@
 # simmon <simmon@nplob.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
 # Kim InSoo <simmon@nplob.com>, 2022.
-# 김인수 <simmon@nplob.com>, 2022, 2023.
+# 김인수 <simmon@nplob.com>, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-21 12:27+0200\n"
-"PO-Revision-Date: 2023-12-21 17:35+0000\n"
+"PO-Revision-Date: 2024-02-24 19:36+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -328,7 +328,7 @@ msgstr "소비자 ID를 읽을 수 없습니다"
 
 #: src/plugins/dnf/subscription_manager.py:141
 msgid "subscription-manager is operating in container mode."
-msgstr "서비스크립션-관리자는 컨테이너 방식에서 작동하고 있습니다."
+msgstr "subscription-manager는 컨테이너 방식에서 작동하고 있습니다."
 
 #: src/plugins/dnf/upload_profile.py:37
 msgid ""
@@ -1387,7 +1387,7 @@ msgstr "계정 정보를 입력하십시오:"
 msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
-msgstr "로그인이나 암호를 잊어버리신 경우 시스템 관리자에게 문의하십시오"
+msgstr "로그인이나 비밀번호를 잊어버리신 경우 시스템 관리자에게 문의하십시오"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/__init__.py:88
@@ -1480,8 +1480,7 @@ msgstr "RHN Classic 및 Red Hat 서브스크립션 관리"
 msgid ""
 "Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password"
-msgstr ""
-"정보: 로그인 또는 암호를 잊어버리셨습니까? https://redhat.com/"
+msgstr "정보: 로그인 또는 비밀번호 잊어버리셨습니까? https://redhat.com/"
 "forgot_password 에서 찾아보십시오"
 
 #: src/subscription_manager/cache.py:176
@@ -1947,7 +1946,8 @@ msgstr "소비자 ID가 없거나 손상되었습니다. register --help를 사�
 msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
-msgstr "서비스크립션-관리자는 컨테이너 방식에서 작동하고 있습니다. 자신의 호스트 "
+msgstr ""
+"subscription-manager는 컨테이너 방식에서 작동하고 있습니다. 자신의 호스트 "
 "시스템을 사용하여 서브스크립션을 관리하세요.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -2966,7 +2966,7 @@ msgstr "오류: 이 명령에서는 --email을 사용하여 이메일 주소를 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:74
 msgid "Error: Unable to redeem subscription for this system."
-msgstr "오류: 이와 같은 시스템을 위해 서브스크립션을 상환 할 수 없습니다"
+msgstr "오류: 이와 같은 시스템을 위해 서브스크립션을 상환 할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:32
