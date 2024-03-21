@@ -7,13 +7,14 @@
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021, 2023.
 # Transtats <suanand@redhat.com>, 2022, 2023.
+# 김인수 <simmon@nplob.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-21 12:27+0200\n"
-"PO-Revision-Date: 2023-11-04 01:48+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2024-02-22 10:35+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ja/>\n"
 "Language: ja\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.1.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -331,9 +332,8 @@ msgid "Unable to read consumer identity"
 msgstr "コンシューマー識別子を読み込めません"
 
 #: src/plugins/dnf/subscription_manager.py:141
-#, fuzzy
 msgid "subscription-manager is operating in container mode."
-msgstr "サブスクリプションマネージャーがコンテナーモードで動作しています。"
+msgstr "subscription-managerがコンテナーモードで動作しています。"
 
 #: src/plugins/dnf/upload_profile.py:37
 msgid ""
