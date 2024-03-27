@@ -32,11 +32,12 @@ import dnf
 
 from configparser import ConfigParser
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from subscription_manager.certdirectory import EntitlementDirectory
     from subscription_manager.identity import Identity
+    from subscription_manager.cache import ReleaseStatusCache
 
 
 expired_warning = _(
@@ -67,6 +68,12 @@ no_subs_warning = _(
     """
 This system is registered with an entitlement server, but is not receiving updates. You can use \
 subscription-manager to assign subscriptions.
+"""
+)
+
+release_lock_warning = _(
+    """
+This system has release set to {release_version} and it receives updates only for this release.
 """
 )
 
@@ -206,6 +213,22 @@ class SubscriptionManager(dnf.Plugin):
                     msg = not_registered_warning
             elif len(ent_dir.list_valid()) == 0 and not is_simple_content_access(identity=identity):
                 msg = no_subs_warning
+            else:
+                # Try to read release version ONLY from cache document.
+                # When cache document does not exist, then do not try to get this information
+                # from candlepin server and slow down DNF plugin!
+                release_cache: ReleaseStatusCache = inj.require(inj.RELEASE_STATUS_CACHE)
+                release_version_dict: Optional[dict] = release_cache.read_cache_only()
+                if release_version_dict:
+                    try:
+                        release_version: str = release_version_dict["releaseVer"]
+                    except KeyError:
+                        log.warning("The 'releaseVer' not included in the release version document")
+                    else:
+                        # Skip the case, when release does not exist at all, or it was unset
+                        # and it is empty string
+                        if release_version:
+                            msg = release_lock_warning.format(release_version=release_version)
         finally:
             if msg:
                 logger.info(msg)
