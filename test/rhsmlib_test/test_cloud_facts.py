@@ -148,6 +148,9 @@ GCP_JWT_TOKEN = """eyJhbGciOiJSUzI1NiIsImtpZCI6IjZhOGJhNTY1MmE3MDQ0MTIxZDRmZWRhY
 AWS_INSTANCE_ID = "i-abcdef01234567890"
 AWS_ACCOUNT_ID = "012345678900"
 AWS_BILLING_PRODUCTS = "bp-0124abcd bp-63a5400a"
+AWS_INSTANCE_TYPE = "m5.large"
+AWS_REGION = "eu-central-1"
+
 # The Azure instance ID has to be the same as "vmId" in AZURE_METADATA
 # values for "sku" an "offer" has to be same as in AZURE_METADATA
 AZURE_INSTANCE_ID = "12345678-1234-1234-1234-123456789abc"
@@ -215,6 +218,10 @@ class TestCloudCollector(unittest.TestCase):
         self.assertEqual(facts["aws_billing_products"], AWS_BILLING_PRODUCTS)
         self.assertIn("aws_marketplace_product_codes", facts)
         self.assertEqual(facts["aws_marketplace_product_codes"], None)
+        self.assertIn("aws_instance_type", facts)
+        self.assertEqual(facts["aws_instance_type"], AWS_INSTANCE_TYPE)
+        self.assertIn("aws_region", facts)
+        self.assertEqual(facts["aws_region"], AWS_REGION)
 
     @patch('cloud_what.providers.aws.requests.Session', name='mock_session_class')
     def test_get_aws_facts_with_null_billing_products(self, mock_session_class):
