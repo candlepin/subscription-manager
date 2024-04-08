@@ -102,6 +102,12 @@ class CloudFactsCollector(collector.FactsCollector):
                 else:
                     log.debug('AWS metadata attribute marketplaceProductCodes has to be list or null')
 
+            if "instanceType" in values:
+                facts["aws_instance_type"] = values["instanceType"]
+
+            if "region" in values:
+                facts["aws_region"] = values["region"]
+
         return facts
 
     def get_azure_facts(self):
