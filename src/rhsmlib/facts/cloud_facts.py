@@ -169,6 +169,11 @@ class CloudFactsCollector(collector.FactsCollector):
                         facts["gcp_project_number"] = values["google"]["compute_engine"]["project_number"]
                     else:
                         log.debug("GCP project_number not found in JWT token")
+                    # zone where the machine is located
+                    if "zone" in values["google"]["compute_engine"]:
+                        facts["gcp_zone"] = values["google"]["compute_engine"]["zone"]
+                    else:
+                        log.debug("GCP zone not found in JWT token")
                 else:
                     log.debug("GCP google.compute_engine on found in JWT token")
         return facts
