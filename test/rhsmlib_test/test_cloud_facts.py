@@ -355,6 +355,8 @@ class TestCloudCollector(unittest.TestCase):
         self.assertEqual(facts["gcp_project_id"], "fair-kingdom-308514")
         self.assertIn("gcp_project_number", facts)
         self.assertEqual(facts["gcp_project_number"], 161958465613)
+        self.assertIn("gcp_zone", facts)
+        self.assertEqual(facts["gcp_zone"], "us-east1-b")
 
     @patch('cloud_what.providers.aws.requests.Session', name='mock_session_class')
     def test_get_not_aws_instance(self, mock_session_class):
