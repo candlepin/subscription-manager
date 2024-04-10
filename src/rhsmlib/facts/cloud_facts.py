@@ -118,12 +118,13 @@ class CloudFactsCollector(collector.FactsCollector):
 
     def get_azure_facts(self) -> Dict[str, str]:
         """
-        Try to get facts of VM running on Azure public cloud. Returned dictionary has following format:
+        Try to get facts of VM running on Azure public cloud. Returned dictionary has the following format:
             {
                 "azure_instance_id": some_instance_ID,
                 "azure_offer": some_offer,
                 "azure_sku": some_sku,
                 "azure_subscription_id": some_subscription_ID
+                "azure_location: azure region the VM is running in
             }
         :return: dictionary containing Azure facts, when the machine is able to gather metadata
             from Azure cloud provider; otherwise returns empty dictionary {}
@@ -143,6 +144,8 @@ class CloudFactsCollector(collector.FactsCollector):
                     facts["azure_offer"] = values["compute"]["offer"]
                 if "subscriptionId" in values["compute"]:
                     facts["azure_subscription_id"] = values["compute"]["subscriptionId"]
+                if "location" in values["compute"]:
+                    facts["azure_location"] = values["compute"]["location"]
         return facts
 
     def get_gcp_facts(self) -> Dict[str, str]:
