@@ -39,7 +39,7 @@ class AzureCloudProvider(BaseCloudProvider):
     # for very long time. It would be good to update the version from time to time,
     # because old versions (three years) are deprecated. It would be good to update
     # the API version with every minor version of RHEL
-    API_VERSION = "2021-02-01"
+    API_VERSION = "2023-07-01"
 
     BASE_CLOUD_PROVIDER_METADATA_URL = "http://169.254.169.254/metadata/instance?api-version="
 
