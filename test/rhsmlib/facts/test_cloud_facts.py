@@ -169,6 +169,7 @@ AZURE_INSTANCE_ID = "12345678-1234-1234-1234-123456789abc"
 AZURE_SKU = "8.1-ci"
 AZURE_OFFER = "RHEL"
 AZURE_SUBSCRIPTION_ID = "01234567-0123-0123-0123-012345679abc"
+AZURE_LOCATION = "westeurope"
 
 
 def mock_prepare_request(request):
@@ -309,13 +310,15 @@ class TestCloudCollector(unittest.TestCase):
         # azure_instance_id should be included in the facts
         self.assertIn("azure_instance_id", facts)
         self.assertEqual(facts["azure_instance_id"], AZURE_INSTANCE_ID)
-        # some other azure facts should be included in facts too
+        # some other azure facts could be included in facts too
         self.assertIn("azure_sku", facts)
         self.assertEqual(facts["azure_sku"], AZURE_SKU)
         self.assertIn("azure_offer", facts)
         self.assertEqual(facts["azure_offer"], AZURE_OFFER)
         self.assertIn("azure_subscription_id", facts)
         self.assertEqual(facts["azure_subscription_id"], AZURE_SUBSCRIPTION_ID)
+        self.assertIn("azure_location", facts)
+        self.assertEqual(facts["azure_location"], AZURE_LOCATION)
 
     @patch("cloud_what.providers.gcp.GCPCloudProvider._write_token_to_cache_file")
     @patch("cloud_what.providers.gcp.GCPCloudProvider._get_metadata_from_cache")
