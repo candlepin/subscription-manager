@@ -146,6 +146,11 @@ class CloudFactsCollector(collector.FactsCollector):
                     facts["azure_subscription_id"] = values["compute"]["subscriptionId"]
                 if "location" in values["compute"]:
                     facts["azure_location"] = values["compute"]["location"]
+                if "extendedLocation" in values["compute"]:
+                    if "name" in values["compute"]["extendedLocation"]:
+                        facts["azure_extended_location_name"] = values["compute"]["extendedLocation"]["name"]
+                    if "type" in values["compute"]["extendedLocation"]:
+                        facts["azure_extended_location_type"] = values["compute"]["extendedLocation"]["type"]
         return facts
 
     def get_gcp_facts(self) -> Dict[str, str]:
