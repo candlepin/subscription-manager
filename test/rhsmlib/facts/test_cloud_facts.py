@@ -48,6 +48,10 @@ AZURE_METADATA = """
 {
     "compute": {
         "azEnvironment": "AzurePublicCloud",
+        "extendedLocation": {
+            "type": "edgeZone",
+            "name": "microsoftlondon"
+        },
         "customData": "",
         "location": "westeurope",
         "name": "foo-bar",
@@ -169,7 +173,12 @@ AZURE_INSTANCE_ID = "12345678-1234-1234-1234-123456789abc"
 AZURE_SKU = "8.1-ci"
 AZURE_OFFER = "RHEL"
 AZURE_SUBSCRIPTION_ID = "01234567-0123-0123-0123-012345679abc"
+# There is no list of valid values of locations, extended locations and
+# types of extended locations. Value "microsoftlondon" probably does not
+# exist at all, and it was added only for testing purpose.
 AZURE_LOCATION = "westeurope"
+AZURE_EXTENDED_LOCATION_NAME = "microsoftlondon"
+AZURE_EXTENDED_LOCATION_TYPE = "edgeZone"
 
 
 def mock_prepare_request(request):
@@ -319,6 +328,10 @@ class TestCloudCollector(unittest.TestCase):
         self.assertEqual(facts["azure_subscription_id"], AZURE_SUBSCRIPTION_ID)
         self.assertIn("azure_location", facts)
         self.assertEqual(facts["azure_location"], AZURE_LOCATION)
+        self.assertIn("azure_extended_location_name", facts)
+        self.assertEqual(facts["azure_extended_location_name"], AZURE_EXTENDED_LOCATION_NAME)
+        self.assertIn("azure_extended_location_type", facts)
+        self.assertEqual(facts["azure_extended_location_type"], AZURE_EXTENDED_LOCATION_TYPE)
 
     @patch("cloud_what.providers.gcp.GCPCloudProvider._write_token_to_cache_file")
     @patch("cloud_what.providers.gcp.GCPCloudProvider._get_metadata_from_cache")
