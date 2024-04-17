@@ -20,6 +20,7 @@
 
 import os
 import sys
+import uuid
 
 # import Cockpit's machinery for test VMs and its browser test API
 TEST_DIR = os.path.dirname(__file__)
@@ -407,8 +408,10 @@ class TestSubscriptions(SubscriptionsCase):
 
         b.wait_visible("button:contains('Connected to Insights')")
 
-        # Break the next upload and expect the warning triangle to tell us about it
-        m.execute("mv /etc/insights-client/machine-id /etc/insights-client/machine-id.lost")
+        # Break the next upload and expect the warning triangle to tell us about it;
+        # write over the original file so its SELinux attributes are preserved.
+        m.execute(["cp", "/etc/insights-client/machine-id", "/etc/insights-client/machine-id.orig"])
+        m.write("/etc/insights-client/machine-id", str(uuid.uuid4()))
         m.execute("systemctl start insights-client")
 
         with b.wait_timeout(60):
@@ -419,7 +422,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.click("button.cancel")
 
         # Unbreak it and retry.
-        m.execute("mv /etc/insights-client/machine-id.lost /etc/insights-client/machine-id")
+        m.execute(["mv", "/etc/insights-client/machine-id.orig", "/etc/insights-client/machine-id"])
         m.execute("systemctl start insights-client; while systemctl --quiet is-active insights-client; do sleep 1; done",
                   timeout=360)
 
