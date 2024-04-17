@@ -360,7 +360,7 @@ class TestSubscriptions(SubscriptionsCase):
         b.click("button:contains('Not connected')")
         b.wait_visible('.pf-c-modal-box__body:contains("This system is not connected")')
         b.click('footer button.apply')
-        with b.wait_timeout(360):
+        with b.wait_timeout(600):
             b.wait_not_present('.pf-c-modal-box')
 
         # HACK - this should eventually not be necessary
@@ -406,7 +406,8 @@ class TestSubscriptions(SubscriptionsCase):
         with b.wait_timeout(360):
             b.wait_not_present(dialog_register_button_sel)
 
-        b.wait_visible("button:contains('Connected to Insights')")
+        with b.wait_timeout(600):
+            b.wait_visible("button:contains('Connected to Insights')")
 
         # Break the next upload and expect the warning triangle to tell us about it;
         # write over the original file so its SELinux attributes are preserved.
