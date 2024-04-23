@@ -107,17 +107,6 @@ class RegisterCommand(UserPassCommand):
             help=_("set a release version"),
         )
         self.parser.add_argument(
-            "--autosubscribe",
-            action="store_true",
-            help=_("Deprecated, see --auto-attach"),
-        )
-        self.parser.add_argument(
-            "--auto-attach",
-            action="store_true",
-            dest="autoattach",
-            help=_("automatically attach compatible subscriptions to this system"),
-        )
-        self.parser.add_argument(
             "--force",
             action="store_true",
             help=_("include an implicit attempt to unregister before registering a new system identity"),
@@ -135,7 +124,6 @@ class RegisterCommand(UserPassCommand):
         )
 
     def _validate_options(self):
-        self.autoattach = self.options.autosubscribe or self.options.autoattach
         if self.is_registered() and not self.options.force:
             system_exit(os.EX_USAGE, _("This system is already registered. Use --force to override"))
         elif self.options.consumername == "":
@@ -148,12 +136,12 @@ class RegisterCommand(UserPassCommand):
             )
         elif self.options.environments and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys do not allow environments to be specified."))
-        elif self.autoattach and self.options.activation_keys:
+        elif self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys cannot be used with --auto-attach."))
         # 746259: Don't allow the user to pass in an empty string as an activation key
         elif self.options.activation_keys and "" in self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Must specify an activation key"))
-        elif self.options.service_level and not self.autoattach:
+        elif self.options.service_level:
             system_exit(os.EX_USAGE, _("Error: Must use --auto-attach with --servicelevel."))
         elif self.options.activation_keys and not self.options.org:
             system_exit(os.EX_USAGE, _("Error: Must provide --org with activation keys."))
@@ -402,13 +390,9 @@ class RegisterCommand(UserPassCommand):
             # TODO: grab the list of valid options, and check
             self.cp.updateConsumer(consumer["uuid"], release=self.options.release)
 
-        if self.autoattach:
-            self._do_auto_attach(consumer)
-
         if (
             self.options.consumerid
             or self.options.activation_keys
-            or self.autoattach
             or self.cp.has_capability(CONTENT_ACCESS_CERT_CAPABILITY)
         ):
             log.debug("System registered, updating entitlements if needed")
@@ -419,7 +403,7 @@ class RegisterCommand(UserPassCommand):
         self._upload_profile(consumer)
 
         subscribed = 0
-        if self.options.activation_keys or self.autoattach:
+        if self.options.activation_keys:
             # update with the latest cert info
             self.sorter = inj.require(inj.CERT_SORTER)
             self.sorter.force_cert_check()

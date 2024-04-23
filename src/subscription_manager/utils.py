@@ -203,7 +203,11 @@ def is_simple_content_access(
     if identity.uuid is None:
         return False
     content_access_mode = inj.require(inj.CONTENT_ACCESS_MODE_CACHE).read_data(uep=uep)
-    return content_access_mode == "org_environment"
+
+    is_sca = content_access_mode == "org_environment"
+    if not is_sca:
+        raise RuntimeError("IS NOT SCA")
+    return is_sca
 
 
 def get_current_owner(uep: Optional["UEPConnection"] = None, identity: "Identity" = None) -> dict:

@@ -1046,7 +1046,10 @@ class ContentAccessModeCache(ConsumerCache):
             )
         else:
             if "contentAccessMode" in current_owner:
-                return current_owner["contentAccessMode"]
+                mode = current_owner["contentAccessMode"]
+                if mode != "org_environment":
+                    raise RuntimeError("IS NOT SCA")
+                return mode
             else:
                 log.debug(
                     "The owner returned from the server did not contain a "
