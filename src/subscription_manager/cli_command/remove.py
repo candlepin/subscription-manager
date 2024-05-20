@@ -55,7 +55,11 @@ class RemoveCommand(CliCommand):
         )
 
     def _short_description(self):
-        return _("Remove all or specific subscriptions from this system")
+        return _(
+            "Deprecated, this command will be removed from the future major releases."
+            " This command is no-op in simple content access mode."
+            " It tries to remove all or specific subscriptions from this system"
+        )
 
     def _command_name(self):
         return "remove"
