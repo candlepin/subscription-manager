@@ -22,9 +22,6 @@ jobs:
           - name: "Fedora latest"
             image: "registry.fedoraproject.org/fedora:latest"
             pytest_args: ''
-          - name: "Fedora Rawhide"
-            image: "registry.fedoraproject.org/fedora:rawhide"
-            pytest_args: ''
 
     runs-on: ubuntu-latest
     container:
