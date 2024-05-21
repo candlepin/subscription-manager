@@ -25,7 +25,7 @@ class TestConsumerDBusObject(SubManDBusFixture):
             name="get_consumer_uuid",
         )
         cls.patches["get_consumer_uuid"] = get_consumer_uuid_patch.start()
-        cls.addClassCleanup(get_consumer_uuid_patch)
+        cls.addClassCleanup(get_consumer_uuid_patch.stop)
 
         cls.impl = ConsumerDBusImplementation()
 
