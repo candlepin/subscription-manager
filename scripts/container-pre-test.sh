@@ -8,7 +8,7 @@ source /etc/os-release
 # These repositories are required for the 'libdnf-devel' package.
 # Fedora has it available out of the box.
 # RHEL needs it to be enabled via 'subscription-manager repos'.
-if [[ $ID == "centos" && $VERSION == "9" ]]; then
+if [[ $ID == "centos" ]]; then
   dnf config-manager --enable crb
 fi
 

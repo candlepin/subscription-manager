@@ -12,8 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "CentOS Stream 9"
-            image: "quay.io/centos/centos:stream9"
+          - name: "CentOS Stream 10"
+            image: "quay.io/centos/centos:stream10-development"
           - name: "Fedora latest"
             image: "registry.fedoraproject.org/fedora:latest"
           - name: "Fedora Rawhide"
@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: "Enable CRB repository"
-        if: ${{ matrix.name == 'CentOS Stream 9' }}
+        if: ${{ matrix.name == 'CentOS Stream 10' }}
         run: |
           dnf --setopt install_weak_deps=False install -y dnf-plugins-core
           dnf config-manager --enable crb
