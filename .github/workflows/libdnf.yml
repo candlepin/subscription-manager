@@ -14,8 +14,6 @@ jobs:
         include:
           - name: "CentOS Stream 9"
             image: "quay.io/centos/centos:stream9"
-          - name: "Fedora latest"
-            image: "registry.fedoraproject.org/fedora:latest"
 
     runs-on: ubuntu-latest
     container:
