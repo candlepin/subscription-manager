@@ -516,6 +516,28 @@ if HAS_DEB822:
                 apt_cont["arches"] = arches_str
                 apt_cont["Architectures"] = arches_str
 
+            # 'Signed-By': look for pulp public-key in '/etc/apt/trusted.gpg.d/'
+            keypath = "/etc/apt/trusted.gpg.d/"
+            keyfiles = [
+                os.path.join(keypath, f)
+                for f in os.listdir(keypath)
+                if os.path.isfile(os.path.join(keypath, f))
+                and (f.startswith("orcharhino_") or f.startswith("pulp_") or f.startswith("client"))
+                and (f.endswith(".gpg") or f.endswith(".asc"))
+            ]
+            orcharhino_keyfile = None
+            if len(keyfiles) > 1:
+                orcharhino_keyfile = keyfiles[0]
+                log.info(f"Found more than one pulp signing-key file; choosing '{orcharhino_keyfile}'")
+            elif len(keyfiles) == 1:
+                orcharhino_keyfile = keyfiles[0]
+            else:
+                log.warn(f"Could not find pulp signing-key in {keypath}")
+            if orcharhino_keyfile:
+                apt_cont["Signed-By"] = orcharhino_keyfile
+            else:
+                log.warn("No pulp signing-key file found!")
+
             return apt_cont
 
         def enabled_repos(self):
