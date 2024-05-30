@@ -104,7 +104,8 @@ class SubscriptionManager(dnf.Plugin):
             if os.getuid() == 0:
                 # Try to update entitlement certificates and redhat.repo file
                 self._update(cache_only)
-                self._warn_or_give_usage_message()
+                if not config.in_container():
+                    self._warn_or_give_usage_message()
             else:
                 logger.info(_("Not root, Subscription Management repositories not updated"))
             self._warn_expired()
@@ -159,7 +160,7 @@ class SubscriptionManager(dnf.Plugin):
         # valid entitlement certificates, but does not yet have any identity.
         # We have access to the content, so we shouldn't be reporting missing
         # identity certificate.
-        if not identity.is_valid() and len(ent_dir.list_valid()) == 0:
+        if not config.in_container() and not identity.is_valid() and len(ent_dir.list_valid()) == 0:
             logger.info(_("Unable to read consumer identity"))
 
         if config.in_container():
