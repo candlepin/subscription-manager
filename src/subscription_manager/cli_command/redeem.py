@@ -26,7 +26,11 @@ from subscription_manager.i18n import ugettext as _
 
 class RedeemCommand(CliCommand):
     def __init__(self):
-        shortdesc = _("Attempt to redeem a subscription for a preconfigured system")
+        shortdesc = _(
+            "Deprecated, this command will be removed from the future major releases."
+            " This command is no-op in simple content access mode."
+            " Attempt to redeem a subscription for a preconfigured system"
+        )
         super(RedeemCommand, self).__init__("redeem", shortdesc, False)
 
         self.parser.add_argument(
