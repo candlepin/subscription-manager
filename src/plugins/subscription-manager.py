@@ -96,7 +96,7 @@ def update(conduit, cache_only):
 
     identity = inj.require(inj.IDENTITY)
 
-    if not identity.is_valid():
+    if not config.in_container() and not identity.is_valid():
         conduit.info(3, "Unable to read consumer identity")
 
     # In containers we have no identity, but we may have entitlements inherited
@@ -208,7 +208,8 @@ def postconfig_hook(conduit):
     # It is save to display following warning messages for all yum commands, because following functions
     # does not communicate with candlepin server. See: https://bugzilla.redhat.com/show_bug.cgi?id=1621275
     try:
-        warn_or_usage_message(conduit)
+        if not config.in_container():
+            warn_or_usage_message(conduit)
         warn_expired_entitlements(conduit)
     except Exception as e:
         conduit.error(2, str(e))
