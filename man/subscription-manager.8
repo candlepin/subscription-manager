@@ -597,7 +597,7 @@ Points to a certificate PEM file which contains the subscription certificate. Th
 .SS REDEEM OPTIONS
 The
 .B redeem
-command is used for systems that are purchased from third-party vendors that include a subscription. The redemption process essentially auto-attaches the preselected subscription that the vendor supplied to the system.
+command is deprecated, this command will be removed from the future major releases. This command is no-op, when simple content access mode is used. Command is used for systems that are purchased from third-party vendors that include a subscription. The redemption process essentially try to auto-attach the preselected subscription that the vendor supplied to the system.
 
 .TP
 .B --email=EMAIL
@@ -1349,7 +1349,7 @@ its existing subscriptions.
 .PP
 After registration, subscriptions on preconfigured systems can be claimed using the
 .B redeem
-command, which essentially auto-attaches the system to its preexisting subscriptions.
+command, which essentially try to auto-attach the system to its preexisting subscriptions.
 
 .RS
 .nf
