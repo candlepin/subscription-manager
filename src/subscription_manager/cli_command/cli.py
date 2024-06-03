@@ -44,7 +44,6 @@ from subscription_manager.utils import (
     format_baseurl,
     is_valid_server_info,
     MissingCaCertException,
-    get_current_owner,
 )
 
 ERR_NOT_REGISTERED_MSG = _(
@@ -114,25 +113,6 @@ class CliCommand(AbstractCLICommand):
         self.identity = inj.require(inj.IDENTITY)
 
         self.correlation_id = generate_correlation_id()
-
-    def _print_ignore_auto_attach_message(self):
-        """
-        This message is shared by attach command and register command, because
-        both commands can do auto-attach.
-        :return: None
-        """
-        owner = get_current_owner(self.cp, self.identity)
-        # We displayed Owner name: `owner_name = owner['displayName']`, but such behavior
-        # was not consistent with rest of subscription-manager
-        # Look at this comment: https://bugzilla.redhat.com/show_bug.cgi?id=1826300#c8
-        owner_id = owner["key"]
-        print(
-            _(
-                "Ignoring the request to auto-attach. "
-                'Attaching subscriptions is disabled for organization "{owner_id}" '
-                "because Simple Content Access (SCA) is enabled."
-            ).format(owner_id=owner_id)
-        )
 
     def _get_logger(self):
         return logging.getLogger(
