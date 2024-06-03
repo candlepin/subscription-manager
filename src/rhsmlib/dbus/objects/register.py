@@ -23,7 +23,6 @@ import subscription_manager.injection as inj
 from rhsmlib.dbus import constants, exceptions, dbus_utils, base_object, server, util
 from rhsmlib.services.register import RegisterService
 from rhsmlib.services.unregister import UnregisterService
-from rhsmlib.services.attach import AttachService
 from rhsmlib.services.entitlement import EntitlementService
 from rhsmlib.client_info import DBusSender
 from subscription_manager.cp_provider import CPProvider
@@ -268,22 +267,12 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
         return bool(options.pop("enable_content"))
 
     def _enable_content(self, uep: "UEPConnection", consumer: dict) -> None:
-        """Try to enable content: Auto-attach in non-SCA or refresh in SCA mode."""
+        """Try to enable content: refresh SCA entitlement certs in SCA mode."""
         content_access: str = consumer["owner"]["contentAccessMode"]
         enabled_content = None
 
         if content_access == "entitlement":
-            log.debug("Auto-attaching since 'enable_content' is true.")
-            service = AttachService(uep)
-            enabled_content = service.attach_auto()
-            if len(enabled_content) > 0:
-                log.debug("Updating entitlement certificates")
-                # FIXME: The enabled_content contains all data necessary for generating entitlement
-                # certificate and private key. Thus we could save few REST API calls, when the data was used.
-                EntCertActionInvoker().update()
-            else:
-                log.debug("No content was enabled, entitlement certificates not updated.")
-
+            log.error("Entitlement content access mode is not supported")
         elif content_access == "org_environment":
             log.debug("Refreshing since 'enable_content' is true.")
             service = EntitlementService(uep)
@@ -409,8 +398,6 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
         used.
 
         Options is a dict of strings that modify the outcome of this method.
-
-        Note this method is registration ONLY.  Auto-attach is a separate process.
         """
         org = dbus_utils.dbus_to_python(org, expected_type=str)
         connection_options = dbus_utils.dbus_to_python(connection_options, expected_type=dict)
@@ -435,7 +422,7 @@ class DomainSocketRegisterDBusObject(base_object.BaseObject):
     @util.dbus_handle_exceptions
     def RegisterWithActivationKeys(self, org, activation_keys, options, connection_options, locale):
         """
-        Note this method is registration ONLY.  Auto-attach is a separate process.
+        This method registers the system using organization and activation keys
         """
         connection_options = dbus_utils.dbus_to_python(connection_options, expected_type=dict)
         options = dbus_utils.dbus_to_python(options, expected_type=dict)
