@@ -4,14 +4,9 @@ source /etc/os-release
 # These repositories are required for the 'libdnf-devel' package.
 # Fedora has it available out of the box.
 # RHEL needs it to be enabled via 'subscription-manager repos'.
-if [[ $ID == "centos" ]]; then
-  dnf --setopt install_weak_deps=False install -y dnf-plugins-core
-  if [[ $VERSION == "8" ]]; then
-    dnf config-manager --set-enabled powertools
-  fi
-  if [[ $VERSION == "9" ]]; then
-    dnf config-manager --enable crb
-  fi
+if [[ $ID == "centos" && $VERSION == "8" ]]; then
+	dnf --setopt install_weak_deps=False install -y dnf-plugins-core
+    dnf config-manager --enable powertools
 fi
 
 # Install essential packages
