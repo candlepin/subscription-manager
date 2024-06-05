@@ -12,8 +12,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: "CentOS Stream 9"
-            image: "quay.io/centos/centos:stream9"
           - name: "CentOS Stream 8"
             image: "quay.io/centos/centos:stream8"
 
@@ -25,17 +23,14 @@ jobs:
       - name: "Checkout repository"
         uses: actions/checkout@v3
 
+      - name: "Use CentOS Vault"
+        run: |
+          sed -i 's|#baseurl=http://mirror|baseurl=http://vault|' /etc/yum.repos.d/CentOS-Stream-*.repo
+
       - name: "Enable PowerTools repository"
-        if: ${{ matrix.name == 'CentOS Stream 8' }}
         run: |
           dnf --setopt install_weak_deps=False install -y dnf-plugins-core
           dnf config-manager --enable powertools
-
-      - name: "Enable CRB repository"
-        if: ${{ matrix.name == 'CentOS Stream 9' }}
-        run: |
-          dnf --setopt install_weak_deps=False install -y dnf-plugins-core
-          dnf config-manager --enable crb
 
       - name: "Install packages"
         run: |

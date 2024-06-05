@@ -11,9 +11,6 @@ source /etc/os-release
 if [[ $ID == "centos" && $VERSION == "8" ]]; then
     dnf config-manager --enable powertools
 fi
-if [[ $ID == "centos" && $VERSION == "9" ]]; then
-    dnf config-manager --enable crb
-fi
 
 # Install system, build and runtime packages
 dnf --setopt install_weak_deps=False install -y \
