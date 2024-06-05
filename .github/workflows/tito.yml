@@ -20,20 +20,18 @@ jobs:
       image: ${{ matrix.image }}
 
     steps:
+      - name: "Use CentOS Vault"
+        run: |
+          sed -i 's|#baseurl=http://mirror|baseurl=http://vault|' /etc/yum.repos.d/CentOS-Stream-*.repo
+
       - name: Install core packages
         run: |
           dnf --setopt install_weak_deps=False install -y \
             git-core dnf-plugins-core rpm-build sudo
 
       - name: Enable PowerTools repository
-        if: ${{ matrix.name == 'CentOS Stream 8' }}
         run: |
           dnf config-manager --enable powertools
-
-      - name: Enable CRB repository
-        if: ${{ matrix.name == 'CentOS Stream 9' }}
-        run: |
-          dnf config-manager --enable crb
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -52,14 +50,7 @@ jobs:
             -D '%global python3_pkgversion 3' \
             subscription-manager.spec
 
-      - name: Install tito (using DNF)
-        if: ${{ startsWith(matrix.name, 'Fedora') }}
-        run: |
-          dnf --setopt install_weak_deps=False install -y \
-            tito
-
-      - name: Install tito (using pip)
-        if: ${{ startsWith(matrix.name, 'CentOS') }}
+      - name: Install tito
         run: |
           dnf --setopt install_weak_deps=False install -y \
             python3-pip python3-setuptools
