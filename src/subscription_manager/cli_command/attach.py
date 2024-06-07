@@ -95,6 +95,7 @@ class AttachCommand(CliCommand):
 
     def _short_description(self):
         return _(
+            "Deprecated, this command will be removed from the future major releases. "
             "Attach a specified subscription to the registered system, when system does not use "
             "Simple Content Access mode"
         )
@@ -103,7 +104,7 @@ class AttachCommand(CliCommand):
         return "attach"
 
     def _primary(self):
-        return True
+        return False
 
     def _validate_options(self):
         if self.options.pool or self.options.file:
