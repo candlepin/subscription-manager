@@ -77,12 +77,6 @@ must be passed as system arguments in a non-interactive session.
 2. unregister
 
 .IP
-3. attach
-
-.IP
-4. auto-attach
-
-.IP
 5. remove
 
 .IP
@@ -138,7 +132,7 @@ must be passed as system arguments in a non-interactive session.
 
 .RE
 
-Following commands were deprecated: addons, role, service-level, subscribe, unsubscribe, usage, and activate
+Following commands were deprecated: addons, attach, auto-attach, role, service-level, subscribe, unsubscribe, usage, and activate
 
 .SS COMMON OPTIONS
 .TP
@@ -259,8 +253,7 @@ subscription-manager register --org="IT Dept" --activationkey=1234abcd
 
 .TP
 .B --auto-attach
-Automatically attaches compatible subscriptions to this system.
-
+Deprecated, this option will be removed in future major releases. Automatically attaches compatible subscriptions to this system.
 
 .TP
 .B --servicelevel=LEVEL
@@ -301,7 +294,7 @@ command does two important things. Firstly, it will implicitly remove all of the
 This command has no options.
 
 .SS ATTACH OPTIONS
-The
+This command is \fBdeprecated\fP and will be removed from the future major releases. The
 .B attach
 command applies a specific subscription to the system. This command is not possible to use, when the content access mode of the organization to which the system is registered is simple content access mode.
 
@@ -338,7 +331,7 @@ or
 .B --file.
 
 .SS AUTO-ATTACH OPTIONS
-The
+This command is \fBdeprecated\fP and will be removed from the future major releases. The
 .B auto-attach
 command sets whether the ability to check, attach, and update subscriptions occurs automatically on the system. Auto-attaching subscriptions checks the currently-installed products, attached subscriptions, and any changes in available subscriptions every four hours using the \fBrhsmcertd\fP daemon.
 
@@ -1044,6 +1037,14 @@ This has been replaced with \fBredeem\fP.
 This has been replaced with \fBsyspurpose addons\fP.
 
 .TP
+.B attach
+This option is not used for systems registered using \fBsimple content access\fP.
+
+.TP
+.B auto-attach
+This option is not used for systems registered using \fBsimple content access\fP.
+
+.TP
 .B role
 This has been replaced with \fBsyspurpose role\fP.
 
@@ -1170,6 +1171,8 @@ subscription-manager unregister
 An option with registration,
 .B --auto-attach,
 will automatically attach the subscriptions pool which best matches the system architecture and configuration to the newly-registered system. This option attaches subscriptions as part of the registration process, rather than separately managing subscriptions.
+
+This option is deprecated and will be removed in future major releases. This option should only be used with systems that are not registered using simple content access.
 
 .RS
 .nf
