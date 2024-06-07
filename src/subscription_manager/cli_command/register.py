@@ -115,7 +115,11 @@ class RegisterCommand(UserPassCommand):
             "--auto-attach",
             action="store_true",
             dest="autoattach",
-            help=_("automatically attach compatible subscriptions to this system"),
+            help=_(
+                "Deprecated, this option will be removed from the future major releases. "
+                "This option is no-op when simple content access is used. "
+                "Automatically attach compatible subscriptions to this system"
+            ),
         )
         self.parser.add_argument(
             "--force",
