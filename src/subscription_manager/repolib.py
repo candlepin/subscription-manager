@@ -411,7 +411,7 @@ class RepoUpdateActionCommand(object):
                     log.info("Removing %s due to manage_repos configuration." %
                             repo_file.path)
             RepoActionInvoker.delete_repo_file()
-            return 0
+            return None
 
         repo_pairs = []
         for repo_class, server_val_repo_class in get_repo_file_classes():
