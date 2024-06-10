@@ -24,7 +24,10 @@ class AutohealCommand(CliCommand):
     def __init__(self):
         self.uuid = inj.require(inj.IDENTITY).uuid
 
-        shortdesc = _("Set if subscriptions are attached on a schedule (default of daily)")
+        shortdesc = _(
+            "Deprecated, this option will be removed from the future major releases. "
+            "Set if subscriptions are attached on a schedule (default of daily)"
+        )
         self._org_help_text = _("specify whether to enable or disable auto-attaching of subscriptions")
         super(AutohealCommand, self).__init__("auto-attach", shortdesc, False)
 
