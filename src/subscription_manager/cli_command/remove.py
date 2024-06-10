@@ -65,7 +65,11 @@ class RemoveCommand(CliCommand):
         return "remove"
 
     def _primary(self):
-        return True
+        """
+        This command is deprecated and no-op. It used to be primary command, but
+        there is no reason to have keep this command as primary command anymore.
+        """
+        return False
 
     def _validate_options(self):
         if self.options.serials:
