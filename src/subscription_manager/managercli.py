@@ -35,7 +35,6 @@ from subscription_manager.cli_command.list import ListCommand
 from subscription_manager.cli_command.override import OverrideCommand
 from subscription_manager.cli_command.owners import OwnersCommand
 from subscription_manager.cli_command.plugins import PluginsCommand
-from subscription_manager.cli_command.redeem import RedeemCommand
 from subscription_manager.cli_command.refresh import RefreshCommand
 from subscription_manager.cli_command.register import RegisterCommand
 from subscription_manager.cli_command.release import ReleaseCommand
@@ -66,7 +65,6 @@ class ManagerCLI(CLI):
             OwnersCommand,
             RefreshCommand,
             CleanCommand,
-            RedeemCommand,
             ReposCommand,
             ReleaseCommand,
             StatusCommand,

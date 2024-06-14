@@ -178,13 +178,6 @@ _subscription_manager_plugins()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription_manager_redeem()
-{
-  local opts="--email --locale
-              ${_subscription_manager_common_opts}"
-  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
-}
-
 _subscription_manager_refresh()
 {
   local opts="--force
@@ -261,7 +254,7 @@ _subscription_manager()
 
   # top-level commands and options
   opts="addons attach auto-attach clean config environments facts identity list orgs
-        repo-override plugins redeem refresh register release remove repos role service-level status
+        repo-override plugins refresh register release remove repos role service-level status
         syspurpose unregister usage version ${_subscription_manager_help_opts}"
 
   case "${first}" in
@@ -274,7 +267,6 @@ _subscription_manager()
       list|\
       orgs|\
       plugins|\
-      redeem|\
       refresh|\
       register|\
       release|\
