@@ -23,7 +23,6 @@ if TYPE_CHECKING:
 
 from subscription_manager import managerlib
 from subscription_manager.cli import CLI
-from subscription_manager.cli_command.addons import AddonsCommand
 from subscription_manager.cli_command.attach import AttachCommand
 from subscription_manager.cli_command.autoheal import AutohealCommand
 from subscription_manager.cli_command.clean import CleanCommand
@@ -41,12 +40,9 @@ from subscription_manager.cli_command.register import RegisterCommand
 from subscription_manager.cli_command.release import ReleaseCommand
 from subscription_manager.cli_command.remove import RemoveCommand
 from subscription_manager.cli_command.repos import ReposCommand
-from subscription_manager.cli_command.role import RoleCommand
-from subscription_manager.cli_command.service_level import ServiceLevelCommand
 from subscription_manager.cli_command.status import StatusCommand
 from subscription_manager.cli_command.syspurpose import SyspurposeCommand
 from subscription_manager.cli_command.unregister import UnRegisterCommand
-from subscription_manager.cli_command.usage import UsageCommand
 from subscription_manager.cli_command.version import VersionCommand
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.repolib import YumPluginManager
@@ -59,7 +55,6 @@ class ManagerCLI(CLI):
         commands: List[Type[CliCommand]] = [
             RegisterCommand,
             UnRegisterCommand,
-            AddonsCommand,
             ConfigCommand,
             ListCommand,
             IdentityCommand,
@@ -71,15 +66,12 @@ class ManagerCLI(CLI):
             ReleaseCommand,
             StatusCommand,
             EnvironmentsCommand,
-            ServiceLevelCommand,
             VersionCommand,
             RemoveCommand,
             AttachCommand,
             PluginsCommand,
             AutohealCommand,
             OverrideCommand,
-            RoleCommand,
-            UsageCommand,
             FactsCommand,
             SyspurposeCommand,
         ]
