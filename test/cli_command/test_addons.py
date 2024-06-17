@@ -4,7 +4,7 @@ from contextlib import ExitStack
 
 from ..test_managercli import TestCliCommand
 from subscription_manager import syspurposelib
-from subscription_manager import managercli
+from subscription_manager.cli_command.addons import AddonsCommand
 
 from ..fixture import Capture
 
@@ -12,7 +12,7 @@ from unittest.mock import patch
 
 
 class TestAddonsCommand(TestCliCommand):
-    command_class = managercli.AddonsCommand
+    command_class = AddonsCommand
 
     def _set_syspurpose(self, syspurpose):
         """
@@ -29,7 +29,7 @@ class TestAddonsCommand(TestCliCommand):
         sp_patch = syspurpose_patch.start()
         self.addCleanup(sp_patch.stop)
         super(TestAddonsCommand, self).setUp()
-        argv_patcher = patch.object(sys, "argv", ["subscription-manager", "addons"])
+        argv_patcher = patch.object(sys, "argv", ["subscription-manager", "syspurpose", "addons"])
         argv_patcher.start()
         self.addCleanup(argv_patcher.stop)
         syspurposelib.USER_SYSPURPOSE = self.write_tempfile("{}").name

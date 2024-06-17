@@ -36,10 +36,9 @@ log = logging.getLogger(__name__)
 
 class SyspurposeCommand(CliCommand):
     """
-    Syspurpose command for generic actions. This command will be used for all
-    syspurpose actions in the future and it will replace addons, role,
-    service-level and usage commands. It will be possible to set service-type
-    using this command.
+    Syspurpose command for generic actions. This command is used for all
+    syspurpose actions. It will be possible to set service-type using this
+    command.
 
     Note: when the system is not registered, then it doesn't make any sense to
     synchronize syspurpose values with candlepin server, because consumer
