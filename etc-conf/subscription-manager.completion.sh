@@ -268,12 +268,11 @@ _subscription_manager()
   done
 
   # top-level commands and options
-  opts="addons attach auto-attach clean config environments facts identity import list orgs
+  opts="attach auto-attach clean config environments facts identity import list orgs
         repo-override plugins redeem refresh register release remove repos role service-level status
         syspurpose unregister usage version ${_subscription_manager_help_opts}"
 
   case "${first}" in
-      addons|\
       clean|\
       config|\
       environments|\

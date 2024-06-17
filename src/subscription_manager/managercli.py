@@ -23,7 +23,6 @@ if TYPE_CHECKING:
 
 from subscription_manager import managerlib
 from subscription_manager.cli import CLI
-from subscription_manager.cli_command.addons import AddonsCommand
 from subscription_manager.cli_command.attach import AttachCommand
 from subscription_manager.cli_command.autoheal import AutohealCommand
 from subscription_manager.cli_command.clean import CleanCommand
@@ -60,7 +59,6 @@ class ManagerCLI(CLI):
         commands: List[Type[CliCommand]] = [
             RegisterCommand,
             UnRegisterCommand,
-            AddonsCommand,
             ConfigCommand,
             ListCommand,
             IdentityCommand,
