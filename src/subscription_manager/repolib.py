@@ -321,7 +321,7 @@ class YumReleaseverSource:
         #       so a new created YumReleaseverSource needs to be created when
         #       you think there may be a new release set. We assume it will be
         #       the same for the lifetime of a RepoUpdateActionCommand
-        if not self.is_set(result) or result is None:
+        if result is None or not self.is_set(result):
             # we got a result indicating we don't know the release, use the
             # default. This could be server error or just an "unset" release.
             self._expansion = self.default
