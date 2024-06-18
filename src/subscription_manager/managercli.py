@@ -40,7 +40,6 @@ from subscription_manager.cli_command.redeem import RedeemCommand
 from subscription_manager.cli_command.refresh import RefreshCommand
 from subscription_manager.cli_command.register import RegisterCommand
 from subscription_manager.cli_command.release import ReleaseCommand
-from subscription_manager.cli_command.remove import RemoveCommand
 from subscription_manager.cli_command.repos import ReposCommand
 from subscription_manager.cli_command.role import RoleCommand
 from subscription_manager.cli_command.service_level import ServiceLevelCommand
@@ -75,7 +74,6 @@ class ManagerCLI(CLI):
             ImportCertCommand,
             ServiceLevelCommand,
             VersionCommand,
-            RemoveCommand,
             AttachCommand,
             PluginsCommand,
             AutohealCommand,
