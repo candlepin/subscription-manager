@@ -219,7 +219,7 @@ class StatusCache(CacheManager):
         self.last_error: Optional[Exception] = None
 
     def load_status(
-        self, uep: connection.UEPConnection, uuid: str, on_date: Optional[datetime.datetime] = None
+        self, uep: connection.UEPConnection, uuid: Optional[str], on_date: Optional[datetime.datetime] = None
     ) -> Optional[Dict]:
         """
         Load status from wherever is appropriate.
@@ -232,6 +232,10 @@ class StatusCache(CacheManager):
         Returns None if we cannot reach the server, or use the cache.
         """
         try:
+            # If UUID is None, then we cannot get anything from server
+            # and None has to be returned
+            if uuid is None:
+                return None
             self._sync_with_server(uep, uuid, on_date)
             self.write_cache()
             self.last_error = False
