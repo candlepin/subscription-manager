@@ -16,23 +16,6 @@ _subscription_manager_auto_attach()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription_manager_attach()
-{
-  # try to autocomplete pool id's as well
-  # doesn't work well with sudo/non root users though
-  case $prev in
-      --pool)
-          # wee bit of a hack to handle that we can't actually run subscription-manager list --available unless
-          # we are root. try it directly (as opposed to userhelper links) and if it fails,ignore it
-          POOLS=$(LANG=C /usr/sbin/subscription-manager list --available 2>/dev/null | sed -ne "s|Pool ID:\s*\(\S*\)|\1|p" )
-          COMPREPLY=($(compgen -W "${POOLS}" -- ${1}))
-          return 0
-  esac
-  local opts="--auto --pool --quantity --servicelevel --file
-              ${_subscription_manager_common_opts}"
-  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
-}
-
 _subscription_manager_syspurpose()
 {
   local opts="role service-level usage --show ${_subscription_manager_common_opts}"
@@ -178,7 +161,7 @@ _subscription_manager_refresh()
 
 _subscription_manager_register()
 {
-  local opts="--activationkey --auto-attach --autosubscribe --baseurl --consumerid
+  local opts="--activationkey --baseurl --consumerid
               --environments --force --name --org --password --release
               --servicelevel --username --token
               ${_subscription_manager_common_url_opts}
@@ -243,7 +226,7 @@ _subscription_manager()
   done
 
   # top-level commands and options
-  opts="attach auto-attach clean config environments facts identity list orgs
+  opts="auto-attach clean config environments facts identity list orgs
         repo-override plugins refresh register release remove repos status
         syspurpose unregister version ${_subscription_manager_help_opts}"
 
@@ -265,10 +248,6 @@ _subscription_manager()
       unregister|\
       version)
       "_subscription_manager_$first" "${cur}" "${prev}"
-      return 0
-      ;;
-      attach)
-      "_subscription_manager_attach" "${cur}" "${prev}"
       return 0
       ;;
       remove)
