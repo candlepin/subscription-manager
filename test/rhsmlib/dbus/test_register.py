@@ -26,45 +26,6 @@ from unittest import mock
 from test.rhsmlib.base import SubManDBusFixture
 
 
-CONSUMER_CONTENT_JSON = """{"hypervisorId": "foo",
-        "serviceLevel": "",
-        "autoheal": true,
-        "idCert": {
-          "key": "FAKE_KEY",
-          "cert": "FAKE_CERT",
-          "serial" : {
-            "id" : 5196045143213189102,
-            "revoked" : false,
-            "collected" : false,
-            "expiration" : "2033-04-25T18:03:06+0000",
-            "serial" : 5196045143213189102,
-            "created" : "2017-04-25T18:03:06+0000",
-            "updated" : "2017-04-25T18:03:06+0000"
-          },
-          "id" : "8a8d011e5ba64700015ba647fbd20b88",
-          "created" : "2017-04-25T18:03:07+0000",
-          "updated" : "2017-04-25T18:03:07+0000"
-        },
-        "owner": {
-          "href": "/owners/admin",
-          "displayName": "Admin Owner",
-          "id": "ff808081550d997c01550d9adaf40003",
-          "key": "admin",
-          "contentAccessMode": "entitlement"
-        },
-        "href": "/consumers/c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
-        "facts": {}, "id": "ff808081550d997c015511b0406d1065",
-        "uuid": "c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
-        "guestIds": null, "capabilities": null,
-        "environment": null, "installedProducts": null,
-        "canActivate": false, "type": {"manifest": false,
-        "id": "1000", "label": "system"}, "annotations": null,
-        "username": "admin", "updated": "2016-06-02T15:16:51+0000",
-        "lastCheckin": null, "entitlementCount": 0, "releaseVer":
-        {"releaseVer": null}, "entitlementStatus": "valid", "name":
-        "test.example.com", "created": "2016-06-02T15:16:51+0000",
-        "contentTags": null, "dev": false}"""
-
 CONSUMER_CONTENT_JSON_SCA = """{"hypervisorId": null,
         "serviceLevel": "",
         "autoheal": true,
@@ -96,158 +57,6 @@ CONSUMER_CONTENT_JSON_SCA = """{"hypervisorId": null,
         "uuid": "c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
         "guestIds": null, "capabilities": null,
         "environment": null, "installedProducts": null,
-        "canActivate": false, "type": {"manifest": false,
-        "id": "1000", "label": "system"}, "annotations": null,
-        "username": "admin", "updated": "2016-06-02T15:16:51+0000",
-        "lastCheckin": null, "entitlementCount": 0, "releaseVer":
-        {"releaseVer": null}, "entitlementStatus": "valid", "name":
-        "test.example.com", "created": "2016-06-02T15:16:51+0000",
-        "contentTags": null, "dev": false}"""
-
-ENABLED_CONTENT = """[ {
-  "created" : "2022-06-30T13:24:33+0000",
-  "updated" : "2022-06-30T13:24:33+0000",
-  "id" : "16def3d98d6549f8a3649f723a76991c",
-  "consumer" : {
-    "id" : "4028face81aa047e0181b4c8e1170bdc",
-    "uuid" : "8503a41a-6ce2-480c-bc38-b67d6aa6dd20",
-    "name" : "thinkpad-t580",
-    "href" : "/consumers/8503a41a-6ce2-480c-bc38-b67d6aa6dd20"
-  },
-  "pool" : {
-    "created" : "2022-06-28T11:14:35+0000",
-    "updated" : "2022-06-30T13:24:33+0000",
-    "id" : "4028face81aa047e0181aa052f740360",
-    "type" : "NORMAL",
-    "owner" : {
-      "id" : "4028face81aa047e0181aa0490e30002",
-      "key" : "admin",
-      "displayName" : "Admin Owner",
-      "href" : "/owners/admin",
-      "contentAccessMode" : "entitlement"
-    },
-    "activeSubscription" : true,
-    "sourceEntitlement" : null,
-    "quantity" : 5,
-    "startDate" : "2022-06-23T13:14:26+0000",
-    "endDate" : "2023-06-23T13:14:26+0000",
-    "attributes" : [ ],
-    "restrictedToUsername" : null,
-    "contractNumber" : "0",
-    "accountNumber" : "6547096716",
-    "orderNumber" : "order-23226139",
-    "consumed" : 1,
-    "exported" : 0,
-    "branding" : [ ],
-    "calculatedAttributes" : {
-      "compliance_type" : "Standard"
-    },
-    "upstreamPoolId" : "upstream-05736148",
-    "upstreamEntitlementId" : null,
-    "upstreamConsumerId" : null,
-    "productName" : "SP Server Standard (U: Development, R: SP Server)",
-    "productId" : "sp-server-dev",
-    "productAttributes" : [ {
-      "name" : "management_enabled",
-      "value" : "1"
-    }, {
-      "name" : "usage",
-      "value" : "Development"
-    }, {
-      "name" : "roles",
-      "value" : "SP Server"
-    }, {
-      "name" : "variant",
-      "value" : "ALL"
-    }, {
-      "name" : "sockets",
-      "value" : "128"
-    }, {
-      "name" : "support_level",
-      "value" : "Standard"
-    }, {
-      "name" : "support_type",
-      "value" : "L1-L3"
-    }, {
-      "name" : "arch",
-      "value" : "ALL"
-    }, {
-      "name" : "type",
-      "value" : "MKT"
-    }, {
-      "name" : "version",
-      "value" : "1.0"
-    } ],
-    "stackId" : null,
-    "stacked" : false,
-    "sourceStackId" : null,
-    "developmentPool" : false,
-    "href" : "/pools/4028face81aa047e0181aa052f740360",
-    "derivedProductAttributes" : [ ],
-    "derivedProductId" : null,
-    "derivedProductName" : null,
-    "providedProducts" : [ {
-      "productId" : "99000",
-      "productName" : "SP Server Bits"
-    } ],
-    "derivedProvidedProducts" : [ ],
-    "subscriptionSubKey" : "master",
-    "subscriptionId" : "srcsub-45255972",
-    "locked" : false
-  },
-  "quantity" : 1,
-  "certificates" : [ {
-    "created" : "2022-06-30T13:24:33+0000",
-    "updated" : "2022-06-30T13:24:33+0000",
-    "id" : "4028face81aa047e0181b4c8e4b90be1",
-    "key" : "-----BEGIN PRIVATE KEY-----REDACTED-----END PRIVATE KEY-----",
-    "cert" : "-----BEGIN CERTIFICATE-----REDACTED-----END RSA SIGNATURE-----",
-    "serial" : {
-      "created" : "2022-06-30T13:24:33+0000",
-      "updated" : "2022-06-30T13:24:33+0000",
-      "id" : 3712610178651551557,
-      "serial" : 3712610178651551557,
-      "expiration" : "2023-06-23T13:14:26+0000",
-      "revoked" : false
-    }
-  } ],
-  "startDate" : "2022-06-23T13:14:26+0000",
-  "endDate" : "2023-06-23T13:14:26+0000",
-  "href" : null
-} ]
-"""
-
-# Following consumer do not contain information about content access mode
-OLD_CONSUMER_CONTENT_JSON = """{"hypervisorId": null,
-        "serviceLevel": "",
-        "autoheal": true,
-        "idCert": {
-          "key": "FAKE_KEY",
-          "cert": "FAKE_CERT",
-          "serial" : {
-            "id" : 5196045143213189102,
-            "revoked" : false,
-            "collected" : false,
-            "expiration" : "2033-04-25T18:03:06+0000",
-            "serial" : 5196045143213189102,
-            "created" : "2017-04-25T18:03:06+0000",
-            "updated" : "2017-04-25T18:03:06+0000"
-          },
-          "id" : "8a8d011e5ba64700015ba647fbd20b88",
-          "created" : "2017-04-25T18:03:07+0000",
-          "updated" : "2017-04-25T18:03:07+0000"
-        },
-        "owner": {
-          "href": "/owners/admin",
-          "displayName": "Admin Owner",
-          "id": "ff808081550d997c01550d9adaf40003",
-          "key": "admin"
-        },
-        "href": "/consumers/c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
-        "facts": {}, "id": "ff808081550d997c015511b0406d1065",
-        "uuid": "c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
-        "guestIds": null, "capabilities": null,
-        "environments": null, "installedProducts": null,
         "canActivate": false, "type": {"manifest": false,
         "id": "1000", "label": "system"}, "annotations": null,
         "username": "admin", "updated": "2016-06-02T15:16:51+0000",
@@ -426,13 +235,6 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
         self.patches["update"] = update_patch.start()
         self.addCleanup(update_patch.stop)
 
-        attach_auto_patch = mock.patch(
-            "rhsmlib.dbus.objects.register.AttachService.attach_auto",
-            name="attach_auto",
-        )
-        self.patches["attach_auto"] = attach_auto_patch.start()
-        self.addCleanup(attach_auto_patch.stop)
-
         build_uep_patch = mock.patch(
             "rhsmlib.dbus.base_object.BaseImplementation.build_uep",
             name="build_uep",
@@ -442,7 +244,7 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
         self.patches["update"].return_value = None
 
     def test_Register(self):
-        expected = json.loads(CONSUMER_CONTENT_JSON)
+        expected = json.loads(CONSUMER_CONTENT_JSON_SCA)
         self.patches["register"].return_value = expected
         self.patches["is_registered"].return_value = False
 
@@ -452,7 +254,7 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
         self.assertEqual(expected, result)
 
     def test_Register__with_force_option(self):
-        expected = json.loads(CONSUMER_CONTENT_JSON)
+        expected = json.loads(CONSUMER_CONTENT_JSON_SCA)
         self.patches["register"].return_value = expected
         self.patches["unregister"].return_value = None
         self.patches["is_registered"].return_value = True
@@ -463,7 +265,7 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
         self.assertEqual(expected, result)
 
     def test_Register__already_registered(self):
-        expected = json.loads(CONSUMER_CONTENT_JSON)
+        expected = json.loads(CONSUMER_CONTENT_JSON_SCA)
         self.patches["register"].return_value = expected
         self.patches["unregister"].return_value = None
         self.patches["is_registered"].return_value = True
@@ -473,27 +275,14 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
 
     def test_Register__enable_content(self):
         """Test including 'enable_content' in entitlement mode with no content."""
-        expected = json.loads(CONSUMER_CONTENT_JSON)
+        expected = json.loads(CONSUMER_CONTENT_JSON_SCA)
         self.patches["register"].return_value = expected
-        self.patches["attach_auto"].return_value = []
         self.patches["is_registered"].return_value = False
 
         result = self.impl.register_with_credentials(
             "org", {"username": "username", "password": "password", "enable_content": "1"}, {"force": True}
         )
         self.assertEqual(expected, result)
-
-    def test_Register__enable_content_with_content(self):
-        """Test including 'enable_content' in entitlement mode with some content."""
-        expected = json.loads(ENABLED_CONTENT)
-        self.patches["register"].return_value = json.loads(CONSUMER_CONTENT_JSON)
-        self.patches["attach_auto"].return_value = expected
-        self.patches["is_registered"].return_value = False
-
-        result = self.impl.register_with_credentials(
-            "org", {"username": "username", "password": "password", "enable_content": "1"}, {}
-        )
-        self.assertEqual(expected, result["enabledContent"])
 
     def test_Register__enable_content__sca(self):
         """Test including 'enable_content' in SCA mode."""
@@ -520,7 +309,7 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
         self.assertEqual(expected, result)
 
     def test_RegisterWithActivationKeys(self):
-        expected = json.loads(CONSUMER_CONTENT_JSON)
+        expected = json.loads(CONSUMER_CONTENT_JSON_SCA)
         self.patches["is_registered"].return_value = False
         self.patches["register"].return_value = expected
 
@@ -532,7 +321,7 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
         self.assertEqual(expected, result)
 
     def test_RegisterWithActivationKeys__already_registered(self):
-        expected = json.loads(CONSUMER_CONTENT_JSON)
+        expected = json.loads(CONSUMER_CONTENT_JSON_SCA)
         self.patches["is_registered"].return_value = True
         self.patches["register"].return_value = expected
 
@@ -544,7 +333,7 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
             )
 
     def test_RegisterWithActivationKeys__with_force_option(self):
-        expected = json.loads(CONSUMER_CONTENT_JSON)
+        expected = json.loads(CONSUMER_CONTENT_JSON_SCA)
         self.patches["is_registered"].return_value = True
         self.patches["unregister"].return_value = None
         self.patches["register"].return_value = expected

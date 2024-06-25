@@ -77,9 +77,6 @@ must be passed as system arguments in a non-interactive session.
 2. unregister
 
 .IP
-3. attach
-
-.IP
 4. auto-attach
 
 .IP
@@ -138,7 +135,7 @@ must be passed as system arguments in a non-interactive session.
 
 .RE
 
-Following commands were deprecated: addons, role, service-level, subscribe, unsubscribe, usage, and activate
+Following commands were deprecated: addons, role, service-level, unsubscribe, usage, and activate
 
 .SS COMMON OPTIONS
 .TP
@@ -258,15 +255,6 @@ subscription-manager register --org="IT Dept" --activationkey=1234abcd
 .RE
 
 .TP
-.B --auto-attach
-Automatically attaches compatible subscriptions to this system.
-
-
-.TP
-.B --servicelevel=LEVEL
-Sets the preferred service level to use with subscriptions added to the system. Service levels are commonly premium, standard, and none, though other levels may be available depending on the product and the contract.
-
-.TP
 .B --force
 When the system is already registered, a new attempt to register will fail with a message reminding the user that the system is already registered. However, passing the
 .B --force,
@@ -299,43 +287,6 @@ command does two important things. Firstly, it will implicitly remove all of the
 
 .PP
 This command has no options.
-
-.SS ATTACH OPTIONS
-The
-.B attach
-command applies a specific subscription to the system. This command is not possible to use, when the content access mode of the organization to which the system is registered is simple content access mode.
-
-.TP
-.B --auto
-Automatically attaches the best-matched compatible subscription or subscriptions to the system. This is the default unless
-.B --pool
-or
-.B --file
-are used.
-
-.TP
-.B --pool=POOLID
-Gives the ID for the subscriptions pool (collection of products) to attach to the system. This overrides the default of --auto.
-
-.TP
-.B --file=FILE
-Specifies a file from which to read whitespace-delimited pool IDs. If FILE is "-", the pool IDs will be read from stdin. This overrides the default of
-.B
---auto.
-
-.TP
-.B --quantity=NUMBER
-Attaches a specified number of subscriptions to the system. Subscriptions may have certain limits on them, like the number of sockets on the system or the number of allowed virtual guests. It is possible to attach multiple subscriptions (or
-.I stacking
-subscriptions) to cover the number of sockets, guests, or other characteristics. May not be used with an auto-attach.
-
-
-.TP
-.B --servicelevel=LEVEL
-Sets the preferred service level to use with subscriptions automatically attached to the system. Service levels are commonly premium, standard, and none, though other levels may be available depending on the product and the contract. This option cannot be used when attaching specific pools via
-.B --pool
-or
-.B --file.
 
 .SS AUTO-ATTACH OPTIONS
 The
@@ -1028,10 +979,6 @@ Overall Status: Insufficient
 As the structures of subscription configuration have changed, some of the original management commands have become obsolete. These commands have been replaced with updated commands.
 
 .TP
-.B subscribe
-This has been replaced with attach. A similar registration option, \fB--subscribe\fP, has also be replaced with \fB--auto-attach\fP.
-
-.TP
 .B unsubscribe
 This has been replaced with \fBremove\fP.
 
@@ -1166,32 +1113,6 @@ subscription-manager unregister
 .fi
 .RE
 
-.PP
-An option with registration,
-.B --auto-attach,
-will automatically attach the subscriptions pool which best matches the system architecture and configuration to the newly-registered system. This option attaches subscriptions as part of the registration process, rather than separately managing subscriptions.
-
-.RS
-.nf
-subscription-manager register --username=admin --password=secret
---auto-attach
-.fi
-.RE
-
-.PP
-Auto-attach also supports an option to set a preferred service level with the selected subscriptions, the
-.B --servicelevel
-option. In this case, the
-.B --servicelevel
-option sets a preference that helps the auto-attach process select appropriate subscriptions. For example, if the preferred service level for a production server is premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the auto-attach process selects the subscription which offers a premium service level.
-
-.RS
-.nf
-subscription-manager register --username=admin --password=secret
---auto-attach --servicelevel=premium
-.fi
-.RE
-
 .SS LISTING, ATTACHING, AND REMOVING SUBSCRIPTIONS FOR PRODUCTS
 A
 .I subscription
@@ -1271,59 +1192,6 @@ Arch:		x86_64
 Status:		Subscribed
 Started:	07/26/2012
 Ends:		08/31/2015
-.fi
-.RE
-
-.PP
-Attaching a subscription requires the ID for the subscription pool (the
-.I --pool
-option). For example:
-
-.RS
-.nf
-subscription-manager attach
---pool=ff8080812bc382e3012bc3845da100d2
-.fi
-.RE
-
-.pp
-As with the
-.B register
-command, the system can be auto-attached to the best-fitting subscriptions. This is the default action and is equivalent to  using the
-.B --auto
-option:
-
-.RS
-.nf
-subscription-manager attach
-.fi
-.RE
-
-
-.PP
-Auto-attach also supports an option to set a preferred service level with the selected subscriptions, the
-.B --servicelevel
-option. In this case, the
-.B --servicelevel
-option sets a preference that helps the auto-attach process select appropriate subscriptions. For example, if the preferred service level for a production server is premium, and there are three matching subscriptions with different service levels (none, standard, and premium), the auto-attach process selects the subscription which offers a premium subscription.
-
-.RS
-.nf
-subscription-manager attach --servicelevel=premium
-.fi
-.RE
-
-.PP
-Some subscriptions define a count based on attributes of the system itself, like the number of sockets or the number of virtual guests on a host. You can combine multiple subscriptions together to cover the count. For example, if there is a four socket server, you can use two subscriptions for "RHEL Server for Two Sockets" to cover the socket count. To specify the number of subscriptions to use,
-use the
-.B --quantity
-option. For example:
-
-.RS
-.nf
-subscription-manager attach
---pool=ff8080812bc382e3012bc3845da100d2
---quantity=2
 .fi
 .RE
 
@@ -1486,7 +1354,7 @@ tool can be run as a post-install script as part of the kickstart installation p
 .RS
 .nf
 %post --log=/root/ks-post.log
-/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --auto-attach --servicelevel=premium --force
+/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --force
 .fi
 .RE
 

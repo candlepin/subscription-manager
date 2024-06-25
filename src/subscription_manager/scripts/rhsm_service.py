@@ -33,7 +33,6 @@ def main():
         object_classes = [
             objects.ConfigDBusObject,
             objects.RegisterDBusObject,
-            objects.AttachDBusObject,
             objects.ProductsDBusObject,
             objects.UnregisterDBusObject,
             objects.EntitlementDBusObject,
