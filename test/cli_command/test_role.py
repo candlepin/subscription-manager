@@ -1,8 +1,8 @@
 import os
 
 from ..test_managercli import TestCliProxyCommand
-from subscription_manager import managercli
 from subscription_manager.cli_command.abstract_syspurpose import AbstractSyspurposeCommand
+from subscription_manager.cli_command.role import RoleCommand
 import subscription_manager.injection as inj
 
 from ..stubs import StubUEP
@@ -12,7 +12,7 @@ from unittest.mock import patch, Mock, MagicMock
 
 
 class TestSyspurposeCommand(TestCliProxyCommand):
-    command_class = managercli.RoleCommand
+    command_class = RoleCommand
 
     def setUp(self):
         synced_store_patch = patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
@@ -32,7 +32,7 @@ class TestSyspurposeCommand(TestCliProxyCommand):
 
 
 class TestRoleCommand(TestCliProxyCommand):
-    command_class = managercli.RoleCommand
+    command_class = RoleCommand
 
     def setUp(self):
         synced_store_patch = patch("subscription_manager.cli_command.abstract_syspurpose.SyncedStore")
@@ -399,7 +399,7 @@ class TestRoleOrgCheckingCommand(SubManFixture):
         self.handle_exception_mock.side_effect = self.do_reraise
         self.addCleanup(self.handle_exception_mock)
         super(TestRoleOrgCheckingCommand, self).setUp()
-        self.cc = managercli.RoleCommand()
+        self.cc = RoleCommand()
         self.cc.is_registered = Mock(return_value=False)
 
     def test_no_org(self):

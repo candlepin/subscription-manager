@@ -41,7 +41,6 @@ from subscription_manager.cli_command.register import RegisterCommand
 from subscription_manager.cli_command.release import ReleaseCommand
 from subscription_manager.cli_command.remove import RemoveCommand
 from subscription_manager.cli_command.repos import ReposCommand
-from subscription_manager.cli_command.role import RoleCommand
 from subscription_manager.cli_command.service_level import ServiceLevelCommand
 from subscription_manager.cli_command.status import StatusCommand
 from subscription_manager.cli_command.syspurpose import SyspurposeCommand
@@ -78,7 +77,6 @@ class ManagerCLI(CLI):
             PluginsCommand,
             AutohealCommand,
             OverrideCommand,
-            RoleCommand,
             UsageCommand,
             FactsCommand,
             SyspurposeCommand,
