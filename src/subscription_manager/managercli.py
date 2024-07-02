@@ -44,7 +44,6 @@ from subscription_manager.cli_command.repos import ReposCommand
 from subscription_manager.cli_command.status import StatusCommand
 from subscription_manager.cli_command.syspurpose import SyspurposeCommand
 from subscription_manager.cli_command.unregister import UnRegisterCommand
-from subscription_manager.cli_command.usage import UsageCommand
 from subscription_manager.cli_command.version import VersionCommand
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.repolib import YumPluginManager
@@ -75,7 +74,6 @@ class ManagerCLI(CLI):
             PluginsCommand,
             AutohealCommand,
             OverrideCommand,
-            UsageCommand,
             FactsCommand,
             SyspurposeCommand,
         ]
