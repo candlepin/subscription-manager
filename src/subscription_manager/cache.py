@@ -395,9 +395,9 @@ class SyspurposeComplianceStatusCache(StatusCache):
 
     def get_overall_status(self) -> str:
         if self.server_status is not None:
-            return self.syspurpose_service.get_overall_status(self.server_status["status"])
+            return syspurpose.Syspurpose.get_overall_status(self.server_status["status"])
         else:
-            return self.syspurpose_service.get_overall_status("unknown")
+            return syspurpose.Syspurpose.get_overall_status("unknown")
 
     def get_overall_status_code(self) -> str:
         if self.server_status is not None:
