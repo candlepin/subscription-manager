@@ -36,9 +36,9 @@ log = logging.getLogger(__name__)
 
 class SyspurposeCommand(CliCommand):
     """
-    Syspurpose command for generic actions. This command replaced the addons
-    and role commands and will be used for all syspurpose actions in the
-    future. It will replace service-level and usage commands too. It will be
+    Syspurpose command for generic actions. This command replaced the addons,
+    role, and service-level commands and will be used for all syspurpose
+    actions in the future. It will replace usage command too. It will be
     possible to set service-type using this command.
 
     Note: when the system is not registered, then it doesn't make any sense to

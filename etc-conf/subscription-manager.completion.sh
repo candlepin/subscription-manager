@@ -269,7 +269,7 @@ _subscription_manager()
 
   # top-level commands and options
   opts="attach auto-attach clean config environments facts identity import list orgs
-        repo-override plugins redeem refresh register release remove repos service-level status
+        repo-override plugins redeem refresh register release remove repos status
         syspurpose unregister usage version ${_subscription_manager_help_opts}"
 
   case "${first}" in
@@ -293,10 +293,6 @@ _subscription_manager()
       usage|\
       version)
       "_subscription_manager_$first" "${cur}" "${prev}"
-      return 0
-      ;;
-      service-level)
-      "_subscription_manager_service_level" "${cur}" "${prev}"
       return 0
       ;;
       attach)

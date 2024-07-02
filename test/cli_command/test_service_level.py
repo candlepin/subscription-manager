@@ -3,7 +3,7 @@ import tempfile
 
 from ..test_managercli import TestCliProxyCommand
 from subscription_manager import syspurposelib
-from subscription_manager import managercli
+from subscription_manager.cli_command.service_level import ServiceLevelCommand
 
 from ..stubs import StubConsumerIdentity, StubUEP
 from ..fixture import set_up_mock_sp_store
@@ -12,7 +12,7 @@ from unittest.mock import patch, Mock, call
 
 
 class TestServiceLevelCommand(TestCliProxyCommand):
-    command_class = managercli.ServiceLevelCommand
+    command_class = ServiceLevelCommand
 
     def setUp(self):
         syspurpose_patch = patch("syspurpose.files.SyncedStore")

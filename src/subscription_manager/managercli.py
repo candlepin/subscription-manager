@@ -41,7 +41,6 @@ from subscription_manager.cli_command.register import RegisterCommand
 from subscription_manager.cli_command.release import ReleaseCommand
 from subscription_manager.cli_command.remove import RemoveCommand
 from subscription_manager.cli_command.repos import ReposCommand
-from subscription_manager.cli_command.service_level import ServiceLevelCommand
 from subscription_manager.cli_command.status import StatusCommand
 from subscription_manager.cli_command.syspurpose import SyspurposeCommand
 from subscription_manager.cli_command.unregister import UnRegisterCommand
@@ -70,7 +69,6 @@ class ManagerCLI(CLI):
             StatusCommand,
             EnvironmentsCommand,
             ImportCertCommand,
-            ServiceLevelCommand,
             VersionCommand,
             RemoveCommand,
             AttachCommand,
