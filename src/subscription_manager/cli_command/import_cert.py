@@ -27,7 +27,11 @@ log = logging.getLogger(__name__)
 
 class ImportCertCommand(CliCommand):
     def __init__(self):
-        shortdesc = _("Import certificates which were provided outside of the tool")
+        shortdesc = _(
+            "Deprecated, this command will be removed from the future major releases."
+            " This command is no-op in simple content access mode."
+            " Import certificates which were provided outside of the tool"
+        )
         super(ImportCertCommand, self).__init__("import", shortdesc, False)
 
         self.parser.add_argument(
