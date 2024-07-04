@@ -31,7 +31,6 @@ from subscription_manager.cli_command.config import ConfigCommand
 from subscription_manager.cli_command.environments import EnvironmentsCommand
 from subscription_manager.cli_command.facts import FactsCommand
 from subscription_manager.cli_command.identity import IdentityCommand
-from subscription_manager.cli_command.import_cert import ImportCertCommand
 from subscription_manager.cli_command.list import ListCommand
 from subscription_manager.cli_command.override import OverrideCommand
 from subscription_manager.cli_command.owners import OwnersCommand
@@ -72,7 +71,6 @@ class ManagerCLI(CLI):
             ReleaseCommand,
             StatusCommand,
             EnvironmentsCommand,
-            ImportCertCommand,
             ServiceLevelCommand,
             VersionCommand,
             RemoveCommand,

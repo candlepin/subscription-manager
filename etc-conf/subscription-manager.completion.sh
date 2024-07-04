@@ -145,14 +145,6 @@ _subscription_manager_identity()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription_manager_import()
-{
-  # TODO: auto complete *.pem?
-  local opts="--certificate
-              -h --help"
-  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
-}
-
 _subscription_manager_list()
 {
   local opts="--afterdate --all --available --consumed --installed
@@ -268,7 +260,7 @@ _subscription_manager()
   done
 
   # top-level commands and options
-  opts="addons attach auto-attach clean config environments facts identity import list orgs
+  opts="addons attach auto-attach clean config environments facts identity list orgs
         repo-override plugins redeem refresh register release remove repos role service-level status
         syspurpose unregister usage version ${_subscription_manager_help_opts}"
 
@@ -279,7 +271,6 @@ _subscription_manager()
       environments|\
       facts|\
       identity|\
-      import|\
       list|\
       orgs|\
       plugins|\
