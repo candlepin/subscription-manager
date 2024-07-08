@@ -22,7 +22,6 @@ import sys
 from rhsm import connection
 
 from subscription_manager import syspurposelib
-from subscription_manager.cli_command.addons import AddonsCommand
 from subscription_manager.cli_command.cli import CliCommand
 from subscription_manager.cli_command.role import RoleCommand
 from subscription_manager.cli_command.service_level import ServiceLevelCommand
@@ -60,7 +59,7 @@ class SyspurposeCommand(CliCommand):
 
         # all the subcommands of 'syspurpose'; add them to this list to be
         # registered as such
-        syspurpose_command_classes = [AddonsCommand, RoleCommand, ServiceLevelCommand, UsageCommand]
+        syspurpose_command_classes = [RoleCommand, ServiceLevelCommand, UsageCommand]
         # create a subparser for all the subcommands: it is passed to all
         # the subcommand classes, so they will create an ArgumentParser that
         # is a child of the 'syspurpose' one, rather than as standalone
