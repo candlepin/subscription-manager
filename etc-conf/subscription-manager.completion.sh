@@ -35,10 +35,9 @@ _subscription_manager_attach()
 
 _subscription_manager_syspurpose()
 {
-  local opts="addons role service-level usage --show ${_subscription_manager_common_opts}"
+  local opts="role service-level usage --show ${_subscription_manager_common_opts}"
 
   case "${2}" in
-      addons|\
       role|\
       usage)
       "_subscription_manager_$2" "${1}" "${2}"
@@ -71,15 +70,6 @@ _subscription_manager_usage()
             ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
-
-_subscription_manager_addons()
-{
-  local opts="--list --org --show --add --remove
-            --unset --username --password --token
-            ${_subscription_manager_common_opts}"
-  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
-}
-
 
 _subscription_manager_unregister()
 {
