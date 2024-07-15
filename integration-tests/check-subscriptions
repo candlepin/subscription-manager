@@ -370,9 +370,11 @@ class TestSubscriptions(SubscriptionsCase):
         b.wait_visible("#overview a:contains('3 hits, including important')")
 
         # test system purpose
-        m.execute("subscription-manager role --set 'Red Hat Enterprise Linux Workstation'")
-        m.execute("subscription-manager usage --set 'Development/Test'")
-        m.execute("subscription-manager service-level --set 'Standard'")
+        m.execute(
+            ["subscription-manager", "syspurpose", "role", "--set", "Red Hat Enterprise Linux Workstation"]
+        )
+        m.execute(["subscription-manager", "syspurpose", "usage", "--set", "Development/Test"])
+        m.execute(["subscription-manager", "syspurpose", "service-level", "--set", "Standard"])
         b.wait_in_text("#syspurpose", "Standard")
         b.wait_in_text("#syspurpose", "Development/Test")
         b.wait_in_text("#syspurpose", "Red Hat Enterprise Linux Workstation")
