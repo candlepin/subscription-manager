@@ -132,6 +132,19 @@ class RegisterService:
             cp_provider = inj.require(inj.CP_PROVIDER)
             cp_provider.close_all_connections()
 
+        access_mode: str = consumer.get("owner", {}).get("contentAccessMode", "unknown")
+        if access_mode != "org_environment":
+            log.error(
+                f"Organization's content access mode is '{access_mode}'. "
+                "Only simple content access/'org_environment' is allowed."
+            )
+            raise exceptions.ServiceError(
+                _(
+                    "Registration is only possible when the organization "
+                    "is in Simple Content Access (SCA) mode."
+                )
+            )
+
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
         managerlib.persist_consumer_cert(consumer)
