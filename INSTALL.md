@@ -9,10 +9,17 @@ To install subscription-manager, run
 sudo dnf install subscription-manager
 ```
 
+RHEL already comes with `subscription-manager` pre-installed. With `subscription-manager` present, you can get register the system with your Red Hat account by running
+
+```bash
+sudo subscription-manager register
+```
+
+
 ## Developer installation
 
-The process below has been tested on Fedora 36.
-Other Fedora versions or distributions may require some adaptation.
+The process below has been tested on Fedora 36 and RHEL 9.
+Other versions or distributions may require some adaptation.
 
 1. First you need to install RPM packages to build and run subscription-manager binaries:
 
@@ -23,9 +30,15 @@ Other Fedora versions or distributions may require some adaptation.
 
    <!-- libdnf-devel, cmake are required to build product-id plugin -->
 
-2. Install Fedora's subscription-manager RPM and packages required to run the test suite:
+   On RHEL, you need to enable the [CodeReady Linux Builder](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/package_manifest/repositories#CodeReadyLinuxBuilder-repository) repository in order to gain access to the development packages like `libdnf-devel`.
 
-   ***NOTE**: Installing `subscription-manager` package is strictly not necessary, but it will pull down all dependencies and create all the files used by subscription-manager.*
+   ```bash
+   sudo subscription-manager repos --enable codeready-builder-for-rhel-9-x86_64-rpms
+   ```
+
+2. Install the `subscription-manager` RPM (not required for RHEL) and packages required to run the test suite:
+
+   ***NOTE**: Installing `subscription-manager` package is not strictly necessary even on Fedora, but it will pull down all dependencies and create all the files used by subscription-manager.*
 
    ```bash
    sudo dnf install --setopt install_weak_deps=False subscription-manager \

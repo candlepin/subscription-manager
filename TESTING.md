@@ -2,6 +2,12 @@
 
 ## subscription-manager
 
+First, install the tests dependencies from [`test-requirements.txt`](test-requirements.txt). Make sure your virtual environment is activated.
+
+```bash
+pip install -r test-requirements.txt
+```
+
 ```bash
 pytest
 # or, for increased verbosity
