@@ -417,7 +417,7 @@ Shows the system's current set of syspurpose preference formatted as JSON. Singl
 .SS addons options
 The
 .B addons
-subcommand displays the current configured addons system purpose attribute
+subcommand is deprecated and will be removed from the future major releases. This command is no-op. It displays the current configured addons system purpose attribute
 .I preference
 for products installed on the system. For example, if the addons preference is ADDON1, then a subscription with a ADDON1 addon is selected when auto-attaching subscriptions to the system.
 
@@ -1026,6 +1026,10 @@ This has been replaced with \fBredeem\fP.
 .TP
 .B addons
 This has been replaced with \fBsyspurpose addons\fP.
+
+.TP
+.B syspurpose addons
+This option never influenced the entitlement experience or reporting: there were no definitions for addons, making it effectively no-op.
 
 .TP
 .B attach
