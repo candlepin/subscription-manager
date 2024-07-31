@@ -123,6 +123,8 @@ class CloudFactsCollector(collector.FactsCollector):
                 "azure_instance_id": some_instance_ID,
                 "azure_offer": some_offer,
                 "azure_sku": some_sku,
+                "azure_vm_name": some_vm_name
+                "azure_resource_group_name": some_resource_group_name
                 "azure_subscription_id": some_subscription_ID
                 "azure_location: azure region the VM is running in
             }
@@ -142,6 +144,10 @@ class CloudFactsCollector(collector.FactsCollector):
                     facts["azure_sku"] = values["compute"]["sku"]
                 if "offer" in values["compute"]:
                     facts["azure_offer"] = values["compute"]["offer"]
+                if "name" in values["compute"]:
+                    facts["azure_vm_name"] = values["compute"]["name"]
+                if "resourceGroupName" in values["compute"]:
+                    facts["azure_resource_group_name"] = values["compute"]["resourceGroupName"]
                 if "subscriptionId" in values["compute"]:
                     facts["azure_subscription_id"] = values["compute"]["subscriptionId"]
                 if "location" in values["compute"]:

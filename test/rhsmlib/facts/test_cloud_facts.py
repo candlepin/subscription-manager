@@ -172,6 +172,8 @@ AWS_REGION = "eu-central-1"
 AZURE_INSTANCE_ID = "12345678-1234-1234-1234-123456789abc"
 AZURE_SKU = "8.1-ci"
 AZURE_OFFER = "RHEL"
+AZURE_VM_NAME = "foo-bar"
+AZURE_RESOURCE_GROUP_NAME = "foo-bar"
 AZURE_SUBSCRIPTION_ID = "01234567-0123-0123-0123-012345679abc"
 # There is no list of valid values of locations, extended locations and
 # types of extended locations. Value "microsoftlondon" probably does not
@@ -324,6 +326,10 @@ class TestCloudCollector(unittest.TestCase):
         self.assertEqual(facts["azure_sku"], AZURE_SKU)
         self.assertIn("azure_offer", facts)
         self.assertEqual(facts["azure_offer"], AZURE_OFFER)
+        self.assertIn("azure_vm_name", facts)
+        self.assertEqual(facts["azure_vm_name"], AZURE_VM_NAME)
+        self.assertIn("azure_resource_group_name", facts)
+        self.assertEqual(facts["azure_resource_group_name"], AZURE_RESOURCE_GROUP_NAME)
         self.assertIn("azure_subscription_id", facts)
         self.assertEqual(facts["azure_subscription_id"], AZURE_SUBSCRIPTION_ID)
         self.assertIn("azure_location", facts)
