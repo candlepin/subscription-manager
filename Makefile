@@ -237,6 +237,10 @@ install-files: dbus-install install-conf install-plugins
 	install -m 644 etc-conf/subscription-manager.conf.tmpfiles \
 		$(DESTDIR)/$(PREFIX)/lib/tmpfiles.d/subscription-manager.conf
 
+	# Install configuration file with system users and group (only rhsm group ATM)
+	install -d $(DESTDIR)/$(PREFIX)/lib/sysusers.d
+	install -m 644 etc-conf/rhsm-sysuser.conf $(DESTDIR)/$(PREFIX)/lib/sysusers.d/rhsm.conf
+
 	# SUSE Linux does not make use of consolehelper
 	if [ -f /etc/redhat-release ]; then \
 		ln -sf /usr/bin/consolehelper $(DESTDIR)/$(PREFIX)/bin/subscription-manager; \
