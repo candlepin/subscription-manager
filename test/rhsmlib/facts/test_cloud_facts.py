@@ -54,7 +54,7 @@ AZURE_METADATA = """
         },
         "customData": "",
         "location": "westeurope",
-        "name": "foo-bar",
+        "name": "foo-vm-name",
         "offer": "RHEL",
         "osType": "Linux",
         "placementGroupId": "",
@@ -73,7 +73,7 @@ AZURE_METADATA = """
             }
         ],
         "publisher": "RedHat",
-        "resourceGroupName": "foo-bar",
+        "resourceGroupName": "foo-group-name",
         "resourceId": "/subscriptions/01234567-0123-0123-0123-012345679abc/resourceGroups/foo-bar/providers/Microsoft.Compute/virtualMachines/foo",
         "sku": "8.1-ci",
         "storageProfile": {
@@ -172,8 +172,8 @@ AWS_REGION = "eu-central-1"
 AZURE_INSTANCE_ID = "12345678-1234-1234-1234-123456789abc"
 AZURE_SKU = "8.1-ci"
 AZURE_OFFER = "RHEL"
-AZURE_VM_NAME = "foo-bar"
-AZURE_RESOURCE_GROUP_NAME = "foo-bar"
+AZURE_VM_NAME = "foo-vm-name"
+AZURE_RESOURCE_GROUP_NAME = "foo-group-name"
 AZURE_SUBSCRIPTION_ID = "01234567-0123-0123-0123-012345679abc"
 # There is no list of valid values of locations, extended locations and
 # types of extended locations. Value "microsoftlondon" probably does not
