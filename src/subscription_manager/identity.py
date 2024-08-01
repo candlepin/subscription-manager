@@ -14,6 +14,7 @@
 
 import logging
 import os
+import grp
 import errno
 import threading
 from typing import Optional, TYPE_CHECKING
@@ -108,14 +109,33 @@ class ConsumerIdentity:
     # TODO: we're using a Certificate which has it's own write/delete, no idea
     # why this landed in a parallel disjoint class wrapping the actual cert.
     def write(self) -> None:
+        """
+        Write consumer key and certificate to disk.
+        """
         from subscription_manager import managerlib
 
+        rhsm_group = None
+        try:
+            rhsm_group = grp.getgrnam(managerlib.RHSM_GROUP_NAME)
+        except KeyError:
+            log.error(f"Unable to get information about {managerlib.RHSM_GROUP_NAME}")
+
         self.__mkdir()
+
         with open(self.keypath(), "w") as key_file:
             key_file.write(self.key)
+
+        # Set proper access permission to the key
+        if os.getuid() == 0 and rhsm_group is not None:
+            os.chown(self.keypath(), 0, rhsm_group.gr_gid)
         os.chmod(self.keypath(), managerlib.ID_CERT_PERMS)
+
         with open(self.certpath(), "w") as cert_file:
             cert_file.write(self.cert)
+
+        # Set proper permission to consumer certificate
+        if os.getuid() == 0 and rhsm_group is not None:
+            os.chown(self.certpath(), 0, rhsm_group.gr_gid)
         os.chmod(self.certpath(), managerlib.ID_CERT_PERMS)
 
     def delete(self) -> None:
