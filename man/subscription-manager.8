@@ -80,46 +80,46 @@ must be passed as system arguments in a non-interactive session.
 3. release
 
 .IP
-5. list
+4. list
 
 .IP
-6. refresh
+5. refresh
 
 .IP
-7. environments
+6. environments
 
 .IP
-8. repos
+7. repos
 
 .IP
-9. orgs
+8. orgs
 
 .IP
-10. plugins
+9. plugins
 
 .IP
-11. identity
+10. identity
 
 .IP
-12. facts
+11. facts
 
 .IP
-13. clean
+12. clean
 
 .IP
-14. config
+13. config
 
 .IP
-15. version
+14. version
 
 .IP
-16. status
+15. status
 
 .IP
-17. syspurpose
+16. syspurpose
 
 .IP
-18. repo-override
+17. repo-override
 
 .RE
 
@@ -285,9 +285,9 @@ command does two important things. Firstly, it will implicitly remove all of the
 This command has no options.
 
 .SS ATTACH OPTIONS
-This command is \fBdeprecated\fP and will be removed from the future major releases. The
+The
 .B attach
-command applies a specific subscription to the system. This command is not possible to use, when the content access mode of the organization to which the system is registered is simple content access mode.
+command is \fBdeprecated\fP and will be removed from the future major releases. This command applies a specific subscription to the system. This command is not possible to use, when the content access mode of the organization to which the system is registered is simple content access mode.
 
 .TP
 .B --auto
@@ -322,9 +322,9 @@ or
 .B --file.
 
 .SS AUTO-ATTACH OPTIONS
-This command is \fBdeprecated\fP and will be removed from the future major releases. The
+The
 .B auto-attach
-command sets whether the ability to check, attach, and update subscriptions occurs automatically on the system. Auto-attaching subscriptions checks the currently-installed products, attached subscriptions, and any changes in available subscriptions every four hours using the \fBrhsmcertd\fP daemon.
+command is \fBdeprecated\fP and will be removed from the future major releases. This command sets whether the ability to check, attach, and update subscriptions occurs automatically on the system. Auto-attaching subscriptions checks the currently-installed products, attached subscriptions, and any changes in available subscriptions every four hours using the \fBrhsmcertd\fP daemon.
 
 .TP
 .B --enable
@@ -417,7 +417,7 @@ Shows the system's current set of syspurpose preference formatted as JSON. Singl
 .SS addons options
 The
 .B addons
-subcommand is deprecated and will be removed from the future major releases. This command is no-op. It displays the current configured addons system purpose attribute
+subcommand is \fBdeprecated\fP and will be removed from the future major releases. This command is no-op. It displays the current configured addons system purpose attribute
 .I preference
 for products installed on the system. For example, if the addons preference is ADDON1, then a subscription with a ADDON1 addon is selected when auto-attaching subscriptions to the system.
 
@@ -585,7 +585,7 @@ Removes any previously set usage preference.
 .SS IMPORT OPTIONS
 The
 .B import
-command is \fBdeprecated\fP and will be removed from the future major releases. Command imports and applies a subscription certificate for the system which was generated externally, such as in the Customer Portal, and then copied over to the system. Importing can be necessary if a system is preconfigured in the subscription management service or if it is offline or unable to access the subscription management service but it has the proper, relevant subscriptions attached to the system.
+command is \fBdeprecated\fP and will be removed from the future major releases. This command imports and applies a subscription certificate for the system which was generated externally, such as in the Customer Portal, and then copied over to the system. Importing can be necessary if a system is preconfigured in the subscription management service or if it is offline or unable to access the subscription management service but it has the proper, relevant subscriptions attached to the system.
 
 .TP
 .B --certificate=CERTIFICATE_FILE
@@ -594,7 +594,7 @@ Points to a certificate PEM file which contains the subscription certificate. Th
 .SS REDEEM OPTIONS
 The
 .B redeem
-command is deprecated, this command will be removed from the future major releases. This command is no-op, when simple content access mode is used. Command is used for systems that are purchased from third-party vendors that include a subscription. The redemption process essentially try to auto-attach the preselected subscription that the vendor supplied to the system.
+command is \fBdeprecated\fP and will be removed from the future major releases. This command is used for systems that are purchased from third-party vendors that include a subscription. The redemption process essentially tries to auto-attach the preselected subscription that the vendor supplied to the system.
 
 .TP
 .B --email=EMAIL
@@ -1009,7 +1009,7 @@ Overall Status: Insufficient
 .RE
 
 .SS DEPRECATED COMMANDS
-As the structures of subscription configuration have changed, some of the original management commands have become obsolete. These commands have been replaced with updated commands.
+As the structures of subscription configuration have changed, some of the original management commands have become obsolete. Some of these commands have been replaced with updated commands.
 
 .TP
 .B subscribe
@@ -1037,6 +1037,18 @@ This option is not used for systems registered using \fBsimple content access\fP
 
 .TP
 .B auto-attach
+This option is not used for systems registered using \fBsimple content access\fP.
+
+.TP
+.B import
+This option is obsolete and will be removed in a future major release.
+
+.TP
+.B redeem
+This option is obsolete and will be removed in a future major release.
+
+.TP
+.B remove
 This option is not used for systems registered using \fBsimple content access\fP.
 
 .TP
@@ -1190,16 +1202,8 @@ subscription-manager register --username=admin --password=secret
 .fi
 .RE
 
-.SS LISTING, ATTACHING, AND REMOVING SUBSCRIPTIONS FOR PRODUCTS
-A
-.I subscription
-is essentially the right to install, use, and receive updates for a Red Hat product. (Sometimes multiple individual software products are bundled together into a single subscription.) When a system is registered, the subscription management service is aware of the system and has a list of all of the possible product subscriptions that the system can install and use. A subscription is applied to a system when the system is
-.I attached
-to the subscription pool that makes that product available. A system releases or
-.I removes
-that subscription (meaning, it removes that subscription so that another system can use that subscription count).
-
-.PP The
+.SS LISTING SUBSCRIPTIONS FOR PRODUCTS
+The
 .B list
 command shows you what subscriptions are available specifically to the system (meaning subscriptions which are active, have available quantities, and match the hardware and architecture) or all subscriptions for the organization. Using the
 .B --ondate
@@ -1272,6 +1276,15 @@ Ends:		08/31/2015
 .fi
 .RE
 
+.SS ATTACHING AND REMOVING SUBSCRIPTIONS FOR PRODUCTS (DEPRECATED)
+A
+.I subscription
+is essentially the right to install, use, and receive updates for a Red Hat product. (Sometimes multiple individual software products are bundled together into a single subscription.) When a system is registered, the subscription management service is aware of the system and has a list of all of the possible product subscriptions that the system can install and use. A subscription is applied to a system when the system is
+.I attached
+to the subscription pool that makes that product available. A system releases or
+.I removes
+that subscription (meaning, it removes that subscription so that another system can use that subscription count).
+
 .PP
 Attaching a subscription requires the ID for the subscription pool (the
 .I --pool
@@ -1342,7 +1355,7 @@ command with the
 option removes every subscription the system has used.
 
 
-.SS REDEEMING EXISTING SUBSCRIPTIONS
+.SS REDEEMING EXISTING SUBSCRIPTIONS (DEPRECATED)
 Sometimes, a system may come preconfigured with products and subscriptions. Rather than attaching a pool and claiming a subscription, this system simply needs to
 .I redeem
 its existing subscriptions.
@@ -1350,7 +1363,7 @@ its existing subscriptions.
 .PP
 After registration, subscriptions on preconfigured systems can be claimed using the
 .B redeem
-command, which essentially try to auto-attach the system to its preexisting subscriptions.
+command, which essentially tries to auto-attach the system to its preexisting subscriptions.
 
 .RS
 .nf
