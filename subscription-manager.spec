@@ -657,7 +657,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %attr(750,root,root) %dir %{_var}/cache/cloud-what
 %dir %{python_sitearch}/cloud_what
 %dir %{python_sitearch}/cloud_what/providers
-%{python_sitearch}/cloud_what/*
+%{python_sitearch}/cloud_what/*.py*
+%{python_sitearch}/cloud_what/providers/*.py*
 %{python_sitearch}/cloud_what/__pycache__
 %{python_sitearch}/cloud_what/providers/__pycache__
 
