@@ -211,16 +211,20 @@ def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
             log.info("Standard automatic registration was successful.")
             return ExitStatus.OK
 
-    if token["tokenType"] == "CP-Anonymous-Cloud-Registration":
-        try:
-            _auto_register_anonymous(uep=uep, token=token)
-            cache.CloudTokenCache.delete_cache()
-        except Exception:
-            log.exception("Anonymous automatic registration failed.")
-            return ExitStatus.REGISTRATION_FAILED
-        else:
-            log.info("Anonymous automatic registration was successful.")
-            return ExitStatus.OK
+    # Uncomment the following block to enable automatic cloud registration v2.
+    # This feature has been disabled temporarily to ensure we do not cause
+    # regressions by not having the backend fully prepared and tested.
+
+    # if token["tokenType"] == "CP-Anonymous-Cloud-Registration":
+    #     try:
+    #         _auto_register_anonymous(uep=uep, token=token)
+    #         cache.CloudTokenCache.delete_cache()
+    #     except Exception:
+    #         log.exception("Anonymous automatic registration failed.")
+    #         return ExitStatus.REGISTRATION_FAILED
+    #     else:
+    #         log.info("Anonymous automatic registration was successful.")
+    #         return ExitStatus.OK
 
     log.error(f"Unsupported token type for automatic registration: {token['tokenType']}.")
     return ExitStatus.BAD_TOKEN_TYPE
