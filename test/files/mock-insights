@@ -14,8 +14,7 @@
 # auto_update=False
 # base_url=127.0.0.1:8443/r/insights
 # cert_verify=/var/lib/insights/mock-certs/ca.crt
-# username=admin
-# password=foobar
+# authmethod=CERT
 
 import email
 from http.server import *
