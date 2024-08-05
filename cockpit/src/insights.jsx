@@ -368,17 +368,15 @@ function jump_to_timer() {
 function monitor_last_upload() {
     let self = {
         timestamp: 0,
-        results: null,
 
         close: close
     };
 
     cockpit.event_target(self);
 
-    let results_file = cockpit.file("/etc/insights-client/.last-upload.results", { syntax: JSON });
-    results_file.watch(data => {
-        self.results = data;
-        cockpit.spawn([ "stat", "-c", "%Y", "/etc/insights-client/.last-upload.results" ], { err: "message" })
+    let results_file = cockpit.file("/etc/insights-client/.lastupload");
+    results_file.watch(() => {
+        cockpit.spawn([ "stat", "-c", "%Y", "/etc/insights-client/.lastupload" ], { err: "message" })
                 .then(ts => {
                     self.timestamp = parseInt(ts);
                     self.dispatchEvent("changed");
@@ -387,7 +385,7 @@ function monitor_last_upload() {
                     self.timestamp = 0;
                     self.dispatchEvent("changed");
                 });
-    });
+    }, { read: false });
 
     function close() {
         results_file.close();
