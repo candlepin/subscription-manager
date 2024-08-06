@@ -17,6 +17,7 @@ import datetime
 import glob
 import logging
 import os
+import grp
 import re
 import shutil
 import stat
@@ -75,6 +76,7 @@ ENT_CONFIG_DIR: str = cfg.get("rhsm", "entitlementCertDir")
 
 # Expected permissions for identity certificates:
 ID_CERT_PERMS: int = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP
+RHSM_GROUP_NAME: str = "rhsm"
 
 
 def system_log(message: str, priority: int = syslog.LOG_NOTICE) -> None:
@@ -934,6 +936,18 @@ def format_iso8601_date(dateobj: Optional[datetime.datetime]) -> str:
     return ""
 
 
+def get_rhsm_group() -> Optional[grp.struct_group]:
+    """
+    Try to get GUID about rhsm group
+    """
+    rhsm_group = None
+    try:
+        rhsm_group = grp.getgrnam(RHSM_GROUP_NAME)
+    except KeyError:
+        log.error(f"Unable to get information about {RHSM_GROUP_NAME}")
+    return rhsm_group
+
+
 # FIXME: move me to identity.py
 def check_identity_cert_perms() -> None:
     """
@@ -941,19 +955,23 @@ def check_identity_cert_perms() -> None:
     fix them if not.
     """
     certs: List[str] = [identity.ConsumerIdentity.keypath(), identity.ConsumerIdentity.certpath()]
+    rhsm_group = get_rhsm_group()
+    cert_guid = 0
+    if rhsm_group is not None:
+        cert_guid = rhsm_group.gr_gid
     for cert in certs:
         if not os.path.exists(cert):
             # Only relevant if these files exist.
             continue
         statinfo: os.stat_result = os.stat(cert)
-        if statinfo[stat.ST_UID] != 0 or statinfo[stat.ST_GID] != 0:
-            os.chown(cert, 0, 0)
-            log.warn("Corrected incorrect ownership of %s." % cert)
+        if statinfo[stat.ST_UID] != 0 or statinfo[stat.ST_GID] != cert_guid:
+            os.chown(cert, 0, cert_guid)
+            log.warning("Corrected incorrect ownership of %s." % cert)
 
         mode: int = stat.S_IMODE(statinfo[stat.ST_MODE])
         if mode != ID_CERT_PERMS:
             os.chmod(cert, ID_CERT_PERMS)
-            log.warn("Corrected incorrect permissions on %s." % cert)
+            log.warning("Corrected incorrect permissions on %s." % cert)
 
 
 def clean_all_data(backup: bool = True) -> None:

@@ -527,6 +527,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{completion_dir}/rhsm-debug
 %{completion_dir}/rhsmcertd
 
+%{_sysusersdir}/rhsm.conf
+
 %dir %{python_sitearch}/subscription_manager
 
 # code, python modules and packages
@@ -689,6 +691,10 @@ if [ "$1" = "2" ] ; then
     killall rhsmd 2> /dev/null || true
 fi
 %endif
+
+# Make all consumer certificates and keys readable by group rhsm
+find /etc/pki/consumer -mindepth 1 -maxdepth 1 -name '*.pem' | xargs --no-run-if-empty chgrp rhsm
+find /etc/pki/consumer -mindepth 1 -maxdepth 1 -name '*.pem' | xargs --no-run-if-empty chmod g+r
 
 # Make all entitlement certificates and keys files readable by group and other
 find /etc/pki/entitlement -mindepth 1 -maxdepth 1 -name '*.pem' | xargs --no-run-if-empty chmod go+r
