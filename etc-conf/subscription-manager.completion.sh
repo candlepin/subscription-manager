@@ -60,26 +60,6 @@ _subscription_manager_unregister()
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
-_subscription_manager_remove()
-{
- # try to autocomplete serial number as well
-  case $prev in
-      --serial)
-          SERIALS=$(LANG=C /usr/sbin/subscription-manager list --consumed 2>/dev/null | sed -ne "s|Serial:\s*\(\S*\)|\1|p" )
-          COMPREPLY=($(compgen -W "${SERIALS}" -- ${1}))
-          return 0
-          ;;
-      --pool)
-          POOLS=$(LANG=C /usr/sbin/subscription-manager list --consumed 2>/dev/null | sed -ne "s|Pool ID:\s*(\S*\)|\1|p" )
-          COMPREPLY=($(compgen -W "${POOLS}" -- ${1}))
-          return 0
-          ;;
-  esac
-  local opts="--serial --pool --all
-              ${_subscription_manager_common_opts}"
-  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
-}
-
 _subscription_manager_clean()
 {
   local opts="-h --help"
@@ -227,7 +207,7 @@ _subscription_manager()
 
   # top-level commands and options
   opts="auto-attach clean config environments facts identity list orgs
-        repo-override plugins refresh register release remove repos status
+        repo-override plugins refresh register release repos status
         syspurpose unregister version ${_subscription_manager_help_opts}"
 
   case "${first}" in
@@ -248,10 +228,6 @@ _subscription_manager()
       unregister|\
       version)
       "_subscription_manager_$first" "${cur}" "${prev}"
-      return 0
-      ;;
-      remove)
-      "_subscription_manager_remove" "${cur}" "${prev}"
       return 0
       ;;
       auto-attach)
