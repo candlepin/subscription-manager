@@ -36,26 +36,26 @@ insecure::
 
 proxy_hostname::
   Set this to a non-blank value if *subscription-manager* should use a
-  reverse proxy to access the subscription service. This sets the host
-  for the reverse proxy. Overrides hostname from *HTTP_PROXY* and
+  proxy to access the subscription service. This sets the host
+  for the proxy. Overrides hostname from *HTTP_PROXY* and
   *HTTPS_PROXY* environment variables.
 
 proxy_port::
   Set this to a non-blank value if *subscription-manager* should use a
-  reverse proxy to access the subscription service. This sets the port
-  for the reverse proxy. Overrides port from *HTTP_PROXY* and
+  proxy to access the subscription service. This sets the port
+  for the proxy. Overrides port from *HTTP_PROXY* and
   *HTTPS_PROXY* environment variables.
 
 proxy_username::
   Set this to a non-blank value if *subscription-manager* should use an
-  authenticated reverse proxy to access the subscription service. This
-  sets the username for the reverse proxy. Overrides username from
+  authenticated proxy to access the subscription service. This
+  sets the username for the proxy. Overrides username from
   *HTTP_PROXY* and *HTTPS_PROXY* environment variables.
 
 proxy_password::
   Set this to a non-blank value if *subscription-manager* should use an
-  authenticated reverse proxy to access the subscription service. This
-  sets the username for the reverse proxy. Overrides password from
+  authenticated proxy to access the subscription service. This
+  sets the username for the proxy. Overrides password from
   *HTTP_PROXY* and *HTTPS_PROXY* environment variables.
 
 no_proxy::
