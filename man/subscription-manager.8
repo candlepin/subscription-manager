@@ -80,9 +80,6 @@ must be passed as system arguments in a non-interactive session.
 4. auto-attach
 
 .IP
-5. remove
-
-.IP
 6. release
 
 .IP
@@ -298,33 +295,6 @@ Disables the auto-attach option for the system. If auto-attach is disabled, then
 .TP
 .B --show
 Shows whether auto-attach is enabled on the systems.
-
-.SS REMOVE OPTIONS
-The
-.B remove
-command removes a subscription from the system. (This does not uninstall the associated products.)
-
-.TP
-.B --serial=SERIALNUMBER
-Gives the serial number of the subscription certificate for the specific product to remove from the system. Subscription certificates attached to a system are in a certificate, in
-.B /etc/pki/entitlement/<serial_number>.pem.
-To remove multiple subscriptions, use the
-.B --serial
-option multiple times.
-
-.TP
-.B --pool=POOLID
-Removes all subscription certificates for the specified pool id from the system.
-To remove multiple sets of subscriptions, use the
-.B --pool
-option multiple times.
-
-.TP
-.B --all
-Removes
-.I all
-of the subscriptions attached to a system.
-
 
 .SS RELEASE OPTIONS
 The
@@ -903,8 +873,6 @@ Overall Status: Insufficient
 As the structures of subscription configuration have changed, some of the original management commands have become obsolete. These commands have been replaced with updated commands.
 
 .TP
-.B unsubscribe
-This has been replaced with \fBremove\fP.
 
 .SH USAGE
 .B subscription-manager
