@@ -7,13 +7,13 @@
 # simmon <simmon@nplob.com>, 2021, 2022.
 # Ludek Janda <ljanda@redhat.com>, 2021.
 # Kim InSoo <simmon@nplob.com>, 2022.
-# 김인수 <simmon@nplob.com>, 2022, 2023.
+# 김인수 <simmon@nplob.com>, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-22 08:09+0200\n"
-"PO-Revision-Date: 2023-12-21 17:35+0000\n"
+"PO-Revision-Date: 2024-02-24 19:36+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ko/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -388,7 +388,7 @@ msgstr "활성키를 사용하여 등록 중..."
 
 #: cockpit/src/subscriptions-client.js:358
 msgid "Registering using username and password ..."
-msgstr "사용자 이름과 암호를 사용하여 등록 중..."
+msgstr "사용자 이름과 비밀번호를 사용하여 등록 중..."
 
 #: cockpit/src/subscriptions-client.js:387
 msgid "Stopping registration service ..."
@@ -867,7 +867,7 @@ msgstr "소비자 ID를 읽을 수 없습니다"
 
 #: src/dnf-plugins/subscription-manager.py:136
 msgid "subscription-manager is operating in container mode."
-msgstr "서비스크립션-관리자는 컨테이너 방식에서 작동하고 있습니다."
+msgstr "subscription-manager는 컨테이너 방식에서 작동하고 있습니다."
 
 #: src/dnf-plugins/upload-profile.py:36
 msgid ""
@@ -1738,7 +1738,7 @@ msgstr "계정 정보를 입력하십시오:"
 msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
-msgstr "로그인이나 암호를 잊어버리신 경우 시스템 관리자에게 문의하십시오"
+msgstr "로그인이나 비밀번호를 잊어버리신 경우 시스템 관리자에게 문의하십시오"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/__init__.py:94
@@ -1831,8 +1831,7 @@ msgstr "RHN Classic 및 Red Hat 서브스크립션 관리"
 msgid ""
 "Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password"
-msgstr ""
-"정보: 로그인 또는 암호를 잊어버리셨습니까? https://redhat.com/"
+msgstr "정보: 로그인 또는 비밀번호 잊어버리셨습니까? https://redhat.com/"
 "forgot_password 에서 찾아보십시오"
 
 #: src/subscription_manager/cache.py:164
@@ -3631,7 +3630,7 @@ msgid ""
 "<small>Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password</small>"
 msgstr ""
-"<small>정보: 로그인 또는 암호를 잊어버리셨습니까? https://redhat.com/"
+"<small>정보: 로그인 또는 비밀번호를 잊어버리셨습니까? https://redhat.com/"
 "forgot_password 에서 찾아보십시오</small>"
 
 #: src/subscription_manager/gui/data/ui/credentials.ui:199
@@ -4192,7 +4191,7 @@ msgstr "로그인을 입력하셔야 합니다."
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:1558
 msgid "You must enter a password."
-msgstr "암호를 입력하셔야 합니다."
+msgstr "비밀번호를 입력하셔야 합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/gui/registergui.py:1665
@@ -4682,7 +4681,8 @@ msgstr "소비자 ID가 없거나 손상되었습니다. register --help를 사�
 msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
-msgstr "서비스크립션-관리자는 컨테이너 방식에서 작동하고 있습니다. 자신의 호스트 "
+msgstr ""
+"subscription-manager는 컨테이너 방식에서 작동하고 있습니다. 자신의 호스트 "
 "시스템을 사용하여 서브스크립션을 관리하세요.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
