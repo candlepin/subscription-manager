@@ -55,7 +55,7 @@ class RegisterService:
         service_level: str = None,
         usage: str = None,
         jwt_token: str = None,
-        **kwargs: dict
+        **kwargs: dict,
     ) -> dict:
         # We accept a kwargs argument so that the DBus object can pass the options dictionary it
         # receives transparently to the service via dictionary unpacking.  This strategy allows the
