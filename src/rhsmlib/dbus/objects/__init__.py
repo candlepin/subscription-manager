@@ -14,7 +14,6 @@
 from rhsmlib.dbus.objects.config import ConfigDBusObject  # NOQA
 from rhsmlib.dbus.objects.main import Main  # NOQA
 from rhsmlib.dbus.objects.register import RegisterDBusObject, DomainSocketRegisterDBusObject  # NOQA
-from rhsmlib.dbus.objects.attach import AttachDBusObject  # NOQA
 from rhsmlib.dbus.objects.products import ProductsDBusObject  # NOQA
 from rhsmlib.dbus.objects.unregister import UnregisterDBusObject  # NOQA
 from rhsmlib.dbus.objects.entitlement import EntitlementDBusObject  # NOQA
