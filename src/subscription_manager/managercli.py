@@ -38,7 +38,6 @@ from subscription_manager.cli_command.redeem import RedeemCommand
 from subscription_manager.cli_command.refresh import RefreshCommand
 from subscription_manager.cli_command.register import RegisterCommand
 from subscription_manager.cli_command.release import ReleaseCommand
-from subscription_manager.cli_command.remove import RemoveCommand
 from subscription_manager.cli_command.repos import ReposCommand
 from subscription_manager.cli_command.status import StatusCommand
 from subscription_manager.cli_command.syspurpose import SyspurposeCommand
@@ -67,7 +66,6 @@ class ManagerCLI(CLI):
             StatusCommand,
             EnvironmentsCommand,
             VersionCommand,
-            RemoveCommand,
             AttachCommand,
             PluginsCommand,
             AutohealCommand,

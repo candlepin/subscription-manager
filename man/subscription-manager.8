@@ -29,7 +29,7 @@ Subscription Manager performs several key operations:
 .IP
 * It lists both available and used subscriptions.
 .IP
-* It allows administrators to both attach specific subscriptions to a system and remove those subscriptions.
+* It allows administrators to attach specific subscriptions to a system.
 .PP
 Subscription Manager can be used to auto-attach subscriptions to a system, as well. The
 .B subscription-manager
@@ -83,59 +83,56 @@ must be passed as system arguments in a non-interactive session.
 4. auto-attach
 
 .IP
-5. remove
+5. release
 
 .IP
-6. release
+6. redeem
 
 .IP
-8. redeem
+7. list
 
 .IP
-9. list
+8. refresh
 
 .IP
-10. refresh
+9. environments
 
 .IP
-11. environments
+10. repos
 
 .IP
-12. repos
+11. orgs
 
 .IP
-13. orgs
+12. plugins
 
 .IP
-14. plugins
+13. identity
 
 .IP
-15. identity
+14. facts
 
 .IP
-16. facts
+15. clean
 
 .IP
-17. clean
+16. config
 
 .IP
-18. config
+17. version
 
 .IP
-19. version
+18. status
 
 .IP
-20. status
+19. syspurpose
 
 .IP
-21. syspurpose
-
-.IP
-22. repo-override
+20. repo-override
 
 .RE
 
-Following commands were deprecated: subscribe and unsubscribe
+Following commands were deprecated: subscribe.
 
 .SS COMMON OPTIONS
 .TP
@@ -350,33 +347,6 @@ Disables the auto-attach option for the system. If auto-attach is disabled, then
 .TP
 .B --show
 Shows whether auto-attach is enabled on the systems.
-
-.SS REMOVE OPTIONS
-The
-.B remove
-command removes a subscription from the system. (This does not uninstall the associated products.)
-
-.TP
-.B --serial=SERIALNUMBER
-Gives the serial number of the subscription certificate for the specific product to remove from the system. Subscription certificates attached to a system are in a certificate, in
-.B /etc/pki/entitlement/<serial_number>.pem.
-To remove multiple subscriptions, use the
-.B --serial
-option multiple times.
-
-.TP
-.B --pool=POOLID
-Removes all subscription certificates for the specified pool id from the system.
-To remove multiple sets of subscriptions, use the
-.B --pool
-option multiple times.
-
-.TP
-.B --all
-Removes
-.I all
-of the subscriptions attached to a system.
-
 
 .SS RELEASE OPTIONS
 The
@@ -1013,15 +983,11 @@ Overall Status: Insufficient
 .RE
 
 .SS DEPRECATED COMMANDS
-As the structures of subscription configuration have changed, some of the original management commands have become obsolete. These commands have been replaced with updated commands.
+As the structures of subscription configuration have changed, some of the original management commands have become obsolete. Some of these commands have been replaced with updated commands.
 
 .TP
 .B subscribe
 This has been replaced with attach. A similar registration option, \fB--subscribe\fP, has also be replaced with \fB--auto-attach\fP.
-
-.TP
-.B unsubscribe
-This has been replaced with \fBremove\fP.
 
 .SH USAGE
 .B subscription-manager
