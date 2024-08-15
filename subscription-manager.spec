@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.40
+Version: 1.29.41
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,79 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Aug 15 2024 Pino Toscano <ptoscano@redhat.com> 1.29.41-1
+- feat: update man page with deprecation notices (jajerome@redhat.com)
+- feat: Disable anonymous cloud registration temporarily (mhorky@redhat.com)
+- feat: Deprecate 'syspurpose addons' (mhorky@redhat.com)
+- fix: make SyspurposeComplianceStatusCache.get_overall_status() always usable
+  (ptoscano@redhat.com)
+- fix: Change order of checks (jhnidek@redhat.com)
+- fix: Cache shouldn't try to get data from server without UUID
+  (jhnidek@redhat.com)
+- feat: Deprecate import command (zpetrace@redhat.com)
+- fix: 1.29 modify section about remove command in man page
+  (jhnidek@redhat.com)
+- feat: 1.29 Deprecate redeem sub-command (jhnidek@redhat.com)
+- fix: Reformated man page of subscription-manager (jhnidek@redhat.com)
+- fix: [1.29] Remove command should not be primary command (jhnidek@redhat.com)
+- feat: deprecate autosubscribe/auto-attach register options
+  (jajerome@redhat.com)
+- feat: deprecate attach/auto-attach modules (jajerome@redhat.com)
+- docs: deprecate attach/auto-attach in man page (jajerome@redhat.com)
+- fix: Hide subscription management "errors" in container mode
+  (mhorky@redhat.com)
+- feat: 1.29 Deprecate remove sub-command (jhnidek@redhat.com)
+- fix: 1.29 Do not try to test this branch for Fedora latest
+  (jhnidek@redhat.com)
+- fix: 1.29 Do not try to test this branch for Fedora rawhide
+  (jhnidek@redhat.com)
+- fix(test): Properly stop method mock (mhorky@redhat.com)
+- feat: Azure: added extended location and type of location fact
+  (jhnidek@redhat.com)
+- fix: Update version of Azure metadata (jhnidek@redhat.com)
+- feat: Added Azure location to facts (jhnidek@redhat.com)
+- feat: Added zone GCP fact (jhnidek@redhat.com)
+- feat: Added more AWS cloud facts (jhnidek@redhat.com)
+- fix: Change type hint according returned value. (jhnidek@redhat.com)
+- feat: Add warning message about release version to dnf plugin
+  (jhnidek@redhat.com)
+- Bump black from 23.3.0 to 24.3.0
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- Format code with black==24.3.0 (ptoscano@redhat.com)
+- Fix memory leaks in test-productdb.c (jhnidek@redhat.com)
+- Fix memory leaks in productdb.c (jhnidek@redhat.com)
+- fix: Function prototype without declaration is deprecated
+  (jhnidek@redhat.com)
+- Removed unused includes of .h files (jhnidek@redhat.com)
+- libdnf: switch from g_error_free() to g_clear_error() in tests
+  (ptoscano@redhat.com)
+- libdnf: do not build test code in plugin (ptoscano@redhat.com)
+- Change handling of deprecated `datetime.datetime.utcnow()`
+  (mhorky@redhat.com)
+- CCT-66: Update identity reporting in DNF plugin during autoregistration
+  (mhorky@redhat.com)
+- Remove automatic registration delay for rhsmcertd (mhorky@redhat.com)
+- Remove API endpoint for automatic cloud registration v1 (mhorky@redhat.com)
+- CCT-67: Use automatic registration v2 (mhorky@redhat.com)
+- IdentityUpdateAction: Improve logging for updating identity certificates
+  (mhorky@redhat.com)
+- Identity: Add method to extract current owner (mhorky@redhat.com)
+- rhsmcertd: Define exit codes (mhorky@redhat.com)
+- rhsmcertd: Use module-level logger (mhorky@redhat.com)
+- Add AnonymousCertificateManager (mhorky@redhat.com)
+- Add CloudTokenCache for Candlepin JWT (mhorky@redhat.com)
+- Implement API endpoints for Automatic registration v2 (mhorky@redhat.com)
+- Update documentation for one API call in connection.py (mhorky@redhat.com)
+- Fix type hint of RegisterService.register() (mhorky@redhat.com)
+- rhsmcertd: Drop D-Bus loop code (mhorky@redhat.com)
+- rhsmcertd: Add type hints (mhorky@redhat.com)
+- rhsmcertd: Remove forgotten old comment (mhorky@redhat.com)
+- Stop logging full lscpu output (mhorky@redhat.com)
+- Prevent double-logging of syspurpose cache log statement (mhorky@redhat.com)
+- Update the log message containing response time statistics
+  (mhorky@redhat.com)
+- CCT-266: Update TLS flags (mhorky@redhat.com)
+
 * Thu Jan 18 2024 Pino Toscano <ptoscano@redhat.com> 1.29.40-1
 - Translated using Weblate (Korean) (simmon@nplob.com)
 - Translated using Weblate (Chinese (Simplified) (zh_CN))
