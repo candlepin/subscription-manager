@@ -18,11 +18,17 @@ from typing import Callable, Optional
 from rhsm.connection import UEPConnection
 
 from rhsmlib.services import exceptions
+from rhsmlib.services.unregister import UnregisterService
 
 from subscription_manager import injection as inj
 from subscription_manager import managerlib
 from subscription_manager import syspurposelib
 from subscription_manager.i18n import ugettext as _
+
+import typing
+
+if typing.TYPE_CHECKING:
+    from subscription_manager.cp_provider import CPProvider
 
 log = logging.getLogger(__name__)
 
@@ -49,7 +55,7 @@ class RegisterService:
         service_level: str = None,
         usage: str = None,
         jwt_token: str = None,
-        **kwargs: dict
+        **kwargs: dict,
     ) -> dict:
         # We accept a kwargs argument so that the DBus object can pass the options dictionary it
         # receives transparently to the service via dictionary unpacking.  This strategy allows the
@@ -129,12 +135,32 @@ class RegisterService:
             )
             # When new consumer is created, then close all existing connections
             # to be able to recreate new one
-            cp_provider = inj.require(inj.CP_PROVIDER)
+            cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
             cp_provider.close_all_connections()
+
+        managerlib.persist_consumer_cert(consumer)
+
+        access_mode: str = consumer.get("owner", {}).get("contentAccessMode", "unknown")
+        if access_mode != "org_environment":
+            log.error(
+                f"Organization's content access mode is '{access_mode}'. "
+                "Only Simple Content Access ('org_environment') is allowed. "
+                "Unregistering."
+            )
+
+            # Use newly saved certificate to unregister the system; the presence of identity
+            # certificate does not mean we can get content.
+            self.identity.reload()
+            UnregisterService(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()).unregister()
+            raise exceptions.ServiceError(
+                _(
+                    "Registration is only possible when the organization "
+                    "is in Simple Content Access (SCA) mode."
+                )
+            )
 
         self.installed_mgr.write_cache()
         self.plugin_manager.run("post_register_consumer", consumer=consumer, facts=facts_dict)
-        managerlib.persist_consumer_cert(consumer)
 
         # Now that we are registered, load the new identity
         self.identity.reload()

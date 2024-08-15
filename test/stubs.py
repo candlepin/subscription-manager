@@ -734,6 +734,9 @@ class StubCPProvider:
     def get_content_connection(self):
         return self.content_connection
 
+    def close_all_connections(self):
+        pass
+
 
 class StubEntitlementStatusCache(EntitlementStatusCache):
     def write_cache(self, debug=False):

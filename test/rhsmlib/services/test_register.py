@@ -54,7 +54,7 @@ CONSUMER_CONTENT_JSON = """{"hypervisorId": null,
           "displayName": "Admin Owner",
           "id": "ff808081550d997c01550d9adaf40003",
           "key": "admin",
-          "contentAccessMode": "entitlement"
+          "contentAccessMode": "org_environment"
         },
         "href": "/consumers/c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
         "facts": {}, "id": "ff808081550d997c015511b0406d1065",
@@ -258,8 +258,9 @@ class RegisterServiceTest(InjectionMockingTest):
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
+    @mock.patch("rhsmlib.services.register.managerlib.clean_all_data", return_value=None)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_normally_old_candlepin(self, mock_persist_consumer, mock_write_cache):
+    def test_register_normally_old_candlepin(self, mock_persist_consumer, mock_clean, mock_write_cache):
         """
         Test for the case, when candlepin server returns consumer without information about
         content access mode.
@@ -271,39 +272,17 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
-        consumer = register_service.register("org", name="name", environments="environment")
-
-        self.mock_cp.registerConsumer.assert_called_once_with(
-            name="name",
-            facts={},
-            owner="org",
-            environments="environment",
-            keys=None,
-            installed_products=[],
-            jwt_token=None,
-            content_tags=[],
-            consumer_type="system",
-            role="",
-            addons=[],
-            service_level="",
-            usage="",
-        )
-        self.mock_installed_products.write_cache.assert_called()
-
-        mock_persist_consumer.assert_called_once_with(expected_consumer)
-        mock_write_cache.assert_called_once()
-        expected_plugin_calls = [
-            mock.call("pre_register_consumer", name="name", facts={}),
-            mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
-        ]
-        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
-        assert "owner" in consumer
-        assert "contentAccessMode" in consumer["owner"]
-        assert "entitlement" == consumer["owner"]["contentAccessMode"]
+        with self.assertRaises(exceptions.ServiceError) as exc_info:
+            register_service.register("org", name="name", environments=["environment"])
+            self.assertEqual(
+                str(exc_info.exception),
+                "Registration is only possible when the organization is in Simple Content Access Mode.",
+            )
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
+    @mock.patch("rhsmlib.services.register.managerlib.clean_all_data")
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_normally_no_owner(self, mock_persist_consumer, mock_write_cache):
+    def test_register_normally_no_owner(self, mock_persist_consumer, mock_clean, mock_write_cache):
         """
         Test for the case, when candlepin server returns consumer without owner
         """
@@ -315,33 +294,12 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
-        consumer = register_service.register("org", name="name", environments="environment")
-
-        self.mock_cp.registerConsumer.assert_called_once_with(
-            name="name",
-            facts={},
-            owner="org",
-            environments="environment",
-            keys=None,
-            installed_products=[],
-            jwt_token=None,
-            content_tags=[],
-            consumer_type="system",
-            role="",
-            addons=[],
-            service_level="",
-            usage="",
-        )
-        self.mock_installed_products.write_cache.assert_called()
-
-        mock_persist_consumer.assert_called_once_with(expected_consumer)
-        mock_write_cache.assert_called_once()
-        expected_plugin_calls = [
-            mock.call("pre_register_consumer", name="name", facts={}),
-            mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
-        ]
-        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
-        assert "owner" not in consumer
+        with self.assertRaises(exceptions.ServiceError) as exc_info:
+            register_service.register("org", name="name", environments=["environment"])
+            self.assertEqual(
+                str(exc_info.exception),
+                "Registration is only possible when the organization is in Simple Content Access Mode.",
+            )
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
