@@ -26,12 +26,8 @@ is the command-line based client for the Red Hat Subscription Manager tool.
 Subscription Manager performs several key operations:
 .IP
 * It registers systems to the Red Hat subscription management service and adds the system to the inventory. Once a system is registered, it can receive updates based on its subscriptions to any kind of software products.
-.IP
-* It lists both available and used subscriptions.
-.IP
-* It allows administrators to both attach specific subscriptions to a system and remove those subscriptions.
 .PP
-Subscription Manager can be used to auto-attach subscriptions to a system, as well. The
+The
 .B subscription-manager
 command can even be invoked as part of a kickstart process.
 
@@ -77,53 +73,51 @@ must be passed as system arguments in a non-interactive session.
 2. unregister
 
 .IP
-6. release
+3. release
 
 .IP
-9. list
+4. list
 
 .IP
-10. refresh
+5. refresh
 
 .IP
-11. environments
+6. environments
 
 .IP
-12. repos
+7. repos
 
 .IP
-13. orgs
+8. orgs
 
 .IP
-14. plugins
+9. plugins
 
 .IP
-15. identity
+10. identity
 
 .IP
-16. facts
+11. facts
 
 .IP
-17. clean
+12. clean
 
 .IP
-18. config
+13. config
 
 .IP
-19. version
+14. version
 
 .IP
-20. status
+15. status
 
 .IP
-21. syspurpose
+16. syspurpose
 
 .IP
-22. repo-override
+17. repo-override
 
 .RE
-
-Following commands were deprecated: unsubscribe
 
 .SS COMMON OPTIONS
 .TP
@@ -229,7 +223,7 @@ Gives a comma-separated list of product keys to apply specific subscriptions to 
 .IP
 When the
 .B --activationkey
-option is used, it is not necessary to use the
+option is used, it is not possible to use the
 .B --username
 and
 .B --password
@@ -328,7 +322,7 @@ The
 .B role
 subcommand displays the current configured role
 .I preference
-for products installed on the system. For example, if the role preference is "Red Hat Enterprise Linux Server", then a subscription with a "Red Hat Enterprise Linux Server" role is selected when auto-attaching subscriptions to the system.
+for products installed on the system. For example, if the role preference is "Red Hat Enterprise Linux Server", then a subscription with a "Red Hat Enterprise Linux Server" role is selected when attaching subscriptions to the system.
 
 .TP
 .B --show
@@ -368,7 +362,7 @@ The
 .B service-level
 subcommand displays the current configured service level
 .I preference
-for products installed on the system. For example, if the service-level preference is standard, then a subscription with a standard service level is selected when auto-attaching subscriptions to the system.
+for products installed on the system. For example, if the service-level preference is standard, then a subscription with a standard service level is selected when attaching subscriptions to the system.
 
 .TP
 .B --serverurl=SERVER_URL
@@ -412,7 +406,7 @@ The
 .B usage
 subcommand displays the current configured usage
 .I preference
-for products installed on the system. For example, if the usage preference is "Production", then a subscription with a "Production" usage is selected when auto-attaching subscriptions to the system.
+for products installed on the system. For example, if the usage preference is "Production", then a subscription with a "Production" usage is selected when attaching subscriptions to the system.
 
 .TP
 .B --show
@@ -850,9 +844,7 @@ Overall Status: Insufficient
 .RE
 
 .SS DEPRECATED COMMANDS
-As the structures of subscription configuration have changed, some of the original management commands have become obsolete. These commands have been replaced with updated commands.
-
-.TP
+No commands are currently deprecated.
 
 .SH USAGE
 .B subscription-manager
@@ -965,14 +957,11 @@ subscription-manager unregister
 .fi
 .RE
 
-.SS LISTING, ATTACHING, AND REMOVING SUBSCRIPTIONS FOR PRODUCTS
+.SS LISTING SUBSCRIPTIONS FOR PRODUCTS
 A
 .I subscription
 is essentially the right to install, use, and receive updates for a Red Hat product. (Sometimes multiple individual software products are bundled together into a single subscription.) When a system is registered, the subscription management service is aware of the system and has a list of all of the possible product subscriptions that the system can install and use. A subscription is applied to a system when the system is
-.I attached
-to the subscription pool that makes that product available. A system releases or
-.I removes
-that subscription (meaning, it removes that subscription so that another system can use that subscription count).
+attached to the subscription pool that makes that product available. 
 
 .PP The
 .B list
@@ -1047,21 +1036,6 @@ Ends:		08/31/2015
 .fi
 .RE
 
-.PP
-Removing subscription from a system releases the subscription back into the pool. The system remains registered with the subscription management service. Each product has an identifying X.509 certificate installed with it. To remove a subscription for a specific product, specify the serial number (or numbers, in multiple \fB--serial\fP options) of the certificate:
-
-.RS
-.nf
-subscription-manager remove --serial=1128750306742160
-.fi
-.RE
-
-.PP
-Giving the
-.B remove
-command with the
-.B --all
-option removes every subscription the system has used.
 
 .SS VIEWING LOCAL SUBSCRIPTION & CONTENT PROVIDER INFORMATION
 Red Hat has a hosted environment, through the Customer Portal, that provides centralized access to subscription management and content repositories. However, organizations can use other tools -- like Subscription Manager -- for content hosting and subscription management. With a local content provider, the organization, environments, repositories, and other structural configuration is performed in the content provider. Red Hat Subscription Manager can be used to display this information, using the
@@ -1094,7 +1068,7 @@ subscription-manager orgs --token=eyJhbGciOiJSUzI1NiIsI ... stGc_2bFDQC8CENEOo
 .SS CHANGING SUBSCRIPTION MANAGER CONFIGURATION
 The Subscription Manager CLI and GUI both use the
 .B /etc/rhsm/rhsm.conf
-file for configuration, including what content and subscription management services to use and management settings like auto-attaching. This configuration file can be edited directly, or it can be edited using the
+file for configuration, including what content and subscription management services to use. This configuration file can be edited directly, or it can be edited using the
 .B config
 command. Parameters and values are passed as arguments with the
 .B config
