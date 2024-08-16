@@ -89,9 +89,6 @@ must be passed as system arguments in a non-interactive session.
 6. release
 
 .IP
-8. redeem
-
-.IP
 9. list
 
 .IP
@@ -237,7 +234,7 @@ References an existing system inventory ID to resume using a previous registrati
 
 .TP
 .B --activationkey=KEYS
-Gives a comma-separated list of product keys to use to redeem or apply specific subscriptions to the system. This is used for preconfigured systems which may already have products installed. Activation keys are issued by an on-premise subscription management service, such as Subscription Asset Manager.
+Gives a comma-separated list of product keys to apply specific subscriptions to the system. This is used for preconfigured systems which may already have products installed. Activation keys are issued by an on-premise subscription management service, such as Subscription Asset Manager.
 .IP
 When the
 .B --activationkey
@@ -593,21 +590,6 @@ Usage to apply to this system
 .TP
 .B --unset
 Removes any previously set usage preference.
-
-
-.SS REDEEM OPTIONS
-The
-.B redeem
-command is used for systems that are purchased from third-party vendors that include a subscription. The redemption process essentially auto-attaches the preselected subscription that the vendor supplied to the system.
-
-.TP
-.B --email=EMAIL
-Gives the email account to send the redemption notification message to.
-
-.TP
-.B --locale=LOCALE
-Sets the locale to use for the message. If none is given, then it defaults to the local system's locale.
-
 
 .SS LIST OPTIONS
 The
@@ -1310,23 +1292,6 @@ Giving the
 command with the
 .B --all
 option removes every subscription the system has used.
-
-
-.SS REDEEMING EXISTING SUBSCRIPTIONS
-Sometimes, a system may come preconfigured with products and subscriptions. Rather than attaching a pool and claiming a subscription, this system simply needs to
-.I redeem
-its existing subscriptions.
-
-.PP
-After registration, subscriptions on preconfigured systems can be claimed using the
-.B redeem
-command, which essentially auto-attaches the system to its preexisting subscriptions.
-
-.RS
-.nf
-subscription-manager redeem --email=admin@example.com --org="IT Dept"
-.fi
-.RE
 
 .SS VIEWING LOCAL SUBSCRIPTION & CONTENT PROVIDER INFORMATION
 Red Hat has a hosted environment, through the Customer Portal, that provides centralized access to subscription management and content repositories. However, organizations can use other tools -- like Subscription Manager -- for content hosting and subscription management. With a local content provider, the organization, environments, repositories, and other structural configuration is performed in the content provider. Red Hat Subscription Manager can be used to display this information, using the
