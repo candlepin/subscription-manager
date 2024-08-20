@@ -1515,10 +1515,11 @@ class UEPConnection(BaseConnection):
         }
         headers = {
             "Content-Type": "application/json",
+            "Accept": "text/plain",
         }
 
         return self.conn.request_post(
-            method="/cloud/authorize?version=2",
+            method="/cloud/authorize",
             params=data,
             headers=headers,
             description=_("Fetching cloud token"),
