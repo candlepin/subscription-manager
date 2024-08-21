@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.0
+Version: 1.30.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -736,6 +736,10 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Aug 21 2024 Pino Toscano <ptoscano@redhat.com> 1.30.1-1
+- feat: forcefully switch automatic cloud registration to v1
+  (ptoscano@redhat.com)
+
 * Fri Aug 16 2024 Pino Toscano <ptoscano@redhat.com> 1.30.0-1
 - Translated using Weblate (Russian) (aleksejfedorov963@gmail.com)
 - Translated using Weblate (Korean) (simmon@nplob.com)
