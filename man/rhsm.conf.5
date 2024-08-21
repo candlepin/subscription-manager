@@ -66,7 +66,7 @@ proxy_hostname
 .RS 4
 Set this to a non\-blank value if
 \fBsubscription\-manager\fR
-should use a reverse proxy to access the subscription service\&. This sets the host for the reverse proxy\&. Overrides hostname from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&. This value
+should use a proxy to access the subscription service\&. This sets the host for the proxy\&. Overrides hostname from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&. This value
 .B should not
 contain the scheme to be used with the proxy (e.g. http or https)\&. To specify that use the
 .B proxy_scheme
@@ -75,17 +75,17 @@ option\&.
 .PP
 proxy_scheme
 .RS 4
-This only sets the scheme for the reverse proxy when writing out the proxy to repo definitions\&. Set this to a non\-blank value if you want to specify the scheme used by your package manager for subscription\-manager managed repos\&. This defaults to "http"\&.
+This only sets the scheme for the proxy when writing out the proxy to repo definitions\&. Set this to a non\-blank value if you want to specify the scheme used by your package manager for subscription\-manager managed repos\&. This defaults to "http"\&.
 
 \fBNote:\fR
-subscription-manager tooling does not use this option for connecting reverse proxy and HTTPS is always used.
+subscription-manager tooling does not use this option for connecting proxy and HTTPS is always used.
 .RE
 .PP
 proxy_port
 .RS 4
 Set this to a non\-blank value if
 \fBsubscription\-manager\fR
-should use a reverse proxy to access the subscription service\&. This sets the port for the reverse proxy\&. Overrides port from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
+should use a proxy to access the subscription service\&. This sets the port for the proxy\&. Overrides port from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
 
 Please note that setting this to any value other than 3128 (depending on your SELinux configuration) will require an update to that policy.
 
@@ -102,14 +102,14 @@ proxy_username
 .RS 4
 Set this to a non\-blank value if
 \fBsubscription\-manager\fR
-should use an authenticated reverse proxy to access the subscription service\&. This sets the username for the reverse proxy\&. Overrides username from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
+should use an authenticated proxy to access the subscription service\&. This sets the username for the proxy\&. Overrides username from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
 .RE
 .PP
 proxy_password
 .RS 4
 Set this to a non\-blank value if
 \fBsubscription\-manager\fR
-should use an authenticated reverse proxy to access the subscription service\&. This sets the password for the reverse proxy\&. Overrides password from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
+should use an authenticated proxy to access the subscription service\&. This sets the password for the proxy\&. Overrides password from \fBHTTP_PROXY\fR and \fBHTTPS_PROXY\fR environment variables\&.
 .RE
 .PP
 no_proxy
