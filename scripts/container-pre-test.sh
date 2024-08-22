@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # Install essential packages
 dnf --setopt install_weak_deps=False install -y \
   dnf-plugins-core git gcc cmake python3 python3-devel python3-pip
@@ -13,7 +15,7 @@ if [[ $ID == "centos" ]]; then
 fi
 
 # Install system, build and runtime packages
-dnf --setopt install_weak_deps=False install -y \
+dnf --setopt install_weak_deps=False install -y --nobest \
   intltool python3-setuptools \
   openssl-devel libdnf-devel \
   python3-rpm python3-librepo python3-gobject \
