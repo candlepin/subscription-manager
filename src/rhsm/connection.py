@@ -1676,7 +1676,6 @@ class UEPConnection(BaseConnection):
         guest_uuids: Union[List[str], List[dict]] = None,
         service_level: str = None,
         release: str = None,
-        autoheal: bool = None,
         hypervisor_id: str = None,
         content_tags: set = None,
         role: str = None,
@@ -1707,8 +1706,6 @@ class UEPConnection(BaseConnection):
             params["facts"] = facts
         if release is not None:
             params["releaseVer"] = release
-        if autoheal is not None:
-            params["autoheal"] = autoheal
         if hypervisor_id is not None:
             params["hypervisorId"] = {"hypervisorId": hypervisor_id}
         if content_tags is not None:

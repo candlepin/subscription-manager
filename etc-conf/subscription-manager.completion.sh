@@ -10,12 +10,6 @@ _subscription_manager_common_opts="--proxy --proxyuser --proxypassword --noproxy
 _subscription_manager_common_url_opts="--insecure --serverurl"
 # complete functions for subcommands ($1 - current opt, $2 - previous opt)
 
-_subscription_manager_auto_attach()
-{
-  local opts="--enable --disable --show ${_subscription_manager_common_opts}"
-  COMPREPLY=($(compgen -W "${opts}" -- ${1}))
-}
-
 _subscription_manager_syspurpose()
 {
   local opts="role service-level usage --show ${_subscription_manager_common_opts}"
@@ -206,7 +200,7 @@ _subscription_manager()
   done
 
   # top-level commands and options
-  opts="auto-attach clean config environments facts identity list orgs
+  opts="clean config environments facts identity list orgs
         repo-override plugins refresh register release repos status
         syspurpose unregister version ${_subscription_manager_help_opts}"
 
@@ -228,10 +222,6 @@ _subscription_manager()
       unregister|\
       version)
       "_subscription_manager_$first" "${cur}" "${prev}"
-      return 0
-      ;;
-      auto-attach)
-      "_subscription_manager_auto_attach" "${cur}" "${prev}"
       return 0
       ;;
       repo-override)

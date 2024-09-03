@@ -77,9 +77,6 @@ must be passed as system arguments in a non-interactive session.
 2. unregister
 
 .IP
-4. auto-attach
-
-.IP
 6. release
 
 .IP
@@ -278,23 +275,6 @@ command does two important things. Firstly, it will implicitly remove all of the
 
 .PP
 This command has no options.
-
-.SS AUTO-ATTACH OPTIONS
-The
-.B auto-attach
-command sets whether the ability to check, attach, and update subscriptions occurs automatically on the system. Auto-attaching subscriptions checks the currently-installed products, attached subscriptions, and any changes in available subscriptions every four hours using the \fBrhsmcertd\fP daemon.
-
-.TP
-.B --enable
-Enables the auto-attach option for the system. If there is any change in the subscriptions for the system, any subscriptions expire, or any new products are installed, then \fBsubscription-manager\fP detects the changes and automatically attaches the appropriate subscriptions so that the system remains covered.
-
-.TP
-.B --disable
-Disables the auto-attach option for the system. If auto-attach is disabled, then any changes in installed products or subscriptions for the system (including expired subscriptions) must be addressed manually by the administrator.
-
-.TP
-.B --show
-Shows whether auto-attach is enabled on the systems.
 
 .SS RELEASE OPTIONS
 The

@@ -536,7 +536,6 @@ class StubUEP:
         guest_uuids=None,
         service_level=None,
         release=None,
-        autoheal=None,
         content_tags=None,
         addons=None,
         role=None,
