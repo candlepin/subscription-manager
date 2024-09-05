@@ -53,7 +53,7 @@ except ImportError:
 from subscription_manager import utils
 from subscription_manager.certdirectory import Path
 import configparser
-from urllib.parse import parse_qs, urlparse, urlunparse, urlencode
+from urllib.parse import parse_qs, urlparse, urlunparse, urlencode, unquote
 
 from rhsm.config import get_config_parser
 
@@ -485,7 +485,7 @@ if HAS_DEB822:
 
         def fix_content(self, content):
             # Luckily apt ignores all Fields it does not recognize
-            parsed_url = urlparse(content["baseurl"])
+            parsed_url = urlparse(unquote(content["baseurl"]))
             baseurl = parsed_url._replace(query="").geturl()
             url_res = re.match(r"^https?://(?P<location>.*)$", baseurl)
             ent_res = re.match(r"^/etc/pki/entitlement/(?P<entitlement>.*).pem$", content["sslclientcert"])
