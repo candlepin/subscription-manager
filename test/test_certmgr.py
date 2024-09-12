@@ -30,7 +30,6 @@ from rhsmlib.facts import hwprobe
 
 from rhsm.profile import RPMProfile
 from rhsm.connection import GoneException
-from rhsm.certificate import GMT
 
 from .fixture import SubManFixture, set_up_mock_sp_store
 
@@ -280,47 +279,3 @@ class TestActionClient(ActionClientTestBase):
             if call[0] == "exception" and isinstance(call[1][0], ExceptionalException):
                 return
         self.fail("Did not ExceptionException in the logged exceptions")
-
-
-class TestHealingActionClient(TestActionClient):
-    def test_healing_no_heal(self):
-        self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
-        self.mock_cert_sorter.compliant_until = datetime.now() + timedelta(days=15)
-        actionclient = action_client.HealingActionClient()
-        actionclient.update()
-        self.assertFalse(self.mock_uep.bind.called)
-
-    def test_healing_needs_heal(self):
-        # need a stub product dir with prods with no entitlements,
-        # don't have to mock here since we can actually pass in a product
-        self.mock_cert_sorter.is_valid = mock.Mock(return_value=False)
-        actionclient = action_client.HealingActionClient()
-        actionclient.update()
-        self.assertTrue(self.mock_uep.bind.called)
-
-    @mock.patch.object(entcertlib.EntitlementCertBundleInstaller, "build_cert")
-    def test_healing_needs_heal_tomorrow(self, cert_build_mock):
-        # Valid today, but not valid 24h from now:
-        self.mock_cert_sorter.is_valid = mock.Mock(return_value=True)
-        self.mock_cert_sorter.compliant_until = datetime.now(GMT()) + timedelta(hours=6)
-        cert_build_mock.return_value = (mock.Mock(), self.stub_ent_expires_tomorrow)
-
-        self._stub_certificate_calls([self.stub_ent_expires_tomorrow])
-        actionclient = action_client.HealingActionClient()
-        actionclient.update()
-        # see if we tried to update certs
-        self.assertTrue(self.mock_uep.bind.called)
-
-    # TODO: use Mock(wraps=) instead of hiding all logging
-    @mock.patch("subscription_manager.healinglib.log")
-    def test_healing_trigger_exception(self, mock_log):
-        # Forcing is_valid to throw the type error we used to expect from
-        # cert sorter using the product dir. Just making sure an unexpected
-        # exception is logged and not bubbling up.
-        self.mock_cert_sorter.is_valid = mock.Mock(side_effect=TypeError())
-        actionclient = action_client.HealingActionClient()
-        actionclient.update()
-        for call in mock_log.method_calls:
-            if call[0] == "exception" and isinstance(call[1][0], TypeError):
-                return
-        self.fail("Did not see TypeError in the logged exceptions")

@@ -100,7 +100,7 @@ Other versions or distributions may require some adaptation.
    alias rhsmcertd="sudo \
        PYTHONPATH=/path/to/subscription-manager/src \
        $(which python3) \
-       -m subscription_manager.scripts.rhsmcertd_worker --autoheal"
+       -m subscription_manager.scripts.rhsmcertd_worker"
    ```
 
    Before you run rhsm service manually, ensure you have disabled the system service first:
