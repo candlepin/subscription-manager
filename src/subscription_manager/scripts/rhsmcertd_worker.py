@@ -31,7 +31,7 @@ import subscription_manager.injection as inj
 from subscription_manager import cache
 from subscription_manager import entcertlib
 from subscription_manager import managerlib
-from subscription_manager.action_client import HealingActionClient, ActionClient
+from subscription_manager.action_client import ActionClient
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.i18n_argparse import ArgumentParser, USAGE
 from subscription_manager.identity import Identity, ConsumerIdentity
@@ -330,11 +330,7 @@ def _main(args: "argparse.Namespace"):
     uep.supports_resource(None)
 
     try:
-        if args.autoheal:
-            action_client = HealingActionClient()
-        else:
-            action_client = ActionClient()
-
+        action_client = ActionClient()
         action_client.update()
 
         for update_report in action_client.update_reports:
@@ -366,13 +362,6 @@ def main():
     logutil.init_logger()
 
     parser = ArgumentParser(usage=USAGE)
-    parser.add_argument(
-        "--autoheal",
-        dest="autoheal",
-        action="store_true",
-        default=False,
-        help="perform an autoheal check",
-    )
     parser.add_argument("--force", dest="force", action="store_true", default=False, help=SUPPRESS)
     parser.add_argument(
         "--auto-register",
