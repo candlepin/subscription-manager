@@ -740,6 +740,18 @@ class RestlibValidateResponseTests(unittest.TestCase):
         else:
             self.fail("Should have raised a RateLimitExceededException")
 
+    def test_429_weird_case(self):
+        content = '{"errors": ["TooFast"]}'
+        headers = {"RETry-aFteR": 20}
+        try:
+            self.vr("429", content, headers)
+        except RateLimitExceededException as e:
+            self.assertEqual(20, e.retry_after)
+            self.assertEqual("TooFast, retry access after: 20 seconds.", e.msg)
+            self.assertEqual("429", e.code)
+        else:
+            self.fail("Should have raised a RateLimitExceededException")
+
     def test_500_empty(self):
         try:
             self.vr("500", "")

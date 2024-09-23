@@ -453,7 +453,11 @@ class RateLimitExceededException(RestlibException):
     def __init__(self, code, msg=None, headers=None):
         super(RateLimitExceededException, self).__init__(code, msg)
         self.headers = headers or {}
-        self.retry_after = safe_int(self.headers.get('retry-after'))
+        self.retry_after = None
+        for header, value in self.headers.items():
+            if header.lower() == "retry-after":
+                self.retry_after = safe_int(value)
+                break
         self.msg = msg or "Access rate limit exceeded"
         if self.retry_after is not None:
             self.msg += ", retry access after: %s seconds." % self.retry_after
