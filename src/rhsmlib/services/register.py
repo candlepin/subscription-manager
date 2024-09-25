@@ -239,10 +239,6 @@ class RegisterService:
                 raise exceptions.ValidationError(
                     _("Error: Activation keys can not be used with previously" " registered IDs.")
                 )
-            elif options["environments"]:
-                raise exceptions.ValidationError(
-                    _("Error: Activation keys do not allow environments to be" " specified.")
-                )
         elif options.get("jwt_token") is not None:
             # TODO: add more checks here
             pass

@@ -508,15 +508,6 @@ class RegisterServiceTest(InjectionMockingTest):
         with self.assertRaisesRegex(exceptions.ValidationError, r".*do not require user credentials.*"):
             register.RegisterService(self.mock_cp).validate_options(options)
 
-    def test_does_not_allow_environment_with_activation_keys(self):
-        self.mock_cp.username = None
-        self.mock_cp.password = None
-
-        self.mock_identity.is_valid.return_value = False
-        options = self._build_options(activation_keys=[1], environments="environment")
-        with self.assertRaisesRegex(exceptions.ValidationError, r".*do not allow environments.*"):
-            register.RegisterService(self.mock_cp).validate_options(options)
-
     def test_does_not_allow_environment_with_consumerid(self):
         self.mock_cp.username = None
         self.mock_cp.password = None
