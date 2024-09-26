@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.1
+Version: 1.30.2
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -742,6 +742,28 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Sep 26 2024 Pino Toscano <ptoscano@redhat.com> 1.30.2-1
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- feat: Create consumer cert & key owner by rhsm group (jhnidek@redhat.com)
+- feat: Add rhsm group during installation of subman RPM (jhnidek@redhat.com)
+- feat: dnf plugin - outsource uploading of profile to rhsmcertd.
+  (jhnidek@redhat.com)
+- docs: remove references to removed commands (jajerome@redhat.com)
+- feat: Remove auto-attach command (jhnidek@redhat.com)
+- feat: Eliminate command 'remove' from subscription-manager
+  (jvlcek@redhat.com)
+- feat: Remove attach from bash completion script (jhnidek@redhat.com)
+- feat: Remove references on auto-attach in man page (jhnidek@redhat.com)
+- feat: Removed attach service (jhnidek@redhat.com)
+- feat: Removed D-Bus methods related to attach (jhnidek@redhat.com)
+- feat: Removed attach command and CLI option related to attach
+  (jhnidek@redhat.com)
+- feat: Remove 'addons' subcommand(s) (mhorky@redhat.com)
+- feat: Removed command "redeem" from subscription-manager (jhnidek@redhat.com)
+- Update the correct man page file. (jvlcek@redhat.com)
+- docs: Change reverse proxy to proxy in man page (jvlcek@redhat.com)
+- test(ci): Improve container pre-test script (mhorky@redhat.com)
+
 * Wed Aug 21 2024 Pino Toscano <ptoscano@redhat.com> 1.30.1-1
 - feat: forcefully switch automatic cloud registration to v1
   (ptoscano@redhat.com)
