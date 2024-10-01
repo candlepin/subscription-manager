@@ -168,6 +168,25 @@ def _collect_cloud_info(cloud_list: List[str]) -> dict:
     return result
 
 
+def _auto_register_wait() -> None:
+    """Delay during the automatic registration.
+
+    Wait for an amount of time during automatic registration, looking at the
+    configured splay and autoregistration interval.
+    """
+    cfg = config.get_config_parser()
+    if cfg.get("rhsmcertd", "splay") == "0":
+        log.debug("Trying to obtain the identity immediately, splay is disabled.")
+    else:
+        registration_interval = int(cfg.get("rhsmcertd", "auto_registration_interval"))
+        splay_interval: int = random.randint(60, registration_interval * 60)
+        log.debug(
+            f"Waiting a period of {splay_interval} seconds "
+            f"(about {splay_interval // 60} minutes) before attempting to obtain the identity."
+        )
+        time.sleep(splay_interval)
+
+
 def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
     """Try to perform automatic registration.
 
@@ -268,17 +287,7 @@ def _auto_register_anonymous(uep: "UEPConnection", token: Dict[str, str]) -> Non
     manager.install_temporary_certificates(uuid=token["anonymousConsumerUuid"], jwt=token["token"])
 
     # Step 2: Wait
-    cfg = config.get_config_parser()
-    if cfg.get("rhsmcertd", "splay") == "0":
-        log.debug("Trying to obtain the identity immediately, splay is disabled.")
-    else:
-        registration_interval = int(cfg.get("rhsmcertd", "auto_registration_interval"))
-        splay_interval: int = random.randint(60, registration_interval * 60)
-        log.debug(
-            f"Waiting a period of {splay_interval} seconds "
-            f"(about {splay_interval // 60} minutes) before attempting to obtain the identity."
-        )
-        time.sleep(splay_interval)
+    _auto_register_wait()
 
     # Step 3: Obtain the identity certificate
     log.debug("Obtaining system identity")
