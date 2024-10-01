@@ -94,11 +94,8 @@ _subscription_manager_identity()
 
 _subscription_manager_list()
 {
-  local opts="--afterdate --all --available --consumed --installed
-              --ondate --servicelevel
-              --match-installed --no-overlap
+  local opts="--installed
               --matches
-              --pool-only
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }

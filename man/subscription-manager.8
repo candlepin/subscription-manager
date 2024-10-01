@@ -443,60 +443,18 @@ Removes any previously set usage preference.
 .SS LIST OPTIONS
 The
 .B list
-command lists all of the subscriptions that are compatible with a system. The options allow the list to be filtered by subscriptions that are used by the system or unused subscriptions that are available to the system.
-
-.TP
-.B --afterdate=YYYY-MM-DD
-Shows pools that are active on or after the given date. This is only used with the
-.B --available
-option.
-
-.TP
-.B --all
-Lists all possible subscriptions that have been purchased, even if they don't match the architecture of the system. This is used with the
-.B --available
-option.
-
-.TP
-.B --available
-Lists available subscriptions which are not yet attached to the system.
-
-.TP
-.B --consumed
-Lists all of the subscriptions currently attached to the system.
+command lists all of the installed products on the system. The options allow the list to be filtered.
 
 .TP
 .B --installed
-Lists products which are currently installed on the system which may (or may not) have subscriptions associated with them, as well as products with attached subscriptions which may (or may not) be installed. (default)
-
-.TP
-.B --ondate=YYYY-MM-DD
-Sets the date to use to search for active and available subscriptions. The default (if not explicitly passed) is today's date; using a later date looks for subscriptions which will be active then. This is only used with the
-.B --available
-option.
-
-.TP
-.B --no-overlap
-Shows pools which provide products that are not already covered; only used with
-.B --available
-option.
-
-.TP
-.B --match-installed
-Shows only subscriptions matching products that are currently installed; only used with
-.B --available
-option.
+Lists products which are currently installed on the system. (default)
 
 .TP
 .B --matches=SEARCH
-Limits the output of --installed, --available and --consumed to only subscriptions or products which contain SEARCH in the subscription or product information, varying with the list requested and the server version.
+Limits the output of installed products which contain SEARCH in product information.
 .br
 SEARCH may contain the wildcards ? or * to match a single character or zero or more characters, respectively. The wildcard characters may be escaped with a backslash to represent a literal
 question mark or asterisk. Likewise, to represent a backslash, it must be escaped with another backslash.
-
-.TP
-.B --pool-only
-Limits the output of --available and --consumed such that only the pool IDs are displayed. No labels or errors will be printed if this option is specified.
 
 .SS REFRESH OPTIONS
 The
