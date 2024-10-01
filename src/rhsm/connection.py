@@ -2059,14 +2059,17 @@ class UEPConnection(BaseConnection):
         results = self.conn.request_get(method, description=_("Fetching service levels"))
         return results
 
-    def getEnvironmentList(self, owner_key: str) -> List[dict]:
+    def getEnvironmentList(self, owner_key: str, list_all: bool = False) -> List[dict]:
         """
         List the environments for a particular owner.
 
         Some servers may not support this and will error out. The caller
         can always check with supports_resource("environments").
         """
-        method = "/owners/%s/environments" % self.sanitize(owner_key)
+        if list_all and self.has_capability("typed_environments"):
+            method = "/owners/%s/environments?list_all=%r" % (self.sanitize(owner_key), list_all)
+        else:
+            method = "/owners/%s/environments" % (self.sanitize(owner_key))
         results = self.conn.request_get(method, description=_("Fetching environments"))
         return results
 
