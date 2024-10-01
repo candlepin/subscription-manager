@@ -239,6 +239,8 @@ def _auto_register_standard(uep: "UEPConnection", token: Dict[str, str]) -> None
     """
     log.debug("Registering the system through standard automatic registration.")
 
+    _auto_register_wait()
+
     service = RegisterService(cp=uep)
     service.register(org=None, jwt_token=token)
 
