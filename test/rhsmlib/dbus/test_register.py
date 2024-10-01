@@ -123,6 +123,77 @@ OWNERS_CONTENT_JSON = """[
 ]
 """
 
+ENVIRONMENTS_CONTENT_JSON = """[
+  {
+    "created": "2024-11-07T20:01:47+0000",
+    "updated": "2024-11-07T20:01:47+0000",
+    "id": "fake-id",
+    "name": "test-environment",
+    "description": "test description",
+    "contentPrefix": null,
+    "type": "content-template",
+    "environmentContent": []
+  },
+  {
+    "created": "2024-11-07T20:01:47+0000",
+    "updated": "2024-11-07T20:01:47+0000",
+    "id": "fake-id-2",
+    "name": "test-environment-2",
+    "description": "test description",
+    "contentPrefix": null,
+    "type": "content-template",
+    "environmentContent": []
+  },
+  {
+    "created": "2024-11-07T20:01:47+0000",
+    "updated": "2024-11-07T20:01:47+0000",
+    "id": "fake-id-3",
+    "name": "test-environment-3",
+    "description": "test description",
+    "contentPrefix": null,
+    "type": null,
+    "environmentContent": []
+  },
+  {
+    "created": "2024-11-07T20:01:47+0000",
+    "updated": "2024-11-07T20:01:47+0000",
+    "id": "fake-id-4",
+    "name": "test-environment-4",
+    "description": "test description",
+    "contentPrefix": null,
+    "environmentContent": []
+  }
+]
+"""
+
+ENVIRONMENTS_DBUS_JSON = """[
+  {
+    "id": "fake-id",
+    "name": "test-environment",
+    "description": "test description",
+    "type": "content-template"
+  },
+  {
+    "id": "fake-id-2",
+    "name": "test-environment-2",
+    "description": "test description",
+    "type": "content-template"
+  },
+  {
+    "id": "fake-id-3",
+    "name": "test-environment-3",
+    "description": "test description",
+    "type": ""
+  },
+  {
+    "id": "fake-id-4",
+    "name": "test-environment-4",
+    "description": "test description",
+    "type": ""
+  }
+]
+"""
+
 
 class RegisterDBusObjectTest(SubManDBusFixture):
     socket_dir: Optional[tempfile.TemporaryDirectory] = None
@@ -306,6 +377,21 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
 
         expected = json.loads(OWNERS_CONTENT_JSON)
         result = self.impl.get_organizations({"username": "username", "password": "password"})
+        self.assertEqual(expected, result)
+
+    def test_GetEnvironments(self):
+        self.patches["is_registered"].return_value = False
+        mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
+        mock_cp.username = "username"
+        mock_cp.password = "password"
+        mock_cp.getEnvironmentList = mock.Mock()
+        mock_cp.getEnvironmentList.return_value = json.loads(ENVIRONMENTS_CONTENT_JSON)
+        self.patches["build_uep"].return_value = mock_cp
+
+        expected = json.loads(ENVIRONMENTS_DBUS_JSON)
+        result = self.impl.get_environments(
+            {"username": "username", "password": "password", "org_id": "org_id"}
+        )
         self.assertEqual(expected, result)
 
     def test_RegisterWithActivationKeys(self):
