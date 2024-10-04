@@ -36,7 +36,6 @@ from subscription_manager.branding import get_branding
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import handle_exception, conf
 from subscription_manager.cli_command.environments import MULTI_ENV
-from subscription_manager.cli_command.list import show_autosubscribe_output
 from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_CAPABILITY
 from subscription_manager.i18n import ugettext as _
@@ -356,15 +355,7 @@ class RegisterCommand(UserPassCommand):
 
         self._upload_profile(consumer)
 
-        subscribed = 0
-        if self.options.activation_keys:
-            # update with the latest cert info
-            self.sorter = inj.require(inj.CERT_SORTER)
-            self.sorter.force_cert_check()
-            subscribed = show_autosubscribe_output(self.cp, self.identity)
-
         self._request_validity_check()
-        return subscribed
 
     def _prompt_for_environment(self):
         """
