@@ -26,7 +26,6 @@ from subscription_manager.cli_command.cli import (
     ERR_NOT_REGISTERED_MSG,
 )
 from subscription_manager.cli_command.org import OrgCommand
-from subscription_manager.cli_command.list import ENVIRONMENT_LIST
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.i18n import ungettext
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
@@ -36,7 +35,13 @@ from subscription_manager.injection import require, IDENTITY
 
 
 log = logging.getLogger(__name__)
+
 MULTI_ENV = "multi_environment"
+
+ENVIRONMENT_LIST = [
+    _("Name:"),
+    _("Description:"),
+]
 
 
 class EnvironmentsCommand(OrgCommand):
