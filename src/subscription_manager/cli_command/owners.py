@@ -21,12 +21,16 @@ import rhsm.connection as connection
 
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import handle_exception
-from subscription_manager.cli_command.list import ORG_LIST
 from subscription_manager.cli_command.user_pass import UserPassCommand
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.printing_utils import columnize, echo_columnize_callback
 
 log = logging.getLogger(__name__)
+
+ORG_LIST = [
+    _("Name:"),
+    _("Key:"),
+]
 
 
 class OwnersCommand(UserPassCommand):

@@ -32,31 +32,6 @@ INSTALLED_PRODUCT_STATUS_SCA = [
     _("Arch:"),
 ]
 
-AVAILABLE_SUBS_MATCH_COLUMNS = [
-    _("Subscription Name:"),
-    _("Provides:"),
-    _("SKU:"),
-    _("Contract:"),
-    _("Service Level:"),
-]
-
-REPOS_LIST = [
-    _("Repo ID:"),
-    _("Repo Name:"),
-    _("Repo URL:"),
-    _("Enabled:"),
-]
-
-ENVIRONMENT_LIST = [
-    _("Name:"),
-    _("Description:"),
-]
-
-ORG_LIST = [
-    _("Name:"),
-    _("Key:"),
-]
-
 
 log = logging.getLogger(__name__)
 

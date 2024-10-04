@@ -1,6 +1,5 @@
 import unittest
 
-from subscription_manager.cli_command.list import AVAILABLE_SUBS_MATCH_COLUMNS
 from subscription_manager.cli_command import status
 from subscription_manager.printing_utils import (
     format_name,
@@ -14,6 +13,15 @@ from subscription_manager.printing_utils import (
 )
 
 from unittest.mock import patch, Mock
+
+
+TEST_COLUMNS = [
+    "Subscription Name:",
+    "Provides:",
+    "SKU:",
+    "Contract:",
+    "Service Level:",
+]
 
 
 class TestFormatName(unittest.TestCase):
@@ -66,7 +74,7 @@ class TestHighlightByFilter(unittest.TestCase):
         args = ["Super Test Subscription"]
         kwargs = {
             "filter_string": "Super*",
-            "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+            "match_columns": TEST_COLUMNS,
             "caption": "Subscription Name:",
             "is_atty": True,
         }
@@ -79,7 +87,7 @@ class TestHighlightByFilter(unittest.TestCase):
         args = ["Super Test Subscription"]
         kwargs = {
             "filter_string": "*Subscriptio?",
-            "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+            "match_columns": TEST_COLUMNS,
             "caption": "Subscription Name:",
             "is_atty": True,
         }
@@ -92,7 +100,7 @@ class TestHighlightByFilter(unittest.TestCase):
         args = ["Super Test Subscription"]
         kwargs = {
             "filter_string": "*",
-            "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+            "match_columns": TEST_COLUMNS,
             "caption": "Subscription Name:",
             "is_atty": True,
         }
@@ -103,7 +111,7 @@ class TestHighlightByFilter(unittest.TestCase):
         args = ["Premium"]
         kwargs = {
             "filter_string": "Premium",
-            "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+            "match_columns": TEST_COLUMNS,
             "caption": "Service Level:",
             "is_atty": True,
         }
@@ -114,7 +122,7 @@ class TestHighlightByFilter(unittest.TestCase):
         args = ["Awesome-os-stacked"]
         kwargs = {
             "filter_string": "Awesome*",
-            "match_columns": AVAILABLE_SUBS_MATCH_COLUMNS,
+            "match_columns": TEST_COLUMNS,
             "caption": "Subscription Name:",
             "is_atty": True,
         }
