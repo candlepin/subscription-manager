@@ -17,36 +17,13 @@
 
 import logging
 from rhsmlib.services import products
-
-from subscription_manager.cert_sorter import (
-    FUTURE_SUBSCRIBED,
-    SUBSCRIBED,
-    NOT_SUBSCRIBED,
-    EXPIRED,
-    PARTIALLY_SUBSCRIBED,
-    UNKNOWN,
-)
-
 from subscription_manager.cli_command.cli import CliCommand
 from subscription_manager.i18n import ugettext as _
 
 from subscription_manager.printing_utils import (
     columnize,
     none_wrap_columnize_callback,
-    echo_columnize_callback,
 )
-from subscription_manager.utils import is_simple_content_access
-
-# Translates the cert sorter status constants:
-
-STATUS_MAP = {
-    FUTURE_SUBSCRIBED: _("Future Subscription"),
-    SUBSCRIBED: _("Subscribed"),
-    NOT_SUBSCRIBED: _("Not Subscribed"),
-    EXPIRED: _("Expired"),
-    PARTIALLY_SUBSCRIBED: _("Partially Subscribed"),
-    UNKNOWN: _("Unknown"),
-}
 
 INSTALLED_PRODUCT_STATUS_SCA = [
     _("Product Name:"),
@@ -70,11 +47,6 @@ REPOS_LIST = [
     _("Enabled:"),
 ]
 
-PRODUCT_STATUS = [
-    _("Product Name:"),
-    _("Status:"),
-]
-
 ENVIRONMENT_LIST = [
     _("Name:"),
     _("Description:"),
@@ -87,41 +59,6 @@ ORG_LIST = [
 
 
 log = logging.getLogger(__name__)
-
-
-def show_autosubscribe_output(uep, identity):
-    """
-    Try to show auto-attach output
-    :param uep: object with connection to candlepin
-    :param identity: object with identity
-    :return: return 1, when all installed products are subscribed, otherwise return 0
-    """
-
-    if is_simple_content_access(uep=uep, identity=identity):
-        return 0
-
-    installed_products = products.InstalledProducts(uep).list()
-
-    if not installed_products:
-        # Returning an error code here breaks registering when no products are installed, and the
-        # AttachCommand already performs this check before calling.
-        print(_("No products installed."))
-        return 0
-
-    log.debug("Attempted to auto-attach/heal the system.")
-    print(_("Installed Product Current Status:"))
-    subscribed = 1
-    all_subscribed = True
-    for product in installed_products:
-        if product[4] == SUBSCRIBED:
-            subscribed = 0
-        status = STATUS_MAP[product[4]]
-        if product[4] == NOT_SUBSCRIBED:
-            all_subscribed = False
-        print(columnize(PRODUCT_STATUS, echo_columnize_callback, product[0], status) + "\n")
-    if not all_subscribed:
-        print(_("Unable to find available subscriptions for all your installed products."))
-    return subscribed
 
 
 class ListCommand(CliCommand):
