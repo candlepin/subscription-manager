@@ -288,15 +288,20 @@ def _auto_register_anonymous(uep: "UEPConnection", token: Dict[str, str]) -> Non
             log.debug(report)
             return
         except connection.RateLimitExceededException as exc:
-            if exc.headers.get("Retry-After", None) is None:
+            if exc.retry_after is None:
+                log.warning(
+                    "Server did not include Retry-After header in rate-limited response. "
+                    f"headers={exc.headers}"
+                )
                 raise
-            delay = int(exc.headers["Retry-After"])
+            delay = exc.retry_after
             log.debug(
                 f"Got response with status code {exc.code} and Retry-After header, "
                 f"will try again in {delay} seconds."
             )
             time.sleep(delay)
-        except Exception:
+        except Exception as exc:
+            log.warning(f"Anonymous registration failed, server returned {exc}.")
             raise
 
     # In theory, this should not happen, it means that something has gone wrong server-side.
