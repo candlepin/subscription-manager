@@ -25,7 +25,6 @@ from rhsmlib.dbus.server import DomainSocketServer
 from unittest import mock
 from test.rhsmlib.base import SubManDBusFixture
 
-
 CONSUMER_CONTENT_JSON_SCA = """{"hypervisorId": null,
         "serviceLevel": "",
         "autoheal": true,
@@ -120,6 +119,28 @@ OWNERS_CONTENT_JSON = """[
         "updated": "2020-02-17T08:21:47+0000",
         "upstreamConsumer": null
     }
+]
+"""
+
+ENVIRONMENTS_CONTENT_JSON = """[
+  {
+    "id": "fake-id",
+    "name": "test-environment",
+    "description": "test description",
+    "type": "content-template"
+  },
+  {
+    "id": "fake-id-2",
+    "name": "test-environment-2",
+    "description": "test description",
+    "type": "content-template"
+  },
+  {
+    "id": "fake-id-3",
+    "name": "test-environment-3",
+    "description": "test description",
+    "type": "content-template"
+  }
 ]
 """
 
@@ -306,6 +327,21 @@ class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
 
         expected = json.loads(OWNERS_CONTENT_JSON)
         result = self.impl.get_organizations({"username": "username", "password": "password"})
+        self.assertEqual(expected, result)
+
+    def test_GetEnvironments(self):
+        self.patches["is_registered"].return_value = False
+        mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
+        mock_cp.username = "username"
+        mock_cp.password = "password"
+        mock_cp.getEnvironmentList = mock.Mock()
+        mock_cp.getEnvironmentList.return_value = json.loads(ENVIRONMENTS_CONTENT_JSON)
+        self.patches["build_uep"].return_value = mock_cp
+
+        expected = json.loads(ENVIRONMENTS_CONTENT_JSON)
+        result = self.impl.get_environments(
+            {"username": "username", "password": "password", "org_id": "org_id"}
+        )
         self.assertEqual(expected, result)
 
     def test_RegisterWithActivationKeys(self):
