@@ -127,7 +127,13 @@ class ConsumerIdentity:
 
         # Set proper access permission to the key
         if os.getuid() == 0 and rhsm_group is not None:
-            os.chown(self.keypath(), 0, rhsm_group.gr_gid)
+            # Changing of owner can fail due to e.g. SELinux. When this
+            # operation fails, then we should only write error message,
+            # and we should create consumer cert.pem too
+            try:
+                os.chown(self.keypath(), 0, rhsm_group.gr_gid)
+            except OSError as err:
+                log.error(f"Unable to chown permissions of {self.keypath()}: {err}")
         os.chmod(self.keypath(), managerlib.ID_CERT_PERMS)
 
         with open(self.certpath(), "w") as cert_file:
@@ -135,7 +141,10 @@ class ConsumerIdentity:
 
         # Set proper permission to consumer certificate
         if os.getuid() == 0 and rhsm_group is not None:
-            os.chown(self.certpath(), 0, rhsm_group.gr_gid)
+            try:
+                os.chown(self.certpath(), 0, rhsm_group.gr_gid)
+            except OSError as err:
+                log.error(f"Unable to chown permissions of {self.certpath()}: {err}")
         os.chmod(self.certpath(), managerlib.ID_CERT_PERMS)
 
     def delete(self) -> None:
