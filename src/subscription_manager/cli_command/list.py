@@ -217,29 +217,41 @@ class ListCommand(CliCommand):
         self.parser.add_argument(
             "--available",
             action="store_true",
-            help=_("show those subscriptions which are available"),
+            help=_(
+                "deprecated, this option will be removed from the future major releases; "
+                "show those subscriptions which are available"
+            ),
         )
         self.parser.add_argument(
             "--all",
             action="store_true",
-            help=_("used with --available to ensure all subscriptions are returned"),
+            help=_(
+                "deprecated, this option will be removed from the future major releases; "
+                "used with --available to ensure all subscriptions are returned"
+            ),
         )
         self.parser.add_argument(
             "--ondate",
             dest="on_date",
             help=_(
-                "date to search on, defaults to today's date, only used with --available (example: {example})"
+                "deprecated, this option will be removed from the future major releases; "
+                "date to search on, defaults to today's date, "
+                "only used with --available (example: {example})"
             ).format(example=strftime("%Y-%m-%d", localtime())),
         )
         self.parser.add_argument(
             "--consumed",
             action="store_true",
-            help=_("show the subscriptions being consumed by this system"),
+            help=_(
+                "deprecated, this option will be removed from the future major releases; "
+                "show the subscriptions being consumed by this system"
+            ),
         )
         self.parser.add_argument(
             "--servicelevel",
             dest="service_level",
             help=_(
+                "deprecated, this option will be removed from the future major releases; "
                 "shows only subscriptions matching the specified service level; "
                 "only used with --available and --consumed"
             ),
@@ -248,6 +260,7 @@ class ListCommand(CliCommand):
             "--no-overlap",
             action="store_true",
             help=_(
+                "deprecated, this option will be removed from the future major releases; "
                 "shows pools which provide products that are not already covered; "
                 "only used with --available"
             ),
@@ -256,6 +269,7 @@ class ListCommand(CliCommand):
             "--match-installed",
             action="store_true",
             help=_(
+                "deprecated, this option will be removed from the future major releases; "
                 "shows only subscriptions matching products that are currently installed; "
                 "only used with --available"
             ),
@@ -274,6 +288,7 @@ class ListCommand(CliCommand):
             dest="pid_only",
             action="store_true",
             help=_(
+                "deprecated, this option will be removed from the future major releases; "
                 "lists only the pool IDs for applicable available or consumed subscriptions; "
                 "only used with --available and --consumed"
             ),
@@ -282,6 +297,7 @@ class ListCommand(CliCommand):
             "--afterdate",
             dest="after_date",
             help=_(
+                "deprecated, this option will be removed from the future major releases; "
                 "show pools that are active on or after the given date; "
                 "only used with --available (example: {example})"
             ).format(example=strftime("%Y-%m-%d", localtime())),
