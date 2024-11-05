@@ -11,7 +11,7 @@ _rhsmcertd()
 	first="${COMP_WORDS[1]}"
 	cur="${COMP_WORDS[COMP_CWORD]}"
 	prev="${COMP_WORDS[COMP_CWORD-1]}"
-	opts="-h --help -c --cert-check-interval --cert-interval -d --debug -i -n --now -s --no-splay -a --auto-registration -r --auto-registration-interval"
+	opts="-h --help -c --cert-check-interval -d --debug -n --now -s --no-splay -a --auto-registration -r --auto-registration-interval"
 
 	case "${cur}" in
 		-*)
