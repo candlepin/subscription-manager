@@ -1,0 +1,19 @@
+upstream_package_name: subscription-manager
+downstream_package_name: subscription-manager
+specfile_path: subscription-manager.spec
+upstream_tag_template: "subscription-manager-{version}-1"
+
+jobs:
+  - job: copr_build
+    trigger: pull_request
+    targets:
+      - centos-stream-9
+
+# TODO: Use this, when rhel-9 project exists on COPR
+#  - job: copr_build
+#    trigger: commit
+#    branch: subscription-manager-1.29
+#    owner: "@yggdrasil"
+#    project: rhel-9
+#    targets:
+#      - centos-stream-9
