@@ -32,7 +32,6 @@ from subscription_manager.cache import (
     AvailableEntitlementsCache,
     SyspurposeValidFieldsCache,
     CurrentOwnerCache,
-    ContentAccessModeCache,
     SyspurposeComplianceStatusCache,
 )
 from subscription_manager.facts import Facts
@@ -778,14 +777,6 @@ class StubReleaseStatusCache(ReleaseStatusCache):
 
 
 class StubAvailableEntitlementsCache(AvailableEntitlementsCache):
-    def write_cache(self, debug=False):
-        pass
-
-    def delete_cache(self):
-        self.server_status = None
-
-
-class StubContentAccessModeCache(ContentAccessModeCache):
     def write_cache(self, debug=False):
         pass
 

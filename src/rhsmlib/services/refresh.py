@@ -54,12 +54,6 @@ class Refresh:
         :return: None
         """
 
-        # First remove the content access mode cache to be sure we display
-        # SCA or regular mode correctly
-        content_access_mode = inj.require(inj.CONTENT_ACCESS_MODE_CACHE)
-        if content_access_mode.exists():
-            content_access_mode.delete_cache()
-
         # Remove the release status cache, in case it was changed
         # on the server; it will be fetched when needed again
         inj.require(inj.RELEASE_STATUS_CACHE).delete_cache()

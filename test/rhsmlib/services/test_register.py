@@ -16,7 +16,7 @@ import json
 
 import subscription_manager.injection as inj
 
-from subscription_manager.cache import InstalledProductsManager, ContentAccessModeCache
+from subscription_manager.cache import InstalledProductsManager
 from subscription_manager.cp_provider import CPProvider
 from subscription_manager.facts import Facts
 from subscription_manager.identity import Identity
@@ -180,12 +180,6 @@ class RegisterServiceTest(InjectionMockingTest):
         # Add a mock cp_provider
         self.mock_cp_provider = mock.Mock(spec=CPProvider, name="CPProvider")
 
-        # Add a mock for content access mode cache
-        self.mock_content_access_mode_cache = mock.Mock(
-            spec=ContentAccessModeCache, name="ContentAccessModeCache"
-        )
-        self.mock_content_access_mode_cache.read_data = mock.Mock(return_value="entitlement")
-
         # For the tests in which it's used, the consumer_auth cp and basic_auth cp can be the same
         self.mock_cp_provider.get_consumer_auth_cp.return_value = self.mock_cp
         self.mock_cp_provider.get_basic_auth_cp.return_value = self.mock_cp
@@ -215,8 +209,6 @@ class RegisterServiceTest(InjectionMockingTest):
             return self.mock_facts
         elif args[0] == inj.CP_PROVIDER:
             return self.mock_cp_provider
-        elif args[0] == inj.CONTENT_ACCESS_MODE_CACHE:
-            return self.mock_content_access_mode_cache
         else:
             return None
 
