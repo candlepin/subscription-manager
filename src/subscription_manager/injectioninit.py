@@ -30,7 +30,6 @@ from subscription_manager.cache import (
     AvailableEntitlementsCache,
     CurrentOwnerCache,
     SyspurposeValidFieldsCache,
-    ContentAccessModeCache,
 )
 
 from subscription_manager.cert_sorter import CertSorter
@@ -65,7 +64,6 @@ def init_dep_injection():
     #        but runs a new version of injectioninit...)
     inj.provide(inj.ENTITLEMENT_STATUS_CACHE, EntitlementStatusCache, singleton=True)
     inj.provide(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, SyspurposeComplianceStatusCache, singleton=True)
-    inj.provide(inj.CONTENT_ACCESS_MODE_CACHE, ContentAccessModeCache, singleton=True)
     inj.provide(inj.CURRENT_OWNER_CACHE, CurrentOwnerCache, singleton=True)
     inj.provide(inj.SYSPURPOSE_VALID_FIELDS_CACHE, SyspurposeValidFieldsCache)
     inj.provide(inj.SUPPORTED_RESOURCES_CACHE, SupportedResourcesCache, singleton=True)

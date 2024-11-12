@@ -202,8 +202,7 @@ def is_simple_content_access(
     # When identity is not known, then system is not registered
     if identity.uuid is None:
         return False
-    content_access_mode = inj.require(inj.CONTENT_ACCESS_MODE_CACHE).read_data(uep=uep)
-    return content_access_mode == "org_environment"
+    return True
 
 
 def get_current_owner(uep: Optional["UEPConnection"] = None, identity: "Identity" = None) -> dict:

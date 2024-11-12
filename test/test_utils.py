@@ -798,17 +798,12 @@ class TestIsOwnerUsingSimpleContentAccess(fixture.SubManFixture):
         super(TestIsOwnerUsingSimpleContentAccess, self).setUp()
         self.cp_provider = Mock()
         self.mock_uep = Mock()
-        self.mock_uep.getOwner = Mock(return_value=self.MOCK_ENTITLEMENT_OWNER)
+        self.mock_uep.getOwner = Mock(return_value=self.MOCK_ORG_ENVIRONMENT_OWNER)
         self.cp_provider.get_consumer_auth_cp = Mock(return_value=self.mock_uep)
         self.identity = Mock()
         self.identity.uuid = Mock(return_value="7f85da06-5c35-44ba-931d-f11f6e581f89")
 
-    def test_get_entitlement_owner(self):
-        ret = is_simple_content_access(uep=self.mock_uep, identity=self.identity)
-        self.assertFalse(ret)
-
     def test_get_org_environment_owner(self):
-        self.mock_uep.getOwner = Mock(return_value=self.MOCK_ORG_ENVIRONMENT_OWNER)
         ret = is_simple_content_access(uep=self.mock_uep, identity=self.identity)
         self.assertTrue(ret)
 

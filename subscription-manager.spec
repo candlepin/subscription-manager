@@ -740,6 +740,7 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 # Remove old cache files
 # The -f flag ensures that exit code 0 will be returned even if the file does not exist.
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
+rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
 * Thu Sep 26 2024 Pino Toscano <ptoscano@redhat.com> 1.30.2-1

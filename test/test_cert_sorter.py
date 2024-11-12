@@ -63,8 +63,9 @@ def stub_prod_cert(pid):
 
 
 class CertSorterTests(SubManFixture):
+    @patch("subscription_manager.cert_sorter.utils.is_simple_content_access")
     @patch("subscription_manager.cache.InstalledProductsManager.update_check")
-    def setUp(self, mock_update):
+    def setUp(self, mock_update, mock_is_simple_content_access):
         SubManFixture.setUp(self)
         # Setup mock product and entitlement certs:
         self.prod_dir = StubProductDirectory(pids=[INST_PID_1, INST_PID_2, INST_PID_3, INST_PID_4])
@@ -79,6 +80,7 @@ class CertSorterTests(SubManFixture):
                 ),
             ]
         )
+        mock_is_simple_content_access.return_value = False
 
         self.mock_uep = StubUEP()
 
@@ -170,11 +172,13 @@ class CertSorterTests(SubManFixture):
         # server reported it here:
         self.assertFalse(INST_PID_3 in sorter.unentitled_products)
 
+    @patch("subscription_manager.cert_sorter.utils.is_simple_content_access")
     @patch("subscription_manager.cache.InstalledProductsManager.update_check")
-    def test_missing_installed_product(self, mock_update):
+    def test_missing_installed_product(self, mock_update, mock_is_simple_content_access):
         # Add a new installed product server doesn't know about:
         prod_dir = StubProductDirectory(pids=[INST_PID_1, INST_PID_2, INST_PID_3, "product4"])
         inj.provide(inj.PROD_DIR, prod_dir)
+        mock_is_simple_content_access.return_value = False
         sorter = CertSorter()
         self.assertTrue("product4" in sorter.unentitled_products)
 
