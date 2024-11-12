@@ -47,7 +47,6 @@ from subscription_manager.cache import (
     SupportedResourcesCache,
     AvailableEntitlementsCache,
     CurrentOwnerCache,
-    ContentAccessModeCache,
     SyspurposeComplianceStatusCache,
 )
 
@@ -1325,28 +1324,6 @@ class TestAvailableEntitlementsCache(SubManFixture):
         uep.conn.smoothed_rt = 20.0
         timeout = self.cache.timeout()
         self.assertEqual(timeout, self.cache.UBOUND)
-
-
-class TestContentAccessModeCache(SubManFixture):
-    MOCK_CACHE_FILE_CONTENT = '{"7f85da06-5c35-44ba-931d-f11f6e581f89": "entitlement"}'
-
-    def setUp(self):
-        super(TestContentAccessModeCache, self).setUp()
-        self.cache = ContentAccessModeCache()
-
-    def test_reading_nonexisting_cache(self):
-        data = self.cache.read_cache_only()
-        self.assertIsNone(data)
-
-    def test_reading_existing_cache(self):
-        temp_cache_dir = tempfile.mkdtemp()
-        self.addCleanup(shutil.rmtree, temp_cache_dir)
-        self.cache.CACHE_FILE = os.path.join(temp_cache_dir, "content_access_mode.json")
-        with open(self.cache.CACHE_FILE, "w") as cache_file:
-            cache_file.write(self.MOCK_CACHE_FILE_CONTENT)
-        data = self.cache.read_cache_only()
-        self.assertTrue("7f85da06-5c35-44ba-931d-f11f6e581f89" in data)
-        self.assertEqual(data["7f85da06-5c35-44ba-931d-f11f6e581f89"], "entitlement")
 
 
 class TestSyspurposeComplianceStatusCache(SubManFixture):
