@@ -6,8 +6,8 @@
 # like this:
 #
 # $ export TEST_OS=rhel-8-4
-# $ ./integration-tests/run prepare
-# $ ./integration-tests/check-subscriptions -v -j1 -t
+# $ ./cockpit-tests/run prepare
+# $ ./cockpit-tests/check-subscriptions -v -j1 -t
 #
 # You need a couple of things installed for that.  At least Python 3,
 # a Chromium browser, and libvirtd.  See
@@ -20,7 +20,7 @@ ifeq ($(TEST_OS),)
 TEST_OS = rhel-8-4
 endif
 export TEST_OS
-SUB_MAN_COCKPIT=$(CURDIR)/integration-tests/submancockpit
+SUB_MAN_COCKPIT=$(CURDIR)/cockpit-tests/submancockpit
 VM_IMAGE=$(SUB_MAN_COCKPIT)/test/images/$(TEST_OS).qcow2
 SUBMAN_TAR=$(CURDIR)/dist/subscription-manager.tar.gz
 SMBEXT_TAR=$(CURDIR)/dist/subscription-manager-build-extra.tar.gz
@@ -45,7 +45,7 @@ $(SUBMAN_TAR):
 $(SMBEXT_TAR):
 	tar czf $(SMBEXT_TAR) build_ext
 
-$(VM_IMAGE): $(SUB_MAN_COCKPIT) $(SUBMAN_TAR) $(SMBEXT_TAR) integration-tests/vm.install
+$(VM_IMAGE): $(SUB_MAN_COCKPIT) $(SUBMAN_TAR) $(SMBEXT_TAR) cockpit-tests/vm.install
 	rm -f $(VM_IMAGE)
 	# setup the test image from subscription-manager-cockpit without
 	# a custom subscription-manager, which will be installed manually
@@ -54,7 +54,7 @@ $(VM_IMAGE): $(SUB_MAN_COCKPIT) $(SUBMAN_TAR) $(SMBEXT_TAR) integration-tests/vm
 	cd $(SUB_MAN_COCKPIT) && bots/image-customize -v $(TEST_OS) \
           -u $(SUBMAN_TAR):/var/tmp/ \
           -u $(SMBEXT_TAR):/var/tmp/ \
-          -s ../../integration-tests/vm.install
+          -s ../../cockpit-tests/vm.install
 
 $(SUB_MAN_COCKPIT):
 	git clone --quiet https://github.com/candlepin/subscription-manager-cockpit.git $(SUB_MAN_COCKPIT)
