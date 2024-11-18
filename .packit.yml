@@ -18,3 +18,29 @@ jobs:
     targets:
       - centos-stream-10
       - fedora-all
+
+#  - job: tests
+#    trigger: pull_request
+#    identifier: "unit/centos-stream"
+#    targets:
+#      - centos-stream-10
+#    labels:
+#      - unit
+#    tf_extra_params:
+#      environments:
+#        - artifacts:
+#            - type: repository-file
+#              id: https://copr.fedorainfracloud.org/coprs/g/yggdrasil/latest/repo/centos-stream-$releasever/group_yggdrasil-latest-centos-stream-$releasever.repo
+
+  - job: tests
+    trigger: pull_request
+    identifier: "unit/fedora"
+    targets:
+      - fedora-all
+    labels:
+      - unit
+    tf_extra_params:
+      environments:
+        - artifacts:
+            - type: repository-file
+              id: https://copr.fedorainfracloud.org/coprs/g/yggdrasil/latest/repo/fedora-$releasever/group_yggdrasil-latest-fedora-$releasever.repo
