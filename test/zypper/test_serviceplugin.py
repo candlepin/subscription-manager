@@ -40,9 +40,6 @@ class TestServicePlugin(TestCase):
             "--serverurl={RHSM_URL}".format(sub_man=self.SUB_MAN, **os.environ),
             shell=True,
         )
-        subprocess.call(
-            "{sub_man} attach --pool={RHSM_POOL}".format(sub_man=self.SUB_MAN, **os.environ), shell=True
-        )
         self.assertTrue(self.has_subman_repos())
 
     def test_can_download_rpm(self):
@@ -50,9 +47,6 @@ class TestServicePlugin(TestCase):
             "{sub_man} register --username={RHSM_USER} --password={RHSM_PASSWORD} "
             "--serverurl={RHSM_URL}".format(sub_man=self.SUB_MAN, **os.environ),
             shell=True,
-        )
-        subprocess.check_call(
-            "{sub_man} attach --pool={RHSM_POOL}".format(sub_man=self.SUB_MAN, **os.environ), shell=True
         )
         subprocess.check_call(
             "{sub_man} repos --enable={RHSM_TEST_REPO}".format(sub_man=self.SUB_MAN, **os.environ), shell=True
