@@ -24,7 +24,6 @@ How to run functional tests?
   cd ./ansible_playbooks
   ansible-playbook ./configure_package_manager.yml --extra-vars="candlepin_hostname=<IP_OF_TESTING_CANDLEPIN>"
   ansible-playbook ./register_system.yml
-  ansible-playbook ./attach_subscriptions.yml
   ansible-playbook ./test_install_remove_packages.yml
   ansible-playbook ./test_not_remove_prod_cert_for_disabled_repo.yml
   ```
