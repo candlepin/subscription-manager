@@ -580,19 +580,19 @@ option
 .B --remove=NAME
 Removes a named override from the repositories specified with the
 .B --repo
-option
+option. The override will not be removed if its source is one of the environments the system belongs in. It can only be removed by either: removing the override from the environment it originates from or removing the system from the environment the override originates from.
 
 .TP
 .B --remove-all
-Removes all overrides from repositories specified with the
+Removes all overrides from repositories
 .B --repo
-option
+option. Overrides inherited from environments the system belongs in will not be removed. They can only be removed by either: removing them from the environment they originate from or removing the system from those environments.
 
 .TP
 .B --list
 Lists all overrides from repositories specified with the
 .B --repo
-option
+option. Source of the listed overrides is a union of the override specified at the system itself and all the overrides set in the environment(s) the system belongs in.
 
 
 .SS IDENTITY OPTIONS
