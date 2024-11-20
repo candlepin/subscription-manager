@@ -1903,35 +1903,6 @@ class UEPConnection(BaseConnection):
             method, headers=headers, description=_("Fetching content for a certificate")
         )
 
-    def bindByEntitlementPool(self, consumerId: str, poolId: str, quantity: int = None) -> List[dict]:
-        """
-        Subscribe consumer to a subscription by pool ID
-        :param consumerId: consumer UUID
-        :param poolId: pool ID
-        :param quantity: the desired quantity of subscription to be consumed
-        """
-        method = "/consumers/%s/entitlements?pool=%s" % (self.sanitize(consumerId), self.sanitize(poolId))
-        if quantity:
-            method = "%s&quantity=%s" % (method, quantity)
-        return self.conn.request_post(method, description=_("Updating subscriptions"))
-
-    def bind(self, consumerId: str, entitle_date: datetime.datetime = None) -> List[dict]:
-        """
-        Same as bindByProduct, but assume the server has a list of the
-        system's products. This is useful for autosubscribe. Note that this is
-        done on a best-effort basis, and there are cases when the server will
-        not be able to fulfill the client's product certs with entitlements
-        :param consumerId: consumer UUID
-        :param entitle_date: The date, when subscription will be valid
-        """
-        method = "/consumers/%s/entitlements" % (self.sanitize(consumerId))
-
-        # add the optional date to the url
-        if entitle_date:
-            method = "%s?entitle_date=%s" % (method, self.sanitize(entitle_date.isoformat(), plus=True))
-
-        return self.conn.request_post(method, description=_("Updating subscriptions"))
-
     def unbindBySerial(self, consumerId: str, serial: str) -> bool:
         """
         Try to remove consumed pool by serial number

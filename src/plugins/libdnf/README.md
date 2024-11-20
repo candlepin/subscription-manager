@@ -115,12 +115,6 @@ To use testing repository you have to do several steps:
   subscription-manager register --username admin --password admin --org admin
   ```
 
-* Attach some subscription:
-
-  ```
-  subscription-manager attach --pool <pool_id>
-  ```
-
 * Choose some repository from output of `subscription-manager repos --list` and
   enable the repository:
   

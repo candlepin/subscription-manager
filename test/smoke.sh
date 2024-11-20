@@ -226,7 +226,6 @@ run_sm "0" list --available
 run_sm "0" service-level
 run_sm "0" service-level --list
 run_sm "0" repos
-run_sm "0" attach
 
 # Note: with current test data, the awesome-os repos will never be enabled
 run_yum "0" repolist

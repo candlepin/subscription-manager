@@ -108,9 +108,7 @@ class EntCertUpdateAction:
         log.info("certs updated:\n%s", self.report)
         self.syslog_results()
 
-        # We call EntCertlibActionInvoker.update() solo from
-        # the 'attach' cli instead of an ActionClient. So
-        # we need to refresh the ent_dir object before calling
+        # We need to refresh the ent_dir object before calling
         # content updating actions.
         self.ent_dir.refresh()
 
