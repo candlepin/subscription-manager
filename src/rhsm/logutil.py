@@ -10,12 +10,14 @@
 
 from typing import Optional, Tuple, Union, List
 
+import datetime
 import logging
 import logging.handlers
 import logging.config
 import os
 import sys
 import rhsm.config
+
 
 LOGFILE_DIR = "/var/log/rhsm/"
 LOGFILE_PATH = os.path.join(LOGFILE_DIR, "rhsm.log")
@@ -145,6 +147,16 @@ class PyWarningsLogger(logging.getLoggerClass()):
         self.addFilter(PyWarningsLoggingFilter(name="py.warnings"))
 
 
+class RhsmISO8601Formatter(logging.Formatter):
+    """Ensure date & time to be in ISO8601 format and containing info about milliseconds and time zone"""
+
+    def __init__(self):
+        super().__init__(fmt=LOG_FORMAT)
+
+    def formatTime(self, record, datefmt=None):
+        return datetime.datetime.fromtimestamp(record.created).astimezone().isoformat(timespec="milliseconds")
+
+
 def _get_default_rhsm_log_handler() -> (
     Tuple[Union[logging.handlers.RotatingFileHandler, logging.StreamHandler], Optional[str]]
 ):
@@ -152,7 +164,7 @@ def _get_default_rhsm_log_handler() -> (
     error: Optional[Exception] = None
     if not _rhsm_log_handler:
         _rhsm_log_handler, error = RHSMLogHandler(LOGFILE_PATH, USER_LOGFILE_PATH)
-        _rhsm_log_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+        _rhsm_log_handler.setFormatter(RhsmISO8601Formatter())
     return _rhsm_log_handler, error
 
 
@@ -160,7 +172,7 @@ def _get_default_subman_debug_handler() -> Union[None, "SubmanDebugHandler"]:
     global _subman_debug_handler
     if not _subman_debug_handler:
         _subman_debug_handler = SubmanDebugHandler()
-        _subman_debug_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+        _subman_debug_handler.setFormatter(RhsmISO8601Formatter())
     return _subman_debug_handler
 
 
