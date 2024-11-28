@@ -281,7 +281,6 @@ run_rhsmcertd "0"
 run_rhsmcertd "0" -n
 
 run_rhsmcertd_worker "0"
-run_rhsmcertd_worker "0" --autoheal
 
 # too slow
 # run_rhsm_debug "0" system
