@@ -262,7 +262,7 @@ class AbstractSyspurposeCommand(CliCommand):
                     print(
                         _(
                             "Warning: This organization does not have any subscriptions that provide a "
-                            'system purpose "{attr}".  This setting will not influence auto-attaching '
+                            'system purpose "{attr}".  This setting will not influence attaching '
                             "subscriptions."
                         ).format(attr=self.attr)
                     )

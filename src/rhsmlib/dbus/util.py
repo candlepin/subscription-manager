@@ -77,8 +77,6 @@ def dbus_handle_exceptions(func, *args, **kwargs):
         pattern = "^HTTP error \x28.*\x29: "
         err_msg = re.sub(pattern, "", str(err))
         # Modify severity of some exception here
-        if "Ignoring request to auto-attach. It is disabled for org" in err_msg:
-            severity = "warning"
         if hasattr(err, "severity"):
             severity = err.severity
         # Raise exception string as JSON string. Thus it can be parsed and printed properly.
