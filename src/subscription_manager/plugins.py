@@ -379,7 +379,6 @@ class SubscriptionConduit(BaseConduit):
             consumer_uuid: the UUID of the consumer being subscribed
             pool_id: the id of the pool the subscription will come from (None if 'auto' is False)
             quantity: the quantity to consume from the pool (None if 'auto' is False).
-            auto: is this an auto-attach/healing event.
         """
         super(SubscriptionConduit, self).__init__(clazz)
         self.consumer_uuid: str = consumer_uuid
@@ -400,33 +399,6 @@ class PostSubscriptionConduit(BaseConduit):
         super(PostSubscriptionConduit, self).__init__(clazz)
         self.consumer_uuid: str = consumer_uuid
         self.entitlement_data: Dict = entitlement_data
-
-
-class AutoAttachConduit(BaseConduit):
-    slots = ["pre_auto_attach"]
-
-    def __init__(self, clazz: Type[SubManPlugin], consumer_uuid: str):
-        """
-        init for AutoAttachConduit
-
-        Args:
-            consumer_uuid: the UUID of the consumer being auto-subscribed
-        """
-        super(AutoAttachConduit, self).__init__(clazz)
-        self.consumer_uuid: str = consumer_uuid
-
-
-class PostAutoAttachConduit(PostSubscriptionConduit):
-    slots = ["post_auto_attach"]
-
-    def __init__(self, clazz: Type[SubManPlugin], consumer_uuid: str, entitlement_data: Dict):
-        """init for PostAutoAttachConduit
-
-        Args:
-            consumer_uuid: the UUID of the consumer subscribed
-            entitlement_data: the data returned by the server
-        """
-        super(PostAutoAttachConduit, self).__init__(clazz, consumer_uuid, entitlement_data)
 
 
 class PluginConfig:
@@ -917,8 +889,6 @@ class PluginManager(BasePluginManager):
             SubscriptionConduit,
             UpdateContentConduit,
             PostSubscriptionConduit,
-            AutoAttachConduit,
-            PostAutoAttachConduit,
         ]
 
     def _get_modules(self):

@@ -318,8 +318,6 @@ run_sm "0" repos --list
 # fully entitled, hence the '1'
 run_sm "1" register --activationkey "${ACTIVATION_KEY}" --org "${ORG}" --force
 run_sm "0" unregister
-run_sm "64" register --activationkey "${ACTIVATION_KEY}" --org "${ORG}" --force --auto-attach
-run_sm "1" unregister
 
 run_sm "0" clean
 
