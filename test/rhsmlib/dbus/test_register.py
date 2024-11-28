@@ -28,7 +28,6 @@ from test.rhsmlib.base import SubManDBusFixture
 
 CONSUMER_CONTENT_JSON_SCA = """{"hypervisorId": null,
         "serviceLevel": "",
-        "autoheal": true,
         "idCert": {
           "key": "FAKE_KEY",
           "cert": "FAKE_CERT",

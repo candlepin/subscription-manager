@@ -72,7 +72,6 @@ NO_CONTENT_JSON = [
         "capabilities": [],
         "hypervisorId": None,
         "contentTags": [],
-        "autoheal": True,
         "contentAccessMode": None,
         "recipientOwnerKey": None,
         "annotations": None,

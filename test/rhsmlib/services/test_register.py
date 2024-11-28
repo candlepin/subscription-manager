@@ -32,7 +32,6 @@ from rhsmlib.services import register, exceptions
 
 CONSUMER_CONTENT_JSON = """{"hypervisorId": null,
         "serviceLevel": "",
-        "autoheal": true,
         "idCert": {
           "key": "FAKE_KEY",
           "cert": "FAKE_CERT",
