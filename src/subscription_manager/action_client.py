@@ -47,8 +47,7 @@ class ActionClient(base_action_client.BaseActionClient):
         self.syspurposelib = SyspurposeSyncActionInvoker()
 
         # WARNING: order is important here, we need to update a number
-        # of things before attempting to autoheal, and we need to autoheal
-        # before attempting to fetch our certificates:
+        # of things before attempting to fetch our certificates:
         lib_set: List[BaseActionInvoker] = [
             self.entcertlib,
             self.idcertlib,
