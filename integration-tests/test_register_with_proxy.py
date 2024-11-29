@@ -19,6 +19,9 @@ It is important to run tests as root. Since RegisterServer is a system dbus serv
 And it provides a unix socket connection.
 """
 
+# TODO: is is necessary to enable log level DEBUG in /etc/rhsm/rhsm.conf.
+#       log messages in /var/log/rhsm/rhsm.log file are a part of verification
+#       process to prove a proxy was connected
 
 def test_register_with_noauth_proxy(external_candlepin, subman, test_config):
     """
@@ -49,7 +52,8 @@ def test_register_with_noauth_proxy(external_candlepin, subman, test_config):
         assert f"Using proxy:" in logfile.read()
 
 
-@pytest.mark.skip(msg="will be subject of troubleshooting in future")
+
+        
 def test_register_with_auth_proxy(external_candlepin, subman, test_config):
     """
     https://www.candlepinproject.org/docs/subscription-manager/dbus_objects.html#methods-6

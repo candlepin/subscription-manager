@@ -1,8 +1,10 @@
 from dasbus.identifier import DBusObjectIdentifier, DBusServiceIdentifier
 from dasbus.connection import SystemMessageBus, MessageBus, SessionMessageBus
 
+
 HOST_DETAILS: str = "/var/lib/insights/host-details.json"
 MACHINE_ID_FILE: str = "/etc/insights-client/machine-id"
+RHSM_CONFIG_FILE_PATH: str = "/etc/rhsm/rhsm.conf"
 
 RHSM_NAMESPACE = (
     "com", "redhat", "RHSM1"
@@ -33,11 +35,6 @@ RHSM_UNREGISTER = DBusObjectIdentifier(
     basename="Unregister"
 )
 
-RHSM_ATTACH = DBusObjectIdentifier(
-    namespace=RHSM_NAMESPACE,
-    basename="Attach"
-)
-
 RHSM_ENTITLEMENT = DBusObjectIdentifier(
     namespace=RHSM_NAMESPACE,
     basename="Entitlement"
@@ -46,4 +43,9 @@ RHSM_ENTITLEMENT = DBusObjectIdentifier(
 RHSM_SYSPURPOSE = DBusObjectIdentifier(
     namespace=RHSM_NAMESPACE,
     basename="Syspurpose"
+)
+
+RHSM_CONSUMER = DBusObjectIdentifier(
+    namespace=RHSM_NAMESPACE,
+    basename="Consumer"
 )

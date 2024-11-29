@@ -3,7 +3,7 @@ import pytest
 import contextlib
 from pytest_client_tools.util import Version
 import conftest
-from constants import RHSM, RHSM_REGISTER_SERVER, RHSM_UNREGISTER
+from constants import RHSM, RHSM_UNREGISTER
 
 import sh
 import subprocess
