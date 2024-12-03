@@ -18,7 +18,6 @@ import glob
 import logging
 import os
 import grp
-import re
 import shutil
 import stat
 import syslog
@@ -26,7 +25,6 @@ from typing import Callable, Dict, Iterable, List, Optional, Tuple, Union, TYPE_
 
 
 from rhsm.config import get_config_parser
-from rhsm.certificate import Key, CertificateException, create_from_pem
 
 import subscription_manager.cache as cache
 from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
@@ -747,166 +745,6 @@ class PoolStash:
         for product in pool["providedProducts"]:
             provided_products.append((product["productName"], product["productId"]))
         return provided_products
-
-
-class ImportFileExtractor:
-    """
-    Responsible for checking an import file and pulling cert and key from it.
-    An import file may include only the certificate, but may also include its
-    key.
-
-    An import file is processed looking for:
-
-    -----BEGIN <TAG>-----
-    <CONTENT>
-    ..
-    -----END <TAG>-----
-
-    and will only process if it finds CERTIFICATE or KEY in the <TAG> text.
-
-    For example the following would locate a key and cert.
-
-    -----BEGIN CERTIFICATE-----
-    <CERT_CONTENT>
-    -----END CERTIFICATE-----
-    -----BEGIN PUBLIC KEY-----
-    <KEY_CONTENT>
-    -----END PUBLIC KEY-----
-
-    """
-
-    _REGEX_START_GROUP = "start"
-    _REGEX_CONTENT_GROUP = "content"
-    _REGEX_END_GROUP = "end"
-    _REGEX = r"(?P<%s>[-]*BEGIN[\w\ ]*[-]*)(?P<%s>[^-]*)(?P<%s>[-]*END[\w\ ]*[-]*)" % (
-        _REGEX_START_GROUP,
-        _REGEX_CONTENT_GROUP,
-        _REGEX_END_GROUP,
-    )
-    _PATTERN = re.compile(_REGEX)
-
-    _CERT_DICT_TAG = "CERTIFICATE"
-    _KEY_DICT_TAG = "KEY"
-    _ENT_DICT_TAG = "ENTITLEMENT"
-    _SIG_DICT_TAG = "RSA SIGNATURE"
-
-    def __init__(self, cert_file_path: str):
-        self.path = cert_file_path
-        self.file_name = os.path.basename(cert_file_path)
-
-        content = self._read(cert_file_path)
-        self.parts = self._process_content(content)
-
-    def _read(self, file_path: str) -> str:
-        fd = open(file_path, "r")
-        file_content = fd.read()
-        fd.close()
-        return file_content
-
-    def _process_content(self, content: str) -> Dict[str, str]:
-        part_dict = {}
-        matches = self._PATTERN.finditer(content)
-        for match in matches:
-            start = match.group(self._REGEX_START_GROUP)
-            meat = match.group(self._REGEX_CONTENT_GROUP)
-            end = match.group(self._REGEX_END_GROUP)
-
-            dict_key = None
-            if not start.find(self._KEY_DICT_TAG) < 0:
-                dict_key = self._KEY_DICT_TAG
-            elif not start.find(self._CERT_DICT_TAG) < 0:
-                dict_key = self._CERT_DICT_TAG
-            elif not start.find(self._ENT_DICT_TAG) < 0:
-                dict_key = self._ENT_DICT_TAG
-            elif not start.find(self._SIG_DICT_TAG) < 0:
-                dict_key = self._SIG_DICT_TAG
-
-            if dict_key is None:
-                continue
-
-            part_dict[dict_key] = start + meat + end
-        return part_dict
-
-    def contains_key_content(self) -> bool:
-        return self._KEY_DICT_TAG in self.parts
-
-    def get_key_content(self) -> Optional[str]:
-        key_content = None
-        if self._KEY_DICT_TAG in self.parts:
-            key_content = self.parts[self._KEY_DICT_TAG]
-        return key_content
-
-    def get_cert_content(self) -> str:
-        cert_content = ""
-        if self._CERT_DICT_TAG in self.parts:
-            cert_content = self.parts[self._CERT_DICT_TAG]
-        if self._ENT_DICT_TAG in self.parts:
-            cert_content = cert_content + os.linesep + self.parts[self._ENT_DICT_TAG]
-        if self._SIG_DICT_TAG in self.parts:
-            cert_content = cert_content + os.linesep + self.parts[self._SIG_DICT_TAG]
-        return cert_content
-
-    def verify_valid_entitlement(self) -> bool:
-        """
-        Verify that a valid entitlement was processed.
-
-        @return: True if valid, False otherwise.
-        """
-        try:
-            cert = self.get_cert()
-            # Don't want to check class explicitly, instead we'll look for
-            # order info, which only an entitlement cert could have:
-            if not hasattr(cert, "order"):
-                return False
-        except CertificateException:
-            return False
-        ent_key = Key(self.get_key_content())
-        if ent_key.bogus():
-            return False
-        return True
-
-    # TODO: rewrite to use certlib.EntitlementCertBundleInstall?
-    def write_to_disk(self) -> None:
-        """
-        Write/copy cert to the entitlement cert dir.
-        """
-        self._ensure_entitlement_dir_exists()
-        dest_file_path = os.path.join(ENT_CONFIG_DIR, self._create_filename_from_cert_serial_number())
-
-        # Write the key/cert content to new files
-        log.debug("Writing certificate file: %s" % (dest_file_path))
-        cert_content = self.get_cert_content()
-        self._write_file(dest_file_path, cert_content)
-
-        if self.contains_key_content():
-            dest_key_file_path = self._get_key_path_from_dest_cert_path(dest_file_path)
-            log.debug("Writing key file: %s" % (dest_key_file_path))
-            self._write_file(dest_key_file_path, self.get_key_content())
-
-    def _write_file(self, target_path: str, content: str) -> None:
-        new_file = open(target_path, "w")
-        try:
-            new_file.write(content)
-        finally:
-            new_file.close()
-
-    def _ensure_entitlement_dir_exists(self) -> None:
-        if not os.access(ENT_CONFIG_DIR, os.R_OK):
-            os.mkdir(ENT_CONFIG_DIR)
-
-    def _get_key_path_from_dest_cert_path(self, dest_cert_path: str) -> str:
-        file_parts = os.path.splitext(dest_cert_path)
-        return file_parts[0] + "-key" + file_parts[1]
-
-    def _create_filename_from_cert_serial_number(self) -> str:
-        "create from serial"
-        ent_cert = self.get_cert()
-        return "%s.pem" % (ent_cert.serial)
-
-    def get_cert(self) -> "EntitlementCertificate":
-        cert_content: str = self.get_cert_content()
-        ent_cert: EntitlementCertificate = create_from_pem(cert_content)
-        return ent_cert
 
 
 def _sub_dict(datadict: dict, subkeys: Iterable[str], default: Optional[object] = None) -> dict:
