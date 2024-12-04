@@ -34,7 +34,7 @@ except ImportError:
 from subscription_manager import utils
 from subscription_manager.certdirectory import Path
 import configparser
-from urllib.parse import parse_qs, urlparse, urlunparse, urlencode
+from urllib.parse import parse_qs, urlparse, urlunparse, urlencode, unquote
 
 from rhsm.config import get_config_parser
 
@@ -461,19 +461,26 @@ if HAS_DEB822:
 
         def fix_content(self, content):
             # Luckily apt ignores all Fields it does not recognize
-            baseurl = content["baseurl"]
-            url_res = re.match(r"^https?://(?P<location>.*)$", baseurl)
+            parsed_url = urlparse(unquote(content["baseurl"]))
+            baseurl = parsed_url._replace(query="").geturl()
             ent_res = re.match(r"^/etc/pki/entitlement/(?P<entitlement>.*).pem$", content["sslclientcert"])
-            if url_res and ent_res:
-                location = url_res.group("location")
-                entitlement = ent_res.group("entitlement")
-                baseurl = "katello://{}@{}".format(entitlement, location)
+            if ent_res:
+                netloc = ent_res.group("entitlement") + "@" + parsed_url.netloc
+                baseurl = parsed_url._replace(scheme="katello", netloc=netloc, query="").geturl()
+
+            query = parse_qs(parsed_url.query)
+            if "rel" in query and "comp" in query:
+                suites = " ".join(query["rel"][0].split(","))
+                components = " ".join(query["comp"][0].split(","))
+            else:
+                suites = "default"
+                components = "all"
 
             apt_cont = content.copy()
             apt_cont["Types"] = "deb"
             apt_cont["URIs"] = baseurl
-            apt_cont["Suites"] = "default"
-            apt_cont["Components"] = "all"
+            apt_cont["Suites"] = suites
+            apt_cont["Components"] = components
             apt_cont["Trusted"] = "yes"
 
             if apt_cont["arches"] is None or apt_cont["arches"] == ["ALL"]:
