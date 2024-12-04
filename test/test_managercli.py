@@ -212,7 +212,7 @@ class TestCliCommand(SubManFixture):
             sys,
             "argv",
             # test with some subcommand; sub-man prints help without it
-            ["subscription-manager", "attach", "--foo", "bar", "baz"],
+            ["subscription-manager", "register", "--foo", "bar", "baz"],
         ):
             try:
                 self.cc.main()

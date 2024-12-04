@@ -226,7 +226,6 @@ run_sm "0" list --available
 run_sm "0" service-level
 run_sm "0" service-level --list
 run_sm "0" repos
-run_sm "0" attach
 
 # Note: with current test data, the awesome-os repos will never be enabled
 run_yum "0" repolist
@@ -282,7 +281,6 @@ run_rhsmcertd "0"
 run_rhsmcertd "0" -n
 
 run_rhsmcertd_worker "0"
-run_rhsmcertd_worker "0" --autoheal
 
 # too slow
 # run_rhsm_debug "0" system
@@ -319,8 +317,6 @@ run_sm "0" repos --list
 # fully entitled, hence the '1'
 run_sm "1" register --activationkey "${ACTIVATION_KEY}" --org "${ORG}" --force
 run_sm "0" unregister
-run_sm "64" register --activationkey "${ACTIVATION_KEY}" --org "${ORG}" --force --auto-attach
-run_sm "1" unregister
 
 run_sm "0" clean
 

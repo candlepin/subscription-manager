@@ -43,7 +43,6 @@ from subscription_manager.cache import ContentAccessCache
 import subscription_manager.injection as inj
 
 from unittest.mock import Mock, patch, mock_open
-from datetime import date
 from rhsm import ourjson as json
 from collections import namedtuple
 
@@ -206,24 +205,6 @@ class ConnectionTests(unittest.TestCase):
         self.cp.conn.headers = {}
         self.cp.conn._set_accept_language_in_header()
         self.assertEqual(self.cp.conn.headers["Accept-Language"], "ja-jp")
-
-    def test_entitle_date(self):
-        self.cp.conn = Mock()
-        self.cp.conn.request_post = Mock(return_value=[])
-        self.cp.bind("abcd", date(2011, 9, 2))
-        self.cp.conn.request_post.assert_called_with(
-            "/consumers/abcd/entitlements?entitle_date=2011-09-02",
-            description="Updating subscriptions",
-        )
-
-    def test_no_entitle_date(self):
-        self.cp.conn = Mock()
-        self.cp.conn.request_post = Mock(return_value=[])
-        self.cp.bind("abcd")
-        self.cp.conn.request_post.assert_called_with(
-            "/consumers/abcd/entitlements",
-            description="Updating subscriptions",
-        )
 
     def test_clean_up_prefix(self):
         self.assertTrue(self.cp.handler == "/Test/")

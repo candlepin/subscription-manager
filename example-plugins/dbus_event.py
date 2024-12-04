@@ -89,9 +89,3 @@ class DbusEventPlugin(SubManPlugin):
 
     def post_subscribe_hook(self, conduit):
         self._dbus_event("post_subscribe", conduit)
-
-    def pre_auto_attach_hook(self, conduit):
-        self._dbus_event("pre_auto_attach", conduit)
-
-    def post_auto_attach_hook(self, conduit):
-        self._dbus_event("post_auto_attach", conduit)

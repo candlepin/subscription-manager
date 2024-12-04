@@ -22,7 +22,6 @@ from test import subman_marker_functional
 from rhsm.connection import (
     ContentConnection,
     UEPConnection,
-    BaseRestLib,
     UnauthorizedException,
     ForbiddenException,
     RestlibException,
@@ -119,40 +118,6 @@ class EntitlementRegenerationTests(unittest.TestCase):
 
     def tearDown(self):
         self.cp.unregisterConsumer(self.consumer_uuid)
-
-
-@subman_marker_functional
-class BindRequestTests(unittest.TestCase):
-    def setUp(self):
-        self.cp = UEPConnection(username="admin", password="admin", insecure=True)
-
-        consumerInfo = self.cp.registerConsumer("test-consumer", "system", owner="admin")
-        self.consumer_uuid = consumerInfo["uuid"]
-
-    @patch.object(BaseRestLib, "validateResult")
-    @patch("rhsm.connection.drift_check", return_value=False)
-    @patch("httplib.HTTPSConnection", autospec=True)
-    def test_bind_no_args(self, mock_conn, mock_drift, mock_validate):
-        self.cp.bind(self.consumer_uuid)
-
-        # verify we called request() with kwargs that include 'body' as None
-        # Specifically, we are checking that passing in "" to post_request, as
-        # it does by default, results in None here. bin() passes no args there
-        # so we use the default, "". See  bz #907536
-        for name, args, kwargs in mock_conn.mock_calls:
-            if name == "().request":
-                self.assertEqual(None, kwargs["body"])
-
-    @patch.object(BaseRestLib, "validateResult")
-    @patch("rhsm.connection.drift_check", return_value=False)
-    @patch("httplib.HTTPSConnection", autospec=True)
-    def test_bind_by_pool(self, mock_conn, mock_drift, mock_validate):
-        # this test is just to verify we make the httplib connection with
-        # right args, we don't validate the bind here
-        self.cp.bindByEntitlementPool(self.consumer_uuid, "123121111", "1")
-        for name, args, kwargs in mock_conn.mock_calls:
-            if name == "().request":
-                self.assertEqual(None, kwargs["body"])
 
 
 @subman_marker_functional
