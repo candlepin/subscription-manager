@@ -1903,34 +1903,6 @@ class UEPConnection(BaseConnection):
             method, headers=headers, description=_("Fetching content for a certificate")
         )
 
-    def unbindBySerial(self, consumerId: str, serial: str) -> bool:
-        """
-        Try to remove consumed pool by serial number
-        :param consumerId: consumer UUID
-        :param serial: serial number of consumed pool
-        """
-        method = "/consumers/%s/certificates/%s" % (self.sanitize(consumerId), self.sanitize(str(serial)))
-        return self.conn.request_delete(method, description=_("Unsubscribing")) is None
-
-    def unbindByPoolId(self, consumer_uuid: str, pool_id: str) -> bool:
-        """
-        Try to remove consumed pool by pool ID
-        :param consumer_uuid: consumer UUID
-        :param pool_id: pool ID
-        :return: None
-        """
-        method = "/consumers/%s/entitlements/pool/%s" % (self.sanitize(consumer_uuid), self.sanitize(pool_id))
-        return self.conn.request_delete(method, description=_("Unsubscribing")) is None
-
-    def unbindAll(self, consumerId: str) -> dict:
-        """
-        Try to remove all consumed pools
-        :param consumerId: consumer UUID
-        :return: Dictionary containing statistics about removed pools
-        """
-        method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
-        return self.conn.request_delete(method, description=_("Unsubscribing"))
-
     def getPoolsList(
         self,
         consumer: str = None,
