@@ -15,7 +15,7 @@ import collections
 import datetime
 import logging
 import time
-from typing import Union, Callable
+from typing import Union
 
 from subscription_manager import injection as inj
 from subscription_manager.i18n import ugettext as _
@@ -517,77 +517,6 @@ class EntitlementService:
             )
         elif not self.identity.is_valid() and "available" in options["pool_subsets"]:
             raise exceptions.ValidationError(_("Error: this system is not registered"))
-
-    def _unbind_ids(self, unbind_method: Callable, consumer_uuid: str, ids: list) -> tuple:
-        """
-        Method for unbinding entitlements
-        :param unbind_method: unbindByPoolId or unbindBySerial
-        :param consumer_uuid: UUID of consumer
-        :param ids: List of serials or pool_ids
-        :return: Tuple of two lists containing unbinded and not-unbinded subscriptions
-        """
-        success = []
-        failure = []
-        for id_ in ids:
-            try:
-                unbind_method(consumer_uuid, id_)
-                success.append(id_)
-            except connection.RestlibException as re:
-                if re.code == 410:
-                    raise
-                failure.append(id_)
-                log.error(re)
-        return success, failure
-
-    def remove_all_entitlements(self) -> dict:
-        """
-        Try to remove all entitlements
-        :return: Result of REST API call
-        """
-
-        response = self.cp.unbindAll(self.identity.uuid)
-        self.entcertlib.update()
-
-        return response
-
-    def remove_entitlements_by_pool_ids(self, pool_ids: list) -> tuple:
-        """
-        Try to remove entitlements by pool IDs
-        :param pool_ids: List of pool IDs
-        :return: List of serial numbers of removed subscriptions
-        """
-
-        removed_serials = []
-        _pool_ids = utils.unique_list_items(pool_ids)  # Don't allow duplicates
-        # FIXME: the cache of CertificateDirectory should be smart enough and refreshing
-        # should not be necessary. I vote for i-notify to be used there somehow.
-        self.entitlement_dir.refresh()
-        pool_id_to_serials = self.entitlement_dir.list_serials_for_pool_ids(_pool_ids)
-        removed_pools, unremoved_pools = self._unbind_ids(
-            self.cp.unbindByPoolId, self.identity.uuid, _pool_ids
-        )
-        if removed_pools:
-            for pool_id in removed_pools:
-                removed_serials.extend(pool_id_to_serials[pool_id])
-        self.entcertlib.update()
-
-        return removed_pools, unremoved_pools, removed_serials
-
-    def remove_entitlements_by_serials(self, serials: list) -> tuple:
-        """
-        Try to remove pools by Serial numbers
-        :param serials: List of serial numbers
-        :return: Tuple of two items: list of serial numbers of already removed subscriptions and list
-            of not removed serials
-        """
-
-        _serials = utils.unique_list_items(serials)  # Don't allow duplicates
-        removed_serials, unremoved_serials = self._unbind_ids(
-            self.cp.unbindBySerial, self.identity.uuid, _serials
-        )
-        self.entcertlib.update()
-
-        return removed_serials, unremoved_serials
 
     @staticmethod
     def reload() -> None:
