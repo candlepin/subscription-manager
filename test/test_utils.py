@@ -19,7 +19,6 @@ from subscription_manager.utils import (
     format_baseurl,
     get_version,
     get_client_versions,
-    unique_list_items,
     get_server_versions,
     friendly_join,
     is_true_value,
@@ -583,22 +582,6 @@ class TestTrueValue(fixture.SubManFixture):
         self.assertFalse(is_true_value("n"))
         self.assertFalse(is_true_value("t"))
         self.assertFalse(is_true_value("f"))
-
-
-class TestUniqueListItems(fixture.SubManFixture):
-    def test_preserves_order(self):
-        input_list = [1, 1, 2, 2, 3, 3]
-        expected = [1, 2, 3]
-        self.assertEqual(expected, unique_list_items(input_list))
-
-    def test_hash_function(self):
-        mock_item_1 = Mock()
-        mock_item_1.value = 1
-        mock_item_2 = Mock()
-        mock_item_2.value = 2
-        input_list = [mock_item_1, mock_item_1, mock_item_2, mock_item_2]
-        expected = [mock_item_1, mock_item_2]
-        self.assertEqual(expected, unique_list_items(input_list, lambda x: x.value))
 
 
 class TestProductCertificateFilter(fixture.SubManFixture):

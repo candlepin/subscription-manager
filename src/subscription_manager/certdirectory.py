@@ -336,15 +336,6 @@ class EntitlementDirectory(CertificateDirectory):
         ]
         return entitlements
 
-    def list_serials_for_pool_ids(self, pool_ids: List[str]) -> Dict[str, List[str]]:
-        """
-        Returns a dict of all entitlement certificate serials for each pool_id in the list provided
-        """
-        pool_id_to_serials = {}
-        for pool_id in pool_ids:
-            pool_id_to_serials[pool_id] = [str(cert.serial) for cert in self.list_for_pool_id(pool_id)]
-        return pool_id_to_serials
-
 
 class Path:
     # Used during Anaconda install by the yum pidplugin to ensure we operate
