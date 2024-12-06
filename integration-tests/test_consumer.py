@@ -2,10 +2,11 @@ import os
 import pytest
 import contextlib
 from pytest_client_tools.util import Version
-import conftest
+from utils import loop_until
 from constants import RHSM, RHSM_CONSUMER
 from dasbus.error import DBusError
 from dasbus.typing import get_variant, Str
+from funcy import first
 
 import sh
 import subprocess
@@ -22,8 +23,9 @@ def test_get_uuid(external_candlepin, subman, test_config, status_of_registratio
     if status_of_registration == "registered":
         subman.register(username=test_config.get("candlepin","username"),
                         password=test_config.get("candlepin","password"),
-                        org=test_config.get("candlepin","org") or "")
-        conftest.loop_until(lambda: subman.is_registered)
+                        org=test_config.get("candlepin","org") or "",
+                        environments=first(test_config.get("candlepin","environment","names")))
+        loop_until(lambda: subman.is_registered)
         
     if status_of_registration == "not_registered":
         assert not subman.is_registered
