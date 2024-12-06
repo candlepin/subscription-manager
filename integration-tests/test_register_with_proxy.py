@@ -31,6 +31,9 @@ def test_register_with_noauth_proxy(external_candlepin, subman, test_config):
     2024-11-27 03:16:10,163 [DEBUG] subscription-manager:23907:MainThread @connection.py:773 - Using proxy: auto-services.usersys.redhat.com:3129
     should appear in /var/log/rhsm/rhsm.log file.
     """
+    if test_config.environment == "testing":
+        pytest.skip("Proxy connection cannot be tested in testing environment - ie. local candlepin is used")
+        
     assert not subman.is_registered
     proxy = RHSM.get_proxy(RHSM_REGISTER_SERVER)
     with RHSMPrivateBus(proxy) as private_bus:
@@ -52,7 +55,6 @@ def test_register_with_noauth_proxy(external_candlepin, subman, test_config):
         assert f"Using proxy:" in logfile.read()
 
 
-
         
 def test_register_with_auth_proxy(external_candlepin, subman, test_config):
     """
@@ -62,6 +64,9 @@ def test_register_with_auth_proxy(external_candlepin, subman, test_config):
     2024-11-27 03:16:10,163 [DEBUG] subscription-manager:23907:MainThread @connection.py:773 - Using proxy: auto-services.usersys.redhat.com:3129
     should appear in /var/log/rhsm/rhsm.log file.
     """
+    if test_config.environment == "testing":
+        pytest.skip("Proxy connection cannot be tested in testing environment - ie. local candlepin is used")
+
     assert not subman.is_registered
     proxy = RHSM.get_proxy(RHSM_REGISTER_SERVER)
     with RHSMPrivateBus(proxy) as private_bus:
