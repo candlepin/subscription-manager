@@ -71,7 +71,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
 
         if not self.is_registered():
             if self.options.list:
-                if not (self.options.username and self.options.password) and not self.options.token:
+                if not (self.options.username and self.options.password):
                     system_exit(
                         os.EX_USAGE,
                         _(
@@ -89,14 +89,13 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
         if self.is_registered() and (
             getattr(self.options, "username", None)
             or getattr(self.options, "password", None)
-            or getattr(self.options, "token", None)
             or getattr(self.options, "org", None)
             or getattr(self.options, "server_url", None)
         ):
             system_exit(
                 os.EX_USAGE,
                 _(
-                    "Error: --username, --password, --token, --org and --serverurl "
+                    "Error: --username, --password, --org and --serverurl "
                     "can be used only on unregistered systems"
                 ),
             )
@@ -107,9 +106,7 @@ class ServiceLevelCommand(AbstractSyspurposeCommand, OrgCommand):
             # If we have a username/password, we're going to use that, otherwise
             # we'll use the identity certificate. We already know one or the other
             # exists:
-            if self.options.token:
-                self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
-            elif self.options.username and self.options.password:
+            if self.options.username and self.options.password:
                 self.cp_provider.set_user_pass(self.username, self.password)
                 self.cp = self.cp_provider.get_basic_auth_cp()
             elif not self.is_registered() and self.options.show:

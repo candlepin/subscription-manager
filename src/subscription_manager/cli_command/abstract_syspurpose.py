@@ -145,11 +145,7 @@ class AbstractSyspurposeCommand(CliCommand):
 
         if not self.is_registered():
             if self.options.list:
-                if self.options.token and not self.options.username:
-                    pass
-                elif self.options.token and self.options.username:
-                    system_exit(os.EX_USAGE, _("Error: you can specify --username or --token not both"))
-                elif not self.options.username or not self.options.password:
+                if not self.options.username or not self.options.password:
                     system_exit(
                         os.EX_USAGE,
                         _(
@@ -164,15 +160,11 @@ class AbstractSyspurposeCommand(CliCommand):
         if self.is_registered() and (
             getattr(self.options, "username", None)
             or getattr(self.options, "password", None)
-            or getattr(self.options, "token", None)
             or getattr(self.options, "org", None)
         ):
             system_exit(
                 os.EX_USAGE,
-                _(
-                    "Error: --username, --password, --token and --org "
-                    "can be used only on unregistered systems"
-                ),
+                _("Error: --username, --password, and --org " "can be used only on unregistered systems"),
             )
 
     def _get_valid_fields(self):
@@ -241,11 +233,7 @@ class AbstractSyspurposeCommand(CliCommand):
         # When the system is not registered and no username & password was provided, then
         # these values will be set silently.
         if invalid_values_len > 0:
-            if (
-                self.is_registered()
-                or (self.options.username and self.options.password)
-                or self.options.token
-            ):
+            if self.is_registered() or (self.options.username and self.options.password):
                 if len(valid_fields.get(self.attr, [])) > 0:
                     # TRANSLATORS: this is used to quote a string
                     quoted_values = [_('"{value}"').format(value=value) for value in invalid_values]
@@ -423,17 +411,7 @@ class AbstractSyspurposeCommand(CliCommand):
             # If we have a username/password, we're going to use that, otherwise
             # we'll use the identity certificate. We already know one or the other
             # exists:
-            if self.options.token:
-                try:
-                    self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
-                except Exception as err:
-                    log.error(
-                        'unable to connect to candlepin server using token: "{token}", err: {err}'.format(
-                            token=self.options.token, err=err
-                        )
-                    )
-                    print(_("Unable to connect to server using token"))
-            elif self.options.username and self.options.password:
+            if self.options.username and self.options.password:
                 self.cp_provider.set_user_pass(self.options.username, self.options.password)
                 self.cp = self.cp_provider.get_basic_auth_cp()
             else:

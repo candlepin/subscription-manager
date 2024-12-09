@@ -63,25 +63,8 @@ class TestRoleCommand(TestCliProxyCommand):
         self.cc.options.to_add = False
         self.cc.options.to_remove = False
         self.cc.options.list = True
-        self.cc.options.token = None
         self.cc.options.username = "admin"
         self.cc.options.password = None
-        try:
-            self.cc._validate_options()
-        except SystemExit as e:
-            self.assertEqual(e.code, os.EX_USAGE)
-
-    def test_list_username_and_token(self):
-        self.cc.options = Mock()
-        self.cc.is_registered = Mock(return_value=False)
-        self.cc.options.set = False
-        self.cc.options.unset = False
-        self.cc.options.to_add = False
-        self.cc.options.to_remove = False
-        self.cc.options.list = True
-        self.cc.options.token = "TOKEN"
-        self.cc.options.username = "admin"
-        self.cc.options.password = "secret"
         try:
             self.cc._validate_options()
         except SystemExit as e:
@@ -126,22 +109,6 @@ class TestRoleCommand(TestCliProxyCommand):
         self.cc.options.show = None
         self.cc.options.list = True
         self.cc.options.password = "secret"
-        try:
-            self.cc._validate_options()
-        except SystemExit as e:
-            self.assertEqual(e.code, os.EX_USAGE)
-
-    def test_token_on_registered_system(self):
-        """Argument --token cannot be used on registered system."""
-        self.cc.is_registered = Mock(return_value=True)
-        self.cc.options = Mock()
-        self.cc.options.set = None
-        self.cc.options.unset = None
-        self.cc.options.to_add = None
-        self.cc.options.to_remove = None
-        self.cc.options.show = None
-        self.cc.options.list = True
-        self.cc.options.token = "TOKEN"
         try:
             self.cc._validate_options()
         except SystemExit as e:
