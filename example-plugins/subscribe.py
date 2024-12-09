@@ -37,9 +37,3 @@ class SubscribePlugin(SubManPlugin):
             conduit: A PostSubscriptionConduit()
         """
         conduit.log.debug("post subscribe called")
-
-    def pre_auto_attach_hook(self, conduit):
-        conduit.log.debug("pre auto attach called")
-
-    def post_auto_attach_hook(self, conduit):
-        conduit.log.debug("post auto attach called")

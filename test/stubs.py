@@ -482,8 +482,6 @@ class StubUEP:
         self.environment_list = []
         self.called_unregister_uuid = None
         self.called_unbind_uuid = None
-        self.called_unbind_serial = []
-        self.called_unbind_pool_id = []
         self.username = username
         self.password = password
         self._capabilities = []
@@ -494,8 +492,6 @@ class StubUEP:
     def reset(self):
         self.called_unregister_uuid = None
         self.called_unbind_uuid = None
-        self.called_unbind_serial = []
-        self.called_unbind_pool_id = []
 
     def has_capability(self, capability):
         return capability in self._capabilities
@@ -561,12 +557,6 @@ class StubUEP:
 
     def unbindAll(self, consumer):
         self.called_unbind_uuid = consumer
-
-    def unbindBySerial(self, consumer, serial):
-        self.called_unbind_serial.append(serial)
-
-    def unbindByPoolId(self, consumer_uuid, pool_id):
-        self.called_unbind_pool_id.append(pool_id)
 
     def getCertificateSerials(self, consumer):
         return []

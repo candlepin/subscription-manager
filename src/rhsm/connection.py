@@ -1903,63 +1903,6 @@ class UEPConnection(BaseConnection):
             method, headers=headers, description=_("Fetching content for a certificate")
         )
 
-    def bindByEntitlementPool(self, consumerId: str, poolId: str, quantity: int = None) -> List[dict]:
-        """
-        Subscribe consumer to a subscription by pool ID
-        :param consumerId: consumer UUID
-        :param poolId: pool ID
-        :param quantity: the desired quantity of subscription to be consumed
-        """
-        method = "/consumers/%s/entitlements?pool=%s" % (self.sanitize(consumerId), self.sanitize(poolId))
-        if quantity:
-            method = "%s&quantity=%s" % (method, quantity)
-        return self.conn.request_post(method, description=_("Updating subscriptions"))
-
-    def bind(self, consumerId: str, entitle_date: datetime.datetime = None) -> List[dict]:
-        """
-        Same as bindByProduct, but assume the server has a list of the
-        system's products. This is useful for autosubscribe. Note that this is
-        done on a best-effort basis, and there are cases when the server will
-        not be able to fulfill the client's product certs with entitlements
-        :param consumerId: consumer UUID
-        :param entitle_date: The date, when subscription will be valid
-        """
-        method = "/consumers/%s/entitlements" % (self.sanitize(consumerId))
-
-        # add the optional date to the url
-        if entitle_date:
-            method = "%s?entitle_date=%s" % (method, self.sanitize(entitle_date.isoformat(), plus=True))
-
-        return self.conn.request_post(method, description=_("Updating subscriptions"))
-
-    def unbindBySerial(self, consumerId: str, serial: str) -> bool:
-        """
-        Try to remove consumed pool by serial number
-        :param consumerId: consumer UUID
-        :param serial: serial number of consumed pool
-        """
-        method = "/consumers/%s/certificates/%s" % (self.sanitize(consumerId), self.sanitize(str(serial)))
-        return self.conn.request_delete(method, description=_("Unsubscribing")) is None
-
-    def unbindByPoolId(self, consumer_uuid: str, pool_id: str) -> bool:
-        """
-        Try to remove consumed pool by pool ID
-        :param consumer_uuid: consumer UUID
-        :param pool_id: pool ID
-        :return: None
-        """
-        method = "/consumers/%s/entitlements/pool/%s" % (self.sanitize(consumer_uuid), self.sanitize(pool_id))
-        return self.conn.request_delete(method, description=_("Unsubscribing")) is None
-
-    def unbindAll(self, consumerId: str) -> dict:
-        """
-        Try to remove all consumed pools
-        :param consumerId: consumer UUID
-        :return: Dictionary containing statistics about removed pools
-        """
-        method = "/consumers/%s/entitlements" % self.sanitize(consumerId)
-        return self.conn.request_delete(method, description=_("Unsubscribing"))
-
     def getPoolsList(
         self,
         consumer: str = None,
@@ -2151,22 +2094,6 @@ class UEPConnection(BaseConnection):
         if not params:
             params = []
         return self.conn.request_delete(method, params, description=_("Removing content overrides"))
-
-    def activateMachine(self, consumerId: str, email: str, lang: str = None) -> Union[dict, None]:
-        """
-        Activate a subscription by machine, information is located in the consumer facts
-        :param consumerId: consumer UUID
-        :param email: The email for sending notification. The notification will be sent by candlepin server
-        :param lang: The locale specifies the language of notification email
-        :return When activation was successful, then dictionary is returned. Otherwise, None is returned.
-        """
-        method = "/subscriptions?consumer_uuid=%s" % consumerId
-        method += "&email=%s" % self.sanitize(email)
-        if (not lang) and (locale.getdefaultlocale()[0] is not None):
-            lang = locale.getdefaultlocale()[0].lower().replace("_", "-")
-        if lang:
-            method += "&email_locale=%s" % self.sanitize(lang)
-        return self.conn.request_post(method, description=_("Activating"))
 
     # used by virt-who
     def getJob(self, job_id: str) -> str:

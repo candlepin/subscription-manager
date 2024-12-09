@@ -11,7 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import datetime
-from typing import List, Union
+from typing import Union
 
 import dbus
 import json
@@ -64,35 +64,6 @@ class EntitlementDBusImplementation(base_object.BaseImplementation):
         pools: dict = service.get_pools(**options)
 
         return pools
-
-    def remove_all_entitlements(self, proxy_options: dict) -> dict:
-        uep: UEPConnection = self.build_uep(proxy_options, proxy_only=True)
-        service = EntitlementService(uep)
-        result: dict = service.remove_all_entitlements()
-
-        return result
-
-    def remove_entitlements_by_pool_ids(self, pool_ids: List[str], proxy_options: dict) -> List[str]:
-        """Remove entitlements by Pool IDs
-
-        :return: List of removed serials.
-        """
-        uep: UEPConnection = self.build_uep(proxy_options, proxy_only=True)
-        service = EntitlementService(uep)
-        _, _, removed_serials = service.remove_entitlements_by_pool_ids(pool_ids)
-
-        return removed_serials
-
-    def remove_entitlements_by_serials(self, serials: List[str], proxy_options: dict) -> List[str]:
-        """Remove entitlements by serials.
-
-        :return: List of removed serials.
-        """
-        uep: UEPConnection = self.build_uep(proxy_options, proxy_only=True)
-        service = EntitlementService(uep)
-        removed_serials, _ = service.remove_entitlements_by_serials(serials)
-
-        return removed_serials
 
     def _parse_date(self, date_string: str) -> datetime.datetime:
         """
@@ -186,79 +157,6 @@ class EntitlementDBusObject(base_object.BaseObject):
 
         pools: dict = self.impl.get_pools(options, proxy_options)
         return json.dumps(pools)
-
-    @util.dbus_service_method(
-        constants.ENTITLEMENT_INTERFACE,
-        in_signature="a{sv}s",
-        out_signature="s",
-    )
-    @util.dbus_handle_sender
-    @util.dbus_handle_exceptions
-    def RemoveAllEntitlements(self, proxy_options, locale, sender=None):
-        """
-        Try to remove all entitlements (subscriptions) from the system
-        :param proxy_options: Settings of proxy
-        :param locale: String with locale (e.g. de_DE.UTF-8)
-        :param sender: Not used argument
-        :return: Json string containing response
-        """
-        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
-        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
-
-        Locale.set(locale)
-
-        result: dict = self.impl.remove_all_entitlements(proxy_options)
-        return json.dumps(result)
-
-    @util.dbus_service_method(
-        constants.ENTITLEMENT_INTERFACE,
-        in_signature="asa{sv}s",
-        out_signature="s",
-    )
-    @util.dbus_handle_sender
-    @util.dbus_handle_exceptions
-    def RemoveEntitlementsByPoolIds(self, pool_ids, proxy_options, locale, sender=None):
-        """
-        Try to remove entitlements (subscriptions) by pool_ids
-        :param pool_ids: List of pool IDs
-        :param proxy_options: Settings of proxy
-        :param locale: String with locale (e.g. de_DE.UTF-8)
-        :param sender: Not used argument
-        :return: Json string representing list of serial numbers
-        """
-        pool_ids = dbus_utils.dbus_to_python(pool_ids, expected_type=list)
-        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
-        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
-
-        Locale.set(locale)
-
-        removed_serials = self.impl.remove_entitlements_by_pool_ids(pool_ids, proxy_options)
-        return json.dumps(removed_serials)
-
-    @util.dbus_service_method(
-        constants.ENTITLEMENT_INTERFACE,
-        in_signature="asa{sv}s",
-        out_signature="s",
-    )
-    @util.dbus_handle_sender
-    @util.dbus_handle_exceptions
-    def RemoveEntitlementsBySerials(self, serials, proxy_options, locale, sender=None):
-        """
-        Try to remove entitlements (subscriptions) by serials
-        :param serials: List of serial numbers of subscriptions
-        :param proxy_options: Settings of proxy
-        :param locale: String with locale (e.g. de_DE.UTF-8)
-        :param sender: Not used argument
-        :return: Json string representing list of serial numbers
-        """
-        serials = dbus_utils.dbus_to_python(serials, expected_type=list)
-        proxy_options = dbus_utils.dbus_to_python(proxy_options, expected_type=dict)
-        locale = dbus_utils.dbus_to_python(locale, expected_type=str)
-
-        Locale.set(locale)
-
-        removed_serials = self.impl.remove_entitlements_by_serials(serials, proxy_options)
-        return json.dumps(removed_serials)
 
     @staticmethod
     def reload():
