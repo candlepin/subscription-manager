@@ -119,7 +119,7 @@ class RegisterCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("This system is already registered. Use --force to override"))
         elif self.options.consumername == "":
             system_exit(os.EX_USAGE, _("Error: system name can not be empty."))
-        elif (self.options.username or self.options.token) and self.options.activation_keys:
+        elif self.options.username and self.options.activation_keys:
             system_exit(os.EX_USAGE, _("Error: Activation keys do not require user credentials."))
         elif self.options.consumerid and self.options.activation_keys:
             system_exit(
@@ -257,9 +257,7 @@ class RegisterCommand(UserPassCommand):
 
         # Proceed with new registration:
         try:
-            if self.options.token:
-                admin_cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
-            elif not self.options.activation_keys:
+            if not self.options.activation_keys:
                 hostname = conf["server"]["hostname"]
                 if ":" in hostname:
                     normalized_hostname = "[{hostname}]".format(hostname=hostname)
