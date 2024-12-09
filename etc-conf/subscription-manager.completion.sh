@@ -35,7 +35,7 @@ _subscription_manager_syspurpose()
 _subscription_manager_role()
 {
   local opts="--list --org --set --show
-            --unset --username --password --token
+            --unset --username --password
             ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -43,7 +43,7 @@ _subscription_manager_role()
 _subscription_manager_usage()
 {
   local opts="--list --org --set --show
-            --unset --username --password --token
+            --unset --username --password
             ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -72,7 +72,7 @@ _subscription_manager_config()
 
 _subscription_manager_environments()
 {
-  local opts="--org --password --username --token --set --list --list-enabled --list-disabled
+  local opts="--org --password --username --set --list --list-enabled --list-disabled
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
@@ -87,7 +87,7 @@ _subscription_manager_facts()
 
 _subscription_manager_identity()
 {
-  local opts="--force --password --regenerate --username --token
+  local opts="--force --password --regenerate --username
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
@@ -102,7 +102,7 @@ _subscription_manager_list()
 
 _subscription_manager_orgs()
 {
-  local opts="--password --username --token
+  local opts="--password --username
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
@@ -134,7 +134,7 @@ _subscription_manager_register()
 {
   local opts="--activationkey --baseurl --consumerid
               --environments --force --name --org --password --release
-              --username --token
+              --username
               ${_subscription_manager_common_url_opts}
               ${_subscription_manager_common_opts}"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
@@ -159,7 +159,7 @@ _subscription_manager_repos()
 _subscription_manager_service_level()
 {
     local opts="--list --org --set --show
-                --unset --username --password --token
+                --unset --username --password
                 ${_subscription_manager_common_url_opts}
                 ${_subscription_manager_common_opts}"
     COMPREPLY=($(compgen -W "${opts}" -- ${1}))

@@ -65,6 +65,3 @@ class TestRegisterCommand(TestCliProxyCommand):
         with patch.object(self.mock_cfg_parser, "save") as mock_save:
             self._test_no_exception(["--insecure"])
             mock_save.assert_called_with()
-
-    def test_token(self):
-        self._test_no_exception(["--token", "eyJhbGciOiJSUzI1NiIsInR5cCIg"])

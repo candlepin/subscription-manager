@@ -61,8 +61,6 @@ class IdentityCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("--force can only be used with --regenerate"))
         if (self.options.username or self.options.password) and not self.options.force:
             system_exit(os.EX_USAGE, _("--username and --password can only be used with --force"))
-        if self.options.token and not self.options.force:
-            system_exit(os.EX_USAGE, _("--token can only be used with --force"))
 
     def _do_command(self):
         # get current consumer identity
@@ -114,12 +112,9 @@ class IdentityCommand(UserPassCommand):
                     )
             else:
                 if self.options.force:
-                    # get an UEP with basic auth or keycloak auth
-                    if self.options.token:
-                        self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
-                    else:
-                        self.cp_provider.set_user_pass(self.username, self.password)
-                        self.cp = self.cp_provider.get_basic_auth_cp()
+                    # get an UEP with basic auth
+                    self.cp_provider.set_user_pass(self.username, self.password)
+                    self.cp = self.cp_provider.get_basic_auth_cp()
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
 

@@ -11,6 +11,3 @@ class TestOwnersCommand(TestCliProxyCommand):
 
     def test_insecure(self):
         self.cc.main(["--insecure"])
-
-    def test_token_(self):
-        self.cc.main(["--token", "eyJhbGciOiJSUzI1NiIsInR5cCIg"])

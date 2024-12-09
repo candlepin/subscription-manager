@@ -223,8 +223,7 @@ class RegisterService:
             # TODO: add more checks here
             pass
         elif not getattr(self.cp, "username", None) or not getattr(self.cp, "password", None):
-            if not getattr(self.cp, "token", None):
-                raise exceptions.ValidationError(_("Error: Missing username or password."))
+            raise exceptions.ValidationError(_("Error: Missing username or password."))
 
     def determine_owner_key(self, username: str, get_owner_cb: Callable, no_owner_cb: Callable) -> str:
         """

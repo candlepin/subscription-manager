@@ -145,22 +145,6 @@ class TestServiceLevelCommand(TestCliProxyCommand):
         except SystemExit as e:
             self.assertEqual(e.code, os.EX_USAGE)
 
-    def test_token_on_registered_system(self):
-        """Argument --token cannot be used on registered system."""
-        self.cc.is_registered = Mock(return_value=True)
-        self.cc.options = Mock()
-        self.cc.options.set = None
-        self.cc.options.unset = None
-        self.cc.options.to_add = None
-        self.cc.options.to_remove = None
-        self.cc.options.show = None
-        self.cc.options.list = True
-        self.cc.options.token = "TOKEN"
-        try:
-            self.cc._validate_options()
-        except SystemExit as e:
-            self.assertEqual(e.code, os.EX_USAGE)
-
     def test_org_on_registered_system(self):
         """Argument --org cannot be used on registered system."""
         self.cc.is_registered = Mock(return_value=True)
