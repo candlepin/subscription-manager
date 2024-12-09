@@ -44,11 +44,8 @@ class OwnersCommand(UserPassCommand):
     def _do_command(self):
         try:
             # get a UEP
-            if self.options.token:
-                self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
-            else:
-                self.cp_provider.set_user_pass(self.username, self.password)
-                self.cp = self.cp_provider.get_basic_auth_cp()
+            self.cp_provider.set_user_pass(self.username, self.password)
+            self.cp = self.cp_provider.get_basic_auth_cp()
             owners = self.cp.getOwnerList(self.username)
             log.debug("Successfully retrieved org list from server.")
             if len(owners):

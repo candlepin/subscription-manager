@@ -94,14 +94,11 @@ class EnvironmentsCommand(OrgCommand):
         if "environments" not in supported_resources:
             system_exit(os.EX_UNAVAILABLE, _("Error: Server does not support environments."))
         try:
-            if self.options.token:
-                self.cp = self.cp_provider.get_keycloak_auth_cp(self.options.token)
-            else:
-                if not self.options.enabled:
-                    if self.options.username is None or self.options.password is None:
-                        print(_("This operation requires user credentials"))
-                    self.cp_provider.set_user_pass(self.username, self.password)
-                    self.cp = self.cp_provider.get_basic_auth_cp()
+            if not self.options.enabled:
+                if self.options.username is None or self.options.password is None:
+                    print(_("This operation requires user credentials"))
+                self.cp_provider.set_user_pass(self.username, self.password)
+                self.cp = self.cp_provider.get_basic_auth_cp()
             self.identity = require(IDENTITY)
             if self.options.set:
                 self._set_environments()
