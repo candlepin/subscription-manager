@@ -46,6 +46,7 @@ class RegisterService:
         org: Optional[str],
         activation_keys: list = None,
         environments: list = None,
+        environment_names: list = None,
         force: bool = False,
         name: str = None,
         consumerid: str = None,
@@ -95,6 +96,7 @@ class RegisterService:
         options = {
             "activation_keys": activation_keys,
             "environments": environments,
+            "environment_names": environment_names,
             "force": force,
             "name": name,
             "consumerid": consumerid,
@@ -123,6 +125,7 @@ class RegisterService:
                 facts=facts_dict,
                 owner=org,
                 environments=environments,
+                environment_names=environment_names,
                 keys=options.get("activation_keys"),
                 installed_products=self.installed_mgr.format_for_server(),
                 content_tags=self.installed_mgr.tags,
