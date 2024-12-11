@@ -681,6 +681,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
     %tmpfiles_create %{_tmpfilesdir}/subscription-manager.conf
 %else
     %systemd_post rhsmcertd.service
+    %systemd_post rhsm.service
+    systemctl restart rhsm.service
 %endif
 
 # When subscription-manager is upgraded on RHEL 8 (from RHEL 8.2 to RHEL 8.3), then kill
