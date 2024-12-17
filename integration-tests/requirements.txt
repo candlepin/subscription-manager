@@ -1,5 +1,14 @@
+# the version of black is specified also in the stylish.yml github workflow;
+# please update the version there in case it is bumped here
+black==24.3.0
+flake8
 git+https://github.com/ptoscano/pytest-client-tools@main
+pytest
 pyyaml
-pytest-randomly
-pytest-timeout
+simplejson
+dasbus
+pycairo
+PyGObject
 sh
+iniparse
+funcy
