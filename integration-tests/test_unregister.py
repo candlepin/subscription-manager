@@ -17,7 +17,6 @@ from constants import RHSM, RHSM_UNREGISTER
 
 import logging
 from functools import partial
-from funcy import first
 from dasbus.error import DBusError
 
 logger = logging.getLogger(__name__)
