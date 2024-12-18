@@ -2,10 +2,11 @@ import pytest
 from conftest import RHSMPrivateBus
 from constants import RHSM, RHSM_REGISTER_SERVER, RHSM_REGISTER
 from dasbus.error import DBusError
-from funcy import partial, take
-
+from funcy import partial, take, first
+from dasbus.typing import get_variant, Str
 import json
 import logging
+from utils import subman_identity
 
 logger = logging.getLogger(__name__)
 locale = "en_US.UTF-8"
@@ -36,15 +37,41 @@ def test_register_with_activation_keys(external_candlepin, subman, test_config, 
         response = json.loads(
             private_proxy.RegisterWithActivationKeys(candlepin_config("org"), act_keynames, {}, {}, locale)
         )
-        if num_of_act_keys_to_use == 0:
-            assert "No activation key specified" in response
-        else:
-            assert (
-                "activationKeys" in response
-            ), "DBus method returns which activation keys were used to register a system"
+        assert (
+            "activationKeys" in response
+        ), "DBus method returns which activation keys were used to register a system"
+        assert subman.is_registered
 
-        logger.debug(response["activationKeys"])
-        assert sorted([ii["activationKeyName"] for ii in response["activationKeys"]]) == sorted(act_keynames)
+
+def test_register_with_activation_keys_and_environments(external_candlepin, subman, test_config):
+    """
+    https://www.candlepinproject.org/docs/subscription-manager/dbus_objects.html#methods-6
+    """
+    candlepin_config = partial(test_config.get, "candlepin")
+
+    assert not subman.is_registered
+    proxy = RHSM.get_proxy(RHSM_REGISTER_SERVER)
+    act_keynames = candlepin_config("activation_keys")
+    with RHSMPrivateBus(proxy) as private_bus:
+        private_proxy = private_bus.get_proxy(RHSM.service_name, RHSM_REGISTER.object_path)
+        response = json.loads(
+            private_proxy.RegisterWithActivationKeys(
+                candlepin_config("org"),
+                act_keynames,
+                {"environments": get_variant(Str, first(candlepin_config("environment", "ids")))},
+                {},
+                locale,
+            )
+        )
+
+        assert (
+            "activationKeys" in response
+        ), "DBus method returns what activation keys were used to register a system"
+        assert frozenset(ii["activationKeyName"] for ii in response["activationKeys"]) == frozenset(
+            act_keynames
+        )
+        pairs = subman_identity(subman)
+        assert pairs["environment name"] == first(candlepin_config("environment", "names"))
 
     assert subman.is_registered
 
