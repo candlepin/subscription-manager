@@ -39,7 +39,6 @@ def test_unregister(any_candlepin, subman, test_config):
         username=candlepin_config("username"),
         password=candlepin_config("password"),
         org=candlepin_config("org"),
-        environments=first(candlepin_config("environment", "names")),
     )
     loop_until(lambda: subman.is_registered)
 
