@@ -46,6 +46,8 @@ class RegisterService:
         org: Optional[str],
         activation_keys: list = None,
         environments: list = None,
+        environment_names: list = None,
+        environment_type: str = None,
         force: bool = False,
         name: str = None,
         consumerid: str = None,
@@ -65,6 +67,11 @@ class RegisterService:
         # signature we want to consider that an error.
         if kwargs:
             raise exceptions.ValidationError(_("Unknown arguments: %s") % kwargs.keys())
+
+        if environments is not None and environment_names is not None:
+            raise exceptions.ValidationError(
+                _("Environment IDs and environment names are mutually exclusive")
+            )
 
         syspurpose = syspurposelib.read_syspurpose()
 
@@ -95,6 +102,7 @@ class RegisterService:
         options = {
             "activation_keys": activation_keys,
             "environments": environments,
+            "environment_names": environment_names,
             "force": force,
             "name": name,
             "consumerid": consumerid,
@@ -123,6 +131,7 @@ class RegisterService:
                 facts=facts_dict,
                 owner=org,
                 environments=environments,
+                environment_names=environment_names,
                 keys=options.get("activation_keys"),
                 installed_products=self.installed_mgr.format_for_server(),
                 content_tags=self.installed_mgr.tags,
@@ -138,7 +147,43 @@ class RegisterService:
             cp_provider: CPProvider = inj.require(inj.CP_PROVIDER)
             cp_provider.close_all_connections()
 
+        # If environment type was specified, then check that all returned
+        # environments have required type. Otherwise, raise exception
+        wrong_env_names = []
+        if environment_type is not None:
+            for environment in consumer.get("environments", []):
+                env_type = environment.get("type", None)
+                if env_type != environment_type:
+                    environment_name = environment["name"]
+                    log.error(
+                        f"Environment: '{environment_name}' does not have required type: '{environment_type},"
+                        f" it has '{env_type}' type"
+                    )
+                    wrong_env_names.append(environment_name)
+
         managerlib.persist_consumer_cert(consumer)
+
+        if len(wrong_env_names) > 0:
+            # We will not use this consumer object. Thus, delete this object
+            # on the server
+            self.identity.reload()
+            UnregisterService(inj.require(inj.CP_PROVIDER).get_consumer_auth_cp()).unregister()
+            if len(wrong_env_names) == 1:
+                raise exceptions.ServiceError(
+                    _(
+                        "Environment: '{env_names}' does not have required type '{environment_type}'".format(
+                            env_names=wrong_env_names[0], environment_type=environment_type
+                        )
+                    )
+                )
+            else:
+                raise exceptions.ServiceError(
+                    _(
+                        "Environments: '{env_names}' do not have required type '{environment_type}'".format(
+                            env_names=", ".join(wrong_env_names), environment_type=environment_type
+                        )
+                    )
+                )
 
         access_mode: str = consumer.get("owner", {}).get("contentAccessMode", "unknown")
         if access_mode != "org_environment":

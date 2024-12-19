@@ -1536,6 +1536,7 @@ class UEPConnection(BaseConnection):
         facts: Optional[dict] = None,
         owner: str = None,
         environments: str = None,
+        environment_names: str = None,
         keys: str = None,
         installed_products: list = None,
         uuid: str = None,
@@ -1581,6 +1582,11 @@ class UEPConnection(BaseConnection):
             for environment in environments.split(","):
                 env_list.append({"id": environment})
             params["environments"] = env_list
+        elif environment_names is not None and self.has_capability(MULTI_ENV):
+            env_name_list = []
+            for env_name in environment_names.split(","):
+                env_name_list.append({"name": env_name})
+            params["environments"] = env_name_list
 
         headers = {}
         if jwt_token:

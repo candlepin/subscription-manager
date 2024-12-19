@@ -60,14 +60,157 @@ CONSUMER_CONTENT_JSON = """{"hypervisorId": null,
         "facts": {}, "id": "ff808081550d997c015511b0406d1065",
         "uuid": "c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
         "guestIds": null, "capabilities": null,
-        "environment": null, "installedProducts": null,
+        "environment": {
+          "created" : "2024-12-09T09:25:17+0000",
+          "updated" : "2024-12-09T09:25:17+0000",
+          "id" : "env-id-1",
+          "name" : "env-name-1",
+          "type" : "content-template",
+          "description" : "Testing environment #1",
+          "contentPrefix" : null,
+          "owner" : {
+            "id" : "ff808081550d997c01550d9adaf40003",
+            "key" : "admin",
+            "displayName" : "Admin Owner",
+            "href" : "/owners/admin",
+            "contentAccessMode" : "org_environment"
+          },
+          "environmentContent" : [ ]
+        },
+        "installedProducts": null,
         "canActivate": false, "type": {"manifest": false,
         "id": "1000", "label": "system"}, "annotations": null,
         "username": "admin", "updated": "2016-06-02T15:16:51+0000",
         "lastCheckin": null, "entitlementCount": 0, "releaseVer":
         {"releaseVer": null}, "entitlementStatus": "valid", "name":
         "test.example.com", "created": "2016-06-02T15:16:51+0000",
-        "contentTags": null, "dev": false}"""
+        "contentTags": null,
+        "dev": false,
+        "environments": [ {
+          "created" : "2024-12-09T09:25:17+0000",
+          "updated" : "2024-12-09T09:25:17+0000",
+          "id" : "env-id-1",
+          "name" : "env-name-1",
+          "type" : "content-template",
+          "description" : "Testing environment #1",
+          "contentPrefix" : null,
+          "owner" : {
+            "id" : "ff808081550d997c01550d9adaf40003",
+            "key" : "admin",
+            "displayName" : "Admin Owner",
+            "href" : "/owners/admin",
+            "contentAccessMode" : "org_environment"
+          },
+          "environmentContent" : [ ]
+        },
+        {
+          "created" : "2024-12-09T09:25:17+0000",
+          "updated" : "2024-12-09T09:25:17+0000",
+          "id" : "env-id-2",
+          "name" : "env-name-2",
+          "type" : "content-template",
+          "description" : "Testing environment #2",
+          "contentPrefix" : null,
+          "owner" : {
+            "id" : "ff808081550d997c01550d9adaf40003",
+            "key" : "admin",
+            "displayName" : "Admin Owner",
+            "href" : "/owners/admin",
+            "contentAccessMode" : "org_environment"
+          },
+          "environmentContent" : [ ]
+        } ] }"""
+
+CONSUMER_CONTENT_JSON_WRONG_ENT_TYPE = """{"hypervisorId": null,
+        "serviceLevel": "",
+        "autoheal": true,
+        "idCert": {
+          "key": "FAKE_KEY",
+          "cert": "FAKE_CERT",
+          "serial" : {
+            "id" : 5196045143213189102,
+            "revoked" : false,
+            "collected" : false,
+            "expiration" : "2033-04-25T18:03:06+0000",
+            "serial" : 5196045143213189102,
+            "created" : "2017-04-25T18:03:06+0000",
+            "updated" : "2017-04-25T18:03:06+0000"
+          },
+          "id" : "8a8d011e5ba64700015ba647fbd20b88",
+          "created" : "2017-04-25T18:03:07+0000",
+          "updated" : "2017-04-25T18:03:07+0000"
+        },
+        "owner": {
+          "href": "/owners/admin",
+          "displayName": "Admin Owner",
+          "id": "ff808081550d997c01550d9adaf40003",
+          "key": "admin",
+          "contentAccessMode": "org_environment"
+        },
+        "href": "/consumers/c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
+        "facts": {}, "id": "ff808081550d997c015511b0406d1065",
+        "uuid": "c1b8648c-6f0a-4aa5-b34e-b9e62c0e4364",
+        "guestIds": null, "capabilities": null,
+        "environment": {
+          "created" : "2024-12-09T09:25:17+0000",
+          "updated" : "2024-12-09T09:25:17+0000",
+          "id" : "env-id-1",
+          "name" : "env-name-1",
+          "type" : "content-template",
+          "description" : "Testing environment #1",
+          "contentPrefix" : null,
+          "owner" : {
+            "id" : "ff808081550d997c01550d9adaf40003",
+            "key" : "admin",
+            "displayName" : "Admin Owner",
+            "href" : "/owners/admin",
+            "contentAccessMode" : "org_environment"
+          },
+          "environmentContent" : [ ]
+        },
+        "installedProducts": null,
+        "canActivate": false, "type": {"manifest": false,
+        "id": "1000", "label": "system"}, "annotations": null,
+        "username": "admin", "updated": "2016-06-02T15:16:51+0000",
+        "lastCheckin": null, "entitlementCount": 0, "releaseVer":
+        {"releaseVer": null}, "entitlementStatus": "valid", "name":
+        "test.example.com", "created": "2016-06-02T15:16:51+0000",
+        "contentTags": null,
+        "dev": false,
+        "environments": [ {
+          "created" : "2024-12-09T09:25:17+0000",
+          "updated" : "2024-12-09T09:25:17+0000",
+          "id" : "env-id-1",
+          "name" : "env-name-1",
+          "type" : "content-template",
+          "description" : "Testing environment #1",
+          "contentPrefix" : null,
+          "owner" : {
+            "id" : "ff808081550d997c01550d9adaf40003",
+            "key" : "admin",
+            "displayName" : "Admin Owner",
+            "href" : "/owners/admin",
+            "contentAccessMode" : "org_environment"
+          },
+          "environmentContent" : [ ]
+        },
+        {
+          "created" : "2024-12-09T09:25:17+0000",
+          "updated" : "2024-12-09T09:25:17+0000",
+          "id" : "env-id-2",
+          "name" : "env-name-2",
+          "type" : "wrong_type_foo",
+          "description" : "Testing environment #2",
+          "contentPrefix" : null,
+          "owner" : {
+            "id" : "ff808081550d997c01550d9adaf40003",
+            "key" : "admin",
+            "displayName" : "Admin Owner",
+            "href" : "/owners/admin",
+            "contentAccessMode" : "org_environment"
+          },
+          "environmentContent" : [ ]
+        } ] }"""
 
 # Following consumer do not contain information about content access mode
 OLD_CONSUMER_CONTENT_JSON = """{"hypervisorId": null,
@@ -222,13 +365,14 @@ class RegisterServiceTest(InjectionMockingTest):
         self.mock_cp.registerConsumer.return_value = expected_consumer
 
         register_service = register.RegisterService(self.mock_cp)
-        register_service.register("org", name="name", environments="environment")
+        register_service.register("org", name="name", environments=["environment"])
 
         self.mock_cp.registerConsumer.assert_called_once_with(
             name="name",
             facts={},
             owner="org",
-            environments="environment",
+            environments=["environment"],
+            environment_names=None,
             keys=None,
             installed_products=[],
             jwt_token=None,
@@ -248,6 +392,164 @@ class RegisterServiceTest(InjectionMockingTest):
             mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
         ]
         self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
+
+    @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_register_multiple_environment_ids(self, mock_persist_consumer, mock_write_cache):
+        self.mock_identity.is_valid.return_value = False
+        self.mock_installed_products.format_for_server.return_value = []
+        self.mock_installed_products.tags = []
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+        self.mock_cp.registerConsumer.return_value = expected_consumer
+
+        register_service = register.RegisterService(self.mock_cp)
+        register_service.register("org", name="name", environments=["env-id-1", "env-id-2"])
+
+        self.mock_cp.registerConsumer.assert_called_once_with(
+            name="name",
+            facts={},
+            owner="org",
+            environments=["env-id-1", "env-id-2"],
+            environment_names=None,
+            keys=None,
+            installed_products=[],
+            jwt_token=None,
+            content_tags=[],
+            consumer_type="system",
+            role="",
+            addons=[],
+            service_level="",
+            usage="",
+        )
+        self.mock_installed_products.write_cache.assert_called()
+
+        mock_persist_consumer.assert_called_once_with(expected_consumer)
+        mock_write_cache.assert_called_once()
+        expected_plugin_calls = [
+            mock.call("pre_register_consumer", name="name", facts={}),
+            mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
+        ]
+        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
+
+    @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_register_multiple_environment_names(self, mock_persist_consumer, mock_write_cache):
+        self.mock_identity.is_valid.return_value = False
+        self.mock_installed_products.format_for_server.return_value = []
+        self.mock_installed_products.tags = []
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+        self.mock_cp.registerConsumer.return_value = expected_consumer
+
+        register_service = register.RegisterService(self.mock_cp)
+        register_service.register("org", name="name", environment_names=["env-name-1", "env-name-2"])
+
+        self.mock_cp.registerConsumer.assert_called_once_with(
+            name="name",
+            facts={},
+            owner="org",
+            environments=None,
+            environment_names=["env-name-1", "env-name-2"],
+            keys=None,
+            installed_products=[],
+            jwt_token=None,
+            content_tags=[],
+            consumer_type="system",
+            role="",
+            addons=[],
+            service_level="",
+            usage="",
+        )
+        self.mock_installed_products.write_cache.assert_called()
+
+        mock_persist_consumer.assert_called_once_with(expected_consumer)
+        mock_write_cache.assert_called_once()
+        expected_plugin_calls = [
+            mock.call("pre_register_consumer", name="name", facts={}),
+            mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
+        ]
+        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
+
+    @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_register_environment_name_type(self, mock_persist_consumer, mock_write_cache):
+        self.mock_identity.is_valid.return_value = False
+        self.mock_installed_products.format_for_server.return_value = []
+        self.mock_installed_products.tags = []
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+        self.mock_cp.registerConsumer.return_value = expected_consumer
+
+        register_service = register.RegisterService(self.mock_cp)
+        register_service.register(
+            "org",
+            name="name",
+            environment_names=["env-name-1", "env-name-2"],
+            environment_type="content-template",
+        )
+
+        self.mock_cp.registerConsumer.assert_called_once_with(
+            name="name",
+            facts={},
+            owner="org",
+            environments=None,
+            environment_names=["env-name-1", "env-name-2"],
+            keys=None,
+            installed_products=[],
+            jwt_token=None,
+            content_tags=[],
+            consumer_type="system",
+            role="",
+            addons=[],
+            service_level="",
+            usage="",
+        )
+        self.mock_installed_products.write_cache.assert_called()
+
+        mock_persist_consumer.assert_called_once_with(expected_consumer)
+        mock_write_cache.assert_called_once()
+        expected_plugin_calls = [
+            mock.call("pre_register_consumer", name="name", facts={}),
+            mock.call("post_register_consumer", consumer=expected_consumer, facts={}),
+        ]
+        self.assertEqual(expected_plugin_calls, self.mock_pm.run.call_args_list)
+
+    @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_register_environment_name_wrong_type(self, mock_persist_consumer, mock_write_cache):
+        self.mock_identity.is_valid.return_value = False
+        self.mock_installed_products.format_for_server.return_value = []
+        self.mock_installed_products.tags = []
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON_WRONG_ENT_TYPE)
+        self.mock_cp.registerConsumer.return_value = expected_consumer
+
+        register_service = register.RegisterService(self.mock_cp)
+
+        with self.assertRaises(Exception):
+            register_service.register(
+                "org",
+                name="name",
+                environment_names=["env-name-1", "env-name-2"],
+                environment_type="content-template",
+            )
+
+    @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
+    @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
+    def test_register_not_allow_environment_ids_and_names(self, mock_persist_consumer, mock_write_cache):
+        self.mock_identity.is_valid.return_value = False
+        self.mock_installed_products.format_for_server.return_value = []
+        self.mock_installed_products.tags = []
+        expected_consumer = json.loads(CONSUMER_CONTENT_JSON)
+        self.mock_cp.registerConsumer.return_value = expected_consumer
+
+        register_service = register.RegisterService(self.mock_cp)
+        with self.assertRaisesRegex(
+            exceptions.ValidationError, r".*Environment IDs and environment names are mutually exclusive.*"
+        ):
+            register_service.register(
+                "org",
+                name="name",
+                environments=["env-id-1", "env-id-2"],
+                environment_names=["env-name-1", "env-name-2"],
+            )
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.clean_all_data", return_value=None)
@@ -341,13 +643,14 @@ class RegisterServiceTest(InjectionMockingTest):
 
         self.assertIsNotNone(org)
 
-        register_service.register(org, name="name", environments="environment")
+        register_service.register(org, name="name")
 
         self.mock_cp.registerConsumer.assert_called_once_with(
             name="name",
             facts={},
             owner="snowwhite",
-            environments="environment",
+            environments=None,
+            environment_names=None,
             keys=None,
             installed_products=[],
             jwt_token=None,
@@ -388,6 +691,7 @@ class RegisterServiceTest(InjectionMockingTest):
             facts={},
             owner="org",
             environments=None,
+            environment_names=None,
             keys=[1],
             installed_products=[],
             jwt_token=None,
@@ -473,6 +777,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=["addon1"],
             content_tags=[],
             environments=None,
+            environment_names=None,
             facts={},
             installed_products=[],
             jwt_token=None,
