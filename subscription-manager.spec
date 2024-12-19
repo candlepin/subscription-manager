@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.42
+Version: 1.29.43
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,18 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Dec 19 2024 Jiri Hnidek <jhnidek@redhat.com> 1.29.43-1
+- [1.29] feat/cct-868: Subset of list command options marked as deprecated *
+  Options --available, --all, --ondate, --servicelevel --no-overlap --match-
+  install, --pool-only, --afterdate were marked as deprecated in ListCommand
+  definition of their help string. (mgrunwal@redhat.com)
+- fix: Handle Retry-After headers better for 429 responses (mhorky@redhat.com)
+- feat: Better automatic registration logging (mhorky@redhat.com)
+- fix: perform autoreg waiting when performing standard autoreg
+  (ptoscano@redhat.com)
+- chore: move autoreg waiting code in own function (ptoscano@redhat.com)
+- docs: update proxy details in man page (jvlcek@redhat.com)
+
 * Thu Aug 22 2024 Pino Toscano <ptoscano@redhat.com> 1.29.42-1
 - feat: forcefully switch automatic cloud registration to v1
   (ptoscano@redhat.com)
