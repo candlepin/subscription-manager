@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.2
+Version: 1.30.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -743,6 +743,47 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Thu Dec 19 2024 Jiri Hnidek <jhnidek@redhat.com> 1.30.3-1
+- Card ID: CCT-731 - integration tests for DBus Register method
+  (jstavel@redhat.com)
+- chore: Remove the --token authentication (pkoprda@redhat.com)
+- chore: Remove artifacts of import (stomsa@redhat.com)
+- chore: Remove artifacts of redeem (stomsa@redhat.com)
+- chore: Remove artifacts of remove (stomsa@redhat.com)
+- chore: Remove artifacts of autoheal (glutexo@icloud.com)
+- chore: Remove artifacts of --auto-attach (glutexo@icloud.com)
+- chore: Remove artifacts of attach (stomsa@redhat.com)
+- fix: Added missing python packages (jhnidek@redhat.com)
+- fix: Fixed integration tests (jhnidek@redhat.com)
+- chore: Remove auto-assign CI job (mhorky@redhat.com)
+- feat: Add initial support for tmt (jhnidek@redhat.com)
+- fix: Renamed integration-tests to cockpit-tests (jhnidek@redhat.com)
+- Feat CCT-965: Include timezone in the logs In `subscription-
+  manager/src/rhsm/logutil.py`i: (mgrunwal@redhat.com)
+- feat: remove content access mode cache (jajerome@redhat.com)
+- feat: add GetEnvironments method to DBus register (ryanverdile@gmail.com)
+- feat: Added basic configuration for Packit (jhnidek@redhat.com)
+- fix: drop "autoattachinterval" from the rhsmcertd defaults
+  (ptoscano@redhat.com)
+- feat/cct-875: Options -i and --cert-interval were removed from rhsmcertd
+  command autocompletion Options -i and --cert-interval were removed from
+  rhsmcertd command autocompletion. (mgrunwal@mgrunwal-
+  thinkpadp1gen3.rmtcz.csb)
+- feat/cct-874: Autocompletion for option --servicelevel removed Autocompletion
+  for option --servicelevel (sub-man register --servicelevel) was removed.
+  (mgrunwal@mgrunwal-thinkpadp1gen3.rmtcz.csb)
+- fix: Handle Retry-After headers better for 429 responses (mhorky@redhat.com)
+- feat: Better automatic registration logging (mhorky@redhat.com)
+- refactor: Moved some definition of lists from list.py (jhnidek@redhat.com)
+- fix: Removed show_autosubscribe_output() method (jhnidek@redhat.com)
+- feat: Remove useless CLI options from list command (jhnidek@redhat.com)
+- fix: perform autoreg waiting when performing standard autoreg
+  (ptoscano@redhat.com)
+- chore: move autoreg waiting code in own function (ptoscano@redhat.com)
+- feat: support registering specifying environments with activation keys
+  (ryanverdile@gmail.com)
+- feat: Remove autoheal functionality from rhsmcertd (jvlcek@redhat.com)
+
 * Thu Sep 26 2024 Pino Toscano <ptoscano@redhat.com> 1.30.2-1
 - Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
 - feat: Create consumer cert & key owner by rhsm group (jhnidek@redhat.com)
