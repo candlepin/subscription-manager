@@ -210,7 +210,7 @@ def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
 
     # Obtain automatic registration token
     try:
-        token: Dict[str, str] = cache.CloudTokenCache._get_from_server(
+        token: Dict[str, str] = cache.CloudTokenCache.get(
             uep=uep,
             cloud_id=cloud_info["cloud_id"],
             metadata=cloud_info["metadata"],
@@ -220,14 +220,29 @@ def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
         log.exception("Cloud token could not be obtained. Unable to perform automatic registration.")
         return ExitStatus.NO_REGISTRATION_TOKEN
 
-    try:
-        _auto_register_standard(uep=uep, token=token)
-    except Exception:
-        log.exception("Standard automatic registration failed.")
-        return ExitStatus.REGISTRATION_FAILED
-    else:
-        log.info("Standard automatic registration was successful.")
-        return ExitStatus.OK
+    if token["tokenType"] == "CP-Cloud-Registration":
+        try:
+            _auto_register_standard(uep=uep, token=token)
+        except Exception:
+            log.exception("Standard automatic registration failed.")
+            return ExitStatus.REGISTRATION_FAILED
+        else:
+            log.info("Standard automatic registration was successful.")
+            return ExitStatus.OK
+
+    if token["tokenType"] == "CP-Anonymous-Cloud-Registration":
+        try:
+            _auto_register_anonymous(uep=uep, token=token)
+            cache.CloudTokenCache.delete_cache()
+        except Exception:
+            log.exception("Anonymous automatic registration failed.")
+            return ExitStatus.REGISTRATION_FAILED
+        else:
+            log.info("Anonymous automatic registration was successful.")
+            return ExitStatus.OK
+
+    log.error(f"Unsupported token type for automatic registration: {token['tokenType']}.")
+    return ExitStatus.BAD_TOKEN_TYPE
 
 
 def _auto_register_standard(uep: "UEPConnection", token: Dict[str, str]) -> None:
@@ -242,7 +257,7 @@ def _auto_register_standard(uep: "UEPConnection", token: Dict[str, str]) -> None
     _auto_register_wait()
 
     service = RegisterService(cp=uep)
-    service.register(org=None, jwt_token=token)
+    service.register(org=None, jwt_token=token["token"])
 
 
 def _auto_register_anonymous(uep: "UEPConnection", token: Dict[str, str]) -> None:
