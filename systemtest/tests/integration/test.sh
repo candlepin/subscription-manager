@@ -42,7 +42,6 @@ EOF
 ./integration-tests/scripts/run-local-candlepin.sh
 
 # create testing data in local candlepin
-./integration-tests/scripts/post-activation-keys.sh
 ./integration-tests/scripts/post-environments.sh
 
 # There is a problem with SELinux in current version of selinux-roles (for rhsm.service)
