@@ -909,6 +909,31 @@ class YumReleaseverSourceIsSetTest(fixture.SubManFixture):
 
 
 class AptRepoFileTest(unittest.TestCase):
+    keypath = "/etc/apt/trusted.gpg.d/"
+
+    @classmethod
+    def setUpClass(cls) -> None:
+
+        cls.original_os_listdir = os.listdir
+
+        def mock_os_listdir(path):
+            """
+            This method mock missing /etc/apt/trusted.gpg.d/ directory
+            :param path: of this directory
+            :return: Empty array if path is equal to keypath, otherwise return os.listdir(path)
+            """
+            if path == cls.keypath:
+                return []
+            else:
+                return cls.original_os_listdir(path)
+
+        cls.patcher = patch("os.listdir", side_effect=mock_os_listdir)
+        cls.mock_exists = cls.patcher.start()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.patcher.stop()
+
     def _helper_stub_repo(self, *args, **kwargs):
         with patch("rhsm.repofile.HAS_DEB822", True):
             repo = Repo(*args, **kwargs)
