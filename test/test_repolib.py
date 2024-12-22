@@ -29,11 +29,13 @@ from rhsm import repofile
 
 # repofile must be patched and reloaded to import AptRepofile, otherwise
 # the class is not defined in the first place
+apt_mock = MagicMock()
 deb_mock = MagicMock()
 deb_mock.Deb822 = dict
-with patch.dict("rhsm.repofile.sys.modules", {"debian.deb822": deb_mock}):
-    reload(repofile)
-    from rhsm.repofile import AptRepoFile
+with patch.dict("rhsm.repofile.sys.modules", {"apt": apt_mock}):
+    with patch.dict("rhsm.repofile.sys.modules", {"debian.deb822": deb_mock}):
+        reload(repofile)
+        from rhsm.repofile import AptRepoFile
 reload(repofile)
 
 from .stubs import (
