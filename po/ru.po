@@ -3,21 +3,23 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
 # ljanda <ljanda@redhat.com>, 2019. #zanata
+# Aleksey Fedorov <aleksejfedorov963@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-22 08:09+0200\n"
-"PO-Revision-Date: 2019-02-08 09:49+0000\n"
-"Last-Translator: ljanda <ljanda@redhat.com>\n"
-"Language-Team: Russian\n"
+"PO-Revision-Date: 2024-03-21 20:36+0000\n"
+"Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
+"Language-Team: Russian <https://translate.fedoraproject.org/projects/"
+"subscription-manager/subscription-manager-1-28/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Zanata 4.6.2\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 5.4\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 #, fuzzy
@@ -209,21 +211,23 @@ msgstr "Регистрация"
 #: src/subscription_manager/gui/data/glade/installed.glade:93
 #: src/subscription_manager/gui/data/ui/installed.ui:99
 msgid "Register System"
-msgstr "Регистрация"
+msgstr "Регистрация системы"
 
 #: cockpit/src/insights.jsx:97 cockpit/src/insights.jsx:323
 msgid "The $0 package is not available from any repository."
-msgstr ""
+msgstr "Пакет $0 недоступен ни в одном репозитории."
 
 #: cockpit/src/insights.jsx:100
 msgid ""
 "The system could not be connected to Insights because installing the $0 "
 "package requires the unexpected removal of other packages."
 msgstr ""
+"Систему не удалось подключить к Insights, поскольку установка пакета $0 "
+"требует неожиданного удаления других пакетов."
 
 #: cockpit/src/insights.jsx:113
 msgid "Connecting to Insights"
-msgstr ""
+msgstr "Подключение к Insights"
 
 #: cockpit/src/insights.jsx:151
 msgid ""
@@ -231,94 +235,99 @@ msgid ""
 "availability, and stability with Red Hat Insights — with predictive "
 "analytics, avoid problems and unplanned downtime in your Red Hat environment."
 msgstr ""
+"Проактивно выявляйте и устраняйте угрозы безопасности, производительности, "
+"доступности и стабильности с помощью Red Hat Insights - благодаря "
+"предиктивной аналитике вы сможете избежать проблем и незапланированных "
+"простоев в вашей среде Red Hat."
 
 #: cockpit/src/insights.jsx:169 cockpit/src/subscriptions-register.jsx:94
 msgid "The $0 package will be installed."
-msgstr ""
+msgstr "Будет установлен пакет $0."
 
 #: cockpit/src/insights.jsx:171
 msgid "The $0 package and $1 other package will be installed."
 msgid_plural "The $0 package and $1 other packages will be installed."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Будет установлен пакет $0 и $1 другой пакет."
+msgstr[1] "Будет установлен пакет $0 и другие $1 пакета."
+msgstr[2] "Будет установлен пакет $0 и другие $1 пакетов."
 
 #: cockpit/src/insights.jsx:179
 msgid "$0 package needs to be removed."
 msgid_plural "$0 packages need to be removed."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "$0 пакет необходимо удалить."
+msgstr[1] "$0 пакета необходимо удалить."
+msgstr[2] "$0 пакетов необходимо удалить."
 
 #: cockpit/src/insights.jsx:193
 msgid "Additional packages:"
-msgstr ""
+msgstr "Дополнительные пакеты:"
 
 #: cockpit/src/insights.jsx:201
 msgid "Removals:"
-msgstr ""
+msgstr "Перемещения:"
 
 #: cockpit/src/insights.jsx:207 cockpit/src/insights.jsx:435
 #: cockpit/src/insights.jsx:440
 msgid "Details"
-msgstr ""
+msgstr "Подробности"
 
 #: cockpit/src/insights.jsx:218 cockpit/src/insights.jsx:229
 #: cockpit/src/insights.jsx:313
 msgid "Waiting for other software management operations to finish"
 msgstr ""
+"Ожидание завершения других операций по управлению программным обеспечением"
 
 #: cockpit/src/insights.jsx:220 cockpit/src/insights.jsx:315
 msgid "Checking installed software"
-msgstr ""
+msgstr "Проверка установленного ПО"
 
 #: cockpit/src/insights.jsx:233
 msgid "Downloading $0"
-msgstr ""
+msgstr "Загрузка $0"
 
 #: cockpit/src/insights.jsx:235
 msgid "Removing $0"
-msgstr ""
+msgstr "Удаление $0"
 
 #: cockpit/src/insights.jsx:237
 msgid "Installing $0"
-msgstr ""
+msgstr "Установка $0"
 
 #: cockpit/src/insights.jsx:254
 msgid "Connect to Red Hat Insights"
-msgstr ""
+msgstr "Подключение к Red Hat Insights"
 
 #: cockpit/src/insights.jsx:257
 msgid "This system is not connected to $0."
-msgstr ""
+msgstr "Эта система не подключена к $0."
 
 #: cockpit/src/insights.jsx:267
 msgid "Connect"
-msgstr ""
+msgstr "Подключить"
 
 #: cockpit/src/insights.jsx:357
 msgid "unknown"
-msgstr ""
+msgstr "неизвестно"
 
 #: cockpit/src/insights.jsx:410
 msgid "The last Insights data upload has failed."
-msgstr ""
+msgstr "Последняя загрузка данных Insights завершилась неудачно."
 
 #: cockpit/src/insights.jsx:415
 msgid "Connected to Red Hat Insights"
-msgstr ""
+msgstr "Подключено к Red Hat Insights"
 
 #: cockpit/src/insights.jsx:421
 msgid "Next Insights data upload"
-msgstr ""
+msgstr "Следующая загрузка данных Insights"
 
 #: cockpit/src/insights.jsx:426
 msgid "Last Insights data upload"
-msgstr ""
+msgstr "Последняя загрузка данных Insights"
 
 #: cockpit/src/insights.jsx:443 cockpit/src/insights.jsx:447
 msgid "Disconnect from Insights"
-msgstr ""
+msgstr "Отключить от Insights"
 
 #: cockpit/src/insights.jsx:445
 msgid ""
@@ -346,82 +355,82 @@ msgstr "Отмена"
 
 #: cockpit/src/insights.jsx:533
 msgid "No rule hits"
-msgstr ""
+msgstr "Нет замечаний"
 
 #: cockpit/src/insights.jsx:541
 msgid "$0 critical hit"
 msgid_plural "$0 hits, including critical"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "$0 критическое замечание"
+msgstr[1] "$0 критических замечания"
+msgstr[2] "$0 критических замечаний"
 
 #: cockpit/src/insights.jsx:546
 msgid "$0 important hit"
 msgid_plural "$0 hits, including important"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "$0 важное замечание"
+msgstr[1] "$0 замечания, включая важные"
+msgstr[2] "$0 замечаний, включая важные"
 
 #: cockpit/src/insights.jsx:551
 msgid "$0 moderate hit"
 msgid_plural "$0 hits, including moderate"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "$0 замечание умеренной важности"
+msgstr[1] "$0 замечания, включая умеренной важности"
+msgstr[2] "$0 замечаний, включая умеренной важности"
 
 #: cockpit/src/insights.jsx:556
 msgid "$0 low severity hit"
 msgid_plural "$0 low severity hits"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "$0 малое замечание"
+msgstr[1] "$0 малых замечания"
+msgstr[2] "$0 малых замечаний"
 
 #: cockpit/src/insights.jsx:562
 msgid "$0 hit"
 msgid_plural "$0 hits"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "$0 замечание"
+msgstr[1] "$0 замечания"
+msgstr[2] "$0 замечаний"
 
 #: cockpit/src/insights.jsx:569
 msgid "View your Insights results"
-msgstr ""
+msgstr "Просмотр результатов Insights"
 
 #: cockpit/src/insights.jsx:575
 msgid "Connected to Insights"
-msgstr ""
+msgstr "Подключено к Insights"
 
 #: cockpit/src/insights.jsx:587
 msgid "Not connected"
-msgstr ""
+msgstr "Не подключено"
 
 #: cockpit/src/insights.jsx:592 cockpit/src/subscriptions-register.jsx:85
 msgid "Insights"
-msgstr ""
+msgstr "Insights"
 
 #: cockpit/src/subscriptions-client.js:317
 msgid "Starting registration service ..."
-msgstr ""
+msgstr "Запуск службы регистрации ..."
 
 #: cockpit/src/subscriptions-client.js:336
 msgid "Registering using activation key ..."
-msgstr ""
+msgstr "Регистрация с использованием ключа активации ..."
 
 #: cockpit/src/subscriptions-client.js:358
 msgid "Registering using username and password ..."
-msgstr ""
+msgstr "Регистрация с использованием имени пользователя и пароля ..."
 
 #: cockpit/src/subscriptions-client.js:387
 msgid "Stopping registration service ..."
-msgstr ""
+msgstr "Остановка службы регистрации ..."
 
 #: cockpit/src/subscriptions-client.js:411
 msgid "Saving configuration ..."
-msgstr ""
+msgstr "Сохранение конфигурации ..."
 
 #: cockpit/src/subscriptions-client.js:431
 msgid "Updating status ..."
-msgstr ""
+msgstr "Обновление статуса …"
 
 #: cockpit/src/subscriptions-client.js:449
 #: cockpit/src/subscriptions-view.jsx:415
@@ -431,11 +440,11 @@ msgstr "Отмена регистрации"
 
 #: cockpit/src/subscriptions-client.js:488
 msgid "not-found"
-msgstr ""
+msgstr "не найдено"
 
 #: cockpit/src/subscriptions-client.js:525
 msgid "Corrupted JSON with status"
-msgstr ""
+msgstr "Поврежденный JSON с состоянием"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-client.js:541
@@ -467,19 +476,19 @@ msgstr "Адрес прокси"
 
 #: cockpit/src/subscriptions-register.jsx:61
 msgid "Proxy Username"
-msgstr "Пользователь"
+msgstr "Имя пользователя прокси"
 
 #: cockpit/src/subscriptions-register.jsx:67
 msgid "Proxy Password"
-msgstr "Пароль"
+msgstr "Пароль прокси"
 
 #: cockpit/src/subscriptions-register.jsx:87
 msgid "Connect this system to $0."
-msgstr ""
+msgstr "Подключить эту систему к $0."
 
 #: cockpit/src/subscriptions-register.jsx:107
 msgid "Username"
-msgstr ""
+msgstr "Имя пользователя"
 
 #: cockpit/src/subscriptions-register.jsx:112
 msgid "Password"
@@ -498,10 +507,8 @@ msgstr "Ключ активации"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-register.jsx:132
-#, fuzzy
-#| msgid "Organization: "
 msgid "Organization ID"
-msgstr "Организация: "
+msgstr "ID организации"
 
 #: cockpit/src/subscriptions-register.jsx:142
 msgid "Default"
@@ -518,11 +525,11 @@ msgstr "URL-адрес"
 
 #: cockpit/src/subscriptions-register.jsx:155
 msgid "Use proxy server"
-msgstr ""
+msgstr "Использовать прокси-сервер"
 
 #: cockpit/src/subscriptions-register.jsx:159
 msgid "Method"
-msgstr ""
+msgstr "Способ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-register.jsx:163 src/rct/manifest_commands.py:250
@@ -532,7 +539,7 @@ msgstr "Учетная запись"
 
 #: cockpit/src/subscriptions-register.jsx:168
 msgid "Activation key"
-msgstr ""
+msgstr "Активационный ключ"
 
 #: cockpit/src/subscriptions-register.jsx:174
 msgid "Subscriptions"
@@ -540,7 +547,7 @@ msgstr "Подписки"
 
 #: cockpit/src/subscriptions-register.jsx:176
 msgid "Attach automatically"
-msgstr ""
+msgstr "Прикрепить автоматически"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:42 cockpit/src/subscriptions-view.jsx:61
@@ -554,13 +561,11 @@ msgstr "Назначить автоматически"
 
 #: cockpit/src/subscriptions-view.jsx:55
 msgid "Auto-attaching ..."
-msgstr ""
+msgstr "Автоматическое прикрепление …"
 
 #: cockpit/src/subscriptions-view.jsx:74 cockpit/src/subscriptions-view.jsx:175
-#, fuzzy
-#| msgid "Product Name"
 msgid "Product name"
-msgstr "Имя"
+msgstr "Имя продукта"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:111
@@ -571,42 +576,32 @@ msgstr "Подписано"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:115
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed"
 msgstr "Подписано частично"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:117
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed ($0)"
-msgstr "Подписано частично"
+msgstr "Подписано частично ($0)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:121
-#, fuzzy
-#| msgid "Not Subscribed"
 msgid "Not subscribed"
 msgstr "Не подписано"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:123
-#, fuzzy
-#| msgid "Not Subscribed"
 msgid "Not subscribed ($0)"
-msgstr "Не подписано"
+msgstr "Не подписано ($0)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:128
-#, fuzzy
-#| msgid "Unknown"
 msgid "Unknown status"
-msgstr "Неизвестно"
+msgstr "Неизвестный статус"
 
 #: cockpit/src/subscriptions-view.jsx:179
 msgid "Product ID"
-msgstr "ID"
+msgstr "ID продукта"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:183 src/rct/printing.py:50
@@ -617,7 +612,7 @@ msgstr "Версия"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:187 src/rct/printing.py:51
 msgid "Arch"
-msgstr "Арх."
+msgstr "Архитектура"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:195
@@ -629,11 +624,11 @@ msgstr "Статус"
 
 #: cockpit/src/subscriptions-view.jsx:199
 msgid "Starts"
-msgstr "Начало"
+msgstr "Начинается"
 
 #: cockpit/src/subscriptions-view.jsx:203
 msgid "Ends"
-msgstr "Конец"
+msgstr "Заканчивается"
 
 #: cockpit/src/subscriptions-view.jsx:226
 #: cockpit/src/subscriptions-view.jsx:230
@@ -642,107 +637,83 @@ msgstr "Установленные продукты"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:233
-#, fuzzy
-#| msgid "No installed products detected."
 msgid "No installed products detected"
-msgstr "Нет установленных продуктов."
+msgstr "Нет установленных продуктов"
 
 #: cockpit/src/subscriptions-view.jsx:307
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Organization/Environment Access. This host "
-#| "has access to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of system purpose status."
 msgstr ""
-"Режим доступа к содержимому настроен на доступ к организации / среде. Этот "
-"хост имеет доступ к контенту, независимо от статуса подписки.\n"
+"Режим доступа к содержимому установлен на Простой доступ к содержимому. Этот "
+"хост имеет доступ к содержимому, независимо от состояния назначения системы."
 
 #: cockpit/src/subscriptions-view.jsx:313
 #: cockpit/src/subscriptions-view.jsx:428
 msgid "Popover with explanation of SCA mode"
-msgstr ""
+msgstr "Всплывающее окно с объяснением режима SCA"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:320
 #: cockpit/src/subscriptions-view.jsx:435
-#, fuzzy
-#| msgid "Subscription Registration"
 msgid "Subscriptions information"
-msgstr "Регистрация подписки"
+msgstr "Информация о подписках"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:345
-#, fuzzy
-#| msgid "Service Level"
 msgid "Service level"
 msgstr "Уровень обслуживания"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:351 src/rct/printing.py:85
 msgid "Usage"
-msgstr "Формат"
+msgstr "Использование"
 
 #: cockpit/src/subscriptions-view.jsx:357
-#, fuzzy
-#| msgid "Role:  "
 msgid "Role"
-msgstr "Роль:  "
+msgstr "Роль"
 
 #: cockpit/src/subscriptions-view.jsx:363 src/rct/printing.py:86
 msgid "Add-ons"
-msgstr ""
+msgstr "Дополнения"
 
 #: cockpit/src/subscriptions-view.jsx:381
-#, fuzzy
-#| msgid "System Purpose Status: %s\n"
 msgid "No system purpose attributes set"
-msgstr "Состояние цели системы: %s\n"
+msgstr "Атрибуты ролей системы не установлены"
 
 #: cockpit/src/subscriptions-view.jsx:392
-#, fuzzy
-#| msgid "System Purpose"
 msgid "System purpose"
 msgstr "Назначение системы"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:406
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Not registered"
-msgstr "Система не зарегистрирована."
+msgstr "Не зарегистрировано"
 
 #: cockpit/src/subscriptions-view.jsx:415
 msgid "Unregister"
 msgstr "Удалить регистрацию"
 
 #: cockpit/src/subscriptions-view.jsx:422
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Organization/Environment Access. This host "
-#| "has access to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status."
 msgstr ""
-"Режим доступа к содержимому настроен на доступ к организации / среде. Этот "
-"хост имеет доступ к контенту, независимо от статуса подписки.\n"
+"Режим доступа к содержимому установлен на Простой доступ к содержимому. Этот "
+"хост имеет доступ к содержимому, независимо от статуса подписки."
 
 #: cockpit/src/subscriptions-view.jsx:449
 msgid "Overview"
-msgstr ""
+msgstr "Обзор"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:455
-#, fuzzy
-#| msgid "Subscription "
 msgid "Subscription status"
-msgstr "Подписка "
+msgstr "Статус подписки"
 
 #: cockpit/src/subscriptions-view.jsx:491
 msgid "Updating"
-msgstr "обновление"
+msgstr "Обновление"
 
 #: cockpit/src/subscriptions-view.jsx:492
 msgid "Retrieving subscription status..."
@@ -754,37 +725,35 @@ msgid ""
 "and try reloading the page. Additionally, make sure that you have checked "
 "the 'Reuse my password for privileged tasks' checkbox on the login page."
 msgstr ""
+"Служба rhsm недоступна. Убедитесь, что subscription-manager установлен, и "
+"попробуйте перезагрузить страницу. Кроме того, убедитесь, что вы установили "
+"флажок \"Повторно использовать мой пароль для привилегированных задач\" на "
+"странице входа в систему."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:507
-#, fuzzy
-#| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to the reach the rhsm service."
-msgstr "Ошибка соединения с сервером: %s:%s%s"
+msgstr "Невозможно связаться со службой rhsm."
 
 #: cockpit/src/subscriptions-view.jsx:509
 msgid "Access denied"
-msgstr ""
+msgstr "Доступ запрещен"
 
 #: cockpit/src/subscriptions-view.jsx:510
 msgid "The current user isn't allowed to access system subscription status."
-msgstr ""
+msgstr "Текущему пользователю не разрешен доступ к статусу подписки в системе."
 
 #: cockpit/src/subscriptions-view.jsx:512
 msgid "Unable to connect"
 msgstr "Не удалось подключиться"
 
 #: cockpit/src/subscriptions-view.jsx:514
-#, fuzzy
-#| msgid ""
-#| "Couldn't get system subscription status. Please ensure subscription-"
-#| "manager is installed."
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed. Reported status: $0 ($1)"
 msgstr ""
-"Не удалось получить статус системной подписки. Убедитесь, что subscription-"
-"manager установлен."
+"Не удалось получить статус подписки в системе. Убедитесь, что установлен "
+"менеджер подписок. Сообщаемый статус: $0 ($1)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:111
