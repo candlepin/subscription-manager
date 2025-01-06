@@ -300,10 +300,10 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
         else:
             return False
 
-    def _enable_content(self, uep: "UEPConnection", consumer: dict) -> None:
+    @staticmethod
+    def _enable_content(uep: "UEPConnection", consumer: dict) -> None:
         """Try to enable content: refresh SCA entitlement certs in SCA mode."""
         content_access: str = consumer["owner"]["contentAccessMode"]
-        enabled_content = None
 
         if content_access == "entitlement":
             log.error("Entitlement content access mode is not supported")
@@ -312,12 +312,8 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
             service = EntitlementService(uep)
             # TODO: try get anything useful from refresh result. It is not possible atm.
             service.refresh(remove_cache=False, force=False)
-
         else:
             log.error(f"Unable to enable content due to unsupported content access mode: '{content_access}'")
-
-        if enabled_content is not None:
-            consumer["enabledContent"] = enabled_content
 
     def _check_force_handling(self, register_options: dict, connection_options: dict) -> None:
         """
