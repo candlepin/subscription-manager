@@ -30,7 +30,6 @@ from subscription_manager.cp_provider import CPProvider
 
 from subscription_manager.i18n import Locale
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.entcertlib import EntCertActionInvoker
 from subscription_manager.utils import is_true_value
 
 if TYPE_CHECKING:
@@ -263,10 +262,12 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
         uep: UEPConnection = self.build_uep(connection_options)
         service = RegisterService(uep)
 
+        enable_content: bool = self._remove_enable_content_option(register_options, default=True)
         consumer: dict = service.register(organization, **register_options)
 
-        ent_cert_lib = EntCertActionInvoker()
-        ent_cert_lib.update()
+        # When consumer is created, we can try to enable content, if requested.
+        if enable_content:
+            self._enable_content(uep, consumer)
 
         return consumer
 
@@ -295,10 +296,7 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
             return default
 
         enable_content = options.pop("enable_content")
-        if is_true_value(enable_content):
-            return True
-        else:
-            return False
+        return is_true_value(enable_content)
 
     @staticmethod
     def _enable_content(uep: "UEPConnection", consumer: dict) -> None:
