@@ -31,6 +31,7 @@ from subscription_manager.cp_provider import CPProvider
 from subscription_manager.i18n import Locale
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.entcertlib import EntCertActionInvoker
+from subscription_manager.utils import is_true_value
 
 if TYPE_CHECKING:
     from rhsm.connection import UEPConnection
@@ -284,15 +285,20 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
         """
         raise NoOrganizationException(username=username)
 
-    def _remove_enable_content_option(self, options: dict) -> bool:
+    @staticmethod
+    def _remove_enable_content_option(options: dict, default: bool = False) -> bool:
         """Try to remove enable_content option from options dictionary.
 
         :returns: The value of 'enable_content' key.
         """
         if "enable_content" not in options:
-            return False
+            return default
 
-        return bool(options.pop("enable_content"))
+        enable_content = options.pop("enable_content")
+        if is_true_value(enable_content):
+            return True
+        else:
+            return False
 
     def _enable_content(self, uep: "UEPConnection", consumer: dict) -> None:
         """Try to enable content: refresh SCA entitlement certs in SCA mode."""
