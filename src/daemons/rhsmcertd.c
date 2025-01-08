@@ -122,8 +122,8 @@ typedef struct _Config {
     bool auto_registration;
 } Config;
 
-const char *
-timestamp ()
+void
+format_timestamp (char *timestamp, size_t timestamp_len)
 {
     time_t tm = time (0);
     char *ts = asctime (localtime (&tm));
@@ -134,7 +134,8 @@ timestamp ()
             *p = 0;
         }
     }
-    return ts;
+    strncpy (timestamp, ts, timestamp_len - 1);
+    timestamp[timestamp_len - 1] = 0;
 }
 
 /*
@@ -153,6 +154,7 @@ r_log (const char *level, const char *message, ...)
     va_list argp;
     FILE *log_file = NULL;
     struct stat log_dir_stat;
+    char timestamp[64];
 
     /* When log directory does not exist, then try to create this directory */
     if (stat(LOGDIR, &log_dir_stat) != 0) {
@@ -164,9 +166,10 @@ r_log (const char *level, const char *message, ...)
         log_file = stdout;
         use_stdout = true;
     }
+    format_timestamp (timestamp, sizeof (timestamp));
     va_start (argp, message);
 
-    fprintf (log_file, "%s [%s] ", timestamp (), level);
+    fprintf (log_file, "%s [%s] ", timestamp, level);
     vfprintf (log_file, message, argp);
     putc ('\n', log_file);
 
