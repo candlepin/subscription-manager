@@ -21,6 +21,7 @@
 #include <sys/syscall.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/time.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <stdio.h>
@@ -122,20 +123,38 @@ typedef struct _Config {
     bool auto_registration;
 } Config;
 
+/**
+ * Format an ISO 8601 timestamp with milliseconds precision to the inout
+ * [timestamp] argument.
+ */
 void
 format_timestamp (char *timestamp, size_t timestamp_len)
 {
-    time_t tm = time (0);
-    char *ts = asctime (localtime (&tm));
-    char *p = ts;
-    while (*p) {
-        p++;
-        if (*p == '\n') {
-            *p = 0;
-        }
-    }
-    strncpy (timestamp, ts, timestamp_len - 1);
-    timestamp[timestamp_len - 1] = 0;
+    struct timeval tv;
+    struct tm tm;
+
+    // Get the time with a subsecond precision, and convert the seconds
+    // to a 'tm' struct for usage with strftime()
+    gettimeofday (&tv, NULL);
+    localtime_r (&tv.tv_sec, &tm);
+
+    // First pass at time formatting: date, 'T' separator, time (up to seconds)
+    // and '.' separator before milliseconds
+    strftime (timestamp, timestamp_len, "%Y-%m-%dT%H:%M:%S.", &tm);
+
+    // Second pass: format the milliseconds
+    sprintf (timestamp + 20, "%03ld", tv.tv_usec / 1000);
+
+    // Third pass: format the timezone offset from UTC as '+hhmm' or '-hhmm'
+    strftime (timestamp + 23, 10, "%z", &tm);
+
+    // Fourth pass: since there is no ':' between hours and minutes in the
+    // timezone offset printed by the previous step, then shift the minutes
+    // by one character further to make room for the ':';
+    // the 3 characters moved using memmove() include the trailing null
+    // character at the end (so it is preserved)
+    memmove (timestamp + 27, timestamp + 26, 3);
+    timestamp[26] = ':';
 }
 
 /*
