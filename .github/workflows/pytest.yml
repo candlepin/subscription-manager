@@ -17,7 +17,7 @@ jobs:
       matrix:
         include:
           - name: "CentOS Stream 10"
-            image: "quay.io/centos/centos:stream10-development"
+            image: "quay.io/centos/centos:stream10"
             pytest_args: ''
           - name: "Fedora latest"
             image: "registry.fedoraproject.org/fedora:latest"
