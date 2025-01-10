@@ -435,6 +435,9 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
     ln -s %{_sbindir}/service %{buildroot}/%{_sbindir}/rcrhsmcertd
 %endif
 
+# Remove script which we only need in debian/ubuntu
+rm -f %{buildroot}%{_bindir}/package-profile-upload
+
 # base/cli tools use the gettext domain 'rhsm', while the
 # gnome-help tools use domain 'subscription-manager'
 %files -f rhsm.lang
