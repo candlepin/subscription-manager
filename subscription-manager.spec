@@ -151,7 +151,6 @@ Requires: %{py_package_prefix}-zypp-plugin
 %else
 Requires: %{py_package_prefix}-dateutil
 Requires: %{py_package_prefix}-dbus
-Requires: usermode
 Requires: python3-gobject-base
 %endif
 
@@ -459,8 +458,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %else
 
-# symlink to console-helper
-%{_bindir}/subscription-manager
 # PAM config
 %{_sysconfdir}/pam.d/subscription-manager
 %{_sysconfdir}/security/console.apps/subscription-manager

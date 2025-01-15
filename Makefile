@@ -241,9 +241,7 @@ install-files: dbus-install install-conf install-plugins
 	install -d $(DESTDIR)/$(PREFIX)/lib/sysusers.d
 	install -m 644 etc-conf/rhsm-sysuser.conf $(DESTDIR)/$(PREFIX)/lib/sysusers.d/rhsm.conf
 
-	# SUSE Linux does not make use of consolehelper
 	if [ -f /etc/redhat-release ]; then \
-		ln -sf /usr/bin/consolehelper $(DESTDIR)/$(PREFIX)/bin/subscription-manager; \
 		install -m 644 etc-conf/subscription-manager.pam $(DESTDIR)/etc/pam.d/subscription-manager; \
 		install -m 644 etc-conf/subscription-manager.console $(DESTDIR)/etc/security/console.apps/subscription-manager; \
 	fi; \
