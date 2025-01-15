@@ -70,6 +70,11 @@ jobs:
             python3-pip python3-setuptools
           pip install https://github.com/rpm-software-management/tito/archive/refs/tags/tito-0.6.22-1.tar.gz
 
+      - name: Install which (RHEL-73048)
+        if: ${{ matrix.name == 'CentOS Stream 10' }}
+        run: |
+          dnf --setopt install_weak_deps=False install -y which
+
       - name: Build the package
         run: |
           tito build --output=tito/ --test --rpm
