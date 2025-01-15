@@ -12,13 +12,13 @@
 # Transtats <suanand@redhat.com>, 2022, 2023.
 # blutch112 <vincent.lefebvre59@gmail.com>, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2023.
-# Léane GRASSER <leane.grasser@proton.me>, 2024.
+# Léane GRASSER <leane.grasser@proton.me>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-07 18:24+0100\n"
-"PO-Revision-Date: 2024-12-13 12:38+0000\n"
+"PO-Revision-Date: 2025-01-10 13:38+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/fr/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -1796,6 +1796,9 @@ msgid ""
 "Deprecated, this command will be removed from the future major releases. "
 "This command is no-op. Show or modify the system purpose addons setting"
 msgstr ""
+"Déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures. Cette commande n'a aucun effet. Afficher ou modifier les "
+"paramètres des extensions de finalité du système"
 
 #: src/subscription_manager/cli_command/attach.py:51
 msgid "The ID of the pool to attach (can be specified more than once)"
@@ -1844,17 +1847,14 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/attach.py:98
-#, fuzzy
-#| msgid ""
-#| "Attach a specified subscription to the registered system, when system "
-#| "does not use Simple Content Access mode"
 msgid ""
 "Deprecated, this command will be removed from the future major releases. "
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
 msgstr ""
-"Assigner l'abonnement spécifié au système enregistré, lorsque le système "
-"n'utilise pas le mode Simple Content Access"
+"Déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures. Assigner l'abonnement spécifié au système enregistré, lorsque le "
+"système n'utilise pas le mode Simple Content Access"
 
 #: src/subscription_manager/cli_command/attach.py:112
 msgid "Error: --auto may not be used when specifying pools."
@@ -1951,14 +1951,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/autoheal.py:28
-#, fuzzy
-#| msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgid ""
 "Deprecated, this option will be removed from the future major releases. Set "
 "if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
-"Paramétrer si les abonnements sont liés à une programmation (par défaut : "
-"quotidien)"
+"Déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures. Paramétrer si les abonnements sont liés à une programmation (par "
+"défaut : quotidien)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/autoheal.py:31
@@ -2394,6 +2393,9 @@ msgid ""
 "This command is no-op in simple content access mode. Import certificates "
 "which were provided outside of the tool"
 msgstr ""
+"Déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures. Cette commande n'a aucun effet en mode Simple Content Access. "
+"Importer des certificats non fournis par cet outil"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/import_cert.py:41
@@ -2717,77 +2719,69 @@ msgid ""
 "deprecated, this option will be removed from the future major releases; show "
 "those subscriptions which are available"
 msgstr ""
+"déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures ; afficher ces abonnements qui sont disponibles"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/list.py:229
-#, fuzzy
-#| msgid "used with --available to ensure all subscriptions are returned"
 msgid ""
 "deprecated, this option will be removed from the future major releases; used "
 "with --available to ensure all subscriptions are returned"
 msgstr ""
-"utilisé avec --available pour assurer que tous les abonnements soient bien "
-"retournés"
+"déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures ; utilisé avec --available pour assurer que tous les abonnements "
+"soient bien retournés"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/list.py:237
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "date to search on, defaults to today's date, only used with --available "
-#| "(example: {example})"
+#, python-brace-format
 msgid ""
 "deprecated, this option will be removed from the future major releases; date "
 "to search on, defaults to today's date, only used with --available (example: "
 "{example})"
 msgstr ""
-"date à rechercher, date actuelle par défaut, uniquement utilisé avec --"
-"available (exemple : {example})"
+"déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures ; date à rechercher, date actuelle par défaut, uniquement utilisé "
+"avec --available (exemple : {example})"
 
 #: src/subscription_manager/cli_command/list.py:246
 msgid ""
 "deprecated, this option will be removed from the future major releases; show "
 "the subscriptions being consumed by this system"
 msgstr ""
+"déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures ; afficher les abonnements consommés par le système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:254
-#, fuzzy
-#| msgid ""
-#| "shows only subscriptions matching the specified service level; only used "
-#| "with --available and --consumed"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
 msgstr ""
-"affiche uniquement les abonnements correspondants au niveau de service "
-"spécifié ; uniquement utilisé avec --available et --consumed"
+"déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures ; affiche uniquement les abonnements correspondants au niveau de "
+"service spécifié ; uniquement utilisé avec --available et --consumed"
 
 #: src/subscription_manager/cli_command/list.py:263
-#, fuzzy
-#| msgid ""
-#| "shows pools which provide products that are not already covered; only "
-#| "used with --available"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows pools which provide products that are not already covered; only used "
 "with --available"
 msgstr ""
-"affiche les pools fournissant des produits qui ne sont pas déjà couverts ; "
-"uniquement utilisé avec --available"
+"déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures ; affiche les pools fournissant des produits qui ne sont pas déjà "
+"couverts ; uniquement utilisé avec --available"
 
 #: src/subscription_manager/cli_command/list.py:272
-#, fuzzy
-#| msgid ""
-#| "shows only subscriptions matching products that are currently installed; "
-#| "only used with --available"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
 msgstr ""
-"affiche seulement les abonnements correspondants aux produits actuellement "
-"installés ; uniquement utilisé avec --available"
+"déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures ; affiche seulement les abonnements correspondants aux produits "
+"actuellement installés ; uniquement utilisé avec --available"
 
 #: src/subscription_manager/cli_command/list.py:281
 msgid ""
@@ -2801,31 +2795,26 @@ msgstr ""
 "casse)."
 
 #: src/subscription_manager/cli_command/list.py:291
-#, fuzzy
-#| msgid ""
-#| "lists only the pool IDs for applicable available or consumed "
-#| "subscriptions; only used with --available and --consumed"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
 msgstr ""
-"répertorie uniquement les ID de pools pour les abonnements applicables "
-"disponibles ou consommables. Uniquement utilisé avec --available et --"
-"consumed"
+"déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures ; répertorie uniquement les ID de pools pour les abonnements "
+"applicables disponibles ou consommables. Uniquement utilisé avec --available "
+"et --consumed"
 
 #: src/subscription_manager/cli_command/list.py:300
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "show pools that are active on or after the given date; only used with --"
-#| "available (example: {example})"
+#, python-brace-format
 msgid ""
 "deprecated, this option will be removed from the future major releases; show "
 "pools that are active on or after the given date; only used with --available "
 "(example: {example})"
 msgstr ""
-"affiche les pools actifs à date donnée ou passé cette date, uniquement "
-"utilisé avec --available (exemple : {example})"
+"déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures ; affiche les pools actifs à date donnée ou passé cette date, "
+"uniquement utilisé avec --available (exemple : {example})"
 
 #: src/subscription_manager/cli_command/list.py:326
 msgid "Error: --afterdate is only applicable with --available"
@@ -3132,6 +3121,9 @@ msgid ""
 "This command is no-op in simple content access mode. Attempt to redeem a "
 "subscription for a preconfigured system"
 msgstr ""
+"Déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures. Cette commande n'a aucun effet en mode Simple Content Access. "
+"Essayer d'activer un abonnement pour un système préconfiguré"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:40
@@ -3233,6 +3225,9 @@ msgid ""
 "option is no-op when simple content access is used. Automatically attach "
 "compatible subscriptions to this system"
 msgstr ""
+"Déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures. Cette option n'a aucun effet en mode Simple Content Access. "
+"Assigner automatiquement au système les abonnements compatibles"
 
 #: src/subscription_manager/cli_command/register.py:127
 msgid ""
@@ -3452,6 +3447,9 @@ msgid ""
 "This command is no-op in simple content access mode. It tries to remove all "
 "or specific subscriptions from this system"
 msgstr ""
+"Déconseillé, cette commande sera supprimée dans les prochaines versions "
+"majeures. Cette option n'a aucun effet en mode Simple Content Access. Elle a "
+"pour effet d'essayer de retirer tout ou partie des abonnements sur ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/remove.py:79
