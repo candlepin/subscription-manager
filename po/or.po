@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 12:27+0200\n"
+"POT-Creation-Date: 2025-01-07 18:12+0100\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Oriya\n"
@@ -16,73 +16,104 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "X-Generator: Zanata 3.9.6\n"
 
+#: /usr/lib64/python3.12/argparse.py:228
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/argparse.py:296
+#: /usr/lib64/python3.12/argparse.py:299
 #, fuzzy
 #| msgid "Usage: %s\n"
 msgid "usage: "
 msgstr "ଉପଯୋଗ: %s\n"
 
-#: /usr/lib64/python3.9/argparse.py:861
+#: /usr/lib64/python3.12/argparse.py:722
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
+
+#: /usr/lib64/python3.12/argparse.py:784
+#, python-format
+msgid "argument %(argument_name)s: %(message)s"
+msgstr ""
+
+#: /usr/lib64/python3.12/argparse.py:890
 msgid ".__call__() not defined"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:1204
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: /usr/lib64/python3.12/argparse.py:1161
+msgid "show program's version number and exit"
+msgstr "ପ୍ରଗ୍ରାମ ସଂସ୍କରଣକୁ ଦର୍ଶାନ୍ତୁ ଏବଂ ପ୍ରସ୍ଥାନକରନ୍ତୁ"
+
+#: /usr/lib64/python3.12/argparse.py:1223
+#, python-format
+msgid "conflicting subparser: %s"
+msgstr ""
+
+#: /usr/lib64/python3.12/argparse.py:1227
+#, python-format
+msgid "conflicting subparser alias: %s"
+msgstr ""
+
+#: /usr/lib64/python3.12/argparse.py:1262
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:1264
+#: /usr/lib64/python3.12/argparse.py:1323
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:1273
+#: /usr/lib64/python3.12/argparse.py:1332
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:1482
+#: /usr/lib64/python3.12/argparse.py:1541
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:1520
+#: /usr/lib64/python3.12/argparse.py:1583
 msgid "'required' is an invalid argument for positionals"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:1542
+#: /usr/lib64/python3.12/argparse.py:1604
 #, python-format
 msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:1560
+#: /usr/lib64/python3.12/argparse.py:1622
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:1577
+#: /usr/lib64/python3.12/argparse.py:1639
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:1595
+#: /usr/lib64/python3.12/argparse.py:1657
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: /usr/lib64/python3.9/argparse.py:1661
+#: /usr/lib64/python3.12/argparse.py:1731
 msgid "mutually exclusive arguments must be optional"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/argparse.py:1728
+#: /usr/lib64/python3.12/argparse.py:1807
 #, fuzzy
 #| msgid "%s option requires an argument"
 msgid "positional arguments"
@@ -90,97 +121,103 @@ msgstr "%s ପସନ୍ଦ ଏକ ସ୍ବତନ୍ତ୍ରଚର ଆବଶ୍
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/argparse.py:1729
+#: /usr/lib64/python3.12/argparse.py:1808
 #, fuzzy
-#| msgid "%s option requires an argument"
-msgid "optional arguments"
-msgstr "%s ପସନ୍ଦ ଏକ ସ୍ବତନ୍ତ୍ରଚର ଆବଶ୍ଯକ କରୁଛି"
+#| msgid "Options"
+msgid "options"
+msgstr "ବିକଳ୍ପଗୁଡିକ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/argparse.py:1744
+#: /usr/lib64/python3.12/argparse.py:1823
 msgid "show this help message and exit"
 msgstr "ଏହି ସହାୟତା ସନ୍ଦେଶ ଦେଖାନ୍ତୁ ଏବଂ ପ୍ରସ୍ଥାନ କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/argparse.py:1775
+#: /usr/lib64/python3.12/argparse.py:1854
 #, fuzzy
 #| msgid "cannot parse argument: %s"
 msgid "cannot have multiple subparser arguments"
 msgstr "ସ୍ୱତନ୍ତ୍ରଚରକୁ ବିଶ୍ଳେଷଣ କରିପାରିବେ ନାହିଁ: %s"
 
-#: /usr/lib64/python3.9/argparse.py:1827 /usr/lib64/python3.9/argparse.py:2338
+#: /usr/lib64/python3.12/argparse.py:1860
+msgid "subcommands"
+msgstr ""
+
+#: /usr/lib64/python3.12/argparse.py:1906
+#: /usr/lib64/python3.12/argparse.py:2459
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/argparse.py:1928
+#: /usr/lib64/python3.12/argparse.py:2011
 #, fuzzy, python-format
 #| msgid "cannot parse argument: %s"
 msgid "not allowed with argument %s"
 msgstr "ସ୍ୱତନ୍ତ୍ରଚରକୁ ବିଶ୍ଳେଷଣ କରିପାରିବେ ନାହିଁ: %s"
 
-#: /usr/lib64/python3.9/argparse.py:1974 /usr/lib64/python3.9/argparse.py:1988
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: /usr/lib64/python3.12/argparse.py:2030
+#, fuzzy, python-format
+#| msgid "ambiguous option: %s (%s?)"
+msgid "ambiguous option: %(option)s could match %(matches)s"
+msgstr "ସନ୍ଦେହଜନକ ବିକଳ୍ପ: %s (%s?)"
+
+#: /usr/lib64/python3.12/argparse.py:2062
+#: /usr/lib64/python3.12/argparse.py:2094
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:2095
+#: /usr/lib64/python3.12/argparse.py:2230
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/argparse.py:2110
+#: /usr/lib64/python3.12/argparse.py:2245
 #, fuzzy, python-format
 #| msgid "Wrong number of arguments specified.\n"
 msgid "one of the arguments %s is required"
 msgstr "ଭୁଲ ସଂଖ୍ୟକ ସ୍ୱତନ୍ତ୍ରଚରଗୁଡ଼ିକୁ ଉଲ୍ଲେଖ କରାଯାଇଛି।\n"
 
-#: /usr/lib64/python3.9/argparse.py:2153
+#: /usr/lib64/python3.12/argparse.py:2289
 msgid "expected one argument"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:2154
+#: /usr/lib64/python3.12/argparse.py:2290
 msgid "expected at most one argument"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:2155
+#: /usr/lib64/python3.12/argparse.py:2291
 msgid "expected at least one argument"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:2159
+#: /usr/lib64/python3.12/argparse.py:2295
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] ""
 msgstr[1] ""
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: /usr/lib64/python3.9/argparse.py:2217
-#, fuzzy, python-format
-#| msgid "ambiguous option: %s (%s?)"
-msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "ସନ୍ଦେହଜନକ ବିକଳ୍ପ: %s (%s?)"
-
-#: /usr/lib64/python3.9/argparse.py:2281
+#: /usr/lib64/python3.12/argparse.py:2405
 #, python-format
 msgid "unexpected option string: %s"
 msgstr ""
 
-#: /usr/lib64/python3.9/argparse.py:2478
+#: /usr/lib64/python3.12/argparse.py:2541
 #, python-format
 msgid "%r is not callable"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/argparse.py:2495
+#: /usr/lib64/python3.12/argparse.py:2557
 #, fuzzy, python-format
 #| msgid "option %s: invalid %s value: %r"
 msgid "invalid %(type)s value: %(value)r"
@@ -188,7 +225,7 @@ msgstr "ବିକଳ୍ପ %s: ଅବୈଧ %s ମୂଲ୍ୟ: %r"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/argparse.py:2506
+#: /usr/lib64/python3.12/argparse.py:2572
 #, fuzzy, python-format
 #| msgid "option %s: invalid choice: %r (choose from %s)"
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
@@ -196,7 +233,7 @@ msgstr "ବିକଳ୍ପ %s: ଅବୈଧ ପସନ୍ଦ: %r (%s ରୁ ବ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: /usr/lib64/python3.9/argparse.py:2582
+#: /usr/lib64/python3.12/argparse.py:2650
 #, fuzzy, python-format
 #| msgid "%s: error: %s"
 msgid "%(prog)s: error: %(message)s\n"
@@ -204,88 +241,68 @@ msgstr "%s: ତ୍ରୁଟି: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:107
-msgid "deprecated, see --cert-check-interval"
-msgstr "ପୁରୁଣା ହୋଇଛି, see --cert-check-interval"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/daemons/rhsmcertd.c:110
+#: src/daemons/rhsmcertd.c:99
 msgid "interval to run cert check (in minutes)"
 msgstr "ପ୍ରମାଣପତ୍ର ଯାଞ୍ଚକୁ ଚଲାଇବା ପାଇଁ ଅନ୍ତରାଳ (ମିନଟରେ)"
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/daemons/rhsmcertd.c:114
-msgid "deprecated, see --auto-attach-interval"
-msgstr "ପୁରୁଣା ହୋଇଛି, --auto-attach-interval କୁ ଦେଖନ୍ତୁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/daemons/rhsmcertd.c:117
-msgid "interval to run auto-attach (in minutes)"
-msgstr "ସ୍ୱୟଂ-ସଂଲଗ୍ନକୁ ଚଲାଇବା ପାଇଁ ଅନ୍ତରାଳ (ମିନଟରେ)"
-
-#: src/daemons/rhsmcertd.c:120
+#: src/daemons/rhsmcertd.c:102
 msgid "interval to run auto-registration (in minutes)"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:123
+#: src/daemons/rhsmcertd.c:105
 msgid "run the initial checks immediately, with no delay"
 msgstr "ବିଳମ୍ବ ନକରି ସଙ୍ଗେ ସଙ୍ଗେ ପ୍ରରମ୍ଭିକ ଯାଞ୍ଚ ଚଲାନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:126
+#: src/daemons/rhsmcertd.c:108
 msgid "show debug messages"
 msgstr "ତ୍ରୁଟିନିବାରଣ ସନ୍ଦେଶଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ"
 
-#: src/daemons/rhsmcertd.c:128
+#: src/daemons/rhsmcertd.c:110
 msgid "do not add an offset to the initial checks."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:131
+#: src/daemons/rhsmcertd.c:113
 msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:612
-#, c-format
+#: src/daemons/rhsmcertd.c:545
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "ଅଧିକ ସୂଚନା ପାଇଁ: rhsmcertd --help କୁ ଚଲାନ୍ତୁ\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:729
+#: src/daemons/rhsmcertd.c:651
 msgid "Wrong number of arguments specified.\n"
 msgstr "ଭୁଲ ସଂଖ୍ୟକ ସ୍ୱତନ୍ତ୍ରଚରଗୁଡ଼ିକୁ ଉଲ୍ଲେଖ କରାଯାଇଛି।\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:805
+#: src/daemons/rhsmcertd.c:720
 msgid "Invalid argument specified.\n"
 msgstr "ଅବୈଧ ସ୍ୱତନ୍ତ୍ରଚର ଉଲ୍ଲେଖ ହୋଇଛି।\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:811
-#, c-format
+#: src/daemons/rhsmcertd.c:726
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "ଚେତାବନୀ: ପୁରୁଣା CLI ସ୍ୱତନ୍ତ୍ରଚରଗୁଡ଼ିକ ବ୍ୟବହାର ହେଉଅଛି।\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:826
+#: src/daemons/rhsmcertd.c:741
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "ଅବୈଧ ବିକଳ୍ପ: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:840
+#: src/daemons/rhsmcertd.c:755
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "ଅବୈଧ ସ୍ୱତନ୍ତ୍ରଚର ଉଲ୍ଲେଖ ହୋଇଛି: %s\n"
@@ -294,7 +311,7 @@ msgstr "ଅବୈଧ ସ୍ୱତନ୍ତ୍ରଚର ଉଲ୍ଲେଖ ହୋ
 msgid "Installed products updated."
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:35
+#: src/plugins/dnf/subscription_manager.py:46
 #, python-format
 msgid ""
 "\n"
@@ -309,7 +326,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/plugins/dnf/subscription_manager.py:46
+#: src/plugins/dnf/subscription_manager.py:57
 #, fuzzy
 #| msgid ""
 #| "This system is registered using both RHN Classic and Red Hat Subscription "
@@ -323,7 +340,21 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/plugins/dnf/subscription_manager.py:52
+#: src/plugins/dnf/subscription_manager.py:63
+#, fuzzy
+#| msgid ""
+#| "This system is registered using both RHN Classic and Red Hat Subscription "
+#| "Management."
+msgid ""
+"\n"
+"This system is not registered with an entitlement server. You can use "
+"\"rhc\" or \"subscription-manager\" to register.\n"
+msgstr ""
+"ଏହି ତନ୍ତ୍ରଟି ଉଭୟ RHN Classic ଏବଂ Red Hat ସଦସ୍ୟତା ପରିଚାଳନା ବ୍ୟବହାର କରି ପଞ୍ଜିକୃତ ହୋଇଛି।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/plugins/dnf/subscription_manager.py:70
 #, fuzzy
 #| msgid ""
 #| "This system is registered using both RHN Classic and Red Hat Subscription "
@@ -335,11 +366,19 @@ msgid ""
 msgstr ""
 "ଏହି ତନ୍ତ୍ରଟି ଉଭୟ RHN Classic ଏବଂ Red Hat ସଦସ୍ୟତା ପରିଚାଳନା ବ୍ୟବହାର କରି ପଞ୍ଜିକୃତ ହୋଇଛି।"
 
-#: src/plugins/dnf/subscription_manager.py:87
+#: src/plugins/dnf/subscription_manager.py:77
+#, python-brace-format
+msgid ""
+"\n"
+"This system has release set to {release_version} and it receives updates "
+"only for this release.\n"
+msgstr ""
+
+#: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:115
+#: src/plugins/dnf/subscription_manager.py:140
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
@@ -350,15 +389,15 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/plugins/dnf/subscription_manager.py:133
+#: src/plugins/dnf/subscription_manager.py:158
 msgid "Updating Subscription Management repositories."
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:138
+#: src/plugins/dnf/subscription_manager.py:167
 msgid "Unable to read consumer identity"
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:141
+#: src/plugins/dnf/subscription_manager.py:170
 msgid "subscription-manager is operating in container mode."
 msgstr ""
 
@@ -1017,53 +1056,53 @@ msgstr "ପରିଚୟ ପ୍ରମାଣପତ୍ର"
 msgid "Unknown Certificate Type"
 msgstr "ଅଜଣା ପ୍ରମାଣପତ୍ର ପ୍ରକାର"
 
-#: src/rhsm/config.py:244
+#: src/rhsm/config.py:243
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
 msgstr ""
 
-#: src/rhsm/config.py:249
+#: src/rhsm/config.py:248
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
 
-#: src/rhsm/config.py:255
+#: src/rhsm/config.py:254
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
 msgstr ""
 
-#: src/rhsm/connection.py:1402
+#: src/rhsm/connection.py:1444
 msgid "Fetching supported resources"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1461
+#: src/rhsm/connection.py:1504
 #, fuzzy
 #| msgid "connectionStatusLabel"
 msgid "Checking connection status"
 msgstr "ସଂଯୋଗ ସ୍ଥିତି ସ୍ତର"
 
-#: src/rhsm/connection.py:1489
+#: src/rhsm/connection.py:1529
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1562
+#: src/rhsm/connection.py:1608
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "ତନ୍ତ୍ରକୁ ପଞ୍ଜିକରଣ କରନ୍ତୁ"
 
-#: src/rhsm/connection.py:1592 src/rhsm/connection.py:1604
+#: src/rhsm/connection.py:1638 src/rhsm/connection.py:1650
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1627
+#: src/rhsm/connection.py:1673
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
@@ -1071,7 +1110,7 @@ msgstr "ସଂସ୍କରଣ ସୂଚନା ମୁଦ୍ରଣ କରନ୍ତ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1702
+#: src/rhsm/connection.py:1745
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
@@ -1079,7 +1118,7 @@ msgstr "ସଦସ୍ୟତା ପଞ୍ଜିକରଣ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1707 src/rhsm/connection.py:1711
+#: src/rhsm/connection.py:1750 src/rhsm/connection.py:1754
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
@@ -1087,7 +1126,7 @@ msgstr "ବସ୍ତୁସୂଚୀ ସୂଚନା ମୁଦ୍ରଣ କରନ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1715
+#: src/rhsm/connection.py:1758
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
@@ -1095,31 +1134,31 @@ msgstr "ବାହାର କରୁଅଛି"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1745 src/rhsm/connection.py:1756
+#: src/rhsm/connection.py:1788 src/rhsm/connection.py:1799
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "ପ୍ରମାଣପତ୍ର ସୂଚନା ମୁଦ୍ରଣ କରନ୍ତୁ"
 
-#: src/rhsm/connection.py:1764
+#: src/rhsm/connection.py:1807
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1773
+#: src/rhsm/connection.py:1816
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1782
+#: src/rhsm/connection.py:1825
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1789
+#: src/rhsm/connection.py:1832
 msgid "Fetching available system purpose settings"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1796 src/rhsm/connection.py:1804
+#: src/rhsm/connection.py:1839 src/rhsm/connection.py:1847
 #, fuzzy
 #| msgid "specify organization"
 msgid "Fetching organizations"
@@ -1127,7 +1166,7 @@ msgstr "ଅନୁଷ୍ଠାନକୁ ଦର୍ଶାନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1817
+#: src/rhsm/connection.py:1860
 #, fuzzy
 #| msgid "Register System"
 msgid "Unregistering system"
@@ -1135,44 +1174,27 @@ msgstr "ତନ୍ତ୍ରକୁ ପଞ୍ଜିକରଣ କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1830
+#: src/rhsm/connection.py:1884
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "ପରିଚୟ ପ୍ରମାଣପତ୍ର"
 
-#: src/rhsm/connection.py:1839
+#: src/rhsm/connection.py:1893
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1855
+#: src/rhsm/connection.py:1909
 msgid "Fetching content for a certificate"
 msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/rhsm/connection.py:1868 src/rhsm/connection.py:1885
-#, fuzzy
-#| msgid "Attaching subscriptions"
-msgid "Updating subscriptions"
-msgstr "ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଯୋଡ଼ୁଅଛି"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/rhsm/connection.py:1894 src/rhsm/connection.py:1904
-#: src/rhsm/connection.py:1913
-#, fuzzy
-#| msgid "Error subscribing: %s"
-msgid "Unsubscribing"
-msgstr "ସଦସ୍ୟତା ପାଇବାରେ ତ୍ରୁଟି: %s"
-
-#: src/rhsm/connection.py:1962
+#: src/rhsm/connection.py:1959
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1973
+#: src/rhsm/connection.py:1970
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
@@ -1180,7 +1202,7 @@ msgstr "ସଂସ୍କରଣ ସୂଚନା ମୁଦ୍ରଣ କରନ୍ତ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1987
+#: src/rhsm/connection.py:1984
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
@@ -1188,7 +1210,7 @@ msgstr "ତାଲିକା ଉପଲବ୍ଧ ପ୍ରକାଶନଗୁଡ଼�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2002
+#: src/rhsm/connection.py:1999
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
@@ -1196,7 +1218,7 @@ msgstr "ସମ୍ଭାବ୍ୟ ପରିବେଶଗୁଡ଼ିକର ତା�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2011
+#: src/rhsm/connection.py:2008
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
@@ -1246,13 +1268,9 @@ msgstr ""
 msgid "Removing content overrides"
 msgstr "ସମସ୍ତ ନବଲିଖନକୁ କାଢ଼ନ୍ତୁ"
 
-#: src/rhsm/connection.py:2118
-msgid "Activating"
-msgstr ""
-
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2127
+#: src/rhsm/connection.py:2111
 #, fuzzy
 #| msgid "Cancel"
 msgid "Fetching job"
@@ -1261,7 +1279,7 @@ msgstr "ବାତିଲ"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsm_debug/debug_commands.py:39
-#: src/subscription_manager/cli_command/cli.py:51
+#: src/subscription_manager/cli_command/cli.py:50
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
@@ -1330,13 +1348,13 @@ msgstr ""
 msgid "Unable to create zip file of system information: {error}"
 msgstr "ତନ୍ତ୍ର ସୂଚନାର ଜିପ ଫାଇଲ ନିର୍ମାଣ କରିବାରେ ଅସମର୍ଥ: %s"
 
-#: src/rhsmlib/dbus/objects/register.py:133
+#: src/rhsmlib/dbus/objects/register.py:156
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/register.py:149
+#: src/rhsmlib/dbus/objects/register.py:172
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr ""
@@ -1380,20 +1398,19 @@ msgstr "ବିଗତ ତାରିଖଗୁଡ଼ିକ ଅନୁମୋଦିତ 
 #: src/rhsmlib/services/entitlement.py:94
 #: src/rhsmlib/services/syspurpose.py:107
 #: src/subscription_manager/cert_sorter.py:296
-#: src/subscription_manager/cli_command/cli.py:233
-#: src/subscription_manager/cli_command/cli.py:237
-#: src/subscription_manager/cli_command/cli.py:238
-#: src/subscription_manager/cli_command/cli.py:239
+#: src/subscription_manager/cli_command/cli.py:213
+#: src/subscription_manager/cli_command/cli.py:217
+#: src/subscription_manager/cli_command/cli.py:218
+#: src/subscription_manager/cli_command/cli.py:219
 #: src/subscription_manager/cli_command/facts.py:66
-#: src/subscription_manager/cli_command/list.py:54
 #: src/subscription_manager/reasons.py:110
-#: src/subscription_manager/utils.py:269 src/subscription_manager/utils.py:285
-#: src/subscription_manager/utils.py:287 src/subscription_manager/utils.py:307
-#: src/subscription_manager/utils.py:309 src/subscription_manager/utils.py:328
+#: src/subscription_manager/utils.py:273 src/subscription_manager/utils.py:289
+#: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:311
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:332
 msgid "Unknown"
 msgstr "ଅଜଣା"
 
-#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:61
+#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:69
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr ""
@@ -1401,28 +1418,24 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:289
-#: src/subscription_manager/cli_command/list.py:428
 msgid "Virtual"
 msgstr "ଆଭାସୀ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:291
-#: src/subscription_manager/cli_command/list.py:430
 msgid "Physical"
 msgstr "ଭୌତିକ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:294
-#: src/subscription_manager/cli_command/list.py:433
 msgid "Yes"
 msgstr "ହଁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:296
-#: src/subscription_manager/cli_command/list.py:435
 msgid "No"
 msgstr "ନାଁ"
 
@@ -1453,40 +1466,34 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:497
-#: src/subscription_manager/cli_command/list.py:292
 msgid "Error: --all is only applicable with --available"
 msgstr "ତ୍ରୁଟି: --all ଟି କେବଳ --available ସହିତ ପ୍ରଯୁକ୍ତ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:499
-#: src/subscription_manager/cli_command/list.py:294
 msgid "Error: --ondate is only applicable with --available"
 msgstr "ତ୍ରୁଟି: --ondate ଟି କେବଳ --available ସହିତ ପ୍ରଯୁକ୍ତ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:504
-#: src/subscription_manager/cli_command/list.py:297
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "ତ୍ରୁଟି: --servicelevel ଟି କେବଳ --available କିମ୍ବା --consumed ସହିତ ପ୍ରଯୁଜ୍ୟ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:508
-#: src/subscription_manager/cli_command/list.py:302
 msgid "Error: --match-installed is only applicable with --available"
 msgstr "ତ୍ରୁଟି: --match-installed ଟି କେବଳ --available ସହିତ ପ୍ରଯୁକ୍ତ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:511
-#: src/subscription_manager/cli_command/list.py:304
 msgid "Error: --no-overlap is only applicable with --available"
 msgstr "ତ୍ରୁଟି: --no-overlap ଟି କେବଳ --available ସହିତ ପ୍ରଯୁକ୍ତ"
 
 #: src/rhsmlib/services/entitlement.py:516
-#: src/subscription_manager/cli_command/list.py:307
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr "ତ୍ରୁଟି: --pool-only ଟି କେବଳ --available ଏବଂ --consumed ସହିତ ପ୍ରଯୁଜ୍ୟ"
@@ -1495,19 +1502,41 @@ msgstr "ତ୍ରୁଟି: --pool-only ଟି କେବଳ --available ଏବ�
 msgid "Error: this system is not registered"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:192
+#: src/rhsmlib/services/register.py:73
+msgid "Environment IDs and environment names are mutually exclusive"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:174
+#, python-brace-format
+msgid ""
+"Environment: '{env_names}' does not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:182
+#, python-brace-format
+msgid ""
+"Environments: '{env_names}' do not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:202
+msgid ""
+"Registration is only possible when the organization is in Simple Content "
+"Access (SCA) mode."
+msgstr ""
+
+#: src/rhsmlib/services/register.py:243
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:195
-#: src/subscription_manager/cli_command/register.py:142
+#: src/rhsmlib/services/register.py:246
+#: src/subscription_manager/cli_command/register.py:121
 msgid "Error: system name can not be empty."
 msgstr "ତ୍ରୁଟି: ତନ୍ତ୍ର ନାମକୁ ଖାଲି ରଖିପାରିବେ ନାହିଁ।"
 
-#: src/rhsmlib/services/register.py:199
-#: src/subscription_manager/cli_command/register.py:164
+#: src/rhsmlib/services/register.py:250
+#: src/subscription_manager/cli_command/register.py:139
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
@@ -1516,33 +1545,26 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:209
-#: src/subscription_manager/cli_command/register.py:155
+#: src/rhsmlib/services/register.py:260
+#: src/subscription_manager/cli_command/register.py:132
 msgid "Error: Must specify an activation key"
 msgstr "ତ୍ରୁଟି: ଗୋଟିଏ ସକ୍ରିୟଣ କି ଉଲ୍ଲେଖ କରିବା ଆବଶ୍ୟକ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:211
-#: src/subscription_manager/cli_command/register.py:144
+#: src/rhsmlib/services/register.py:262
+#: src/subscription_manager/cli_command/register.py:123
 msgid "Error: Activation keys do not require user credentials."
 msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କି ଚାଳକ ଅଧିକାର ଆବଶ୍ୟକ କରିନଥାଏ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:214
-#: src/subscription_manager/cli_command/register.py:147
+#: src/rhsmlib/services/register.py:265
+#: src/subscription_manager/cli_command/register.py:126
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କି କୁ ପୂର୍ବରୁ ପଞ୍ଜିକୃତ ID ଗୁଡ଼ିକ ସହିତ ବ୍ୟବହାର କରିହେବ ନାହିଁ।"
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/rhsmlib/services/register.py:218
-#: src/subscription_manager/cli_command/register.py:150
-msgid "Error: Activation keys do not allow environments to be specified."
-msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କିଗୁଡ଼ିକ ପରିବେଶମାନଙ୍କୁ ଉଲ୍ଲେଖ କରିବା ପାଇଁ ଅନୁମତି ଦେଇନଥାଏ।"
-
-#: src/rhsmlib/services/register.py:225
+#: src/rhsmlib/services/register.py:271
 msgid "Error: Missing username or password."
 msgstr ""
 
@@ -1571,45 +1593,45 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/branding/__init__.py:77
+#: src/subscription_manager/branding/__init__.py:76
 msgid "Register the system to the server"
 msgstr "ତନ୍ତ୍ରକୁ ସର୍ଭରରେ ପଞ୍ଜିକରଣ କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/branding/__init__.py:78
+#: src/subscription_manager/branding/__init__.py:77
 msgid "Unregister the system from the server"
 msgstr "ତନ୍ତ୍ରକୁ ସର୍ଭରରୁ ପଞ୍ଜିକୃତ ହୀନ କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/branding/__init__.py:79
+#: src/subscription_manager/branding/__init__.py:78
 msgid "This system is registered to spacewalk"
 msgstr "ଏହି ତନ୍ତ୍ରଟି spacewalk ରେ ପଞ୍ଜିକୃତ ହୋଇଛି"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/branding/__init__.py:81
+#: src/subscription_manager/branding/__init__.py:80
 #: src/subscription_manager/branding/redhat_branding.py:14
-#: src/subscription_manager/managercli.py:96
+#: src/subscription_manager/managercli.py:78
 msgid "WARNING"
 msgstr "ଚେତାବନୀ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/branding/__init__.py:81
+#: src/subscription_manager/branding/__init__.py:80
 msgid "You have already registered with spacewalk."
 msgstr "ଆପଣ ପୂର୍ବରୁ spacewalk ରେ ପଞ୍ଜିକୃତ ହୋଇଛନ୍ତି।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/branding/__init__.py:84
+#: src/subscription_manager/branding/__init__.py:83
 msgid "Please enter your account information:"
 msgstr "ଦୟାକରି ଆପଣଙ୍କର ଖାତା ସୂଚନା ଭରଣ କରନ୍ତୁ:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/branding/__init__.py:86
+#: src/subscription_manager/branding/__init__.py:85
 msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
@@ -1619,7 +1641,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/branding/__init__.py:88
+#: src/subscription_manager/branding/__init__.py:87
 #: src/subscription_manager/branding/redhat_branding.py:29
 msgid "Red Hat Subscription Management"
 msgstr "Red Hat ସଦସ୍ୟତା ପରିଚାଳନା"
@@ -1721,7 +1743,7 @@ msgid ""
 "forgot_password"
 msgstr ""
 
-#: src/subscription_manager/cache.py:176
+#: src/subscription_manager/cache.py:178
 #, python-brace-format
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
@@ -1833,29 +1855,25 @@ msgstr ""
 msgid "--add cannot be used with --remove"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:151
-msgid "Error: you can specify --username or --token not both"
-msgstr ""
-
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:156
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:152
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:173
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:167
 msgid ""
-"Error: --username, --password, --token and --org can be used only on "
-"unregistered systems"
+"Error: --username, --password, and --org can be used only on unregistered "
+"systems"
 msgstr ""
 
 #. TRANSLATORS: this is used to quote a string
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:251
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:239
 #, python-brace-format
 msgid "\"{value}\""
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:255
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:243
 #, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
@@ -1866,7 +1884,7 @@ msgstr[1] ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:264
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:252
 #, fuzzy, python-brace-format
 #| msgid "This org does not have any subscriptions with service levels."
 msgid ""
@@ -1875,261 +1893,67 @@ msgid ""
 "subscriptions."
 msgstr "ଏହି ଅନୁଷ୍ଠାନରେ ସର୍ଭିସ ସ୍ତର ସହିତ କୌଣସି ସଦସ୍ୟତା ନାହିଁ।"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:278
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:266
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:296
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:284
 #, python-brace-format
 msgid "{attr} unset."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:313
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:338
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:301
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:326
 #, python-brace-format
 msgid "{attr} updated."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:369
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:357
 #, python-brace-format
 msgid "Current {name}: {val}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:371
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:359
 #, python-brace-format
 msgid "{name} not set."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:389
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:377
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:401
-#: src/subscription_manager/cli_command/service_level.py:213
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:389
+#: src/subscription_manager/cli_command/service_level.py:210
 #, python-brace-format
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:409
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:397
 #, python-brace-format
 msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
 msgstr ""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:435
-msgid "Unable to connect to server using token"
-msgstr ""
-
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:483
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:461
 #: src/subscription_manager/i18n_argparse.py:35
 #, fuzzy, python-format
 #| msgid "%prog [OPTIONS]"
 msgid "%(prog)s [OPTIONS]"
 msgstr "%prog [ବିକଳ୍ପଗୁଡିକ]"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:492
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:470
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
 msgstr ""
-
-#: src/subscription_manager/cli_command/addons.py:24
-msgid "Show or modify the system purpose addons setting"
-msgstr ""
-
-#: src/subscription_manager/cli_command/attach.py:51
-msgid "The ID of the pool to attach (can be specified more than once)"
-msgstr ""
-
-#: src/subscription_manager/cli_command/attach.py:57
-msgid "Number of subscriptions to attach. May not be used with an auto-attach."
-msgstr ""
-
-#: src/subscription_manager/cli_command/attach.py:63
-msgid ""
-"Automatically attach the best-matched compatible subscriptions to this "
-"system. This is the default action."
-msgstr ""
-
-#: src/subscription_manager/cli_command/attach.py:71
-msgid ""
-"Automatically attach only subscriptions matching the specified service "
-"level; only used with --auto"
-msgstr ""
-
-#: src/subscription_manager/cli_command/attach.py:79
-msgid ""
-"A file from which to read pool IDs. If a hyphen is provided, pool IDs will "
-"be read from stdin."
-msgstr ""
-"ପୁଲ ID ଗୁଡ଼ିକୁ ଯେଉଁ ଫାଇଲରୁ ପଢ଼ାଯାଇ ପାରିବ। ଯଦି ଏକ ହାଇଫେନ୍‌ ଦିଆଯାଇଥାଏ, ତେବେ ପୁଲ ID ଗୁଡ଼ିକୁ stdin "
-"ରୁ ପଢ଼ାଯାଇପାରିବ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/attach.py:85
-msgid "All installed products are covered by valid entitlements."
-msgstr "ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ବୈଧ ଅଧିକାର ପ୍ରାପ୍ତ ହୋଇଛି।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/attach.py:86
-msgid "No need to update subscriptions at this time."
-msgstr "ବର୍ତ୍ତମାନ କୌଣସି ସଦସ୍ୟତାକୁ ଅଦ୍ୟତନ କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/attach.py:98
-#, fuzzy
-#| msgid "Attach a specified subscription to the registered system"
-msgid ""
-"Attach a specified subscription to the registered system, when system does "
-"not use Simple Content Access mode"
-msgstr "ପଞ୍ଜିକୃତ ତନ୍ତ୍ରରେ ଉଲ୍ଲିଖିତ ସଦସ୍ୟତାକୁ ସଂଲଗ୍ନ କରନ୍ତୁ"
-
-#: src/subscription_manager/cli_command/attach.py:111
-msgid "Error: --auto may not be used when specifying pools."
-msgstr "ତୃଟି: --auto କୁ ହୁଏତଃ ପୁଲଗୁଡ଼ିକୁ ଉଲ୍ଲେଖ କରିବା ପାଇଁ ବ୍ୟବହାର କରାଯାଇପାରିବ ନାହିଁ।"
-
-#: src/subscription_manager/cli_command/attach.py:114
-msgid "Error: The --servicelevel option cannot be used when specifying pools."
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/attach.py:120
-msgid "Error: Quantity must be a positive integer."
-msgstr "ତ୍ରୁଟି: ପରିମାଣଟି ଏକ ଯୁକ୍ତାତ୍ମକ ଗଣନ ସଂଖ୍ୟା ହୋଇଥିବା ଉଚିତ।"
-
-#: src/subscription_manager/cli_command/attach.py:122
-msgid "Error: --quantity may not be used with an auto-attach"
-msgstr ""
-
-#: src/subscription_manager/cli_command/attach.py:132
-msgid "Error: Received data does not contain any pool IDs."
-msgstr ""
-
-#: src/subscription_manager/cli_command/attach.py:136
-#, fuzzy, python-brace-format
-#| msgid "Error: The file \"%s\" does not exist or cannot be read."
-msgid "Error: The file \"{file}\" does not contain any pool IDs."
-msgstr "ତୃଟି: ଫାଇଲ \"%s\" ଅବସ୍ଥିତ ନଥାଏ କିମ୍ବା ପଢ଼ାଯାଇ ପାରିବ ନାହିଁ।"
-
-#: src/subscription_manager/cli_command/attach.py:143
-#, fuzzy, python-brace-format
-#| msgid "Error: The file \"%s\" does not exist or cannot be read."
-msgid "Error: The file \"{file}\" does not exist or cannot be read."
-msgstr "ତୃଟି: ଫାଇଲ \"%s\" ଅବସ୍ଥିତ ନଥାଏ କିମ୍ବା ପଢ଼ାଯାଇ ପାରିବ ନାହିଁ।"
-
-#: src/subscription_manager/cli_command/attach.py:157
-#, python-brace-format
-msgid ""
-"Ignoring the request to attach. Attaching subscriptions is disabled for "
-"organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/attach.py:201
-msgid "Please enter a valid numeric pool ID."
-msgstr "ଦୟାକରି ଗୋଟିଏ ବୈଧ ସାଂଖ୍ୟିକ ସମୂହ ID ଭରଣ କରନ୍ତୁ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/attach.py:209
-#, fuzzy, python-brace-format
-#| msgid "Successfully attached a subscription for: %s"
-msgid "Successfully attached a subscription for: {name}"
-msgstr "ଏହା ପାଇଁ ଏକ ସଦସ୍ୟତାକୁ ସଫଳତାର ସହିତ ସଂଲଗ୍ନ କରିଛି: %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/attach.py:239
-msgid "No Installed products on system. No need to attach subscriptions."
-msgstr "ତନ୍ତ୍ରରେ କୌଣସି ସ୍ଥାପିତ ଉତ୍ପାଦନ ନାହିଁ। କୌଣସି ସଦସ୍ୟତାକୁ ସଂଲଗ୍ନ କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/attach.py:243
-msgid ""
-"All installed products are covered by valid entitlements. No need to update "
-"subscriptions at this time."
-msgstr ""
-"ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ବୈଧ ଅଧିକାର ପ୍ରାପ୍ତ ହୋଇଛି। ବର୍ତ୍ତମାନ କୌଣସି ସଦସ୍ୟତାକୁ ଅଦ୍ୟତନ କରିବା "
-"ଆବଶ୍ୟକ ନାହିଁ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/attach.py:257
-#: src/subscription_manager/cli_command/register.py:201
-msgid ""
-"Error: The --servicelevel option is not supported by the server. Did not "
-"complete your request."
-msgstr ""
-"ତ୍ରୁଟି: --servicelevel ବିକଳ୍ପ ସର୍ଭର ଦ୍ୱାରା ସହାୟତା ପ୍ରାପ୍ତ ନୁହଁ। ଆପଣଙ୍କ ଅନୁରୋଧ ସମ୍ପୂର୍ଣ୍ଣ "
-"ହୋଇନାହିଁ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/attach.py:271
-#, fuzzy
-#| msgid "Service level set to: %s"
-msgid "Service level set to: {}"
-msgstr "ସର୍ଭିସ ସ୍ତରକୁ ଏପରି ସେଟ କରାଯାଇଛି: %s"
-
-#: src/subscription_manager/cli_command/attach.py:280
-msgid "Entitlement Certificate(s) update failed due to the following reasons:"
-msgstr "ନିମ୍ନଲିଖିତ କାରଣଗୁଡ଼ିକ ହେତୁ ସଦସ୍ୟତା ପ୍ରମାଣପତ୍ର(ଗୁଡ଼ିକ) ଅଦ୍ୟତନ କରିବାରେ ବିଫଳ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/autoheal.py:27
-msgid "Set if subscriptions are attached on a schedule (default of daily)"
-msgstr "ସଦସ୍ୟତାଗୁଡ଼ିକ ଗୋଟିଏ ଯୋଜନା ଉପରେ ସଂଲଗ୍ନ ହୋଇଥିଲେ ସେଟ କରନ୍ତୁ (ଦିନର ପୂର୍ବନିର୍ଦ୍ଧାରିତ)"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/autoheal.py:28
-msgid "specify whether to enable or disable auto-attaching of subscriptions"
-msgstr "ସଦସ୍ୟତାଗୁଡ଼ିକର ସ୍ୱୟଂ ସଂଲଗ୍ନକୁ ସକ୍ରିୟ କିମ୍ବା ନିଷ୍କ୍ରିୟ କରିବା ଉଚିତ କି ନୁହଁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/autoheal.py:35
-msgid "try to attach subscriptions for uncovered products each check-in"
-msgstr "ପ୍ରତ୍ୟେକ ପ୍ରବେଶରେ ଅନାବୃତ ଉତ୍ପାଦନଗୁଡ଼ିକ ପାଇଁ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସଂଲଗ୍ନ କରନ୍ତୁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/autoheal.py:41
-msgid "do not try to automatically attach subscriptions each check-in"
-msgstr "ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସଂଲଗ୍ନ କରିବା ପାଇଁ ଚେଷ୍ଟା କରନ୍ତୁ ନାହିଁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/autoheal.py:47
-msgid "show the current auto-attach preference"
-msgstr "ପ୍ରଚଳିତ ସ୍ୱୟଂସଂଲଗ୍ନ ପସନ୍ଦକୁ ଦର୍ଶାନ୍ତୁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/autoheal.py:60
-msgid "Auto-attach preference: enabled"
-msgstr "ସ୍ୱୟଂ-ସଂଯୁକ୍ତ ପସନ୍ଦ: ସକ୍ରିୟ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/autoheal.py:62
-msgid "Auto-attach preference: disabled"
-msgstr "ସ୍ୱୟଂ-ସଂଯୁକ୍ତ ପସନ୍ଦ: ନିଷ୍କ୍ରିୟ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2141,22 +1965,15 @@ msgstr "ସର୍ଭର ଉପରେ ପ୍ରଭାବ ନପକାଇ ସମ�
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/clean.py:31
-#: src/subscription_manager/cli_command/register.py:312
+#: src/subscription_manager/cli_command/register.py:256
 msgid "All local data removed"
 msgstr "ସମସ୍ତ ସ୍ଥାନୀୟ ତଥ୍ୟକୁ କଢ଼ାଯାଇଛି"
 
-#: src/subscription_manager/cli_command/cli.py:131
-#, python-brace-format
-msgid ""
-"Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
-"organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr ""
-
-#: src/subscription_manager/cli_command/cli.py:152
+#: src/subscription_manager/cli_command/cli.py:132
 msgid "server URL in the form of https://hostname:port/prefix"
 msgstr "https://hostname:port/prefix ଆକାରରେ ସର୍ଭର URL"
 
-#: src/subscription_manager/cli_command/cli.py:159
+#: src/subscription_manager/cli_command/cli.py:139
 msgid ""
 "do not check the entitlement server SSL certificate against available "
 "certificate authorities"
@@ -2164,7 +1981,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:170
+#: src/subscription_manager/cli_command/cli.py:150
 #, fuzzy
 #| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
@@ -2172,30 +1989,30 @@ msgstr "proxy_hostname:proxy_port  ଶୈଳୀରେ ପ୍ରକ୍ସି URL"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:176
+#: src/subscription_manager/cli_command/cli.py:156
 msgid "user for HTTP proxy with basic authentication"
 msgstr "ମୌଳିକ ବୈଧିକରଣ ସହିତ HTTP ପ୍ରକ୍ସି ପାଇଁ ଚାଳକ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:182
+#: src/subscription_manager/cli_command/cli.py:162
 msgid "password for HTTP proxy with basic authentication"
 msgstr "ମୌଳିକ ବୈଧିକରଣ ସହିତ HTTP ପ୍ରକ୍ସି ପାଇଁ ପ୍ରବେଶ ସଂକେତ"
 
-#: src/subscription_manager/cli_command/cli.py:188
+#: src/subscription_manager/cli_command/cli.py:168
 msgid "host suffixes that should bypass HTTP proxy"
 msgstr ""
 
-#: src/subscription_manager/cli_command/cli.py:197
+#: src/subscription_manager/cli_command/cli.py:177
 msgid "Do not display progress messages"
 msgstr ""
 
-#: src/subscription_manager/cli_command/cli.py:209
+#: src/subscription_manager/cli_command/cli.py:189
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 
-#: src/subscription_manager/cli_command/cli.py:267
+#: src/subscription_manager/cli_command/cli.py:247
 #, fuzzy
 #| msgid ""
 #| "subscription-manager is disabled when running inside a container. Please "
@@ -2209,7 +2026,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:282
+#: src/subscription_manager/cli_command/cli.py:262
 #, fuzzy, python-brace-format
 #| msgid "%s: error: %s"
 msgid "{prog}: error: no such option: {args}"
@@ -2217,19 +2034,19 @@ msgstr "%s: ତ୍ରୁଟି: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:301
+#: src/subscription_manager/cli_command/cli.py:281
 msgid "Error parsing serverurl:"
 msgstr "ସର୍ଭର url କୁ ବିଶ୍ଳେଷଣ କରିବାରେ ତ୍ରୁଟି:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:317
+#: src/subscription_manager/cli_command/cli.py:297
 msgid "Error parsing baseurl:"
 msgstr "ଆଧାର url କୁ ବିଶ୍ଳେଷଣ କରିବାରେ ତ୍ରୁଟି:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:390
+#: src/subscription_manager/cli_command/cli.py:369
 #, fuzzy, python-brace-format
 #| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to reach the server at {host}:{port}{handler}"
@@ -2237,17 +2054,17 @@ msgstr "%s:%s%s ରେ ସର୍ଭରକୁ ପହଞ୍ଚିବାରେ ଅ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:400
+#: src/subscription_manager/cli_command/cli.py:379
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "ତ୍ରୁଟି: ସଦସ୍ଯତା ସର୍ଭିସ ପାଇଁ CA ପ୍ରମାଣପତ୍ରକୁ ସ୍ଥାପନ କରାଯାଇ ନାହିଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/cli.py:422
+#: src/subscription_manager/cli_command/cli.py:401
 msgid "System certificates corrupted. Please reregister."
 msgstr "ତନ୍ତ୍ର ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକ ତ୍ରୁଟିଯୁକ୍ତ ହୋଇଛି। ଦୟାକରି ପଞ୍ଜିକରଣ କରନ୍ତୁ।"
 
-#: src/subscription_manager/cli_command/cli.py:433
+#: src/subscription_manager/cli_command/cli.py:412
 #, python-brace-format
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
@@ -2342,27 +2159,40 @@ msgstr "ବିଭାଗ %s ଏବଂ ନାମ %s କୁ କଢ଼ାଯାଇ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:44
+#: src/subscription_manager/cli_command/environments.py:42
+#: src/subscription_manager/cli_command/owners.py:31
+msgid "Name:"
+msgstr "ନାମ:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/cli_command/environments.py:43
+msgid "Description:"
+msgstr "ବର୍ଣ୍ଣନା:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/cli_command/environments.py:49
 msgid "Display the environments available for a user"
 msgstr "ଚାଳକ ପାଇଁ ଉପଲବ୍ଧ ପରିବେଶକୁ ଦର୍ଶାନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:45
+#: src/subscription_manager/cli_command/environments.py:50
 msgid "specify organization for environment list, using organization key"
 msgstr "ଅନୁଷ୍ଠାନ ଚାବିି ବ୍ୟବହାର କରି, ପରିବେଶ ତାଲିକା ପାଇଁ ଅନୁଷ୍ଠାନକୁ ଦର୍ଶାନ୍ତୁ"
 
-#: src/subscription_manager/cli_command/environments.py:52
+#: src/subscription_manager/cli_command/environments.py:57
 msgid "set an ordered comma-separated list of environments for this consumer"
 msgstr ""
 
-#: src/subscription_manager/cli_command/environments.py:58
+#: src/subscription_manager/cli_command/environments.py:63
 msgid "list all environments for the organization"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:65
+#: src/subscription_manager/cli_command/environments.py:70
 #, fuzzy
 #| msgid "Display the environments available for a user"
 msgid "list the environments enabled for this consumer in order"
@@ -2370,26 +2200,26 @@ msgstr "ଚାଳକ ପାଇଁ ଉପଲବ୍ଧ ପରିବେଶକୁ �
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:72
+#: src/subscription_manager/cli_command/environments.py:77
 #, fuzzy
 #| msgid "Display the environments available for a user"
 msgid "list the environments not enabled for this consumer"
 msgstr "ଚାଳକ ପାଇଁ ଉପଲବ୍ଧ ପରିବେଶକୁ ଦର୍ଶାନ୍ତୁ"
 
-#: src/subscription_manager/cli_command/environments.py:81
+#: src/subscription_manager/cli_command/environments.py:86
 msgid "You may not specify an --org for environments when registered."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:90
-#: src/subscription_manager/cli_command/register.py:460
+#: src/subscription_manager/cli_command/environments.py:95
+#: src/subscription_manager/cli_command/register.py:387
 msgid "Error: Server does not support environments."
 msgstr "ତ୍ରୁଟି: ସର୍ଭର ପରିବେଶଗୁଡ଼ିକୁ ସମର୍ଥନ କରେ ନାହିଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:97
+#: src/subscription_manager/cli_command/environments.py:99
 #, fuzzy
 #| msgid "%s option requires %d arguments"
 msgid "This operation requires user credentials"
@@ -2397,13 +2227,13 @@ msgstr "%s ବିକଳ୍ପ %d ସ୍ୱତନ୍ତ୍ରଚର ଆବଶ୍�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:111
+#: src/subscription_manager/cli_command/environments.py:113
 msgid "Error: Unable to retrieve environment list from server"
 msgstr "ତ୍ରୁଟି: ସର୍ଭରରୁ ପରିବେଶ ତାଲିକା କାଢ଼ିବାରେ ଅସମର୍ଥ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:126
+#: src/subscription_manager/cli_command/environments.py:128
 #, fuzzy
 #| msgid "Environments"
 msgid "Environments updated."
@@ -2411,7 +2241,7 @@ msgstr "ପରିବେଶଗୁଡ଼ିକ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:128
+#: src/subscription_manager/cli_command/environments.py:130
 #, fuzzy
 #| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support environment updates."
@@ -2419,7 +2249,7 @@ msgstr "ତ୍ରୁଟି: ସର୍ଭର ପରିବେଶଗୁଡ଼ିକ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:136
+#: src/subscription_manager/cli_command/environments.py:138
 #, fuzzy
 #| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support multi-environment operations."
@@ -2427,25 +2257,25 @@ msgstr "ତ୍ରୁଟି: ସର୍ଭର ପରିବେଶଗୁଡ଼ିକ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:154
+#: src/subscription_manager/cli_command/environments.py:156
 msgid "Environments"
 msgstr "ପରିବେଶଗୁଡ଼ିକ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:167
+#: src/subscription_manager/cli_command/environments.py:169
 #, fuzzy
 #| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
 msgstr "ଏହି ଅନୁଷ୍ଠାନରେ କୌଣସି ପରିବେଶ ନାହିଁ।"
 
-#: src/subscription_manager/cli_command/environments.py:203
+#: src/subscription_manager/cli_command/environments.py:205
 msgid "Error: The same environment may not be listed more than once. "
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:209
+#: src/subscription_manager/cli_command/environments.py:211
 #, fuzzy, python-brace-format
 #| msgid "No such environment: %s"
 msgid "No such environment: {names}"
@@ -2509,14 +2339,10 @@ msgstr "--force କୁ କେବଳ --regenerate ସହିତ ବ୍ୟବହା
 msgid "--username and --password can only be used with --force"
 msgstr "--username ଏବଂ --password କୁ କେବଳ --force ସହିତ ବ୍ୟବହାର କରିହେବ"
 
-#: src/subscription_manager/cli_command/identity.py:65
-msgid "--token can only be used with --force"
-msgstr ""
-
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:74
-#: src/subscription_manager/cli_command/identity.py:77
+#: src/subscription_manager/cli_command/identity.py:72
+#: src/subscription_manager/cli_command/identity.py:75
 #: src/subscription_manager/cli_command/version.py:33
 #, fuzzy, python-brace-format
 #| msgid "server type: %s"
@@ -2525,33 +2351,33 @@ msgstr "ସର୍ଭର ପ୍ରକାର: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:89
+#: src/subscription_manager/cli_command/identity.py:87
 #, fuzzy, python-brace-format
 #| msgid "system identity: %s"
 msgid "system identity: {consumerid}"
 msgstr "ତନ୍ତ୍ର ପରିଚୟ: %s"
 
-#: src/subscription_manager/cli_command/identity.py:90
+#: src/subscription_manager/cli_command/identity.py:88
 #, python-brace-format
 msgid "name: {consumer_name}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:91
+#: src/subscription_manager/cli_command/identity.py:89
 #, fuzzy, python-brace-format
 #| msgid "org name: %s"
 msgid "org name: {ownername}"
 msgstr "ଅନୁଷ୍ଠାନ ନାମ: %s"
 
-#: src/subscription_manager/cli_command/identity.py:92
+#: src/subscription_manager/cli_command/identity.py:90
 #, python-brace-format
 msgid "org ID: {ownerid}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:107
+#: src/subscription_manager/cli_command/identity.py:105
 #: src/subscription_manager/printing_utils.py:165
 #: src/subscription_manager/printing_utils.py:184
 msgid "None"
@@ -2559,7 +2385,7 @@ msgstr "କିଛିନୁହଁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:110
+#: src/subscription_manager/cli_command/identity.py:108
 #, fuzzy, python-brace-format
 #| msgid "environment name: %s"
 msgid "environment name: {environment_name}"
@@ -2569,496 +2395,72 @@ msgstr[1] "ପରିବେଶ ନାମ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:130
+#: src/subscription_manager/cli_command/identity.py:125
 msgid "Identity certificate has been regenerated."
 msgstr "ପରିଚୟ ପ୍ରମାଣପତ୍ରର ପୁନଃନିର୍ମାଣ ସରିଛି।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:143
+#: src/subscription_manager/cli_command/identity.py:138
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "ତ୍ରୁଟି: ଏହି ତନ୍ତ୍ର ପାଇଁ ଗୋଟିଏ ନୂତନ ପରିଚୟ ନିର୍ମାଣ କରିବାରେ ଅସମର୍ଥ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/import_cert.py:30
-msgid "Import certificates which were provided outside of the tool"
-msgstr "ଉପକରଣ ବାହାରେ ପ୍ରଦାନ କରାଯାଇଥିବା ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ ଆମଦାନୀ କରନ୍ତୁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/import_cert.py:37
-msgid "certificate file to import (can be specified more than once)"
-msgstr "ଆମଦାନୀ କରିବା ପାଇଁ ଥିବା ପ୍ରମାଣପତ୍ର ଫାଇଲ (ଅଧିକ ଥର ଉଲ୍ଲେଖ କରିପାରିବେ)"
-
-#: src/subscription_manager/cli_command/import_cert.py:45
-msgid ""
-"Error: You may not import certificates into a system that is registered to a "
-"subscription management service."
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/import_cert.py:52
-msgid ""
-"Error: This command requires that you specify a certificate with --"
-"certificate."
-msgstr ""
-"ତ୍ରୁଟି: ଏହି ନିର୍ଦ୍ଦେଶଟି ଆବଶ୍ୟକ କରିଥାଏ ଯେ ଆପଣ --certificate ସହିତ ଗୋଟିଏ ପ୍ରମାଣପତ୍ର ଉଲ୍ଲେଖ "
-"କରନ୍ତୁ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/import_cert.py:69
-#, fuzzy, python-brace-format
-#| msgid "Successfully imported certificate %s"
-msgid "Successfully imported certificate {file}"
-msgstr "ପ୍ରମାଣପତ୍ର %s କୁ ସଫଳତାର ସହିତ ଆମଦାନୀ କରାଯାଇଛି"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/import_cert.py:81
-#, fuzzy, python-brace-format
-#| msgid "%s is not a valid certificate file. Please use a valid certificate."
-msgid "{file} is not a valid certificate file. Please use a valid certificate."
-msgstr "%s ଟି ଗୋଟିଏ ବୈଧ ପ୍ରମାଣପତ୍ର ଫାଇଲ ନୁହଁ। ଦୟାକରି ଗୋଟିଏ ବୈଧ ପ୍ରମାଣପତ୍ର ବ୍ୟବହାର କରନ୍ତୁ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/import_cert.py:90
-msgid ""
-"An error occurred while importing the certificate. Please check log file for "
-"more information."
-msgstr ""
-"ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ ଆମଦାନୀ କରିବା ସମୟରେ ଗୋଟିଏ ତ୍ରୁଟି ଘଟିଛି। ଅଧିକ ସୂଚନା ପାଇଁ ଦୟାକରି ଲଗ ଫାଇଲ ଦେଖନ୍ତୁ।"
-
-#: src/subscription_manager/cli_command/import_cert.py:96
-#, python-brace-format
-msgid "{file}: file not found."
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:49
-msgid "Future Subscription"
-msgstr "ଭବିଷ୍ଯତ ସଦସ୍ୟତା"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:50
-msgid "Subscribed"
-msgstr "ସ୍ବୀକାର କରାହୋଇଛି"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:51
-msgid "Not Subscribed"
-msgstr "ସଦସ୍ୟତା ଗ୍ରହଣ କରିନାହିଁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:52
-msgid "Expired"
-msgstr "ସମୟ ସମାପ୍ତ ହୋଇଛି"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:53
-msgid "Partially Subscribed"
-msgstr "ଆଂଶିକ ସଦସ୍ୟତା ଗ୍ରହଣ କରିଅଛି"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:58
-#: src/subscription_manager/cli_command/list.py:69
-#: src/subscription_manager/cli_command/list.py:111
+#: src/subscription_manager/cli_command/list.py:29
 msgid "Product Name:"
 msgstr "ଉତ୍ପାଦନ ନାମ:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/list.py:59
-#: src/subscription_manager/cli_command/list.py:70
+#: src/subscription_manager/cli_command/list.py:30
 msgid "Product ID:"
 msgstr "ଉତ୍ପାଦନ ID:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/list.py:60
-#: src/subscription_manager/cli_command/list.py:71
+#: src/subscription_manager/cli_command/list.py:31
 msgid "Version:"
 msgstr "ସଂସ୍କରଣ:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/list.py:61
-#: src/subscription_manager/cli_command/list.py:72
+#: src/subscription_manager/cli_command/list.py:32
 msgid "Arch:"
 msgstr "ଅଭିଲେଖ:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/list.py:62
-#: src/subscription_manager/cli_command/list.py:112
-msgid "Status:"
-msgstr "ସ୍ଥିତି:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:63
-#: src/subscription_manager/cli_command/list.py:138
-#: src/subscription_manager/cli_command/list.py:161
-msgid "Status Details:"
-msgstr "ସ୍ଥିତି ବିବରଣୀ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:64
-#: src/subscription_manager/cli_command/list.py:90
-#: src/subscription_manager/cli_command/list.py:140
-#: src/subscription_manager/cli_command/list.py:163
-msgid "Starts:"
-msgstr "ଆରମ୍ଭ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:65
-#: src/subscription_manager/cli_command/list.py:91
-#: src/subscription_manager/cli_command/list.py:141
-#: src/subscription_manager/cli_command/list.py:164
-msgid "Ends:"
-msgstr "ସମାପ୍ତ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:76
-#: src/subscription_manager/cli_command/list.py:96
-#: src/subscription_manager/cli_command/list.py:126
-#: src/subscription_manager/cli_command/list.py:146
-msgid "Subscription Name:"
-msgstr "ସଦସ୍ୟତା ନାମ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:77
-#: src/subscription_manager/cli_command/list.py:97
-#: src/subscription_manager/cli_command/list.py:127
-#: src/subscription_manager/cli_command/list.py:147
-msgid "Provides:"
-msgstr "ପ୍ରଦାନ କରିଥାଏ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:78
-#: src/subscription_manager/cli_command/list.py:98
-#: src/subscription_manager/cli_command/list.py:128
-#: src/subscription_manager/cli_command/list.py:148
-msgid "SKU:"
-msgstr "SKU:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:79
-#: src/subscription_manager/cli_command/list.py:99
-#: src/subscription_manager/cli_command/list.py:129
-#: src/subscription_manager/cli_command/list.py:149
-msgid "Contract:"
-msgstr "ରାଜିନାମା:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:80
-#: src/subscription_manager/cli_command/list.py:132
-#: src/subscription_manager/cli_command/list.py:152
-msgid "Pool ID:"
-msgstr "ପୁଲ ID:"
-
-#: src/subscription_manager/cli_command/list.py:81
-#: src/subscription_manager/cli_command/list.py:133
-#: src/subscription_manager/cli_command/list.py:153
-msgid "Provides Management:"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:82
-msgid "Available:"
-msgstr "ଉପଲବ୍ଧ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:83
-msgid "Suggested:"
-msgstr "ପ୍ରସ୍ତାବିତ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:84
-#: src/subscription_manager/cli_command/list.py:136
-#: src/subscription_manager/cli_command/list.py:156
-msgid "Service Type:"
-msgstr "ସର୍ଭିସ ପ୍ରକାର:"
-
-#: src/subscription_manager/cli_command/list.py:85
-#: src/subscription_manager/cli_command/list.py:157
-msgid "Roles:"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:86
-#: src/subscription_manager/cli_command/list.py:100
-#: src/subscription_manager/cli_command/list.py:137
-#: src/subscription_manager/cli_command/list.py:158
-msgid "Service Level:"
-msgstr "ସର୍ଭିସ ସ୍ତର:"
-
-#: src/subscription_manager/cli_command/list.py:87
-#: src/subscription_manager/cli_command/list.py:159
-msgid "Usage:"
-msgstr ""
-
-#: src/subscription_manager/cli_command/list.py:88
-#: src/subscription_manager/cli_command/list.py:160
-msgid "Add-ons:"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:89
-#: src/subscription_manager/cli_command/list.py:139
-#: src/subscription_manager/cli_command/list.py:162
-msgid "Subscription Type:"
-msgstr "ସଦସ୍ୟତା ପ୍ରକାର:"
-
-#: src/subscription_manager/cli_command/list.py:92
-#: src/subscription_manager/cli_command/list.py:165
-msgid "Entitlement Type:"
-msgstr ""
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:104
-msgid "Repo ID:"
-msgstr "ରେପୋ ID:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:105
-msgid "Repo Name:"
-msgstr "ରେପୋ ନାମ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:106
-msgid "Repo URL:"
-msgstr "ରେପୋ URL:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:107
-msgid "Enabled:"
-msgstr "ସକ୍ରିୟ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:116
-#: src/subscription_manager/cli_command/list.py:121
-msgid "Name:"
-msgstr "ନାମ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:117
-msgid "Description:"
-msgstr "ବର୍ଣ୍ଣନା:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:122
-msgid "Key:"
-msgstr "କି:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:130
-#: src/subscription_manager/cli_command/list.py:150
-msgid "Account:"
-msgstr "ଖାତା:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:131
-#: src/subscription_manager/cli_command/list.py:151
-msgid "Serial:"
-msgstr "କ୍ରମ ସଂଖ୍ୟା:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:134
-#: src/subscription_manager/cli_command/list.py:154
-msgid "Active:"
-msgstr "ସକ୍ରିୟ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:135
-#: src/subscription_manager/cli_command/list.py:155
-msgid "Quantity Used:"
-msgstr "ବ୍ୟବହୃତ ପରିମାଣ:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:142
-msgid "System Type:"
-msgstr "ତନ୍ତ୍ର ପ୍ରକାର:"
-
-# translation auto-copied from project subscription-manager, version 1.13.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:187
-msgid "No products installed."
-msgstr "କୌଣସି ସ୍ଥାପିତ ବସ୍ତୁ ନାହିଁ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:191
-msgid "Installed Product Current Status:"
-msgstr "ସ୍ଥାପିତ ଉତ୍ପାଦନର ବର୍ତ୍ତମାନ ସ୍ଥିତି:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys, author mgiri
-#: src/subscription_manager/cli_command/list.py:202
-msgid "Unable to find available subscriptions for all your installed products."
-msgstr "ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ପାଇଁ ଉପଲବ୍ଧ ସଦସ୍ୟତା ଖୋଜିବାରେ ଅସମର୍ଥ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:208
+#: src/subscription_manager/cli_command/list.py:41
 msgid "List subscription and product information for this system"
 msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ସଦସ୍ୟତା ଏବଂ ଉତ୍ପାଦନ ସୂଚନାକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/list.py:215
+#: src/subscription_manager/cli_command/list.py:46
 msgid "list shows those products which are installed (default)"
 msgstr "ତାଲିକା ସେହି ଉତ୍ପାଦନଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ ଯାହାକି ସ୍ଥାପିତ ହୋଇଛି (ପୂର୍ବନିର୍ଦ୍ଧାରିତ)"
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:220
-msgid "show those subscriptions which are available"
-msgstr "ତାଲିକା ଉପଲବ୍ଧ ଥିବା ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:225
-msgid "used with --available to ensure all subscriptions are returned"
-msgstr ""
-"ସମସ୍ତ ସଦସ୍ୟତାକୁ ଫେରାଇ ଦିଆଯାଇଛି କି ନାହିଁ ନିଶ୍ଚିତ କରିବା ପାଇଁ --available ସହିତ ପ୍ରଦାନ କରାଯାଇଛି"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:231
-#, fuzzy, python-brace-format
+#: src/subscription_manager/cli_command/list.py:51
+#, fuzzy
 #| msgid ""
-#| "date to search on, defaults to today's date, only used with --available "
-#| "(example: %s)"
+#| "lists only subscriptions or products containing the specified expression "
+#| "in the subscription or product information, varying with the list "
+#| "requested and the server version (case-insensitive)."
 msgid ""
-"date to search on, defaults to today's date, only used with --available "
-"(example: {example})"
-msgstr ""
-"ସନ୍ଧାନ କରିବା ପାଇଁ ତାରିଖ, ଆଜିର ତାରିଖକୁ ପୂର୍ବନିର୍ଦ୍ଧାରିତ କରି, କେବଳ --available ସହିତ ବ୍ୟବହାର "
-"କରାଯାଇଥାଏ (ଉଦାହରଣ: %s)"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:237
-msgid "show the subscriptions being consumed by this system"
-msgstr "ଏହି ତନ୍ତ୍ର ଦ୍ୱାରା ବ୍ୟବହାର ହେଉଥିବା ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:243
-msgid ""
-"shows only subscriptions matching the specified service level; only used "
-"with --available and --consumed"
-msgstr ""
-"କେବଳ ନିର୍ଦ୍ଦିଷ୍ଟ ସର୍ଭିସ ସ୍ତର ସହିତ ମେଳକ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ; କେବଳ --available ଏବଂ --"
-"consumed ସହିତ ବ୍ୟବହୃତ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:251
-msgid ""
-"shows pools which provide products that are not already covered; only used "
-"with --available"
-msgstr "ପୂର୍ବରୁ ଧାରଣ ହୋଇନଥିବା ପୁଲଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ; କେବଳ --available ସହିତ ବ୍ୟବହାର ହୋଇଥାଏ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:259
-msgid ""
-"shows only subscriptions matching products that are currently installed; "
-"only used with --available"
-msgstr ""
-"ବର୍ତ୍ତମାନ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ମଧ୍ଯରୁ କେବଳ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ; କେବଳ --available ସହିତ "
-"ବ୍ୟବହାର କରାଯାଇଥାଏ"
-
-#: src/subscription_manager/cli_command/list.py:267
-msgid ""
-"lists only subscriptions or products containing the specified expression in "
-"the subscription or product information, varying with the list requested and "
-"the server version (case-insensitive)."
+"lists only products containing the specified expression in the product "
+"information."
 msgstr ""
 "କେବଳ ସଦସ୍ୟତା କିମ୍ବା ଉତ୍ପାଦନ ସୂଚନାରେ ଉଲ୍ଲିଖିତ ଅଭିବ୍ୟକ୍ତି ସଦସ୍ଯତା ଅଥବା ଉତ୍ପାଦନଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ "
 "କରନ୍ତୁ, ଅନୁରୋଧ କରାଯାଇଥିବା ତାଲିକା ଠାରୁ ଭିନ୍ନ ଏବଂ ସର୍ଭର ସଂସ୍କରଣ (ଅକ୍ଷର ନିର୍ଦ୍ଦିଷ୍ଟ)।"
 
-#: src/subscription_manager/cli_command/list.py:277
-msgid ""
-"lists only the pool IDs for applicable available or consumed subscriptions; "
-"only used with --available and --consumed"
-msgstr ""
-"ପ୍ରଯୁଜ୍ୟ ଉପଲବ୍ଧ ଅଥବା ବ୍ୟବହୃତ ସଦସ୍ୟତାଗୁଡ଼ିକ ପାଇଁ କେବଳ ପୁଲ ID ଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ; କେବଳ --"
-"available ଏବଂ --consumed ସହିତ ବ୍ୟବହାର କରନ୍ତୁ"
-
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/list.py:285
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "date to search on, defaults to today's date, only used with --available "
-#| "(example: %s)"
-msgid ""
-"show pools that are active on or after the given date; only used with --"
-"available (example: {example})"
-msgstr ""
-"ସନ୍ଧାନ କରିବା ପାଇଁ ତାରିଖ, ଆଜିର ତାରିଖକୁ ପୂର୍ବନିର୍ଦ୍ଧାରିତ କରି, କେବଳ --available ସହିତ ବ୍ୟବହାର "
-"କରାଯାଇଥାଏ (ଉଦାହରଣ: %s)"
-
-#: src/subscription_manager/cli_command/list.py:310
-msgid "Error: --afterdate is only applicable with --available"
-msgstr ""
-
-#: src/subscription_manager/cli_command/list.py:312
-msgid "Error: --afterdate cannot be used with --ondate"
-msgstr ""
-
-#: src/subscription_manager/cli_command/list.py:327
-#, python-brace-format
-msgid ""
-"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-"{dateexample})"
-msgstr ""
-"ଭରଣ କରାଯାଇଥିବା ତାରିଖଟି ଅବୈଧ ଅଟେ। ତାରିଖଟି YYYY-MM-DD ଶୈଳୀରେ ରହିବା ଉଚିତ (ଉଦାହରଣ:  "
-"{dateexample})"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:355
+#: src/subscription_manager/cli_command/list.py:64
 msgid "    Installed Product Status"
 msgstr "    ସ୍ଥାପିତ ବସ୍ତୁ ସ୍ଥିତି"
 
-#: src/subscription_manager/cli_command/list.py:391
+#: src/subscription_manager/cli_command/list.py:82
 #, fuzzy, python-brace-format
 #| msgid "No installed products were found matching the expression \"%s\"."
 msgid "No installed products were found matching the expression \"{filter}\"."
@@ -3066,91 +2468,9 @@ msgstr "ଅଭିବ୍ୟକ୍ତି \"%s\" ସହିତ ମିଶୁଥିବ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/list.py:396
+#: src/subscription_manager/cli_command/list.py:87
 msgid "No installed products to list"
 msgstr "ତାଲିକାଭୁକ୍ତ କରିବା ପାଇଁ କୌଣସି ସ୍ଥାପିତ ବସ୍ତୁ ନାହିଁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:423
-msgid "Available Subscriptions"
-msgstr "ଉପଲବ୍ଧ ସଦସ୍ୟତାଗୁଡ଼ିକ"
-
-#: src/subscription_manager/cli_command/list.py:471
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No available subscription pools were found matching the expression \"%s\" "
-#| "and the service level \"%s\"."
-msgid ""
-"No available subscription pools were found matching the expression "
-"\"{filter}\" and the service level \"{level}\"."
-msgstr ""
-"ଅଭିବ୍ୟକ୍ତି \"%s\" ଏବଂ ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ଉପଲବ୍ଧ ପୁଲଗୁଡ଼ିକ ମିଳିଲା ନାହିଁ।"
-
-#: src/subscription_manager/cli_command/list.py:478
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No available subscription pools were found matching the expression \"%s\"."
-msgid ""
-"No available subscription pools were found matching the expression "
-"\"{filter}\"."
-msgstr "ଅଭିବ୍ୟକ୍ତି \"%s\" ସହିତ ମେଳଖାଉଥିବା କୌଣସି ଉପଲବ୍ଧ ପୁଲ ମିଳିଲା ନାହିଁ।"
-
-#: src/subscription_manager/cli_command/list.py:484
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No available subscription pools were found matching the service level "
-#| "\"%s\"."
-msgid ""
-"No available subscription pools were found matching the service level "
-"\"{level}\"."
-msgstr "ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ଉପଲବ୍ଧ ପୁଲଗୁଡ଼ିକ ମିଳିଲା ନାହିଁ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:488
-msgid "No available subscription pools to list"
-msgstr "ତାଲିକାରେ କୌଣସି ଉପଲବ୍ଧ ସଦସ୍ୟତା ସମୂହ ନାହିଁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/list.py:510
-msgid "Consumed Subscriptions"
-msgstr "ବ୍ୟବହାର ହୋଇଥିବା ସଦସ୍ୟତାଗୁଡ଼ିକ"
-
-#: src/subscription_manager/cli_command/list.py:535
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No consumed subscription pools were found matching the expression \"%s\" "
-#| "and the service level \"%s\"."
-msgid ""
-"No consumed subscription pools were found matching the expression "
-"\"{filter}\" and the service level \"{level}\"."
-msgstr ""
-"ଅଭିବ୍ୟକ୍ତି \"%s\" ଏବଂ ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ବ୍ୟବହୃତ ପୁଲଗୁଡ଼ିକ ମିଳିଲା ନାହିଁ।"
-
-#: src/subscription_manager/cli_command/list.py:541
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No consumed subscription pools were found matching the expression \"%s\"."
-msgid ""
-"No consumed subscription pools were found matching the expression "
-"\"{filter}\"."
-msgstr "ଅଭିବ୍ୟକ୍ତି \"%s\" ସହିତ ମେଳଖାଉଥିବା କୌଣସି ବ୍ୟବହୃତ ପୁଲ ମିଳିଲା ନାହିଁ।"
-
-#: src/subscription_manager/cli_command/list.py:548
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No consumed subscription pools were found matching the service level "
-#| "\"%s\"."
-msgid ""
-"No consumed subscription pools were found matching the service level "
-"\"{level}\"."
-msgstr "ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ବ୍ୟବହୃତ ପୁଲଗୁଡ଼ିକ ମିଳିଲା ନାହିଁ।"
-
-#: src/subscription_manager/cli_command/list.py:552
-msgid "No consumed subscription pools were found."
-msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3161,14 +2481,14 @@ msgid "specify an organization"
 msgstr "ଅନୁଷ୍ଠାନକୁ ଦର୍ଶାନ୍ତୁ"
 
 #: src/subscription_manager/cli_command/org.py:46
-#: src/subscription_manager/cli_command/register.py:522
+#: src/subscription_manager/cli_command/register.py:449
 msgid "Error: --org is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/org.py:48
-#: src/subscription_manager/cli_command/register.py:527
+#: src/subscription_manager/cli_command/register.py:454
 msgid "Organization: "
 msgstr "ଅନୁଷ୍ଠାନ: "
 
@@ -3181,7 +2501,7 @@ msgid "Error: User {username} is not member of any organization."
 msgstr "%s କୌଣସି ଅନୁଷ୍ଠାନରେ ପଞ୍ଜିକରଣ କରିପାରିବ ନାହିଁ।"
 
 #: src/subscription_manager/cli_command/org.py:74
-#: src/subscription_manager/cli_command/register.py:513
+#: src/subscription_manager/cli_command/register.py:440
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr ""
@@ -3283,7 +2603,7 @@ msgstr "ତୃଟି: 'repo-override' ନିର୍ଦ୍ଦେଶଟି ସର�
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/override.py:138
-#: src/subscription_manager/cli_command/repos.py:124
+#: src/subscription_manager/cli_command/repos.py:130
 msgid "Repositories disabled by configuration."
 msgstr "ସଂରଚନା ଦ୍ୱାରା ରେପୋଜିଟୋରୀ ନିଷ୍କ୍ରିୟ ହୋଇଛି।"
 
@@ -3322,19 +2642,25 @@ msgstr "ରେପୋଜିଟୋରୀ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/owners.py:34
+#: src/subscription_manager/cli_command/owners.py:32
+msgid "Key:"
+msgstr "କି:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/cli_command/owners.py:38
 msgid "Display the organizations against which a user can register a system"
 msgstr "ଚାଳକ ତନ୍ତ୍ରକୁ ପଞ୍ଜିକରଣ କରିପାରୁଥିବା ଅନୁଷ୍ଠାନ ନାମ ଦର୍ଶାନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/owners.py:52
+#: src/subscription_manager/cli_command/owners.py:53
 msgid "Organizations"
 msgstr "ଅନୁଷ୍ଠାନଗୁଡ଼ିକ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/owners.py:61
+#: src/subscription_manager/cli_command/owners.py:62
 #, fuzzy, python-brace-format
 #| msgid "%s cannot register with any organizations."
 msgid "{username} cannot register with any organizations."
@@ -3342,7 +2668,7 @@ msgstr "%s କୌଣସି ଅନୁଷ୍ଠାନରେ ପଞ୍ଜିକର�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/owners.py:69
+#: src/subscription_manager/cli_command/owners.py:70
 msgid "Error: Unable to retrieve org list from server"
 msgstr "ତ୍ରୁଟି: ସର୍ଭରରୁ ଅନୁଷ୍ଠାନ ତାଲିକା କାଢ଼ିବାରେ ଅସମର୍ଥ"
 
@@ -3394,44 +2720,6 @@ msgstr "ସକ୍ରିୟ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/redeem.py:29
-msgid "Attempt to redeem a subscription for a preconfigured system"
-msgstr "ପୂର୍ବରୁ ବିନ୍ୟାସିତ ତନ୍ତ୍ର ପାଇଁ ସଦସ୍ୟତାକୁ ହ୍ରାସ କରିବା ପାଇଁ ପ୍ରୟାସ କରୁଅଛି"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/redeem.py:36
-msgid "email address to notify when subscription redemption is complete"
-msgstr "କେତେବେଳେ ସଦସ୍ୟତା ସମ୍ପୂର୍ଣ୍ଣ ହେବ ତାହା ଜଣାଇବା ପାଇଁ ଇମେଲ ଠିକଣା"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/redeem.py:43
-msgid ""
-"optional language to use for email notification when subscription redemption "
-"is complete (Examples: en-us, de-de)"
-msgstr ""
-"ଇମେଲ ବିଜ୍ଞପ୍ତି ପାଇଁ ବ୍ୟବହାର କରିବାକୁ ଥିବା ଇଚ୍ଛାମୁତାବକ ଭାଷା ଯେତେବେଳେ ସଦସ୍ୟତା ହ୍ରାସ ସମ୍ପୂର୍ଣ୍ଣ "
-"ହୋଇଥାଏ (ଉଦାହରଣ: en-us, de-de)"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/redeem.py:52
-msgid ""
-"Error: This command requires that you specify an email address with --email."
-msgstr ""
-"ତ୍ରୁଟି: ଏହି ନିର୍ଦ୍ଦେଶଟି ଆବଶ୍ୟକ କରିଥାଏ ଯେ ଆପଣ --email ସହିତ ଗୋଟିଏ ଇମେଲ ଠିକଣାକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/redeem.py:74
-#, fuzzy
-#| msgid "Error: Unable to generate a new identity for the system"
-msgid "Error: Unable to redeem subscription for this system."
-msgstr "ତ୍ରୁଟି: ଏହି ତନ୍ତ୍ର ପାଇଁ ଗୋଟିଏ ନୂତନ ପରିଚୟ ନିର୍ମାଣ କରିବାରେ ଅସମର୍ଥ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
 #: src/subscription_manager/cli_command/refresh.py:32
 msgid "Pull the latest subscription data from the server"
 msgstr "ସର୍ଭରରୁ ନୂତନତମ ସଦସ୍ୟତା ତଥ୍ଯକୁ ଆଣନ୍ତୁ"
@@ -3454,31 +2742,31 @@ msgstr "ନିମ୍ନଲିଖିତ ବ୍ୟତୀକ୍ରମ ହେତୁ 
 msgid "All local data refreshed"
 msgstr "ସମସ୍ତ ସ୍ଥାନୀୟ ତଥ୍ୟକୁ ସତେଜ କରାଯାଇଛି"
 
-#: src/subscription_manager/cli_command/register.py:68
+#: src/subscription_manager/cli_command/register.py:64
 msgid "base URL for content in form of https://hostname:port/prefix"
 msgstr "https://hostname:port/prefix ଆକାରରେ ଥିବା ଆଧାର URL"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:81
+#: src/subscription_manager/cli_command/register.py:77
 msgid "name of the system to register, defaults to the hostname"
 msgstr "ପଞ୍ଜିକରଣ କରିବାକୁ ଥିବା ତନ୍ତ୍ର ପ୍ରକାର, ହୋଷ୍ଟ ନାମ ପାଇଁ ପୂର୍ବନିର୍ଦ୍ଧାରିତ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:87
+#: src/subscription_manager/cli_command/register.py:83
 msgid "the existing system data is pulled from the server"
 msgstr "ସ୍ଥିତବାନ ତନ୍ତ୍ର ତଥ୍ୟକୁ ସର୍ଭରରୁ ଅଣାଯାଇଥାଏ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:93
+#: src/subscription_manager/cli_command/register.py:89
 msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
 msgstr "ଅନୁଷ୍ଠାନ ଚାବି ବ୍ୟବହାର କରି ଚାଳକ ପାଇଁ ଏକାଧିକ ଅନୁଷ୍ଠାନ ମଧ୍ଯରୁ ଗୋଟିଏରେ ପଞ୍ଜିକରଣ କରନ୍ତୁ"
 
-#: src/subscription_manager/cli_command/register.py:99
+#: src/subscription_manager/cli_command/register.py:95
 msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
@@ -3487,23 +2775,11 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:107
+#: src/subscription_manager/cli_command/register.py:103
 msgid "set a release version"
 msgstr "ଏକ ପ୍ରକାଶନ ସଂସ୍କରଣକୁ ସେଟ କରନ୍ତୁ"
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/register.py:112
-msgid "Deprecated, see --auto-attach"
-msgstr "ପୁରୁଣା ହୋଇଛି, --auto-attach ଦେଖନ୍ତୁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/register.py:118
-msgid "automatically attach compatible subscriptions to this system"
-msgstr "ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସୁସଙ୍ଗତ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଏହି ତନ୍ତ୍ରରେ ସଂଲଗ୍ନ କରନ୍ତୁ"
-
-#: src/subscription_manager/cli_command/register.py:123
+#: src/subscription_manager/cli_command/register.py:108
 msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
@@ -3511,64 +2787,49 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:129
+#: src/subscription_manager/cli_command/register.py:114
 msgid ""
 "activation key to use for registration (can be specified more than once)"
 msgstr "ପଞ୍ଜିକରଣ ପାଇଁ ବ୍ୟବହାର ହେବାକୁ ଥିବା ସକ୍ରିୟଣ କି (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ କରିପାରିବେ)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:134
-msgid ""
-"system preference used when subscribing automatically, requires --auto-attach"
-msgstr ""
-"ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା ସମୟରେ ତନ୍ତ୍ର ପସନ୍ଦକୁ ବ୍ଯବହାର କରାଯାଇଥାଏ, ଯାହାକି --"
-"auto-attach ଆବଶ୍ୟକ କରିଥାଏ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/register.py:140
+#: src/subscription_manager/cli_command/register.py:119
 msgid "This system is already registered. Use --force to override"
 msgstr "ତନ୍ତ୍ରଟି ପୂର୍ବରୁ ପଞ୍ଜୀକୃତ ଅଟେ। ଏହାକୁ ବ୍ଯର୍ଥ କରିବା ପାଇଁ --force କୁ ବ୍ଯବହାର କରନ୍ତୁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:152
-msgid "Error: Activation keys cannot be used with --auto-attach."
-msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କିଗୁଡ଼ିକୁ --auto-attach ସହିତ ବ୍ୟବହାର କରିପାରିବେ ନାହିଁ।"
+#: src/subscription_manager/cli_command/register.py:129
+msgid "Error: Activation keys do not allow environments to be specified."
+msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କିଗୁଡ଼ିକ ପରିବେଶମାନଙ୍କୁ ଉଲ୍ଲେଖ କରିବା ପାଇଁ ଅନୁମତି ଦେଇନଥାଏ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:157
-msgid "Error: Must use --auto-attach with --servicelevel."
-msgstr "ତ୍ରୁଟି: ନିଶ୍ଚିତ ଭାବରେ --auto-attach କୁ --servicelevel ସହିତ ବ୍ୟବହାର କରନ୍ତୁ।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/register.py:159
+#: src/subscription_manager/cli_command/register.py:134
 msgid "Error: Must provide --org with activation keys."
 msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କିଗୁଡ଼ିକ ସହିତ ନିଶ୍ଚିତ ଭାବରେ --org କୁ ଉଲ୍ଲେଖ କରିବା ଉଚିତ।"
 
-#: src/subscription_manager/cli_command/register.py:173
+#: src/subscription_manager/cli_command/register.py:148
 msgid "Error: The --type option has been deprecated and may not be used."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:176
-#: src/subscription_manager/cli_command/register.py:491
+#: src/subscription_manager/cli_command/register.py:151
+#: src/subscription_manager/cli_command/register.py:418
 #, fuzzy
 #| msgid "This org does not have any environments."
 msgid "The entitlement server does not allow multiple environments"
 msgstr "ଏହି ଅନୁଷ୍ଠାନରେ କୌଣସି ପରିବେଶ ନାହିଁ।"
 
-#: src/subscription_manager/cli_command/register.py:220
+#: src/subscription_manager/cli_command/register.py:164
 msgid "Uploading DNF profile"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:290
+#: src/subscription_manager/cli_command/register.py:234
 #: src/subscription_manager/cli_command/unregister.py:41
 #, fuzzy, python-brace-format
 #| msgid "Enter in the format hostname(:port)"
@@ -3577,20 +2838,20 @@ msgstr "ଆଧାରନାମ ଶୈଳୀରେ ଭରଣ କରନ୍ତୁ (:
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:301
+#: src/subscription_manager/cli_command/register.py:245
 #, fuzzy, python-brace-format
 #| msgid "The system with UUID %s has been unregistered"
 msgid "The system with UUID {old_uuid} has been unregistered"
 msgstr "UUID %s ବିଶିଷ୍ଟ ତନ୍ତ୍ରକୁ ପଞ୍ଜିକରଣ କରାଯାଇନାହିଁ"
 
-#: src/subscription_manager/cli_command/register.py:325
+#: src/subscription_manager/cli_command/register.py:267
 #, python-brace-format
 msgid "Registering to: {hostname}:{port}{prefix}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:365
+#: src/subscription_manager/cli_command/register.py:306
 #, fuzzy, python-brace-format
 #| msgid "Error during registration: %s"
 msgid "Error during registration: {e}"
@@ -3598,32 +2859,24 @@ msgstr "ପଞ୍ଜକରଣ ସମୟରେ ତ୍ରୁଟି: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:368
+#: src/subscription_manager/cli_command/register.py:309
 #, fuzzy, python-brace-format
 #| msgid "The system has been registered with ID: %s "
 msgid "The system has been registered with ID: {id}"
 msgstr "ତନ୍ତ୍ରଟି ID ଦ୍ୱାରା ପଞ୍ଜିକୃତ ହୋଇଛି: %s "
 
-#: src/subscription_manager/cli_command/register.py:369
+#: src/subscription_manager/cli_command/register.py:310
 #, python-brace-format
 msgid "The registered system name is: {name}"
 msgstr ""
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/register.py:371
-#, fuzzy, python-brace-format
-#| msgid "Service level set to: %s"
-msgid "Service level set to: {level}"
-msgstr "ସର୍ଭିସ ସ୍ତରକୁ ଏପରି ସେଟ କରାଯାଇଛି: %s"
-
-#: src/subscription_manager/cli_command/register.py:438
+#: src/subscription_manager/cli_command/register.py:365
 msgid "Error: --environments is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:442
+#: src/subscription_manager/cli_command/register.py:369
 #, fuzzy
 #| msgid "Environment: "
 msgid "Environments: "
@@ -3631,18 +2884,18 @@ msgstr "ପରିବେଶ: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:444
+#: src/subscription_manager/cli_command/register.py:371
 msgid "Environment: "
 msgstr "ପରିବେଶ: "
 
-#: src/subscription_manager/cli_command/register.py:485
+#: src/subscription_manager/cli_command/register.py:412
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:501
+#: src/subscription_manager/cli_command/register.py:428
 #, fuzzy, python-brace-format
 #| msgid "%s cannot register with any organizations."
 msgid "{name} cannot register with any organizations."
@@ -3738,131 +2991,47 @@ msgstr "ଉପଲବ୍ଧ ପ୍ରକାଶନଗୁଡ଼ିକ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:41
-msgid "certificate serial number to remove (can be specified more than once)"
-msgstr "କାଢ଼ିବାକୁ ଥିବା ପ୍ରମାଣପତ୍ର କ୍ରମ ସଂଖ୍ୟା (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ କରିପାରିବେ)"
-
-#: src/subscription_manager/cli_command/remove.py:48
-msgid "the ID of the pool to remove (can be specified more than once)"
-msgstr ""
+#: src/subscription_manager/cli_command/repos.py:34
+msgid "Repo ID:"
+msgstr "ରେପୋ ID:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:54
-msgid "remove all subscriptions from this system"
-msgstr "ଏହି ତନ୍ତ୍ରରୁ ସମସ୍ତ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ବାହାର କରନ୍ତୁ"
+#: src/subscription_manager/cli_command/repos.py:35
+msgid "Repo Name:"
+msgstr "ରେପୋ ନାମ:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:58
-msgid "Remove all or specific subscriptions from this system"
-msgstr "ଏହି ତନ୍ତ୍ରରୁ ସମସ୍ତ ଅଥବା କିଛି ନିର୍ଦ୍ଦିଷ୍ଟ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ବାହାର କରନ୍ତୁ"
+#: src/subscription_manager/cli_command/repos.py:36
+msgid "Repo URL:"
+msgstr "ରେପୋ URL:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:71
-#, fuzzy, python-brace-format
-#| msgid "Error: '%s' is not a valid serial number"
-msgid "Error: '{serial}' is not a valid serial number"
-msgstr "ତ୍ରୁଟି: '%s' ଟି ଗୋଟିଏ ବୈଧ କ୍ରମ ସଂଖ୍ୟା ନୁହଁ"
-
-#: src/subscription_manager/cli_command/remove.py:80
-msgid ""
-"Error: The registered entitlement server does not support remove --pool.\n"
-"Instead, use the remove --serial option."
-msgstr ""
-
-#: src/subscription_manager/cli_command/remove.py:87
-msgid ""
-"Error: This command requires that you specify one of --serial, --pool or --"
-"all."
-msgstr ""
-
-#: src/subscription_manager/cli_command/remove.py:93
-msgid "The entitlement server successfully removed these pools:"
-msgstr ""
-
-#: src/subscription_manager/cli_command/remove.py:95
-msgid "The entitlement server successfully removed these serial numbers:"
-msgstr ""
-
-#: src/subscription_manager/cli_command/remove.py:97
-msgid "The entitlement server successfully removed these IDs:"
-msgstr ""
-
-#: src/subscription_manager/cli_command/remove.py:102
-msgid "The entitlement server failed to remove these pools:"
-msgstr ""
-
-#: src/subscription_manager/cli_command/remove.py:104
-msgid "The entitlement server failed to remove these serial numbers:"
-msgstr ""
-
-#: src/subscription_manager/cli_command/remove.py:106
-msgid "The entitlement server failed to remove these IDs:"
-msgstr ""
+#: src/subscription_manager/cli_command/repos.py:37
+msgid "Enabled:"
+msgstr "ସକ୍ରିୟ:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/remove.py:124
-msgid "All subscriptions have been removed at the server."
-msgstr "ସମସ୍ତ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସର୍ଭରରେ ବାହାର କରାଯାଇଛି।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/remove.py:129
-#, python-format
-msgid "%s subscription removed at the server."
-msgid_plural "%s subscriptions removed at the server."
-msgstr[0] "%s ସଦସ୍ୟତାକୁ ସର୍ଭରରେ ବାହାର କରାଯାଇଛି।"
-msgstr[1] "%s ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସର୍ଭରରେ ବାହାର କରାଯାଇଛି।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/remove.py:170
-#: src/subscription_manager/cli_command/remove.py:206
-#, fuzzy, python-brace-format
-#| msgid "Unable to perform remove due to the following exception: %s"
-msgid "Unable to perform remove due to the following exception: {e}"
-msgstr "ନିମ୍ନଲିଖିତ ବ୍ୟତୀକ୍ରମ ହେତୁ ସଦସ୍ୟତା ବହିଷ୍କାର କରିବାରେ ଅସମର୍ଥ: %s"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/remove.py:182
-#, fuzzy, python-brace-format
-#| msgid "%s subscriptions removed from this system."
-msgid "{total} subscription removed from this system."
-msgid_plural "{total} subscriptions removed from this system."
-msgstr[0] "%s ସଦସ୍ୟତା ଏହି ତନ୍ତ୍ରରୁ ବାହାର ହୋଇଛି।"
-msgstr[1] "%s ସଦସ୍ୟତା ଏହି ତନ୍ତ୍ରରୁ ବାହାର ହୋଇଛି।"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/remove.py:198
-#, fuzzy, python-brace-format
-#| msgid "Subscription with serial number %s removed from this system"
-msgid "Subscription with serial number {serial} removed from this system"
-msgstr "କ୍ରମ ସଂଖ୍ୟା %s ବିଶିଷ୍ଟ ସଦସ୍ୟତାକୁ ଏହି ତନ୍ତ୍ରରୁ ବାହାର କରାହୋଇଛି"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/repos.py:60
+#: src/subscription_manager/cli_command/repos.py:66
 msgid "List the repositories which this system is entitled to use"
 msgstr "ଏହି ତନ୍ତ୍ରରେ ବ୍ୟବହାର କରିବା ପାଇଁ ନିଯୁକ୍ତ ରେପୋଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ"
 
-#: src/subscription_manager/cli_command/repos.py:67
+#: src/subscription_manager/cli_command/repos.py:73
 msgid "list all known repositories for this system"
 msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ଜଣାଥିବା ସମସ୍ତ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ"
 
-#: src/subscription_manager/cli_command/repos.py:73
+#: src/subscription_manager/cli_command/repos.py:79
 msgid "list known, enabled repositories for this system"
 msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ଜଣାଥିବା ସକ୍ରିୟ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ"
 
-#: src/subscription_manager/cli_command/repos.py:79
+#: src/subscription_manager/cli_command/repos.py:85
 msgid "list known, disabled repositories for this system"
 msgstr "ଏହି ତନ୍ତ୍ର ପାଇଁ ଜଣାଥିବା ନିଷ୍କ୍ରିୟ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ"
 
-#: src/subscription_manager/cli_command/repos.py:87
+#: src/subscription_manager/cli_command/repos.py:93
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
@@ -3870,7 +3039,7 @@ msgstr ""
 "ସକ୍ରିୟ କରିବାକୁ ଥିବା ରେପୋଜିଟୋରୀ (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ କରିପାରିବେ)। ୱାଇଲ୍ଡ କାର୍ଡ (* ଏବଂ ?) ଗୁଡ଼ିକ "
 "ସହାୟତାପ୍ରାପ୍ତ।"
 
-#: src/subscription_manager/cli_command/repos.py:96
+#: src/subscription_manager/cli_command/repos.py:102
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
@@ -3880,37 +3049,37 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/repos.py:165
+#: src/subscription_manager/cli_command/repos.py:171
 #, fuzzy, python-brace-format
 #| msgid "    Available Repositories in %s"
 msgid "    Available Repositories in {file}"
 msgstr "    %s ରେ ଉପଲବ୍ଧ ରେପୋଜିଟୋରୀଗୁଡ଼ିକ"
 
-#: src/subscription_manager/cli_command/repos.py:181
+#: src/subscription_manager/cli_command/repos.py:187
 msgid "There were no available repositories matching the specified criteria."
 msgstr "ଉଲ୍ଲିଖିତ ବିଶେଷତା ବିଶିଷ୍ଟ ସେଠାରେ କୌଣସି ଉପଲବ୍ଧ ରେପୋଜିଟୋରୀ ନାହିଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/repos.py:183
-#: src/subscription_manager/cli_command/repos.py:201
+#: src/subscription_manager/cli_command/repos.py:189
+#: src/subscription_manager/cli_command/repos.py:207
 msgid "This system has no repositories available through subscriptions."
 msgstr "ଏହି ତନ୍ତ୍ରରେ ସଦସ୍ୟତାଗୁଡ଼ିକ ମାଧ୍ଯମରେ କୌଣସି ରେପୋଜିଟୋରୀ ଉପଲବ୍ଧ ନାହିଁ।"
 
-#: src/subscription_manager/cli_command/repos.py:210
+#: src/subscription_manager/cli_command/repos.py:216
 #, python-brace-format
 msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
 msgstr ""
 
-#: src/subscription_manager/cli_command/repos.py:265
+#: src/subscription_manager/cli_command/repos.py:271
 #, fuzzy, python-brace-format
 #| msgid "Repository '%s' is enabled for this system."
 msgid "Repository '{repoid}' is enabled for this system."
 msgstr "ରେପୋଜିଟୋରୀ '%s' କୁ ଏହି ତନ୍ତ୍ର ପାଇଁ ସକ୍ରିୟ କରାଯାଇଛି।"
 
-#: src/subscription_manager/cli_command/repos.py:267
+#: src/subscription_manager/cli_command/repos.py:273
 #, fuzzy, python-brace-format
 #| msgid "Repository '%s' is disabled for this system."
 msgid "Repository '{repoid}' is disabled for this system."
@@ -3937,41 +3106,41 @@ msgid ""
 msgstr ""
 "ତ୍ରୁଟି: ଆପଣଙ୍କୁ --username ଏବଂ --password କୁ ତାଲିକା ସର୍ଭିସ ସ୍ତରଗୁଡ଼ିକରେ ଉଲ୍ଲେଖ କରିବା ଉଚିତ"
 
-#: src/subscription_manager/cli_command/service_level.py:99
+#: src/subscription_manager/cli_command/service_level.py:98
 msgid ""
-"Error: --username, --password, --token, --org and --serverurl can be used "
-"only on unregistered systems"
+"Error: --username, --password, --org and --serverurl can be used only on "
+"unregistered systems"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:126
+#: src/subscription_manager/cli_command/service_level.py:123
 msgid "Error: Unable to retrieve service levels."
 msgstr "ତ୍ରୁଟି: ସର୍ଭିସ ସ୍ତର କାଢ଼ିବାରେ ଅସମର୍ଥ।"
 
-#: src/subscription_manager/cli_command/service_level.py:157
+#: src/subscription_manager/cli_command/service_level.py:154
 #, python-brace-format
 msgid "Service level set to: \"{val}\"."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:165
+#: src/subscription_manager/cli_command/service_level.py:162
 msgid "Service level preference has been unset"
 msgstr "ସର୍ଭିସ ସ୍ତରୀୟ ପସନ୍ଦକୁ ସେଟ କରା ହୋଇନାହିଁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:172
-#: src/subscription_manager/cli_command/service_level.py:188
-#: src/subscription_manager/cli_command/service_level.py:222
-#: src/subscription_manager/cli_command/service_level.py:229
+#: src/subscription_manager/cli_command/service_level.py:169
+#: src/subscription_manager/cli_command/service_level.py:185
+#: src/subscription_manager/cli_command/service_level.py:219
+#: src/subscription_manager/cli_command/service_level.py:226
 msgid "Error: The service-level command is not supported by the server."
 msgstr "ତ୍ରୁଟି: ସର୍ଭିସ-ସ୍ତରୀୟ ନିର୍ଦ୍ଦେଶ ସର୍ଭର ଦ୍ୱାରା ସମର୍ଥିତ ନୁହଁ।"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:192
+#: src/subscription_manager/cli_command/service_level.py:189
 #, fuzzy, python-brace-format
 #| msgid "Current service level: %s"
 msgid "Current service level: {level}"
@@ -3979,13 +3148,13 @@ msgstr "ପ୍ରଚଳିତ ସର୍ଭିସ ସ୍ତର: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:194
+#: src/subscription_manager/cli_command/service_level.py:191
 msgid "Service level preference not set"
 msgstr "ସର୍ଭିସ ସ୍ତରୀୟ ପସନ୍ଦ ସେଟ ହୋଇ ନାହିଁ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/service_level.py:206
+#: src/subscription_manager/cli_command/service_level.py:203
 msgid "Available Service Levels"
 msgstr "ଉପଲବ୍ଧ ସର୍ଭିସ ସ୍ତରଗୁଡ଼ିକ"
 
@@ -4035,29 +3204,29 @@ msgstr "ହାରାହାରୀ ସ୍ଥିତି: %s\n"
 msgid "System Purpose Status: {status}"
 msgstr "ତନ୍ତ୍ର ସ୍ଥିତି ବିବରଣୀ"
 
-#: src/subscription_manager/cli_command/syspurpose.py:53
+#: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
 msgstr ""
 
-#: src/subscription_manager/cli_command/syspurpose.py:59
+#: src/subscription_manager/cli_command/syspurpose.py:57
 msgid "show current system purpose"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/syspurpose.py:76
+#: src/subscription_manager/cli_command/syspurpose.py:74
 #, fuzzy, python-brace-format
 #| msgid "%s: error: %s"
 msgid "{prog} {name}"
 msgstr "%s: ତ୍ରୁଟି: %s"
 
-#: src/subscription_manager/cli_command/syspurpose.py:78
+#: src/subscription_manager/cli_command/syspurpose.py:76
 msgid "Syspurpose submodules"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/syspurpose.py:92
+#: src/subscription_manager/cli_command/syspurpose.py:90
 #, fuzzy, python-format, python-brace-format
 #| msgid "%prog [OPTIONS]"
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
@@ -4066,7 +3235,7 @@ msgstr "%prog [ବିକଳ୍ପଗୁଡିକ]"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/unregister.py:38
-#: src/subscription_manager/utils.py:286
+#: src/subscription_manager/utils.py:290
 msgid "This system is currently not registered."
 msgstr "ତନ୍ତ୍ରଟି ବର୍ତ୍ତମାନ ପଞ୍ଜିକରଣ ହୋଇନାହିଁ।"
 
@@ -4092,27 +3261,23 @@ msgstr "ସର୍ଭର ବିପକ୍ଷରେ ବୈଧିକରଣ କରି
 msgid "password to use when authorizing against the server"
 msgstr "ସର୍ଭର ବିପକ୍ଷରେ ବୈଧିକରଣ କରିବା ସମୟରେ ବ୍ୟବହାର କରିବାକୁ ଥିବା ପ୍ରବେଶ ସଂକେତ"
 
-#: src/subscription_manager/cli_command/user_pass.py:50
-msgid "token to use when authorizing against the server"
-msgstr ""
-
-#: src/subscription_manager/cli_command/user_pass.py:64
+#: src/subscription_manager/cli_command/user_pass.py:59
 msgid "Error: --username is a required parameter in non-interactive mode."
 msgstr ""
 
-#: src/subscription_manager/cli_command/user_pass.py:69
+#: src/subscription_manager/cli_command/user_pass.py:64
 msgid "Error: --password is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/user_pass.py:73
+#: src/subscription_manager/cli_command/user_pass.py:68
 msgid "Username: "
 msgstr "ଚାଳକ ନାମ: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/user_pass.py:76
+#: src/subscription_manager/cli_command/user_pass.py:71
 msgid "Password: "
 msgstr "ପ୍ରବେଶ ସଙ୍କେତ: "
 
@@ -4138,7 +3303,7 @@ msgstr "ସଦସ୍ୟତା ପରିଚାଳନା ନିୟମାବଳୀ:
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:295
+#: src/subscription_manager/entcertlib.py:294
 #, python-format
 msgid "%s local certificate has been deleted."
 msgid_plural "%s local certificates have been deleted."
@@ -4147,35 +3312,35 @@ msgstr[1] "%s ସ୍ଥାନୀୟ ପ୍ରମାଣପତ୍ରଗୁଡ଼�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:452
+#: src/subscription_manager/entcertlib.py:451
 #, python-format
 msgid "Total updates: %d"
 msgstr "ସମୁଦାୟ ଅଦ୍ୟତନଗୁଡ଼ିକ: %d"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:453
+#: src/subscription_manager/entcertlib.py:452
 #, python-format
 msgid "Found (local) serial# %s"
 msgstr "(ସ୍ଥାନୀୟ) କ୍ରମ# %s ମିଳିଲା"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:454
+#: src/subscription_manager/entcertlib.py:453
 #, python-format
 msgid "Expected (UEP) serial# %s"
 msgstr "(UEP) କ୍ରମ# %s କୁ ଆଶାକରାଯାଇଥିଲା"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:455
+#: src/subscription_manager/entcertlib.py:454
 #: src/subscription_manager/repolib.py:682
 msgid "Added (new)"
 msgstr "ଯୋଗକରାଯାଇଛି (ନୂତନ)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/entcertlib.py:456
+#: src/subscription_manager/entcertlib.py:455
 msgid "Deleted (rogue):"
 msgstr "ଅପସାରଣ କରାଯାଇଛି (ଅଜ୍ଞାନୀ):"
 
@@ -4264,7 +3429,6 @@ msgstr "ଖରାପ CA ପ୍ରମାଣପତ୍ର: %s"
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/exceptions.py:51
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:218
 msgid "Your identity certificate has expired"
 msgstr "ଆପଣଙ୍କର ପରିଚୟ ପ୍ରମାଣପତ୍ରର ଅବଧି ସମାପ୍ତ ହୋଇଛି"
 
@@ -4456,19 +3620,39 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:198
-msgid "Updating entitlement certificates & repositories"
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#, fuzzy
+#| msgid "This system is already registered. Use --force to override"
+msgid ""
+"This system is already registered, ignoring request to automatically "
+"register."
+msgstr "ତନ୍ତ୍ରଟି ପୂର୍ବରୁ ପଞ୍ଜୀକୃତ ଅଟେ। ଏହାକୁ ବ୍ଯର୍ଥ କରିବା ପାଇଁ --force କୁ ବ୍ଯବହାର କରନ୍ତୁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#, fuzzy
+#| msgid "Register System"
+msgid "Registering the system"
+msgstr "ତନ୍ତ୍ରକୁ ପଞ୍ଜିକରଣ କରନ୍ତୁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#, fuzzy
+#| msgid "Updating entitlement certificates & repositories"
+msgid "Updating entitlement certificates & repositories."
 msgstr "ଅଧିକାର ପ୍ରମାଣପତ୍ର ଏବଂ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ଅଦ୍ୟତନ କରୁଅଛି"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:293
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:404
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "ଅଧିକାର ପ୍ରମାଣପତ୍ର ଏବଂ ରେପୋଜିଟୋରୀଗୁଡ଼ିକୁ ଅଦ୍ୟତନ କରିବାରେ ବିଫଳ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/utils.py:386
+#: src/subscription_manager/utils.py:390
 msgid "and"
 msgstr "ଏବଂ"
 
@@ -4484,6 +3668,632 @@ msgstr ""
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy
+#~| msgid "%s option requires an argument"
+#~ msgid "optional arguments"
+#~ msgstr "%s ପସନ୍ଦ ଏକ ସ୍ବତନ୍ତ୍ରଚର ଆବଶ୍ଯକ କରୁଛି"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "deprecated, see --cert-check-interval"
+#~ msgstr "ପୁରୁଣା ହୋଇଛି, see --cert-check-interval"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "deprecated, see --auto-attach-interval"
+#~ msgstr "ପୁରୁଣା ହୋଇଛି, --auto-attach-interval କୁ ଦେଖନ୍ତୁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "interval to run auto-attach (in minutes)"
+#~ msgstr "ସ୍ୱୟଂ-ସଂଲଗ୍ନକୁ ଚଲାଇବା ପାଇଁ ଅନ୍ତରାଳ (ମିନଟରେ)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy
+#~| msgid "Attaching subscriptions"
+#~ msgid "Updating subscriptions"
+#~ msgstr "ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଯୋଡ଼ୁଅଛି"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy
+#~| msgid "Error subscribing: %s"
+#~ msgid "Unsubscribing"
+#~ msgstr "ସଦସ୍ୟତା ପାଇବାରେ ତ୍ରୁଟି: %s"
+
+#~ msgid ""
+#~ "A file from which to read pool IDs. If a hyphen is provided, pool IDs "
+#~ "will be read from stdin."
+#~ msgstr ""
+#~ "ପୁଲ ID ଗୁଡ଼ିକୁ ଯେଉଁ ଫାଇଲରୁ ପଢ଼ାଯାଇ ପାରିବ। ଯଦି ଏକ ହାଇଫେନ୍‌ ଦିଆଯାଇଥାଏ, ତେବେ ପୁଲ ID ଗୁଡ଼ିକୁ "
+#~ "stdin ରୁ ପଢ଼ାଯାଇପାରିବ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "All installed products are covered by valid entitlements."
+#~ msgstr "ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ବୈଧ ଅଧିକାର ପ୍ରାପ୍ତ ହୋଇଛି।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "No need to update subscriptions at this time."
+#~ msgstr "ବର୍ତ୍ତମାନ କୌଣସି ସଦସ୍ୟତାକୁ ଅଦ୍ୟତନ କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy
+#~| msgid "Attach a specified subscription to the registered system"
+#~ msgid ""
+#~ "Attach a specified subscription to the registered system, when system "
+#~ "does not use Simple Content Access mode"
+#~ msgstr "ପଞ୍ଜିକୃତ ତନ୍ତ୍ରରେ ଉଲ୍ଲିଖିତ ସଦସ୍ୟତାକୁ ସଂଲଗ୍ନ କରନ୍ତୁ"
+
+#~ msgid "Error: --auto may not be used when specifying pools."
+#~ msgstr "ତୃଟି: --auto କୁ ହୁଏତଃ ପୁଲଗୁଡ଼ିକୁ ଉଲ୍ଲେଖ କରିବା ପାଇଁ ବ୍ୟବହାର କରାଯାଇପାରିବ ନାହିଁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Error: Quantity must be a positive integer."
+#~ msgstr "ତ୍ରୁଟି: ପରିମାଣଟି ଏକ ଯୁକ୍ତାତ୍ମକ ଗଣନ ସଂଖ୍ୟା ହୋଇଥିବା ଉଚିତ।"
+
+#, fuzzy, python-brace-format
+#~| msgid "Error: The file \"%s\" does not exist or cannot be read."
+#~ msgid "Error: The file \"{file}\" does not contain any pool IDs."
+#~ msgstr "ତୃଟି: ଫାଇଲ \"%s\" ଅବସ୍ଥିତ ନଥାଏ କିମ୍ବା ପଢ଼ାଯାଇ ପାରିବ ନାହିଁ।"
+
+#, fuzzy, python-brace-format
+#~| msgid "Error: The file \"%s\" does not exist or cannot be read."
+#~ msgid "Error: The file \"{file}\" does not exist or cannot be read."
+#~ msgstr "ତୃଟି: ଫାଇଲ \"%s\" ଅବସ୍ଥିତ ନଥାଏ କିମ୍ବା ପଢ଼ାଯାଇ ପାରିବ ନାହିଁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Please enter a valid numeric pool ID."
+#~ msgstr "ଦୟାକରି ଗୋଟିଏ ବୈଧ ସାଂଖ୍ୟିକ ସମୂହ ID ଭରଣ କରନ୍ତୁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "Successfully attached a subscription for: %s"
+#~ msgid "Successfully attached a subscription for: {name}"
+#~ msgstr "ଏହା ପାଇଁ ଏକ ସଦସ୍ୟତାକୁ ସଫଳତାର ସହିତ ସଂଲଗ୍ନ କରିଛି: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "No Installed products on system. No need to attach subscriptions."
+#~ msgstr "ତନ୍ତ୍ରରେ କୌଣସି ସ୍ଥାପିତ ଉତ୍ପାଦନ ନାହିଁ। କୌଣସି ସଦସ୍ୟତାକୁ ସଂଲଗ୍ନ କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "All installed products are covered by valid entitlements. No need to "
+#~ "update subscriptions at this time."
+#~ msgstr ""
+#~ "ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ବୈଧ ଅଧିକାର ପ୍ରାପ୍ତ ହୋଇଛି। ବର୍ତ୍ତମାନ କୌଣସି ସଦସ୍ୟତାକୁ ଅଦ୍ୟତନ "
+#~ "କରିବା ଆବଶ୍ୟକ ନାହିଁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "Error: The --servicelevel option is not supported by the server. Did not "
+#~ "complete your request."
+#~ msgstr ""
+#~ "ତ୍ରୁଟି: --servicelevel ବିକଳ୍ପ ସର୍ଭର ଦ୍ୱାରା ସହାୟତା ପ୍ରାପ୍ତ ନୁହଁ। ଆପଣଙ୍କ ଅନୁରୋଧ ସମ୍ପୂର୍ଣ୍ଣ "
+#~ "ହୋଇନାହିଁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy
+#~| msgid "Service level set to: %s"
+#~ msgid "Service level set to: {}"
+#~ msgstr "ସର୍ଭିସ ସ୍ତରକୁ ଏପରି ସେଟ କରାଯାଇଛି: %s"
+
+#~ msgid ""
+#~ "Entitlement Certificate(s) update failed due to the following reasons:"
+#~ msgstr "ନିମ୍ନଲିଖିତ କାରଣଗୁଡ଼ିକ ହେତୁ ସଦସ୍ୟତା ପ୍ରମାଣପତ୍ର(ଗୁଡ଼ିକ) ଅଦ୍ୟତନ କରିବାରେ ବିଫଳ:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Set if subscriptions are attached on a schedule (default of daily)"
+#~ msgstr "ସଦସ୍ୟତାଗୁଡ଼ିକ ଗୋଟିଏ ଯୋଜନା ଉପରେ ସଂଲଗ୍ନ ହୋଇଥିଲେ ସେଟ କରନ୍ତୁ (ଦିନର ପୂର୍ବନିର୍ଦ୍ଧାରିତ)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "specify whether to enable or disable auto-attaching of subscriptions"
+#~ msgstr "ସଦସ୍ୟତାଗୁଡ଼ିକର ସ୍ୱୟଂ ସଂଲଗ୍ନକୁ ସକ୍ରିୟ କିମ୍ବା ନିଷ୍କ୍ରିୟ କରିବା ଉଚିତ କି ନୁହଁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "try to attach subscriptions for uncovered products each check-in"
+#~ msgstr "ପ୍ରତ୍ୟେକ ପ୍ରବେଶରେ ଅନାବୃତ ଉତ୍ପାଦନଗୁଡ଼ିକ ପାଇଁ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସଂଲଗ୍ନ କରନ୍ତୁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "do not try to automatically attach subscriptions each check-in"
+#~ msgstr "ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସଂଲଗ୍ନ କରିବା ପାଇଁ ଚେଷ୍ଟା କରନ୍ତୁ ନାହିଁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "show the current auto-attach preference"
+#~ msgstr "ପ୍ରଚଳିତ ସ୍ୱୟଂସଂଲଗ୍ନ ପସନ୍ଦକୁ ଦର୍ଶାନ୍ତୁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Auto-attach preference: enabled"
+#~ msgstr "ସ୍ୱୟଂ-ସଂଯୁକ୍ତ ପସନ୍ଦ: ସକ୍ରିୟ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Auto-attach preference: disabled"
+#~ msgstr "ସ୍ୱୟଂ-ସଂଯୁକ୍ତ ପସନ୍ଦ: ନିଷ୍କ୍ରିୟ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Import certificates which were provided outside of the tool"
+#~ msgstr "ଉପକରଣ ବାହାରେ ପ୍ରଦାନ କରାଯାଇଥିବା ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ ଆମଦାନୀ କରନ୍ତୁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "certificate file to import (can be specified more than once)"
+#~ msgstr "ଆମଦାନୀ କରିବା ପାଇଁ ଥିବା ପ୍ରମାଣପତ୍ର ଫାଇଲ (ଅଧିକ ଥର ଉଲ୍ଲେଖ କରିପାରିବେ)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "Error: This command requires that you specify a certificate with --"
+#~ "certificate."
+#~ msgstr ""
+#~ "ତ୍ରୁଟି: ଏହି ନିର୍ଦ୍ଦେଶଟି ଆବଶ୍ୟକ କରିଥାଏ ଯେ ଆପଣ --certificate ସହିତ ଗୋଟିଏ ପ୍ରମାଣପତ୍ର ଉଲ୍ଲେଖ "
+#~ "କରନ୍ତୁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "Successfully imported certificate %s"
+#~ msgid "Successfully imported certificate {file}"
+#~ msgstr "ପ୍ରମାଣପତ୍ର %s କୁ ସଫଳତାର ସହିତ ଆମଦାନୀ କରାଯାଇଛି"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "%s is not a valid certificate file. Please use a valid certificate."
+#~ msgid ""
+#~ "{file} is not a valid certificate file. Please use a valid certificate."
+#~ msgstr ""
+#~ "%s ଟି ଗୋଟିଏ ବୈଧ ପ୍ରମାଣପତ୍ର ଫାଇଲ ନୁହଁ। ଦୟାକରି ଗୋଟିଏ ବୈଧ ପ୍ରମାଣପତ୍ର ବ୍ୟବହାର କରନ୍ତୁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "An error occurred while importing the certificate. Please check log file "
+#~ "for more information."
+#~ msgstr ""
+#~ "ପ୍ରମାଣପତ୍ରଗୁଡ଼ିକୁ ଆମଦାନୀ କରିବା ସମୟରେ ଗୋଟିଏ ତ୍ରୁଟି ଘଟିଛି। ଅଧିକ ସୂଚନା ପାଇଁ ଦୟାକରି ଲଗ ଫାଇଲ "
+#~ "ଦେଖନ୍ତୁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Future Subscription"
+#~ msgstr "ଭବିଷ୍ଯତ ସଦସ୍ୟତା"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Subscribed"
+#~ msgstr "ସ୍ବୀକାର କରାହୋଇଛି"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Not Subscribed"
+#~ msgstr "ସଦସ୍ୟତା ଗ୍ରହଣ କରିନାହିଁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Expired"
+#~ msgstr "ସମୟ ସମାପ୍ତ ହୋଇଛି"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Partially Subscribed"
+#~ msgstr "ଆଂଶିକ ସଦସ୍ୟତା ଗ୍ରହଣ କରିଅଛି"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Status:"
+#~ msgstr "ସ୍ଥିତି:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Status Details:"
+#~ msgstr "ସ୍ଥିତି ବିବରଣୀ:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Starts:"
+#~ msgstr "ଆରମ୍ଭ:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Ends:"
+#~ msgstr "ସମାପ୍ତ:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Subscription Name:"
+#~ msgstr "ସଦସ୍ୟତା ନାମ:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Provides:"
+#~ msgstr "ପ୍ରଦାନ କରିଥାଏ:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "SKU:"
+#~ msgstr "SKU:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Contract:"
+#~ msgstr "ରାଜିନାମା:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Pool ID:"
+#~ msgstr "ପୁଲ ID:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Available:"
+#~ msgstr "ଉପଲବ୍ଧ:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Suggested:"
+#~ msgstr "ପ୍ରସ୍ତାବିତ:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Service Type:"
+#~ msgstr "ସର୍ଭିସ ପ୍ରକାର:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Service Level:"
+#~ msgstr "ସର୍ଭିସ ସ୍ତର:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Subscription Type:"
+#~ msgstr "ସଦସ୍ୟତା ପ୍ରକାର:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Account:"
+#~ msgstr "ଖାତା:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Serial:"
+#~ msgstr "କ୍ରମ ସଂଖ୍ୟା:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Active:"
+#~ msgstr "ସକ୍ରିୟ:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Quantity Used:"
+#~ msgstr "ବ୍ୟବହୃତ ପରିମାଣ:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "System Type:"
+#~ msgstr "ତନ୍ତ୍ର ପ୍ରକାର:"
+
+# translation auto-copied from project subscription-manager, version 1.13.X,
+# document keys
+#~ msgid "No products installed."
+#~ msgstr "କୌଣସି ସ୍ଥାପିତ ବସ୍ତୁ ନାହିଁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Installed Product Current Status:"
+#~ msgstr "ସ୍ଥାପିତ ଉତ୍ପାଦନର ବର୍ତ୍ତମାନ ସ୍ଥିତି:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys, author mgiri
+#~ msgid ""
+#~ "Unable to find available subscriptions for all your installed products."
+#~ msgstr "ସମସ୍ତ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ପାଇଁ ଉପଲବ୍ଧ ସଦସ୍ୟତା ଖୋଜିବାରେ ଅସମର୍ଥ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "show those subscriptions which are available"
+#~ msgstr "ତାଲିକା ଉପଲବ୍ଧ ଥିବା ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "used with --available to ensure all subscriptions are returned"
+#~ msgstr ""
+#~ "ସମସ୍ତ ସଦସ୍ୟତାକୁ ଫେରାଇ ଦିଆଯାଇଛି କି ନାହିଁ ନିଶ୍ଚିତ କରିବା ପାଇଁ --available ସହିତ ପ୍ରଦାନ "
+#~ "କରାଯାଇଛି"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "date to search on, defaults to today's date, only used with --available "
+#~| "(example: %s)"
+#~ msgid ""
+#~ "date to search on, defaults to today's date, only used with --available "
+#~ "(example: {example})"
+#~ msgstr ""
+#~ "ସନ୍ଧାନ କରିବା ପାଇଁ ତାରିଖ, ଆଜିର ତାରିଖକୁ ପୂର୍ବନିର୍ଦ୍ଧାରିତ କରି, କେବଳ --available ସହିତ ବ୍ୟବହାର "
+#~ "କରାଯାଇଥାଏ (ଉଦାହରଣ: %s)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "show the subscriptions being consumed by this system"
+#~ msgstr "ଏହି ତନ୍ତ୍ର ଦ୍ୱାରା ବ୍ୟବହାର ହେଉଥିବା ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "shows only subscriptions matching the specified service level; only used "
+#~ "with --available and --consumed"
+#~ msgstr ""
+#~ "କେବଳ ନିର୍ଦ୍ଦିଷ୍ଟ ସର୍ଭିସ ସ୍ତର ସହିତ ମେଳକ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ; କେବଳ --available ଏବଂ --"
+#~ "consumed ସହିତ ବ୍ୟବହୃତ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "shows pools which provide products that are not already covered; only "
+#~ "used with --available"
+#~ msgstr ""
+#~ "ପୂର୍ବରୁ ଧାରଣ ହୋଇନଥିବା ପୁଲଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ; କେବଳ --available ସହିତ ବ୍ୟବହାର ହୋଇଥାଏ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "shows only subscriptions matching products that are currently installed; "
+#~ "only used with --available"
+#~ msgstr ""
+#~ "ବର୍ତ୍ତମାନ ସ୍ଥାପିତ ଉତ୍ପାଦନଗୁଡ଼ିକ ମଧ୍ଯରୁ କେବଳ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଦର୍ଶାଇଥାଏ; କେବଳ --available "
+#~ "ସହିତ ବ୍ୟବହାର କରାଯାଇଥାଏ"
+
+#~ msgid ""
+#~ "lists only the pool IDs for applicable available or consumed "
+#~ "subscriptions; only used with --available and --consumed"
+#~ msgstr ""
+#~ "ପ୍ରଯୁଜ୍ୟ ଉପଲବ୍ଧ ଅଥବା ବ୍ୟବହୃତ ସଦସ୍ୟତାଗୁଡ଼ିକ ପାଇଁ କେବଳ ପୁଲ ID ଗୁଡ଼ିକୁ ତାଲିକାଭୁକ୍ତ କରନ୍ତୁ; କେବଳ --"
+#~ "available ଏବଂ --consumed ସହିତ ବ୍ୟବହାର କରନ୍ତୁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "date to search on, defaults to today's date, only used with --available "
+#~| "(example: %s)"
+#~ msgid ""
+#~ "show pools that are active on or after the given date; only used with --"
+#~ "available (example: {example})"
+#~ msgstr ""
+#~ "ସନ୍ଧାନ କରିବା ପାଇଁ ତାରିଖ, ଆଜିର ତାରିଖକୁ ପୂର୍ବନିର୍ଦ୍ଧାରିତ କରି, କେବଳ --available ସହିତ ବ୍ୟବହାର "
+#~ "କରାଯାଇଥାଏ (ଉଦାହରଣ: %s)"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+#~ "{dateexample})"
+#~ msgstr ""
+#~ "ଭରଣ କରାଯାଇଥିବା ତାରିଖଟି ଅବୈଧ ଅଟେ। ତାରିଖଟି YYYY-MM-DD ଶୈଳୀରେ ରହିବା ଉଚିତ (ଉଦାହରଣ:  "
+#~ "{dateexample})"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Available Subscriptions"
+#~ msgstr "ଉପଲବ୍ଧ ସଦସ୍ୟତାଗୁଡ଼ିକ"
+
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "No available subscription pools were found matching the expression "
+#~| "\"%s\" and the service level \"%s\"."
+#~ msgid ""
+#~ "No available subscription pools were found matching the expression "
+#~ "\"{filter}\" and the service level \"{level}\"."
+#~ msgstr ""
+#~ "ଅଭିବ୍ୟକ୍ତି \"%s\" ଏବଂ ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ଉପଲବ୍ଧ ପୁଲଗୁଡ଼ିକ ମିଳିଲା "
+#~ "ନାହିଁ।"
+
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "No available subscription pools were found matching the expression "
+#~| "\"%s\"."
+#~ msgid ""
+#~ "No available subscription pools were found matching the expression "
+#~ "\"{filter}\"."
+#~ msgstr "ଅଭିବ୍ୟକ୍ତି \"%s\" ସହିତ ମେଳଖାଉଥିବା କୌଣସି ଉପଲବ୍ଧ ପୁଲ ମିଳିଲା ନାହିଁ।"
+
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "No available subscription pools were found matching the service level "
+#~| "\"%s\"."
+#~ msgid ""
+#~ "No available subscription pools were found matching the service level "
+#~ "\"{level}\"."
+#~ msgstr "ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ଉପଲବ୍ଧ ପୁଲଗୁଡ଼ିକ ମିଳିଲା ନାହିଁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "No available subscription pools to list"
+#~ msgstr "ତାଲିକାରେ କୌଣସି ଉପଲବ୍ଧ ସଦସ୍ୟତା ସମୂହ ନାହିଁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Consumed Subscriptions"
+#~ msgstr "ବ୍ୟବହାର ହୋଇଥିବା ସଦସ୍ୟତାଗୁଡ଼ିକ"
+
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "No consumed subscription pools were found matching the expression \"%s\" "
+#~| "and the service level \"%s\"."
+#~ msgid ""
+#~ "No consumed subscription pools were found matching the expression "
+#~ "\"{filter}\" and the service level \"{level}\"."
+#~ msgstr ""
+#~ "ଅଭିବ୍ୟକ୍ତି \"%s\" ଏବଂ ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ବ୍ୟବହୃତ ପୁଲଗୁଡ଼ିକ ମିଳିଲା "
+#~ "ନାହିଁ।"
+
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "No consumed subscription pools were found matching the expression \"%s\"."
+#~ msgid ""
+#~ "No consumed subscription pools were found matching the expression "
+#~ "\"{filter}\"."
+#~ msgstr "ଅଭିବ୍ୟକ୍ତି \"%s\" ସହିତ ମେଳଖାଉଥିବା କୌଣସି ବ୍ୟବହୃତ ପୁଲ ମିଳିଲା ନାହିଁ।"
+
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "No consumed subscription pools were found matching the service level "
+#~| "\"%s\"."
+#~ msgid ""
+#~ "No consumed subscription pools were found matching the service level "
+#~ "\"{level}\"."
+#~ msgstr "ସର୍ଭିସ ସ୍ତର \"%s\"  ସହିତ ମେଳଖାଉଥିବା କୌଣସି ବ୍ୟବହୃତ ପୁଲଗୁଡ଼ିକ ମିଳିଲା ନାହିଁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Attempt to redeem a subscription for a preconfigured system"
+#~ msgstr "ପୂର୍ବରୁ ବିନ୍ୟାସିତ ତନ୍ତ୍ର ପାଇଁ ସଦସ୍ୟତାକୁ ହ୍ରାସ କରିବା ପାଇଁ ପ୍ରୟାସ କରୁଅଛି"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "email address to notify when subscription redemption is complete"
+#~ msgstr "କେତେବେଳେ ସଦସ୍ୟତା ସମ୍ପୂର୍ଣ୍ଣ ହେବ ତାହା ଜଣାଇବା ପାଇଁ ଇମେଲ ଠିକଣା"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "optional language to use for email notification when subscription "
+#~ "redemption is complete (Examples: en-us, de-de)"
+#~ msgstr ""
+#~ "ଇମେଲ ବିଜ୍ଞପ୍ତି ପାଇଁ ବ୍ୟବହାର କରିବାକୁ ଥିବା ଇଚ୍ଛାମୁତାବକ ଭାଷା ଯେତେବେଳେ ସଦସ୍ୟତା ହ୍ରାସ "
+#~ "ସମ୍ପୂର୍ଣ୍ଣ ହୋଇଥାଏ (ଉଦାହରଣ: en-us, de-de)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "Error: This command requires that you specify an email address with --"
+#~ "email."
+#~ msgstr ""
+#~ "ତ୍ରୁଟି: ଏହି ନିର୍ଦ୍ଦେଶଟି ଆବଶ୍ୟକ କରିଥାଏ ଯେ ଆପଣ --email ସହିତ ଗୋଟିଏ ଇମେଲ ଠିକଣାକୁ ଉଲ୍ଲେଖ କରନ୍ତୁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy
+#~| msgid "Error: Unable to generate a new identity for the system"
+#~ msgid "Error: Unable to redeem subscription for this system."
+#~ msgstr "ତ୍ରୁଟି: ଏହି ତନ୍ତ୍ର ପାଇଁ ଗୋଟିଏ ନୂତନ ପରିଚୟ ନିର୍ମାଣ କରିବାରେ ଅସମର୍ଥ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Deprecated, see --auto-attach"
+#~ msgstr "ପୁରୁଣା ହୋଇଛି, --auto-attach ଦେଖନ୍ତୁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "automatically attach compatible subscriptions to this system"
+#~ msgstr "ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସୁସଙ୍ଗତ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ଏହି ତନ୍ତ୍ରରେ ସଂଲଗ୍ନ କରନ୍ତୁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "system preference used when subscribing automatically, requires --auto-"
+#~ "attach"
+#~ msgstr ""
+#~ "ସ୍ୱୟଂଚାଳିତ ଭାବରେ ସଦସ୍ୟତା ଗ୍ରହଣ କରିବା ସମୟରେ ତନ୍ତ୍ର ପସନ୍ଦକୁ ବ୍ଯବହାର କରାଯାଇଥାଏ, ଯାହାକି "
+#~ "--auto-attach ଆବଶ୍ୟକ କରିଥାଏ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Error: Activation keys cannot be used with --auto-attach."
+#~ msgstr "ତ୍ରୁଟି: ସକ୍ରିୟଣ କିଗୁଡ଼ିକୁ --auto-attach ସହିତ ବ୍ୟବହାର କରିପାରିବେ ନାହିଁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Error: Must use --auto-attach with --servicelevel."
+#~ msgstr "ତ୍ରୁଟି: ନିଶ୍ଚିତ ଭାବରେ --auto-attach କୁ --servicelevel ସହିତ ବ୍ୟବହାର କରନ୍ତୁ।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "Service level set to: %s"
+#~ msgid "Service level set to: {level}"
+#~ msgstr "ସର୍ଭିସ ସ୍ତରକୁ ଏପରି ସେଟ କରାଯାଇଛି: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid ""
+#~ "certificate serial number to remove (can be specified more than once)"
+#~ msgstr "କାଢ଼ିବାକୁ ଥିବା ପ୍ରମାଣପତ୍ର କ୍ରମ ସଂଖ୍ୟା (ଥରେରୁ ଅଧିକ ଉଲ୍ଲେଖ କରିପାରିବେ)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "remove all subscriptions from this system"
+#~ msgstr "ଏହି ତନ୍ତ୍ରରୁ ସମସ୍ତ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ବାହାର କରନ୍ତୁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "Remove all or specific subscriptions from this system"
+#~ msgstr "ଏହି ତନ୍ତ୍ରରୁ ସମସ୍ତ ଅଥବା କିଛି ନିର୍ଦ୍ଦିଷ୍ଟ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ବାହାର କରନ୍ତୁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "Error: '%s' is not a valid serial number"
+#~ msgid "Error: '{serial}' is not a valid serial number"
+#~ msgstr "ତ୍ରୁଟି: '%s' ଟି ଗୋଟିଏ ବୈଧ କ୍ରମ ସଂଖ୍ୟା ନୁହଁ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#~ msgid "All subscriptions have been removed at the server."
+#~ msgstr "ସମସ୍ତ ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସର୍ଭରରେ ବାହାର କରାଯାଇଛି।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, python-format
+#~ msgid "%s subscription removed at the server."
+#~ msgid_plural "%s subscriptions removed at the server."
+#~ msgstr[0] "%s ସଦସ୍ୟତାକୁ ସର୍ଭରରେ ବାହାର କରାଯାଇଛି।"
+#~ msgstr[1] "%s ସଦସ୍ୟତାଗୁଡ଼ିକୁ ସର୍ଭରରେ ବାହାର କରାଯାଇଛି।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "Unable to perform remove due to the following exception: %s"
+#~ msgid "Unable to perform remove due to the following exception: {e}"
+#~ msgstr "ନିମ୍ନଲିଖିତ ବ୍ୟତୀକ୍ରମ ହେତୁ ସଦସ୍ୟତା ବହିଷ୍କାର କରିବାରେ ଅସମର୍ଥ: %s"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "%s subscriptions removed from this system."
+#~ msgid "{total} subscription removed from this system."
+#~ msgid_plural "{total} subscriptions removed from this system."
+#~ msgstr[0] "%s ସଦସ୍ୟତା ଏହି ତନ୍ତ୍ରରୁ ବାହାର ହୋଇଛି।"
+#~ msgstr[1] "%s ସଦସ୍ୟତା ଏହି ତନ୍ତ୍ରରୁ ବାହାର ହୋଇଛି।"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "Subscription with serial number %s removed from this system"
+#~ msgid "Subscription with serial number {serial} removed from this system"
+#~ msgstr "କ୍ରମ ସଂଖ୍ୟା %s ବିଶିଷ୍ଟ ସଦସ୍ୟତାକୁ ଏହି ତନ୍ତ୍ରରୁ ବାହାର କରାହୋଇଛି"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -6861,11 +6671,6 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#~ msgid "show program's version number and exit"
-#~ msgstr "ପ୍ରଗ୍ରାମ ସଂସ୍କରଣକୁ ଦର୍ଶାନ୍ତୁ ଏବଂ ପ୍ରସ୍ଥାନକରନ୍ତୁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
 #~ msgid "%prog [options]"
 #~ msgstr "%prog [ବିକଳ୍ପଗୁଡିକ]"
 
@@ -6873,11 +6678,6 @@ msgstr ""
 # document keys
 #~ msgid "%s option does not take a value"
 #~ msgstr "%s ବିକଳ୍ପ ମୂଲ୍ଯକୁ ଗ୍ରହଣ କରେନାହିଁ"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#~ msgid "Options"
-#~ msgstr "ବିକଳ୍ପଗୁଡିକ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys

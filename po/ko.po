@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 12:27+0200\n"
+"POT-Creation-Date: 2025-01-07 18:12+0100\n"
 "PO-Revision-Date: 2024-09-27 06:11+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
@@ -25,235 +25,260 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.7.2\n"
 
-#: /usr/lib64/python3.9/argparse.py:296
+#: /usr/lib64/python3.12/argparse.py:228
+#, python-format
+msgid "%(heading)s:"
+msgstr ""
+
+#: /usr/lib64/python3.12/argparse.py:299
 msgid "usage: "
 msgstr "사용법: "
 
-#: /usr/lib64/python3.9/argparse.py:861
+#: /usr/lib64/python3.12/argparse.py:722
+#, python-format
+msgid " (default: %(default)s)"
+msgstr ""
+
+#: /usr/lib64/python3.12/argparse.py:784
+#, python-format
+msgid "argument %(argument_name)s: %(message)s"
+msgstr ""
+
+#: /usr/lib64/python3.12/argparse.py:890
 msgid ".__call__() not defined"
 msgstr ".__ call __ () 정의되지 않음"
 
-#: /usr/lib64/python3.9/argparse.py:1204
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: /usr/lib64/python3.12/argparse.py:1161
+msgid "show program's version number and exit"
+msgstr "프로그램의 버전 번호 보기 및 종료"
+
+#: /usr/lib64/python3.12/argparse.py:1223
+#, fuzzy, python-format
+#| msgid "conflicting option string: %s"
+#| msgid_plural "conflicting option strings: %s"
+msgid "conflicting subparser: %s"
+msgstr "충돌 하는 선택 문자열: %s"
+
+#: /usr/lib64/python3.12/argparse.py:1227
+#, fuzzy, python-format
+#| msgid "conflicting option string: %s"
+#| msgid_plural "conflicting option strings: %s"
+msgid "conflicting subparser alias: %s"
+msgstr "충돌 하는 선택 문자열: %s"
+
+#: /usr/lib64/python3.12/argparse.py:1262
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr "알지 못하는 구문 분석기 %(parser_name)r (선택기:%(choices)s)"
 
-#: /usr/lib64/python3.9/argparse.py:1264
+#: /usr/lib64/python3.12/argparse.py:1323
 #, python-format
 msgid "argument \"-\" with mode %r"
 msgstr "인수 \"-\" (방법 %r인)"
 
-#: /usr/lib64/python3.9/argparse.py:1273
+#: /usr/lib64/python3.12/argparse.py:1332
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
 msgstr "'%(filename)s': %(error)s를 열 수 없습니다"
 
-#: /usr/lib64/python3.9/argparse.py:1482
+#: /usr/lib64/python3.12/argparse.py:1541
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
 msgstr "병합 할 수 없습니다 - 두 그룹의 이름은 %r입니다"
 
-#: /usr/lib64/python3.9/argparse.py:1520
+#: /usr/lib64/python3.12/argparse.py:1583
 msgid "'required' is an invalid argument for positionals"
 msgstr "'필요한'은 위치에 대한 잘못된 인수입니다"
 
-#: /usr/lib64/python3.9/argparse.py:1542
+#: /usr/lib64/python3.12/argparse.py:1604
 #, python-format
 msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr "잘못된 선택 문자열 %(option)r: 문자 %(prefix_chars)r로 시작해야 합니다"
 
-#: /usr/lib64/python3.9/argparse.py:1560
+#: /usr/lib64/python3.12/argparse.py:1622
 #, python-format
 msgid "dest= is required for options like %r"
 msgstr "dest= 는 %r과 같은 선택에 필요합니다"
 
-#: /usr/lib64/python3.9/argparse.py:1577
+#: /usr/lib64/python3.12/argparse.py:1639
 #, python-format
 msgid "invalid conflict_resolution value: %r"
 msgstr "잘못된 충돌_해결 값: %r"
 
-#: /usr/lib64/python3.9/argparse.py:1595
+#: /usr/lib64/python3.12/argparse.py:1657
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
 msgstr[0] "충돌 하는 선택 문자열: %s"
 
-#: /usr/lib64/python3.9/argparse.py:1661
+#: /usr/lib64/python3.12/argparse.py:1731
 msgid "mutually exclusive arguments must be optional"
 msgstr "상호 배타적인 인수는 선택사항이어야만 합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/argparse.py:1728
+#: /usr/lib64/python3.12/argparse.py:1807
 msgid "positional arguments"
 msgstr "위치 인수"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/argparse.py:1729
-msgid "optional arguments"
-msgstr "선택적인 인수"
+#: /usr/lib64/python3.12/argparse.py:1808
+#, fuzzy
+#| msgid "Options"
+msgid "options"
+msgstr "옵션"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/argparse.py:1744
+#: /usr/lib64/python3.12/argparse.py:1823
 msgid "show this help message and exit"
 msgstr "도움말 보기 및 종료"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/argparse.py:1775
+#: /usr/lib64/python3.12/argparse.py:1854
 msgid "cannot have multiple subparser arguments"
 msgstr "여러 하위 구문 분석기 인수를 가질 수 없습니다"
 
-#: /usr/lib64/python3.9/argparse.py:1827 /usr/lib64/python3.9/argparse.py:2338
+#: /usr/lib64/python3.12/argparse.py:1860
+msgid "subcommands"
+msgstr ""
+
+#: /usr/lib64/python3.12/argparse.py:1906
+#: /usr/lib64/python3.12/argparse.py:2459
 #, python-format
 msgid "unrecognized arguments: %s"
 msgstr "인식 할 수 없는 인수: %s"
 
-#: /usr/lib64/python3.9/argparse.py:1928
+#: /usr/lib64/python3.12/argparse.py:2011
 #, python-format
 msgid "not allowed with argument %s"
 msgstr "인수 %s와 함께 허용하지 않습니다"
 
-#: /usr/lib64/python3.9/argparse.py:1974 /usr/lib64/python3.9/argparse.py:1988
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: /usr/lib64/python3.12/argparse.py:2030
+#, python-format
+msgid "ambiguous option: %(option)s could match %(matches)s"
+msgstr "모호한 선택: %(option)s은 %(matches)s와 일치 할 수 있습니다"
+
+#: /usr/lib64/python3.12/argparse.py:2062
+#: /usr/lib64/python3.12/argparse.py:2094
 #, python-format
 msgid "ignored explicit argument %r"
 msgstr "명시적 인수 %r 무시"
 
-#: /usr/lib64/python3.9/argparse.py:2095
+#: /usr/lib64/python3.12/argparse.py:2230
 #, python-format
 msgid "the following arguments are required: %s"
 msgstr "다음 인수가 필요합니다: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/argparse.py:2110
+#: /usr/lib64/python3.12/argparse.py:2245
 #, python-format
 msgid "one of the arguments %s is required"
 msgstr "인수 %s 중 하나가 필요합니다"
 
-#: /usr/lib64/python3.9/argparse.py:2153
+#: /usr/lib64/python3.12/argparse.py:2289
 msgid "expected one argument"
 msgstr "예상되는 하나의 인수"
 
-#: /usr/lib64/python3.9/argparse.py:2154
+#: /usr/lib64/python3.12/argparse.py:2290
 msgid "expected at most one argument"
 msgstr "많으면 하나의 인수가 예상됩니다"
 
-#: /usr/lib64/python3.9/argparse.py:2155
+#: /usr/lib64/python3.12/argparse.py:2291
 msgid "expected at least one argument"
 msgstr "적어도 하나의 인수가 예상됩니다"
 
-#: /usr/lib64/python3.9/argparse.py:2159
+#: /usr/lib64/python3.12/argparse.py:2295
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
 msgstr[0] "%s 인수가 예상됩니다"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/argparse.py:2217
-#, python-format
-msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "모호한 선택: %(option)s은 %(matches)s와 일치 할 수 있습니다"
-
-#: /usr/lib64/python3.9/argparse.py:2281
+#: /usr/lib64/python3.12/argparse.py:2405
 #, python-format
 msgid "unexpected option string: %s"
 msgstr "예상되는 선택 문자열: %s"
 
-#: /usr/lib64/python3.9/argparse.py:2478
+#: /usr/lib64/python3.12/argparse.py:2541
 #, python-format
 msgid "%r is not callable"
 msgstr "%r은 호출 할 수 없습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/argparse.py:2495
+#: /usr/lib64/python3.12/argparse.py:2557
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
 msgstr "잘못된 %(type)s 값: %(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/argparse.py:2506
+#: /usr/lib64/python3.12/argparse.py:2572
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
 msgstr "잘못된 선택: %(value)r (%(choices)s에서 선택)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: /usr/lib64/python3.9/argparse.py:2582
+#: /usr/lib64/python3.12/argparse.py:2650
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: 오류: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:107
-msgid "deprecated, see --cert-check-interval"
-msgstr "폐지 예정, --cert-check-interval 참조"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:110
+#: src/daemons/rhsmcertd.c:99
 msgid "interval to run cert check (in minutes)"
 msgstr "인증서 확인을 실행하는 간격 (분 단위)"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:114
-msgid "deprecated, see --auto-attach-interval"
-msgstr "폐지 예정, --auto-attach-interval 참조"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:117
-msgid "interval to run auto-attach (in minutes)"
-msgstr "자동 첨부를 실행하는 간격 (분 단위)"
-
-#: src/daemons/rhsmcertd.c:120
+#: src/daemons/rhsmcertd.c:102
 msgid "interval to run auto-registration (in minutes)"
 msgstr "자동 등록을 실행하는 간격(분 단위)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:123
+#: src/daemons/rhsmcertd.c:105
 msgid "run the initial checks immediately, with no delay"
 msgstr "지연 없이 즉시 초기 검사를 실행합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:126
+#: src/daemons/rhsmcertd.c:108
 msgid "show debug messages"
 msgstr "디버그 메세지 보기"
 
-#: src/daemons/rhsmcertd.c:128
+#: src/daemons/rhsmcertd.c:110
 msgid "do not add an offset to the initial checks."
 msgstr "오프셋을 처음 확인에 추가하지 마십시오."
 
-#: src/daemons/rhsmcertd.c:131
+#: src/daemons/rhsmcertd.c:113
 msgid "try to perform auto-registration."
 msgstr "자동 등록을 실행하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:612
-#, c-format
+#: src/daemons/rhsmcertd.c:545
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "자세한 정보를 보려면 rhsmcertd --help를 실행하십시오\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:729
+#: src/daemons/rhsmcertd.c:651
 msgid "Wrong number of arguments specified.\n"
 msgstr "잘못된 인수 번호가 지정되어 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:805
+#: src/daemons/rhsmcertd.c:720
 msgid "Invalid argument specified.\n"
 msgstr "잘못된 인수가 지정되어 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:811
-#, c-format
+#: src/daemons/rhsmcertd.c:726
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "경고: 사용권장되지 않는 CLI 인수가 사용되고 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:826
+#: src/daemons/rhsmcertd.c:741
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "잘못된 옵션: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:840
+#: src/daemons/rhsmcertd.c:755
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "잘못된 인수가 지정됨: %s\n"
@@ -262,7 +287,7 @@ msgstr "잘못된 인수가 지정됨: %s\n"
 msgid "Installed products updated."
 msgstr "설치된 제품이 최신화되었습니다."
 
-#: src/plugins/dnf/subscription_manager.py:35
+#: src/plugins/dnf/subscription_manager.py:46
 #, python-format
 msgid ""
 "\n"
@@ -282,7 +307,7 @@ msgstr ""
 "대한 최신화에 접근하려면 활성 서브스크립션이 필요합니다. 활성 서브스크립션이 "
 "없을 경우, 만료된 서브스크립션을 갱신 할 수 있습니다.  "
 
-#: src/plugins/dnf/subscription_manager.py:46
+#: src/plugins/dnf/subscription_manager.py:57
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
@@ -292,7 +317,22 @@ msgstr ""
 "이 시스템은 Red Hat 관리서버에 등록되어 있지 않습니다. subscription-manager"
 "를 사용하여 등록 할 수 있습니다.\n"
 
-#: src/plugins/dnf/subscription_manager.py:52
+#: src/plugins/dnf/subscription_manager.py:63
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "This system is not registered with an entitlement server. You can use "
+#| "subscription-manager to register.\n"
+msgid ""
+"\n"
+"This system is not registered with an entitlement server. You can use "
+"\"rhc\" or \"subscription-manager\" to register.\n"
+msgstr ""
+"\n"
+"이 시스템은 Red Hat 관리서버에 등록되어 있지 않습니다. subscription-manager"
+"를 사용하여 등록 할 수 있습니다.\n"
+
+#: src/plugins/dnf/subscription_manager.py:70
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
@@ -302,11 +342,19 @@ msgstr ""
 "이 시스템은 자격 서버로 등록되어 있지만, 최신화를 받지 않습니다. "
 "subscription-manager를 사용하여 서브스크립션을 할당 할 수 있습니다.\n"
 
-#: src/plugins/dnf/subscription_manager.py:87
+#: src/plugins/dnf/subscription_manager.py:77
+#, python-brace-format
+msgid ""
+"\n"
+"This system has release set to {release_version} and it receives updates "
+"only for this release.\n"
+msgstr ""
+
+#: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
 msgstr "root가 아니며, 서브스크립션 관리 저장소가 최신화되지 않습니다"
 
-#: src/plugins/dnf/subscription_manager.py:115
+#: src/plugins/dnf/subscription_manager.py:140
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
@@ -318,15 +366,15 @@ msgstr[0] ""
 "subscription-manager 플러그인이 /etc/dnf/plugins/subscription-manager.conf의 "
 "구성과 관련된 %d 시스템 저장소를 비활성화했습니다"
 
-#: src/plugins/dnf/subscription_manager.py:133
+#: src/plugins/dnf/subscription_manager.py:158
 msgid "Updating Subscription Management repositories."
 msgstr "서브스크립션 관리 저장소를 최신화하기."
 
-#: src/plugins/dnf/subscription_manager.py:138
+#: src/plugins/dnf/subscription_manager.py:167
 msgid "Unable to read consumer identity"
 msgstr "소비자 ID를 읽을 수 없습니다"
 
-#: src/plugins/dnf/subscription_manager.py:141
+#: src/plugins/dnf/subscription_manager.py:170
 msgid "subscription-manager is operating in container mode."
 msgstr "subscription-manager는 컨테이너 방식에서 작동하고 있습니다."
 
@@ -881,12 +929,12 @@ msgstr "ID 인증서"
 msgid "Unknown Certificate Type"
 msgstr "알 수 없는 인증서 유형"
 
-#: src/rhsm/config.py:244
+#: src/rhsm/config.py:243
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
 msgstr "잘못된 로그 레벨: {lvl}, 이와 같은 실행을 위해 INFO로 설정합니다."
 
-#: src/rhsm/config.py:249
+#: src/rhsm/config.py:248
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
@@ -894,128 +942,117 @@ msgstr ""
 "사용해 주세요:  subscription-manager config --logging.default_log_level=<Log "
 "Level>는 default_log_level을 유효한 값으로 설정합니다."
 
-#: src/rhsm/config.py:255
+#: src/rhsm/config.py:254
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
 msgstr "유효 값: {valid_str}"
 
-#: src/rhsm/connection.py:1402
+#: src/rhsm/connection.py:1444
 msgid "Fetching supported resources"
 msgstr "지원되는 자원 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1461
+#: src/rhsm/connection.py:1504
 msgid "Checking connection status"
 msgstr "연결 상태 점검하기"
 
-#: src/rhsm/connection.py:1489
+#: src/rhsm/connection.py:1529
 msgid "Fetching cloud token"
 msgstr "클라우드 토큰 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1562
+#: src/rhsm/connection.py:1608
 msgid "Registering system"
 msgstr "시스템 등록하기"
 
-#: src/rhsm/connection.py:1592 src/rhsm/connection.py:1604
+#: src/rhsm/connection.py:1638 src/rhsm/connection.py:1650
 msgid "Updating detected virtual machines running on given host"
 msgstr "제공된 호스트에서 실행 중에 감지된 가상화 장비 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1627
+#: src/rhsm/connection.py:1673
 msgid "Updating hypervisor information"
 msgstr "하이퍼바이저 정보 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1702
+#: src/rhsm/connection.py:1745
 msgid "Updating consumer information"
 msgstr "고객 정보 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1707 src/rhsm/connection.py:1711
+#: src/rhsm/connection.py:1750 src/rhsm/connection.py:1754
 msgid "Fetching guest information"
 msgstr "게스트 정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1715
+#: src/rhsm/connection.py:1758
 msgid "Removing guests"
 msgstr "게스트 제거 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1745 src/rhsm/connection.py:1756
+#: src/rhsm/connection.py:1788 src/rhsm/connection.py:1799
 msgid "Updating profile information"
 msgstr "프로파일 정보 최신화하기"
 
-#: src/rhsm/connection.py:1764
+#: src/rhsm/connection.py:1807
 msgid "Fetching consumer keys"
 msgstr "고객 키 가져오기"
 
-#: src/rhsm/connection.py:1773
+#: src/rhsm/connection.py:1816
 msgid "Checking compliance status"
 msgstr "준수 상태 점검 중"
 
-#: src/rhsm/connection.py:1782
+#: src/rhsm/connection.py:1825
 msgid "Checking system purpose compliance status"
 msgstr "시스템 목적 준수 상태 점검 중"
 
-#: src/rhsm/connection.py:1789
+#: src/rhsm/connection.py:1832
 msgid "Fetching available system purpose settings"
 msgstr "사용 가능한 시스템 목적 설정 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1796 src/rhsm/connection.py:1804
+#: src/rhsm/connection.py:1839 src/rhsm/connection.py:1847
 msgid "Fetching organizations"
 msgstr "조직 가져오기"
 
-#: src/rhsm/connection.py:1817
+#: src/rhsm/connection.py:1860
 msgid "Unregistering system"
 msgstr "시스템 등록 해제 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1830
+#: src/rhsm/connection.py:1884
 msgid "Fetching certificates"
 msgstr "인증서 가져오기"
 
-#: src/rhsm/connection.py:1839
+#: src/rhsm/connection.py:1893
 msgid "Fetching certificate serial numbers"
 msgstr "인증서 일련 번호 가져오기"
 
-#: src/rhsm/connection.py:1855
+#: src/rhsm/connection.py:1909
 msgid "Fetching content for a certificate"
 msgstr "인증서를 위해 내용 가져오기"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1868 src/rhsm/connection.py:1885
-msgid "Updating subscriptions"
-msgstr "서브스크립션 초신화 중"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1894 src/rhsm/connection.py:1904
-#: src/rhsm/connection.py:1913
-msgid "Unsubscribing"
-msgstr "구독"
-
-#: src/rhsm/connection.py:1962
+#: src/rhsm/connection.py:1959
 msgid "Fetching pools"
 msgstr "풀 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1973
+#: src/rhsm/connection.py:1970
 msgid "Fetching release information"
 msgstr "출시 정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1987
+#: src/rhsm/connection.py:1984
 msgid "Fetching available releases"
 msgstr "사용 가능한 출시정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2002
+#: src/rhsm/connection.py:1999
 msgid "Fetching entitlements"
 msgstr "자격 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2011
+#: src/rhsm/connection.py:2008
 msgid "Fetching service levels"
 msgstr "서비스 수준 가져오기"
 
@@ -1050,17 +1087,13 @@ msgstr "내용 재정의 최신화 중"
 msgid "Removing content overrides"
 msgstr "내용 재정의 제거 중"
 
-#: src/rhsm/connection.py:2118
-msgid "Activating"
-msgstr "활성화"
-
-#: src/rhsm/connection.py:2127
+#: src/rhsm/connection.py:2111
 msgid "Fetching job"
 msgstr "작업 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:39
-#: src/subscription_manager/cli_command/cli.py:51
+#: src/subscription_manager/cli_command/cli.py:50
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
@@ -1123,13 +1156,13 @@ msgstr "작성됨: {destination_dir_name}"
 msgid "Unable to create zip file of system information: {error}"
 msgstr "시스템 정보의 zip 파일을 생성할 수 없음: {error}"
 
-#: src/rhsmlib/dbus/objects/register.py:133
+#: src/rhsmlib/dbus/objects/register.py:156
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr "사용자 %s은(는) 더 많은 조직의 멤버이지만, 조직이 선택되지 않았습니다"
 
-#: src/rhsmlib/dbus/objects/register.py:149
+#: src/rhsmlib/dbus/objects/register.py:172
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr "사용자 %s은(는) 조직의 멤버가 아닙니다"
@@ -1169,45 +1202,40 @@ msgstr "지난 날짜는 허용되지 않음"
 #: src/rhsmlib/services/entitlement.py:94
 #: src/rhsmlib/services/syspurpose.py:107
 #: src/subscription_manager/cert_sorter.py:296
-#: src/subscription_manager/cli_command/cli.py:233
-#: src/subscription_manager/cli_command/cli.py:237
-#: src/subscription_manager/cli_command/cli.py:238
-#: src/subscription_manager/cli_command/cli.py:239
+#: src/subscription_manager/cli_command/cli.py:213
+#: src/subscription_manager/cli_command/cli.py:217
+#: src/subscription_manager/cli_command/cli.py:218
+#: src/subscription_manager/cli_command/cli.py:219
 #: src/subscription_manager/cli_command/facts.py:66
-#: src/subscription_manager/cli_command/list.py:54
 #: src/subscription_manager/reasons.py:110
-#: src/subscription_manager/utils.py:269 src/subscription_manager/utils.py:285
-#: src/subscription_manager/utils.py:287 src/subscription_manager/utils.py:307
-#: src/subscription_manager/utils.py:309 src/subscription_manager/utils.py:328
+#: src/subscription_manager/utils.py:273 src/subscription_manager/utils.py:289
+#: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:311
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:332
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:61
+#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:69
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr "알 수 없는 인수: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:289
-#: src/subscription_manager/cli_command/list.py:428
 msgid "Virtual"
 msgstr "가상"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:291
-#: src/subscription_manager/cli_command/list.py:430
 msgid "Physical"
 msgstr "물리"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:294
-#: src/subscription_manager/cli_command/list.py:433
 msgid "Yes"
 msgstr "예"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:296
-#: src/subscription_manager/cli_command/list.py:435
 msgid "No"
 msgstr "아니오"
 
@@ -1238,36 +1266,30 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:497
-#: src/subscription_manager/cli_command/list.py:292
 msgid "Error: --all is only applicable with --available"
 msgstr "오류: --all은 --available과만 사용 가능"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:499
-#: src/subscription_manager/cli_command/list.py:294
 msgid "Error: --ondate is only applicable with --available"
 msgstr "오류: --ondate는 --available과만 사용 가능"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:504
-#: src/subscription_manager/cli_command/list.py:297
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr "오류: --servicelevel은 --available 또는 --consumed와만 사용 가능"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:508
-#: src/subscription_manager/cli_command/list.py:302
 msgid "Error: --match-installed is only applicable with --available"
 msgstr "오류: --match-installed는 --available과만 적용 가능합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:511
-#: src/subscription_manager/cli_command/list.py:304
 msgid "Error: --no-overlap is only applicable with --available"
 msgstr "오류: --no-overlap은 --available과만 적용 가능합니다"
 
 #: src/rhsmlib/services/entitlement.py:516
-#: src/subscription_manager/cli_command/list.py:307
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr "오류: --pool-only는 --available 또는 --consumed와만 사용 가능"
@@ -1276,20 +1298,42 @@ msgstr "오류: --pool-only는 --available 또는 --consumed와만 사용 가능
 msgid "Error: this system is not registered"
 msgstr "오류: 이 시스템은 등록되어 있지 않습니다"
 
-#: src/rhsmlib/services/register.py:192
+#: src/rhsmlib/services/register.py:73
+msgid "Environment IDs and environment names are mutually exclusive"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:174
+#, python-brace-format
+msgid ""
+"Environment: '{env_names}' does not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:182
+#, python-brace-format
+msgid ""
+"Environments: '{env_names}' do not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:202
+msgid ""
+"Registration is only possible when the organization is in Simple Content "
+"Access (SCA) mode."
+msgstr ""
+
+#: src/rhsmlib/services/register.py:243
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 "이 시스템은 이미 등록되어 있습니다. 덮어쓰기 하려면 옵션에 force를 추가합니"
 "다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:195
-#: src/subscription_manager/cli_command/register.py:142
+#: src/rhsmlib/services/register.py:246
+#: src/subscription_manager/cli_command/register.py:121
 msgid "Error: system name can not be empty."
 msgstr "오류: 시스템 이름은 비워둘 수 없습니다."
 
-#: src/rhsmlib/services/register.py:199
-#: src/subscription_manager/cli_command/register.py:164
+#: src/rhsmlib/services/register.py:250
+#: src/subscription_manager/cli_command/register.py:139
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
@@ -1300,30 +1344,24 @@ msgstr ""
 "이 다시 실행합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:209
-#: src/subscription_manager/cli_command/register.py:155
+#: src/rhsmlib/services/register.py:260
+#: src/subscription_manager/cli_command/register.py:132
 msgid "Error: Must specify an activation key"
 msgstr "오류: 활성키를 지정해야 합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:211
-#: src/subscription_manager/cli_command/register.py:144
+#: src/rhsmlib/services/register.py:262
+#: src/subscription_manager/cli_command/register.py:123
 msgid "Error: Activation keys do not require user credentials."
 msgstr "오류: 활성키는 사용자 인증을 필요로 하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:214
-#: src/subscription_manager/cli_command/register.py:147
+#: src/rhsmlib/services/register.py:265
+#: src/subscription_manager/cli_command/register.py:126
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "오류: 활성키는 이전에 등록된 ID와 함께 사용할 수 없습니다."
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:218
-#: src/subscription_manager/cli_command/register.py:150
-msgid "Error: Activation keys do not allow environments to be specified."
-msgstr "오류: 활성키로 환경을 지정할 수 없습니다."
-
-#: src/rhsmlib/services/register.py:225
+#: src/rhsmlib/services/register.py:271
 msgid "Error: Missing username or password."
 msgstr "오류: 사용자 이름 또는 암호가 없습니다."
 
@@ -1351,46 +1389,46 @@ msgid "Disabled"
 msgstr "비활성화됨"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/branding/__init__.py:77
+#: src/subscription_manager/branding/__init__.py:76
 msgid "Register the system to the server"
 msgstr "시스템을 서버에 등록합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/branding/__init__.py:78
+#: src/subscription_manager/branding/__init__.py:77
 msgid "Unregister the system from the server"
 msgstr "시스템을 서버에서 등록 해제합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/branding/__init__.py:79
+#: src/subscription_manager/branding/__init__.py:78
 msgid "This system is registered to spacewalk"
 msgstr "이 시스템은 spacewalk에 등록되어 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/branding/__init__.py:81
+#: src/subscription_manager/branding/__init__.py:80
 #: src/subscription_manager/branding/redhat_branding.py:14
-#: src/subscription_manager/managercli.py:96
+#: src/subscription_manager/managercli.py:78
 msgid "WARNING"
 msgstr "경고"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/branding/__init__.py:81
+#: src/subscription_manager/branding/__init__.py:80
 msgid "You have already registered with spacewalk."
 msgstr "spacewalk로 이미 등록되어 있습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/branding/__init__.py:84
+#: src/subscription_manager/branding/__init__.py:83
 msgid "Please enter your account information:"
 msgstr "계정 정보를 입력하십시오:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/branding/__init__.py:86
+#: src/subscription_manager/branding/__init__.py:85
 msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
 msgstr "로그인이나 비밀번호를 잊어버리신 경우 시스템 관리자에게 문의하십시오"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/branding/__init__.py:88
+#: src/subscription_manager/branding/__init__.py:87
 #: src/subscription_manager/branding/redhat_branding.py:29
 msgid "Red Hat Subscription Management"
 msgstr "Red Hat 서브스크립션 관리"
@@ -1480,10 +1518,11 @@ msgstr "RHN Classic 및 Red Hat 서브스크립션 관리"
 msgid ""
 "Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password"
-msgstr "정보: 로그인 또는 비밀번호 잊어버리셨습니까? https://redhat.com/"
+msgstr ""
+"정보: 로그인 또는 비밀번호 잊어버리셨습니까? https://redhat.com/"
 "forgot_password 에서 찾아보십시오"
 
-#: src/subscription_manager/cache.py:176
+#: src/subscription_manager/cache.py:178
 #, python-brace-format
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
@@ -1589,11 +1628,7 @@ msgstr "--unset은 --set, --add, 또는 --remove와 함께 사용 할 수 없습
 msgid "--add cannot be used with --remove"
 msgstr "--add는 --remove와 함께 사용할 수 없습니다"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:151
-msgid "Error: you can specify --username or --token not both"
-msgstr "오류: --username 또는 --token을 둘 다 지정할 수 없습니다"
-
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:156
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:152
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
@@ -1601,21 +1636,25 @@ msgstr ""
 "오류: {attr}을(를) 나열하려면 --username 및 --password를 등록하거나 지정해야 "
 "합니다"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:173
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:167
+#, fuzzy
+#| msgid ""
+#| "Error: --username, --password, --token and --org can be used only on "
+#| "unregistered systems"
 msgid ""
-"Error: --username, --password, --token and --org can be used only on "
-"unregistered systems"
+"Error: --username, --password, and --org can be used only on unregistered "
+"systems"
 msgstr ""
 "오류: --username, --password, --token과 --org는 등록되지 않은 시스템에서만 사"
 "용 할 수 있습니다"
 
 #. TRANSLATORS: this is used to quote a string
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:251
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:239
 #, python-brace-format
 msgid "\"{value}\""
 msgstr "\"{value}\""
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:255
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:243
 #, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
@@ -1625,7 +1664,7 @@ msgstr[0] ""
 "경고: 제공된 값 {vals}은(는) 유효한 값 목록에 포함되어 있지 않습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:264
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:252
 #, python-brace-format
 msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
@@ -1635,39 +1674,39 @@ msgstr ""
 "경고: 이 조직은 시스템 목적 \"{attr}\"를 제공하는 어떤 서브스크립션을 가지고 "
 "있지 않습니다.이 설정은 자동-첨부 서브스크립션에 영향을 주지 않을 것입니다."
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:278
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:266
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
 msgstr "{attr}이 \"{val}\"로 설정되었습니다."
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:296
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:284
 #, python-brace-format
 msgid "{attr} unset."
 msgstr "{attr} 해제되었습니다."
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:313
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:338
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:301
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:326
 #, python-brace-format
 msgid "{attr} updated."
 msgstr "{attr}가 최신화되었습니다."
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:369
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:357
 #, python-brace-format
 msgid "Current {name}: {val}"
 msgstr "현재 {name}: {val}"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:371
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:359
 #, python-brace-format
 msgid "{name} not set."
 msgstr "{name}가 설정되어 있지 않습니다."
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:389
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:377
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
 msgstr "{syspurpose_attr} 사용 가능"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:401
-#: src/subscription_manager/cli_command/service_level.py:213
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:389
+#: src/subscription_manager/cli_command/service_level.py:210
 #, python-brace-format
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
@@ -1676,7 +1715,7 @@ msgstr ""
 "이 조직에는 사용가능한 서브스크립션에서 시스템 목적\"{syspurpose_attr}\"을 위"
 "해 사용 가능한 값이 없습니다."
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:409
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:397
 #, python-brace-format
 msgid ""
 "Unable to get the list of valid values for the system purpose "
@@ -1684,201 +1723,20 @@ msgid ""
 msgstr ""
 "시스템 용도 “{syspurpose_attr}”를 위한 유효한 값 목록을 가져올 수 없습니다."
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:435
-msgid "Unable to connect to server using token"
-msgstr "토큰을 사용하여 서버에 연결할 수 없습니다"
-
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:483
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:461
 #: src/subscription_manager/i18n_argparse.py:35
 #, python-format
 msgid "%(prog)s [OPTIONS]"
 msgstr "%(prog)s [옵션]"
 
-#: src/subscription_manager/cli_command/abstract_syspurpose.py:492
+#: src/subscription_manager/cli_command/abstract_syspurpose.py:470
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
 msgstr ""
 "참고: 현재 설정되어 있는 자격 서버는 시스템 용도 {attr}를 지원하지 않습니다."
-
-#: src/subscription_manager/cli_command/addons.py:24
-msgid "Show or modify the system purpose addons setting"
-msgstr "시스템 목적 추가구성 설정을 표시 또는 수정합니다"
-
-#: src/subscription_manager/cli_command/attach.py:51
-msgid "The ID of the pool to attach (can be specified more than once)"
-msgstr "할당할 풀 ID (한 번 이상 지정할 수 있음)"
-
-#: src/subscription_manager/cli_command/attach.py:57
-msgid "Number of subscriptions to attach. May not be used with an auto-attach."
-msgstr "할당 할 서브스크립션 수입니다. auto-attach와 함께 사용 할 수 없습니다."
-
-#: src/subscription_manager/cli_command/attach.py:63
-msgid ""
-"Automatically attach the best-matched compatible subscriptions to this "
-"system. This is the default action."
-msgstr ""
-"이 시스템에 가장 적합한 호환 가능 서브스크립션을 자동 첨부합니다. 이는 기본 "
-"동작입니다."
-
-#: src/subscription_manager/cli_command/attach.py:71
-msgid ""
-"Automatically attach only subscriptions matching the specified service "
-"level; only used with --auto"
-msgstr ""
-"지정된 서비스 수준에 일치하는 서브스크립션만 자동으로 할당합니다; --auto와만 "
-"함께 사용됨"
-
-#: src/subscription_manager/cli_command/attach.py:79
-msgid ""
-"A file from which to read pool IDs. If a hyphen is provided, pool IDs will "
-"be read from stdin."
-msgstr ""
-"풀 ID를 읽어올 파일입니다. 하이픈이 지정되어 있을 경우 풀 ID는 stdin에서 읽"
-"게 됩니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/attach.py:85
-msgid "All installed products are covered by valid entitlements."
-msgstr "설치된 모든 제품에는 유효한 인타이틀먼트가 적용됩니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/attach.py:86
-msgid "No need to update subscriptions at this time."
-msgstr "현재로서는 서브스크립션을 최신화 할 필요가 없습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/attach.py:98
-msgid ""
-"Attach a specified subscription to the registered system, when system does "
-"not use Simple Content Access mode"
-msgstr ""
-"시스템이 단순 컨텐츠 접근 방식을 사용하지 않을 경우 등록된 시스템에 지정된 서"
-"브스크립션을 첨부"
-
-#: src/subscription_manager/cli_command/attach.py:111
-msgid "Error: --auto may not be used when specifying pools."
-msgstr "오류: 풀을 지정할 때 --auto를 사용할 수 없습니다."
-
-#: src/subscription_manager/cli_command/attach.py:114
-msgid "Error: The --servicelevel option cannot be used when specifying pools."
-msgstr "오류: 풀을 지정할 때 --servicelevel 옵션을 사용 할 수 없습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/attach.py:120
-msgid "Error: Quantity must be a positive integer."
-msgstr "오류: 수량은 양의 정수이어야 합니다."
-
-#: src/subscription_manager/cli_command/attach.py:122
-msgid "Error: --quantity may not be used with an auto-attach"
-msgstr "오류: --quantity는 auto-attach와 함께 사용할 수 없습니다"
-
-#: src/subscription_manager/cli_command/attach.py:132
-msgid "Error: Received data does not contain any pool IDs."
-msgstr "오류: 전송된 데이터에 풀 ID가 포함되어 있지 않습니다."
-
-#: src/subscription_manager/cli_command/attach.py:136
-#, python-brace-format
-msgid "Error: The file \"{file}\" does not contain any pool IDs."
-msgstr "오류: 파일 \"{file}\"에 풀 ID가 포함되어 있지 않습니다."
-
-#: src/subscription_manager/cli_command/attach.py:143
-#, python-brace-format
-msgid "Error: The file \"{file}\" does not exist or cannot be read."
-msgstr "오류: 파일 \"{file}\"은 존재하지 않거나 읽을 수 없습니다."
-
-# translation manually copied from candlepin
-#: src/subscription_manager/cli_command/attach.py:157
-#, python-brace-format
-msgid ""
-"Ignoring the request to attach. Attaching subscriptions is disabled for "
-"organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr ""
-"첨부 요청을 무시합니다. 첨부된 서브스크립션은 단순 콘텐츠 접근(SCA)이 활성화 "
-"되었기 때문에 조직 \"{owner_id}\"를 위해 비활성화 되었습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/attach.py:201
-msgid "Please enter a valid numeric pool ID."
-msgstr "유효한 숫자 풀 ID를 입력하십시오."
-
-#: src/subscription_manager/cli_command/attach.py:209
-#, python-brace-format
-msgid "Successfully attached a subscription for: {name}"
-msgstr "서브스크립션을 제대로 첨부했습니다: {name}"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/attach.py:239
-msgid "No Installed products on system. No need to attach subscriptions."
-msgstr ""
-"시스템에 설치된 제품이 없습니다. 서브스크립션을 첨부 할 필요가 없습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/attach.py:243
-msgid ""
-"All installed products are covered by valid entitlements. No need to update "
-"subscriptions at this time."
-msgstr ""
-"설치된 모든 제품에는 유효한 자격이 적용됩니다. 서브스크립션을 최신화 할 필요"
-"가 없습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/attach.py:257
-#: src/subscription_manager/cli_command/register.py:201
-msgid ""
-"Error: The --servicelevel option is not supported by the server. Did not "
-"complete your request."
-msgstr ""
-"오류: --servicelevel 옵션은 서버에서 지원되지 않습니다. 요청을 완료하지 못했"
-"습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/attach.py:271
-msgid "Service level set to: {}"
-msgstr "서비스 레벨 설정: {}"
-
-#: src/subscription_manager/cli_command/attach.py:280
-msgid "Entitlement Certificate(s) update failed due to the following reasons:"
-msgstr "다음과 같은 이유로 자격 인증서 최신화에 실패했습니다:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/autoheal.py:27
-msgid "Set if subscriptions are attached on a schedule (default of daily)"
-msgstr "일정에 따라 (기본적으로 매일) 서브스크립션을 첨부 할지를 설정합니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/autoheal.py:28
-msgid "specify whether to enable or disable auto-attaching of subscriptions"
-msgstr ""
-"서브스크립션의 자동 첨부를 활성화 또는 비활성화할 지에 대한 여부를 지정합니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/autoheal.py:35
-msgid "try to attach subscriptions for uncovered products each check-in"
-msgstr ""
-"각 체크인 마다 적용되지 않은 제품에 대해 서브스크립션을 첨부 시도합니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/autoheal.py:41
-msgid "do not try to automatically attach subscriptions each check-in"
-msgstr "각 체크인 마다 자동 서브스크립션 첨부를 시도하지 않습니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/autoheal.py:47
-msgid "show the current auto-attach preference"
-msgstr "현재 자동 첨부 설정 상태를 표시합니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/autoheal.py:60
-msgid "Auto-attach preference: enabled"
-msgstr "자동 첨부 설정: 활성화됨"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/autoheal.py:62
-msgid "Auto-attach preference: disabled"
-msgstr "자동 첨부 설정: 비활성화됨"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/clean.py:25
@@ -1889,25 +1747,15 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/clean.py:31
-#: src/subscription_manager/cli_command/register.py:312
+#: src/subscription_manager/cli_command/register.py:256
 msgid "All local data removed"
 msgstr "로컬 데이터가 모두 삭제되었습니다"
 
-# translation manually copied from candlepin
-#: src/subscription_manager/cli_command/cli.py:131
-#, python-brace-format
-msgid ""
-"Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
-"organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr ""
-"자동-첨부 요청을 무시합니다. 첨부된 서브스크립션은 단순 컨텐츠 접근(SCA)가 활"
-"성화 되었기 때문에 조직 \"{owner_id}\"를 위해 비활성화되어 있습니다."
-
-#: src/subscription_manager/cli_command/cli.py:152
+#: src/subscription_manager/cli_command/cli.py:132
 msgid "server URL in the form of https://hostname:port/prefix"
 msgstr "https://hostname:port/prefix 형식의 서버 URL"
 
-#: src/subscription_manager/cli_command/cli.py:159
+#: src/subscription_manager/cli_command/cli.py:139
 msgid ""
 "do not check the entitlement server SSL certificate against available "
 "certificate authorities"
@@ -1915,74 +1763,74 @@ msgstr ""
 "사용 가능한 인증 기관에 대해 인타이틀먼트 서버 SSL 인증서를 확인하지 않습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/cli.py:170
+#: src/subscription_manager/cli_command/cli.py:150
 msgid "proxy URL in the form of hostname:port"
 msgstr "hostname:port의 형식에서 프락시 URL"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/cli.py:176
+#: src/subscription_manager/cli_command/cli.py:156
 msgid "user for HTTP proxy with basic authentication"
 msgstr "기본 인증을 갖는 HTTP 프락시 사용자"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/cli.py:182
+#: src/subscription_manager/cli_command/cli.py:162
 msgid "password for HTTP proxy with basic authentication"
 msgstr "기본 인증을 갖는 HTTP 프락시 비밀번호"
 
-#: src/subscription_manager/cli_command/cli.py:188
+#: src/subscription_manager/cli_command/cli.py:168
 msgid "host suffixes that should bypass HTTP proxy"
 msgstr "HTTP 프락시를 사용하지 않는 호스트 접미사"
 
-#: src/subscription_manager/cli_command/cli.py:197
+#: src/subscription_manager/cli_command/cli.py:177
 msgid "Do not display progress messages"
 msgstr "진행 중인 메시지를 표시하지 않습니다"
 
-#: src/subscription_manager/cli_command/cli.py:209
+#: src/subscription_manager/cli_command/cli.py:189
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr "소비자 ID가 없거나 손상되었습니다. register --help를 사용해 보십시오"
 
-#: src/subscription_manager/cli_command/cli.py:267
+#: src/subscription_manager/cli_command/cli.py:247
 msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
 msgstr ""
-"subscription-manager는 컨테이너 방식에서 작동하고 있습니다. 자신의 호스트 "
-"시스템을 사용하여 서브스크립션을 관리하세요.\n"
+"subscription-manager는 컨테이너 방식에서 작동하고 있습니다. 자신의 호스트 시"
+"스템을 사용하여 서브스크립션을 관리하세요.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/cli.py:282
+#: src/subscription_manager/cli_command/cli.py:262
 #, python-brace-format
 msgid "{prog}: error: no such option: {args}"
 msgstr "{prog}: 오류: 그런 선택이 없습니다: {args}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/cli.py:301
+#: src/subscription_manager/cli_command/cli.py:281
 msgid "Error parsing serverurl:"
 msgstr "서버 url을 구문 분석하는 도중 오류 발생:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/cli.py:317
+#: src/subscription_manager/cli_command/cli.py:297
 msgid "Error parsing baseurl:"
 msgstr "기반 url을 구문 분석하는 도중 오류 발생:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/cli.py:390
+#: src/subscription_manager/cli_command/cli.py:369
 #, python-brace-format
 msgid "Unable to reach the server at {host}:{port}{handler}"
 msgstr "{host}:{port}{handler}에 있는 서버에 연결할 수 없습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/cli.py:400
+#: src/subscription_manager/cli_command/cli.py:379
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "오류: 서브스크립션 서비스의 CA 인증서가 설치되어 있지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/cli.py:422
+#: src/subscription_manager/cli_command/cli.py:401
 msgid "System certificates corrupted. Please reregister."
 msgstr "시스템 인증서가 손상되었습니다. 다시 등록하시기 바랍니다."
 
-#: src/subscription_manager/cli_command/cli.py:433
+#: src/subscription_manager/cli_command/cli.py:412
 #, python-brace-format
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
@@ -2058,84 +1906,95 @@ msgid "Section {section} and name {name} cannot be removed."
 msgstr "섹션 {section} 및 이름 {name}은 삭제할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:44
+#: src/subscription_manager/cli_command/environments.py:42
+#: src/subscription_manager/cli_command/owners.py:31
+msgid "Name:"
+msgstr "이름:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/environments.py:43
+msgid "Description:"
+msgstr "설명:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/environments.py:49
 msgid "Display the environments available for a user"
 msgstr "사용자에 대해 사용가능한 환경 표시"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:45
+#: src/subscription_manager/cli_command/environments.py:50
 msgid "specify organization for environment list, using organization key"
 msgstr "조직 키를 사용하여 환경 목록에 조직을 지정"
 
-#: src/subscription_manager/cli_command/environments.py:52
+#: src/subscription_manager/cli_command/environments.py:57
 msgid "set an ordered comma-separated list of environments for this consumer"
 msgstr "이 소비자에 대해 순서가 지정된 쉼표로-구분된 환경 목록을 설정합니다"
 
-#: src/subscription_manager/cli_command/environments.py:58
+#: src/subscription_manager/cli_command/environments.py:63
 msgid "list all environments for the organization"
 msgstr "조직을 위해 모든 환경을 나열합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:65
+#: src/subscription_manager/cli_command/environments.py:70
 msgid "list the environments enabled for this consumer in order"
 msgstr "순서대로 이 소비자를 위해 활성화된 환경을 나열합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:72
+#: src/subscription_manager/cli_command/environments.py:77
 msgid "list the environments not enabled for this consumer"
 msgstr "이 사용자를 위해 비활성화된 환경을 나열합니다"
 
-#: src/subscription_manager/cli_command/environments.py:81
+#: src/subscription_manager/cli_command/environments.py:86
 msgid "You may not specify an --org for environments when registered."
 msgstr "당신은 등록 할 때 환경을 위해 --org를 지정 할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:90
-#: src/subscription_manager/cli_command/register.py:460
+#: src/subscription_manager/cli_command/environments.py:95
+#: src/subscription_manager/cli_command/register.py:387
 msgid "Error: Server does not support environments."
 msgstr "오류: 서버가 환경을 지원하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:97
+#: src/subscription_manager/cli_command/environments.py:99
 msgid "This operation requires user credentials"
 msgstr "이와 같은 동작은 사용자 인증이 필요합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:111
+#: src/subscription_manager/cli_command/environments.py:113
 msgid "Error: Unable to retrieve environment list from server"
 msgstr "오류: 서버에서 환경 목록을 검색할 수 없음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:126
+#: src/subscription_manager/cli_command/environments.py:128
 msgid "Environments updated."
 msgstr "환경이 최신화되었습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:128
+#: src/subscription_manager/cli_command/environments.py:130
 msgid "Error: Server does not support environment updates."
 msgstr "오류: 서버가 환경 최신화를 지원하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:136
+#: src/subscription_manager/cli_command/environments.py:138
 msgid "Error: Server does not support multi-environment operations."
 msgstr "오류: 서버가 다중-환경 동작을 지원하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:154
+#: src/subscription_manager/cli_command/environments.py:156
 msgid "Environments"
 msgstr "환경"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:167
+#: src/subscription_manager/cli_command/environments.py:169
 msgid "This list operation does not have any environments to report."
 msgstr "이와 같이 나열된 동작은 보고 할 환경이 없습니다."
 
-#: src/subscription_manager/cli_command/environments.py:203
+#: src/subscription_manager/cli_command/environments.py:205
 msgid "Error: The same environment may not be listed more than once. "
 msgstr "오류: 동일한 환경은 두 번 이상 나열되지 않습니다. "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/environments.py:209
+#: src/subscription_manager/cli_command/environments.py:211
 #, python-brace-format
 msgid "No such environment: {names}"
 msgid_plural "No such environments: {names}"
@@ -2189,560 +2048,117 @@ msgstr "--force는 --regenerate와 함께 사용될 수 있습니다"
 msgid "--username and --password can only be used with --force"
 msgstr "--username 및 --password는 --force와만 함께 사용될 수 있습니다"
 
-#: src/subscription_manager/cli_command/identity.py:65
-msgid "--token can only be used with --force"
-msgstr "--token은 --force와만 사용할 수 있습니다"
-
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/identity.py:74
-#: src/subscription_manager/cli_command/identity.py:77
+#: src/subscription_manager/cli_command/identity.py:72
+#: src/subscription_manager/cli_command/identity.py:75
 #: src/subscription_manager/cli_command/version.py:33
 #, python-brace-format
 msgid "server type: {type}"
 msgstr "서버 유형: {type}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/identity.py:89
+#: src/subscription_manager/cli_command/identity.py:87
 #, python-brace-format
 msgid "system identity: {consumerid}"
 msgstr "시스템 ID: {consumerid}"
 
-#: src/subscription_manager/cli_command/identity.py:90
+#: src/subscription_manager/cli_command/identity.py:88
 #, python-brace-format
 msgid "name: {consumer_name}"
 msgstr "이름: {consumer_name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/identity.py:91
+#: src/subscription_manager/cli_command/identity.py:89
 #, python-brace-format
 msgid "org name: {ownername}"
 msgstr "조직 이름: {ownername}"
 
-#: src/subscription_manager/cli_command/identity.py:92
+#: src/subscription_manager/cli_command/identity.py:90
 #, python-brace-format
 msgid "org ID: {ownerid}"
 msgstr "조직 ID: {ownerid}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/identity.py:107
+#: src/subscription_manager/cli_command/identity.py:105
 #: src/subscription_manager/printing_utils.py:165
 #: src/subscription_manager/printing_utils.py:184
 msgid "None"
 msgstr "없음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/identity.py:110
+#: src/subscription_manager/cli_command/identity.py:108
 #, python-brace-format
 msgid "environment name: {environment_name}"
 msgid_plural "environment names: {environment_name}"
 msgstr[0] "환경 이름: {environment_name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/identity.py:130
+#: src/subscription_manager/cli_command/identity.py:125
 msgid "Identity certificate has been regenerated."
 msgstr "ID 인증서가 다시 생성되었습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/identity.py:143
+#: src/subscription_manager/cli_command/identity.py:138
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "오류: 시스템에 새로운 ID를 생성할 수 없습니다"
 
-#: src/subscription_manager/cli_command/import_cert.py:30
-msgid "Import certificates which were provided outside of the tool"
-msgstr "도구 외부에서 제공된 인증서를 가져옵니다"
-
-#: src/subscription_manager/cli_command/import_cert.py:37
-msgid "certificate file to import (can be specified more than once)"
-msgstr "불러올 인증서 파일 (하나 이상을 지정할 수 있음)"
-
-#: src/subscription_manager/cli_command/import_cert.py:45
-msgid ""
-"Error: You may not import certificates into a system that is registered to a "
-"subscription management service."
-msgstr ""
-"오류: 서브스크립션 관리 서비스에 등록된 시스템으로 인증서를 불러올 수 없습니"
-"다."
-
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/import_cert.py:52
-msgid ""
-"Error: This command requires that you specify a certificate with --"
-"certificate."
-msgstr "오류: 이 명령에서는 --certificate를 사용하여 인증서를 지정해야 합니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/import_cert.py:69
-#, python-brace-format
-msgid "Successfully imported certificate {file}"
-msgstr "인증서 {file}을(를) 성공적으로 가져왔습니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/import_cert.py:81
-#, python-brace-format
-msgid "{file} is not a valid certificate file. Please use a valid certificate."
-msgstr ""
-"{file}은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 사용하십시오."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/import_cert.py:90
-msgid ""
-"An error occurred while importing the certificate. Please check log file for "
-"more information."
-msgstr ""
-"인증서를 가져오기하는 동안 오류가 발생했습니다. 자세한 내용은 로그 파일에서 "
-"확인하십시오."
-
-#: src/subscription_manager/cli_command/import_cert.py:96
-#, python-brace-format
-msgid "{file}: file not found."
-msgstr "{file}: 파일을 찾을 수 없습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:49
-msgid "Future Subscription"
-msgstr "차후 서브스크립션"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:50
-msgid "Subscribed"
-msgstr "등록됨"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:51
-msgid "Not Subscribed"
-msgstr "등록되지 않음"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:52
-msgid "Expired"
-msgstr "만료됨"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:53
-msgid "Partially Subscribed"
-msgstr "부분적으로 등록됨"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:58
-#: src/subscription_manager/cli_command/list.py:69
-#: src/subscription_manager/cli_command/list.py:111
+#: src/subscription_manager/cli_command/list.py:29
 msgid "Product Name:"
 msgstr "제품 이름:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:59
-#: src/subscription_manager/cli_command/list.py:70
+#: src/subscription_manager/cli_command/list.py:30
 msgid "Product ID:"
 msgstr "제품 ID:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:60
-#: src/subscription_manager/cli_command/list.py:71
+#: src/subscription_manager/cli_command/list.py:31
 msgid "Version:"
 msgstr "버전:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:61
-#: src/subscription_manager/cli_command/list.py:72
+#: src/subscription_manager/cli_command/list.py:32
 msgid "Arch:"
 msgstr "구조:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:62
-#: src/subscription_manager/cli_command/list.py:112
-msgid "Status:"
-msgstr "상태:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:63
-#: src/subscription_manager/cli_command/list.py:138
-#: src/subscription_manager/cli_command/list.py:161
-msgid "Status Details:"
-msgstr "상태 정보:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:64
-#: src/subscription_manager/cli_command/list.py:90
-#: src/subscription_manager/cli_command/list.py:140
-#: src/subscription_manager/cli_command/list.py:163
-msgid "Starts:"
-msgstr "시작:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:65
-#: src/subscription_manager/cli_command/list.py:91
-#: src/subscription_manager/cli_command/list.py:141
-#: src/subscription_manager/cli_command/list.py:164
-msgid "Ends:"
-msgstr "종료:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:76
-#: src/subscription_manager/cli_command/list.py:96
-#: src/subscription_manager/cli_command/list.py:126
-#: src/subscription_manager/cli_command/list.py:146
-msgid "Subscription Name:"
-msgstr "서브스크립션 이름:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:77
-#: src/subscription_manager/cli_command/list.py:97
-#: src/subscription_manager/cli_command/list.py:127
-#: src/subscription_manager/cli_command/list.py:147
-msgid "Provides:"
-msgstr "제공:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:78
-#: src/subscription_manager/cli_command/list.py:98
-#: src/subscription_manager/cli_command/list.py:128
-#: src/subscription_manager/cli_command/list.py:148
-msgid "SKU:"
-msgstr "SKU:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:79
-#: src/subscription_manager/cli_command/list.py:99
-#: src/subscription_manager/cli_command/list.py:129
-#: src/subscription_manager/cli_command/list.py:149
-msgid "Contract:"
-msgstr "계약:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:80
-#: src/subscription_manager/cli_command/list.py:132
-#: src/subscription_manager/cli_command/list.py:152
-msgid "Pool ID:"
-msgstr "풀 ID:"
-
-#: src/subscription_manager/cli_command/list.py:81
-#: src/subscription_manager/cli_command/list.py:133
-#: src/subscription_manager/cli_command/list.py:153
-msgid "Provides Management:"
-msgstr "관리 제공:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:82
-msgid "Available:"
-msgstr "사용 가능:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:83
-msgid "Suggested:"
-msgstr "권장 사항:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:84
-#: src/subscription_manager/cli_command/list.py:136
-#: src/subscription_manager/cli_command/list.py:156
-msgid "Service Type:"
-msgstr "서비스 유형:"
-
-#: src/subscription_manager/cli_command/list.py:85
-#: src/subscription_manager/cli_command/list.py:157
-msgid "Roles:"
-msgstr "역할:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:86
-#: src/subscription_manager/cli_command/list.py:100
-#: src/subscription_manager/cli_command/list.py:137
-#: src/subscription_manager/cli_command/list.py:158
-msgid "Service Level:"
-msgstr "서비스 레벨:"
-
-#: src/subscription_manager/cli_command/list.py:87
-#: src/subscription_manager/cli_command/list.py:159
-msgid "Usage:"
-msgstr "사용법:"
-
-#: src/subscription_manager/cli_command/list.py:88
-#: src/subscription_manager/cli_command/list.py:160
-msgid "Add-ons:"
-msgstr "애드온:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:89
-#: src/subscription_manager/cli_command/list.py:139
-#: src/subscription_manager/cli_command/list.py:162
-msgid "Subscription Type:"
-msgstr "서브스크립션 유형:"
-
-#: src/subscription_manager/cli_command/list.py:92
-#: src/subscription_manager/cli_command/list.py:165
-msgid "Entitlement Type:"
-msgstr "인타이틀먼트 유형:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:104
-msgid "Repo ID:"
-msgstr "저장소 ID:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:105
-msgid "Repo Name:"
-msgstr "저장소 이름:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:106
-msgid "Repo URL:"
-msgstr "저장소 URL:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:107
-msgid "Enabled:"
-msgstr "활성화됨:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:116
-#: src/subscription_manager/cli_command/list.py:121
-msgid "Name:"
-msgstr "이름:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:117
-msgid "Description:"
-msgstr "설명:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:122
-msgid "Key:"
-msgstr "키:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:130
-#: src/subscription_manager/cli_command/list.py:150
-msgid "Account:"
-msgstr "계정:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:131
-#: src/subscription_manager/cli_command/list.py:151
-msgid "Serial:"
-msgstr "시리얼:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:134
-#: src/subscription_manager/cli_command/list.py:154
-msgid "Active:"
-msgstr "활성:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:135
-#: src/subscription_manager/cli_command/list.py:155
-msgid "Quantity Used:"
-msgstr "사용 수량:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:142
-msgid "System Type:"
-msgstr "시스템 유형:"
-
-# translation auto-copied from project subscription-manager, version 1.13.X, document keys
-#: src/subscription_manager/cli_command/list.py:187
-msgid "No products installed."
-msgstr "제품이 설치되어 있지 않습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:191
-msgid "Installed Product Current Status:"
-msgstr "설치된 제품의 현재 상태:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys, author eukim
-#: src/subscription_manager/cli_command/list.py:202
-msgid "Unable to find available subscriptions for all your installed products."
-msgstr "설치된 모든 제품에 대한 유효한 서브스크립션을 찾을 수 없습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:208
+#: src/subscription_manager/cli_command/list.py:41
 msgid "List subscription and product information for this system"
 msgstr "이 시스템의 서브스크립션 및 제품 정보를 나열합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:215
+#: src/subscription_manager/cli_command/list.py:46
 msgid "list shows those products which are installed (default)"
 msgstr "목록에는 설치된 제품이 표시됩니다 (디폴트)"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:220
-msgid "show those subscriptions which are available"
-msgstr "사용 가능한 서브스크립션을 표시합니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:225
-msgid "used with --available to ensure all subscriptions are returned"
-msgstr "모든 서브스크립션이 반환되었는지 확인하려면 --available과 함께 사용함"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:231
-#, python-brace-format
+#: src/subscription_manager/cli_command/list.py:51
+#, fuzzy
+#| msgid ""
+#| "lists only subscriptions or products containing the specified expression "
+#| "in the subscription or product information, varying with the list "
+#| "requested and the server version (case-insensitive)."
 msgid ""
-"date to search on, defaults to today's date, only used with --available "
-"(example: {example})"
-msgstr ""
-"검색일, 기본값은 오늘로 되어 있으며, --available과 함께 사용해야 합니다 (예: "
-"{example})"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:237
-msgid "show the subscriptions being consumed by this system"
-msgstr "이 시스템에서 사용되고 있는 서브스크립션을 보여줍니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:243
-msgid ""
-"shows only subscriptions matching the specified service level; only used "
-"with --available and --consumed"
-msgstr ""
-"--available과 --consumed만을 사용하여 지정된 서비스 레벨에 일치하는 서브스크"
-"립션만을 보여줍니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:251
-msgid ""
-"shows pools which provide products that are not already covered; only used "
-"with --available"
-msgstr ""
-"아직 서브스크립션이 적용되지 않은 제품이 포함된 풀을 표시합니다; --available"
-"과만 함께 사용 가능합니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:259
-msgid ""
-"shows only subscriptions matching products that are currently installed; "
-"only used with --available"
-msgstr ""
-"현재 설치된 제품과 일치하는 서브스크립션만 표시합니다; --available과만 함께 "
-"사용합니다"
-
-#: src/subscription_manager/cli_command/list.py:267
-msgid ""
-"lists only subscriptions or products containing the specified expression in "
-"the subscription or product information, varying with the list requested and "
-"the server version (case-insensitive)."
+"lists only products containing the specified expression in the product "
+"information."
 msgstr ""
 "서브스크립션 또는 제품 정보에 지정된 표현식을 포함하는 서브스크립션 또는 제품"
 "만 나열합니다. 요청 목록 및 서버 버전에 따라 달라집니다. (대소문자 구분)."
 
-#: src/subscription_manager/cli_command/list.py:277
-msgid ""
-"lists only the pool IDs for applicable available or consumed subscriptions; "
-"only used with --available and --consumed"
-msgstr ""
-"적용 가능한 또는 사용된 서브스크립션의 풀 ID만 나열합니다; --available 및 --"
-"consumed와만 사용"
-
-#: src/subscription_manager/cli_command/list.py:285
-#, python-brace-format
-msgid ""
-"show pools that are active on or after the given date; only used with --"
-"available (example: {example})"
-msgstr ""
-"지정된 날짜 이후에 활성화된 풀을 표시합니다. --available과 함께 만 사용 "
-"(예 : {example})"
-
-#: src/subscription_manager/cli_command/list.py:310
-msgid "Error: --afterdate is only applicable with --available"
-msgstr "오류: --afterdate는 --available과만 사용 가능"
-
-#: src/subscription_manager/cli_command/list.py:312
-msgid "Error: --afterdate cannot be used with --ondate"
-msgstr "오류: --afterdate는 --ondate와 함께 사용할 수 없습니다"
-
-#: src/subscription_manager/cli_command/list.py:327
-#, python-brace-format
-msgid ""
-"Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-"{dateexample})"
-msgstr ""
-"입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 주십시"
-"오. (예: {dateexample})"
-
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:355
+#: src/subscription_manager/cli_command/list.py:64
 msgid "    Installed Product Status"
 msgstr "    설치된 제품 상태"
 
-#: src/subscription_manager/cli_command/list.py:391
+#: src/subscription_manager/cli_command/list.py:82
 #, python-brace-format
 msgid "No installed products were found matching the expression \"{filter}\"."
 msgstr "\"{filter}\" 표현식에 일치하는 설치된 제품을 찾을 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:396
+#: src/subscription_manager/cli_command/list.py:87
 msgid "No installed products to list"
 msgstr "표시할 수 있는 설치된 제품이 없음"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:423
-msgid "Available Subscriptions"
-msgstr "사용 가능한 서브스크립션"
-
-#: src/subscription_manager/cli_command/list.py:471
-#, python-brace-format
-msgid ""
-"No available subscription pools were found matching the expression "
-"\"{filter}\" and the service level \"{level}\"."
-msgstr ""
-"\"{filter}\" 표현식 및 \"{level}\" 서비스 레벨에 일치하는 사용 가능한 서브스"
-"크립션 풀을 찾을 수 없습니다."
-
-#: src/subscription_manager/cli_command/list.py:478
-#, python-brace-format
-msgid ""
-"No available subscription pools were found matching the expression "
-"\"{filter}\"."
-msgstr ""
-"\"{filter}\" 표현식에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 없습니"
-"다."
-
-#: src/subscription_manager/cli_command/list.py:484
-#, python-brace-format
-msgid ""
-"No available subscription pools were found matching the service level "
-"\"{level}\"."
-msgstr ""
-"\"{level}\" 서비스 레벨에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 없습"
-"니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:488
-msgid "No available subscription pools to list"
-msgstr "나열할 사용 가능한 서브스크립션 풀이 없음"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/list.py:510
-msgid "Consumed Subscriptions"
-msgstr "소비된 서브스크립션"
-
-#: src/subscription_manager/cli_command/list.py:535
-#, python-brace-format
-msgid ""
-"No consumed subscription pools were found matching the expression "
-"\"{filter}\" and the service level \"{level}\"."
-msgstr ""
-"\"{filter}\" 표현식 및 \"{level}\" 서비스 레벨에 일치하는 사용된 서브스크립"
-"션 풀을 찾을 수 없습니다."
-
-#: src/subscription_manager/cli_command/list.py:541
-#, python-brace-format
-msgid ""
-"No consumed subscription pools were found matching the expression "
-"\"{filter}\"."
-msgstr ""
-"\"{filter}\" 표현식에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
-
-#: src/subscription_manager/cli_command/list.py:548
-#, python-brace-format
-msgid ""
-"No consumed subscription pools were found matching the service level "
-"\"{level}\"."
-msgstr ""
-"\"{level}\" 서비스 레벨에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
-
-#: src/subscription_manager/cli_command/list.py:552
-msgid "No consumed subscription pools were found."
-msgstr "소비된 서브스크립션 풀을 찾을 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/org.py:35
@@ -2750,13 +2166,13 @@ msgid "specify an organization"
 msgstr "조직을 지정합니다"
 
 #: src/subscription_manager/cli_command/org.py:46
-#: src/subscription_manager/cli_command/register.py:522
+#: src/subscription_manager/cli_command/register.py:449
 msgid "Error: --org is a required parameter in non-interactive mode."
 msgstr "오류: --org는 비-대화형 방식에서 매개변수가 필요합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/org.py:48
-#: src/subscription_manager/cli_command/register.py:527
+#: src/subscription_manager/cli_command/register.py:454
 msgid "Organization: "
 msgstr "조직: "
 
@@ -2766,7 +2182,7 @@ msgid "Error: User {username} is not member of any organization."
 msgstr "오류: 사용자 {username}는 조직의 구성원이 아닙니다."
 
 #: src/subscription_manager/cli_command/org.py:74
-#: src/subscription_manager/cli_command/register.py:513
+#: src/subscription_manager/cli_command/register.py:440
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr "암시: 사용자 \"{name}\"는 다음 조직의 구성원입니다: {orgs}"
@@ -2853,7 +2269,7 @@ msgstr "오류: 'repo-override' 명령은 서버에서 지원하지 않습니다
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:138
-#: src/subscription_manager/cli_command/repos.py:124
+#: src/subscription_manager/cli_command/repos.py:130
 msgid "Repositories disabled by configuration."
 msgstr "구성에 의해 비활성화된 저장소."
 
@@ -2882,23 +2298,28 @@ msgid "Repository: {repo}"
 msgstr "저장소: {repo}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/owners.py:34
+#: src/subscription_manager/cli_command/owners.py:32
+msgid "Key:"
+msgstr "키:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/owners.py:38
 msgid "Display the organizations against which a user can register a system"
 msgstr "시스템을 등록할 수 있는 사용자에 대한 조직을 표시합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/owners.py:52
+#: src/subscription_manager/cli_command/owners.py:53
 msgid "Organizations"
 msgstr "조직"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/owners.py:61
+#: src/subscription_manager/cli_command/owners.py:62
 #, python-brace-format
 msgid "{username} cannot register with any organizations."
 msgstr "{username}은(는) 어떤 조직에도 등록할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/owners.py:69
+#: src/subscription_manager/cli_command/owners.py:70
 msgid "Error: Unable to retrieve org list from server"
 msgstr "오류: 서버에서 조직 목록을 검색할 수 없음"
 
@@ -2940,35 +2361,6 @@ msgid "enabled"
 msgstr "활성화됨"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/redeem.py:29
-msgid "Attempt to redeem a subscription for a preconfigured system"
-msgstr "사전 설정된 시스템의 서브스크립션 사용을 시도합니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/redeem.py:36
-msgid "email address to notify when subscription redemption is complete"
-msgstr "서브스크립션 사용 완료 시 통지하기 위한 전자우편 주소"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/redeem.py:43
-msgid ""
-"optional language to use for email notification when subscription redemption "
-"is complete (Examples: en-us, de-de)"
-msgstr ""
-"서브스크립션 사용 완료 시 전자우편 통지에 사용할 언어 선택 (예: en-us, de-de)"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/redeem.py:52
-msgid ""
-"Error: This command requires that you specify an email address with --email."
-msgstr "오류: 이 명령에서는 --email을 사용하여 이메일 주소를 지정해야 합니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/redeem.py:74
-msgid "Error: Unable to redeem subscription for this system."
-msgstr "오류: 이와 같은 시스템을 위해 서브스크립션을 상환 할 수 없습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:32
 msgid "Pull the latest subscription data from the server"
 msgstr "서버에서 최신 서브스크립션 자료를 풀(pull) 합니다"
@@ -2988,28 +2380,28 @@ msgstr "다음과 같은 예외 사항이 발생하면 새로 고침을 실행 �
 msgid "All local data refreshed"
 msgstr "로컬 데이터가 모두 재생되었습니다"
 
-#: src/subscription_manager/cli_command/register.py:68
+#: src/subscription_manager/cli_command/register.py:64
 msgid "base URL for content in form of https://hostname:port/prefix"
 msgstr "https://hostname:port/prefix 형식의 컨텐츠 기반 URL"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:81
+#: src/subscription_manager/cli_command/register.py:77
 msgid "name of the system to register, defaults to the hostname"
 msgstr "등록할 시스템 이름, 기본적으로 호스트 이름으로 되어 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:87
+#: src/subscription_manager/cli_command/register.py:83
 msgid "the existing system data is pulled from the server"
 msgstr "기존 시스템 데이터가 서버에서 풀(pull) 되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:93
+#: src/subscription_manager/cli_command/register.py:89
 msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
 msgstr "조직 키를 사용하여 사용자의 여러 조직 중 하나에 등록"
 
-#: src/subscription_manager/cli_command/register.py:99
+#: src/subscription_manager/cli_command/register.py:95
 msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
@@ -3019,21 +2411,11 @@ msgstr ""
 "니다. 다중 환경을 사용하는 기능은 자격 부여 서버에 의해 제어됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:107
+#: src/subscription_manager/cli_command/register.py:103
 msgid "set a release version"
 msgstr "출시 버전 설정"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:112
-msgid "Deprecated, see --auto-attach"
-msgstr "사용 권장되지 않음, --auto-attach 참조"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:118
-msgid "automatically attach compatible subscriptions to this system"
-msgstr "이 시스템에 호환 가능한 서브스크립션을 자동 첨부합니다"
-
-#: src/subscription_manager/cli_command/register.py:123
+#: src/subscription_manager/cli_command/register.py:108
 msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
@@ -3041,109 +2423,93 @@ msgstr ""
 "새로운 시스템 식별을 등록하기 전에 등록해제에 암묵적인 시도를 포함합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:129
+#: src/subscription_manager/cli_command/register.py:114
 msgid ""
 "activation key to use for registration (can be specified more than once)"
 msgstr "등록에 사용할 활성키 (두 번 이상 지정할 수 있음)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:134
-msgid ""
-"system preference used when subscribing automatically, requires --auto-attach"
-msgstr "자동 등록 시 사용되는 시스템 환경 설정, --auto-attach 사용"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:140
+#: src/subscription_manager/cli_command/register.py:119
 msgid "This system is already registered. Use --force to override"
 msgstr "이 시스템은 이미 등록되어 있습니다. 무시하시려면 --force를 사용합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:152
-msgid "Error: Activation keys cannot be used with --auto-attach."
-msgstr "오류: 활성키는 --auto-attach와 함께 사용할 수 없습니다."
+#: src/subscription_manager/cli_command/register.py:129
+msgid "Error: Activation keys do not allow environments to be specified."
+msgstr "오류: 활성키로 환경을 지정할 수 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:157
-msgid "Error: Must use --auto-attach with --servicelevel."
-msgstr "오류: --servicelevel과 함께 --auto-attach를 사용해야 합니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:159
+#: src/subscription_manager/cli_command/register.py:134
 msgid "Error: Must provide --org with activation keys."
 msgstr "오류: 활성키와 함께 --org를 지정하셔야 합니다."
 
-#: src/subscription_manager/cli_command/register.py:173
+#: src/subscription_manager/cli_command/register.py:148
 msgid "Error: The --type option has been deprecated and may not be used."
 msgstr "오류: --type 옵션은 더 이상 사용 할 수 없습니다."
 
-#: src/subscription_manager/cli_command/register.py:176
-#: src/subscription_manager/cli_command/register.py:491
+#: src/subscription_manager/cli_command/register.py:151
+#: src/subscription_manager/cli_command/register.py:418
 msgid "The entitlement server does not allow multiple environments"
 msgstr "자격 서버는 다중 환경을 허용하지 않습니다"
 
-#: src/subscription_manager/cli_command/register.py:220
+#: src/subscription_manager/cli_command/register.py:164
 msgid "Uploading DNF profile"
 msgstr "DNF 프로파일을 적재 중"
 
-#: src/subscription_manager/cli_command/register.py:290
+#: src/subscription_manager/cli_command/register.py:234
 #: src/subscription_manager/cli_command/unregister.py:41
 #, python-brace-format
 msgid "Unregistering from: {hostname}:{port}{prefix}"
 msgstr "등록 해제 중: {hostname}:{port}{prefix}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:301
+#: src/subscription_manager/cli_command/register.py:245
 #, python-brace-format
 msgid "The system with UUID {old_uuid} has been unregistered"
 msgstr "UUID {old_uuid} 시스템은 등록 취소되었습니다"
 
-#: src/subscription_manager/cli_command/register.py:325
+#: src/subscription_manager/cli_command/register.py:267
 #, python-brace-format
 msgid "Registering to: {hostname}:{port}{prefix}"
 msgstr "등록 대상: {hostname}:{port}{prefix}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:365
+#: src/subscription_manager/cli_command/register.py:306
 #, python-brace-format
 msgid "Error during registration: {e}"
 msgstr "등록 도중 오류가 발생했습니다: {e}"
 
-#: src/subscription_manager/cli_command/register.py:368
+#: src/subscription_manager/cli_command/register.py:309
 #, python-brace-format
 msgid "The system has been registered with ID: {id}"
 msgstr "시스템은 ID로 등록되어 있습니다: {id}"
 
-#: src/subscription_manager/cli_command/register.py:369
+#: src/subscription_manager/cli_command/register.py:310
 #, python-brace-format
 msgid "The registered system name is: {name}"
 msgstr "등록된 시스템 이름: {name}"
 
-#: src/subscription_manager/cli_command/register.py:371
-#, python-brace-format
-msgid "Service level set to: {level}"
-msgstr "서비스 레벨 설정: {level}"
-
-#: src/subscription_manager/cli_command/register.py:438
+#: src/subscription_manager/cli_command/register.py:365
 msgid "Error: --environments is a required parameter in non-interactive mode."
 msgstr "오류: --environments는 비-대화형 방식에서 매개변수가 필요합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:442
+#: src/subscription_manager/cli_command/register.py:369
 msgid "Environments: "
 msgstr "환경: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:444
+#: src/subscription_manager/cli_command/register.py:371
 msgid "Environment: "
 msgstr "환경: "
 
-#: src/subscription_manager/cli_command/register.py:485
+#: src/subscription_manager/cli_command/register.py:412
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
 msgstr "힌트: 조직 \"{key}\"는 다음 환경을 포함합니다: {list}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/register.py:501
+#: src/subscription_manager/cli_command/register.py:428
 #, python-brace-format
 msgid "{name} cannot register with any organizations."
 msgstr "{name}은(는) 어떤 조직에도 등록할 수 없습니다."
@@ -3220,118 +2586,43 @@ msgid "Available Releases"
 msgstr "사용 가능한 릴리즈"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/remove.py:41
-msgid "certificate serial number to remove (can be specified more than once)"
-msgstr "삭제할 인증서 일련 번호 (한 번 이상 지정할 수 있음)"
-
-#: src/subscription_manager/cli_command/remove.py:48
-msgid "the ID of the pool to remove (can be specified more than once)"
-msgstr "삭제할 풀의 ID (한 번 이상 지정할 수 있음)"
+#: src/subscription_manager/cli_command/repos.py:34
+msgid "Repo ID:"
+msgstr "저장소 ID:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/remove.py:54
-msgid "remove all subscriptions from this system"
-msgstr "시스템에서 모든 서브스크립션을 삭제"
+#: src/subscription_manager/cli_command/repos.py:35
+msgid "Repo Name:"
+msgstr "저장소 이름:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/remove.py:58
-msgid "Remove all or specific subscriptions from this system"
-msgstr "시스템에서 모든 또는 특정 서브스크립션을 삭제"
+#: src/subscription_manager/cli_command/repos.py:36
+msgid "Repo URL:"
+msgstr "저장소 URL:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/remove.py:71
-#, python-brace-format
-msgid "Error: '{serial}' is not a valid serial number"
-msgstr "오류: '{serial}'는 유효한 일련 번호가 아닙니다"
-
-#: src/subscription_manager/cli_command/remove.py:80
-msgid ""
-"Error: The registered entitlement server does not support remove --pool.\n"
-"Instead, use the remove --serial option."
-msgstr ""
-"오류: 등록된 자격 서버는 remove --pool을 지원하지 않습니다.\n"
-"대신 remove --serial 옵션을 사용합니다."
-
-#: src/subscription_manager/cli_command/remove.py:87
-msgid ""
-"Error: This command requires that you specify one of --serial, --pool or --"
-"all."
-msgstr ""
-"오류: 이 명령에서는 --serial, --pool 또는 --all 중 하나를 지정해야 합니다."
-
-#: src/subscription_manager/cli_command/remove.py:93
-msgid "The entitlement server successfully removed these pools:"
-msgstr "인타이틀먼트 서버가 풀을 성공적으로 삭제했습니다:"
-
-#: src/subscription_manager/cli_command/remove.py:95
-msgid "The entitlement server successfully removed these serial numbers:"
-msgstr "인타이틀먼트 서버가 일련 번호를 성공적으로 삭제했습니다:"
-
-#: src/subscription_manager/cli_command/remove.py:97
-msgid "The entitlement server successfully removed these IDs:"
-msgstr "인타이틀먼트 서버가 ID를 성공적으로 삭제했습니다:"
-
-#: src/subscription_manager/cli_command/remove.py:102
-msgid "The entitlement server failed to remove these pools:"
-msgstr "인타이틀먼트 서버가 풀 삭제에 실패했습니다:"
-
-#: src/subscription_manager/cli_command/remove.py:104
-msgid "The entitlement server failed to remove these serial numbers:"
-msgstr "인타이틀먼트 서버가 일련 번호 삭제에 실패했습니다:"
-
-#: src/subscription_manager/cli_command/remove.py:106
-msgid "The entitlement server failed to remove these IDs:"
-msgstr "인타이틀먼트 서버가 ID 삭제에 실패했습니다:"
+#: src/subscription_manager/cli_command/repos.py:37
+msgid "Enabled:"
+msgstr "활성화됨:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/remove.py:124
-msgid "All subscriptions have been removed at the server."
-msgstr "모든 서브스크립션이 서버에서 삭제되었습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/remove.py:129
-#, python-format
-msgid "%s subscription removed at the server."
-msgid_plural "%s subscriptions removed at the server."
-msgstr[0] "%s 서브스크립션이 서버에서 삭제되었습니다."
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/remove.py:170
-#: src/subscription_manager/cli_command/remove.py:206
-#, python-brace-format
-msgid "Unable to perform remove due to the following exception: {e}"
-msgstr "다음과 같은 예외로 인해 삭제를 실행할 수 없습니다: {e}"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/remove.py:182
-#, python-brace-format
-msgid "{total} subscription removed from this system."
-msgid_plural "{total} subscriptions removed from this system."
-msgstr[0] "{total} 서브스크립션을 이 시스템에서 제거했습니다."
-
-#: src/subscription_manager/cli_command/remove.py:198
-#, python-brace-format
-msgid "Subscription with serial number {serial} removed from this system"
-msgstr "일련 번호 {serial}의 서브스크립션이 시스템에서 제거되었습니다"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/repos.py:60
+#: src/subscription_manager/cli_command/repos.py:66
 msgid "List the repositories which this system is entitled to use"
 msgstr "이와 같은 시스템이 사용 할 수 있는 저장소를 나열합니다"
 
-#: src/subscription_manager/cli_command/repos.py:67
+#: src/subscription_manager/cli_command/repos.py:73
 msgid "list all known repositories for this system"
 msgstr "이 시스템을 위해 모든 알려진 저장소를 나열합니다"
 
-#: src/subscription_manager/cli_command/repos.py:73
+#: src/subscription_manager/cli_command/repos.py:79
 msgid "list known, enabled repositories for this system"
 msgstr "이 시스템을 위해 알려진, 활성화된 저장소를 나열합니다"
 
-#: src/subscription_manager/cli_command/repos.py:79
+#: src/subscription_manager/cli_command/repos.py:85
 msgid "list known, disabled repositories for this system"
 msgstr "이 시스템을 위해 알려진, 비활성화된 저장소를 나열합니다"
 
-#: src/subscription_manager/cli_command/repos.py:87
+#: src/subscription_manager/cli_command/repos.py:93
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
@@ -3339,7 +2630,7 @@ msgstr ""
 "활성화하려는 저장소(두 번 이상 지정 할 수 있음). 와일드카드(* 과 ?)가 지원됩"
 "니다."
 
-#: src/subscription_manager/cli_command/repos.py:96
+#: src/subscription_manager/cli_command/repos.py:102
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
@@ -3348,22 +2639,22 @@ msgstr ""
 "니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/repos.py:165
+#: src/subscription_manager/cli_command/repos.py:171
 #, python-brace-format
 msgid "    Available Repositories in {file}"
 msgstr "    {file}에서 사용 가능한 저장소"
 
-#: src/subscription_manager/cli_command/repos.py:181
+#: src/subscription_manager/cli_command/repos.py:187
 msgid "There were no available repositories matching the specified criteria."
 msgstr "지정된 기준에 일치하는 사용 가능한 저장소가 없습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/repos.py:183
-#: src/subscription_manager/cli_command/repos.py:201
+#: src/subscription_manager/cli_command/repos.py:189
+#: src/subscription_manager/cli_command/repos.py:207
 msgid "This system has no repositories available through subscriptions."
 msgstr "이 시스템은 서브스크립션을 통해 사용 가능한 저장소가 없습니다."
 
-#: src/subscription_manager/cli_command/repos.py:210
+#: src/subscription_manager/cli_command/repos.py:216
 #, python-brace-format
 msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
@@ -3372,12 +2663,12 @@ msgstr ""
 "오류: '{repoid}'은 유효한 저장소 ID와 일치하지 않습니다. \"subscription-"
 "manager repos --list\"를 사용하여 유효한 저장소를 확인합니다."
 
-#: src/subscription_manager/cli_command/repos.py:265
+#: src/subscription_manager/cli_command/repos.py:271
 #, python-brace-format
 msgid "Repository '{repoid}' is enabled for this system."
 msgstr "저장소 '{repoid}'가 이 시스템에 활성화되었습니다."
 
-#: src/subscription_manager/cli_command/repos.py:267
+#: src/subscription_manager/cli_command/repos.py:273
 #, python-brace-format
 msgid "Repository '{repoid}' is disabled for this system."
 msgstr "저장소 '{repoid}'가 이 시스템에 비활성화되었습니다."
@@ -3403,49 +2694,53 @@ msgstr ""
 "오류: 서비스 레벨을 나열하려면 --username 및 --password를 등록하거나 지정해"
 "야 합니다"
 
-#: src/subscription_manager/cli_command/service_level.py:99
+#: src/subscription_manager/cli_command/service_level.py:98
+#, fuzzy
+#| msgid ""
+#| "Error: --username, --password, --token, --org and --serverurl can be used "
+#| "only on unregistered systems"
 msgid ""
-"Error: --username, --password, --token, --org and --serverurl can be used "
-"only on unregistered systems"
+"Error: --username, --password, --org and --serverurl can be used only on "
+"unregistered systems"
 msgstr ""
 "오류: --username, --password, --token, --org과 --serverurl은 등록되지 않은 시"
 "스템에서만 사용 할 수 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/service_level.py:126
+#: src/subscription_manager/cli_command/service_level.py:123
 msgid "Error: Unable to retrieve service levels."
 msgstr "오류: 서비스 레벨을 검색할 수 없습니다."
 
-#: src/subscription_manager/cli_command/service_level.py:157
+#: src/subscription_manager/cli_command/service_level.py:154
 #, python-brace-format
 msgid "Service level set to: \"{val}\"."
 msgstr "서비스 레벨 설정: \"{val}\"."
 
-#: src/subscription_manager/cli_command/service_level.py:165
+#: src/subscription_manager/cli_command/service_level.py:162
 msgid "Service level preference has been unset"
 msgstr "서비스 레벨 환경 설정이 해제되었습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/service_level.py:172
-#: src/subscription_manager/cli_command/service_level.py:188
-#: src/subscription_manager/cli_command/service_level.py:222
-#: src/subscription_manager/cli_command/service_level.py:229
+#: src/subscription_manager/cli_command/service_level.py:169
+#: src/subscription_manager/cli_command/service_level.py:185
+#: src/subscription_manager/cli_command/service_level.py:219
+#: src/subscription_manager/cli_command/service_level.py:226
 msgid "Error: The service-level command is not supported by the server."
 msgstr "오류: service-level 명령은 서버에서 지원하지 않습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/service_level.py:192
+#: src/subscription_manager/cli_command/service_level.py:189
 #, python-brace-format
 msgid "Current service level: {level}"
 msgstr "현재 서비스 레벨: {level}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/service_level.py:194
+#: src/subscription_manager/cli_command/service_level.py:191
 msgid "Service level preference not set"
 msgstr "서비스 레벨 환경 설정이 구성되지 않았습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/service_level.py:206
+#: src/subscription_manager/cli_command/service_level.py:203
 msgid "Available Service Levels"
 msgstr "사용 가능한 서비스 레벨"
 
@@ -3488,33 +2783,33 @@ msgstr ""
 msgid "System Purpose Status: {status}"
 msgstr "시스템 목적 상태: {status}"
 
-#: src/subscription_manager/cli_command/syspurpose.py:53
+#: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
 msgstr "모든 시스템 목적 설정을 관리 할 수 있는 편리한 모듈"
 
-#: src/subscription_manager/cli_command/syspurpose.py:59
+#: src/subscription_manager/cli_command/syspurpose.py:57
 msgid "show current system purpose"
 msgstr "현재 시스템 목적 표시"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/syspurpose.py:76
+#: src/subscription_manager/cli_command/syspurpose.py:74
 #, python-brace-format
 msgid "{prog} {name}"
 msgstr "{prog} {name}"
 
-#: src/subscription_manager/cli_command/syspurpose.py:78
+#: src/subscription_manager/cli_command/syspurpose.py:76
 msgid "Syspurpose submodules"
 msgstr "Syspurpose 하위모듈"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/syspurpose.py:92
+#: src/subscription_manager/cli_command/syspurpose.py:90
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 msgstr "%(prog)s {name} [하위모듈] [옵션]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:38
-#: src/subscription_manager/utils.py:286
+#: src/subscription_manager/utils.py:290
 msgid "This system is currently not registered."
 msgstr "현재 시스템은 등록되어 있지 않습니다."
 
@@ -3537,25 +2832,21 @@ msgstr "서버 인증시 사용할 사용자 이름"
 msgid "password to use when authorizing against the server"
 msgstr "서버 인증시 사용 할 비밀번호"
 
-#: src/subscription_manager/cli_command/user_pass.py:50
-msgid "token to use when authorizing against the server"
-msgstr "서버 인증시 사용 할 토큰"
-
-#: src/subscription_manager/cli_command/user_pass.py:64
+#: src/subscription_manager/cli_command/user_pass.py:59
 msgid "Error: --username is a required parameter in non-interactive mode."
 msgstr "오류: --username 비-대화형 방식에서 매개변수가 필요합니다."
 
-#: src/subscription_manager/cli_command/user_pass.py:69
+#: src/subscription_manager/cli_command/user_pass.py:64
 msgid "Error: --password is a required parameter in non-interactive mode."
 msgstr "오류: --password는 비-대화형 방식에서 매개변수가 필요합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/user_pass.py:73
+#: src/subscription_manager/cli_command/user_pass.py:68
 msgid "Username: "
 msgstr "사용자 이름: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/user_pass.py:76
+#: src/subscription_manager/cli_command/user_pass.py:71
 msgid "Password: "
 msgstr "비밀번호: "
 
@@ -3576,37 +2867,37 @@ msgid "subscription management rules: {version}"
 msgstr "서브스크립션 관리 규칙: {version}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/entcertlib.py:295
+#: src/subscription_manager/entcertlib.py:294
 #, python-format
 msgid "%s local certificate has been deleted."
 msgid_plural "%s local certificates have been deleted."
 msgstr[0] "%s 로컬 인증서가 삭제되었습니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/entcertlib.py:452
+#: src/subscription_manager/entcertlib.py:451
 #, python-format
 msgid "Total updates: %d"
 msgstr "총 최신화: %d"
 
-#: src/subscription_manager/entcertlib.py:453
+#: src/subscription_manager/entcertlib.py:452
 #, python-format
 msgid "Found (local) serial# %s"
 msgstr "검색된 (로컬) 일련 번호# %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/entcertlib.py:454
+#: src/subscription_manager/entcertlib.py:453
 #, python-format
 msgid "Expected (UEP) serial# %s"
 msgstr "예상 (UEP) 일련 번호# %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/entcertlib.py:455
+#: src/subscription_manager/entcertlib.py:454
 #: src/subscription_manager/repolib.py:682
 msgid "Added (new)"
 msgstr "추가됨 (신규)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/entcertlib.py:456
+#: src/subscription_manager/entcertlib.py:455
 msgid "Deleted (rogue):"
 msgstr "삭제됨 (결함이 있음):"
 
@@ -3689,7 +2980,6 @@ msgstr "잘못된 CA 인증서: {file}: {reason}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:51
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:218
 msgid "Your identity certificate has expired"
 msgstr "ID 인증서가 만료되었습니다"
 
@@ -3868,18 +3158,37 @@ msgstr "사용자가 프로세스를 중단했습니다."
 msgid "Error uploading package profile: %s\n"
 msgstr "꾸러미 프로파일 적재 중 오류 발생: %s\n"
 
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#, fuzzy
+#| msgid "This system is already registered. Add force to options to override."
+msgid ""
+"This system is already registered, ignoring request to automatically "
+"register."
+msgstr ""
+"이 시스템은 이미 등록되어 있습니다. 덮어쓰기 하려면 옵션에 force를 추가합니"
+"다."
+
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:198
-msgid "Updating entitlement certificates & repositories"
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#, fuzzy
+#| msgid "Registering system"
+msgid "Registering the system"
+msgstr "시스템 등록하기"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#, fuzzy
+#| msgid "Updating entitlement certificates & repositories"
+msgid "Updating entitlement certificates & repositories."
 msgstr "자격 인증서 & 저장소를 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:293
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:404
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "자격 인증서 및 저장소를 최신화 할 수 없음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/utils.py:386
+#: src/subscription_manager/utils.py:390
 msgid "and"
 msgstr "및"
 
@@ -3895,6 +3204,641 @@ msgstr "경고: 제공된 값 \"{val}\"은 유효값{attr} 목록에 포함되�
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr "경고: 제공된 키 \"{key}\"는 유효 키 목록에 포함되지 않습니다:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "optional arguments"
+#~ msgstr "선택적인 인수"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "deprecated, see --cert-check-interval"
+#~ msgstr "폐지 예정, --cert-check-interval 참조"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "deprecated, see --auto-attach-interval"
+#~ msgstr "폐지 예정, --auto-attach-interval 참조"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "interval to run auto-attach (in minutes)"
+#~ msgstr "자동 첨부를 실행하는 간격 (분 단위)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Updating subscriptions"
+#~ msgstr "서브스크립션 초신화 중"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Unsubscribing"
+#~ msgstr "구독"
+
+#~ msgid "Activating"
+#~ msgstr "활성화"
+
+#~ msgid "Error: you can specify --username or --token not both"
+#~ msgstr "오류: --username 또는 --token을 둘 다 지정할 수 없습니다"
+
+#~ msgid "Unable to connect to server using token"
+#~ msgstr "토큰을 사용하여 서버에 연결할 수 없습니다"
+
+#~ msgid "Show or modify the system purpose addons setting"
+#~ msgstr "시스템 목적 추가구성 설정을 표시 또는 수정합니다"
+
+#~ msgid "The ID of the pool to attach (can be specified more than once)"
+#~ msgstr "할당할 풀 ID (한 번 이상 지정할 수 있음)"
+
+#~ msgid ""
+#~ "Number of subscriptions to attach. May not be used with an auto-attach."
+#~ msgstr ""
+#~ "할당 할 서브스크립션 수입니다. auto-attach와 함께 사용 할 수 없습니다."
+
+#~ msgid ""
+#~ "Automatically attach the best-matched compatible subscriptions to this "
+#~ "system. This is the default action."
+#~ msgstr ""
+#~ "이 시스템에 가장 적합한 호환 가능 서브스크립션을 자동 첨부합니다. 이는 기"
+#~ "본 동작입니다."
+
+#~ msgid ""
+#~ "Automatically attach only subscriptions matching the specified service "
+#~ "level; only used with --auto"
+#~ msgstr ""
+#~ "지정된 서비스 수준에 일치하는 서브스크립션만 자동으로 할당합니다; --auto와"
+#~ "만 함께 사용됨"
+
+#~ msgid ""
+#~ "A file from which to read pool IDs. If a hyphen is provided, pool IDs "
+#~ "will be read from stdin."
+#~ msgstr ""
+#~ "풀 ID를 읽어올 파일입니다. 하이픈이 지정되어 있을 경우 풀 ID는 stdin에서 "
+#~ "읽게 됩니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "All installed products are covered by valid entitlements."
+#~ msgstr "설치된 모든 제품에는 유효한 인타이틀먼트가 적용됩니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "No need to update subscriptions at this time."
+#~ msgstr "현재로서는 서브스크립션을 최신화 할 필요가 없습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "Attach a specified subscription to the registered system, when system "
+#~ "does not use Simple Content Access mode"
+#~ msgstr ""
+#~ "시스템이 단순 컨텐츠 접근 방식을 사용하지 않을 경우 등록된 시스템에 지정"
+#~ "된 서브스크립션을 첨부"
+
+#~ msgid "Error: --auto may not be used when specifying pools."
+#~ msgstr "오류: 풀을 지정할 때 --auto를 사용할 수 없습니다."
+
+#~ msgid ""
+#~ "Error: The --servicelevel option cannot be used when specifying pools."
+#~ msgstr "오류: 풀을 지정할 때 --servicelevel 옵션을 사용 할 수 없습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Error: Quantity must be a positive integer."
+#~ msgstr "오류: 수량은 양의 정수이어야 합니다."
+
+#~ msgid "Error: --quantity may not be used with an auto-attach"
+#~ msgstr "오류: --quantity는 auto-attach와 함께 사용할 수 없습니다"
+
+#~ msgid "Error: Received data does not contain any pool IDs."
+#~ msgstr "오류: 전송된 데이터에 풀 ID가 포함되어 있지 않습니다."
+
+#, python-brace-format
+#~ msgid "Error: The file \"{file}\" does not contain any pool IDs."
+#~ msgstr "오류: 파일 \"{file}\"에 풀 ID가 포함되어 있지 않습니다."
+
+#, python-brace-format
+#~ msgid "Error: The file \"{file}\" does not exist or cannot be read."
+#~ msgstr "오류: 파일 \"{file}\"은 존재하지 않거나 읽을 수 없습니다."
+
+# translation manually copied from candlepin
+#, python-brace-format
+#~ msgid ""
+#~ "Ignoring the request to attach. Attaching subscriptions is disabled for "
+#~ "organization \"{owner_id}\" because Simple Content Access (SCA) is "
+#~ "enabled."
+#~ msgstr ""
+#~ "첨부 요청을 무시합니다. 첨부된 서브스크립션은 단순 콘텐츠 접근(SCA)이 활성"
+#~ "화 되었기 때문에 조직 \"{owner_id}\"를 위해 비활성화 되었습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Please enter a valid numeric pool ID."
+#~ msgstr "유효한 숫자 풀 ID를 입력하십시오."
+
+#, python-brace-format
+#~ msgid "Successfully attached a subscription for: {name}"
+#~ msgstr "서브스크립션을 제대로 첨부했습니다: {name}"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "No Installed products on system. No need to attach subscriptions."
+#~ msgstr ""
+#~ "시스템에 설치된 제품이 없습니다. 서브스크립션을 첨부 할 필요가 없습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "All installed products are covered by valid entitlements. No need to "
+#~ "update subscriptions at this time."
+#~ msgstr ""
+#~ "설치된 모든 제품에는 유효한 자격이 적용됩니다. 서브스크립션을 최신화 할 필"
+#~ "요가 없습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "Error: The --servicelevel option is not supported by the server. Did not "
+#~ "complete your request."
+#~ msgstr ""
+#~ "오류: --servicelevel 옵션은 서버에서 지원되지 않습니다. 요청을 완료하지 못"
+#~ "했습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Service level set to: {}"
+#~ msgstr "서비스 레벨 설정: {}"
+
+#~ msgid ""
+#~ "Entitlement Certificate(s) update failed due to the following reasons:"
+#~ msgstr "다음과 같은 이유로 자격 인증서 최신화에 실패했습니다:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Set if subscriptions are attached on a schedule (default of daily)"
+#~ msgstr "일정에 따라 (기본적으로 매일) 서브스크립션을 첨부 할지를 설정합니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "specify whether to enable or disable auto-attaching of subscriptions"
+#~ msgstr ""
+#~ "서브스크립션의 자동 첨부를 활성화 또는 비활성화할 지에 대한 여부를 지정합"
+#~ "니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "try to attach subscriptions for uncovered products each check-in"
+#~ msgstr ""
+#~ "각 체크인 마다 적용되지 않은 제품에 대해 서브스크립션을 첨부 시도합니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "do not try to automatically attach subscriptions each check-in"
+#~ msgstr "각 체크인 마다 자동 서브스크립션 첨부를 시도하지 않습니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "show the current auto-attach preference"
+#~ msgstr "현재 자동 첨부 설정 상태를 표시합니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Auto-attach preference: enabled"
+#~ msgstr "자동 첨부 설정: 활성화됨"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Auto-attach preference: disabled"
+#~ msgstr "자동 첨부 설정: 비활성화됨"
+
+# translation manually copied from candlepin
+#, python-brace-format
+#~ msgid ""
+#~ "Ignoring the request to auto-attach. Attaching subscriptions is disabled "
+#~ "for organization \"{owner_id}\" because Simple Content Access (SCA) is "
+#~ "enabled."
+#~ msgstr ""
+#~ "자동-첨부 요청을 무시합니다. 첨부된 서브스크립션은 단순 컨텐츠 접근(SCA)"
+#~ "가 활성화 되었기 때문에 조직 \"{owner_id}\"를 위해 비활성화되어 있습니다."
+
+#~ msgid "--token can only be used with --force"
+#~ msgstr "--token은 --force와만 사용할 수 있습니다"
+
+#~ msgid "Import certificates which were provided outside of the tool"
+#~ msgstr "도구 외부에서 제공된 인증서를 가져옵니다"
+
+#~ msgid "certificate file to import (can be specified more than once)"
+#~ msgstr "불러올 인증서 파일 (하나 이상을 지정할 수 있음)"
+
+#~ msgid ""
+#~ "Error: You may not import certificates into a system that is registered "
+#~ "to a subscription management service."
+#~ msgstr ""
+#~ "오류: 서브스크립션 관리 서비스에 등록된 시스템으로 인증서를 불러올 수 없습"
+#~ "니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "Error: This command requires that you specify a certificate with --"
+#~ "certificate."
+#~ msgstr ""
+#~ "오류: 이 명령에서는 --certificate를 사용하여 인증서를 지정해야 합니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#, python-brace-format
+#~ msgid "Successfully imported certificate {file}"
+#~ msgstr "인증서 {file}을(를) 성공적으로 가져왔습니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#, python-brace-format
+#~ msgid ""
+#~ "{file} is not a valid certificate file. Please use a valid certificate."
+#~ msgstr ""
+#~ "{file}은(는) 유효한 인증서 파일이 아닙니다. 유효한 인증서를 사용하십시오."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "An error occurred while importing the certificate. Please check log file "
+#~ "for more information."
+#~ msgstr ""
+#~ "인증서를 가져오기하는 동안 오류가 발생했습니다. 자세한 내용은 로그 파일에"
+#~ "서 확인하십시오."
+
+#, python-brace-format
+#~ msgid "{file}: file not found."
+#~ msgstr "{file}: 파일을 찾을 수 없습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Future Subscription"
+#~ msgstr "차후 서브스크립션"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Subscribed"
+#~ msgstr "등록됨"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Not Subscribed"
+#~ msgstr "등록되지 않음"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Expired"
+#~ msgstr "만료됨"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Partially Subscribed"
+#~ msgstr "부분적으로 등록됨"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Status:"
+#~ msgstr "상태:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Status Details:"
+#~ msgstr "상태 정보:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Starts:"
+#~ msgstr "시작:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Ends:"
+#~ msgstr "종료:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Subscription Name:"
+#~ msgstr "서브스크립션 이름:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Provides:"
+#~ msgstr "제공:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "SKU:"
+#~ msgstr "SKU:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Contract:"
+#~ msgstr "계약:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Pool ID:"
+#~ msgstr "풀 ID:"
+
+#~ msgid "Provides Management:"
+#~ msgstr "관리 제공:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Available:"
+#~ msgstr "사용 가능:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Suggested:"
+#~ msgstr "권장 사항:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Service Type:"
+#~ msgstr "서비스 유형:"
+
+#~ msgid "Roles:"
+#~ msgstr "역할:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Service Level:"
+#~ msgstr "서비스 레벨:"
+
+#~ msgid "Usage:"
+#~ msgstr "사용법:"
+
+#~ msgid "Add-ons:"
+#~ msgstr "애드온:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Subscription Type:"
+#~ msgstr "서브스크립션 유형:"
+
+#~ msgid "Entitlement Type:"
+#~ msgstr "인타이틀먼트 유형:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Account:"
+#~ msgstr "계정:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Serial:"
+#~ msgstr "시리얼:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Active:"
+#~ msgstr "활성:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Quantity Used:"
+#~ msgstr "사용 수량:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "System Type:"
+#~ msgstr "시스템 유형:"
+
+# translation auto-copied from project subscription-manager, version 1.13.X, document keys
+#~ msgid "No products installed."
+#~ msgstr "제품이 설치되어 있지 않습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Installed Product Current Status:"
+#~ msgstr "설치된 제품의 현재 상태:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys, author eukim
+#~ msgid ""
+#~ "Unable to find available subscriptions for all your installed products."
+#~ msgstr "설치된 모든 제품에 대한 유효한 서브스크립션을 찾을 수 없습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "show those subscriptions which are available"
+#~ msgstr "사용 가능한 서브스크립션을 표시합니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "used with --available to ensure all subscriptions are returned"
+#~ msgstr ""
+#~ "모든 서브스크립션이 반환되었는지 확인하려면 --available과 함께 사용함"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#, python-brace-format
+#~ msgid ""
+#~ "date to search on, defaults to today's date, only used with --available "
+#~ "(example: {example})"
+#~ msgstr ""
+#~ "검색일, 기본값은 오늘로 되어 있으며, --available과 함께 사용해야 합니다 "
+#~ "(예: {example})"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "show the subscriptions being consumed by this system"
+#~ msgstr "이 시스템에서 사용되고 있는 서브스크립션을 보여줍니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "shows only subscriptions matching the specified service level; only used "
+#~ "with --available and --consumed"
+#~ msgstr ""
+#~ "--available과 --consumed만을 사용하여 지정된 서비스 레벨에 일치하는 서브스"
+#~ "크립션만을 보여줍니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "shows pools which provide products that are not already covered; only "
+#~ "used with --available"
+#~ msgstr ""
+#~ "아직 서브스크립션이 적용되지 않은 제품이 포함된 풀을 표시합니다; --"
+#~ "available과만 함께 사용 가능합니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "shows only subscriptions matching products that are currently installed; "
+#~ "only used with --available"
+#~ msgstr ""
+#~ "현재 설치된 제품과 일치하는 서브스크립션만 표시합니다; --available과만 함"
+#~ "께 사용합니다"
+
+#~ msgid ""
+#~ "lists only the pool IDs for applicable available or consumed "
+#~ "subscriptions; only used with --available and --consumed"
+#~ msgstr ""
+#~ "적용 가능한 또는 사용된 서브스크립션의 풀 ID만 나열합니다; --available 및 "
+#~ "--consumed와만 사용"
+
+#, python-brace-format
+#~ msgid ""
+#~ "show pools that are active on or after the given date; only used with --"
+#~ "available (example: {example})"
+#~ msgstr ""
+#~ "지정된 날짜 이후에 활성화된 풀을 표시합니다. --available과 함께 만 사용 "
+#~ "(예 : {example})"
+
+#~ msgid "Error: --afterdate is only applicable with --available"
+#~ msgstr "오류: --afterdate는 --available과만 사용 가능"
+
+#~ msgid "Error: --afterdate cannot be used with --ondate"
+#~ msgstr "오류: --afterdate는 --ondate와 함께 사용할 수 없습니다"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
+#~ "{dateexample})"
+#~ msgstr ""
+#~ "입력하신 날짜가 유효하지 않습니다. YYYY-MM-DD 형식으로 날짜를 입력해 주십"
+#~ "시오. (예: {dateexample})"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Available Subscriptions"
+#~ msgstr "사용 가능한 서브스크립션"
+
+#, python-brace-format
+#~ msgid ""
+#~ "No available subscription pools were found matching the expression "
+#~ "\"{filter}\" and the service level \"{level}\"."
+#~ msgstr ""
+#~ "\"{filter}\" 표현식 및 \"{level}\" 서비스 레벨에 일치하는 사용 가능한 서브"
+#~ "스크립션 풀을 찾을 수 없습니다."
+
+#, python-brace-format
+#~ msgid ""
+#~ "No available subscription pools were found matching the expression "
+#~ "\"{filter}\"."
+#~ msgstr ""
+#~ "\"{filter}\" 표현식에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 없습"
+#~ "니다."
+
+#, python-brace-format
+#~ msgid ""
+#~ "No available subscription pools were found matching the service level "
+#~ "\"{level}\"."
+#~ msgstr ""
+#~ "\"{level}\" 서비스 레벨에 일치하는 사용 가능한 서브스크립션 풀을 찾을 수 "
+#~ "없습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "No available subscription pools to list"
+#~ msgstr "나열할 사용 가능한 서브스크립션 풀이 없음"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Consumed Subscriptions"
+#~ msgstr "소비된 서브스크립션"
+
+#, python-brace-format
+#~ msgid ""
+#~ "No consumed subscription pools were found matching the expression "
+#~ "\"{filter}\" and the service level \"{level}\"."
+#~ msgstr ""
+#~ "\"{filter}\" 표현식 및 \"{level}\" 서비스 레벨에 일치하는 사용된 서브스크"
+#~ "립션 풀을 찾을 수 없습니다."
+
+#, python-brace-format
+#~ msgid ""
+#~ "No consumed subscription pools were found matching the expression "
+#~ "\"{filter}\"."
+#~ msgstr ""
+#~ "\"{filter}\" 표현식에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니다."
+
+#, python-brace-format
+#~ msgid ""
+#~ "No consumed subscription pools were found matching the service level "
+#~ "\"{level}\"."
+#~ msgstr ""
+#~ "\"{level}\" 서비스 레벨에 일치하는 사용된 서브스크립션 풀을 찾을 수 없습니"
+#~ "다."
+
+#~ msgid "No consumed subscription pools were found."
+#~ msgstr "소비된 서브스크립션 풀을 찾을 수 없습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Attempt to redeem a subscription for a preconfigured system"
+#~ msgstr "사전 설정된 시스템의 서브스크립션 사용을 시도합니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "email address to notify when subscription redemption is complete"
+#~ msgstr "서브스크립션 사용 완료 시 통지하기 위한 전자우편 주소"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "optional language to use for email notification when subscription "
+#~ "redemption is complete (Examples: en-us, de-de)"
+#~ msgstr ""
+#~ "서브스크립션 사용 완료 시 전자우편 통지에 사용할 언어 선택 (예: en-us, de-"
+#~ "de)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "Error: This command requires that you specify an email address with --"
+#~ "email."
+#~ msgstr ""
+#~ "오류: 이 명령에서는 --email을 사용하여 이메일 주소를 지정해야 합니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Error: Unable to redeem subscription for this system."
+#~ msgstr "오류: 이와 같은 시스템을 위해 서브스크립션을 상환 할 수 없습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Deprecated, see --auto-attach"
+#~ msgstr "사용 권장되지 않음, --auto-attach 참조"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "automatically attach compatible subscriptions to this system"
+#~ msgstr "이 시스템에 호환 가능한 서브스크립션을 자동 첨부합니다"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "system preference used when subscribing automatically, requires --auto-"
+#~ "attach"
+#~ msgstr "자동 등록 시 사용되는 시스템 환경 설정, --auto-attach 사용"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Error: Activation keys cannot be used with --auto-attach."
+#~ msgstr "오류: 활성키는 --auto-attach와 함께 사용할 수 없습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Error: Must use --auto-attach with --servicelevel."
+#~ msgstr "오류: --servicelevel과 함께 --auto-attach를 사용해야 합니다."
+
+#, python-brace-format
+#~ msgid "Service level set to: {level}"
+#~ msgstr "서비스 레벨 설정: {level}"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid ""
+#~ "certificate serial number to remove (can be specified more than once)"
+#~ msgstr "삭제할 인증서 일련 번호 (한 번 이상 지정할 수 있음)"
+
+#~ msgid "the ID of the pool to remove (can be specified more than once)"
+#~ msgstr "삭제할 풀의 ID (한 번 이상 지정할 수 있음)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "remove all subscriptions from this system"
+#~ msgstr "시스템에서 모든 서브스크립션을 삭제"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "Remove all or specific subscriptions from this system"
+#~ msgstr "시스템에서 모든 또는 특정 서브스크립션을 삭제"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#, python-brace-format
+#~ msgid "Error: '{serial}' is not a valid serial number"
+#~ msgstr "오류: '{serial}'는 유효한 일련 번호가 아닙니다"
+
+#~ msgid ""
+#~ "Error: The registered entitlement server does not support remove --pool.\n"
+#~ "Instead, use the remove --serial option."
+#~ msgstr ""
+#~ "오류: 등록된 자격 서버는 remove --pool을 지원하지 않습니다.\n"
+#~ "대신 remove --serial 옵션을 사용합니다."
+
+#~ msgid ""
+#~ "Error: This command requires that you specify one of --serial, --pool or "
+#~ "--all."
+#~ msgstr ""
+#~ "오류: 이 명령에서는 --serial, --pool 또는 --all 중 하나를 지정해야 합니다."
+
+#~ msgid "The entitlement server successfully removed these pools:"
+#~ msgstr "인타이틀먼트 서버가 풀을 성공적으로 삭제했습니다:"
+
+#~ msgid "The entitlement server successfully removed these serial numbers:"
+#~ msgstr "인타이틀먼트 서버가 일련 번호를 성공적으로 삭제했습니다:"
+
+#~ msgid "The entitlement server successfully removed these IDs:"
+#~ msgstr "인타이틀먼트 서버가 ID를 성공적으로 삭제했습니다:"
+
+#~ msgid "The entitlement server failed to remove these pools:"
+#~ msgstr "인타이틀먼트 서버가 풀 삭제에 실패했습니다:"
+
+#~ msgid "The entitlement server failed to remove these serial numbers:"
+#~ msgstr "인타이틀먼트 서버가 일련 번호 삭제에 실패했습니다:"
+
+#~ msgid "The entitlement server failed to remove these IDs:"
+#~ msgstr "인타이틀먼트 서버가 ID 삭제에 실패했습니다:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#~ msgid "All subscriptions have been removed at the server."
+#~ msgstr "모든 서브스크립션이 서버에서 삭제되었습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#, python-format
+#~ msgid "%s subscription removed at the server."
+#~ msgid_plural "%s subscriptions removed at the server."
+#~ msgstr[0] "%s 서브스크립션이 서버에서 삭제되었습니다."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#, python-brace-format
+#~ msgid "Unable to perform remove due to the following exception: {e}"
+#~ msgstr "다음과 같은 예외로 인해 삭제를 실행할 수 없습니다: {e}"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#, python-brace-format
+#~ msgid "{total} subscription removed from this system."
+#~ msgid_plural "{total} subscriptions removed from this system."
+#~ msgstr[0] "{total} 서브스크립션을 이 시스템에서 제거했습니다."
+
+#, python-brace-format
+#~ msgid "Subscription with serial number {serial} removed from this system"
+#~ msgstr "일련 번호 {serial}의 서브스크립션이 시스템에서 제거되었습니다"
+
+#~ msgid "token to use when authorizing against the server"
+#~ msgstr "서버 인증시 사용 할 토큰"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid ""
@@ -6313,10 +6257,6 @@ msgstr "경고: 제공된 키 \"{key}\"는 유효 키 목록에 포함되지 않
 #~ msgstr "복소수"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#~ msgid "show program's version number and exit"
-#~ msgstr "프로그램의 버전 번호 보기 및 종료"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "%prog [options]"
 #~ msgstr "%prog [옵션]"
 
@@ -6327,10 +6267,6 @@ msgstr "경고: 제공된 키 \"{key}\"는 유효 키 목록에 포함되지 않
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "%s option does not take a value"
 #~ msgstr "%s 옵션은 값을 갖지 않음"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#~ msgid "Options"
-#~ msgstr "옵션"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid ""
