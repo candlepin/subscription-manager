@@ -242,7 +242,10 @@ class SubscriptionManager(dnf.Plugin):
         Call Package Profile
         """
         cfg = config.get_config_parser()
-        if "1" == cfg.get("rhsm", "package_profile_on_trans"):
+        if (
+            cfg.get("rhsm", "report_package_profile") == "1"
+            and cfg.get("rhsm", "package_profile_on_trans") == "1"
+        ):
             log.debug("Uploading package profile")
             self._upload_profile()
         else:
