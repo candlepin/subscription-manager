@@ -241,11 +241,6 @@ install-files: dbus-install install-conf install-plugins
 	install -d $(DESTDIR)/$(PREFIX)/lib/sysusers.d
 	install -m 644 etc-conf/rhsm-sysuser.conf $(DESTDIR)/$(PREFIX)/lib/sysusers.d/rhsm.conf
 
-	if [ -f /etc/redhat-release ]; then \
-		install -m 644 etc-conf/subscription-manager.pam $(DESTDIR)/etc/pam.d/subscription-manager; \
-		install -m 644 etc-conf/subscription-manager.console $(DESTDIR)/etc/security/console.apps/subscription-manager; \
-	fi; \
-
 	install -m 755 bin/rhsmcertd $(DESTDIR)/$(PREFIX)/bin/rhsmcertd
 
 .PHONY: check

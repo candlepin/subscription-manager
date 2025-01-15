@@ -456,12 +456,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_sbindir}/rcrhsm-facts
 %{_sbindir}/rcrhsmcertd
 
-%else
-
-# PAM config
-%{_sysconfdir}/pam.d/subscription-manager
-%{_sysconfdir}/security/console.apps/subscription-manager
-
 %endif
 
 %dir %{python_sitearch}/rhsmlib/candlepin
