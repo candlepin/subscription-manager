@@ -8,16 +8,15 @@
 # simmon <simmon@nplob.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
 # Kim InSoo <simmon@nplob.com>, 2022.
-# 김인수 <simmon@nplob.com>, 2022, 2023, 2024.
+# 김인수 <simmon@nplob.com>, 2022, 2023, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-07 18:12+0100\n"
-"PO-Revision-Date: 2025-01-10 05:55+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2025-01-11 05:38+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
 "Language: ko\n"
@@ -30,7 +29,7 @@ msgstr ""
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib64/python3.12/argparse.py:299
 msgid "usage: "
@@ -39,12 +38,12 @@ msgstr "사용법: "
 #: /usr/lib64/python3.12/argparse.py:722
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (기본값: %(default)s)"
 
 #: /usr/lib64/python3.12/argparse.py:784
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "인수 %(argument_name)s: %(message)s"
 
 #: /usr/lib64/python3.12/argparse.py:890
 msgid ".__call__() not defined"
@@ -56,18 +55,14 @@ msgid "show program's version number and exit"
 msgstr "프로그램의 버전 번호 보기 및 종료"
 
 #: /usr/lib64/python3.12/argparse.py:1223
-#, fuzzy, python-format
-#| msgid "conflicting option string: %s"
-#| msgid_plural "conflicting option strings: %s"
+#, python-format
 msgid "conflicting subparser: %s"
-msgstr "충돌 하는 선택 문자열: %s"
+msgstr "충돌하는 하위파서: %s"
 
 #: /usr/lib64/python3.12/argparse.py:1227
-#, fuzzy, python-format
-#| msgid "conflicting option string: %s"
-#| msgid_plural "conflicting option strings: %s"
+#, python-format
 msgid "conflicting subparser alias: %s"
-msgstr "충돌 하는 선택 문자열: %s"
+msgstr "충돌하는 하위파서 별칭: %s"
 
 #: /usr/lib64/python3.12/argparse.py:1262
 #, python-format
@@ -142,7 +137,7 @@ msgstr "여러 하위 구문 분석기 인수를 가질 수 없습니다"
 
 #: /usr/lib64/python3.12/argparse.py:1860
 msgid "subcommands"
-msgstr "하위 명령:"
+msgstr "하위 명령"
 
 #: /usr/lib64/python3.12/argparse.py:1906
 #: /usr/lib64/python3.12/argparse.py:2459
@@ -1300,25 +1295,25 @@ msgstr "오류: 이 시스템은 등록되어 있지 않습니다"
 
 #: src/rhsmlib/services/register.py:73
 msgid "Environment IDs and environment names are mutually exclusive"
-msgstr ""
+msgstr "환경 IDs 및 환경 이름은 상호 베타적입니다"
 
 #: src/rhsmlib/services/register.py:174
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
-msgstr ""
+msgstr "환경: '{env_names}'는 필수 유형 '{environment_type}' 를 갖고 있지 않습니다"
 
 #: src/rhsmlib/services/register.py:182
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
-msgstr ""
+msgstr "환경: '{env_names}'는 필수 유형 '{environment_type}' 를 갖고 있지 않습니다"
 
 #: src/rhsmlib/services/register.py:202
 msgid ""
 "Registration is only possible when the organization is in Simple Content "
 "Access (SCA) mode."
-msgstr ""
+msgstr "등록은 조직이 단순 내용 접근(SCA) 방식일 때만 가능합니다."
 
 #: src/rhsmlib/services/register.py:243
 msgid "This system is already registered. Add force to options to override."
@@ -1637,16 +1632,11 @@ msgstr ""
 "합니다"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:167
-#, fuzzy
-#| msgid ""
-#| "Error: --username, --password, --token and --org can be used only on "
-#| "unregistered systems"
 msgid ""
 "Error: --username, --password, and --org can be used only on unregistered "
 "systems"
-msgstr ""
-"오류: --username, --password, --token과 --org는 등록되지 않은 시스템에서만 사"
-"용 할 수 있습니다"
+msgstr "오류: --username, --password 및 --org는 등록되지 않은 시스템에서만 사용 할 "
+"수 있습니다"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:239
@@ -2133,17 +2123,10 @@ msgid "list shows those products which are installed (default)"
 msgstr "목록에는 설치된 제품이 표시됩니다 (디폴트)"
 
 #: src/subscription_manager/cli_command/list.py:51
-#, fuzzy
-#| msgid ""
-#| "lists only subscriptions or products containing the specified expression "
-#| "in the subscription or product information, varying with the list "
-#| "requested and the server version (case-insensitive)."
 msgid ""
 "lists only products containing the specified expression in the product "
 "information."
-msgstr ""
-"서브스크립션 또는 제품 정보에 지정된 표현식을 포함하는 서브스크립션 또는 제품"
-"만 나열합니다. 요청 목록 및 서버 버전에 따라 달라집니다. (대소문자 구분)."
+msgstr "제품 정보에 지정된 표현식을 포함하는 제품만 나열합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:64
@@ -2695,16 +2678,12 @@ msgstr ""
 "야 합니다"
 
 #: src/subscription_manager/cli_command/service_level.py:98
-#, fuzzy
-#| msgid ""
-#| "Error: --username, --password, --token, --org and --serverurl can be used "
-#| "only on unregistered systems"
 msgid ""
 "Error: --username, --password, --org and --serverurl can be used only on "
 "unregistered systems"
 msgstr ""
-"오류: --username, --password, --token, --org과 --serverurl은 등록되지 않은 시"
-"스템에서만 사용 할 수 있습니다"
+"오류: --username, --password, --org 및 --serverurl은 등록되지 않은 "
+"시스템에서만 사용 할 수 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:123
@@ -3159,28 +3138,20 @@ msgid "Error uploading package profile: %s\n"
 msgstr "꾸러미 프로파일 적재 중 오류 발생: %s\n"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:328
-#, fuzzy
-#| msgid "This system is already registered. Add force to options to override."
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
-msgstr ""
-"이 시스템은 이미 등록되어 있습니다. 덮어쓰기 하려면 옵션에 force를 추가합니"
-"다."
+msgstr "이 시스템은 이미 등록되어 있어, 자동으로 등록되는 요청은 무시합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:331
-#, fuzzy
-#| msgid "Registering system"
 msgid "Registering the system"
 msgstr "시스템 등록하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:342
-#, fuzzy
-#| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
-msgstr "자격 인증서 & 저장소를 최신화하기"
+msgstr "자격 인증서 & 저장소를 최신화하기."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:404
