@@ -8,13 +8,13 @@
 # simmon <simmon@nplob.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021.
 # Kim InSoo <simmon@nplob.com>, 2022.
-# 김인수 <simmon@nplob.com>, 2022, 2023, 2024.
+# 김인수 <simmon@nplob.com>, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-07 18:24+0100\n"
-"PO-Revision-Date: 2024-09-27 06:11+0000\n"
+"PO-Revision-Date: 2025-01-12 16:02+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/ko/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -293,19 +293,14 @@ msgstr ""
 "를 사용하여 등록 할 수 있습니다.\n"
 
 #: src/plugins/dnf/subscription_manager.py:61
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is not registered with an entitlement server. You can use "
-#| "subscription-manager to register.\n"
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "\"rhc\" or \"subscription-manager\" to register.\n"
 msgstr ""
 "\n"
-"이 시스템은 Red Hat 관리서버에 등록되어 있지 않습니다. subscription-manager"
-"를 사용하여 등록 할 수 있습니다.\n"
+"이 시스템은 Red Hat 관리서버에 등록되어 있지 않습니다. \"rhc\" 또는 "
+"\"subscription-manager\"를 사용하여 등록 할 수 있습니다.\n"
 
 #: src/plugins/dnf/subscription_manager.py:68
 msgid ""
@@ -324,6 +319,9 @@ msgid ""
 "This system has release set to {release_version} and it receives updates "
 "only for this release.\n"
 msgstr ""
+"\n"
+"이와 같은 시스템은 {release_version} 으로 설정되어 출시되었고 해당 출시에 "
+"대해서만 최신화를 수신합니다.\n"
 
 #: src/plugins/dnf/subscription_manager.py:110
 msgid "Not root, Subscription Management repositories not updated"
@@ -1732,6 +1730,8 @@ msgid ""
 "Deprecated, this command will be removed from the future major releases. "
 "This command is no-op. Show or modify the system purpose addons setting"
 msgstr ""
+"폐기된, 이와 같은 명령은 앞으로의 주요 출시에서 제거됩니다. 이와 같은 명령은 "
+"동작하지 않습니다. 시스템 목적의 추가 설정을 표시하거나 수정합니다"
 
 #: src/subscription_manager/cli_command/attach.py:51
 msgid "The ID of the pool to attach (can be specified more than once)"
@@ -1777,17 +1777,14 @@ msgstr "현재로서는 서브스크립션을 최신화 할 필요가 없습니�
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:98
-#, fuzzy
-#| msgid ""
-#| "Attach a specified subscription to the registered system, when system "
-#| "does not use Simple Content Access mode"
 msgid ""
 "Deprecated, this command will be removed from the future major releases. "
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
 msgstr ""
-"시스템이 단순 컨텐츠 접근 방식을 사용하지 않을 경우 등록된 시스템에 지정된 서"
-"브스크립션을 첨부"
+"폐기된, 이와 같은 명령은 앞으로의 주요 출시에서 제거됩니다. 시스템이 단순 "
+"내용 접근 방식을 사용하지 않을 경우 등록된 시스템에 지정된 서브스크립션을 "
+"첨부합니다"
 
 #: src/subscription_manager/cli_command/attach.py:112
 msgid "Error: --auto may not be used when specifying pools."
@@ -1876,12 +1873,12 @@ msgstr "다음과 같은 이유로 자격 인증서 최신화에 실패했습니
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/autoheal.py:28
-#, fuzzy
-#| msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgid ""
 "Deprecated, this option will be removed from the future major releases. Set "
 "if subscriptions are attached on a schedule (default of daily)"
-msgstr "일정에 따라 (기본적으로 매일) 서브스크립션을 첨부 할지를 설정합니다"
+msgstr ""
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다. 서브스크립션은 "
+"일정에 따라(기본적으로 매일) 첨부 여부를 설정합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/autoheal.py:31
@@ -2288,6 +2285,9 @@ msgid ""
 "This command is no-op in simple content access mode. Import certificates "
 "which were provided outside of the tool"
 msgstr ""
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다. 이와 같은 명령은 "
+"단순 내용 접근 방식에서 동작하지 않습니다. 도구의 외부에서 제공되는 인증서를 "
+"가져옵니다"
 
 #: src/subscription_manager/cli_command/import_cert.py:41
 msgid "certificate file to import (can be specified more than once)"
@@ -2605,78 +2605,66 @@ msgstr "목록에는 설치된 제품이 표시됩니다 (디폴트)"
 msgid ""
 "deprecated, this option will be removed from the future major releases; show "
 "those subscriptions which are available"
-msgstr ""
+msgstr "폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다; 사용 가능한 이들 "
+"서브스크립션을 표시합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:229
-#, fuzzy
-#| msgid "used with --available to ensure all subscriptions are returned"
 msgid ""
 "deprecated, this option will be removed from the future major releases; used "
 "with --available to ensure all subscriptions are returned"
-msgstr "모든 서브스크립션이 반환되었는지 확인하려면 --available과 함께 사용함"
+msgstr ""
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다; --available과 "
+"함께 사용되면 모든 서브스크립션이 반환됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:237
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "date to search on, defaults to today's date, only used with --available "
-#| "(example: {example})"
+#, python-brace-format
 msgid ""
 "deprecated, this option will be removed from the future major releases; date "
 "to search on, defaults to today's date, only used with --available (example: "
 "{example})"
 msgstr ""
-"검색일, 기본값은 오늘로 되어 있으며, --available과 함께 사용해야 합니다 (예: "
-"{example})"
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다; 검색일, 기본값은 "
+"오늘로 되어 있으며, --available과 함께만 사용됩니다 (예: {example})"
 
 #: src/subscription_manager/cli_command/list.py:246
 msgid ""
 "deprecated, this option will be removed from the future major releases; show "
 "the subscriptions being consumed by this system"
-msgstr ""
+msgstr "폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다; 해당 시스템에 "
+"의해 소비되어지는 서브스크립션을 표시합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:254
-#, fuzzy
-#| msgid ""
-#| "shows only subscriptions matching the specified service level; only used "
-#| "with --available and --consumed"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
 msgstr ""
-"--available과 --consumed만을 사용하여 지정된 서비스 레벨에 일치하는 서브스크"
-"립션만을 보여줍니다"
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다; 지정된 서비스 "
+"수준에 일치하는 서브스크립션만을 표시합니다; --available 및 --consumed 와 "
+"함께만 사용됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:263
-#, fuzzy
-#| msgid ""
-#| "shows pools which provide products that are not already covered; only "
-#| "used with --available"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows pools which provide products that are not already covered; only used "
 "with --available"
 msgstr ""
-"아직 서브스크립션이 적용되지 않은 제품이 포함된 풀을 표시합니다; --available"
-"과만 함께 사용 가능합니다"
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다; 이미 다루지 않은 "
+"제품을 제공하는 풀을 표시합니다; --available 함께만 사용됩니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:272
-#, fuzzy
-#| msgid ""
-#| "shows only subscriptions matching products that are currently installed; "
-#| "only used with --available"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
 msgstr ""
-"현재 설치된 제품과 일치하는 서브스크립션만 표시합니다; --available과만 함께 "
-"사용합니다"
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다; 현재 설치된 "
+"제품과 일치하는 서브스크립션만 표시합니다; --available 함께만 사용됩니다"
 
 #: src/subscription_manager/cli_command/list.py:281
 msgid ""
@@ -2688,30 +2676,25 @@ msgstr ""
 "만 나열합니다. 요청 목록 및 서버 버전에 따라 달라집니다. (대소문자 구분)."
 
 #: src/subscription_manager/cli_command/list.py:291
-#, fuzzy
-#| msgid ""
-#| "lists only the pool IDs for applicable available or consumed "
-#| "subscriptions; only used with --available and --consumed"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
 msgstr ""
-"적용 가능한 또는 사용된 서브스크립션의 풀 ID만 나열합니다; --available 및 --"
-"consumed와만 사용"
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다; 적용 할 수 있는 "
+"사용가능하거나 사용된 서브스크립션을 위한 풀 ID만 나열합니다; --available 및 "
+"--consumed 함께만 사용됩니다"
 
 #: src/subscription_manager/cli_command/list.py:300
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "show pools that are active on or after the given date; only used with --"
-#| "available (example: {example})"
+#, python-brace-format
 msgid ""
 "deprecated, this option will be removed from the future major releases; show "
 "pools that are active on or after the given date; only used with --available "
 "(example: {example})"
 msgstr ""
-"지정된 날짜 이후에 활성화된 풀을 표시합니다. --available과 함께 만 사용 "
-"(예 : {example})"
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다; 지정된 날짜 "
+"이후에 활성화된 풀을 표시합니다; --available과 함께만 사용됩니다 (예 : "
+"{example})"
 
 #: src/subscription_manager/cli_command/list.py:326
 msgid "Error: --afterdate is only applicable with --available"
@@ -3017,6 +3000,9 @@ msgid ""
 "This command is no-op in simple content access mode. Attempt to redeem a "
 "subscription for a preconfigured system"
 msgstr ""
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다. 이와 같은 명령은 "
+"단순 내용 접근 방식에서 동작하지 않습니다. 사전-구성된 시스템을 위해 "
+"서브스크립션을 사용하려고 시도합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:40
@@ -3108,6 +3094,9 @@ msgid ""
 "option is no-op when simple content access is used. Automatically attach "
 "compatible subscriptions to this system"
 msgstr ""
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다. 이와 같은 옵션은 "
+"단순 내용 접근이 사용 중일 때에 동작하지 않습니다. 해당 시스템에 호환 가능한 "
+"서브스크립션을 자동으로 부착합니다"
 
 #: src/subscription_manager/cli_command/register.py:127
 msgid ""
@@ -3315,6 +3304,9 @@ msgid ""
 "This command is no-op in simple content access mode. It tries to remove all "
 "or specific subscriptions from this system"
 msgstr ""
+"폐기된, 이와 같은 선택은 앞으로의 주요 출시에서 제거됩니다. 이와 같은 명령은 "
+"단순 내용 접근 방식에서 동작하지 않습니다. 해당 시스템에서 모든 또는 지정된 "
+"서브스크립션을 제거하도록 시도합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/remove.py:79
