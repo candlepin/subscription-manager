@@ -5,7 +5,7 @@
 # myamamot <myamamot@redhat.com>, 2018. #zanata
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023.
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
-# Pino Toscano <ptoscano@redhat.com>, 2021, 2023.
+# Pino Toscano <ptoscano@redhat.com>, 2021, 2023, 2025.
 # Transtats <suanand@redhat.com>, 2022, 2023.
 # 김인수 <simmon@nplob.com>, 2024.
 msgid ""
@@ -27,7 +27,7 @@ msgstr ""
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib64/python3.12/argparse.py:299
 msgid "usage: "
@@ -36,12 +36,12 @@ msgstr "使用方法: "
 #: /usr/lib64/python3.12/argparse.py:722
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (デフォルト:%(default)s)"
 
 #: /usr/lib64/python3.12/argparse.py:784
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "引数 %(argument_name)s: %(message)s"
 
 #: /usr/lib64/python3.12/argparse.py:890
 msgid ".__call__() not defined"
@@ -53,18 +53,18 @@ msgid "show program's version number and exit"
 msgstr "プログラムのバージョン番号を表示して終了します"
 
 #: /usr/lib64/python3.12/argparse.py:1223
-#, fuzzy, python-format
+#, python-format
 #| msgid "conflicting option string: %s"
 #| msgid_plural "conflicting option strings: %s"
 msgid "conflicting subparser: %s"
-msgstr "競合するオプションの文字列: %s"
+msgstr "競合するサブパーサー: %s"
 
 #: /usr/lib64/python3.12/argparse.py:1227
-#, fuzzy, python-format
+#, python-format
 #| msgid "conflicting option string: %s"
 #| msgid_plural "conflicting option strings: %s"
 msgid "conflicting subparser alias: %s"
-msgstr "競合するオプションの文字列: %s"
+msgstr "競合するサブパーサーエイリアス: %s"
 
 #: /usr/lib64/python3.12/argparse.py:1262
 #, python-format
@@ -84,7 +84,7 @@ msgstr "'%(filename)s' を開くことができません: %(error)s"
 #: /usr/lib64/python3.12/argparse.py:1541
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr "動作をマージできません: 2 つのグループの名は、%r と命名されています"
+msgstr "動作をマージできません: 2 つのグループは、%r の名前が指定されています"
 
 #: /usr/lib64/python3.12/argparse.py:1583
 msgid "'required' is an invalid argument for positionals"
@@ -95,9 +95,7 @@ msgstr "'required' は、位置引数の無効な引数です"
 msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
-msgstr ""
-"無効なオプション文字列 %(option)r: 文字 %(prefix_chars)r で始まる必要がありま"
-"す"
+msgstr "無効なオプション文字列 %(option)r: 文字 %(prefix_chars)r で始まる必要があります"
 
 #: /usr/lib64/python3.12/argparse.py:1622
 #, python-format
@@ -126,7 +124,6 @@ msgstr "位置引数"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1808
-#, fuzzy
 #| msgid "Options"
 msgid "options"
 msgstr "オプション"
@@ -143,7 +140,7 @@ msgstr "複数の subparser 引数を指定できません"
 
 #: /usr/lib64/python3.12/argparse.py:1860
 msgid "subcommands"
-msgstr ""
+msgstr "サブコマンド"
 
 #: /usr/lib64/python3.12/argparse.py:1906
 #: /usr/lib64/python3.12/argparse.py:2459
@@ -160,8 +157,7 @@ msgstr "引数 %s では許可されていません"
 #: /usr/lib64/python3.12/argparse.py:2030
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
-"あいまいなオプション: %(option)s は %(matches)s に一致する可能性があります"
+msgstr "あいまいなオプション: %(option)s は %(matches)s に一致する可能性があります"
 
 #: /usr/lib64/python3.12/argparse.py:2062
 #: /usr/lib64/python3.12/argparse.py:2094
@@ -300,28 +296,21 @@ msgid ""
 "It is important that you apply an active subscription in order to resume "
 "access to security and other critical updates. If you don't have other "
 "active subscriptions, you can renew the expired subscription.  "
-msgstr ""
-"\n"
+msgstr "\n"
 "*** 警告 ***\n"
 "以下の製品のサブスクリプションの期限が切れています。\n"
 "%s\n"
-"これらの製品を提供するリポジトリーは、利用できなくなります。セキュリティーの"
-"更新と、その他の重要な更新へのアクセスを再開するには、アクティブなサブスクリ"
-"プションを適用する必要があります。他にアクティブなサブスクリプションがない場"
-"合は、有効期限の切れたサブスクリプションを更新してください。  "
+"これらの製品を提供するリポジトリーは、利用できなくなります。セキュリティーの更新と、その他の重要な更新へのアクセスを再開するには、アクティブなサブスクリプションを適用する必要があります。他にアクティブなサブスクリプションがない場合は、有効期限の切れたサブスクリプションを更新してください。  "
 
 #: src/plugins/dnf/subscription_manager.py:57
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
-msgstr ""
-"\n"
-"このシステムは、エンタイトルメントサーバーに登録されていません。subscription-"
-"manager で登録できます。\n"
+msgstr "\n"
+"このシステムは、エンタイトルメントサーバーに登録されていません。subscription-manager で登録できます。\n"
 
 #: src/plugins/dnf/subscription_manager.py:63
-#, fuzzy
 #| msgid ""
 #| "\n"
 #| "This system is not registered with an entitlement server. You can use "
@@ -330,21 +319,16 @@ msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "\"rhc\" or \"subscription-manager\" to register.\n"
-msgstr ""
-"\n"
-"このシステムは、エンタイトルメントサーバーに登録されていません。subscription-"
-"manager で登録できます。\n"
+msgstr "\n"
+"このシステムはエンタイトルメントサーバーに登録されていません。登録するには、\"rhc\" または \"subscription-manager\" を使用できます。\n"
 
 #: src/plugins/dnf/subscription_manager.py:70
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
-msgstr ""
-"\n"
-"このシステムは、エンタイトルメントーバーに登録されていますが、更新は受信して"
-"いません。subscription-manager でサブスクリプションを割り当てることができま"
-"す。\n"
+msgstr "\n"
+"このシステムは、エンタイトルメントーバーに登録されていますが、更新は受信していません。subscription-manager でサブスクリプションを割り当てることができます。\n"
 
 #: src/plugins/dnf/subscription_manager.py:77
 #, python-brace-format
@@ -352,24 +336,20 @@ msgid ""
 "\n"
 "This system has release set to {release_version} and it receives updates "
 "only for this release.\n"
-msgstr ""
+msgstr "\n"
+"このシステムのリリースは {release_version} に設定されており、このリリースの更新のみを受信します。\n"
 
 #: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
-msgstr ""
-"root ではありません。サブスクリプション管理リポジトリーは更新されていません"
+msgstr "root ではありません。サブスクリプション管理リポジトリーは更新されていません"
 
 #: src/plugins/dnf/subscription_manager.py:140
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
-msgid_plural ""
-"subscription-manager plugin disabled %d system repositories with respect of "
-"configuration in /etc/dnf/plugins/subscription-manager.conf"
-msgstr[0] ""
-"subscription-manager プラグインは /etc/dnf/plugins/subscription-manager.conf "
-"の設定を参照して %d システムリポジトリーを無効にします"
+msgid_plural "subscription-manager plugin disabled %d system repositories with respect of configuration in /etc/dnf/plugins/subscription-manager.conf"
+msgstr[0] "subscription-manager プラグインは /etc/dnf/plugins/subscription-manager.conf の設定を参照して %d システムリポジトリーを無効にします"
 
 #: src/plugins/dnf/subscription_manager.py:158
 msgid "Updating Subscription Management repositories."
@@ -381,15 +361,13 @@ msgstr "コンシューマー識別子を読み込めません"
 
 #: src/plugins/dnf/subscription_manager.py:170
 msgid "subscription-manager is operating in container mode."
-msgstr "subscription-managerがコンテナーモードで動作しています。"
+msgstr "subscription-manager はコンテナーモードで動作しています。"
 
 #: src/plugins/dnf/upload_profile.py:37
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
-msgstr ""
-"結合されたプロファイルを Satellite サーバーにアップロードします (インストール"
-"済みの RPM、有効なリポジトリーとモジュールのリスト)"
+msgstr "結合されたプロファイルを Satellite サーバーにアップロードします (インストール済みの RPM、有効なリポジトリーとモジュールのリスト)"
 
 #: src/plugins/dnf/upload_profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
@@ -399,9 +377,7 @@ msgstr "パッケージプロファイルのアップロードを強制します
 #: src/plugins/dnf/upload_profile.py:66
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
-msgstr ""
-"実行された更新はありません。詳細は /var/log/rhsm/rhsm.log を参照してくださ"
-"い。"
+msgstr "実行された更新はありません。詳細は /var/log/rhsm/rhsm.log を参照してください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:33
@@ -493,9 +469,7 @@ msgstr "ベースディレクトリー外でマニフェスト zip の展開が�
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rct/manifest_commands.py:114
 msgid "Unable to trace symbolic link.  Possibly circular linkage."
-msgstr ""
-"シンボリックリンクを追跡できません。リンクが循環参照している可能性がありま"
-"す。"
+msgstr "シンボリックリンクを追跡できません。リンクが循環参照している可能性があります。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rct/manifest_commands.py:138
@@ -712,9 +686,7 @@ msgstr "存在する可能性のあるファイルを上書きする"
 #: src/rct/manifest_commands.py:348
 #, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
-msgstr ""
-"\"{filename}\" というファイルは存在しています。-f を使用して、このファイルを"
-"強制的に上書きします。"
+msgstr "\"{filename}\" のファイルは存在しています。-f を使用して、このファイルを強制的に上書きします。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rct/manifest_commands.py:354
@@ -947,9 +919,7 @@ msgstr "無効なログレベル: {lvl}、この実行では INFO に設定し�
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
-msgstr ""
-"使用: subscription-manager config --logging.default_log_level=<Log Level> を"
-"使用して default_log_level を有効な値に設定してください。"
+msgstr "使用: subscription-manager config --logging.default_log_level=<Log Level> を使用して default_log_level を有効な値に設定してください。"
 
 #: src/rhsm/config.py:254
 #, python-brace-format
@@ -1105,9 +1075,7 @@ msgstr "ジョブを取得中"
 msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
-msgstr ""
-"このシステムは登録されていません。 詳細については「subscription-manager "
-"register --help」をご覧ください。"
+msgstr "このシステムは登録されていません。 詳細については「subscription-manager register --help」をご覧ください。"
 
 #: src/rhsm_debug/debug_commands.py:53
 msgid "Assemble system information as a tar file or directory"
@@ -1140,10 +1108,7 @@ msgstr "'--destination' で指定したディレクトリーが必要です。"
 msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
-msgstr ""
-"アーカイブしないオプションを使用する場合は、データアセンブリーディレクトリー"
-"の '{destination}' と同じファイルシステムに、保存ディレクトリー '{assembly}' "
-"が必要です。"
+msgstr "アーカイブしないオプションを使用する場合は、データアセンブリーディレクトリーの '{destination}' と同じファイルシステムに、保存ディレクトリー '{assembly}' が必要です。"
 
 #: src/rhsm_debug/debug_commands.py:212
 #, python-brace-format
@@ -1164,8 +1129,7 @@ msgstr "システム情報の zip ファイルを作成できません: {error}"
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
-msgstr ""
-"ユーザー %s はより多くの組織に所属していますが、選択された組織はありません"
+msgstr "ユーザー %s はより多くの組織に所属していますが、選択された組織はありません"
 
 #: src/rhsmlib/dbus/objects/register.py:172
 #, python-format
@@ -1177,12 +1141,8 @@ msgstr "ユーザー %s は、いかなる組織のメンバーでもありま�
 msgid ""
 "Warning: The following field was recently set for this system by the "
 "entitlement server administrator: {conflict_msg}"
-msgid_plural ""
-"Warning: The following fields were recently set for this system by the "
-"entitlement server administrator: {conflict_msg}"
-msgstr[0] ""
-"警告: 以下のフィールドは、エンタイトルメントサーバー管理者によってこのシステ"
-"ムに最近設定されました: {conflict_msg}"
+msgid_plural "Warning: The following fields were recently set for this system by the entitlement server administrator: {conflict_msg}"
+msgstr[0] "警告: 以下のフィールドは、エンタイトルメントサーバー管理者によってこのシステムに最近設定されました: {conflict_msg}"
 
 #: src/rhsmlib/dbus/service_wrapper.py:54
 #, python-brace-format
@@ -1194,8 +1154,7 @@ msgstr "エラー: バス '{name}' をロードできません"
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{date})"
-msgstr ""
-"入力した日付は無効です。日付は YYYY-MM-DD の形式にしてください (例: {date})"
+msgstr "入力した日付は無効です。日付は YYYY-MM-DD の形式にしてください (例: {date})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rhsmlib/services/entitlement.py:57
@@ -1264,9 +1223,7 @@ msgstr "サブスクリプション管理サービスでは、状態の詳細に
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
-msgstr ""
-"エラー: 無効な一覧表示タイプが指定されまし"
-"た。\"installed\"、\"consumed\"、\"available\" だけが利用できます"
+msgstr "エラー: 無効な一覧表示タイプが指定されました。\"installed\"、\"consumed\"、\"available\" だけが利用できます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:497
@@ -1281,9 +1238,7 @@ msgstr "エラー: --ondate は、--available との併用でのみ適用可能"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/rhsmlib/services/entitlement.py:504
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
-msgstr ""
-"エラー: --servicelevel は、--available か --consumed との併用でのみ適用できま"
-"す"
+msgstr "エラー: --servicelevel は、--available か --consumed との併用でのみ適用できます"
 
 #: src/rhsmlib/services/entitlement.py:508
 msgid "Error: --match-installed is only applicable with --available"
@@ -1296,9 +1251,7 @@ msgstr "エラー: --no-overlap は、--available との併用でのみ適用で
 #: src/rhsmlib/services/entitlement.py:516
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
-msgstr ""
-"エラー: --pool-only は、--available または --consumed のいずれかまたはその両"
-"方との併用での適用できます"
+msgstr "エラー: --pool-only は、--available または --consumed のいずれかまたはその両方との併用での適用できます"
 
 #: src/rhsmlib/services/entitlement.py:519
 msgid "Error: this system is not registered"
@@ -1306,30 +1259,29 @@ msgstr "エラー: このシステムは登録されていません"
 
 #: src/rhsmlib/services/register.py:73
 msgid "Environment IDs and environment names are mutually exclusive"
-msgstr ""
+msgstr "環境 ID と環境名は同時に使用できません"
 
 #: src/rhsmlib/services/register.py:174
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
-msgstr ""
+msgstr "環境: '{env_names} ' には必要なタイプ ('{environment_type}') がありません '"
 
 #: src/rhsmlib/services/register.py:182
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
-msgstr ""
+msgstr "環境: '{env_names} ' には必要なタイプ ('{environment_type}') がありません"
 
 #: src/rhsmlib/services/register.py:202
 msgid ""
 "Registration is only possible when the organization is in Simple Content "
 "Access (SCA) mode."
-msgstr ""
+msgstr "登録は、組織が Simple Content Access (SCA) モードになっている場合にのみ可能です。"
 
 #: src/rhsmlib/services/register.py:243
 msgid "This system is already registered. Add force to options to override."
-msgstr ""
-"このシステムは登録済みです。上書きするには、オプションに force を追加します。"
+msgstr "このシステムは登録済みです。上書きするには、オプションに force を追加します。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/register.py:246
@@ -1343,10 +1295,7 @@ msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
 "use the clean command and try again without --force."
-msgstr ""
-"エラー: consumerid で登録を回復している最中は、登録を実施できません。再登録を"
-"行う場合は、--consumerid の代わりに --force を使用するか、clean コマンドに --"
-"force を 使わないでやり直してみてください。"
+msgstr "エラー: consumerid で登録を回復している最中は、登録を実施できません。再登録を行う場合は、--consumerid の代わりに --force を使用するか、clean コマンドに --force を 使わないでやり直してみてください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/register.py:260
@@ -1358,8 +1307,7 @@ msgstr "エラー: アクティベーションキーを指定する必要があ�
 #: src/rhsmlib/services/register.py:262
 #: src/subscription_manager/cli_command/register.py:123
 msgid "Error: Activation keys do not require user credentials."
-msgstr ""
-"エラー: アクティベーションキーには、ユーザーの認証情報は必要ありません。"
+msgstr "エラー: アクティベーションキーには、ユーザーの認証情報は必要ありません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rhsmlib/services/register.py:265
@@ -1431,9 +1379,7 @@ msgstr "アカウント情報を入力してください:"
 msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
-msgstr ""
-"ログインまたはパスワードを忘れてしまった場合は、システム管理者に連絡してくだ"
-"さい"
+msgstr "ログインまたはパスワードを忘れてしまった場合は、システム管理者に連絡してください"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/__init__.py:87
@@ -1446,18 +1392,14 @@ msgstr "Red Hat サブスクリプション管理"
 msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
-msgstr ""
-"カスタマーポータル、または別のサブスクリプション管理サービスに、このシステム"
-"を登録します"
+msgstr "カスタマーポータル、または別のサブスクリプション管理サービスに、このシステムを登録します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:10
 msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
-msgstr ""
-"カスタマーポータル、または別のサブスクリプション管理サービスから、このシステ"
-"ムの登録を取り消す"
+msgstr "カスタマーポータル、または別のサブスクリプション管理サービスから、このシステムの登録を取り消す"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:12
@@ -1474,18 +1416,14 @@ msgstr "このシステムは、RHN Classic で Red Hat に登録されていま
 msgid ""
 "Your system is being registered again using Red Hat Subscription Management. "
 "Red Hat recommends that customers only register once."
-msgstr ""
-"Red Hat サブスクリプション管理で、システムの登録が再度行なわれようとしていま"
-"す。Red Hat は、登録は 1 度のみ行うことを推奨します。"
+msgstr "Red Hat サブスクリプション管理で、システムの登録が再度行なわれようとしています。Red Hat は、登録は 1 度のみ行うことを推奨します。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/branding/redhat_branding.py:24
 msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
-msgstr ""
-"サービスの登録を解除をする方法については、 次のナレッジベースの記載をご覧くだ"
-"さい: https://access.redhat.com/kb/docs/DOC-45563"
+msgstr "サービスの登録を解除をする方法については、 次のナレッジベースの記載をご覧ください: https://access.redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author nnakakit
 #: src/subscription_manager/branding/redhat_branding.py:28
@@ -1502,25 +1440,19 @@ msgstr "お持ちの Red Hat アカウント情報を入力してください:"
 msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
-msgstr ""
-"このシステムの登録には、RHN Classic と Red Hat サブスクリプション管理の両方が"
-"使用されています。"
+msgstr "このシステムの登録には、RHN Classic と Red Hat サブスクリプション管理の両方が使用されています。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/branding/redhat_branding.py:34
 msgid "Red Hat recommends that customers only register with one service."
-msgstr ""
-"Red Hat では、 登録に使用するサービスは一つにしていただくよう、お客様にお願い"
-"しています。"
+msgstr "Red Hat では、 登録に使用するサービスは一つにしていただくよう、お客様にお願いしています。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:37
 msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
-msgstr ""
-"RHN の登録と技術に関する詳細は、ナレッジベースの記事 https://access.redhat."
-"com/kb/docs/DOC-45563 を参照してください"
+msgstr "RHN の登録と技術に関する詳細は、ナレッジベースの記事 https://access.redhat.com/kb/docs/DOC-45563 を参照してください"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:41
@@ -1531,18 +1463,14 @@ msgstr "RHN Classic と Red Hat サブスクリプション管理"
 msgid ""
 "Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password"
-msgstr ""
-"ヒント: ログインまたはパスワードをお忘れの場合は、https://redhat.com/"
-"forgot_password で確認してください"
+msgstr "ヒント: ログインまたはパスワードをお忘れの場合は、https://redhat.com/forgot_password で確認してください"
 
 #: src/subscription_manager/cache.py:178
 #, python-brace-format
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
-msgstr ""
-"consumer_uuid={consumer_uuid} は有効な consumer_uuid ではありません。"
-"{class_name} キャッシュとサーバーの同期は試行していません。"
+msgstr "consumer_uuid={consumer_uuid} は有効な consumer_uuid ではありません。{class_name} キャッシュとサーバーの同期は試行していません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cert_sorter.py:292
@@ -1587,9 +1515,7 @@ msgid ""
 "Warning: A {attr} of \"{download_value}\" was recently set for this system "
 "by the entitlement server administrator.\n"
 "{advice}"
-msgstr ""
-"警告: \"{download_value}\" の {attr} は最近、エンタイトルメントサーバー管理者"
-"によってこのシステムに設定されました。\n"
+msgstr "警告: \"{download_value}\" の {attr} は最近、エンタイトルメントサーバー管理者によってこのシステムに設定されました。\n"
 "{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
@@ -1645,21 +1571,16 @@ msgstr "--add は --remove と併用できません"
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
-msgstr ""
-"エラー: リスト {attr} に、--username と --password を指定または登録する必要が"
-"あります"
+msgstr "エラー: リスト {attr} に、--username と --password を指定または登録する必要があります"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:167
-#, fuzzy
 #| msgid ""
 #| "Error: --username, --password, --token and --org can be used only on "
 #| "unregistered systems"
 msgid ""
 "Error: --username, --password, and --org can be used only on unregistered "
 "systems"
-msgstr ""
-"エラー: --username、--password、--token、--org は、未登録のシステムでのみ使用"
-"できます"
+msgstr "エラー: --username、--password、および --org は、未登録のシステムでのみ使用できます"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:239
@@ -1671,8 +1592,7 @@ msgstr "\"{value}\""
 #, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
-msgid_plural ""
-"Warning: Provided values {vals} are not included in the list of valid values"
+msgid_plural "Warning: Provided values {vals} are not included in the list of valid values"
 msgstr[0] "警告: 指定された値 {vals} は有効な値のリストに含まれていません"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -1682,9 +1602,7 @@ msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
-msgstr ""
-"警告: この組織には、システム目的「{attr}」を提供するサブスクリプションがあり"
-"ません。この設定は、自動割り当てサブスクリプションには影響しません。"
+msgstr "警告: この組織には、システム目的「{attr}」を提供するサブスクリプションがありません。この設定は、自動割り当てサブスクリプションには影響しません。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:266
 #, python-brace-format
@@ -1723,9 +1641,7 @@ msgstr "利用可能な {syspurpose_attr}"
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr ""
-"この組織には、利用可能なサブスクリプションからシステム目的の"
-"「{syspurpose_attr}」に使用できる値がありません。"
+msgstr "この組織には、利用可能なサブスクリプションからシステム目的の「{syspurpose_attr}」に使用できる値がありません。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:397
 #, python-brace-format
@@ -1746,17 +1662,13 @@ msgstr "%(prog)s [オプション]"
 msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
-msgstr ""
-"注: 現在せっていされているエンタイトルメントサーバーはシステムの目的 {attr} "
-"をサポートしません。"
+msgstr "注: 現在設定されているエンタイトルメントサーバーはシステムの目的 {attr} をサポートしません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/clean.py:25
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr ""
-"サーバーには影響を与えずに、ローカルのシステムとサブスクリプションデータをす"
-"べて削除します"
+msgstr "サーバーには影響を与えずに、ローカルのシステムとサブスクリプションデータをすべて削除します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/clean.py:31
@@ -1772,8 +1684,7 @@ msgstr "https://hostname:port/prefix 形式のサーバー URL"
 msgid ""
 "do not check the entitlement server SSL certificate against available "
 "certificate authorities"
-msgstr ""
-"エンタイトルメントサーバーの SSL 証明書は、利用可能な認証局と照合されません"
+msgstr "エンタイトルメントサーバーの SSL 証明書は、利用可能な認証局と照合されません"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/cli.py:150
@@ -1801,17 +1712,13 @@ msgstr "進捗のメッセージを表示しない"
 #: src/subscription_manager/cli_command/cli.py:189
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr ""
-"コンシューマー識別子が存在しないか、破損しています。register --help を試して"
-"ください"
+msgstr "コンシューマー識別子が存在しないか、破損しています。register --help を試してください"
 
 #: src/subscription_manager/cli_command/cli.py:247
 msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
-msgstr ""
-"subscription-manager がコンテナーモードで動作しています。ホストシステムを使用"
-"してサブスクリプションを管理してください。\n"
+msgstr "subscription-manager がコンテナーモードで動作しています。ホストシステムを使用してサブスクリプションを管理してください。\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/cli.py:262
@@ -1836,8 +1743,7 @@ msgstr "{host}:{port}{handler} にあるサーバーに接続できません"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/cli_command/cli.py:379
 msgid "Error: CA certificate for subscription service has not been installed."
-msgstr ""
-"エラー: サブスクリプションサービス用の CA 証明書はインスト─ルされていません。"
+msgstr "エラー: サブスクリプションサービス用の CA 証明書はインスト─ルされていません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/cli.py:401
@@ -1849,9 +1755,7 @@ msgstr "システムの証明書が破損しています。 再登録を行っ�
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
-msgstr ""
-"コンシューマープロファイル \"{uuid}\" は、サーバーから削除されています。ロー"
-"カルのプロファイルは、clean または unregister コマンドを使って削除します。"
+msgstr "コンシューマープロファイル \"{uuid}\" は、サーバーから削除されています。ローカルのプロファイルは、clean または unregister コマンドを使って削除します。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/config.py:28
@@ -1879,18 +1783,14 @@ msgstr "セクション: {s}、名前: {name}"
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
-msgstr ""
-"エラー: 設定を追加または削除する場合に、--list は他のオプションと併用すること"
-"はできません。"
+msgstr "エラー: 設定を追加または削除する場合に、--list は他のオプションと併用することはできません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/cli_command/config.py:93
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
-msgstr ""
-"エラー: 削除する設定エントリーは、[section.name] の形式で指定する必要がありま"
-"す"
+msgstr "エラー: 削除する設定エントリーは、[section.name] の形式で指定する必要があります"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/config.py:108
@@ -2050,9 +1950,7 @@ msgstr "新規証明書の生成を要求します"
 msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
-msgstr ""
-"強制的に証明書を再生成します (ユーザー名とパスワードが必要)。--regenerate と"
-"併用する場合のみ使用できます"
+msgstr "強制的に証明書を再生成します (ユーザー名とパスワードが必要)。--regenerate と併用する場合のみ使用できます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/identity.py:61
@@ -2148,7 +2046,6 @@ msgid "list shows those products which are installed (default)"
 msgstr "一覧は、インスト─ル済みの製品を表示します (デフォルト)"
 
 #: src/subscription_manager/cli_command/list.py:51
-#, fuzzy
 #| msgid ""
 #| "lists only subscriptions or products containing the specified expression "
 #| "in the subscription or product information, varying with the list "
@@ -2156,10 +2053,7 @@ msgstr "一覧は、インスト─ル済みの製品を表示します (デフ�
 msgid ""
 "lists only products containing the specified expression in the product "
 "information."
-msgstr ""
-"サブスクリプションまたは製品情報内に、指定した式が含まれるサブスクリプション"
-"または製品のみを表示します。これは要求される一覧およびサーバーのバージョンに"
-"よって異なります (大文字と小文字は区別しません)。"
+msgstr "製品情報に指定された表現を含む製品のみを表示します。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:64
@@ -2215,16 +2109,13 @@ msgstr "変更するリポジトリー (複数回の指定が可能)"
 msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
-msgstr ""
-"削除する上書きの名前 (複数回の指定が可能)。--repo オプションと併用します。"
+msgstr "削除する上書きの名前 (複数回の指定が可能)。--repo オプションと併用します。"
 
 #: src/subscription_manager/cli_command/override.py:56
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
-msgstr ""
-"上書きするオプションの名前と値。コロンで区切ります (複数回の指定が可能)。--"
-"repo オプションと併用します。"
+msgstr "上書きするオプションの名前と値。コロンで区切ります (複数回の指定が可能)。--repo オプションと併用します。"
 
 #: src/subscription_manager/cli_command/override.py:63
 msgid ""
@@ -2249,8 +2140,7 @@ msgstr "エラー: 変更するリポジトリーを指定してください"
 
 #: src/subscription_manager/cli_command/override.py:94
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
-msgstr ""
-"エラー: --add または --remove は、--remove-all や --list とは併用できません"
+msgstr "エラー: --add または --remove は、--remove-all や --list とは併用できません"
 
 #: src/subscription_manager/cli_command/override.py:97
 msgid "Error: You may not use --list with --remove-all"
@@ -2258,8 +2148,7 @@ msgstr "エラー: --list は、--remove-all とは併用できません"
 
 #: src/subscription_manager/cli_command/override.py:102
 msgid "Error: The --repo option must be used with --list or --add or --remove."
-msgstr ""
-"エラー: --repo オプションには、--list、--add、--remove のいずれかが必要です。"
+msgstr "エラー: --repo オプションには、--list、--add、--remove のいずれかが必要です。"
 
 #: src/subscription_manager/cli_command/override.py:107
 msgid "Error: You must specify an override name with --remove."
@@ -2267,8 +2156,7 @@ msgstr "エラー: --remove で、上書きする名前を指定する必要が�
 
 #: src/subscription_manager/cli_command/override.py:126
 msgid "Error: The 'repo-override' command is not supported by the server."
-msgstr ""
-"エラー: 'repo-override' コマンドは、サーバーではサポートされていません。"
+msgstr "エラー: 'repo-override' コマンドは、サーバーではサポートされていません。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/override.py:138
@@ -2285,8 +2173,7 @@ msgstr "このシステムに適用される、コンテンツの上書きはあ
 msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
-msgstr ""
-"現在、リポジトリー '{repo}' は存在しませんが、上書きが追加されています。"
+msgstr "現在、リポジトリー '{repo}' は存在しませんが、上書きが追加されています。"
 
 #: src/subscription_manager/cli_command/override.py:198
 #, python-brace-format
@@ -2407,10 +2294,7 @@ msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
-msgstr ""
-"宛先組織に含まれる特定の環境 (単一の値) または複数の環境 (コンマ区切りリス"
-"ト) を指定して登録します。複数の環境を使用する機能は、エンタイトルメントサー"
-"バーで制御します"
+msgstr "宛先組織に含まれる特定の環境 (単一の値) または複数の環境 (コンマ区切りリスト) を指定して登録します。複数の環境を使用する機能は、エンタイトルメントサーバーで制御します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:103
@@ -2432,8 +2316,7 @@ msgstr "登録に使用するアクティベーションキー (複数回指定�
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:119
 msgid "This system is already registered. Use --force to override"
-msgstr ""
-"このシステムはすでに登録されています。上書きするには --force を使用します"
+msgstr "このシステムはすでに登録されています。上書きするには --force を使用します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:129
@@ -2443,14 +2326,11 @@ msgstr "エラー: アクティベーションキーでは、環境を指定で�
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:134
 msgid "Error: Must provide --org with activation keys."
-msgstr ""
-"エラー: --org を指定する場合は、アクティベーションキーを指定する必要がありま"
-"す。"
+msgstr "エラー: --org を指定する場合は、アクティベーションキーを指定する必要があります。"
 
 #: src/subscription_manager/cli_command/register.py:148
 msgid "Error: The --type option has been deprecated and may not be used."
-msgstr ""
-"エラー: --type オプションは非推奨となっており、使用できない場合があります。"
+msgstr "エラー: --type オプションは非推奨となっており、使用できない場合があります。"
 
 #: src/subscription_manager/cli_command/register.py:151
 #: src/subscription_manager/cli_command/register.py:418
@@ -2570,9 +2450,7 @@ msgstr "リリースの詳細設定は解除されました"
 #, python-brace-format
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
-msgstr ""
-"どのリリースも '{release}' に一致しません。全一覧は、'release --list' で確認"
-"します。"
+msgstr "どのリリースも '{release}' に一致しません。全一覧は、'release --list' で確認します。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/cli_command/release.py:113
@@ -2583,8 +2461,7 @@ msgstr "リリースは次のように設定されています: {release}"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/cli_command/release.py:122
 msgid "No release versions available, please check subscriptions."
-msgstr ""
-"リリースバージョンがありません。サブスクリプションをチェックしてください。"
+msgstr "リリースバージョンがありません。サブスクリプションをチェックしてください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/release.py:125
@@ -2632,17 +2509,13 @@ msgstr "このシステムで既知の無効なリポジトリーを一覧表示
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
-msgstr ""
-"有効にするリポジトリーです (複数回の指定が可能)。 ワイルドカード (* と ?) が"
-"使用できます。"
+msgstr "有効にするリポジトリーです (複数回の指定が可能)。 ワイルドカード (* と ?) が使用できます。"
 
 #: src/subscription_manager/cli_command/repos.py:102
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
-msgstr ""
-"無効にするリポジトリーです (複数回の指定が可能)。 ワイルドカード (* と ?) が"
-"使用できます。"
+msgstr "無効にするリポジトリーです (複数回の指定が可能)。 ワイルドカード (* と ?) が使用できます。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/repos.py:171
@@ -2658,18 +2531,14 @@ msgstr "指定された条件に一致する、利用可能なリポジトリー
 #: src/subscription_manager/cli_command/repos.py:189
 #: src/subscription_manager/cli_command/repos.py:207
 msgid "This system has no repositories available through subscriptions."
-msgstr ""
-"このシステムには、サブスクリプション経由で利用できるリポジトリーがありませ"
-"ん。"
+msgstr "このシステムには、サブスクリプション経由で利用できるリポジトリーがありません。"
 
 #: src/subscription_manager/cli_command/repos.py:216
 #, python-brace-format
 msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
-msgstr ""
-"エラー: '{repoid}' は有効なリポジトリー ID と一致しません。\"subscription-"
-"manager repos --list\" を使用すると有効なリポジトリーを表示できます。"
+msgstr "エラー: '{repoid}' は有効なリポジトリー ID と一致しません。\"subscription-manager repos --list\" を使用すると有効なリポジトリーを表示できます。"
 
 #: src/subscription_manager/cli_command/repos.py:271
 #, python-brace-format
@@ -2691,30 +2560,23 @@ msgstr "システム目的のサービスレベルの設定の表示または変
 
 #: src/subscription_manager/cli_command/service_level.py:70
 msgid "Error: --org is only supported with the --list or --set option"
-msgstr ""
-"エラー: --org は、 --list または --set オプションとの併用でのみサポートされま"
-"す"
+msgstr "エラー: --org は、 --list または --set オプションとの併用でのみサポートされます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/service_level.py:78
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
-msgstr ""
-"エラー: サービスレベルを表示するには、 --username と --password を指定する"
-"か、登録を行う必要があります"
+msgstr "エラー: サービスレベルを表示するには、 --username と --password を指定するか、登録を行う必要があります"
 
 #: src/subscription_manager/cli_command/service_level.py:98
-#, fuzzy
 #| msgid ""
 #| "Error: --username, --password, --token, --org and --serverurl can be used "
 #| "only on unregistered systems"
 msgid ""
 "Error: --username, --password, --org and --serverurl can be used only on "
 "unregistered systems"
-msgstr ""
-"エラー: --username、--password、--token、--org および --serverurl は、未登録"
-"のシステムでのみ使用できます"
+msgstr "エラー: --username、--password、--org、および --serverurl は、未登録のシステムでのみ使用できます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:123
@@ -2757,16 +2619,14 @@ msgstr "利用可能なサービスレベル"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/status.py:40
 msgid "Show status information for this system's subscriptions and products"
-msgstr ""
-"このシステムのサブスクリプションと製品に関するステータス情報を表示します"
+msgstr "このシステムのサブスクリプションと製品に関するステータス情報を表示します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/status.py:45
 #, python-brace-format
 msgid ""
 "future date to check status on, defaults to today's date (example: {example})"
-msgstr ""
-"ステータス確認を行う未来の日付。デフォルトは本日の日付です (例: {example})"
+msgstr "ステータス確認を行う未来の日付。デフォルトは本日の日付です (例: {example})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/status.py:70
@@ -2777,18 +2637,14 @@ msgstr "システムのステータス詳細"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
-msgstr ""
-"コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。こ"
-"のホストは、サブスクリプションのステータスに関係なく、コンテンツにアクセスで"
-"きます。\n"
+msgstr "コンテンツアクセスモードは、シンプルコンテンツアクセスに設定されています。このホストは、サブスクリプションのステータスに関係なく、コンテンツにアクセスできます。\n"
 
 #: src/subscription_manager/cli_command/status.py:111
 #, python-brace-format
 msgid ""
 "Overall Status: {status}\n"
 "{message}"
-msgstr ""
-"全体的な状態: {status}\n"
+msgstr "全体的な状態: {status}\n"
 "{message}"
 
 #: src/subscription_manager/cli_command/status.py:145
@@ -2920,9 +2776,7 @@ msgstr "削除済み (不正):"
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
-msgstr ""
-"ネットワークエラーでサーバーに接続できません。詳細は /var/log/rhsm/rhsm.log "
-"をご覧ください。"
+msgstr "ネットワークエラーでサーバーに接続できません。詳細は /var/log/rhsm/rhsm.log をご覧ください。"
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
@@ -2939,8 +2793,7 @@ msgstr "接続エラー: {message} (error code {code})"
 msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
-msgstr ""
-"不明なサーバー応答 (HTTP エラーコード {code}: {title}):\n"
+msgstr "不明なサーバー応答 (HTTP エラーコード {code}: {title}):\n"
 "{content}"
 
 #: src/subscription_manager/exceptions.py:37
@@ -2952,9 +2805,7 @@ msgstr "不明なサーバー応答 (HTTP エラーコード {code}: {title})"
 #, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
-msgstr ""
-"プロキシーエラー: {hostname} に接続できません: {message} (エラーコード "
-"{code})"
+msgstr "プロキシーエラー: {hostname} に接続できません: {message} (エラーコード {code})"
 
 #: src/subscription_manager/exceptions.py:41
 #, python-brace-format
@@ -2983,9 +2834,7 @@ msgstr "禁止: 要求に対して無効な認証情報です。"
 msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
-msgstr ""
-"リモートサーバーエラーです。接続詳細を確認するか、/var/log/rhsm/rhsm.log をご"
-"覧ください。"
+msgstr "リモートサーバーエラーです。接続詳細を確認するか、/var/log/rhsm/rhsm.log をご覧ください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/exceptions.py:50
@@ -3013,9 +2862,7 @@ msgstr "サーバーの URL を空欄にすることはできません"
 #: src/subscription_manager/exceptions.py:54
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr ""
-"サーバー URL は単にスキーマです。ホスト名か、ポートまたはパスの一方、もしくは"
-"その両方を含めます"
+msgstr "サーバー URL は単にスキーマです。ホスト名か、ポートまたはパスの一方、もしくはその両方を含めます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/exceptions.py:55
@@ -3030,9 +2877,7 @@ msgstr "サーバーの URL ポートは数値にしてください"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/exceptions.py:57
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr ""
-"サーバーの URL に無効なスキームがあります。http:// と https:// がサポートされ"
-"ます"
+msgstr "サーバーの URL に無効なスキームがあります。http:// と https:// がサポートされます"
 
 #: src/subscription_manager/exceptions.py:58
 msgid "The server rate limit has been exceeded, please try again later."
@@ -3053,8 +2898,7 @@ msgstr "不適切な証明書: {file}: [{library}] {message}"
 msgid ""
 "Bad certificate: [{library}] {message}\n"
 "{data}"
-msgstr ""
-"不適切な証明書: [{library}] {message}\n"
+msgstr "不適切な証明書: [{library}] {message}\n"
 "{data}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -3081,12 +2925,8 @@ msgstr "{message} (HTTP エラーコード {code}: {title})"
 msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} second)"
-msgid_plural ""
-"The server rate limit has been exceeded, please try again later. (Expires in "
-"{time} seconds)"
-msgstr[0] ""
-"サーバーレートの制限を超えました。後で再試行してください。({time} 秒後に期限"
-"が切れます)"
+msgid_plural "The server rate limit has been exceeded, please try again later. (Expires in {time} seconds)"
+msgstr[0] "サーバーレートの制限を超えました。後で再試行してください。({time} 秒後に期限が切れます)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:50
@@ -3131,9 +2971,7 @@ msgstr "スタック "
 msgid ""
 "Error: More than one release product certificate installed. Certificate "
 "paths: %s"
-msgstr ""
-"エラー: リリースの製品証明書が 2 つ以上インストールされています。証明書パス: "
-"%s"
+msgstr "エラー: リリースの製品証明書が 2 つ以上インストールされています。証明書パス: %s"
 
 #: src/subscription_manager/repolib.py:94
 #, python-format
@@ -3141,10 +2979,7 @@ msgid ""
 "The yum/dnf plugins: %s were automatically enabled for the benefit of Red "
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
-msgstr ""
-"yum/dnf プラグイン: Red Hat サブスクリプション管理に対して %s が自動的に有効"
-"になりました。自動的に有効化しない場合は、\"subscription-manager config --"
-"rhsm.auto_enable_yum_plugins=0\" で無効にします。"
+msgstr "yum/dnf プラグイン: Red Hat サブスクリプション管理に対して %s が自動的に有効になりました。自動的に有効化しない場合は、\"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" で無効にします。"
 
 #: src/subscription_manager/repolib.py:678
 msgid "Repo updates"
@@ -3180,27 +3015,23 @@ msgid "Error uploading package profile: %s\n"
 msgstr "パッケージプロファイルのアップロード中にエラー発生: %s\n"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:328
-#, fuzzy
 #| msgid "This system is already registered. Add force to options to override."
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
-msgstr ""
-"このシステムは登録済みです。上書きするには、オプションに force を追加します。"
+msgstr "このシステムはすでに登録されているため、自動登録の要求は無視されます。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:331
-#, fuzzy
 #| msgid "Registering system"
 msgid "Registering the system"
 msgstr "システムを登録中"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:342
-#, fuzzy
 #| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
-msgstr "エンタイトルメント証明書とリポジトリーを更新中"
+msgstr "エンタイトルメント証明書とリポジトリーを更新しています。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:404
@@ -3217,9 +3048,7 @@ msgstr "および"
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
-msgstr ""
-"警告: 指定された値 \"{val}\" は、属性 {attr} の有効な値のリストに含まれていま"
-"せん:"
+msgstr "警告: 指定された値 \"{val}\" は、属性 {attr} の有効な値のリストに含まれていません:"
 
 #: src/syspurpose/files.py:472
 #, python-brace-format
@@ -5640,7 +5469,6 @@ msgstr "警告: 指定された値 \"{key}\" は有効なキーのリストに�
 #~ msgstr "本当に {subscription_text} を削除してもよろしいですか?"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#, fuzzy
 #~ msgid "Stack of {group_name} and 1 other"
 #~ msgid_plural "Stack of {group_name} and {unique} others"
 #~ msgstr[0] "多数の {group_name} とその他に１つ"
@@ -6540,10 +6368,3 @@ msgstr "警告: 指定された値 \"{key}\" は有効なキーのリストに�
 #~ msgstr ""
 #~ "製品 ID ごとのチャンネル数を 1 に減らしてから、移行を実行し直してくださ"
 #~ "い。"
-
-#~ msgid ""
-#~ "To remove a channel, use 'rhn-channel --remove --"
-#~ "channel=<conflicting_channel>'."
-#~ msgstr ""
-#~ "チャンネルを削除するには、'rhn-channel --remove --"
-#~ "channel=<conflicting_channel>' を使用します。"
