@@ -12,13 +12,13 @@
 # Transtats <suanand@redhat.com>, 2022, 2023.
 # blutch112 <vincent.lefebvre59@gmail.com>, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2023.
-# Léane GRASSER <leane.grasser@proton.me>, 2024.
+# Léane GRASSER <leane.grasser@proton.me>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-07 18:12+0100\n"
-"PO-Revision-Date: 2024-12-13 12:38+0000\n"
+"PO-Revision-Date: 2025-01-10 10:38+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
@@ -27,12 +27,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s :"
 
 #: /usr/lib64/python3.12/argparse.py:299
 msgid "usage: "
@@ -41,12 +41,12 @@ msgstr "Utilisation : "
 #: /usr/lib64/python3.12/argparse.py:722
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (par défaut : %(default)s)"
 
 #: /usr/lib64/python3.12/argparse.py:784
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "argument %(argument_name)s : %(message)s"
 
 #: /usr/lib64/python3.12/argparse.py:890
 msgid ".__call__() not defined"
@@ -58,18 +58,14 @@ msgid "show program's version number and exit"
 msgstr "afficher le numéro de version du programme et quitter"
 
 #: /usr/lib64/python3.12/argparse.py:1223
-#, fuzzy, python-format
-#| msgid "conflicting option string: %s"
-#| msgid_plural "conflicting option strings: %s"
+#, python-format
 msgid "conflicting subparser: %s"
-msgstr "chaîne d'option conflictuelle : %s"
+msgstr "sous-analyseur en conflit : %s"
 
 #: /usr/lib64/python3.12/argparse.py:1227
-#, fuzzy, python-format
-#| msgid "conflicting option string: %s"
-#| msgid_plural "conflicting option strings: %s"
+#, python-format
 msgid "conflicting subparser alias: %s"
-msgstr "chaîne d'option conflictuelle : %s"
+msgstr "alias de sous-analyseur en conflit : %s"
 
 #: /usr/lib64/python3.12/argparse.py:1262
 #, python-format
@@ -133,10 +129,8 @@ msgstr "Arguments positionnels"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1808
-#, fuzzy
-#| msgid "Options"
 msgid "options"
-msgstr "Options"
+msgstr "options"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1823
@@ -150,7 +144,7 @@ msgstr "impossible d'avoir plusieurs arguments de sous-analyseur"
 
 #: /usr/lib64/python3.12/argparse.py:1860
 msgid "subcommands"
-msgstr ""
+msgstr "sous-commandes"
 
 #: /usr/lib64/python3.12/argparse.py:1906
 #: /usr/lib64/python3.12/argparse.py:2459
@@ -331,19 +325,14 @@ msgstr ""
 "subscription-manager pour l'enregistrer.\n"
 
 #: src/plugins/dnf/subscription_manager.py:63
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is not registered with an entitlement server. You can use "
-#| "subscription-manager to register.\n"
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "\"rhc\" or \"subscription-manager\" to register.\n"
 msgstr ""
 "\n"
-"Le système n'est pas enregistré auprès un serveur de droits. Utilisez "
-"subscription-manager pour l'enregistrer.\n"
+"Le système n'est pas enregistré auprès un serveur de droits. Utilisez \"rhc\""
+" ou \"subscription-manager\" pour l'enregistrer.\n"
 
 #: src/plugins/dnf/subscription_manager.py:70
 msgid ""
@@ -363,6 +352,9 @@ msgid ""
 "This system has release set to {release_version} and it receives updates "
 "only for this release.\n"
 msgstr ""
+"\n"
+"Ce système est en version {release_version} et reçoit des mises à jour "
+"uniquement pour cette version.\n"
 
 #: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
@@ -1338,24 +1330,31 @@ msgstr "Erreur : ce système n'est pas enregistré"
 #: src/rhsmlib/services/register.py:73
 msgid "Environment IDs and environment names are mutually exclusive"
 msgstr ""
+"Les ID d'environnement et les noms d'environnement ne peuvent pas être "
+"utilisés en même temps"
 
 #: src/rhsmlib/services/register.py:174
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
 msgstr ""
+"Environnement : '{env_names}' n'est pas du type requis '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:182
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
 msgstr ""
+"Environnements : '{env_names}' ne sont pas du type requis "
+"'{environment_type}'"
 
 #: src/rhsmlib/services/register.py:202
 msgid ""
 "Registration is only possible when the organization is in Simple Content "
 "Access (SCA) mode."
 msgstr ""
+"L'enregistrement est possible uniquement lorsque l'organisation est en mode "
+"Simple Content Access (SCA)."
 
 #: src/rhsmlib/services/register.py:243
 msgid "This system is already registered. Add force to options to override."
@@ -1691,16 +1690,12 @@ msgstr ""
 "password pour lister {attr}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:167
-#, fuzzy
-#| msgid ""
-#| "Error: --username, --password, --token and --org can be used only on "
-#| "unregistered systems"
 msgid ""
 "Error: --username, --password, and --org can be used only on unregistered "
 "systems"
 msgstr ""
-"Erreur : --username, --password, --token et --org ne peuvent être utilisés "
-"que sur des systèmes non enregistrés"
+"Erreur : --username, --password et --org ne peuvent être utilisés que sur "
+"des systèmes non enregistrés"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:239
@@ -2220,19 +2215,12 @@ msgid "list shows those products which are installed (default)"
 msgstr "la liste affiche les produits installés (par défaut)"
 
 #: src/subscription_manager/cli_command/list.py:51
-#, fuzzy
-#| msgid ""
-#| "lists only subscriptions or products containing the specified expression "
-#| "in the subscription or product information, varying with the list "
-#| "requested and the server version (case-insensitive)."
 msgid ""
 "lists only products containing the specified expression in the product "
 "information."
 msgstr ""
-"répertorie uniquement les abonnements ou produits contenant l'expression "
-"spécifiée dans les informations de l'abonnement ou du produit, et variant en "
-"fonction de la liste requise et de la version du serveur (insensible à la "
-"casse)."
+"répertorie uniquement les produits contenant l'expression spécifiée dans les "
+"informations du produit."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:64
@@ -2801,16 +2789,12 @@ msgstr ""
 "password pour lister les niveaux de service"
 
 #: src/subscription_manager/cli_command/service_level.py:98
-#, fuzzy
-#| msgid ""
-#| "Error: --username, --password, --token, --org and --serverurl can be used "
-#| "only on unregistered systems"
 msgid ""
 "Error: --username, --password, --org and --serverurl can be used only on "
 "unregistered systems"
 msgstr ""
-"Erreur : --username, --password, --token, --org et --serverurl ne peuvent "
-"être utilisés que sur des systèmes non enregistrés"
+"Erreur : --username, --password, --org et --serverurl ne peuvent être "
+"utilisés que sur des systèmes non enregistrés"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:123
@@ -3291,27 +3275,21 @@ msgid "Error uploading package profile: %s\n"
 msgstr "Erreur de téléchargement du profil du paquet : %s\n"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:328
-#, fuzzy
-#| msgid "This system is already registered. Add force to options to override."
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
 msgstr ""
-"Ce système est déjà enregistré. Ajoutez force aux options pour passer outre."
+"Ce système est déjà enregistré, requête d'enregistrement automatique ignorée."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:331
-#, fuzzy
-#| msgid "Registering system"
 msgid "Registering the system"
-msgstr "Système d'enregistrement"
+msgstr "Enregistrement du système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:342
-#, fuzzy
-#| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
-msgstr "Mise à jour des certificats de droits d'accès et des référentiels"
+msgstr "Mise à jour des certificats de droits d'accès et des référentiels."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:404
