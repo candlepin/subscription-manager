@@ -1,15 +1,15 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
-# Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023.
+# Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023, 2025.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-07 18:12+0100\n"
-"PO-Revision-Date: 2024-12-23 23:38+0000\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"PO-Revision-Date: 2025-01-10 10:38+0000\n"
+"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
 "Language: it\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib64/python3.12/argparse.py:299
 msgid "usage: "
@@ -31,12 +31,12 @@ msgstr "uso: "
 #: /usr/lib64/python3.12/argparse.py:722
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (predefinito: %(default)s)"
 
 #: /usr/lib64/python3.12/argparse.py:784
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "argomento %(argument_name)s: %(message)s"
 
 #: /usr/lib64/python3.12/argparse.py:890
 msgid ".__call__() not defined"
@@ -48,11 +48,9 @@ msgid "show program's version number and exit"
 msgstr "mostra numero di versione del programma ed esci"
 
 #: /usr/lib64/python3.12/argparse.py:1223
-#, fuzzy, python-format
-#| msgid "conflicting option string: %s"
-#| msgid_plural "conflicting option strings: %s"
+#, python-format
 msgid "conflicting subparser: %s"
-msgstr "stringa di opzione in conflitto: %s"
+msgstr "analizzatore in conflitto: %s"
 
 #: /usr/lib64/python3.12/argparse.py:1227
 #, fuzzy, python-format
@@ -122,10 +120,8 @@ msgstr "argomenti posizionali"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1808
-#, fuzzy
-#| msgid "Options"
 msgid "options"
-msgstr "Opzioni"
+msgstr "opzioni"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1823
@@ -139,7 +135,7 @@ msgstr "impossibile avere multipli sotto-analizzatori di argomenti"
 
 #: /usr/lib64/python3.12/argparse.py:1860
 msgid "subcommands"
-msgstr ""
+msgstr "sottomoduli"
 
 #: /usr/lib64/python3.12/argparse.py:1906
 #: /usr/lib64/python3.12/argparse.py:2459
@@ -388,10 +384,8 @@ msgid "Unable to read consumer identity"
 msgstr "Impossibile leggere l'identità dell'utente"
 
 #: src/plugins/dnf/subscription_manager.py:170
-#, fuzzy
-#| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
-msgstr "Subscription Manager sta funzionando in modalità per container."
+msgstr "subscription-manager sta funzionando in modalità per container."
 
 #: src/plugins/dnf/upload_profile.py:37
 msgid ""
@@ -1407,7 +1401,7 @@ msgstr "Errore: nome utente o password mancante."
 #: src/rhsmlib/services/syspurpose.py:100
 #: src/rhsmlib/services/syspurpose.py:103
 msgid "Matched"
-msgstr ""
+msgstr "Abbinato"
 
 #: src/rhsmlib/services/syspurpose.py:101
 #: src/rhsmlib/services/syspurpose.py:104
@@ -1681,16 +1675,12 @@ msgstr ""
 "elencare {attr}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:167
-#, fuzzy
-#| msgid ""
-#| "Error: --username, --password, --token and --org can be used only on "
-#| "unregistered systems"
 msgid ""
 "Error: --username, --password, and --org can be used only on unregistered "
 "systems"
 msgstr ""
-"Errore: --username, --password, --token e --org possono essere usati solo in "
-"sistemi non registrati"
+"Errore: --username, --password e --org possono essere usati solo in sistemi "
+"non registrati"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:239
@@ -1835,7 +1825,7 @@ msgstr "suffissi di host che dovrebbero bypassare proxy HTTP"
 
 #: src/subscription_manager/cli_command/cli.py:177
 msgid "Do not display progress messages"
-msgstr ""
+msgstr "Non visualizzare i messaggi di avanzamento"
 
 #: src/subscription_manager/cli_command/cli.py:189
 msgid ""
@@ -2209,19 +2199,12 @@ msgid "list shows those products which are installed (default)"
 msgstr "l'elenco mostra quei prodotti che sono installati (predefinito)"
 
 #: src/subscription_manager/cli_command/list.py:51
-#, fuzzy
-#| msgid ""
-#| "lists only subscriptions or products containing the specified expression "
-#| "in the subscription or product information, varying with the list "
-#| "requested and the server version (case-insensitive)."
 msgid ""
 "lists only products containing the specified expression in the product "
 "information."
 msgstr ""
-"elenca solo le sottoscrizioni o i prodotti contenenti l'espressione "
-"specificata nelle informazioni sul prodotto o sulla sottoscrizione, che "
-"variano con l'elenco richiesto e la versione del server (ignora maiuscole/"
-"minuscole)."
+"elenca solo i prodotti contenenti l'espressione specificata nelle "
+"informazioni sul prodotto."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:64
@@ -2784,16 +2767,12 @@ msgstr ""
 "elencare i livelli dei servizi"
 
 #: src/subscription_manager/cli_command/service_level.py:98
-#, fuzzy
-#| msgid ""
-#| "Error: --username, --password, --token, --org and --serverurl can be used "
-#| "only on unregistered systems"
 msgid ""
 "Error: --username, --password, --org and --serverurl can be used only on "
 "unregistered systems"
 msgstr ""
-"Errore: --username, --password, --token, --org e --serverurl possono essere "
-"usati solo in sistemi non registrati"
+"Errore: --username, --password, --org e --serverurl possono essere usati "
+"solo in sistemi non registrati"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:123
@@ -2896,10 +2875,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/syspurpose.py:90
-#, fuzzy, python-format, python-brace-format
-#| msgid "%(prog)s {name} [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr "%(prog)s {name} [OPZIONI]"
+msgstr "%(prog)s {name} [SOTTOMODULO] [OPZIONI]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:38
@@ -2914,7 +2892,7 @@ msgstr "Il sistema non è più registrato."
 
 #: src/subscription_manager/cli_command/usage.py:24
 msgid "Show or modify the system purpose usage setting"
-msgstr ""
+msgstr "Mostra o modifica l'impostazione di utilizzo dello scopo del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/user_pass.py:40
@@ -3058,7 +3036,7 @@ msgstr "Non autorizzato: credenziali non valide per la richiesta."
 
 #: src/subscription_manager/exceptions.py:44
 msgid "Token authentication not supported by the entitlement server"
-msgstr ""
+msgstr "Autenticazione token non supportata dal server di autorizzazione"
 
 #: src/subscription_manager/exceptions.py:45
 msgid "Forbidden: Invalid credentials for request."
@@ -3270,28 +3248,22 @@ msgid "Error uploading package profile: %s\n"
 msgstr "Errore durante l'invio del profilo di pacchetti: %s\n"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:328
-#, fuzzy
-#| msgid "This system is already registered. Add force to options to override."
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
 msgstr ""
-"Questo sistema è già registrato. Aggiungere \"force\" alle opzioni per "
-"eseguire sovrascrivere."
+"Questo sistema è già registrato; la richiesta di registrare automaticamente "
+"viene ignorata."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:331
-#, fuzzy
-#| msgid "Registering system"
 msgid "Registering the system"
 msgstr "Registrazione del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:342
-#, fuzzy
-#| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
-msgstr "Aggiornamento certificati per l'entitlement & repository in corso"
+msgstr "Aggiornamento certificati per i contentui & repository in corso."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:404
