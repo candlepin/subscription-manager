@@ -384,6 +384,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     COMPLETION_DIR=%{completion_dir} \
     RUN_DIR=%{run_dir} \
+    SBIN_DIR=%{_sbindir} \
     %{?install_ostree} %{?install_container} \
     %{?install_dnf_plugins} \
     %{?install_zypper_plugins} \
