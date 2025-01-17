@@ -19,6 +19,7 @@ PREFIX ?= /usr/local
 SYSCONF ?= etc
 INSTALL_DIR = $(PREFIX)/share
 RUN_DIR ?= /run
+SBIN_DIR ?= $(PREFIX)/sbin
 
 OS = $(shell test -f /etc/os-release && source /etc/os-release; echo $$ID)
 OS_DIST ?= $(shell rpm --eval='%dist')
@@ -199,9 +200,9 @@ install-example-plugins: install-plugins
 install-via-setup: install-subpackages-via-setup
 	EXCLUDE_PACKAGES="$(EXCLUDE_PACKAGES)" $(PYTHON) ./setup.py install --root $(DESTDIR) --pkg-version=$(VERSION) --prefix=$(PREFIX) \
 	$(SETUP_PY_INSTALL_PARAMS)
-	mkdir -p $(DESTDIR)/$(PREFIX)/sbin/
+	mkdir -p $(DESTDIR)/$(SBIN_DIR)/
 	mkdir -p $(DESTDIR)/$(LIBEXEC_DIR)/
-	mv $(DESTDIR)/$(PREFIX)/bin/subscription-manager $(DESTDIR)/$(PREFIX)/sbin/
+	mv -n $(DESTDIR)/$(PREFIX)/bin/subscription-manager $(DESTDIR)/$(SBIN_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsmcertd-worker $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
