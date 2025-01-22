@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.3
+Version: 1.30.4
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -736,6 +736,39 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Wed Jan 22 2025 Pino Toscano <ptoscano@redhat.com> 1.30.4-1
+- Revert "feat: Disable anonymous cloud registration temporarily"
+  (ptoscano@redhat.com)
+- Revert "feat: forcefully switch automatic cloud registration to v1"
+  (ptoscano@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (ptoscano@redhat.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Translated using Weblate (French) (leane.grasser@proton.me)
+- Translated using Weblate (Georgian) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Update translation files (noreply@weblate.org)
+- spec: respect the %%{_sbindir} of the distro (ptoscano@redhat.com)
+- build: make it possible to customize the 'sbin' install dir
+  (ptoscano@redhat.com)
+- fix: Restart rhsm service after installation (pkoprda@redhat.com)
+- Drop pam_console leftovers (ptoscano@redhat.com)
+- Stop using usermode (ptoscano@redhat.com)
+- fix: Do not upload profile from DNF, when it is disabled in conf
+  (jhnidek@redhat.com)
+- rhsmcertd: use ISO 8601 timestamps for the log file (ptoscano@redhat.com)
+- rhsmcertd: refactor timestamp function (ptoscano@redhat.com)
+- ci: temporarily install 'which' on CentOS Stream 10 (ptoscano@redhat.com)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- ci: use official c10s container image (ptoscano@redhat.com)
+- Translated using Weblate (Italian) (info@salvatorecocuzza.it)
+- Translated using Weblate (French) (leane.grasser@proton.me)
+- Translated using Weblate (German) (atalanttore@googlemail.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- feat: Enable register with environment names and environment types
+  (jhnidek@redhat.com)
+
 * Thu Dec 19 2024 Jiri Hnidek <jhnidek@redhat.com> 1.30.3-1
 - Card ID: CCT-731 - integration tests for DBus Register method
   (jstavel@redhat.com)
