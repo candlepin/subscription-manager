@@ -20,6 +20,8 @@ from typing import Optional
 from rhsm import connection
 import rhsmlib.dbus.exceptions
 from rhsmlib.dbus.objects.register import DomainSocketRegisterDBusImplementation, RegisterDBusImplementation
+from rhsm.config import RhsmConfigParser
+from test.rhsmlib.services.test_config import TEST_CONFIG
 from rhsmlib.dbus.server import DomainSocketServer
 
 from unittest import mock
@@ -275,9 +277,28 @@ class RegisterDBusObjectTest(SubManDBusFixture):
 
 
 class DomainSocketRegisterDBusObjectTest(SubManDBusFixture):
+    config_file = None
+    """Attribute referencing file containing test configuration text."""
+    parser = None
+    """Attribute referencing configuration's parser object."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        super().setUpClass()
+
+        cls.config_file = tempfile.NamedTemporaryFile()
+        with open(cls.config_file.name, "w") as handle:
+            handle.write(TEST_CONFIG)
+        cls.parser = RhsmConfigParser(cls.config_file.name)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.config_file = None
+        super().tearDownClass()
+
     def setUp(self) -> None:
         super().setUp()
-        self.impl = DomainSocketRegisterDBusImplementation()
+        self.impl = DomainSocketRegisterDBusImplementation(self.parser)
 
         register_patch = mock.patch(
             "rhsmlib.dbus.objects.register.RegisterService.register",
