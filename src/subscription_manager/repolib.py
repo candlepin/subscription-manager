@@ -133,7 +133,7 @@ class YumPluginManager:
                 continue
 
             if len(result) == 0:
-                log.warn(
+                log.warning(
                     'Configuration file of %s plugin: "%s" cannot be read' % (pkg_mgr_name, plugin_file_name)
                 )
                 continue

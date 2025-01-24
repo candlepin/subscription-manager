@@ -757,7 +757,7 @@ def format_date(dt: datetime.datetime) -> str:
         try:
             return dt.astimezone(tzlocal()).strftime("%x")
         except ValueError:
-            log.warn("Datetime does not contain timezone information")
+            log.warning("Datetime does not contain timezone information")
             return dt.strftime("%x")
     else:
         return ""
@@ -847,7 +847,7 @@ def clean_all_data(backup: bool = True) -> None:
             log.debug("Removing entitlement cert: %s" % f)
             os.remove(certpath)
     else:
-        log.warn("Entitlement cert directory does not exist: %s" % ent_cert_dir)
+        log.warning("Entitlement cert directory does not exist: %s" % ent_cert_dir)
 
     # Subclasses of cache.CacheManager have a @classmethod delete_cache
     # for deleting persistent caches

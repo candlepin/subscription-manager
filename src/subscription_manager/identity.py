@@ -71,7 +71,7 @@ class ConsumerIdentity:
                 cls.read()
                 return True
             except Exception as e:
-                log.warn("possible certificate corruption")
+                log.warning("possible certificate corruption")
                 log.error(e)
         return False
 

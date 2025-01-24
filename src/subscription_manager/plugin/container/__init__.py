@@ -132,8 +132,8 @@ class ContainerCertDir:
     def sync(self, expected_keypairs):
         log.debug("Syncing container certificates to %s" % self.path)
         if not os.path.exists(self.host_cert_dir):
-            log.warn("Container cert directory does not exist: %s" % self.host_cert_dir)
-            log.warn("Exiting plugin")
+            log.warning("Container cert directory does not exist: %s" % self.host_cert_dir)
+            log.warning("Exiting plugin")
             return
         if not os.path.exists(self.path):
             log.info("Container cert directory does not exist, creating it.")
