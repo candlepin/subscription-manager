@@ -538,11 +538,11 @@ if HAS_DEB822:
             elif len(keyfiles) == 1:
                 orcharhino_keyfile = keyfiles[0]
             else:
-                log.warn(f"Could not find pulp signing-key in {keypath}")
+                log.warning(f"Could not find pulp signing-key in {keypath}")
             if orcharhino_keyfile:
                 apt_cont["Signed-By"] = orcharhino_keyfile
             else:
-                log.warn("No pulp signing-key file found!")
+                log.warning("No pulp signing-key file found!")
 
             return apt_cont
 
