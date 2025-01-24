@@ -39,7 +39,7 @@ class CustomFacts:
         try:
             data = ourjson.loads(json_blob)
         except ValueError:
-            log.warn("Unable to load custom facts file.")
+            log.warning("Unable to load custom facts file.")
 
         custom_facts.data = data
         return custom_facts
@@ -62,7 +62,7 @@ class CustomFactsFile:
             with open(self.path, "r") as fd:
                 return fd.read()
         except IOError:
-            log.warn("Unable to open custom facts file: %s" % self.path)
+            log.warning("Unable to open custom facts file: %s" % self.path)
             raise
 
     def read(self) -> str:

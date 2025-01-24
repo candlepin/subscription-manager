@@ -139,9 +139,9 @@ class VirtUuidCollector(collector.FactsCollector):
                     vm_uuid: str = contents.strip(string.whitespace + "\0")
                     return vm_uuid
             except IOError as e:
-                log.warn("Tried to read %s but there was an error: %s", uuid_path, e)
+                log.warning("Tried to read %s but there was an error: %s", uuid_path, e)
 
-        log.warn("No available file for UUID on %s", self.arch)
+        log.warning("No available file for UUID on %s", self.arch)
         return None
 
 

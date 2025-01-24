@@ -106,7 +106,7 @@ class Candlepin:
             self.last_error = ex
 
             msg = "Unable to reach server."
-            log.warn(msg)
+            log.warning(msg)
             raise CandlepinApiNetworkError("%s: %s" % (msg, ex))
 
 

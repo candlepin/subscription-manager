@@ -110,7 +110,7 @@ class ZypperProductManager(ProductManager):
                     continue
                 certs_and_repos.append((cert, repo_id))
             except Exception as e:
-                log.warn("Error loading productid metadata for %s." % repo.alias())
+                log.warning("Error loading productid metadata for %s." % repo.alias())
                 log.exception(e)
                 self.meta_data_errors.append(repo_id)
 
