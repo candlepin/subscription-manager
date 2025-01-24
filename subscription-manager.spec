@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.43
+Version: 1.29.44
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,23 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Fri Jan 24 2025 Pino Toscano <ptoscano@redhat.com> 1.29.44-1
+- Revert "feat: Disable anonymous cloud registration temporarily"
+  (ptoscano@redhat.com)
+- Revert "feat: forcefully switch automatic cloud registration to v1"
+  (ptoscano@redhat.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (ptoscano@redhat.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (French) (leane.grasser@proton.me)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Translated using Weblate (Italian) (info@salvatorecocuzza.it)
+- Translated using Weblate (French) (leane.grasser@proton.me)
+- Translated using Weblate (German) (atalanttore@googlemail.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+
 * Thu Dec 19 2024 Jiri Hnidek <jhnidek@redhat.com> 1.29.43-1
 - [1.29] feat/cct-868: Subset of list command options marked as deprecated *
   Options --available, --all, --ondate, --servicelevel --no-overlap --match-
