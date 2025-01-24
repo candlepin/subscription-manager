@@ -112,7 +112,7 @@ class KeyFileConfigParser(RhsmConfigParser):
         # create /ostree/repo/config if /ostree/repo exists
         dir_name = os.path.dirname(self.config_file)
         if not os.path.exists(dir_name):
-            log.warn("%s does not exist, so unable to save %s", dir_name, self.config_file)
+            log.warning("%s does not exist, so unable to save %s", dir_name, self.config_file)
             return
 
         super(KeyFileConfigParser, self).save()
