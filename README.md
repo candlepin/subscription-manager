@@ -8,6 +8,13 @@ from the Candlepin.
  - https://candlepinproject.org/
  - https://github.com/candlepin/subscription-manager
 
+Important Note
+--------------
+
+This is a fork of the upstream subscription-manager repository at https://github.com/candlepin/subscription-manager
+which includes enhancements for the usage on Debian-based systems. It will be the base of the debian/ubuntu
+subscription-manager packages on https://oss.atix.de
+
 Local Installation
 ------------------
 
