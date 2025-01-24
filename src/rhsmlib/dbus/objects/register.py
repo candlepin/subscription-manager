@@ -30,7 +30,7 @@ from subscription_manager.cp_provider import CPProvider
 
 from subscription_manager.i18n import Locale
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.entcertlib import EntCertActionInvoker
+from subscription_manager.utils import is_true_value
 
 if TYPE_CHECKING:
     from rhsm.connection import UEPConnection
@@ -262,10 +262,12 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
         uep: UEPConnection = self.build_uep(connection_options)
         service = RegisterService(uep)
 
+        enable_content: bool = self._remove_enable_content_option(register_options, default=True)
         consumer: dict = service.register(organization, **register_options)
 
-        ent_cert_lib = EntCertActionInvoker()
-        ent_cert_lib.update()
+        # When consumer is created, we can try to enable content, if requested.
+        if enable_content:
+            self._enable_content(uep, consumer)
 
         return consumer
 
@@ -284,20 +286,22 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
         """
         raise NoOrganizationException(username=username)
 
-    def _remove_enable_content_option(self, options: dict) -> bool:
+    @staticmethod
+    def _remove_enable_content_option(options: dict, default: bool = False) -> bool:
         """Try to remove enable_content option from options dictionary.
 
         :returns: The value of 'enable_content' key.
         """
         if "enable_content" not in options:
-            return False
+            return default
 
-        return bool(options.pop("enable_content"))
+        enable_content = options.pop("enable_content")
+        return is_true_value(enable_content)
 
-    def _enable_content(self, uep: "UEPConnection", consumer: dict) -> None:
+    @staticmethod
+    def _enable_content(uep: "UEPConnection", consumer: dict) -> None:
         """Try to enable content: refresh SCA entitlement certs in SCA mode."""
         content_access: str = consumer["owner"]["contentAccessMode"]
-        enabled_content = None
 
         if content_access == "entitlement":
             log.error("Entitlement content access mode is not supported")
@@ -306,12 +310,8 @@ class DomainSocketRegisterDBusImplementation(base_object.BaseImplementation):
             service = EntitlementService(uep)
             # TODO: try get anything useful from refresh result. It is not possible atm.
             service.refresh(remove_cache=False, force=False)
-
         else:
             log.error(f"Unable to enable content due to unsupported content access mode: '{content_access}'")
-
-        if enabled_content is not None:
-            consumer["enabledContent"] = enabled_content
 
     def _check_force_handling(self, register_options: dict, connection_options: dict) -> None:
         """
