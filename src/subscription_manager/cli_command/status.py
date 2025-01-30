@@ -78,6 +78,7 @@ class StatusCommand(CliCommand):
             "Content Access Mode is set to Simple Content Access. "
             "This host has access to content, regardless of subscription status.\n"
         )
+        status_message = service_status["status"]
 
         certs = self.entitlement_dir.list_with_content_access()
         sca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
@@ -109,12 +110,9 @@ class StatusCommand(CliCommand):
                 refresh_service.refresh()
             else:
                 ca_message = has_cert
+                status_message = _("Registered")
 
-        print(
-            _("Overall Status: {status}\n{message}").format(
-                status=service_status["status"], message=ca_message
-            )
-        )
+        print(_("Overall Status: {status}\n{message}").format(status=status_message, message=ca_message))
 
     def _print_reasons(self, service_status):
         """
