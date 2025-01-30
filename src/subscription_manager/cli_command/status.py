@@ -60,15 +60,18 @@ class StatusCommand(CliCommand):
                 system_exit(os.EX_DATAERR, err)
         return on_date
 
+    def _print_status_banner(self):
+        print("+-------------------------------------------+")
+        print("   " + _("System Status Details"))
+        print("+-------------------------------------------+")
+
     def _print_status(self, service_status):
         """
         Print only status
         :return: Print overall status
         """
 
-        print("+-------------------------------------------+")
-        print("   " + _("System Status Details"))
-        print("+-------------------------------------------+")
+        self._print_status_banner()
 
         ca_message = ""
         has_cert = _(
