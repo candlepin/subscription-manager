@@ -60,21 +60,25 @@ class StatusCommand(CliCommand):
                 system_exit(os.EX_DATAERR, err)
         return on_date
 
+    def _print_status_banner(self):
+        print("+-------------------------------------------+")
+        print("   " + _("System Status Details"))
+        print("+-------------------------------------------+")
+
     def _print_status(self, service_status):
         """
         Print only status
         :return: Print overall status
         """
 
-        print("+-------------------------------------------+")
-        print("   " + _("System Status Details"))
-        print("+-------------------------------------------+")
+        self._print_status_banner()
 
         ca_message = ""
         has_cert = _(
             "Content Access Mode is set to Simple Content Access. "
             "This host has access to content, regardless of subscription status.\n"
         )
+        status_message = service_status["status"]
 
         certs = self.entitlement_dir.list_with_content_access()
         sca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
@@ -106,12 +110,9 @@ class StatusCommand(CliCommand):
                 refresh_service.refresh()
             else:
                 ca_message = has_cert
+                status_message = _("Registered")
 
-        print(
-            _("Overall Status: {status}\n{message}").format(
-                status=service_status["status"], message=ca_message
-            )
-        )
+        print(_("Overall Status: {status}\n{message}").format(status=status_message, message=ca_message))
 
     def _print_reasons(self, service_status):
         """
@@ -156,6 +157,13 @@ class StatusCommand(CliCommand):
         """
         Print status and all reasons it is not valid
         """
+
+        # In case we are not registered, then simply print that and avoid
+        # all the rest of the checks
+        if not self.is_consumer_cert_present():
+            self._print_status_banner()
+            print(_("Overall Status: Not registered\n"))
+            return 1
 
         # First get/check if provided date is valid
         on_date = self._get_date_cli_option()
