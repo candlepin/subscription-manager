@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.4
+Version: 1.30.5
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -739,6 +739,17 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Tue Feb 04 2025 Pino Toscano <ptoscano@redhat.com> 1.30.5-1
+- fix: Disabling of content in D-Bus methods Register*() (jhnidek@redhat.com)
+- chore: logging.warn() -> logging.warning() (ptoscano@redhat.com)
+- Feat CCT-467: Add explanatory info about the source of overrides in repo-
+  overrides command (mgrunwal@mgrunwal-thinkpadp1gen3.rmtcz.csb)
+- feat: Allow to call RegisterWithActivationKeys() with enable_content
+  (jhnidek@redhat.com)
+- refactor: Small changes of _enable_content (jhnidek@redhat.com)
+- fix: It is possible to disable content using enable_content option
+  (jhnidek@redhat.com)
+
 * Wed Jan 22 2025 Pino Toscano <ptoscano@redhat.com> 1.30.4-1
 - Revert "feat: Disable anonymous cloud registration temporarily"
   (ptoscano@redhat.com)
