@@ -65,19 +65,12 @@ class StatusCommand(CliCommand):
         print("   " + _("System Status Details"))
         print("+-------------------------------------------+")
 
-    def _print_status(self, service_status):
+    def _determine_whether_content_access_mode_is_sca(self, service_status):
         """
-        Print only status
-        :return: Print overall status
+        Try hard to determine whether the content access mode is SCA,
+        refreshing the caches if needed
+        :return: True if SCA, False if entitlement mode
         """
-
-        self._print_status_banner()
-
-        ca_message = ""
-        has_cert = _(
-            "Content Access Mode is set to Simple Content Access. "
-            "This host has access to content, regardless of subscription status.\n"
-        )
 
         certs = self.entitlement_dir.list_with_content_access()
         sca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
@@ -107,8 +100,25 @@ class StatusCommand(CliCommand):
                     "Refreshing entitlement certs..."
                 )
                 refresh_service.refresh()
-            else:
-                ca_message = has_cert
+                sca_mode_detected = False
+
+        return sca_mode_detected
+
+    def _print_status(self, service_status, is_sca):
+        """
+        Print only status
+        :return: Print overall status
+        """
+
+        self._print_status_banner()
+
+        ca_message = ""
+
+        if is_sca:
+            ca_message = _(
+                "Content Access Mode is set to Simple Content Access. "
+                "This host has access to content, regardless of subscription status.\n"
+            )
 
         print(
             _("Overall Status: {status}\n{message}").format(
@@ -165,7 +175,9 @@ class StatusCommand(CliCommand):
 
         service_status = entitlement.EntitlementService(cp=self.cp).get_status(on_date)
 
-        self._print_status(service_status)
+        is_sca = self._determine_whether_content_access_mode_is_sca(service_status)
+
+        self._print_status(service_status, is_sca)
 
         self._print_reasons(service_status)
 
