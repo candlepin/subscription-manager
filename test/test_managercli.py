@@ -408,6 +408,7 @@ class TestStatusCommand(SubManFixture):
         self.cc.cp._capabilities = ["syspurpose"]
         self.cc.options = Mock()
         self.cc.options.on_date = None
+        self.cc._determine_whether_content_access_mode_is_sca = Mock(return_value=False)
         with Capture() as cap:
             self.cc._do_command()
         self.assertTrue('System Purpose Status: Matched' in cap.out)
@@ -418,6 +419,7 @@ class TestStatusCommand(SubManFixture):
         self.cc.cp._capabilities = ["syspurpose"]
         self.cc.options = Mock()
         self.cc.options.on_date = None
+        self.cc._determine_whether_content_access_mode_is_sca = Mock(return_value=False)
         with Capture() as cap:
             self.cc._do_command()
         self.assertTrue('System Purpose Status: Unknown' in cap.out)
@@ -428,6 +430,7 @@ class TestStatusCommand(SubManFixture):
         self.cc.cp._capabilities = []
         self.cc.options = Mock()
         self.cc.options.on_date = None
+        self.cc._determine_whether_content_access_mode_is_sca = Mock(return_value=False)
         with Capture() as cap:
             self.cc._do_command()
         self.assertTrue('System Purpose Status: Unknown' in cap.out)
@@ -438,6 +441,7 @@ class TestStatusCommand(SubManFixture):
         self.cc.cp._capabilities = ["syspurpose"]
         self.cc.options = Mock()
         self.cc.options.on_date = None
+        self.cc._determine_whether_content_access_mode_is_sca = Mock(return_value=False)
         with Capture() as cap:
             self.cc._do_command()
         self.assertTrue('System Purpose Status: Mismatched' in cap.out)
