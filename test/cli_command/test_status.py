@@ -1,7 +1,7 @@
 from subscription_manager import managercli
 from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 
-from ..stubs import StubConsumerIdentity, StubUEP
+from ..stubs import StubUEP
 from ..fixture import SubManFixture, Capture
 
 from unittest.mock import Mock, patch
@@ -41,7 +41,6 @@ class TestStatusCommand(SubManFixture):
         """
         Test status, when SCA mode is used
         """
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({"status": "disabled"})
         self.cc.cp._capabilities = ["syspurpose"]
@@ -66,7 +65,6 @@ class TestStatusCommand(SubManFixture):
         """
         # Note that server sent response with "Current" status
         self.mock_entitlement_instance.get_status = Mock(return_value=MOCK_SERVICE_STATUS_ENTITLEMENT)
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({"status": "valid"})
         self.cc.cp._capabilities = ["syspurpose"]
@@ -90,7 +88,6 @@ class TestStatusCommand(SubManFixture):
         """
         # Note that server sent response with "Current" status
         self.mock_entitlement_instance.get_status = Mock(return_value=MOCK_SERVICE_STATUS_ENTITLEMENT)
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({"status": "valid"})
         self.cc.cp._capabilities = ["syspurpose"]
@@ -110,7 +107,6 @@ class TestStatusCommand(SubManFixture):
         self.assertIn("System Purpose Status: Matched", cap.out)
 
     def test_purpose_status_success(self):
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({"status": "valid"})
         self.cc.cp._capabilities = ["syspurpose"]
@@ -122,7 +118,6 @@ class TestStatusCommand(SubManFixture):
         self.assertTrue("System Purpose Status: Matched" in cap.out)
 
     def test_purpose_status_consumer_lack(self):
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({"status": "unknown"})
         self.cc.cp._capabilities = ["syspurpose"]
@@ -134,7 +129,6 @@ class TestStatusCommand(SubManFixture):
         self.assertTrue("System Purpose Status: Unknown" in cap.out)
 
     def test_purpose_status_consumer_no_capability(self):
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({"status": "unknown"})
         self.cc.cp._capabilities = []
@@ -146,7 +140,6 @@ class TestStatusCommand(SubManFixture):
         self.assertTrue("System Purpose Status: Unknown" in cap.out)
 
     def test_purpose_status_mismatch(self):
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance(
             {"status": "mismatched", "reasons": ["unsatisfied usage: Production"]}
