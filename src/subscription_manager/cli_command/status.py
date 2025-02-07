@@ -173,6 +173,13 @@ class StatusCommand(CliCommand):
         # First get/check if provided date is valid
         on_date = self._get_date_cli_option()
 
+        # In case we are not registered, then simply print that and avoid
+        # all the rest of the checks
+        if not self.is_consumer_cert_present():
+            self._print_status_banner()
+            print(_("Overall Status: Not registered\n"))
+            return 1
+
         service_status = entitlement.EntitlementService(cp=self.cp).get_status(on_date)
 
         is_sca = self._determine_whether_content_access_mode_is_sca(service_status)
