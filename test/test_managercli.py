@@ -339,7 +339,7 @@ class TestStatusCommand(SubManFixture):
         self.cc.entitlement_dir.list_with_content_access = Mock(return_value=cert_list)
         self.cc.entcertlib = Mock()
 
-    def test_disabled_status_sca_mode(self):
+    def test_status_sca_mode_registered(self):
         """
         Test status, when SCA mode is used
         """
@@ -350,7 +350,7 @@ class TestStatusCommand(SubManFixture):
         self.cc.options.on_date = None
         with Capture() as cap:
             self.cc._do_command()
-        self.assertIn("Overall Status: Disabled", cap.out)
+        self.assertIn("Overall Status: Registered", cap.out)
         self.assertIn("Content Access Mode is set to Simple Content Access.", cap.out)
         self.assertIn("This host has access to content, regardless of subscription status.", cap.out)
         self.assertIn("System Purpose Status: Disabled", cap.out)

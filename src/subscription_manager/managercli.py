@@ -3753,18 +3753,16 @@ class StatusCommand(CliCommand):
         self._print_status_banner()
 
         ca_message = ""
+        status_message = service_status["status"]
 
         if is_sca:
             ca_message = _(
                 "Content Access Mode is set to Simple Content Access. "
                 "This host has access to content, regardless of subscription status.\n"
             )
+            status_message = _("Registered")
 
-        print(
-            _("Overall Status: {status}\n{message}").format(
-                status=service_status["status"], message=ca_message
-            )
-        )
+        print(_("Overall Status: {status}\n{message}").format(status=status_message, message=ca_message))
 
     def _print_reasons(self, service_status):
         """
