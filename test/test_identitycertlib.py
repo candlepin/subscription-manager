@@ -12,7 +12,7 @@
 
 from unittest import mock
 
-from . import fixture
+from . import fixture, stubs
 
 from subscription_manager import identity
 from subscription_manager import identitycertlib
@@ -33,18 +33,11 @@ mock_consumer_identity.getConsumerId.return_value = "11111-00000-11111-0000"
 
 
 # Identities to inject for testing
-class StubIdentity(identity.Identity):
-    _consumer = None
-
-    def _get_consumer_identity(self):
-        return self._consumer
-
-
-class InvalidIdentity(StubIdentity):
+class InvalidIdentity(stubs.StubIdentity):
     pass
 
 
-class ValidIdentity(StubIdentity):
+class ValidIdentity(stubs.StubIdentity):
     _consumer = mock_consumer_identity
 
 
@@ -54,7 +47,7 @@ different_mock_consumer_identity.getConsumerName.return_value = "A Different Moc
 different_mock_consumer_identity.getConsumerId.return_value = "AAAAAA-BBBBB-CCCCCC-DDDDD"
 
 
-class DifferentValidConsumerIdentity(StubIdentity):
+class DifferentValidConsumerIdentity(stubs.StubIdentity):
     _consumer = different_mock_consumer_identity
 
 
