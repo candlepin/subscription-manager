@@ -2812,11 +2812,10 @@ class TestNoneWrap(unittest.TestCase):
 
 class TestColumnize(unittest.TestCase):
     def setUp(self):
-        self.old_method = managercli.get_terminal_width
-        managercli.get_terminal_width = Mock(return_value=500)
-
-    def tearDown(self):
-        managercli.get_terminal_width = self.old_method
+        patcher = patch("subscription_manager.printing_utils.get_terminal_width")
+        self.get_terminal_width_mock = patcher.start()
+        self.get_terminal_width_mock.return_value = 500
+        self.addCleanup(patcher.stop)
 
     def test_columnize(self):
         result = columnize(["Hello:", "Foo:"], echo_columnize_callback, "world", "bar")
@@ -2830,16 +2829,15 @@ class TestColumnize(unittest.TestCase):
         result = columnize(["Hello:", "Foo:"], echo_columnize_callback, [], "bar")
         self.assertEqual(result, "Hello: \nFoo:   bar")
 
-    @patch('subscription_manager.printing_utils.get_terminal_width')
-    def test_columnize_with_small_term(self, term_width_mock):
-        term_width_mock.return_value = None
+    def test_columnize_with_small_term(self):
+        self.get_terminal_width_mock.return_value = None
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
                 echo_columnize_callback, "This is a testing string", "This_is_another_testing_string")
         expected = 'Hello\nHello\nHello\nHello\n:     This\n      is a\n      ' \
                 'testin\n      g\n      string\nFoo\nFoo\nFoo\nFoo:  ' \
                 'This_i\n      s_anot\n      her_te\n      sting_\n      string'
         self.assertNotEqual(result, expected)
-        term_width_mock.return_value = 12
+        self.get_terminal_width_mock.return_value = 12
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
                 echo_columnize_callback, "This is a testing string", "This_is_another_testing_string")
         self.assertEqual(result, expected)
@@ -2873,14 +2871,13 @@ class TestColumnize(unittest.TestCase):
         expected = 'a' * 9 + '\n ' + 'a' * 9 + '\n ' + 'aa'
         self.assertEqual(result, expected)
 
-    @patch('subscription_manager.printing_utils.get_terminal_width')
-    def test_columnize_multibyte(self, term_width_mock):
+    def test_columnize_multibyte(self):
         multibyte_str = u"このシステム用に"
-        term_width_mock.return_value = 40
+        self.get_terminal_width_mock.return_value = 40
         result = columnize([multibyte_str], echo_columnize_callback, multibyte_str)
         expected = u"このシステム用に このシステム用に"
         self.assertEqual(result, expected)
-        term_width_mock.return_value = 14
+        self.get_terminal_width_mock.return_value = 14
         result = columnize([multibyte_str], echo_columnize_callback, multibyte_str)
         expected = u"このシ\nステム\n用に   このシ\n       ステム\n       用に"
         self.assertEqual(result, expected)
