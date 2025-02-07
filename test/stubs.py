@@ -38,6 +38,7 @@ from subscription_manager.facts import Facts
 from rhsm.certificate import GMT
 from rhsm.certificate2 import Version
 from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
+from subscription_manager.identity import Identity
 
 from rhsm.certificate import parse_tags
 from rhsm.certificate2 import EntitlementCertificate, ProductCertificate, Product, Content, Order
@@ -461,6 +462,13 @@ class StubConsumerIdentity:
     @classmethod
     def keypath(cls):
         return ""
+
+
+class StubIdentity(Identity):
+    _consumer = None
+
+    def _get_consumer_identity(self):
+        return self._consumer
 
 
 class StubUEP:
