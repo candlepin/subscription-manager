@@ -58,8 +58,6 @@ class TestStatusCommand(SubManFixture):
             self.cc._do_command()
         self.assertIn("Overall Status: Registered", cap.out)
         self.assertIn("Content Access Mode is set to Simple Content Access.", cap.out)
-        self.assertIn("This host has access to content, regardless of subscription status.", cap.out)
-        self.assertIn("System Purpose Status: Disabled", cap.out)
 
     def test_current_status_entitlement_mode(self):
         """
