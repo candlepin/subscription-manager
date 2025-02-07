@@ -39,7 +39,7 @@ class TestStatusCommand(SubManFixture):
         self.mock_entitlement_instance.get_status = Mock(return_value=MOCK_SERVICE_STATUS_SCA)
         self.entitlement_mock.EntitlementService = Mock(return_value=self.mock_entitlement_instance)
 
-    def test_disabled_status_sca_mode(self):
+    def test_status_sca_mode_registered(self):
         """
         Test status, when SCA mode is used
         """
@@ -56,7 +56,7 @@ class TestStatusCommand(SubManFixture):
         self.cc.entcertlib = Mock()
         with Capture() as cap:
             self.cc._do_command()
-        self.assertIn("Overall Status: Disabled", cap.out)
+        self.assertIn("Overall Status: Registered", cap.out)
         self.assertIn("Content Access Mode is set to Simple Content Access.", cap.out)
         self.assertIn("This host has access to content, regardless of subscription status.", cap.out)
         self.assertIn("System Purpose Status: Disabled", cap.out)
