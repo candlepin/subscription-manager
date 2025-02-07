@@ -184,9 +184,10 @@ class StatusCommand(CliCommand):
 
         self._print_status(service_status, is_sca)
 
-        self._print_reasons(service_status)
+        if not is_sca:
+            self._print_reasons(service_status)
 
-        self._print_syspurpose_status(on_date)
+            self._print_syspurpose_status(on_date)
 
         if service_status["valid"]:
             result = 0
