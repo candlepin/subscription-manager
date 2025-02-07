@@ -1,10 +1,12 @@
 from subscription_manager import managercli
 from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 
-from ..stubs import StubUEP
+from ..stubs import StubUEP, StubIdentity
 from ..fixture import SubManFixture, Capture
 
 from unittest.mock import Mock, patch
+
+from subscription_manager import injection as inj
 
 
 MOCK_SERVICE_STATUS_SCA = {
@@ -105,6 +107,17 @@ class TestStatusCommand(SubManFixture):
             self.cc._do_command()
         self.assertIn("Overall Status: Current", cap.out)
         self.assertIn("System Purpose Status: Matched", cap.out)
+
+    def test_status_unregistered(self):
+        """
+        Test status, when the system is not registered
+        """
+        inj.provide(inj.IDENTITY, StubIdentity())
+        self.cc.options = Mock()
+        self.cc.options.on_date = None
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertIn("Overall Status: Not registered", cap.out)
 
     def test_purpose_status_success(self):
         self.cc.cp = StubUEP()
