@@ -25,7 +25,7 @@ from subscription_manager.cache import ContentAccessCache, \
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 from subscription_manager.injection import provide, require, \
         CERT_SORTER, PROD_DIR, CONTENT_ACCESS_CACHE, CONTENT_ACCESS_MODE_CACHE, \
-        CP_PROVIDER
+        CP_PROVIDER, IDENTITY
 from rhsmlib.services.products import InstalledProducts
 from subscription_manager.managercli import AVAILABLE_SUBS_MATCH_COLUMNS
 from subscription_manager.printing_utils import format_name, columnize, \
@@ -35,7 +35,7 @@ from subscription_manager.overrides import Override
 
 from .stubs import StubProductCertificate, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, \
-        StubCertSorter, StubPool
+        StubCertSorter, StubPool, StubIdentity
 from .fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher, set_up_mock_sp_store
 
@@ -401,6 +401,17 @@ class TestStatusCommand(SubManFixture):
             self.cc._do_command()
         self.assertIn("Overall Status: Current", cap.out)
         self.assertIn("System Purpose Status: Matched", cap.out)
+
+    def test_status_unregistered(self):
+        """
+        Test status, when the system is not registered
+        """
+        provide(IDENTITY, StubIdentity())
+        self.cc.options = Mock()
+        self.cc.options.on_date = None
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertIn("Overall Status: Not registered", cap.out)
 
     def test_purpose_status_success(self):
         self.cc.cp = StubUEP()
