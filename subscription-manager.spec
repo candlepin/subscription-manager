@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.44
+Version: 1.29.45
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,18 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Tue Feb 11 2025 Pino Toscano <ptoscano@redhat.com> 1.29.45-1
+- fix: Do not upload profile from DNF, when it is disabled in conf
+  (jhnidek@redhat.com)
+- feat: dnf plugin - outsource uploading of profile to rhsmcertd.
+  (jhnidek@redhat.com)
+- feat: Enable register with environment names and environment types
+  (jhnidek@redhat.com)
+- feat: support registering specifying environments with activation keys
+  (ryanverdile@gmail.com)
+- chore: Remove auto-assign CI job (mhorky@redhat.com)
+- feat: [1.29] Added basic configuration for Packit (jhnidek@redhat.com)
+
 * Fri Jan 24 2025 Pino Toscano <ptoscano@redhat.com> 1.29.44-1
 - Revert "feat: Disable anonymous cloud registration temporarily"
   (ptoscano@redhat.com)
