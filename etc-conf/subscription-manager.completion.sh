@@ -167,7 +167,7 @@ _subscription_manager_service_level()
 
 _subscription_manager_status()
 {
-  local opts="${_subscription_manager_common_opts} --ondate"
+  local opts="--ondate -h --help"
   COMPREPLY=($(compgen -W "${opts}" -- ${1}))
 }
 
