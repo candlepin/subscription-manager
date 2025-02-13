@@ -15,14 +15,10 @@
 # in this software or its documentation.
 #
 import logging
-import os
 
-from rhsmlib.services import entitlement
 
-from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand
 from subscription_manager.i18n import ugettext as _
-from time import localtime, strftime
 
 log = logging.getLogger(__name__)
 
@@ -31,29 +27,9 @@ class StatusCommand(CliCommand):
     def __init__(self):
         shortdesc = _("Show status information for this system")
         super(StatusCommand, self).__init__("status", shortdesc, True)
-        self.parser.add_argument(
-            "--ondate",
-            dest="on_date",
-            help=_("future date to check status on, defaults to today's date (example: {example})").format(
-                example=strftime("%Y-%m-%d", localtime())
-            ),
-        )
 
     def require_connection(self):
         return False
-
-    def _get_date_cli_option(self):
-        """
-        Try to get and validate command line options date
-        :return: Return date or None, when date was not provided
-        """
-        on_date = None
-        if self.options.on_date:
-            try:
-                on_date = entitlement.EntitlementService.parse_date(self.options.on_date)
-            except ValueError as err:
-                system_exit(os.EX_DATAERR, err)
-        return on_date
 
     def _print_status_banner(self):
         print("+-------------------------------------------+")
@@ -64,9 +40,6 @@ class StatusCommand(CliCommand):
         """
         Print status and all reasons it is not valid
         """
-
-        # First get/check if provided date is valid
-        self._get_date_cli_option()
 
         self._print_status_banner()
 
