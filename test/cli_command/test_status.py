@@ -20,7 +20,6 @@ class TestStatusCommand(SubManFixture):
         Test status, when the system is registered
         """
         self.cc.options = Mock()
-        self.cc.options.on_date = None
         with Capture() as cap:
             self.cc._do_command()
         self.assertIn("Overall Status: Registered", cap.out)
@@ -31,7 +30,6 @@ class TestStatusCommand(SubManFixture):
         """
         inj.provide(inj.IDENTITY, StubIdentity())
         self.cc.options = Mock()
-        self.cc.options.on_date = None
         with Capture() as cap:
             self.cc._do_command()
         self.assertIn("Overall Status: Not registered", cap.out)
