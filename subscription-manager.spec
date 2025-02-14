@@ -6,8 +6,10 @@
 # Plugin for container (docker, podman) is not supported on RHEL
 %if 0%{?rhel}
 %global use_container_plugin 0
+%global use_dnf 1
 %else
 %global use_container_plugin 1
+%global use_dnf 0
 %endif
 
 %global dmidecode_arches %{ix86} x86_64 aarch64
@@ -23,8 +25,7 @@
 %global use_inotify 0
 %endif
 
-%global use_dnf (0%{?fedora} || (0%{?rhel}))
-%global create_libdnf_rpm (0%{?fedora} || 0%{?rhel} > 8)
+%global create_libdnf_rpm (0%{?rhel} > 8)
 
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
