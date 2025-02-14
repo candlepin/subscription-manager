@@ -232,7 +232,7 @@ platform.
 %if %{use_container_plugin}
 %package -n subscription-manager-plugin-container
 Summary: A plugin for handling container content
-Requires: %{name} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description -n subscription-manager-plugin-container
 Enables handling of content of type 'containerImage' in any certificates
@@ -304,7 +304,7 @@ Summary: A plugin for handling OSTree content.
 Requires: %{py_package_prefix}-gobject-base
 # plugin needs a slightly newer version of python-iniparse for 'tidy'
 Requires:  %{py_package_prefix}-iniparse >= 0.4
-Requires: %{name} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description -n subscription-manager-plugin-ostree
 Enables handling of content of type 'ostree' in any certificates
