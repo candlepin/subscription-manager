@@ -3,6 +3,8 @@ set -eux
 
 dnf install -y cockpit-ws python3-devel openssl-devel gcc
 
+rm -f /usr/*bin/subscription-manager
+
 cd /var/tmp
 
 tar -xzf subscription-manager.tar.gz --transform 's,[^/]*,/sm,'
@@ -14,4 +16,4 @@ python3 ./setup.py build
 RPM_BUILD_ROOT="/" python3 ./setup.py install --prefix /usr --root /
 
 mv /usr/bin/{rhsm-facts-service,rhsm-service,rhsmcertd-worker} /usr/libexec
-mv /usr/bin/subscription-manager /usr/sbin
+mv -n /usr/bin/subscription-manager /usr/sbin
