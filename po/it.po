@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 18:12+0100\n"
+"POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2025-01-10 10:38+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
@@ -219,60 +219,60 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: errore: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:99
+#: src/daemons/rhsmcertd.c:100
 msgid "interval to run cert check (in minutes)"
 msgstr "intervallo per eseguire il controllo del certificato (in minuti)"
 
-#: src/daemons/rhsmcertd.c:102
+#: src/daemons/rhsmcertd.c:103
 msgid "interval to run auto-registration (in minutes)"
 msgstr "intervallo per l'esecuzione della registrazione automatica (in minuti)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:106
 msgid "run the initial checks immediately, with no delay"
 msgstr "esegui immediatamente i controlli iniziali, senza alcun ritardo"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:109
 msgid "show debug messages"
 msgstr "mostra i messaggi di debug"
 
-#: src/daemons/rhsmcertd.c:110
+#: src/daemons/rhsmcertd.c:111
 msgid "do not add an offset to the initial checks."
 msgstr "non aggiungere un offset per i controlli iniziali."
 
-#: src/daemons/rhsmcertd.c:113
+#: src/daemons/rhsmcertd.c:114
 msgid "try to perform auto-registration."
 msgstr "prova a effettuare la registrazione automatica."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:545
+#: src/daemons/rhsmcertd.c:567
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "Per maggiori informazioni esegui: rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:651
+#: src/daemons/rhsmcertd.c:673
 msgid "Wrong number of arguments specified.\n"
 msgstr "Specificato un numero errato di argomenti.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:720
+#: src/daemons/rhsmcertd.c:742
 msgid "Invalid argument specified.\n"
 msgstr "Specificato un argomento non valido.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:726
+#: src/daemons/rhsmcertd.c:748
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "AVVISO: sono stati usati argomenti deprecati a riga di comando.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:741
+#: src/daemons/rhsmcertd.c:763
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "Opzione non valida: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:755
+#: src/daemons/rhsmcertd.c:777
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "Argomento non valido specificato: %s\n"
@@ -975,148 +975,148 @@ msgstr "Recupero delle risorse supportate"
 msgid "Checking connection status"
 msgstr "Controllo dello stato della connessione"
 
-#: src/rhsm/connection.py:1529
+#: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
 msgstr "Recupero del token di cloud"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1608
+#: src/rhsm/connection.py:1607
 msgid "Registering system"
 msgstr "Registrazione del sistema"
 
-#: src/rhsm/connection.py:1638 src/rhsm/connection.py:1650
+#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 "Aggiornamento delle macchine virtuali rilevate in esecuzione sull'host dato"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsm/connection.py:1673
+#: src/rhsm/connection.py:1672
 msgid "Updating hypervisor information"
 msgstr "Aggiornamento delle informazioni dell'hypervisor"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsm/connection.py:1745
+#: src/rhsm/connection.py:1744
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
 msgstr "Registrazione sottoscrizione"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsm/connection.py:1750 src/rhsm/connection.py:1754
+#: src/rhsm/connection.py:1749 src/rhsm/connection.py:1753
 msgid "Fetching guest information"
 msgstr "Recupero delle informazioni del guest"
 
-#: src/rhsm/connection.py:1758
+#: src/rhsm/connection.py:1757
 msgid "Removing guests"
 msgstr "Rimozione dei guest"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1788 src/rhsm/connection.py:1799
+#: src/rhsm/connection.py:1787 src/rhsm/connection.py:1798
 msgid "Updating profile information"
 msgstr "Aggiornamento delle informazioni del profilo"
 
-#: src/rhsm/connection.py:1807
+#: src/rhsm/connection.py:1806
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1816
+#: src/rhsm/connection.py:1815
 #, fuzzy
 #| msgid "Checking installed software"
 msgid "Checking compliance status"
 msgstr "Verifica del software installato"
 
-#: src/rhsm/connection.py:1825
+#: src/rhsm/connection.py:1824
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1832
+#: src/rhsm/connection.py:1831
 msgid "Fetching available system purpose settings"
 msgstr "Recupero delle impostazioni disponibili dello scopo di sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsm/connection.py:1839 src/rhsm/connection.py:1847
+#: src/rhsm/connection.py:1838 src/rhsm/connection.py:1846
 msgid "Fetching organizations"
 msgstr "Recupero delle organizzazioni"
 
-#: src/rhsm/connection.py:1860
+#: src/rhsm/connection.py:1859
 msgid "Unregistering system"
 msgstr "Annullamento registrazione del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1884
+#: src/rhsm/connection.py:1883
 msgid "Fetching certificates"
 msgstr "Recupero dei certificati"
 
-#: src/rhsm/connection.py:1893
+#: src/rhsm/connection.py:1892
 msgid "Fetching certificate serial numbers"
 msgstr "Recupero dei numeri seriali dei certificati"
 
-#: src/rhsm/connection.py:1909
+#: src/rhsm/connection.py:1908
 msgid "Fetching content for a certificate"
 msgstr "Recupero del contenuto di un certificato"
 
-#: src/rhsm/connection.py:1959
+#: src/rhsm/connection.py:1958
 msgid "Fetching pools"
 msgstr "Recupero dei pool"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsm/connection.py:1970
+#: src/rhsm/connection.py:1969
 msgid "Fetching release information"
 msgstr "Recupero delle informazioni sul rilascio"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1984
+#: src/rhsm/connection.py:1983
 msgid "Fetching available releases"
 msgstr "Recupero dei rilasci disponibili"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsm/connection.py:1999
+#: src/rhsm/connection.py:1998
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
 msgstr "Recupero elenco di ambienti possibili"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:2008
+#: src/rhsm/connection.py:2007
 msgid "Fetching service levels"
 msgstr "Recupero dei livelli di servizio"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsm/connection.py:2022
+#: src/rhsm/connection.py:2021
 msgid "Fetching environments"
 msgstr "Recupero degli ambienti"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:2032
+#: src/rhsm/connection.py:2031
 msgid "Updating certificate"
 msgstr "Aggiornamento certificato"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/rhsm/connection.py:2051
+#: src/rhsm/connection.py:2050
 msgid "Updating certificates"
 msgstr "Aggiornamento certificati"
 
-#: src/rhsm/connection.py:2070
+#: src/rhsm/connection.py:2069
 msgid "Checking server status"
 msgstr "Verifica dello stato del server"
 
-#: src/rhsm/connection.py:2078
+#: src/rhsm/connection.py:2077
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2089
+#: src/rhsm/connection.py:2088
 #, fuzzy
 #| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
 msgstr "Aggiornamento override del repository"
 
-#: src/rhsm/connection.py:2102
+#: src/rhsm/connection.py:2101
 #, fuzzy
 #| msgid "Removing Repository Overrides"
 msgid "Removing content overrides"
 msgstr "Rimozione override del repository"
 
-#: src/rhsm/connection.py:2111
+#: src/rhsm/connection.py:2110
 #, fuzzy
 #| msgid "Fetching pools"
 msgid "Fetching job"
@@ -1183,7 +1183,7 @@ msgstr "Scritto: {destination_dir_name}"
 msgid "Unable to create zip file of system information: {error}"
 msgstr "Impossibile creare il file zip con informazioni del sistema: {error}"
 
-#: src/rhsmlib/dbus/objects/register.py:156
+#: src/rhsmlib/dbus/objects/register.py:158
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
@@ -1191,7 +1191,7 @@ msgstr ""
 "L'utente %s è parte di più organizzazioni, ma non è stata selezionata alcuna "
 "organizzazione"
 
-#: src/rhsmlib/dbus/objects/register.py:172
+#: src/rhsmlib/dbus/objects/register.py:174
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr "L'utente %s non è parte di alcuna organizzazione"
@@ -1238,7 +1238,7 @@ msgstr "Non è possibile usare le date nel passato"
 #: src/subscription_manager/reasons.py:110
 #: src/subscription_manager/utils.py:273 src/subscription_manager/utils.py:289
 #: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:311
-#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:332
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:334
 msgid "Unknown"
 msgstr "Sconosciuto"
 
@@ -2813,45 +2813,31 @@ msgid "Available Service Levels"
 msgstr "Livelli di servizio disponibili"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/subscription_manager/cli_command/status.py:40
-msgid "Show status information for this system's subscriptions and products"
+#: src/subscription_manager/cli_command/status.py:28
+#, fuzzy
+#| msgid "Show status information for this system's subscriptions and products"
+msgid "Show status information for this system"
 msgstr ""
 "Mostra le informazioni sullo stato per i prodotti e le sottoscrizioni per "
 "questo sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/subscription_manager/cli_command/status.py:45
-#, python-brace-format
-msgid ""
-"future date to check status on, defaults to today's date (example: {example})"
-msgstr ""
-"data futura per il controllo dello stato, l'impostazione predefinita è la "
-"data odierna (esempio: {example})"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/subscription_manager/cli_command/status.py:70
+#: src/subscription_manager/cli_command/status.py:36
 msgid "System Status Details"
 msgstr "Dettagli stato del sistema"
 
-#: src/subscription_manager/cli_command/status.py:75
-msgid ""
-"Content Access Mode is set to Simple Content Access. This host has access to "
-"content, regardless of subscription status.\n"
-msgstr ""
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
+#: src/subscription_manager/cli_command/status.py:49
+#, fuzzy
+#| msgid "Not registered"
+msgid "Overall Status: Not registered\n"
+msgstr "Non è registrato"
 
-#: src/subscription_manager/cli_command/status.py:111
-#, python-brace-format
-msgid ""
-"Overall Status: {status}\n"
-"{message}"
-msgstr ""
-"Stato generale: {status}\n"
-"{message}"
-
-#: src/subscription_manager/cli_command/status.py:145
-#, python-brace-format
-msgid "System Purpose Status: {status}"
-msgstr "Stato dello scopo di sistema: {status}"
+#: src/subscription_manager/cli_command/status.py:52
+#, fuzzy
+#| msgid "Overall Status"
+msgid "Overall Status: Registered\n"
+msgstr "Stato generale"
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
@@ -2875,7 +2861,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/syspurpose.py:90
-#, python-brace-format, python-format
+#, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 msgstr "%(prog)s {name} [SOTTOMODULO] [OPZIONI]"
 
@@ -3247,7 +3233,7 @@ msgstr "Processo interrotto dall'utente."
 msgid "Error uploading package profile: %s\n"
 msgstr "Errore durante l'invio del profilo di pacchetti: %s\n"
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
@@ -3256,22 +3242,22 @@ msgstr ""
 "viene ignorata."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 msgid "Registering the system"
 msgstr "Registrazione del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 msgid "Updating entitlement certificates & repositories."
 msgstr "Aggiornamento certificati per i contentui & repository in corso."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:404
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:419
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "Impossibile aggiornare i certificati per l'entitlement e repository"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#: src/subscription_manager/utils.py:390
+#: src/subscription_manager/utils.py:392
 msgid "and"
 msgstr "e"
 
@@ -3291,6 +3277,27 @@ msgid ""
 msgstr ""
 "Avviso: la chiave fornita \"{key}\" non è inclusa nella lista delle chiavi "
 "valide:"
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
+#, python-brace-format
+#~ msgid ""
+#~ "future date to check status on, defaults to today's date (example: "
+#~ "{example})"
+#~ msgstr ""
+#~ "data futura per il controllo dello stato, l'impostazione predefinita è la "
+#~ "data odierna (esempio: {example})"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Overall Status: {status}\n"
+#~ "{message}"
+#~ msgstr ""
+#~ "Stato generale: {status}\n"
+#~ "{message}"
+
+#, python-brace-format
+#~ msgid "System Purpose Status: {status}"
+#~ msgstr "Stato dello scopo di sistema: {status}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid "optional arguments"
@@ -4280,10 +4287,6 @@ msgstr ""
 #~ msgid "System purpose"
 #~ msgstr "Scopo del sistema"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
-#~ msgid "Not registered"
-#~ msgstr "Non è registrato"
-
 #~ msgid "Unregister"
 #~ msgstr "Rimuovi-registrazione"
 
@@ -4930,9 +4933,6 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid "<b>Status:</b>"
 #~ msgstr "<b>Stato:</b>"
-
-#~ msgid "Overall Status"
-#~ msgstr "Stato generale"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid "Installed View"

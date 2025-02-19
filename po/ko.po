@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 18:12+0100\n"
+"POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2025-01-11 05:38+0000\n"
 "Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
@@ -220,60 +220,60 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: 오류: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:99
+#: src/daemons/rhsmcertd.c:100
 msgid "interval to run cert check (in minutes)"
 msgstr "인증서 확인을 실행하는 간격 (분 단위)"
 
-#: src/daemons/rhsmcertd.c:102
+#: src/daemons/rhsmcertd.c:103
 msgid "interval to run auto-registration (in minutes)"
 msgstr "자동 등록을 실행하는 간격(분 단위)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:106
 msgid "run the initial checks immediately, with no delay"
 msgstr "지연 없이 즉시 초기 검사를 실행합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:109
 msgid "show debug messages"
 msgstr "디버그 메세지 보기"
 
-#: src/daemons/rhsmcertd.c:110
+#: src/daemons/rhsmcertd.c:111
 msgid "do not add an offset to the initial checks."
 msgstr "오프셋을 처음 확인에 추가하지 마십시오."
 
-#: src/daemons/rhsmcertd.c:113
+#: src/daemons/rhsmcertd.c:114
 msgid "try to perform auto-registration."
 msgstr "자동 등록을 실행하십시오."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:545
+#: src/daemons/rhsmcertd.c:567
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "자세한 정보를 보려면 rhsmcertd --help를 실행하십시오\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:651
+#: src/daemons/rhsmcertd.c:673
 msgid "Wrong number of arguments specified.\n"
 msgstr "잘못된 인수 번호가 지정되어 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:720
+#: src/daemons/rhsmcertd.c:742
 msgid "Invalid argument specified.\n"
 msgstr "잘못된 인수가 지정되어 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:726
+#: src/daemons/rhsmcertd.c:748
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "경고: 사용권장되지 않는 CLI 인수가 사용되고 있습니다.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:741
+#: src/daemons/rhsmcertd.c:763
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "잘못된 옵션: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/daemons/rhsmcertd.c:755
+#: src/daemons/rhsmcertd.c:777
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "잘못된 인수가 지정됨: %s\n"
@@ -951,138 +951,138 @@ msgstr "지원되는 자원 가져오기"
 msgid "Checking connection status"
 msgstr "연결 상태 점검하기"
 
-#: src/rhsm/connection.py:1529
+#: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
 msgstr "클라우드 토큰 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1608
+#: src/rhsm/connection.py:1607
 msgid "Registering system"
 msgstr "시스템 등록하기"
 
-#: src/rhsm/connection.py:1638 src/rhsm/connection.py:1650
+#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr "제공된 호스트에서 실행 중에 감지된 가상화 장비 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1673
+#: src/rhsm/connection.py:1672
 msgid "Updating hypervisor information"
 msgstr "하이퍼바이저 정보 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1745
+#: src/rhsm/connection.py:1744
 msgid "Updating consumer information"
 msgstr "고객 정보 최신화하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1750 src/rhsm/connection.py:1754
+#: src/rhsm/connection.py:1749 src/rhsm/connection.py:1753
 msgid "Fetching guest information"
 msgstr "게스트 정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1758
+#: src/rhsm/connection.py:1757
 msgid "Removing guests"
 msgstr "게스트 제거 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1788 src/rhsm/connection.py:1799
+#: src/rhsm/connection.py:1787 src/rhsm/connection.py:1798
 msgid "Updating profile information"
 msgstr "프로파일 정보 최신화하기"
 
-#: src/rhsm/connection.py:1807
+#: src/rhsm/connection.py:1806
 msgid "Fetching consumer keys"
 msgstr "고객 키 가져오기"
 
-#: src/rhsm/connection.py:1816
+#: src/rhsm/connection.py:1815
 msgid "Checking compliance status"
 msgstr "준수 상태 점검 중"
 
-#: src/rhsm/connection.py:1825
+#: src/rhsm/connection.py:1824
 msgid "Checking system purpose compliance status"
 msgstr "시스템 목적 준수 상태 점검 중"
 
-#: src/rhsm/connection.py:1832
+#: src/rhsm/connection.py:1831
 msgid "Fetching available system purpose settings"
 msgstr "사용 가능한 시스템 목적 설정 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1839 src/rhsm/connection.py:1847
+#: src/rhsm/connection.py:1838 src/rhsm/connection.py:1846
 msgid "Fetching organizations"
 msgstr "조직 가져오기"
 
-#: src/rhsm/connection.py:1860
+#: src/rhsm/connection.py:1859
 msgid "Unregistering system"
 msgstr "시스템 등록 해제 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1884
+#: src/rhsm/connection.py:1883
 msgid "Fetching certificates"
 msgstr "인증서 가져오기"
 
-#: src/rhsm/connection.py:1893
+#: src/rhsm/connection.py:1892
 msgid "Fetching certificate serial numbers"
 msgstr "인증서 일련 번호 가져오기"
 
-#: src/rhsm/connection.py:1909
+#: src/rhsm/connection.py:1908
 msgid "Fetching content for a certificate"
 msgstr "인증서를 위해 내용 가져오기"
 
-#: src/rhsm/connection.py:1959
+#: src/rhsm/connection.py:1958
 msgid "Fetching pools"
 msgstr "풀 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1970
+#: src/rhsm/connection.py:1969
 msgid "Fetching release information"
 msgstr "출시 정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1984
+#: src/rhsm/connection.py:1983
 msgid "Fetching available releases"
 msgstr "사용 가능한 출시정보 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1999
+#: src/rhsm/connection.py:1998
 msgid "Fetching entitlements"
 msgstr "자격 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2008
+#: src/rhsm/connection.py:2007
 msgid "Fetching service levels"
 msgstr "서비스 수준 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2022
+#: src/rhsm/connection.py:2021
 msgid "Fetching environments"
 msgstr "환경 목록 가져오기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2032
+#: src/rhsm/connection.py:2031
 msgid "Updating certificate"
 msgstr "인증서 최신화 중"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2051
+#: src/rhsm/connection.py:2050
 msgid "Updating certificates"
 msgstr "인증서 최신화 중"
 
-#: src/rhsm/connection.py:2070
+#: src/rhsm/connection.py:2069
 msgid "Checking server status"
 msgstr "서버 상태 확인 중"
 
-#: src/rhsm/connection.py:2078
+#: src/rhsm/connection.py:2077
 msgid "Fetching content overrides"
 msgstr "내용 재정의 가져오기"
 
-#: src/rhsm/connection.py:2089
+#: src/rhsm/connection.py:2088
 msgid "Updating content overrides"
 msgstr "내용 재정의 최신화 중"
 
-#: src/rhsm/connection.py:2102
+#: src/rhsm/connection.py:2101
 msgid "Removing content overrides"
 msgstr "내용 재정의 제거 중"
 
-#: src/rhsm/connection.py:2111
+#: src/rhsm/connection.py:2110
 msgid "Fetching job"
 msgstr "작업 가져오기"
 
@@ -1151,13 +1151,13 @@ msgstr "작성됨: {destination_dir_name}"
 msgid "Unable to create zip file of system information: {error}"
 msgstr "시스템 정보의 zip 파일을 생성할 수 없음: {error}"
 
-#: src/rhsmlib/dbus/objects/register.py:156
+#: src/rhsmlib/dbus/objects/register.py:158
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr "사용자 %s은(는) 더 많은 조직의 멤버이지만, 조직이 선택되지 않았습니다"
 
-#: src/rhsmlib/dbus/objects/register.py:172
+#: src/rhsmlib/dbus/objects/register.py:174
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr "사용자 %s은(는) 조직의 멤버가 아닙니다"
@@ -1205,7 +1205,7 @@ msgstr "지난 날짜는 허용되지 않음"
 #: src/subscription_manager/reasons.py:110
 #: src/subscription_manager/utils.py:273 src/subscription_manager/utils.py:289
 #: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:311
-#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:332
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:334
 msgid "Unknown"
 msgstr "알 수 없음"
 
@@ -1301,13 +1301,15 @@ msgstr "환경 IDs 및 환경 이름은 상호 베타적입니다"
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
-msgstr "환경: '{env_names}'는 필수 유형 '{environment_type}' 를 갖고 있지 않습니다"
+msgstr ""
+"환경: '{env_names}'는 필수 유형 '{environment_type}' 를 갖고 있지 않습니다"
 
 #: src/rhsmlib/services/register.py:182
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
-msgstr "환경: '{env_names}'는 필수 유형 '{environment_type}' 를 갖고 있지 않습니다"
+msgstr ""
+"환경: '{env_names}'는 필수 유형 '{environment_type}' 를 갖고 있지 않습니다"
 
 #: src/rhsmlib/services/register.py:202
 msgid ""
@@ -1635,7 +1637,8 @@ msgstr ""
 msgid ""
 "Error: --username, --password, and --org can be used only on unregistered "
 "systems"
-msgstr "오류: --username, --password 및 --org는 등록되지 않은 시스템에서만 사용 할 "
+msgstr ""
+"오류: --username, --password 및 --org는 등록되지 않은 시스템에서만 사용 할 "
 "수 있습니다"
 
 #. TRANSLATORS: this is used to quote a string
@@ -2682,8 +2685,8 @@ msgid ""
 "Error: --username, --password, --org and --serverurl can be used only on "
 "unregistered systems"
 msgstr ""
-"오류: --username, --password, --org 및 --serverurl은 등록되지 않은 "
-"시스템에서만 사용 할 수 있습니다"
+"오류: --username, --password, --org 및 --serverurl은 등록되지 않은 시스템에서"
+"만 사용 할 수 있습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:123
@@ -2724,43 +2727,30 @@ msgid "Available Service Levels"
 msgstr "사용 가능한 서비스 레벨"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/status.py:40
-msgid "Show status information for this system's subscriptions and products"
+#: src/subscription_manager/cli_command/status.py:28
+#, fuzzy
+#| msgid "Show status information for this system's subscriptions and products"
+msgid "Show status information for this system"
 msgstr "이 시스템의 서브스크립션 및 제품의 상태 정보를 표시"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/status.py:45
-#, python-brace-format
-msgid ""
-"future date to check status on, defaults to today's date (example: {example})"
-msgstr "상태를 확인할 날짜. 기본값은 오늘 날짜임 (예: {example})"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/status.py:70
+#: src/subscription_manager/cli_command/status.py:36
 msgid "System Status Details"
 msgstr "시스템 상태 정보"
 
-#: src/subscription_manager/cli_command/status.py:75
-msgid ""
-"Content Access Mode is set to Simple Content Access. This host has access to "
-"content, regardless of subscription status.\n"
-msgstr ""
-"컨텐츠 접근 방식이 단순 컨텐츠 접근으로 설정되어 있습니다. 이 호스트는 서브스"
-"크립션 상태에 관계없이 컨텐츠에 접근 할 수 있습니다.\n"
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/status.py:49
+#, fuzzy
+#| msgid "Not registered"
+msgid "Overall Status: Not registered\n"
+msgstr "등록되어 있지 않습니다"
 
-#: src/subscription_manager/cli_command/status.py:111
-#, python-brace-format
-msgid ""
-"Overall Status: {status}\n"
-"{message}"
-msgstr ""
-"전체 상태: {status}\n"
-"{message}"
-
-#: src/subscription_manager/cli_command/status.py:145
-#, python-brace-format
-msgid "System Purpose Status: {status}"
-msgstr "시스템 목적 상태: {status}"
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/status.py:52
+#, fuzzy
+#| msgid "Overall Status"
+msgid "Overall Status: Registered\n"
+msgstr "전체 상태"
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
@@ -3137,29 +3127,29 @@ msgstr "사용자가 프로세스를 중단했습니다."
 msgid "Error uploading package profile: %s\n"
 msgstr "꾸러미 프로파일 적재 중 오류 발생: %s\n"
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
 msgstr "이 시스템은 이미 등록되어 있어, 자동으로 등록되는 요청은 무시합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 msgid "Registering the system"
 msgstr "시스템 등록하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 msgid "Updating entitlement certificates & repositories."
 msgstr "자격 인증서 & 저장소를 최신화하기."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:404
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:419
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "자격 인증서 및 저장소를 최신화 할 수 없음"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/utils.py:390
+#: src/subscription_manager/utils.py:392
 msgid "and"
 msgstr "및"
 
@@ -3175,6 +3165,32 @@ msgstr "경고: 제공된 값 \"{val}\"은 유효값{attr} 목록에 포함되�
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr "경고: 제공된 키 \"{key}\"는 유효 키 목록에 포함되지 않습니다:"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#, python-brace-format
+#~ msgid ""
+#~ "future date to check status on, defaults to today's date (example: "
+#~ "{example})"
+#~ msgstr "상태를 확인할 날짜. 기본값은 오늘 날짜임 (예: {example})"
+
+#~ msgid ""
+#~ "Content Access Mode is set to Simple Content Access. This host has access "
+#~ "to content, regardless of subscription status.\n"
+#~ msgstr ""
+#~ "컨텐츠 접근 방식이 단순 컨텐츠 접근으로 설정되어 있습니다. 이 호스트는 서"
+#~ "브스크립션 상태에 관계없이 컨텐츠에 접근 할 수 있습니다.\n"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Overall Status: {status}\n"
+#~ "{message}"
+#~ msgstr ""
+#~ "전체 상태: {status}\n"
+#~ "{message}"
+
+#, python-brace-format
+#~ msgid "System Purpose Status: {status}"
+#~ msgstr "시스템 목적 상태: {status}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "optional arguments"
@@ -4151,10 +4167,6 @@ msgstr "경고: 제공된 키 \"{key}\"는 유효 키 목록에 포함되지 않
 #~ msgid "System purpose"
 #~ msgstr "시스템 목적"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#~ msgid "Not registered"
-#~ msgstr "등록되어 있지 않습니다"
-
 #~ msgid "Unregister"
 #~ msgstr "등록 해제"
 
@@ -4773,10 +4785,6 @@ msgstr "경고: 제공된 키 \"{key}\"는 유효 키 목록에 포함되지 않
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "<b>Status:</b>"
 #~ msgstr "<b>상태:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#~ msgid "Overall Status"
-#~ msgstr "전체 상태"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "Installed View"
