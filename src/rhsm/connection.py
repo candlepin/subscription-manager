@@ -28,7 +28,7 @@ import socket
 import sys
 import time
 import traceback
-from typing import Optional
+from typing import Any, Dict, List, Optional
 from pathlib import Path
 
 from email.utils import format_datetime
@@ -453,7 +453,11 @@ class RateLimitExceededException(RestlibException):
     def __init__(self, code, msg=None, headers=None):
         super(RateLimitExceededException, self).__init__(code, msg)
         self.headers = headers or {}
-        self.retry_after = safe_int(self.headers.get('retry-after'))
+        self.retry_after = None
+        for header, value in self.headers.items():
+            if header.lower() == "retry-after":
+                self.retry_after = safe_int(value)
+                break
         self.msg = msg or "Access rate limit exceeded"
         if self.retry_after is not None:
             self.msg += ", retry access after: %s seconds." % self.retry_after
@@ -1107,11 +1111,12 @@ class UEPConnection(BaseConnection):
 
         return self.resources
 
-    def supports_resource(self, resource_name):
-        """
-        Check if the server we're connecting too supports a particular
-        resource. For our use cases this is generally the plural form
-        of the resource.
+    def supports_resource(self, resource_name: Optional[str]):
+        """Check if the server supports a particular resource.
+
+        :param resource_name:
+            Resource to be requested.
+            When `None`, API call `GET /` is made to cache all supported resources.
         """
         if self.resources is None:
             self._load_supported_resources()
@@ -1151,32 +1156,28 @@ class UEPConnection(BaseConnection):
     def ping(self, username=None, password=None):
         return self.conn.request_get("/status/")
 
-    def getJWToken(self, cloud_id, metadata, signature):
+    def getCloudJWT(self, cloud_id: str, metadata: str, signature: str) -> Dict[str, Any]:
+        """Obtain cloud JWT.
+
+        This method is part of the Cloud registration v2: standard or anonymous flow.
+
+        :param cloud_id: Cloud provider, e.g. 'aws', 'azure' or 'gcp'.
+        :param metadata: Base64 encoded public cloud metadata.
+        :param signature: Base64 encoded public cloud signature.
         """
-        When automatic registration is enabled in rhsm.conf and it was possible
-        to gather cloud metadata, then it is possible to try to get JSON Web Token
-        for automatic registration. When candlepin does not provide automatic
-        registration, then raise exception.
-        :param cloud_id: ID of cloud provider, e.g. "aws", "azure", "gcp"
-        :param metadata: string with base64 encoded metadata
-        :param signature: string with base64 encoded signature
-        :return: string with JWT
-        """
-        params = {
+        data = {
             "type": cloud_id,
             "metadata": metadata,
-            "signature": signature
+            "signature": signature,
         }
-        # "Accept" http header has to be text/plain, because candlepin return
-        # token as simple text and it is not wrapped in json document
         headers = {
-            "Content-type": "application/json",
-            "Accept": "text/plain"
+            "Content-Type": "application/json",
         }
+
         return self.conn.request_post(
-            method="/cloud/authorize",
-            params=params,
-            headers=headers
+            method="/cloud/authorize?version=2",
+            params=data,
+            headers=headers,
         )
 
     def registerConsumer(self, name="unknown", type="system", facts={},
@@ -1513,16 +1514,29 @@ class UEPConnection(BaseConnection):
         method = '/consumers/%s' % self.sanitize(consumerId)
         return self.conn.request_delete(method)
 
-    def getCertificates(self, consumer_uuid, serials=[]):
+    def getCertificates(
+        self,
+        consumer_uuid: str,
+        serials: Optional[list] = None,
+        jwt: Optional[str] = None,
+    ) -> List[dict]:
         """
         Fetch all entitlement certificates for this consumer.
         Specify a list of serial numbers to filter if desired.
+
+        :param consumer_uuid: consumer UUID
+        :param serials: list of entitlement serial numbers
+        :param jwt: JWT identifying an anonymous system
         """
         method = '/consumers/%s/certificates' % (self.sanitize(consumer_uuid))
-        if len(serials) > 0:
+        if serials:
             serials_str = ','.join(serials)
             method = "%s?serials=%s" % (method, serials_str)
-        return self.conn.request_get(method)
+        headers = {}
+        if jwt:
+            headers["Authorization"] = "Bearer {jwt}".format(jwt=jwt)
+
+        return self.conn.request_get(method, headers=headers)
 
     def getCertificateSerials(self, consumerId):
         """
