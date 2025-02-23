@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 18:12+0100\n"
+"POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2024-11-09 18:38+0000\n"
 "Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
@@ -226,60 +226,60 @@ msgid "%(prog)s: error: %(message)s\n"
 msgstr "%(prog)s: Fehler: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:99
+#: src/daemons/rhsmcertd.c:100
 msgid "interval to run cert check (in minutes)"
 msgstr "Intervall zum Ausführen der Zertifikatsprüfung (in Minuten)"
 
-#: src/daemons/rhsmcertd.c:102
+#: src/daemons/rhsmcertd.c:103
 msgid "interval to run auto-registration (in minutes)"
 msgstr "Intervall zum Ausführen der automatischen Registrierung (in Minuten)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:106
 msgid "run the initial checks immediately, with no delay"
 msgstr "Initiale Prüfungen ohne Verzögerung sofort durchführen"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:109
 msgid "show debug messages"
 msgstr "Zeige Debug-Meldungen"
 
-#: src/daemons/rhsmcertd.c:110
+#: src/daemons/rhsmcertd.c:111
 msgid "do not add an offset to the initial checks."
 msgstr "die ersten Kontrollen keinen Versatz hinzufügen."
 
-#: src/daemons/rhsmcertd.c:113
+#: src/daemons/rhsmcertd.c:114
 msgid "try to perform auto-registration."
 msgstr "Versuchen Sie, eine automatische Registrierung durchzuführen."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:545
+#: src/daemons/rhsmcertd.c:567
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "Weitere Informationen erhalten Sie mit: rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:651
+#: src/daemons/rhsmcertd.c:673
 msgid "Wrong number of arguments specified.\n"
 msgstr "Falsche Anzahl an Argumenten angegeben.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:720
+#: src/daemons/rhsmcertd.c:742
 msgid "Invalid argument specified.\n"
 msgstr "Ungültiges Argument angegeben.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:726
+#: src/daemons/rhsmcertd.c:748
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "WARNUNG: Veraltete CLI-Parameter verwendet.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:741
+#: src/daemons/rhsmcertd.c:763
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "Ungültige Option: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/daemons/rhsmcertd.c:755
+#: src/daemons/rhsmcertd.c:777
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "Ungültiger Parameter spezifiziert: %s\n"
@@ -979,180 +979,180 @@ msgstr ""
 msgid "Checking connection status"
 msgstr "connectionStatusLabel"
 
-#: src/rhsm/connection.py:1529
+#: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1608
+#: src/rhsm/connection.py:1607
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "System registrieren"
 
-#: src/rhsm/connection.py:1638 src/rhsm/connection.py:1650
+#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
-#: src/rhsm/connection.py:1673
+#: src/rhsm/connection.py:1672
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
 msgstr "Versionsinformationen anzeigen"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
-#: src/rhsm/connection.py:1745
+#: src/rhsm/connection.py:1744
 #, fuzzy
 #| msgid "Subscriptions information"
 msgid "Updating consumer information"
 msgstr "Subskriptionsinformation"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
-#: src/rhsm/connection.py:1750 src/rhsm/connection.py:1754
+#: src/rhsm/connection.py:1749 src/rhsm/connection.py:1753
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
 msgstr "Manifestinformationen anzeigen"
 
-#: src/rhsm/connection.py:1758
+#: src/rhsm/connection.py:1757
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
 msgstr "Entfernen"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1788 src/rhsm/connection.py:1799
+#: src/rhsm/connection.py:1787 src/rhsm/connection.py:1798
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "Zertifikatsinformationen anzeigen"
 
-#: src/rhsm/connection.py:1807
+#: src/rhsm/connection.py:1806
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1816
+#: src/rhsm/connection.py:1815
 #, fuzzy
 #| msgid "Checking installed software"
 msgid "Checking compliance status"
 msgstr "Überprüfen der installierten Software"
 
-#: src/rhsm/connection.py:1825
+#: src/rhsm/connection.py:1824
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1832
+#: src/rhsm/connection.py:1831
 #, fuzzy
 #| msgid "Convenient module for managing all system purpose settings"
 msgid "Fetching available system purpose settings"
 msgstr "Praktisches Modul zur Verwaltung aller Systemzweckeinstellungen"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
-#: src/rhsm/connection.py:1839 src/rhsm/connection.py:1847
+#: src/rhsm/connection.py:1838 src/rhsm/connection.py:1846
 #, fuzzy
 #| msgid "specify an organization"
 msgid "Fetching organizations"
 msgstr "Eine Organisation angeben"
 
-#: src/rhsm/connection.py:1860
+#: src/rhsm/connection.py:1859
 #, fuzzy
 #| msgid "Unregistering"
 msgid "Unregistering system"
 msgstr "Wird abgemeldet"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1884
+#: src/rhsm/connection.py:1883
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "Identitätszertifikat"
 
-#: src/rhsm/connection.py:1893
+#: src/rhsm/connection.py:1892
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1909
+#: src/rhsm/connection.py:1908
 msgid "Fetching content for a certificate"
 msgstr ""
 
-#: src/rhsm/connection.py:1959
+#: src/rhsm/connection.py:1958
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
-#: src/rhsm/connection.py:1970
+#: src/rhsm/connection.py:1969
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
 msgstr "Versionsinformationen anzeigen"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:1984
+#: src/rhsm/connection.py:1983
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
 msgstr "Alle verfügbaren Releases auflisten"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
-#: src/rhsm/connection.py:1999
+#: src/rhsm/connection.py:1998
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
 msgstr "Liste möglicher Umgebungen abrufen"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:2008
+#: src/rhsm/connection.py:2007
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
 msgstr "Verwendetes Servicelevel:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
-#: src/rhsm/connection.py:2022
+#: src/rhsm/connection.py:2021
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
 msgstr "Liste möglicher Umgebungen abrufen"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:2032
+#: src/rhsm/connection.py:2031
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Updating certificate"
 msgstr "Identitätszertifikat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
-#: src/rhsm/connection.py:2051
+#: src/rhsm/connection.py:2050
 #, fuzzy
 #| msgid "Import Certificates"
 msgid "Updating certificates"
 msgstr "Zertifikate importieren"
 
-#: src/rhsm/connection.py:2070
+#: src/rhsm/connection.py:2069
 #, fuzzy
 #| msgid "Checking installed software"
 msgid "Checking server status"
 msgstr "Überprüfen der installierten Software"
 
-#: src/rhsm/connection.py:2078
+#: src/rhsm/connection.py:2077
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2089
+#: src/rhsm/connection.py:2088
 #, fuzzy
 #| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
 msgstr "Aktualisierung von Repository-Überschreibungen"
 
-#: src/rhsm/connection.py:2102
+#: src/rhsm/connection.py:2101
 #, fuzzy
 #| msgid "Removing Repository Overrides"
 msgid "Removing content overrides"
 msgstr "Repository-Überschreibungen werden entfernt"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/rhsm/connection.py:2111
+#: src/rhsm/connection.py:2110
 #, fuzzy
 #| msgid "Cancel"
 msgid "Fetching job"
@@ -1225,7 +1225,7 @@ msgid "Unable to create zip file of system information: {error}"
 msgstr ""
 "Zip-Datei mit Systeminformationen konnte nicht erstellt werden: {error}"
 
-#: src/rhsmlib/dbus/objects/register.py:156
+#: src/rhsmlib/dbus/objects/register.py:158
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
@@ -1233,7 +1233,7 @@ msgstr ""
 "Benutzer %s ist Mitglied in mehreren Organisationen, aber es wurde keine "
 "Organisation ausgewählt"
 
-#: src/rhsmlib/dbus/objects/register.py:172
+#: src/rhsmlib/dbus/objects/register.py:174
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr "Benutzer %s ist kein Mitglied einer Organisation"
@@ -1283,7 +1283,7 @@ msgstr "Vergangene Termine sind nicht erlaubt"
 #: src/subscription_manager/reasons.py:110
 #: src/subscription_manager/utils.py:273 src/subscription_manager/utils.py:289
 #: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:311
-#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:332
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:334
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -2911,48 +2911,30 @@ msgid "Available Service Levels"
 msgstr "Verfügbare Servicelevels"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgromans
-#: src/subscription_manager/cli_command/status.py:40
-msgid "Show status information for this system's subscriptions and products"
+#: src/subscription_manager/cli_command/status.py:28
+#, fuzzy
+#| msgid "Show status information for this system's subscriptions and products"
+msgid "Show status information for this system"
 msgstr ""
 "Anzeigen der Statusinformation für Subskriptionen und Produkte dieses Systems"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgromans
-#: src/subscription_manager/cli_command/status.py:45
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "future date to check status on, defaults to today's date (example: %s)"
-msgid ""
-"future date to check status on, defaults to today's date (example: {example})"
-msgstr ""
-"Zukünftiges Datum, an dem der Status überprüft wird, standardmäßig heutiges "
-"Datum (Beispiel: %s)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgromans
-#: src/subscription_manager/cli_command/status.py:70
+#: src/subscription_manager/cli_command/status.py:36
 msgid "System Status Details"
 msgstr "Systemstatusdetails"
 
-#: src/subscription_manager/cli_command/status.py:75
-msgid ""
-"Content Access Mode is set to Simple Content Access. This host has access to "
-"content, regardless of subscription status.\n"
-msgstr ""
-"Der Inhaltszugriffsmodus ist auf Einfacher Inhaltszugriff eingestellt. "
-"Dieser Host hat unabhängig vom Abonnementstatus Zugriff auf Inhalte.\n"
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
+#: src/subscription_manager/cli_command/status.py:49
+#, fuzzy
+#| msgid "Not registered"
+msgid "Overall Status: Not registered\n"
+msgstr "Nicht registriert"
 
-#: src/subscription_manager/cli_command/status.py:111
-#, python-brace-format
-msgid ""
-"Overall Status: {status}\n"
-"{message}"
-msgstr ""
-"Gesamtstatus: {status}\n"
-"{message}"
-
-#: src/subscription_manager/cli_command/status.py:145
-#, python-brace-format
-msgid "System Purpose Status: {status}"
-msgstr "Systemzweckstatus: {status}"
+#: src/subscription_manager/cli_command/status.py:52
+#, fuzzy
+#| msgid "Overall Status"
+msgid "Overall Status: Registered\n"
+msgstr "Gesamtstatus"
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
@@ -3352,7 +3334,7 @@ msgstr "Benutzer hat den Prozess unterbrochen."
 msgid "Error uploading package profile: %s\n"
 msgstr "Fehler beim Hochladen des Paketprofils: %s\n"
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 #, fuzzy
 #| msgid "This system is already registered. Add force to options to override."
 msgid ""
@@ -3363,27 +3345,27 @@ msgstr ""
 "Sie Kraft."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering the system"
 msgstr "System registrieren"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgromans
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 #, fuzzy
 #| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
 msgstr "Berechtigungszertifikate & Repositorys aktualisieren"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgromans
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:404
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:419
 msgid "Unable to update entitlement certificates and repositories"
 msgstr ""
 "Berechtigungszertifikate und Repositorys konnten nicht aktualisiert werden"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgromans
-#: src/subscription_manager/utils.py:390
+#: src/subscription_manager/utils.py:392
 msgid "and"
 msgstr "und"
 
@@ -3399,6 +3381,36 @@ msgstr ""
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author rgromans
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "future date to check status on, defaults to today's date (example: %s)"
+#~ msgid ""
+#~ "future date to check status on, defaults to today's date (example: "
+#~ "{example})"
+#~ msgstr ""
+#~ "Zukünftiges Datum, an dem der Status überprüft wird, standardmäßig "
+#~ "heutiges Datum (Beispiel: %s)"
+
+#~ msgid ""
+#~ "Content Access Mode is set to Simple Content Access. This host has access "
+#~ "to content, regardless of subscription status.\n"
+#~ msgstr ""
+#~ "Der Inhaltszugriffsmodus ist auf Einfacher Inhaltszugriff eingestellt. "
+#~ "Dieser Host hat unabhängig vom Abonnementstatus Zugriff auf Inhalte.\n"
+
+#, python-brace-format
+#~ msgid ""
+#~ "Overall Status: {status}\n"
+#~ "{message}"
+#~ msgstr ""
+#~ "Gesamtstatus: {status}\n"
+#~ "{message}"
+
+#, python-brace-format
+#~ msgid "System Purpose Status: {status}"
+#~ msgstr "Systemzweckstatus: {status}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid "optional arguments"
@@ -4496,10 +4508,6 @@ msgstr ""
 #~ msgid "System purpose"
 #~ msgstr "Systemzweck"
 
-# translation auto-copied from project subscription-manager, version 1.9.X, document keys, author hedda
-#~ msgid "Not registered"
-#~ msgstr "Nicht registriert"
-
 #~ msgid "Unregister"
 #~ msgstr "Abmelden"
 
@@ -5126,9 +5134,6 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid "<b>Status:</b>"
 #~ msgstr "<b>Status:</b>"
-
-#~ msgid "Overall Status"
-#~ msgstr "Gesamtstatus"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #~ msgid "Installed View"

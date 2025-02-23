@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 18:12+0100\n"
+"POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2023-01-25 22:20+0000\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Kannada <https://translate.fedoraproject.org/projects/"
@@ -242,68 +242,68 @@ msgstr "%s: ದೋಷ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:99
+#: src/daemons/rhsmcertd.c:100
 msgid "interval to run cert check (in minutes)"
 msgstr "ಪ್ರಮಾಣಪತ್ರ ಪರಿಶೀಲನೆಯನ್ನು ಚಲಾಯಿಸಬೇಕಿರುವ ಅಂತರ (ನಿಮಿಷಗಳಲ್ಲಿ)"
 
-#: src/daemons/rhsmcertd.c:102
+#: src/daemons/rhsmcertd.c:103
 msgid "interval to run auto-registration (in minutes)"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:106
 msgid "run the initial checks immediately, with no delay"
 msgstr "ಯಾವುದೆ ವಿಳಂಬವಿಲ್ಲದೆ ಆರಂಭಿಕ ಪರಿಶೀಲನೆಗಳನ್ನು ಕೂಡಲೇ ಚಲಾಯಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:109
 msgid "show debug messages"
 msgstr "ದೋಷನಿವಾರಣ ಮಾಹಿತಿಯನ್ನು ತೋರಿಸು"
 
-#: src/daemons/rhsmcertd.c:110
+#: src/daemons/rhsmcertd.c:111
 msgid "do not add an offset to the initial checks."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:113
+#: src/daemons/rhsmcertd.c:114
 msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:545
+#: src/daemons/rhsmcertd.c:567
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "ಹೆಚ್ಚಿನ ಮಾಹಿತಿಗಾಗಿ ಇದನ್ನು ಚಲಾಯಿಸಿ: rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:651
+#: src/daemons/rhsmcertd.c:673
 msgid "Wrong number of arguments specified.\n"
 msgstr "ತಪ್ಪು ಸಂಖ್ಯೆಗಳ ಆರ್ಗ್ಯುಮೆಂಟ್‌ಗಳನ್ನು ಸೂಚಿಸಲಾಗಿದೆ.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:720
+#: src/daemons/rhsmcertd.c:742
 msgid "Invalid argument specified.\n"
 msgstr "ಅಸಿಂಧುವಾದ ಆರ್ಗ್ಯುಮೆಂಟ್‌ ಅನ್ನು ಸೂಚಿಸಲಾಗಿದೆ.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:726
+#: src/daemons/rhsmcertd.c:748
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "ಎಚ್ಚರಿಕೆ: ಅಪ್ರಚಲಿತವಾದ CLI ಆರ್ಗ್ಯುಮೆಂಟ್‌ಗಳನ್ನು ಬಳಸಲಾಗುತ್ತಿದೆ.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:741
+#: src/daemons/rhsmcertd.c:763
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "ಅಮಾನ್ಯವಾದ ಆಯ್ಕೆ: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:755
+#: src/daemons/rhsmcertd.c:777
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "ಅಸಿಂಧುವಾದ ಆರ್ಗ್ಯುಮೆಂಟ್‌ ಅನ್ನು ಸೂಚಿಸಲಾಗಿದೆ: %s\n"
@@ -1091,25 +1091,25 @@ msgstr ""
 msgid "Checking connection status"
 msgstr "connectionStatusLabel"
 
-#: src/rhsm/connection.py:1529
+#: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1608
+#: src/rhsm/connection.py:1607
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "ವ್ಯವಸ್ಥೆಯನ್ನು ನೋಂದಾಯಿಸಿ"
 
-#: src/rhsm/connection.py:1638 src/rhsm/connection.py:1650
+#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1673
+#: src/rhsm/connection.py:1672
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
@@ -1117,7 +1117,7 @@ msgstr "ಆವೃತ್ತಿಯ ಮಾಹಿತಿಯನ್ನು ಮುದ್�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1745
+#: src/rhsm/connection.py:1744
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
@@ -1125,7 +1125,7 @@ msgstr "ಚಂದಾದಾರಿಕೆ ನೋಂದಣಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1750 src/rhsm/connection.py:1754
+#: src/rhsm/connection.py:1749 src/rhsm/connection.py:1753
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
@@ -1133,7 +1133,7 @@ msgstr "ಮ್ಯಾನಿಫೆಸ್ಟ್ ಮಾಹಿತಿಯನ್ನು �
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1758
+#: src/rhsm/connection.py:1757
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
@@ -1141,31 +1141,31 @@ msgstr "ತೆಗೆದುಹಾಕಲಾಗುತ್ತಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1788 src/rhsm/connection.py:1799
+#: src/rhsm/connection.py:1787 src/rhsm/connection.py:1798
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "ಪ್ರಮಾಣಪತ್ರ ಮಾಹಿತಿಯನ್ನು ಮುದ್ರಿಸು"
 
-#: src/rhsm/connection.py:1807
+#: src/rhsm/connection.py:1806
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1816
+#: src/rhsm/connection.py:1815
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1825
+#: src/rhsm/connection.py:1824
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1832
+#: src/rhsm/connection.py:1831
 msgid "Fetching available system purpose settings"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1839 src/rhsm/connection.py:1847
+#: src/rhsm/connection.py:1838 src/rhsm/connection.py:1846
 #, fuzzy
 #| msgid "specify organization"
 msgid "Fetching organizations"
@@ -1173,7 +1173,7 @@ msgstr "ಸಂಸ್ಥೆಯನ್ನು ಸೂಚಿಸಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1860
+#: src/rhsm/connection.py:1859
 #, fuzzy
 #| msgid "Register System"
 msgid "Unregistering system"
@@ -1181,27 +1181,27 @@ msgstr "ವ್ಯವಸ್ಥೆಯನ್ನು ನೋಂದಾಯಿಸಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1884
+#: src/rhsm/connection.py:1883
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "ಗುರುತು ಪ್ರಮಾಣಪತ್ರ"
 
-#: src/rhsm/connection.py:1893
+#: src/rhsm/connection.py:1892
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1909
+#: src/rhsm/connection.py:1908
 msgid "Fetching content for a certificate"
 msgstr ""
 
-#: src/rhsm/connection.py:1959
+#: src/rhsm/connection.py:1958
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1970
+#: src/rhsm/connection.py:1969
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
@@ -1209,7 +1209,7 @@ msgstr "ಆವೃತ್ತಿಯ ಮಾಹಿತಿಯನ್ನು ಮುದ್�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1984
+#: src/rhsm/connection.py:1983
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
@@ -1217,7 +1217,7 @@ msgstr "ಲಭ್ಯವಿರುವ ಬಿಡುಗಡೆಗಳ ಪಟ್ಟಿ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1999
+#: src/rhsm/connection.py:1998
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
@@ -1225,7 +1225,7 @@ msgstr "ಸಾಧ್ಯವಿರುವ ಪರಿಸರಗಳ ಪಟ್ಟಿಯ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2008
+#: src/rhsm/connection.py:2007
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
@@ -1233,7 +1233,7 @@ msgstr "ಸೇವಾ ಮಟ್ಟವನ್ನು ಬಳಸಿಕೊಂಡು:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2022
+#: src/rhsm/connection.py:2021
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
@@ -1241,7 +1241,7 @@ msgstr "ಸಾಧ್ಯವಿರುವ ಪರಿಸರಗಳ ಪಟ್ಟಿಯ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2032
+#: src/rhsm/connection.py:2031
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Updating certificate"
@@ -1249,27 +1249,27 @@ msgstr "ಗುರುತು ಪ್ರಮಾಣಪತ್ರ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2051
+#: src/rhsm/connection.py:2050
 #, fuzzy
 #| msgid "Import Certificates"
 msgid "Updating certificates"
 msgstr "ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಆಮದು ಮಾಡಿಕೊ"
 
-#: src/rhsm/connection.py:2070
+#: src/rhsm/connection.py:2069
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2078
+#: src/rhsm/connection.py:2077
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2089
+#: src/rhsm/connection.py:2088
 msgid "Updating content overrides"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2102
+#: src/rhsm/connection.py:2101
 #, fuzzy
 #| msgid "Remove All Overrides"
 msgid "Removing content overrides"
@@ -1277,7 +1277,7 @@ msgstr "ಎಲ್ಲಾ ಅತಿಕ್ರಮಿಕೆಗಳನ್ನು ತೆ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2111
+#: src/rhsm/connection.py:2110
 #, fuzzy
 #| msgid "Cancel"
 msgid "Fetching job"
@@ -1355,13 +1355,13 @@ msgstr ""
 msgid "Unable to create zip file of system information: {error}"
 msgstr "ವ್ಯವಸ್ಥೆಯ ಮಾಹಿತಿಯ ಜಿಪ್ ಕಡತವನ್ನು ರಚಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ: %s"
 
-#: src/rhsmlib/dbus/objects/register.py:156
+#: src/rhsmlib/dbus/objects/register.py:158
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/register.py:172
+#: src/rhsmlib/dbus/objects/register.py:174
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr ""
@@ -1413,7 +1413,7 @@ msgstr "ಹಿಂದಿನ ದಿನಾಂಕಗಳಿಗೆ ಅನುಮತಿ 
 #: src/subscription_manager/reasons.py:110
 #: src/subscription_manager/utils.py:273 src/subscription_manager/utils.py:289
 #: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:311
-#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:332
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:334
 msgid "Unknown"
 msgstr "ಅಜ್ಞಾತ"
 
@@ -3192,51 +3192,33 @@ msgstr "ಲಭ್ಯವಿರುವ ಸೇವೆಯ ಮಟ್ಟಗಳು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/status.py:40
-msgid "Show status information for this system's subscriptions and products"
+#: src/subscription_manager/cli_command/status.py:28
+#, fuzzy
+#| msgid "Show status information for this system's subscriptions and products"
+msgid "Show status information for this system"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯ ಚಂದಾದಾರಿಕೆಗಳು ಮತ್ತು ಉತ್ಪನ್ನಗಳಿಗಾಗಿನ ಸ್ಥಿತಿ ಮಾಹಿತಿಯನ್ನು ತೋರಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/status.py:45
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "future date to check status on, defaults to today's date (example: %s)"
-msgid ""
-"future date to check status on, defaults to today's date (example: {example})"
-msgstr ""
-"ಸ್ಥಿತಿಯನ್ನು ಪರಿಶೀಲಿಸಬೇಕಿರುವ ಭವಿಷ್ಯದ ದಿನಗಳು, ಇಂದಿನ ದಿನಾಂಕಕ್ಕೆ "
-"ಪೂರ್ವನಿಯೋಜಿತಗೊಂಡಿರುತ್ತದೆ (ಉದಾಹರಣೆ: %s)"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/status.py:70
+#: src/subscription_manager/cli_command/status.py:36
 msgid "System Status Details"
 msgstr "ವ್ಯವಸ್ಥೆಯ ಸ್ಥಿತಿಯ ವಿವರಗಳು"
 
-#: src/subscription_manager/cli_command/status.py:75
-msgid ""
-"Content Access Mode is set to Simple Content Access. This host has access to "
-"content, regardless of subscription status.\n"
-msgstr ""
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/cli_command/status.py:49
+#, fuzzy
+#| msgid "System is not registered."
+msgid "Overall Status: Not registered\n"
+msgstr "ಈ ವ್ಯವಸ್ಥೆಯನ್ನು ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/status.py:111
-#, fuzzy, python-brace-format
-#| msgid "Overall Status: %s\n"
-msgid ""
-"Overall Status: {status}\n"
-"{message}"
-msgstr "ಒಟ್ಟಾರೆ ಸ್ಥಿತಿ: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/status.py:145
-#, fuzzy, python-brace-format
-#| msgid "System Status Details"
-msgid "System Purpose Status: {status}"
-msgstr "ವ್ಯವಸ್ಥೆಯ ಸ್ಥಿತಿಯ ವಿವರಗಳು"
+#: src/subscription_manager/cli_command/status.py:52
+#, fuzzy
+#| msgid "Overall Status"
+msgid "Overall Status: Registered\n"
+msgstr "ಒಟ್ಟಾರೆ ಸ್ಥಿತಿ"
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
@@ -3657,7 +3639,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 #, fuzzy
 #| msgid "This system is already registered. Use --force to override"
 msgid ""
@@ -3667,7 +3649,7 @@ msgstr "ಈ ವ್ಯವಸ್ಥೆಯನ್ನು ಈಗಾಗಲೆ ನೋಂ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering the system"
@@ -3675,7 +3657,7 @@ msgstr "ವ್ಯವಸ್ಥೆಯನ್ನು ನೋಂದಾಯಿಸಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 #, fuzzy
 #| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
@@ -3683,13 +3665,13 @@ msgstr "ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ರಮಾಣಪತ್ರಗ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:404
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:419
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಮತ್ತು ರೆಪೊಸಿಟರಿಗಳನ್ನು ಅಪ್‌ಡೇಟ್ ಮಾಡಲಾಗಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/utils.py:390
+#: src/subscription_manager/utils.py:392
 msgid "and"
 msgstr "ಮತ್ತು"
 
@@ -3705,6 +3687,34 @@ msgstr ""
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "future date to check status on, defaults to today's date (example: %s)"
+#~ msgid ""
+#~ "future date to check status on, defaults to today's date (example: "
+#~ "{example})"
+#~ msgstr ""
+#~ "ಸ್ಥಿತಿಯನ್ನು ಪರಿಶೀಲಿಸಬೇಕಿರುವ ಭವಿಷ್ಯದ ದಿನಗಳು, ಇಂದಿನ ದಿನಾಂಕಕ್ಕೆ "
+#~ "ಪೂರ್ವನಿಯೋಜಿತಗೊಂಡಿರುತ್ತದೆ (ಉದಾಹರಣೆ: %s)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "Overall Status: %s\n"
+#~ msgid ""
+#~ "Overall Status: {status}\n"
+#~ "{message}"
+#~ msgstr "ಒಟ್ಟಾರೆ ಸ್ಥಿತಿ: %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "System Status Details"
+#~ msgid "System Purpose Status: {status}"
+#~ msgstr "ವ್ಯವಸ್ಥೆಯ ಸ್ಥಿತಿಯ ವಿವರಗಳು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4575,13 +4585,6 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #, fuzzy
-#~| msgid "System is not registered."
-#~ msgid "Not registered"
-#~ msgstr "ಈ ವ್ಯವಸ್ಥೆಯನ್ನು ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ."
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#, fuzzy
 #~| msgid "_Unregister"
 #~ msgid "Unregister"
 #~ msgstr "ನೋಂದಣಿ ರದ್ಧತಿ (_U)"
@@ -5261,11 +5264,6 @@ msgstr ""
 # document keys
 #~ msgid "<b>Status:</b>"
 #~ msgstr "<b>ಸ್ಥಿತಿ:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#~ msgid "Overall Status"
-#~ msgstr "ಒಟ್ಟಾರೆ ಸ್ಥಿತಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
