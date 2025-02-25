@@ -27,13 +27,13 @@ OS_DIST ?= $(shell rpm --eval='%dist')
 PYTHON_VER ?= $(shell $(PYTHON) -c 'import sys; print("python%s.%s" % sys.version_info[:2])')
 
 ifeq ($(OS_DIST), debian)
-  PYTHON_SITELIB ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
+  PYTHON_SITEARCH ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
 else
-  PYTHON_SITELIB ?= $(PREFIX)/lib64/$(PYTHON_VER)/site-packages
+  PYTHON_SITEARCH ?= $(PREFIX)/lib64/$(PYTHON_VER)/site-packages
 endif
 DNF_PLUGIN_PYTHON_SITELIB ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
 # Note the underscore used instead of a hyphen
-PYTHON_INST_DIR = $(PYTHON_SITELIB)/subscription_manager
+PYTHON_INST_DIR = $(PYTHON_SITEARCH)/subscription_manager
 
 # Where various bits of code live in the git repo
 SRC_DIR := src/subscription_manager
@@ -207,7 +207,7 @@ install-via-setup: install-subpackages-via-setup
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-package-profile-uploader $(DESTDIR)/$(LIBEXEC_DIR)/
-	find $(DESTDIR)/$(PYTHON_SITELIB) -name requires.txt -exec sed -i '/dbus-python/d' {} \;
+	find $(DESTDIR)/$(PYTHON_SITEARCH) -name requires.txt -exec sed -i '/dbus-python/d' {} \;
 
 
 .PHONY: install-subpackages-via-setup

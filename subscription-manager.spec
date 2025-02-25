@@ -380,7 +380,7 @@ popd
 %install
 make -f Makefile install VERSION=%{version}-%{release} \
     PYTHON=%{__python} PREFIX=%{_prefix} \
-    DESTDIR=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
+    DESTDIR=%{buildroot} PYTHON_SITEARCH=%{python_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     COMPLETION_DIR=%{completion_dir} \
     RUN_DIR=%{run_dir} \
