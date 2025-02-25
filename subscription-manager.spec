@@ -212,7 +212,7 @@ Obsoletes: subscription-manager-plugin-container <= %{version}
 
 %if %{use_dnf}
 %if %{create_libdnf_rpm}
-# The libdnf plugin is in separate RPM, but shubscription-manager should be dependent
+# The libdnf plugin is in a separate RPM, but subscription-manager should be dependent
 # on this RPM, because somebody can install microdnf on host and installing of product
 # certs would not work as expected without libdnf plugin
 Requires: libdnf-plugin-subscription-manager = %{version}
