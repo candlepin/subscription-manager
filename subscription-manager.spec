@@ -268,7 +268,6 @@ BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
 BuildRequires: libdnf-devel >= 0.22.5
-Requires: json-c%{?_isa}
 Requires: libdnf%{?_isa} >= 0.22.5
 %endif
 
