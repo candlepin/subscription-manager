@@ -134,7 +134,7 @@ Requires:  iproute
 Requires:  %{py_package_prefix}-iniparse
 Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what
-Requires:  %{rhsm_package_name} = %{version}
+Requires:  %{rhsm_package_name} = %{version}-%{release}
 Requires: subscription-manager-rhsm-certificates
 %ifarch %{dmidecode_arches}
 Requires: dmidecode
@@ -168,11 +168,11 @@ Requires: python3-librepo
 # The libdnf plugin is in a separate RPM, but subscription-manager should be dependent
 # on this RPM, because somebody can install microdnf on host and installing of product
 # certs would not work as expected without libdnf plugin
-Requires: libdnf-plugin-subscription-manager = %{version}
+Requires: libdnf-plugin-subscription-manager = %{version}-%{release}
 # The dnf plugin is now part of subscription-manager
 Obsoletes: dnf-plugin-subscription-manager < 1.29.0
 %else
-Requires: dnf-plugin-subscription-manager = %{version}
+Requires: dnf-plugin-subscription-manager = %{version}-%{release}
 %endif
 %endif
 
