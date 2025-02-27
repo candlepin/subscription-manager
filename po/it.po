@@ -1,15 +1,15 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
-# Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023.
+# Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023, 2025.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-07 18:24+0100\n"
-"PO-Revision-Date: 2024-12-23 23:38+0000\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"PO-Revision-Date: 2025-02-27 12:38+0000\n"
+"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -290,14 +290,9 @@ msgid ""
 msgstr ""
 "\n"
 "Questo sistema non è registrato con un server di autorizzazione. Puoi "
-"utilizzare il gestore abbonamenti per registrarti.\n"
+"utilizzare subscription-manager per registrarti.\n"
 
 #: src/plugins/dnf/subscription_manager.py:61
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is not registered with an entitlement server. You can use "
-#| "subscription-manager to register.\n"
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
@@ -305,7 +300,7 @@ msgid ""
 msgstr ""
 "\n"
 "Questo sistema non è registrato con un server di autorizzazione. Puoi "
-"utilizzare il gestore abbonamenti per registrarti.\n"
+"utilizzare \"rhc\" or \"subscription-manager\" per registrarti.\n"
 
 #: src/plugins/dnf/subscription_manager.py:68
 msgid ""
@@ -315,7 +310,7 @@ msgid ""
 msgstr ""
 "\n"
 "Questo sistema è registrato con un server di autorizzazione, ma non riceve "
-"aggiornamenti. Puoi utilizzare il gestore abbonamenti per assegnare gli "
+"aggiornamenti. Puoi utilizzare subscription-manager per assegnare gli "
 "abbonamenti.\n"
 
 #: src/plugins/dnf/subscription_manager.py:75
@@ -1078,11 +1073,11 @@ msgstr "Verifica dello stato del server"
 
 #: src/rhsm/connection.py:2129
 msgid "Fetching content overrides"
-msgstr "Il recupero del contenuto esegue l'override"
+msgstr ""
 
 #: src/rhsm/connection.py:2140
 msgid "Updating content overrides"
-msgstr "L'aggiornamento del contenuto ha la precedenza"
+msgstr ""
 
 #: src/rhsm/connection.py:2153
 msgid "Removing content overrides"
@@ -1380,7 +1375,7 @@ msgstr "Abbinato"
 #: src/rhsmlib/services/syspurpose.py:101
 #: src/rhsmlib/services/syspurpose.py:104
 msgid "Mismatched"
-msgstr "Non corrispondenti"
+msgstr "Non corrispondente"
 
 #: src/rhsmlib/services/syspurpose.py:102
 msgid "Partial"
@@ -2033,8 +2028,8 @@ msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
 msgstr ""
-"il gestore degli abbonamenti funziona in modalità contenitore. Utilizza il "
-"tuo sistema host per gestire gli abbonamenti.\n"
+"subscription-manager funziona in modalità per container. Utilizza il tuo "
+"sistema host per gestire gli abbonamenti.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/cli.py:282
@@ -3693,7 +3688,7 @@ msgstr "{prog} {name}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:78
 msgid "Syspurpose submodules"
-msgstr "Sottomoduli di sistema"
+msgstr "Sottomoduli di syspurpose"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/syspurpose.py:92
