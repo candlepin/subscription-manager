@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 18:12+0100\n"
+"POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2021-08-18 07:00+0000\n"
 "Last-Translator: Hela Basa <r45xveza@pm.me>\n"
 "Language-Team: Sinhala <https://translate.fedoraproject.org/projects/"
@@ -203,52 +203,52 @@ msgstr ""
 msgid "%(prog)s: error: %(message)s\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:99
+#: src/daemons/rhsmcertd.c:100
 msgid "interval to run cert check (in minutes)"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:102
+#: src/daemons/rhsmcertd.c:103
 msgid "interval to run auto-registration (in minutes)"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:106
 msgid "run the initial checks immediately, with no delay"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:109
 msgid "show debug messages"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:110
+#: src/daemons/rhsmcertd.c:111
 msgid "do not add an offset to the initial checks."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:113
+#: src/daemons/rhsmcertd.c:114
 msgid "try to perform auto-registration."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:545
+#: src/daemons/rhsmcertd.c:567
 msgid "For more information run: rhsmcertd --help\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:651
+#: src/daemons/rhsmcertd.c:673
 msgid "Wrong number of arguments specified.\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:720
+#: src/daemons/rhsmcertd.c:742
 msgid "Invalid argument specified.\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:726
+#: src/daemons/rhsmcertd.c:748
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:741
+#: src/daemons/rhsmcertd.c:763
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:755
+#: src/daemons/rhsmcertd.c:777
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr ""
@@ -803,123 +803,123 @@ msgstr ""
 msgid "Checking connection status"
 msgstr ""
 
-#: src/rhsm/connection.py:1529
+#: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
 msgstr ""
 
-#: src/rhsm/connection.py:1608
+#: src/rhsm/connection.py:1607
 msgid "Registering system"
 msgstr ""
 
-#: src/rhsm/connection.py:1638 src/rhsm/connection.py:1650
+#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
-#: src/rhsm/connection.py:1673
+#: src/rhsm/connection.py:1672
 msgid "Updating hypervisor information"
 msgstr ""
 
-#: src/rhsm/connection.py:1745
+#: src/rhsm/connection.py:1744
 msgid "Updating consumer information"
 msgstr ""
 
-#: src/rhsm/connection.py:1750 src/rhsm/connection.py:1754
+#: src/rhsm/connection.py:1749 src/rhsm/connection.py:1753
 msgid "Fetching guest information"
 msgstr ""
 
-#: src/rhsm/connection.py:1758
+#: src/rhsm/connection.py:1757
 msgid "Removing guests"
 msgstr ""
 
-#: src/rhsm/connection.py:1788 src/rhsm/connection.py:1799
+#: src/rhsm/connection.py:1787 src/rhsm/connection.py:1798
 msgid "Updating profile information"
 msgstr ""
 
-#: src/rhsm/connection.py:1807
+#: src/rhsm/connection.py:1806
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1816
+#: src/rhsm/connection.py:1815
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1825
+#: src/rhsm/connection.py:1824
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1832
+#: src/rhsm/connection.py:1831
 msgid "Fetching available system purpose settings"
 msgstr ""
 
-#: src/rhsm/connection.py:1839 src/rhsm/connection.py:1847
+#: src/rhsm/connection.py:1838 src/rhsm/connection.py:1846
 msgid "Fetching organizations"
 msgstr ""
 
-#: src/rhsm/connection.py:1860
+#: src/rhsm/connection.py:1859
 msgid "Unregistering system"
 msgstr ""
 
-#: src/rhsm/connection.py:1884
+#: src/rhsm/connection.py:1883
 msgid "Fetching certificates"
 msgstr ""
 
-#: src/rhsm/connection.py:1893
+#: src/rhsm/connection.py:1892
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1909
+#: src/rhsm/connection.py:1908
 msgid "Fetching content for a certificate"
 msgstr ""
 
-#: src/rhsm/connection.py:1959
+#: src/rhsm/connection.py:1958
 msgid "Fetching pools"
 msgstr ""
 
-#: src/rhsm/connection.py:1970
+#: src/rhsm/connection.py:1969
 msgid "Fetching release information"
 msgstr ""
 
-#: src/rhsm/connection.py:1984
+#: src/rhsm/connection.py:1983
 msgid "Fetching available releases"
 msgstr ""
 
-#: src/rhsm/connection.py:1999
+#: src/rhsm/connection.py:1998
 msgid "Fetching entitlements"
 msgstr ""
 
-#: src/rhsm/connection.py:2008
+#: src/rhsm/connection.py:2007
 msgid "Fetching service levels"
 msgstr ""
 
-#: src/rhsm/connection.py:2022
+#: src/rhsm/connection.py:2021
 msgid "Fetching environments"
 msgstr ""
 
-#: src/rhsm/connection.py:2032
+#: src/rhsm/connection.py:2031
 msgid "Updating certificate"
 msgstr ""
 
-#: src/rhsm/connection.py:2051
+#: src/rhsm/connection.py:2050
 msgid "Updating certificates"
 msgstr ""
 
-#: src/rhsm/connection.py:2070
+#: src/rhsm/connection.py:2069
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2078
+#: src/rhsm/connection.py:2077
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2089
+#: src/rhsm/connection.py:2088
 msgid "Updating content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2102
+#: src/rhsm/connection.py:2101
 msgid "Removing content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2111
+#: src/rhsm/connection.py:2110
 msgid "Fetching job"
 msgstr ""
 
@@ -977,13 +977,13 @@ msgstr ""
 msgid "Unable to create zip file of system information: {error}"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/register.py:156
+#: src/rhsmlib/dbus/objects/register.py:158
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/register.py:172
+#: src/rhsmlib/dbus/objects/register.py:174
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr ""
@@ -1026,7 +1026,7 @@ msgstr ""
 #: src/subscription_manager/reasons.py:110
 #: src/subscription_manager/utils.py:273 src/subscription_manager/utils.py:289
 #: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:311
-#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:332
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:334
 msgid "Unknown"
 msgstr ""
 
@@ -2308,36 +2308,20 @@ msgstr ""
 msgid "Available Service Levels"
 msgstr ""
 
-#: src/subscription_manager/cli_command/status.py:40
-msgid "Show status information for this system's subscriptions and products"
+#: src/subscription_manager/cli_command/status.py:28
+msgid "Show status information for this system"
 msgstr ""
 
-#: src/subscription_manager/cli_command/status.py:45
-#, python-brace-format
-msgid ""
-"future date to check status on, defaults to today's date (example: {example})"
-msgstr ""
-
-#: src/subscription_manager/cli_command/status.py:70
+#: src/subscription_manager/cli_command/status.py:36
 msgid "System Status Details"
 msgstr ""
 
-#: src/subscription_manager/cli_command/status.py:75
-msgid ""
-"Content Access Mode is set to Simple Content Access. This host has access to "
-"content, regardless of subscription status.\n"
+#: src/subscription_manager/cli_command/status.py:49
+msgid "Overall Status: Not registered\n"
 msgstr ""
 
-#: src/subscription_manager/cli_command/status.py:111
-#, python-brace-format
-msgid ""
-"Overall Status: {status}\n"
-"{message}"
-msgstr ""
-
-#: src/subscription_manager/cli_command/status.py:145
-#, python-brace-format
-msgid "System Purpose Status: {status}"
+#: src/subscription_manager/cli_command/status.py:52
+msgid "Overall Status: Registered\n"
 msgstr ""
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
@@ -2671,25 +2655,25 @@ msgstr ""
 msgid "Error uploading package profile: %s\n"
 msgstr ""
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
 msgstr ""
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 msgid "Registering the system"
 msgstr ""
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 msgid "Updating entitlement certificates & repositories."
 msgstr ""
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:404
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:419
 msgid "Unable to update entitlement certificates and repositories"
 msgstr ""
 
-#: src/subscription_manager/utils.py:390
+#: src/subscription_manager/utils.py:392
 msgid "and"
 msgstr ""
 
