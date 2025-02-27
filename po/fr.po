@@ -12,13 +12,13 @@
 # Transtats <suanand@redhat.com>, 2022, 2023.
 # blutch112 <vincent.lefebvre59@gmail.com>, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2023, 2025.
-# Léane GRASSER <leane.grasser@proton.me>, 2024.
+# Léane GRASSER <leane.grasser@proton.me>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2024-12-13 12:38+0000\n"
+"PO-Revision-Date: 2025-02-19 12:38+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.8.4\n"
+"X-Generator: Weblate 5.10\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -1021,7 +1021,7 @@ msgstr "Extraire les clés des consommateurs"
 
 #: src/rhsm/connection.py:1815
 msgid "Checking compliance status"
-msgstr "Vérification du statut de conformité"
+msgstr "Vérification de l'état de conformité"
 
 #: src/rhsm/connection.py:1824
 msgid "Checking system purpose compliance status"
@@ -1280,8 +1280,7 @@ msgstr "L'abonnement n'a pas commencé"
 #: src/rhsmlib/services/entitlement.py:323
 msgid "Subscription management service doesn't support Status Details."
 msgstr ""
-"Le service de gestion des abonnements ne prend pas en charge les « Détails "
-"du statut »."
+"Le service de gestion des abonnements ne prend pas en charge l'état détaillé."
 
 #: src/rhsmlib/services/entitlement.py:492
 msgid ""
@@ -2222,7 +2221,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:64
 msgid "    Installed Product Status"
-msgstr "    Statut des produits installés"
+msgstr "    État des produits installés"
 
 #: src/subscription_manager/cli_command/list.py:82
 #, python-brace-format
@@ -2834,29 +2833,22 @@ msgstr "Tous les niveaux de service disponibles"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/status.py:28
-#, fuzzy
-#| msgid "Show status information for this system's subscriptions and products"
 msgid "Show status information for this system"
-msgstr ""
-"Afficher les informations de statut des abonnements et produits de ce système"
+msgstr "Afficher les informations d'état relatives à ce système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/status.py:36
 msgid "System Status Details"
-msgstr "Détails du statut du système"
+msgstr "Détails de l'état du système"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/status.py:49
-#, fuzzy
-#| msgid "Not registered"
 msgid "Overall Status: Not registered\n"
-msgstr "Non inscrit"
+msgstr "État général : Non enregistré\n"
 
 #: src/subscription_manager/cli_command/status.py:52
-#, fuzzy
-#| msgid "Overall Status"
 msgid "Overall Status: Registered\n"
-msgstr "Statut général"
+msgstr "État général : Enregistré\n"
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
