@@ -1,13 +1,14 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2021.
 # Pino Toscano <toscano.pino@tiscali.it>, 2021, 2023.
+# Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-02 12:40+0100\n"
-"PO-Revision-Date: 2023-05-03 06:03+0000\n"
-"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
+"PO-Revision-Date: 2024-12-23 19:38+0000\n"
+"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/it/>\n"
 "Language: it\n"
@@ -15,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -176,6 +177,9 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Avvertimento: Un {attr} di \"{download_value}\" è stato recentemente "
+"impostato per questo sistema dall'amministratore del server dei diritti.\n"
+"{advice}"
 
 #: src/syspurpose/cli.py:31
 #, python-brace-format
@@ -219,7 +223,7 @@ msgstr "{attr} disinserito."
 
 #: src/syspurpose/cli.py:157
 msgid "System Syspurpose Management Tool"
-msgstr ""
+msgstr "Strumento di gestione degli scopi del sistema"
 
 #: src/syspurpose/cli.py:158 src/syspurpose/cli.py:353
 msgid ""
@@ -227,6 +231,9 @@ msgid ""
 "release. Please use the 'subscription-manager syspurpose' command going "
 "forward."
 msgstr ""
+"Il comando 'sysscope' è deprecato e verrà rimosso in una futura versione "
+"principale. D'ora in poi utilizza il comando "
+"\"subscription-manager sysscope\"."
 
 #: src/syspurpose/cli.py:165 src/syspurpose/cli.py:230
 msgid "The value(s) to add"
@@ -266,23 +273,23 @@ msgstr "Rimuove i valori dalla proprietà data"
 
 #: src/syspurpose/cli.py:262
 msgid "Set the system role to the system syspurpose"
-msgstr ""
+msgstr "Imposta il ruolo di sistema sullo scopo del sistema"
 
 #: src/syspurpose/cli.py:270
 msgid "Clear set role"
-msgstr ""
+msgstr "Ruolo chiaro e definito"
 
 #: src/syspurpose/cli.py:278
 msgid "Add addons to the system syspurpose"
-msgstr ""
+msgstr "Aggiungi componenti aggiuntivi allo scopo del sistema"
 
 #: src/syspurpose/cli.py:286
 msgid "Remove addons from the system syspurpose"
-msgstr ""
+msgstr "Rimuovere i componenti aggiuntivi dallo scopo di sistema del sistema"
 
 #: src/syspurpose/cli.py:293
 msgid "Clear set addons"
-msgstr ""
+msgstr "Cancella i componenti aggiuntivi impostati"
 
 #: src/syspurpose/cli.py:301
 msgid "Set the system sla"
@@ -298,7 +305,7 @@ msgstr "Imposta l'utilizzo del sistema"
 
 #: src/syspurpose/cli.py:324
 msgid "Clear set usage"
-msgstr ""
+msgstr "Cancella l'utilizzo del set"
 
 #: src/syspurpose/cli.py:332
 msgid "Show the current system syspurpose"
