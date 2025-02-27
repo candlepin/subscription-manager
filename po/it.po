@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2025-01-10 10:38+0000\n"
+"PO-Revision-Date: 2025-02-27 08:06+0000\n"
 "Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -304,48 +304,35 @@ msgstr ""
 "sottoscrizione scaduta.  "
 
 #: src/plugins/dnf/subscription_manager.py:57
-#, fuzzy
-#| msgid ""
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register."
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
 "\n"
-"Questo sistema non è registrato a Red Hat Subscription Management. È "
-"possibile utilizzare subscription-manager per effettuare la registrazione.\n"
+"Questo sistema non è registrato con un server di autorizzazione. Puoi "
+"utilizzare subscription-manager per registrarti.\n"
 
 #: src/plugins/dnf/subscription_manager.py:63
-#, fuzzy
-#| msgid ""
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register."
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "\"rhc\" or \"subscription-manager\" to register.\n"
 msgstr ""
 "\n"
-"Questo sistema non è registrato a Red Hat Subscription Management. È "
-"possibile utilizzare subscription-manager per effettuare la registrazione.\n"
+"Questo sistema non è registrato con un server di autorizzazione. Puoi "
+"utilizzare \"rhc\" or \"subscription-manager\" per registrarti.\n"
 
 #: src/plugins/dnf/subscription_manager.py:70
-#, fuzzy
-#| msgid ""
-#| "This system is registered to Red Hat Subscription Management, but is not "
-#| "receiving updates. You can use subscription-manager to assign "
-#| "subscriptions."
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
 "\n"
-"Questo sistema è registrato a Red Hat Subscription Management, ma non sta "
-"ricevendo gli aggiornamenti. È possibile utilizzare subscription-manager per "
-"assegnare le sottoscrizioni.\n"
+"Questo sistema è registrato con un server di autorizzazione, ma non riceve "
+"aggiornamenti. Puoi utilizzare subscription-manager per assegnare gli "
+"abbonamenti.\n"
 
 #: src/plugins/dnf/subscription_manager.py:77
 #, python-brace-format
@@ -1105,10 +1092,8 @@ msgid "Fetching content overrides"
 msgstr ""
 
 #: src/rhsm/connection.py:2088
-#, fuzzy
-#| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
-msgstr "Aggiornamento override del repository"
+msgstr ""
 
 #: src/rhsm/connection.py:2101
 #, fuzzy
@@ -1328,19 +1313,20 @@ msgstr "Errore: questo sistema non è registrato"
 
 #: src/rhsmlib/services/register.py:73
 msgid "Environment IDs and environment names are mutually exclusive"
-msgstr ""
+msgstr "ID e nomi di ambienti sono mutualmente esclusivi"
 
 #: src/rhsmlib/services/register.py:174
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
-msgstr ""
+msgstr "L'ambiente: '{env_names}' non ha il tipo richiesto '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:182
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
 msgstr ""
+"Gli ambienti: '{env_names}' non hanno il tipo richiesto '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:202
 msgid ""
@@ -1406,7 +1392,7 @@ msgstr "Abbinato"
 #: src/rhsmlib/services/syspurpose.py:101
 #: src/rhsmlib/services/syspurpose.py:104
 msgid "Mismatched"
-msgstr ""
+msgstr "Non corrispondente"
 
 #: src/rhsmlib/services/syspurpose.py:102
 msgid "Partial"
@@ -1835,16 +1821,12 @@ msgstr ""
 "help"
 
 #: src/subscription_manager/cli_command/cli.py:247
-#, fuzzy
-#| msgid ""
-#| "subscription-manager is disabled when running inside a container. Please "
-#| "refer to your host system for subscription management.\n"
 msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
 msgstr ""
-"Se eseguito all'interno di un container subscription-manager risulterà "
-"disabilitato. Per la gestione delle sottoscrizioni usare il sistema host.\n"
+"subscription-manager funziona in modalità per container. Utilizza il tuo "
+"sistema host per gestire gli abbonamenti.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/cli.py:262
@@ -2478,6 +2460,8 @@ msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
 msgstr ""
+"includere un tentativo implicito di annullare la registrazione prima di "
+"registrare una nuova identità di sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:114
@@ -2814,12 +2798,8 @@ msgstr "Livelli di servizio disponibili"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/status.py:28
-#, fuzzy
-#| msgid "Show status information for this system's subscriptions and products"
 msgid "Show status information for this system"
-msgstr ""
-"Mostra le informazioni sullo stato per i prodotti e le sottoscrizioni per "
-"questo sistema"
+msgstr "Mostra le informazioni sullo stato di questo sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/status.py:36
@@ -2828,16 +2808,12 @@ msgstr "Dettagli stato del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/status.py:49
-#, fuzzy
-#| msgid "Not registered"
 msgid "Overall Status: Not registered\n"
-msgstr "Non è registrato"
+msgstr "Stato generale: non registrato\n"
 
 #: src/subscription_manager/cli_command/status.py:52
-#, fuzzy
-#| msgid "Overall Status"
 msgid "Overall Status: Registered\n"
-msgstr "Stato generale"
+msgstr "Stato generale: registrato\n"
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
@@ -2857,7 +2833,7 @@ msgstr "{prog} {name}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:76
 msgid "Syspurpose submodules"
-msgstr ""
+msgstr "Sottomoduli di syspurpose"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/syspurpose.py:90
