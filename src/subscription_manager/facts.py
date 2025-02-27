@@ -12,13 +12,14 @@
 from datetime import datetime
 import logging
 import os
-from typing import Dict, List, Optional, TYPE_CHECKING
+from typing import Dict, Optional, TYPE_CHECKING
 
 from subscription_manager.injection import PLUGIN_MANAGER, require
 from subscription_manager.cache import CacheManager
 from rhsm import ourjson as json
 
 from rhsmlib.facts.all import AllFactsCollector
+from rhsmlib.facts.collection import FactsDict
 
 if TYPE_CHECKING:
     from subscription_manager.plugins import PluginManager
@@ -40,13 +41,6 @@ class Facts(CacheManager):
 
     def __init__(self):
         self.facts = {}
-
-        # see bz #627962
-        # we would like to have this info, but for now, since it
-        # can change constantly on laptops, it makes for a lot of
-        # fact churn, so we report it, but ignore it as an indicator
-        # that we need to update
-        self.graylist: List[str] = ["cpu.cpu_mhz", "lscpu.cpu_mhz"]
 
         # plugin manager so we can add custom facts via plugin
         self.plugin_manager: PluginManager = require(PLUGIN_MANAGER)
@@ -70,7 +64,7 @@ class Facts(CacheManager):
         # In order to accurately check for changes, we must refresh local data
         self.facts = self.get_facts(True)
 
-        for key in (set(self.facts) | set(cached_facts)) - set(self.graylist):
+        for key in (set(self.facts) | set(cached_facts)) - FactsDict.GRAYLIST:
             if self.facts.get(key) != cached_facts.get(key):
                 return True
         return False
