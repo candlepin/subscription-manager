@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 18:12+0100\n"
+"POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Telugu\n"
@@ -241,68 +241,68 @@ msgstr "%s: దోషం: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:99
+#: src/daemons/rhsmcertd.c:100
 msgid "interval to run cert check (in minutes)"
 msgstr "ధృవీకరణపత్ర పరిశీలన నడుపుటకు విరామం (నిమిషాలలో)"
 
-#: src/daemons/rhsmcertd.c:102
+#: src/daemons/rhsmcertd.c:103
 msgid "interval to run auto-registration (in minutes)"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:106
 msgid "run the initial checks immediately, with no delay"
 msgstr "ప్రాథమిక పరిశీలనలను తక్షణమే నడుపుము, ఆలస్యం లేకుండా"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:109
 msgid "show debug messages"
 msgstr "డీబగ్ సందేశములను చూపుము"
 
-#: src/daemons/rhsmcertd.c:110
+#: src/daemons/rhsmcertd.c:111
 msgid "do not add an offset to the initial checks."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:113
+#: src/daemons/rhsmcertd.c:114
 msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:545
+#: src/daemons/rhsmcertd.c:567
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "మరింత సమాచారం కొరకు నడుపుము: rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:651
+#: src/daemons/rhsmcertd.c:673
 msgid "Wrong number of arguments specified.\n"
 msgstr "సరికాని సంఖ్యలో ఆర్గుమెంట్లు తెలుపబడెను.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:720
+#: src/daemons/rhsmcertd.c:742
 msgid "Invalid argument specified.\n"
 msgstr "చెల్లని ఆర్గుమెంట్ తెలుపబడెను.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:726
+#: src/daemons/rhsmcertd.c:748
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "హెచ్చరిక: తీసివేసిన CLI ఆర్గుమెంట్లు వుపయోగించబడినవి.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:741
+#: src/daemons/rhsmcertd.c:763
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "చెల్లని ఐచ్చికాలు: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:755
+#: src/daemons/rhsmcertd.c:777
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "చెల్లని ఆర్గుమెంట్ తెలుపబడెను: %s\n"
@@ -1080,25 +1080,25 @@ msgstr ""
 msgid "Checking connection status"
 msgstr "అనుసంధానంస్థితిలేబుల్"
 
-#: src/rhsm/connection.py:1529
+#: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1608
+#: src/rhsm/connection.py:1607
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "సిస్టమ్ నమోదుచేయి"
 
-#: src/rhsm/connection.py:1638 src/rhsm/connection.py:1650
+#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1673
+#: src/rhsm/connection.py:1672
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
@@ -1106,7 +1106,7 @@ msgstr "వర్షన్ సమాచారం ముద్రించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1745
+#: src/rhsm/connection.py:1744
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
@@ -1114,7 +1114,7 @@ msgstr "సబ్‌స్క్రిప్షన్ నమోదీకరణ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1750 src/rhsm/connection.py:1754
+#: src/rhsm/connection.py:1749 src/rhsm/connection.py:1753
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
@@ -1122,7 +1122,7 @@ msgstr "మానిఫెస్ట్ సమాచారం ముద్రి�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1758
+#: src/rhsm/connection.py:1757
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
@@ -1130,31 +1130,31 @@ msgstr "తీసివేయుచున్నది"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1788 src/rhsm/connection.py:1799
+#: src/rhsm/connection.py:1787 src/rhsm/connection.py:1798
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "ధృవీకరణపత్రం సమాచారం ముద్రించు"
 
-#: src/rhsm/connection.py:1807
+#: src/rhsm/connection.py:1806
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1816
+#: src/rhsm/connection.py:1815
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1825
+#: src/rhsm/connection.py:1824
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1832
+#: src/rhsm/connection.py:1831
 msgid "Fetching available system purpose settings"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1839 src/rhsm/connection.py:1847
+#: src/rhsm/connection.py:1838 src/rhsm/connection.py:1846
 #, fuzzy
 #| msgid "specify organization"
 msgid "Fetching organizations"
@@ -1162,7 +1162,7 @@ msgstr "సంస్థను తెలుపు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1860
+#: src/rhsm/connection.py:1859
 #, fuzzy
 #| msgid "Register System"
 msgid "Unregistering system"
@@ -1170,27 +1170,27 @@ msgstr "సిస్టమ్ నమోదుచేయి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1884
+#: src/rhsm/connection.py:1883
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "గుర్తింపు దృవీకరణపత్రం"
 
-#: src/rhsm/connection.py:1893
+#: src/rhsm/connection.py:1892
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1909
+#: src/rhsm/connection.py:1908
 msgid "Fetching content for a certificate"
 msgstr ""
 
-#: src/rhsm/connection.py:1959
+#: src/rhsm/connection.py:1958
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1970
+#: src/rhsm/connection.py:1969
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
@@ -1198,7 +1198,7 @@ msgstr "వర్షన్ సమాచారం ముద్రించు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1984
+#: src/rhsm/connection.py:1983
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
@@ -1206,7 +1206,7 @@ msgstr "అందుబాటులోని విడుదలలు జాబ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1999
+#: src/rhsm/connection.py:1998
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
@@ -1214,7 +1214,7 @@ msgstr "సాధ్యమగు పరిసరాల జాబితాను 
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2008
+#: src/rhsm/connection.py:2007
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
@@ -1222,7 +1222,7 @@ msgstr "సేవా స్థాయిను వుపయోగించుట:
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2022
+#: src/rhsm/connection.py:2021
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
@@ -1230,7 +1230,7 @@ msgstr "సాధ్యమగు పరిసరాల జాబితాను 
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2032
+#: src/rhsm/connection.py:2031
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Updating certificate"
@@ -1238,27 +1238,27 @@ msgstr "గుర్తింపు దృవీకరణపత్రం"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2051
+#: src/rhsm/connection.py:2050
 #, fuzzy
 #| msgid "Import Certificates"
 msgid "Updating certificates"
 msgstr "ధృవీకరణపత్రాలను దిగుమతిచేయి"
 
-#: src/rhsm/connection.py:2070
+#: src/rhsm/connection.py:2069
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2078
+#: src/rhsm/connection.py:2077
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2089
+#: src/rhsm/connection.py:2088
 msgid "Updating content overrides"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2102
+#: src/rhsm/connection.py:2101
 #, fuzzy
 #| msgid "Remove All Overrides"
 msgid "Removing content overrides"
@@ -1266,7 +1266,7 @@ msgstr "అన్ని ఓవర్‌రైడ్లు తొలగించ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2111
+#: src/rhsm/connection.py:2110
 #, fuzzy
 #| msgid "Cancel"
 msgid "Fetching job"
@@ -1344,13 +1344,13 @@ msgstr ""
 msgid "Unable to create zip file of system information: {error}"
 msgstr "వ్యవస్థ సమాచారం కొరకు జిప్ ఫైలు సృష్టించలేదు: %s"
 
-#: src/rhsmlib/dbus/objects/register.py:156
+#: src/rhsmlib/dbus/objects/register.py:158
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/register.py:172
+#: src/rhsmlib/dbus/objects/register.py:174
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr ""
@@ -1400,7 +1400,7 @@ msgstr "గత తేదీలు అనుమతించబడవు"
 #: src/subscription_manager/reasons.py:110
 #: src/subscription_manager/utils.py:273 src/subscription_manager/utils.py:289
 #: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:311
-#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:332
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:334
 msgid "Unknown"
 msgstr "తెలియని"
 
@@ -3139,49 +3139,33 @@ msgstr "అందుబాటులోని సేవా స్థాయిల�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/status.py:40
-msgid "Show status information for this system's subscriptions and products"
+#: src/subscription_manager/cli_command/status.py:28
+#, fuzzy
+#| msgid "Show status information for this system's subscriptions and products"
+msgid "Show status information for this system"
 msgstr "ఈ వ్యవస్థ యొక్క సబ్‌స్క్రిప్షన్లు మరియు వుత్పత్తుల కొరకు స్థితి సమాచారం చూపము"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/status.py:45
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "future date to check status on, defaults to today's date (example: %s)"
-msgid ""
-"future date to check status on, defaults to today's date (example: {example})"
-msgstr "స్థితిని పరిశీలించుటకు భవిష్య తేది, అప్రమేయంగా ఇవాల్టి తేది వుండును (ఉదాహరణకు: %s)"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/status.py:70
+#: src/subscription_manager/cli_command/status.py:36
 msgid "System Status Details"
 msgstr "వ్యవస్థ స్థితి వివరాలు"
 
-#: src/subscription_manager/cli_command/status.py:75
-msgid ""
-"Content Access Mode is set to Simple Content Access. This host has access to "
-"content, regardless of subscription status.\n"
-msgstr ""
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/cli_command/status.py:49
+#, fuzzy
+#| msgid "System is not registered."
+msgid "Overall Status: Not registered\n"
+msgstr "వ్యవస్థ నమోదు కాలేదు."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/status.py:111
-#, fuzzy, python-brace-format
-#| msgid "Overall Status: %s\n"
-msgid ""
-"Overall Status: {status}\n"
-"{message}"
-msgstr "మొత్తంగా స్థితి: %s\n"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/subscription_manager/cli_command/status.py:145
-#, fuzzy, python-brace-format
-#| msgid "System Status Details"
-msgid "System Purpose Status: {status}"
-msgstr "వ్యవస్థ స్థితి వివరాలు"
+#: src/subscription_manager/cli_command/status.py:52
+#, fuzzy
+#| msgid "Overall Status"
+msgid "Overall Status: Registered\n"
+msgstr "మొత్తంగా స్థితి"
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
@@ -3598,7 +3582,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 #, fuzzy
 #| msgid "This system is already registered. Use --force to override"
 msgid ""
@@ -3608,7 +3592,7 @@ msgstr "ఈ సిస్టమ్ యిప్పటికే నమోదైం
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering the system"
@@ -3616,7 +3600,7 @@ msgstr "సిస్టమ్ నమోదుచేయి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 #, fuzzy
 #| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
@@ -3624,13 +3608,13 @@ msgstr "ఎన్టైటిల్మెంట్ ధృవీకరణపత�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:404
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:419
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "ఎన్టైటిల్మెంట్ ధృవీకరణపత్రాలను మరియు రిపోజిటరీలను నవీకరించలేదు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/utils.py:390
+#: src/subscription_manager/utils.py:392
 msgid "and"
 msgstr "మరియు"
 
@@ -3646,6 +3630,32 @@ msgstr ""
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "future date to check status on, defaults to today's date (example: %s)"
+#~ msgid ""
+#~ "future date to check status on, defaults to today's date (example: "
+#~ "{example})"
+#~ msgstr "స్థితిని పరిశీలించుటకు భవిష్య తేది, అప్రమేయంగా ఇవాల్టి తేది వుండును (ఉదాహరణకు: %s)"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "Overall Status: %s\n"
+#~ msgid ""
+#~ "Overall Status: {status}\n"
+#~ "{message}"
+#~ msgstr "మొత్తంగా స్థితి: %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#, fuzzy, python-brace-format
+#~| msgid "System Status Details"
+#~ msgid "System Purpose Status: {status}"
+#~ msgstr "వ్యవస్థ స్థితి వివరాలు"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -4479,13 +4489,6 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #, fuzzy
-#~| msgid "System is not registered."
-#~ msgid "Not registered"
-#~ msgstr "వ్యవస్థ నమోదు కాలేదు."
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#, fuzzy
 #~| msgid "_Unregister"
 #~ msgid "Unregister"
 #~ msgstr "నమోదుతీయి (_U)"
@@ -5153,11 +5156,6 @@ msgstr ""
 # document keys
 #~ msgid "<b>Status:</b>"
 #~ msgstr "<b>స్థితి:</b>"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#~ msgid "Overall Status"
-#~ msgstr "మొత్తంగా స్థితి"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 18:12+0100\n"
+"POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2015-09-25 02:52-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Hindi <kde-i18n-doc@kde.org>\n"
@@ -242,68 +242,68 @@ msgstr "%s: त्रुटि: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:99
+#: src/daemons/rhsmcertd.c:100
 msgid "interval to run cert check (in minutes)"
 msgstr "प्रमाणपत्र जाँच  (मिनट में)"
 
-#: src/daemons/rhsmcertd.c:102
+#: src/daemons/rhsmcertd.c:103
 msgid "interval to run auto-registration (in minutes)"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:105
+#: src/daemons/rhsmcertd.c:106
 msgid "run the initial checks immediately, with no delay"
 msgstr "आरंभिक जाँच तत्काल चलाएँ, बिना किसी विलंब के"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:108
+#: src/daemons/rhsmcertd.c:109
 msgid "show debug messages"
 msgstr "डिबग संदेश दिखाएँ"
 
-#: src/daemons/rhsmcertd.c:110
+#: src/daemons/rhsmcertd.c:111
 msgid "do not add an offset to the initial checks."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:113
+#: src/daemons/rhsmcertd.c:114
 msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:545
+#: src/daemons/rhsmcertd.c:567
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "अधिक जानकारी के लिए चलाएँ: rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:651
+#: src/daemons/rhsmcertd.c:673
 msgid "Wrong number of arguments specified.\n"
 msgstr "निर्दिष्ट वितर्क की गलत संख्या.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:720
+#: src/daemons/rhsmcertd.c:742
 msgid "Invalid argument specified.\n"
 msgstr "अवैध वितर्क निर्दिष्ट.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:726
+#: src/daemons/rhsmcertd.c:748
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "चेतावनी: पदावनत CLI वितर्क का प्रयोग हो रहा है.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/daemons/rhsmcertd.c:741
+#: src/daemons/rhsmcertd.c:763
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "अवैध विकल्प: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/daemons/rhsmcertd.c:755
+#: src/daemons/rhsmcertd.c:777
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "अवैध वितर्क निर्दिष्ट: %s\n"
@@ -1079,25 +1079,25 @@ msgstr ""
 msgid "Checking connection status"
 msgstr "connectionStatusLabel"
 
-#: src/rhsm/connection.py:1529
+#: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1608
+#: src/rhsm/connection.py:1607
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "तंत्र पंजीकृत करें"
 
-#: src/rhsm/connection.py:1638 src/rhsm/connection.py:1650
+#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/rhsm/connection.py:1673
+#: src/rhsm/connection.py:1672
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
@@ -1105,7 +1105,7 @@ msgstr "छपाई संस्करण सूचना"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/rhsm/connection.py:1745
+#: src/rhsm/connection.py:1744
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
@@ -1113,13 +1113,13 @@ msgstr "सदस्यता पंजीयन"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/rhsm/connection.py:1750 src/rhsm/connection.py:1754
+#: src/rhsm/connection.py:1749 src/rhsm/connection.py:1753
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
 msgstr "मेनिफेस्ट सूचना छापें"
 
-#: src/rhsm/connection.py:1758
+#: src/rhsm/connection.py:1757
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
@@ -1127,31 +1127,31 @@ msgstr "हटा रहा है"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1788 src/rhsm/connection.py:1799
+#: src/rhsm/connection.py:1787 src/rhsm/connection.py:1798
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "प्रमाणपत्र सूचना छापें"
 
-#: src/rhsm/connection.py:1807
+#: src/rhsm/connection.py:1806
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1816
+#: src/rhsm/connection.py:1815
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1825
+#: src/rhsm/connection.py:1824
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1832
+#: src/rhsm/connection.py:1831
 msgid "Fetching available system purpose settings"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/rhsm/connection.py:1839 src/rhsm/connection.py:1847
+#: src/rhsm/connection.py:1838 src/rhsm/connection.py:1846
 #, fuzzy
 #| msgid "specify organization"
 msgid "Fetching organizations"
@@ -1159,7 +1159,7 @@ msgstr "संगठन निर्दिष्ट करें"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1860
+#: src/rhsm/connection.py:1859
 #, fuzzy
 #| msgid "Register System"
 msgid "Unregistering system"
@@ -1167,27 +1167,27 @@ msgstr "तंत्र पंजीकृत करें"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1884
+#: src/rhsm/connection.py:1883
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "पहचान प्रमाणपत्र"
 
-#: src/rhsm/connection.py:1893
+#: src/rhsm/connection.py:1892
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1909
+#: src/rhsm/connection.py:1908
 msgid "Fetching content for a certificate"
 msgstr ""
 
-#: src/rhsm/connection.py:1959
+#: src/rhsm/connection.py:1958
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/rhsm/connection.py:1970
+#: src/rhsm/connection.py:1969
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
@@ -1195,7 +1195,7 @@ msgstr "छपाई संस्करण सूचना"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:1984
+#: src/rhsm/connection.py:1983
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
@@ -1203,7 +1203,7 @@ msgstr "उपलब्ध रिलीज की सूची जारी क�
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/rhsm/connection.py:1999
+#: src/rhsm/connection.py:1998
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
@@ -1211,7 +1211,7 @@ msgstr "संभावित वातावरण की सूची ला �
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:2008
+#: src/rhsm/connection.py:2007
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
@@ -1219,7 +1219,7 @@ msgstr "सेवा स्तर का उपयोग कर रहा है
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/rhsm/connection.py:2022
+#: src/rhsm/connection.py:2021
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
@@ -1227,7 +1227,7 @@ msgstr "संभावित वातावरण की सूची ला �
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:2032
+#: src/rhsm/connection.py:2031
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Updating certificate"
@@ -1235,25 +1235,25 @@ msgstr "पहचान प्रमाणपत्र"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/rhsm/connection.py:2051
+#: src/rhsm/connection.py:2050
 #, fuzzy
 #| msgid "Import Certificates"
 msgid "Updating certificates"
 msgstr "प्रमाणपत्र आयात करें"
 
-#: src/rhsm/connection.py:2070
+#: src/rhsm/connection.py:2069
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2078
+#: src/rhsm/connection.py:2077
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2089
+#: src/rhsm/connection.py:2088
 msgid "Updating content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2102
+#: src/rhsm/connection.py:2101
 #, fuzzy
 #| msgid "Remove All Overrides"
 msgid "Removing content overrides"
@@ -1261,7 +1261,7 @@ msgstr "सभी अधिरोहन हटाएँ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/rhsm/connection.py:2111
+#: src/rhsm/connection.py:2110
 #, fuzzy
 #| msgid "Cancel"
 msgid "Fetching job"
@@ -1329,13 +1329,13 @@ msgstr ""
 msgid "Unable to create zip file of system information: {error}"
 msgstr "तंत्र सूचना के लिए जिप फ़ाइल बनाने में असमर्थ: %s"
 
-#: src/rhsmlib/dbus/objects/register.py:156
+#: src/rhsmlib/dbus/objects/register.py:158
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/register.py:172
+#: src/rhsmlib/dbus/objects/register.py:174
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr ""
@@ -1387,7 +1387,7 @@ msgstr "पिछली तिथि की अनुमति नहीं"
 #: src/subscription_manager/reasons.py:110
 #: src/subscription_manager/utils.py:273 src/subscription_manager/utils.py:289
 #: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:311
-#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:332
+#: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:334
 msgid "Unknown"
 msgstr "अज्ञात"
 
@@ -3089,49 +3089,31 @@ msgstr "उपलब्ध सेवा स्तर"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/subscription_manager/cli_command/status.py:40
-msgid "Show status information for this system's subscriptions and products"
+#: src/subscription_manager/cli_command/status.py:28
+#, fuzzy
+#| msgid "Show status information for this system's subscriptions and products"
+msgid "Show status information for this system"
 msgstr "इस तंत्र के सदस्यता और उत्पाद के लिए तंत्र की सदस्यता दिखाता है"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/subscription_manager/cli_command/status.py:45
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "future date to check status on, defaults to today's date (example: %s)"
-msgid ""
-"future date to check status on, defaults to today's date (example: {example})"
-msgstr "स्थिति चालू जाँचने के लिए भविष्य की तिथि, आज के तिथि का तयशुदा (उदाहरण: %s)"
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author rajesh
-#: src/subscription_manager/cli_command/status.py:70
+#: src/subscription_manager/cli_command/status.py:36
 msgid "System Status Details"
 msgstr "तंत्र स्थिति विवरण"
 
-#: src/subscription_manager/cli_command/status.py:75
-msgid ""
-"Content Access Mode is set to Simple Content Access. This host has access to "
-"content, regardless of subscription status.\n"
-msgstr ""
-
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/subscription_manager/cli_command/status.py:111
-#, fuzzy, python-brace-format
-#| msgid "Overall Status: %s\n"
-msgid ""
-"Overall Status: {status}\n"
-"{message}"
-msgstr "सकल स्थिति: %s\n"
+#: src/subscription_manager/cli_command/status.py:49
+#, fuzzy
+#| msgid "System is not registered."
+msgid "Overall Status: Not registered\n"
+msgstr "तंत्र पंजीकृत नहीं है."
 
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author rajesh
-#: src/subscription_manager/cli_command/status.py:145
-#, fuzzy, python-brace-format
-#| msgid "System Status Details"
-msgid "System Purpose Status: {status}"
-msgstr "तंत्र स्थिति विवरण"
+#: src/subscription_manager/cli_command/status.py:52
+#, fuzzy
+#| msgid "Overall Status"
+msgid "Overall Status: Registered\n"
+msgstr "सकल स्थिति"
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
@@ -3544,7 +3526,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 #, fuzzy
 #| msgid "This system is already registered. Use --force to override"
 msgid ""
@@ -3554,7 +3536,7 @@ msgstr "यह तंत्र पर से पंजीकृत है.  --fo
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering the system"
@@ -3562,7 +3544,7 @@ msgstr "तंत्र पंजीकृत करें"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 #, fuzzy
 #| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
@@ -3570,13 +3552,13 @@ msgstr "एंटाइटेलमेंट प्रमाणपत्र व 
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:404
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:419
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "एंटाइटेलमेंट प्रमाणपत्र और रिपोजिटरी अद्यतन करने में असमर्थ"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
-#: src/subscription_manager/utils.py:390
+#: src/subscription_manager/utils.py:392
 msgid "and"
 msgstr "और"
 
@@ -3592,6 +3574,32 @@ msgstr ""
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author rajesh
+#, fuzzy, python-brace-format
+#~| msgid ""
+#~| "future date to check status on, defaults to today's date (example: %s)"
+#~ msgid ""
+#~ "future date to check status on, defaults to today's date (example: "
+#~ "{example})"
+#~ msgstr "स्थिति चालू जाँचने के लिए भविष्य की तिथि, आज के तिथि का तयशुदा (उदाहरण: %s)"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author rajesh
+#, fuzzy, python-brace-format
+#~| msgid "Overall Status: %s\n"
+#~ msgid ""
+#~ "Overall Status: {status}\n"
+#~ "{message}"
+#~ msgstr "सकल स्थिति: %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.9.X,
+# document keys, author rajesh
+#, fuzzy, python-brace-format
+#~| msgid "System Status Details"
+#~ msgid "System Purpose Status: {status}"
+#~ msgstr "तंत्र स्थिति विवरण"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -4423,13 +4431,6 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author rajesh
 #, fuzzy
-#~| msgid "System is not registered."
-#~ msgid "Not registered"
-#~ msgstr "तंत्र पंजीकृत नहीं है."
-
-# translation auto-copied from project subscription-manager, version 1.9.X,
-# document keys, author rajesh
-#, fuzzy
 #~| msgid "_Unregister"
 #~ msgid "Unregister"
 #~ msgstr "गैर पंजीकृत करें (_U)"
@@ -5076,9 +5077,6 @@ msgstr ""
 # document keys
 #~ msgid "<b>Status:</b>"
 #~ msgstr "<b>स्थिति:</b>"
-
-#~ msgid "Overall Status"
-#~ msgstr "सकल स्थिति"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
