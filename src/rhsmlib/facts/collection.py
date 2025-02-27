@@ -21,7 +21,14 @@ log = logging.getLogger(__name__)
 class FactsDict(collections.abc.MutableMapping):
     """A dict for facts that ignores items in 'graylist' on compares."""
 
-    graylist = set(["cpu.cpu_mhz", "lscpu.cpu_mhz"])
+    # see bz #627962
+    # we would like to have this info, but for now, since it
+    # can change constantly on laptops, it makes for a lot of
+    # fact churn, so we report it, but ignore it as an indicator
+    # that we need to update
+    GRAYLIST = set(
+        ["cpu.cpu_mhz", "lscpu.cpu_mhz"]
+    )
 
     def __init__(self, *args, **kwargs):
         super(FactsDict, self).__init__(*args, **kwargs)
@@ -43,12 +50,12 @@ class FactsDict(collections.abc.MutableMapping):
         return len(self.data)
 
     def __eq__(self, other) -> bool:
-        """Compares all of the items in self.data, except it ignores keys in self.graylist."""
+        """Compares all of the items in self.data, except it ignores keys in self.GRAYLIST."""
         if not isinstance(other, FactsDict):
             return NotImplemented
 
-        keys_self = set(self.data).difference(self.graylist)
-        keys_other = set(other.data).difference(self.graylist)
+        keys_self = set(self.data).difference(self.GRAYLIST)
+        keys_other = set(other.data).difference(self.GRAYLIST)
         if keys_self == keys_other:
             if all(self.data[k] == other.data[k] for k in keys_self):
                 return True
