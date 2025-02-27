@@ -2,13 +2,14 @@
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Ludek Janda <ljanda@redhat.com>, 2021.
 # Jérôme Fenal <jfenal@free.fr>, 2022.
+# Léane GRASSER <leane.grasser@proton.me>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-02 12:40+0100\n"
-"PO-Revision-Date: 2022-02-23 12:16+0000\n"
-"Last-Translator: Sundeep Anand <suanand@redhat.com>\n"
+"PO-Revision-Date: 2024-12-13 12:38+0000\n"
+"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/fr/>\n"
 "Language: fr\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 5.8.4\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -29,7 +30,7 @@ msgstr ".__call__() non défini"
 #: /usr/lib64/python3.6/argparse.py:1127
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr "analyseur syntaxique inconnu %(parser_name)r (choix : %(choices)s)"
+msgstr "analyseur syntaxique %(parser_name)r inconnu (choix : %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:1181
 #, python-format
@@ -44,7 +45,7 @@ msgstr "impossible d'ouvrir «%s » : %s"
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr "ne peut pas fusionner les actions - deux groupes sont nommés %r"
+msgstr "impossible de fusionner les actions : deux groupes portent le nom %r"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
@@ -95,7 +96,7 @@ msgstr "afficher ce message d'aide et quitter"
 
 #: /usr/lib64/python3.6/argparse.py:1684
 msgid "cannot have multiple subparser arguments"
-msgstr "ne peut pas avoir plusieurs arguments de sous-analyse"
+msgstr "impossible d'avoir plusieurs arguments de sous-analyseur"
 
 #: /usr/lib64/python3.6/argparse.py:1736
 #, python-format
@@ -124,15 +125,15 @@ msgstr "l'un des arguments %s est requis"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
-msgstr "attendait un argument"
+msgstr "un argument attendu"
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
-msgstr "attend au plus un argument"
+msgstr "au plus un argument attendu"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
-msgstr "attendait au moins un argument"
+msgstr "au moins un argument attendu"
 
 #: /usr/lib64/python3.6/argparse.py:2062
 #, python-format
@@ -327,7 +328,7 @@ msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
 msgstr ""
-"Avertissement : impossible de synchroniser le syspurpose du système avec le "
+"Avertissement : impossible de synchroniser la finalité du système avec le "
 "serveur de gestion des abonnements : le module subscription_manager n'est "
 "pas disponible."
 
