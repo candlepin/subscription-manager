@@ -2,13 +2,14 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
 # Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023.
+# Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-08-22 08:09+0200\n"
-"PO-Revision-Date: 2023-05-16 23:21+0000\n"
-"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
+"PO-Revision-Date: 2024-12-23 19:38+0000\n"
+"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/it/>\n"
 "Language: it\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -309,6 +310,8 @@ msgid ""
 "If you disconnect this system from Insights, it will no longer report it's "
 "Insights status in Red Hat Cloud or Satellite."
 msgstr ""
+"Se disconnetti questo sistema da Insights, non riporterà più il suo stato "
+"Insights in Red Hat Cloud o Satellite."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/insights.jsx:455 cockpit/src/insights.jsx:474
@@ -1531,6 +1534,8 @@ msgid ""
 "Warning: A {conflict_msg} was recently set for this system by the "
 "entitlement server administrator."
 msgstr ""
+"Avvertenza: un {conflict_msg} è stato recentemente impostato per questo "
+"sistema dall'amministratore del server dei diritti."
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:76
 #, python-brace-format
@@ -1538,6 +1543,8 @@ msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
 "entitlement server administrator."
 msgstr ""
+"Avvertimento: Un {conflict_msg} è stato recentemente impostato per questo "
+"sistema dall'amministratore del server dei diritti."
 
 #: src/rhsmlib/dbus/service_wrapper.py:45
 #, python-brace-format
