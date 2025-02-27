@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-07 18:24+0100\n"
-"PO-Revision-Date: 2025-01-15 06:38+0000\n"
+"PO-Revision-Date: 2025-02-26 12:38+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/ka/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -97,7 +97,7 @@ msgstr ""
 #: /usr/lib64/python3.9/argparse.py:1827 /usr/lib64/python3.9/argparse.py:2338
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "უცნობი არგუმენტები: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1928
 #, python-format
@@ -121,7 +121,7 @@ msgstr ""
 
 #: /usr/lib64/python3.9/argparse.py:2153
 msgid "expected one argument"
-msgstr ""
+msgstr "მოველოდი ერთ არგუმენტს"
 
 #: /usr/lib64/python3.9/argparse.py:2154
 msgid "expected at most one argument"
@@ -135,8 +135,8 @@ msgstr ""
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "მოველოდი %s არგუმენტს"
+msgstr[1] "მოველოდი %s არგუმენტს"
 
 #: /usr/lib64/python3.9/argparse.py:2217
 #, python-format
@@ -166,7 +166,7 @@ msgstr ""
 #: /usr/lib64/python3.9/argparse.py:2582
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: შეცდომა: %(message)s\n"
 
 #: src/daemons/rhsmcertd.c:104
 msgid "deprecated, see --cert-check-interval"
@@ -194,7 +194,7 @@ msgstr ""
 
 #: src/daemons/rhsmcertd.c:123
 msgid "show debug messages"
-msgstr ""
+msgstr "გამართვის შეტყობინებების ჩვენება"
 
 #: src/daemons/rhsmcertd.c:125
 msgid "do not add an offset to the initial checks."
@@ -215,7 +215,7 @@ msgstr ""
 
 #: src/daemons/rhsmcertd.c:763
 msgid "Invalid argument specified.\n"
-msgstr ""
+msgstr "მითითებულია არასწორი არგუმენტი.\n"
 
 #: src/daemons/rhsmcertd.c:769
 #, c-format
@@ -234,7 +234,7 @@ msgstr ""
 
 #: src/plugins/dnf/product_id.py:75
 msgid "Installed products updated."
-msgstr ""
+msgstr "დაყენებული პროდუქტები განახლდა."
 
 #: src/plugins/dnf/subscription_manager.py:44
 #, python-format
@@ -341,7 +341,7 @@ msgstr ""
 
 #: src/rct/cert_commands.py:61
 msgid "Print certificate information"
-msgstr ""
+msgstr "სერტიფიკატის ინფორმაციის გამოტანა"
 
 #: src/rct/cert_commands.py:69
 msgid "do not show the cert's product information"
@@ -368,7 +368,7 @@ msgstr "ვერსია: {certificate_version}"
 #: src/rct/cert_commands.py:101
 #, python-brace-format
 msgid "DER size: {size}b"
-msgstr ""
+msgstr "DER-ის ზომა: {size}ბ"
 
 #: src/rct/cert_commands.py:106
 #, python-brace-format
@@ -378,7 +378,7 @@ msgstr ""
 #: src/rct/cert_commands.py:113
 #, python-brace-format
 msgid "Content sets: {content_length}"
-msgstr ""
+msgstr "შემცველობის სეტები: {content_length}"
 
 #: src/rct/manifest_commands.py:62
 msgid "Manifest zip is invalid."
@@ -412,7 +412,7 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:172
 msgid "Print manifest information"
-msgstr ""
+msgstr "მანიფესტის ინფორმაციის გამოტანა"
 
 #: src/rct/manifest_commands.py:179
 msgid "skip printing Content Sets"
@@ -449,7 +449,7 @@ msgstr "UUID"
 
 #: src/rct/manifest_commands.py:217
 msgid "Content Access Mode"
-msgstr ""
+msgstr "შემცველობასთან წვდომის რეჟიმი"
 
 #: src/rct/manifest_commands.py:218 src/rct/printing.py:97
 msgid "Type"
@@ -740,7 +740,7 @@ msgstr "პულის ID"
 
 #: src/rct/printing.py:224
 msgid "Authorized Content URLs:"
-msgstr ""
+msgstr "ავტორიზებული შემცველობის ბმულები:"
 
 #: src/rct/printing.py:244
 msgid "Entitlement Certificate"
@@ -756,7 +756,7 @@ msgstr "პირადობის სერტიფიკატი"
 
 #: src/rct/printing.py:250
 msgid "Unknown Certificate Type"
-msgstr ""
+msgstr "უცნობი სერტიფიკატის ტიპი"
 
 #: src/rhsm/config.py:244
 #, python-brace-format
@@ -861,7 +861,7 @@ msgstr "გამოწერის გაუქმება"
 
 #: src/rhsm/connection.py:2013
 msgid "Fetching pools"
-msgstr ""
+msgstr "პულების გამოთხოვა"
 
 #: src/rhsm/connection.py:2024
 msgid "Fetching release information"
@@ -941,7 +941,7 @@ msgstr ""
 #: src/rhsm_debug/debug_commands.py:106
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS] "
-msgstr ""
+msgstr "%(prog)s {name} [პარამეტრები] "
 
 #: src/rhsm_debug/debug_commands.py:110
 msgid "The directory specified by '--destination' must already exist."
@@ -1026,7 +1026,7 @@ msgstr "უცნობი"
 #: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:61
 #, python-format
 msgid "Unknown arguments: %s"
-msgstr ""
+msgstr "უცნობი არგუმენტები: %s"
 
 #: src/rhsmlib/services/entitlement.py:289
 #: src/subscription_manager/cli_command/list.py:444
@@ -1050,11 +1050,11 @@ msgstr "არა"
 
 #: src/rhsmlib/services/entitlement.py:316
 msgid "Subscription is current"
-msgstr ""
+msgstr "გამოწერა მიმდინარეა"
 
 #: src/rhsmlib/services/entitlement.py:319
 msgid "Subscription is expired"
-msgstr ""
+msgstr "გამოწერის ვადა ამოწურულია"
 
 #: src/rhsmlib/services/entitlement.py:321
 msgid "Subscription has not begun"
@@ -1294,7 +1294,7 @@ msgstr "არასწორი"
 #: src/subscription_manager/cli.py:83
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS]"
-msgstr ""
+msgstr "%(prog)s {name} [პარამეტრები]"
 
 #: src/subscription_manager/cli.py:123
 #, python-format
@@ -1325,7 +1325,7 @@ msgstr ""
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:41
 msgid "Deprecated, see 'syspurpose'"
-msgstr ""
+msgstr "მოძველებულია. იხილეთ 'syspurpose'"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:75
 #, python-brace-format
@@ -1423,12 +1423,12 @@ msgstr "{attr} განახლებულია."
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:369
 #, python-brace-format
 msgid "Current {name}: {val}"
-msgstr ""
+msgstr "მიმდინარე {name}: {val}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:371
 #, python-brace-format
 msgid "{name} not set."
-msgstr ""
+msgstr "{name} დაყენებული არაა."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:389
 #, python-brace-format
@@ -1680,11 +1680,11 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/cli.py:301
 msgid "Error parsing serverurl:"
-msgstr ""
+msgstr "serverurl-ის დამუშავების შეცდომა:"
 
 #: src/subscription_manager/cli_command/cli.py:317
 msgid "Error parsing baseurl:"
-msgstr ""
+msgstr "baseurl-ის დამუშავების შეცდომა:"
 
 #: src/subscription_manager/cli_command/cli.py:389
 #, python-brace-format
@@ -1879,12 +1879,12 @@ msgstr ""
 #: src/subscription_manager/cli_command/version.py:33
 #, python-brace-format
 msgid "server type: {type}"
-msgstr ""
+msgstr "სერვერის ტიპი: {type}"
 
 #: src/subscription_manager/cli_command/identity.py:89
 #, python-brace-format
 msgid "system identity: {consumerid}"
-msgstr ""
+msgstr "სისტემის იდენტიფიკატორი: {consumerid}"
 
 #: src/subscription_manager/cli_command/identity.py:90
 #, python-brace-format
@@ -1894,12 +1894,12 @@ msgstr "სახელი: {consumer_name}"
 #: src/subscription_manager/cli_command/identity.py:91
 #, python-brace-format
 msgid "org name: {ownername}"
-msgstr ""
+msgstr "ორგან-ციის სახელი: {ownername}"
 
 #: src/subscription_manager/cli_command/identity.py:92
 #, python-brace-format
 msgid "org ID: {ownerid}"
-msgstr ""
+msgstr "ორგან-ციის ID: {ownerid}"
 
 #: src/subscription_manager/cli_command/identity.py:107
 #: src/subscription_manager/printing_utils.py:165
@@ -1911,8 +1911,8 @@ msgstr "არა"
 #, python-brace-format
 msgid "environment name: {environment_name}"
 msgid_plural "environment names: {environment_name}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "გარემოს სახელი: {environment_name}"
+msgstr[1] "გარემოს სახელი: {environment_name}"
 
 #: src/subscription_manager/cli_command/identity.py:130
 msgid "Identity certificate has been regenerated."
@@ -2278,7 +2278,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:371
 msgid "    Installed Product Status"
-msgstr ""
+msgstr "    დაყენებული პროდუქტის სტატუსი"
 
 #: src/subscription_manager/cli_command/list.py:407
 #, python-brace-format
@@ -2349,7 +2349,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/org.py:35
 msgid "specify an organization"
-msgstr ""
+msgstr "მიუთითეთ ორგანიზაცია"
 
 #: src/subscription_manager/cli_command/org.py:46
 #: src/subscription_manager/cli_command/register.py:526
@@ -2483,7 +2483,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/plugins.py:31
 #, python-brace-format
 msgid "list {SM} plugins"
-msgstr ""
+msgstr "{SM}-ის დამატებების სია"
 
 #: src/subscription_manager/cli_command/plugins.py:34
 #, python-brace-format
@@ -2539,7 +2539,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/refresh.py:34
 msgid "force certificate regeneration"
-msgstr ""
+msgstr "სერტიფიკატის რეგენერაცია ძალით"
 
 #: src/subscription_manager/cli_command/refresh.py:46
 #, python-brace-format
@@ -2639,7 +2639,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/unregister.py:41
 #, python-brace-format
 msgid "Unregistering from: {hostname}:{port}{prefix}"
-msgstr ""
+msgstr "რეგისტრაციის მოხსნა საიდან: {hostname}:{port}{prefix}"
 
 #: src/subscription_manager/cli_command/register.py:305
 #, python-brace-format
@@ -2649,7 +2649,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/register.py:329
 #, python-brace-format
 msgid "Registering to: {hostname}:{port}{prefix}"
-msgstr ""
+msgstr "რეგისტრაცია სად: {hostname}:{port}{prefix}"
 
 #: src/subscription_manager/cli_command/register.py:369
 #, python-brace-format
@@ -2703,7 +2703,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/release.py:46
 msgid "list available releases"
-msgstr ""
+msgstr "ხელმისაწვდომი რელიზების სია"
 
 #: src/subscription_manager/cli_command/release.py:53
 msgid "set the release for this system"
@@ -3092,7 +3092,7 @@ msgstr "დამატებულია (ახალი)"
 
 #: src/subscription_manager/entcertlib.py:457
 msgid "Deleted (rogue):"
-msgstr ""
+msgstr "წაშლილია (გვერდითი):"
 
 #: src/subscription_manager/exceptions.py:32
 msgid ""
@@ -3291,7 +3291,7 @@ msgstr ""
 
 #: src/subscription_manager/repolib.py:678
 msgid "Repo updates"
-msgstr ""
+msgstr "რეპოზიტორიის განახლებები"
 
 #: src/subscription_manager/repolib.py:679
 #, python-format
