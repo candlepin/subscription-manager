@@ -258,7 +258,7 @@ e.g. microdnf.
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
 
-%if (0%{?fedora} || 0%{?rhel})
+%if 0%{?rhel}
 BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
