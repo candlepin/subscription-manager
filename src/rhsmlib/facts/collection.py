@@ -27,7 +27,7 @@ class FactsDict(collections.abc.MutableMapping):
     # fact churn, so we report it, but ignore it as an indicator
     # that we need to update
     GRAYLIST = set(
-        ["cpu.cpu_mhz", "lscpu.cpu_mhz"]
+        ["cpu.cpu_mhz", "lscpu.cpu_mhz", "proc_cpuinfo.common.cpu_mhz", "lscpu.cpu(s)_scaling_mhz"]
     )
 
     def __init__(self, *args, **kwargs):
