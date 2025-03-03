@@ -7,6 +7,9 @@
 %if 0%{?rhel}
 %global use_container_plugin 0
 %global use_dnf 1
+%elif 0%{?fedora}
+%global use_container_plugin 1
+%global use_dnf 0
 %else
 %global use_container_plugin 1
 %global use_dnf 0
