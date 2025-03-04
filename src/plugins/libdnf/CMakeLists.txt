@@ -4,22 +4,6 @@ project(product-id C)
 
 include(GNUInstallDirs)
 
-# Warn user because CLion is upset by in source builds
-MACRO(MACRO_ENSURE_OUT_OF_SOURCE_BUILD MSG)
-    STRING(COMPARE EQUAL "${CMAKE_SOURCE_DIR}"
-    "${CMAKE_BINARY_DIR}" insource)
-    GET_FILENAME_COMPONENT(PARENTDIR ${CMAKE_SOURCE_DIR} PATH)
-    STRING(COMPARE EQUAL "${CMAKE_SOURCE_DIR}"
-    "${PARENTDIR}" insourcesubdir)
-    IF(insource OR insourcesubdir)
-        MESSAGE(WARNING "${MSG}")
-    ENDIF(insource OR insourcesubdir)
-ENDMACRO(MACRO_ENSURE_OUT_OF_SOURCE_BUILD)
-
-MACRO_ENSURE_OUT_OF_SOURCE_BUILD(
-"${CMAKE_PROJECT_NAME} requires an out of source build. Delete all CMake generated files or CLion won't work."
-)
-
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 11)
 
