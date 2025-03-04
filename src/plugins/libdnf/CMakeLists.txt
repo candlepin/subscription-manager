@@ -31,8 +31,8 @@ pkg_check_modules(GLIB REQUIRED glib-2.0>=2.44.0)
 pkg_check_modules(GIO REQUIRED gio-2.0>=2.54.3)
 pkg_check_modules(LIBDNF REQUIRED libdnf>=0.22.0)
 pkg_check_modules(ZLIB REQUIRED zlib>=1.2.0)
-pkg_check_modules(OPENSSL libcrypto libssl REQUIRED)
-pkg_check_modules(JSONC json-c REQUIRED)
+pkg_check_modules(OPENSSL REQUIRED libcrypto libssl)
+pkg_check_modules(JSONC REQUIRED json-c)
 
 # Copy ./test_data directory to ${PROJECT_BINARY_DIR}
 file (COPY "${PROJECT_SOURCE_DIR}/test_data/corrupted_compressed_productid.pem.gz"
