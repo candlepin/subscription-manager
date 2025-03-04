@@ -27,12 +27,12 @@ if (CMAKE_COMPILER_IS_GNUCC)
 endif (CMAKE_COMPILER_IS_GNUCC)
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(GLIB REQUIRED glib-2.0>=2.44.0)
-pkg_check_modules(GIO REQUIRED gio-2.0>=2.54.3)
-pkg_check_modules(LIBDNF REQUIRED libdnf>=0.22.0)
-pkg_check_modules(ZLIB REQUIRED zlib>=1.2.0)
-pkg_check_modules(OPENSSL REQUIRED libcrypto libssl)
-pkg_check_modules(JSONC REQUIRED json-c)
+pkg_check_modules(GLIB REQUIRED IMPORTED_TARGET glib-2.0>=2.44.0)
+pkg_check_modules(GIO REQUIRED IMPORTED_TARGET gio-2.0>=2.54.3)
+pkg_check_modules(LIBDNF REQUIRED IMPORTED_TARGET libdnf>=0.22.0)
+pkg_check_modules(ZLIB REQUIRED IMPORTED_TARGET zlib>=1.2.0)
+pkg_check_modules(OPENSSL REQUIRED IMPORTED_TARGET libcrypto libssl)
+pkg_check_modules(JSONC REQUIRED IMPORTED_TARGET json-c)
 
 # Copy ./test_data directory to ${PROJECT_BINARY_DIR}
 file (COPY "${PROJECT_SOURCE_DIR}/test_data/corrupted_compressed_productid.pem.gz"
@@ -42,25 +42,18 @@ file (COPY "${PROJECT_SOURCE_DIR}/test_data/59803427316a729fb1d67fd08e7d0c8ccd2a
 file (COPY "${PROJECT_SOURCE_DIR}/test_data/cert_dir/71.pem"
         DESTINATION "${PROJECT_BINARY_DIR}/test_data/cert_dir/")
 
-include_directories(${GLIB_INCLUDE_DIRS})
-include_directories(${GIO_INCLUDE_DIRS})
-include_directories(${LIBDNF_INCLUDE_DIRS})
-include_directories(${ZLIB_INCLUDE_DIRS})
-include_directories(${OPENSSL_INCLUDE_DIR})
-include_directories(${JSONC_INCLUDE_DIR})
-
 add_library(product-id SHARED product-id.c util.c productdb.c)
 
 # Don't put "lib" on the front
 set_target_properties(product-id PROPERTIES PREFIX "")
 
 target_link_libraries(product-id
-    ${GLIB_LIBRARIES}
-    ${GIO_LIBRARIES}
-    ${LIBDNF_LIBRARIES}
-    ${ZLIB_LIBRARIES}
-    ${OPENSSL_LIBRARIES}
-    ${JSONC_LIBRARIES}
+    PkgConfig::GLIB
+    PkgConfig::GIO
+    PkgConfig::LIBDNF
+    PkgConfig::ZLIB
+    PkgConfig::OPENSSL
+    PkgConfig::JSONC
 )
 
 # Note: libdnf use "hardcoded" directory /usr/lib64/libdnf/plugins for searching
