@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.5
+Version: 1.30.6
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,43 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Thu Mar 06 2025 Pino Toscano <ptoscano@redhat.com> 1.30.6-1
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Translated using Weblate (Japanese) (ptoscano@redhat.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (French) (leane.grasser@proton.me)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Korean) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Update translation files (noreply@weblate.org)
+- spec: Remove an unnecessary explicit dependency on json-c
+  (debarshir@gnome.org)
+- spec: Require shared libraries with architecture-specific dependencies
+  (debarshir@gnome.org)
+- Revert "ci: temporarily install 'which' on CentOS Stream 10"
+  (ptoscano@redhat.com)
+- build: cockpit: fix installation of sub-man with newer Fedora
+  (ptoscano@redhat.com)
+- spec: Require the base package with architecture-specific dependencies
+  (debarshir@gnome.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- feat: drop the --ondate option of "status" (ptoscano@redhat.com)
+- feat: drop non-SCA support in status command (ptoscano@redhat.com)
+- tests: fix mocking of get_terminal_width() in TestColumnize
+  (ptoscano@redhat.com)
+- feat: print compliance errors & syspurpose status only in entitlement mode
+  (ptoscano@redhat.com)
+- feat: print "registered" as status when using SCA (ptoscano@redhat.com)
+- feat: print "not registered" on status when not registered
+  (ptoscano@redhat.com)
+- tests: force syspurpose tests in test_status to non-SCA (ptoscano@redhat.com)
+- refactor: move determination of content access mode in own method
+  (ptoscano@redhat.com)
+- tests: move StubIdentity to stubs (ptoscano@redhat.com)
+- tests: cleanup dead/broken bits in test_status (ptoscano@redhat.com)
+- chore: move banner printing to its own function (ptoscano@redhat.com)
+
 * Tue Feb 04 2025 Pino Toscano <ptoscano@redhat.com> 1.30.5-1
 - fix: Disabling of content in D-Bus methods Register*() (jhnidek@redhat.com)
 - chore: logging.warn() -> logging.warning() (ptoscano@redhat.com)
