@@ -655,15 +655,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
     %systemd_post rhsmcertd.service
 %endif
 
-# When subscription-manager is upgraded on RHEL 8 (from RHEL 8.2 to RHEL 8.3), then kill
-# instance of rhsmd, because it is not necessary anymore and it can cause issues.
-# See: https://bugzilla.redhat.com/show_bug.cgi?id=1840364
-%if ( 0%{?rhel} || 0%{?fedora} )
-if [ "$1" = "2" ] ; then
-    killall rhsmd 2> /dev/null || true
-fi
-%endif
-
 # Make all consumer certificates and keys readable by group rhsm
 find /etc/pki/consumer -mindepth 1 -maxdepth 1 -name '*.pem' | xargs --no-run-if-empty chgrp rhsm
 find /etc/pki/consumer -mindepth 1 -maxdepth 1 -name '*.pem' | xargs --no-run-if-empty chmod g+r
