@@ -29,12 +29,7 @@
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
 %global __python %__python3
-%if 0%{?suse_version}
-%global py_package_prefix python3
-%else
-%global py_package_prefix python%{python3_pkgversion}
-%endif
-%global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
+%global rhsm_package_name python3-subscription-manager-rhsm
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
@@ -131,8 +126,8 @@ Source2: subscription-manager-rpmlintrc
 # at the start of a line making meaningful indentation impossible.
 
 Requires:  iproute
-Requires:  %{py_package_prefix}-iniparse
-Requires:  %{py_package_prefix}-decorator
+Requires:  python3-iniparse
+Requires:  python3-decorator
 Requires:  virt-what
 Requires:  %{rhsm_package_name} = %{version}-%{release}
 Requires: subscription-manager-rhsm-certificates
@@ -141,16 +136,16 @@ Requires: dmidecode
 %endif
 
 %if 0%{?suse_version}
-Requires: %{py_package_prefix}-python-dateutil
-Requires: %{py_package_prefix}-dbus-python
+Requires: python3-python-dateutil
+Requires: python3-dbus-python
 Requires: logrotate
 Requires: cron
-Requires: %{py_package_prefix}-gobject2
+Requires: python3-gobject2
 Requires: libzypp
-Requires: %{py_package_prefix}-zypp-plugin
+Requires: python3-zypp-plugin
 %else
-Requires: %{py_package_prefix}-dateutil
-Requires: %{py_package_prefix}-dbus
+Requires: python3-dateutil
+Requires: python3-dbus
 Requires: python3-gobject-base
 %endif
 
@@ -175,7 +170,7 @@ Requires: dnf-plugin-subscription-manager = %{version}-%{release}
 %endif
 
 %if %use_inotify
-Requires:  %{py_package_prefix}-inotify
+Requires:  python3-inotify
 %endif
 
 Requires(post): systemd
@@ -184,10 +179,10 @@ Requires(postun): systemd
 
 Requires: python3-cloud-what = %{version}-%{release}
 
-BuildRequires: %{py_package_prefix}-devel
+BuildRequires: python3-devel
 BuildRequires: openssl-devel
 BuildRequires: gcc
-BuildRequires: %{py_package_prefix}-setuptools
+BuildRequires: python3-setuptools
 BuildRequires: gettext
 BuildRequires: glib2-devel
 
@@ -196,10 +191,10 @@ BuildRequires: distribution-release
 BuildRequires: libzypp
 BuildRequires: systemd-rpm-macros
 BuildRequires: python3-rpm-macros
-BuildRequires: %{py_package_prefix}-python-dateutil
+BuildRequires: python3-python-dateutil
 %else
 BuildRequires: system-release
-BuildRequires: %{py_package_prefix}-dateutil
+BuildRequires: python3-dateutil
 %endif
 
 BuildRequires: systemd
@@ -214,7 +209,7 @@ Obsoletes: rhsm-gtk <= %{version}-%{release}
 Obsoletes: subscription-manager-plugin-container <= %{version}
 %endif
 
-Obsoletes: %{py_package_prefix}-syspurpose <= %{version}
+Obsoletes: python3-syspurpose <= %{version}
 
 %description
 The Subscription Manager package provides programs and libraries to allow users
@@ -283,9 +278,9 @@ package or when debugging this package.
 %package -n subscription-manager-plugin-ostree
 Summary: A plugin for handling OSTree content.
 
-Requires: %{py_package_prefix}-gobject-base
+Requires: python3-gobject-base
 # plugin needs a slightly newer version of python-iniparse for 'tidy'
-Requires:  %{py_package_prefix}-iniparse >= 0.4
+Requires:  python3-iniparse >= 0.4
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description -n subscription-manager-plugin-ostree
@@ -303,14 +298,14 @@ Group: Development/Libraries/Python
 
 
 %if 0%{?suse_version}
-Requires:  %{py_package_prefix}-python-dateutil
+Requires:  python3-python-dateutil
 %else
-Requires: %{py_package_prefix}-dateutil
+Requires: python3-dateutil
 %endif
-Requires: %{py_package_prefix}-iniparse
+Requires: python3-iniparse
 Requires: subscription-manager-rhsm-certificates
 # Required by Fedora packaging guidelines
-%{?python_provide:%python_provide %{py_package_prefix}-rhsm}
+%{?python_provide:%python_provide python3-rhsm}
 Requires: python3-cloud-what = %{version}-%{release}
 Requires: python3-rpm
 Provides: python3-rhsm = %{version}-%{release}
