@@ -28,7 +28,6 @@
 
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
-%global __python %__python3
 %global rhsm_package_name python3-subscription-manager-rhsm
 
 %global _hardened_build 1
@@ -340,7 +339,7 @@ cloud metadata and signatures.
 
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
-    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
+    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python3}" \
     %{?subpackages} %{exclude_packages}
 
 %if %{use_dnf}
@@ -352,7 +351,7 @@ popd
 
 %install
 make -f Makefile install VERSION=%{version}-%{release} \
-    PYTHON=%{__python} PREFIX=%{_prefix} \
+    PYTHON=%{__python3} PREFIX=%{_prefix} \
     DESTDIR=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     COMPLETION_DIR=%{completion_dir} \
@@ -658,7 +657,7 @@ fi
 
 %if %{use_container_plugin}
 %post -n subscription-manager-plugin-container
-%{__python} %{rhsm_plugins_dir}/container_content.py || :
+%{__python3} %{rhsm_plugins_dir}/container_content.py || :
 %endif
 
 %preun
