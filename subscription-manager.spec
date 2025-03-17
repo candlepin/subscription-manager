@@ -24,7 +24,7 @@
 %endif
 
 %global use_dnf (0%{?fedora} || (0%{?rhel}))
-%global create_libdnf_rpm (0%{?fedora} || 0%{?rhel} > 8)
+%global create_libdnf_rpm (0%{?fedora} || 0%{?rhel})
 
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
@@ -152,12 +152,6 @@ Requires: %{py_package_prefix}-zypp-plugin
 Requires: %{py_package_prefix}-dateutil
 Requires: %{py_package_prefix}-dbus
 Requires: python3-gobject-base
-%endif
-
-# rhel 8 has different naming for setuptools going forward
-# on newer rhels and Fedora setuptools is not needed on runtime at all
-%if (0%{?rhel} && 0%{?rhel} == 8)
-Requires:  platform-python-setuptools
 %endif
 
 %if %{use_dnf}
@@ -363,11 +357,7 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 %if %{use_dnf}
 pushd src/plugins/libdnf
 %cmake -DCMAKE_BUILD_TYPE="Release"
-%if (0%{?rhel} && 0%{?rhel} <= 8)
-%make_build
-%else
 %cmake_build
-%endif
 popd
 %endif
 
@@ -388,11 +378,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
 %if %{use_dnf}
 pushd src/plugins/libdnf
 mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
-%if (0%{?rhel} && 0%{?rhel} <= 8)
-%make_install
-%else
 %cmake_install
-%endif
 popd
 %endif
 
