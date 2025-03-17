@@ -155,6 +155,10 @@ Requires: python3-gobject-base
 %endif
 
 %if %{use_dnf}
+BuildRequires: cmake
+BuildRequires: gcc
+BuildRequires: json-c-devel
+BuildRequires: libdnf-devel >= 0.22.5
 %if %{create_libdnf_rpm}
 Requires: python3-dnf
 Requires: python3-dnf-plugins-core
@@ -234,10 +238,6 @@ from the server. Populates /etc/docker/certs.d appropriately.
 %if %{create_libdnf_rpm}
 %package -n libdnf-plugin-subscription-manager
 Summary: Subscription Manager plugin for libdnf
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: json-c-devel
-BuildRequires: libdnf-devel >= 0.22.5
 
 Obsoletes: dnf-plugin-subscription-manager < 1.29.0
 
@@ -253,10 +253,6 @@ e.g. microdnf.
 Summary: Subscription Manager plugins for DNF
 
 %if (0%{?fedora} || 0%{?rhel})
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: json-c-devel
-BuildRequires: libdnf-devel >= 0.22.5
 Requires: libdnf%{?_isa} >= 0.22.5
 %endif
 
