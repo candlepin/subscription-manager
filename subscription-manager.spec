@@ -252,9 +252,7 @@ e.g. microdnf.
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
 
-%if (0%{?fedora} || 0%{?rhel})
 Requires: libdnf%{?_isa} >= 0.22.5
-%endif
 
 Requires: python3-dnf-plugins-core
 Requires: python3-librepo
