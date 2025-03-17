@@ -28,7 +28,6 @@
 
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
-%global rhsm_package_name python3-subscription-manager-rhsm
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
@@ -128,7 +127,7 @@ Requires:  iproute
 Requires:  python3-iniparse
 Requires:  python3-decorator
 Requires:  virt-what
-Requires:  %{rhsm_package_name} = %{version}-%{release}
+Requires:  python3-subscription-manager-rhsm = %{version}-%{release}
 Requires: subscription-manager-rhsm-certificates
 %ifarch %{dmidecode_arches}
 Requires: dmidecode
@@ -289,7 +288,7 @@ the remote in the currently deployed .origin file.
 %endif
 
 
-%package -n %{rhsm_package_name}
+%package -n python3-subscription-manager-rhsm
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
 %if 0%{?suse_version}
 Group: Development/Libraries/Python
@@ -312,7 +311,7 @@ Obsoletes: python3-rhsm <= 1.20.3-1
 Provides: python-rhsm = %{version}-%{release}
 Obsoletes: python-rhsm <= 1.20.3-1
 
-%description -n %{rhsm_package_name}
+%description -n python3-subscription-manager-rhsm
 A small library for communicating with the REST interface of a Red Hat Unified
 Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
@@ -609,7 +608,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %endif
 
 
-%files -n %{rhsm_package_name}
+%files -n python3-subscription-manager-rhsm
 %defattr(-,root,root,-)
 %dir %{python_sitearch}/rhsm
 %{python_sitearch}/rhsm/*
