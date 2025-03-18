@@ -252,18 +252,6 @@ from the Red Hat entitlement platform; contains subscription-manager and
 product-id plugins.
 %endif
 
-# This redefinition of debuginfo package has to be here, because we
-# need to solve the issue described in this BZ:
-# https://bugzilla.redhat.com/show_bug.cgi?id=1920568
-# We need to obsolete old dnf-sub-man-plugin-debuginfo RPM
-%package -n libdnf-plugin-subscription-manager-debuginfo
-Summary: Debug information for package libdnf-plugin-subscription-manager
-Obsoletes: dnf-plugin-subscription-manager-debuginfo < 1.29.0
-%description -n libdnf-plugin-subscription-manager-debuginfo
-This package provides debug information for package libdnf-plugin-subscription-manager.
-Debug information is useful when developing applications that use this
-package or when debugging this package.
-
 %endif
 
 
