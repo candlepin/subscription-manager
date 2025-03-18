@@ -14,8 +14,6 @@
 
 %global completion_dir %{_datadir}/bash-completion/completions
 
-%global run_dir /run
-
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 
 %if 0%{?suse_version}
@@ -351,7 +349,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
     DESTDIR=%{buildroot} PYTHON_SITELIB=%{python3_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     COMPLETION_DIR=%{completion_dir} \
-    RUN_DIR=%{run_dir} \
+    RUN_DIR=%{_rundir} \
     SBIN_DIR=%{_sbindir} \
     %{?install_ostree} %{?install_container} \
     %{?install_dnf_plugins} \
@@ -471,7 +469,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/spool/rhsm/debug
-%ghost %attr(755,root,root) %dir %{run_dir}/rhsm
+%ghost %attr(755,root,root) %dir %{_rundir}/rhsm
 %attr(750,root,root) %dir %{_var}/lib/rhsm
 %attr(750,root,root) %dir %{_var}/lib/rhsm/facts
 %attr(750,root,root) %dir %{_var}/lib/rhsm/packages
