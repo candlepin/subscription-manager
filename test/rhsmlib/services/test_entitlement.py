@@ -17,8 +17,6 @@ from test.rhsmlib.base import InjectionMockingTest
 
 from subscription_manager import injection as inj
 from subscription_manager.identity import Identity
-from subscription_manager.cert_sorter import CertSorter
-from subscription_manager.reasons import Reasons
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.cp_provider import CPProvider
 from subscription_manager.cache import AvailableEntitlementsCache
@@ -34,7 +32,7 @@ class TestEntitlementService(InjectionMockingTest):
         super(TestEntitlementService, self).setUp()
         self.mock_identity = mock.Mock(spec=Identity, name="Identity").return_value
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection").return_value
-        self.mock_sorter_class = mock.Mock(spec=CertSorter, name="CertSorter")
+
         self.mock_ent_dir = mock.Mock(spec=EntitlementDirectory, name="EntitlementDirectory").return_value
         self.mock_cache_avail_ent = mock.Mock(
             spec=AvailableEntitlementsCache, name="AvailableEntitlements"
@@ -47,12 +45,6 @@ class TestEntitlementService(InjectionMockingTest):
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
             return self.mock_identity
-        elif args[0] == inj.CERT_SORTER:
-            # This sleight of hand is needed because we want to check the arguments given
-            # when the cert sorter is instantiated.
-            instance = self.mock_sorter_class(*args[1:])
-            self.mock_sorter_class.return_value = instance
-            return instance
         elif args[0] == inj.ENT_DIR:
             return self.mock_ent_dir
         elif args[0] == inj.AVAILABLE_ENTITLEMENT_CACHE:
@@ -61,61 +53,6 @@ class TestEntitlementService(InjectionMockingTest):
             return self.mock_provider
         else:
             return None
-
-    def test_get_status(self):
-        # Prime the injected dependencies built in injection_definitions
-        service = EntitlementService()
-
-        self.mock_identity.is_valid.return_value = True
-
-        mock_reasons = mock.Mock(spec=Reasons, name="Reasons").return_value
-        mock_reasons.get_name_message_map.return_value = {"RHEL": ["Not supported by a valid subscription"]}
-        mock_reasons.get_reason_ids_map.return_value = {"69": {"key": "NOTCOVERED", "product_name": "RHEL"}}
-
-        mock_sorter = self.mock_sorter_class.return_value
-        mock_sorter.get_system_status.return_value = "Invalid"
-        mock_sorter.get_system_status_id.return_value = "invalid"
-        mock_sorter.reasons = mock_reasons
-        mock_sorter.is_valid.return_value = False
-
-        expected_value = {
-            "status": "Invalid",
-            "status_id": "invalid",
-            "reasons": {"RHEL": ["Not supported by a valid subscription"]},
-            "reason_ids": {"69": {"key": "NOTCOVERED", "product_name": "RHEL"}},
-            "valid": False,
-        }
-
-        self.assertEqual(expected_value, service.get_status())
-
-    def test_get_status_on_date(self):
-        # Prime the injected dependencies with those built in injection_definitions
-        service = EntitlementService()
-
-        # Verify the cert_sorter was constructed for a specific date
-        mock_sorter = self.mock_sorter_class.return_value
-
-        self.mock_identity.is_valid.return_value = True
-
-        mock_reasons = mock.Mock(spec=Reasons, name="Reasons").return_value
-        mock_reasons.get_name_message_map.return_value = {"RHEL": ["Not supported by a valid subscription"]}
-        mock_reasons.get_reason_ids_map.return_value = {"69": {"key": "NOTCOVERED", "product_name": "RHEL"}}
-
-        mock_sorter.get_system_status.return_value = "Invalid"
-        mock_sorter.get_system_status_id.return_value = "invalid"
-        mock_sorter.reasons = mock_reasons
-        mock_sorter.is_valid.return_value = False
-
-        expected_value = {
-            "status": "Invalid",
-            "status_id": "invalid",
-            "reasons": {"RHEL": ["Not supported by a valid subscription"]},
-            "reason_ids": {"69": {"key": "NOTCOVERED", "product_name": "RHEL"}},
-            "valid": False,
-        }
-
-        self.assertEqual(expected_value, service.get_status("some_date"))
-        self.mock_sorter_class.assert_called_once_with("some_date")
 
     def _build_options(
         self,
