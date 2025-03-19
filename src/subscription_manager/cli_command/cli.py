@@ -119,10 +119,6 @@ class CliCommand(AbstractCLICommand):
             "rhsm-app.{module}.{name}".format(module=self.__module__, name=self.__class__.__name__)
         )
 
-    def _request_validity_check(self):
-        # Make sure the sorter is fresh (low footprint if it is)
-        inj.require(inj.CERT_SORTER).force_cert_check()
-
     def _add_url_options(self):
         """Add options that allow the setting of the server URL."""
         self.parser.add_argument(

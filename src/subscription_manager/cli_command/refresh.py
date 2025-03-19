@@ -47,4 +47,3 @@ class RefreshCommand(CliCommand):
             )
         else:
             print(_("All local data refreshed"))
-        self._request_validity_check()

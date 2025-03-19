@@ -27,11 +27,10 @@ from typing import Callable, Dict, Iterable, List, Optional, Tuple, Union, TYPE_
 from rhsm.config import get_config_parser
 
 import subscription_manager.cache as cache
-from subscription_manager.cert_sorter import StackingGroupSorter, ComplianceManager
+from subscription_manager.cert_sorter import StackingGroupSorter
 from subscription_manager import identity
 from subscription_manager.injection import (
     require,
-    CERT_SORTER,
     IDENTITY,
     ENTITLEMENT_STATUS_CACHE,
     SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE,
@@ -61,7 +60,6 @@ if TYPE_CHECKING:
     from rhsm.connection import UEPConnection
     from rhsm.certificate2 import EntitlementCertificate, DateRange
     from rhsm.config import RhsmConfigParser
-    from subscription_manager.cert_sorter import CertSorter
     from subscription_manager.identity import Identity
     from subscription_manager.certdirectory import EntitlementDirectory, ProductDirectory
     from subscription_manager.cp_provider import CPProvider
@@ -127,11 +125,9 @@ class PoolFilter:
         self,
         product_dir: "ProductDirectory",
         entitlement_dir: "EntitlementDirectory",
-        sorter: Optional[ComplianceManager] = None,
     ):
         self.product_directory: ProductDirectory = product_dir
         self.entitlement_directory: EntitlementDirectory = entitlement_dir
-        self.sorter: Optional[ComplianceManager] = sorter
 
     def filter_product_ids(self, pools: Iterable[dict], product_ids: Iterable[str]) -> List[dict]:
         """
@@ -248,14 +244,11 @@ class PoolFilter:
             overlap: int = 0
             possible_overlap_pids = provided_ids.intersection(list(entitled_product_ids_to_certs.keys()))
             for productid in possible_overlap_pids:
-                if (
-                    self._dates_overlap(pool, entitled_product_ids_to_certs[productid])
-                    and productid not in self.sorter.partially_valid_products
-                ):
+                if self._dates_overlap(pool, entitled_product_ids_to_certs[productid]):
                     overlap += 1
                 else:
                     break
-            if overlap != len(provided_ids) or wrapped_pool.get_stacking_id() in self.sorter.partial_stacks:
+            if overlap != len(provided_ids):
                 filtered_pools.append(pool)
 
         return filtered_pools
@@ -541,7 +534,6 @@ class PoolStash:
 
     def __init__(self):
         self.identity: Identity = require(IDENTITY)
-        self.sorter: Optional[Union[ComplianceManager, CertSorter]] = None
 
         # Pools which passed rules server side for this consumer:
         self.compatible_pools = {}
@@ -563,10 +555,6 @@ class PoolStash:
         Refresh the list of pools from the server, active on the given date.
         """
 
-        if active_on:
-            self.sorter = ComplianceManager(active_on)
-        else:
-            self.sorter = require(CERT_SORTER)
         self.all_pools = {}
         self.compatible_pools = {}
         log.debug("Refreshing pools from server...")
@@ -619,10 +607,6 @@ class PoolStash:
         """
         self.all_pools: Dict[str, dict] = {}
         self.compatible_pools: Dict[str, dict] = {}
-        if active_on and overlapping:
-            self.sorter = ComplianceManager(active_on)
-        elif not active_on and overlapping:
-            self.sorter = require(CERT_SORTER)
 
         if incompatible:
             pools = list_pools(
@@ -679,7 +663,7 @@ class PoolStash:
             pools = list(self.compatible_pools.values())
             log.debug("\tRemoved %d incompatible pools" % len(self.incompatible_pools))
 
-        pool_filter = PoolFilter(require(PROD_DIR), require(ENT_DIR), self.sorter)
+        pool_filter = PoolFilter(require(PROD_DIR), require(ENT_DIR))
 
         # Filter out products that are not installed if necessary:
         if uninstalled:

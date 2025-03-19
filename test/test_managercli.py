@@ -1,18 +1,17 @@
 import unittest
 
-from datetime import datetime, timedelta
 import sys
 import socket
 import os
 
 from subscription_manager import syspurposelib
 from subscription_manager import managercli, managerlib
-from subscription_manager.injection import provide, CERT_SORTER, PROD_DIR
+from subscription_manager.injection import provide, PROD_DIR
 from rhsmlib.services.products import InstalledProducts
 from subscription_manager.cli_command.cli import handle_exception, system_exit
 from subscription_manager.cli_command import cli
 
-from .stubs import StubEntitlementCertificate, StubUEP, StubProductDirectory, StubCertSorter
+from .stubs import StubUEP, StubProductDirectory
 from .fixture import FakeException, FakeLogger, SubManFixture, Capture
 
 from unittest.mock import patch
@@ -31,108 +30,6 @@ class InstalledProductStatusTests(SubManFixture):
 
         # no product certs installed...
         self.assertEqual(0, len(product_status))
-
-    def test_entitlement_for_installed_product_shows_subscribed(self):
-        product_directory = StubProductDirectory(pids=["product1"])
-        provide(PROD_DIR, product_directory)
-        ent_cert = StubEntitlementCertificate("product1")
-
-        stub_sorter = StubCertSorter()
-        stub_sorter.valid_products["product1"] = [ent_cert]
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = InstalledProducts(StubUEP()).list()
-
-        self.assertEqual(1, len(product_status))
-        self.assertEqual("subscribed", product_status[0][4])
-
-    def test_expired_entitlement_for_installed_product_shows_expired(self):
-        ent_cert = StubEntitlementCertificate("product1", end_date=(datetime.now() - timedelta(days=2)))
-
-        product_directory = StubProductDirectory(pids=["product1"])
-        provide(PROD_DIR, product_directory)
-        stub_sorter = StubCertSorter()
-        stub_sorter.expired_products["product1"] = [ent_cert]
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = InstalledProducts(StubUEP()).list()
-
-        self.assertEqual(1, len(product_status))
-        self.assertEqual("expired", product_status[0][4])
-
-    def test_no_entitlement_for_installed_product_shows_no_subscribed(self):
-        product_directory = StubProductDirectory(pids=["product1"])
-        provide(PROD_DIR, product_directory)
-        stub_sorter = StubCertSorter()
-        stub_sorter.unentitled_products["product1"] = None  # prod cert unused here
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = InstalledProducts(StubUEP()).list()
-
-        self.assertEqual(1, len(product_status))
-        self.assertEqual("not_subscribed", product_status[0][4])
-
-    def test_future_dated_entitlement_shows_future_subscribed(self):
-        product_directory = StubProductDirectory(pids=["product1"])
-        provide(PROD_DIR, product_directory)
-        ent_cert = StubEntitlementCertificate("product1", start_date=(datetime.now() + timedelta(days=1365)))
-        stub_sorter = StubCertSorter()
-        stub_sorter.future_products["product1"] = [ent_cert]
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = InstalledProducts(StubUEP()).list()
-        self.assertEqual(1, len(product_status))
-        self.assertEqual("future_subscribed", product_status[0][4])
-
-    def test_one_product_with_two_entitlements_lists_product_twice(self):
-        ent_cert = StubEntitlementCertificate("product1", ["product2", "product3"], sockets=10)
-        product_directory = StubProductDirectory(pids=["product1"])
-        provide(PROD_DIR, product_directory)
-        stub_sorter = StubCertSorter()
-        stub_sorter.valid_products["product1"] = [ent_cert, ent_cert]
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = InstalledProducts(StubUEP()).list()
-
-        # only "product" is installed
-        self.assertEqual(1, len(product_status))
-
-    def test_one_subscription_with_bundled_products_lists_once(self):
-        ent_cert = StubEntitlementCertificate("product1", ["product2", "product3"], sockets=10)
-        product_directory = StubProductDirectory(pids=["product1"])
-        provide(PROD_DIR, product_directory)
-        stub_sorter = StubCertSorter()
-        stub_sorter.valid_products["product1"] = [ent_cert]
-        stub_sorter.valid_products["product2"] = [ent_cert]
-        stub_sorter.valid_products["product3"] = [ent_cert]
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = InstalledProducts(StubUEP()).list()
-
-        # neither product3 or product 2 are installed
-        self.assertEqual(1, len(product_status))
-        self.assertEqual("product1", product_status[0][0])
-        self.assertEqual("subscribed", product_status[0][4])
-
-    def test_one_subscription_with_bundled_products_lists_once_part_two(self):
-        ent_cert = StubEntitlementCertificate("product1", ["product2", "product3"], sockets=10)
-
-        prod_dir = StubProductDirectory(pids=["product1", "product2"])
-        provide(PROD_DIR, prod_dir)
-        stub_sorter = StubCertSorter()
-        stub_sorter.valid_products["product1"] = [ent_cert]
-        stub_sorter.valid_products["product2"] = [ent_cert]
-
-        provide(CERT_SORTER, stub_sorter)
-
-        product_status = InstalledProducts(StubUEP()).list()
-
-        # product3 isn't installed
-        self.assertEqual(2, len(product_status))
-        self.assertEqual("product1", product_status[0][0])
-        self.assertEqual("subscribed", product_status[0][4])
-        self.assertEqual("product2", product_status[1][0])
-        self.assertEqual("subscribed", product_status[1][4])
 
 
 class TestCli(SubManFixture):
@@ -308,7 +205,7 @@ class TestSystemExit(unittest.TestCase):
         self.assertEqual("%s\n" % msg, cap.err)
 
     def test_msg_unicode(self):
-        msg: str = "\u2620 \u2603 \u203D"
+        msg: str = "\u2620 \u2603 \u203d"
         with Capture() as cap:
             try:
                 system_exit(1, msg)
@@ -327,7 +224,7 @@ class TestSystemExit(unittest.TestCase):
         self.assertEqual("%s\n" % str(ex), cap.err)
 
     def test_only_exception_unicode(self):
-        ex: ValueError = ValueError("\u2620 \u2603 \u203D")
+        ex: ValueError = ValueError("\u2620 \u2603 \u203d")
         with Capture() as cap:
             try:
                 system_exit(1, ex)

@@ -134,7 +134,6 @@ class ReposCommand(CliCommand):
         if self.identity.is_valid():
             cert_action_client = ActionClient(skips=[PackageProfileActionInvoker])
             cert_action_client.update()
-            self._request_validity_check()
 
         if self.is_registered():
             supported_resources = get_supported_resources()

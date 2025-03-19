@@ -19,7 +19,7 @@ from unittest import mock
 import random
 
 from rhsm import config
-from subscription_manager.cert_sorter import CertSorter
+
 from subscription_manager.cache import (
     EntitlementStatusCache,
     ProductStatusCache,
@@ -600,7 +600,6 @@ class StubBackend:
         self.entitlement_dir = None
         self.product_dir = None
         self.content_connection = None
-        self.cs = StubCertSorter()
         self.overrides = None
         self.certlib = None
 
@@ -664,19 +663,6 @@ class StubEntActionInvoker:
         self.uep = uep or StubUEP()
 
     def update(self):
-        pass
-
-
-class StubCertSorter(CertSorter):
-    def __init__(self):
-        super(StubCertSorter, self).__init__()
-
-    def update_product_manager(self):
-        pass
-
-    def _parse_server_status(self):
-        # Override this method to just leave all fields uninitialized so
-        # tests can do whatever they wish with them.
         pass
 
 

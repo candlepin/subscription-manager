@@ -13,7 +13,7 @@
 #
 import unittest
 
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
 
 from .stubs import (
@@ -21,7 +21,6 @@ from .stubs import (
     StubProductCertificate,
     StubProduct,
     StubProductDirectory,
-    StubCertSorter,
 )
 from .fixture import SubManFixture
 from subscription_manager.managerlib import (
@@ -37,7 +36,7 @@ from subscription_manager.injection import provide, PROD_DIR
 from .modelhelpers import create_pool
 from subscription_manager import managerlib
 import rhsm
-from rhsm.certificate import create_from_pem, DateRange, GMT
+from rhsm.certificate import create_from_pem, GMT
 from unittest.mock import Mock, patch
 
 cfg = rhsm.config.get_config_parser()
@@ -408,272 +407,6 @@ class PoolFilterTests(SubManFixture):
         result = pool_filter.filter_product_name(pools, "Bar")
         self.assertEqual(1, len(result))
         self.assertEqual(product1, result[0]["productId"])
-
-    def test_filter_no_overlap(self):
-        product1 = "Test Product 1"
-        provided1 = "1"  # Provided by product 1
-
-        pd = StubCertificateDirectory([])
-        pool_filter = PoolFilter(
-            product_dir=pd, entitlement_dir=StubCertificateDirectory([]), sorter=StubCertSorter()
-        )
-
-        begin_date = datetime.now() - timedelta(days=10)
-        end_date = datetime.now() + timedelta(days=365)
-        pools = [
-            self._create_pool(
-                product1,
-                product1,
-                provided_products=[provided1],
-                start_end_range=DateRange(begin_date, end_date),
-            ),
-        ]
-        result = pool_filter.filter_out_overlapping(pools)
-        self.assertEqual(1, len(result))
-
-        result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEqual(0, len(result))
-
-    def test_filter_overlap(self):
-        product1 = "Test Product 1"
-        provided1 = "1"
-        product2 = "Test Product 2"
-        provided2 = "2"
-
-        cert_start = datetime.now() - timedelta(days=10)
-        cert_end = datetime.now() + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
-
-        ent_dir = StubCertificateDirectory([cert1])
-        pool_filter = PoolFilter(
-            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=StubCertSorter()
-        )
-
-        pools = [
-            self._create_pool(
-                product1,
-                product1,
-                provided_products=[provided1],
-                start_end_range=DateRange(cert_start, cert_end),
-            ),
-            self._create_pool(
-                product2,
-                product2,
-                provided_products=[provided2],
-                start_end_range=DateRange(cert_start, cert_end),
-            ),
-        ]
-        result = pool_filter.filter_out_overlapping(pools)
-        self.assertEqual([pools[1]], result)
-
-        result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEqual([pools[0]], result)
-
-    def test_filter_overlap_sorter_without_partially_valid(self):
-        product1 = "Test Product 1"
-        provided1 = "1"
-
-        cert_start = datetime.now() - timedelta(days=10)
-        cert_end = datetime.now() + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
-
-        ent_dir = StubCertificateDirectory([cert1])
-        mock_sorter = StubCertSorter()
-        mock_sorter.partially_valid_products = {}
-        pool_filter = PoolFilter(
-            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
-        )
-
-        pools = [
-            self._create_pool(
-                product1,
-                product1,
-                provided_products=[provided1],
-                start_end_range=DateRange(cert_start, cert_end),
-            ),
-        ]
-        result = pool_filter.filter_out_overlapping(pools)
-        self.assertEqual(0, len(result))
-
-        result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEqual([pools[0]], result)
-
-    def test_filter_overlap_sorter_with_partially_valid(self):
-        product1 = "Test Product 1"
-        provided1 = "1"
-        product2 = "Test Product 2"
-        provided2 = "2"
-        product3 = "Test Product 3"
-
-        cert_start = datetime.now() - timedelta(days=10)
-        cert_end = datetime.now() + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
-        cert2 = StubProductCertificate(StubProduct(provided2), start_date=cert_start, end_date=cert_end)
-
-        ent_dir = StubCertificateDirectory([cert1, cert2])
-        mock_sorter = StubCertSorter()
-        mock_sorter.partially_valid_products = {cert1.products[0].id: set([cert1])}
-        pool_filter = PoolFilter(
-            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
-        )
-
-        pools = [
-            self._create_pool(
-                product1,
-                product1,
-                provided_products=[provided1],
-                start_end_range=DateRange(cert_start, cert_end),
-            ),
-            self._create_pool(
-                product2,
-                product2,
-                provided_products=[provided2, provided1],
-                start_end_range=DateRange(cert_start, cert_end),
-            ),
-            self._create_pool(
-                product3,
-                product3,
-                provided_products=[provided2],
-                start_end_range=DateRange(cert_start, cert_end),
-            ),
-        ]
-        result = pool_filter.filter_out_overlapping(pools)
-        self.assertEqual([pools[0], pools[1]], result)
-
-        result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEqual([pools[2]], result)
-
-    def test_filter_no_overlap_with_future_entitlement(self):
-        product1 = "Test Product 1"
-        provided1 = "1"
-
-        cert_start = datetime.now() + timedelta(days=365)
-        cert_end = cert_start + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
-
-        ent_dir = StubCertificateDirectory([cert1])
-        mock_sorter = StubCertSorter()
-        pool_filter = PoolFilter(
-            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
-        )
-
-        begin_date = datetime.now() - timedelta(days=100)
-        end_date = datetime.now() + timedelta(days=100)
-        pools = [
-            self._create_pool(
-                product1,
-                product1,
-                provided_products=[provided1],
-                start_end_range=DateRange(begin_date, end_date),
-            ),
-        ]
-        result = pool_filter.filter_out_overlapping(pools)
-        self.assertEqual(1, len(result))
-
-        result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEqual(0, len(result))
-
-    def test_filter_no_overlap_with_partial_stack(self):
-        product1 = "Test Product 1"
-        provided1 = "1"
-        stacking_id1 = "123"
-
-        ent_dir = StubCertificateDirectory()
-        mock_sorter = StubCertSorter()
-        pool_filter = PoolFilter(
-            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
-        )
-
-        begin_date = datetime.now() - timedelta(days=100)
-        end_date = datetime.now() + timedelta(days=100)
-        pools = [
-            self._create_pool(
-                product1,
-                product1,
-                provided_products=[provided1],
-                start_end_range=DateRange(begin_date, end_date),
-                stacking_id=stacking_id1,
-            ),
-        ]
-        result = pool_filter.filter_out_overlapping(pools)
-        self.assertEqual([pools[0]], result)
-
-    def test_filter_overlap_with_partial_stack(self):
-        product1 = "Test Product 1"
-        provided1 = "1"
-        stacking_id1 = "123"
-
-        cert_start = datetime.now() - timedelta(days=10)
-        cert_end = datetime.now() + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
-        ent_dir = StubCertificateDirectory([cert1])
-        mock_sorter = StubCertSorter()
-        mock_sorter.partial_stacks = {stacking_id1: [cert1]}
-        pool_filter = PoolFilter(
-            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
-        )
-        begin_date = datetime.now() - timedelta(days=100)
-        end_date = datetime.now() + timedelta(days=100)
-        pools = [
-            self._create_pool(
-                product1,
-                product1,
-                provided_products=[provided1],
-                start_end_range=DateRange(begin_date, end_date),
-                stacking_id=stacking_id1,
-            ),
-            self._create_pool(
-                product1,
-                product1,
-                provided_products=[provided1],
-                start_end_range=DateRange(begin_date, end_date),
-                stacking_id=stacking_id1,
-            ),
-        ]
-        result = pool_filter.filter_out_overlapping(pools)
-        self.assertEqual(2, len(result))
-
-    def test_filter_no_overlap_with_product_id(self):
-        product1 = "Test Product 1"
-        provided1 = "1"
-        product2 = "0"  # different product id than that of product 1
-        provided2 = "1"  # same provided product as product 1
-        product2_type = "SVC"
-
-        cert_start = datetime.now() - timedelta(days=10)
-        cert_end = datetime.now() + timedelta(days=365)
-        cert1 = StubProductCertificate(StubProduct(provided1), start_date=cert_start, end_date=cert_end)
-
-        ent_dir = StubCertificateDirectory([cert1])
-        mock_sorter = StubCertSorter()
-        mock_sorter.partially_valid_products = {}
-        pool_filter = PoolFilter(
-            product_dir=StubCertificateDirectory([]), entitlement_dir=ent_dir, sorter=mock_sorter
-        )
-
-        pools = [
-            self._create_pool(
-                product1,
-                product1,
-                provided_products=[provided1],
-                start_end_range=DateRange(cert_start, cert_end),
-            ),
-            self._create_pool(
-                product2,
-                product2,
-                provided_products=[provided2],
-                start_end_range=DateRange(cert_start, cert_end),
-                type=product2_type,
-            ),
-        ]
-        result = pool_filter.filter_out_overlapping(pools)
-        self.assertEqual([pools[1]], result)
-
-        result = pool_filter.filter_out_non_overlapping(pools)
-        self.assertEqual([pools[0]], result)
-
-        # Adds in a stacking_id to be used in testing the partial stacks
-        # Assume default type attribute of 'MKT'
 
     def _create_pool(
         self, product_id, product_name, provided_products, start_end_range, stacking_id=None, type="MKT"

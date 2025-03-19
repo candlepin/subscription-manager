@@ -10,14 +10,11 @@
 # Red Hat trademarks are not licensed under GPLv2. No permission is
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
-import collections
 from typing import List
 
 from rhsm.connection import UEPConnection
 
 from subscription_manager import injection as inj
-from subscription_manager import utils
-from subscription_manager import managerlib
 
 
 class InstalledProducts:
@@ -51,52 +48,5 @@ class InstalledProducts:
         # reverse order, then request can be incomplete and result
         # needn't contain all data (especially startDate and endDate).
         # See BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1357152
-
-        # FIXME: make following functions independent on order of calling
-        sorter = inj.require(inj.CERT_SORTER)
-        calculator = inj.require(inj.PRODUCT_DATE_RANGE_CALCULATOR, self.cp)
-
-        cert_filter = None
-        if filter_string:
-            cert_filter = utils.ProductCertificateFilter(filter_string)
-
-        # Instead of a dictionary because some legacy methods unpack this as a list
-        ProductStatus = collections.namedtuple(
-            "ProductStatus",
-            ["product_name", "product_id", "version", "arch", "status", "status_details", "starts", "ends"],
-        )
-
-        if iso_dates:
-            date_formatter = managerlib.format_iso8601_date
-        else:
-            # Format the date in user's local time as the date
-            # range is returned in GMT.
-            date_formatter = managerlib.format_date
-
-        for installed_product in sorted(sorter.installed_products):
-            product_cert = sorter.installed_products[installed_product]
-
-            if cert_filter is None or cert_filter.match(product_cert):
-                for product in product_cert.products:
-                    begin = ""
-                    end = ""
-                    prod_status_range = calculator.calculate(product.id)
-
-                    if prod_status_range:
-                        begin = date_formatter(prod_status_range.begin())
-                        end = date_formatter(prod_status_range.end())
-
-                    product_status.append(
-                        ProductStatus(
-                            product.name,
-                            installed_product,
-                            product.version,
-                            ",".join(product.architectures),
-                            sorter.get_status(product.id),
-                            sorter.reasons.get_product_reasons(product),
-                            begin,
-                            end,
-                        )
-                    )
 
         return product_status
