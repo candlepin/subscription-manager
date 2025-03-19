@@ -32,7 +32,6 @@ from subscription_manager.cache import (
     SyspurposeValidFieldsCache,
 )
 
-from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.certdirectory import EntitlementDirectory
 from subscription_manager.certdirectory import ProductDirectory
 from subscription_manager.facts import Facts
@@ -77,8 +76,6 @@ def init_dep_injection():
     inj.provide(inj.INSTALLED_PRODUCTS_MANAGER, InstalledProductsManager, singleton=True)
 
     inj.provide(inj.CP_PROVIDER, CPProvider, singleton=True)
-
-    inj.provide(inj.CERT_SORTER, CertSorter, singleton=True)
 
     # Set up plugin manager as a singleton.
     # FIXME: should we aggressively catch exceptions here? If we can't

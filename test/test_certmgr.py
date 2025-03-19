@@ -130,8 +130,6 @@ class ActionClientTestBase(SubManFixture):
 
         # TODO: need to provide return for "getRelease" for repolib stuff
 
-        injection.provide(injection.CERT_SORTER, self.mock_cert_sorter)
-
         syspurpose_patch = mock.patch("subscription_manager.syspurposelib.SyncedStore")
         self.mock_sp_store = syspurpose_patch.start()
         self.mock_sp_store, self.mock_sp_store_contents = set_up_mock_sp_store(self.mock_sp_store)

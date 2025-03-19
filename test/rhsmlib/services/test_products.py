@@ -16,7 +16,6 @@ import datetime
 from test.rhsmlib.base import InjectionMockingTest
 
 from subscription_manager import injection as inj
-from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.validity import ValidProductDateRangeCalculator
 
 from test import stubs
@@ -171,9 +170,7 @@ class TestProductService(InjectionMockingTest):
         )
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.CERT_SORTER:
-            return self.mock_cert_sorter
-        elif args[0] == inj.PRODUCT_DATE_RANGE_CALCULATOR:
+        if args[0] == inj.PRODUCT_DATE_RANGE_CALCULATOR:
             return self.mock_calculator
         else:
             return None
