@@ -47,7 +47,7 @@ jobs:
         uses: MishaKav/pytest-coverage-comment@main
         if: |
           github.event.pull_request.head.repo.full_name == github.repository
-          && matrix.name == 'Fedora latest'
+          && matrix.name == 'CentOS Stream 9'
         with:
           title: "Coverage (computed on ${{ matrix.name }})"
           report-only-changed-files: true
