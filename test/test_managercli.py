@@ -25,7 +25,7 @@ from subscription_manager.cache import ContentAccessCache, \
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 from subscription_manager.injection import provide, require, \
         CERT_SORTER, PROD_DIR, CONTENT_ACCESS_CACHE, CONTENT_ACCESS_MODE_CACHE, \
-        CP_PROVIDER
+        CP_PROVIDER, IDENTITY
 from rhsmlib.services.products import InstalledProducts
 from subscription_manager.managercli import AVAILABLE_SUBS_MATCH_COLUMNS
 from subscription_manager.printing_utils import format_name, columnize, \
@@ -35,7 +35,7 @@ from subscription_manager.overrides import Override
 
 from .stubs import StubProductCertificate, StubEntitlementCertificate, \
         StubConsumerIdentity, StubProduct, StubUEP, StubProductDirectory, \
-        StubCertSorter, StubPool
+        StubCertSorter, StubPool, StubIdentity
 from .fixture import FakeException, FakeLogger, SubManFixture, \
         Capture, Matcher, set_up_mock_sp_store
 
@@ -339,11 +339,10 @@ class TestStatusCommand(SubManFixture):
         self.cc.entitlement_dir.list_with_content_access = Mock(return_value=cert_list)
         self.cc.entcertlib = Mock()
 
-    def test_disabled_status_sca_mode(self):
+    def test_status_sca_mode_registered(self):
         """
         Test status, when SCA mode is used
         """
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({"status": "disabled"})
         self.cc.cp._capabilities = ["syspurpose"]
@@ -351,10 +350,8 @@ class TestStatusCommand(SubManFixture):
         self.cc.options.on_date = None
         with Capture() as cap:
             self.cc._do_command()
-        self.assertIn("Overall Status: Disabled", cap.out)
+        self.assertIn("Overall Status: Registered", cap.out)
         self.assertIn("Content Access Mode is set to Simple Content Access.", cap.out)
-        self.assertIn("This host has access to content, regardless of subscription status.", cap.out)
-        self.assertIn("System Purpose Status: Disabled", cap.out)
 
     def test_current_status_entitlement_mode(self):
         """
@@ -362,7 +359,6 @@ class TestStatusCommand(SubManFixture):
         """
         # Note that server sent response with "Current" status
         self.mock_entitlement_instance.get_status = Mock(return_value=self.MOCK_SERVICE_STATUS_ENTITLEMENT)
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({"status": "valid"})
         self.cc.cp._capabilities = ["syspurpose"]
@@ -386,7 +382,6 @@ class TestStatusCommand(SubManFixture):
         """
         # Note that server sent response with "Current" status
         self.mock_entitlement_instance.get_status = Mock(return_value=self.MOCK_SERVICE_STATUS_ENTITLEMENT)
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({"status": "valid"})
         self.cc.cp._capabilities = ["syspurpose"]
@@ -405,46 +400,57 @@ class TestStatusCommand(SubManFixture):
         self.assertIn("Overall Status: Current", cap.out)
         self.assertIn("System Purpose Status: Matched", cap.out)
 
+    def test_status_unregistered(self):
+        """
+        Test status, when the system is not registered
+        """
+        provide(IDENTITY, StubIdentity())
+        self.cc.options = Mock()
+        self.cc.options.on_date = None
+        with Capture() as cap:
+            self.cc._do_command()
+        self.assertIn("Overall Status: Not registered", cap.out)
+
     def test_purpose_status_success(self):
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({'status': 'valid'})
         self.cc.cp._capabilities = ["syspurpose"]
         self.cc.options = Mock()
         self.cc.options.on_date = None
+        self.cc._determine_whether_content_access_mode_is_sca = Mock(return_value=False)
         with Capture() as cap:
             self.cc._do_command()
         self.assertTrue('System Purpose Status: Matched' in cap.out)
 
     def test_purpose_status_consumer_lack(self):
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({'status': 'unknown'})
         self.cc.cp._capabilities = ["syspurpose"]
         self.cc.options = Mock()
         self.cc.options.on_date = None
+        self.cc._determine_whether_content_access_mode_is_sca = Mock(return_value=False)
         with Capture() as cap:
             self.cc._do_command()
         self.assertTrue('System Purpose Status: Unknown' in cap.out)
 
     def test_purpose_status_consumer_no_capability(self):
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({'status': 'unknown'})
         self.cc.cp._capabilities = []
         self.cc.options = Mock()
         self.cc.options.on_date = None
+        self.cc._determine_whether_content_access_mode_is_sca = Mock(return_value=False)
         with Capture() as cap:
             self.cc._do_command()
         self.assertTrue('System Purpose Status: Unknown' in cap.out)
 
     def test_purpose_status_mismatch(self):
-        self.cc.consumerIdentity = StubConsumerIdentity
         self.cc.cp = StubUEP()
         self.cc.cp.setSyspurposeCompliance({'status': 'mismatched', 'reasons': ['unsatisfied usage: Production']})
         self.cc.cp._capabilities = ["syspurpose"]
         self.cc.options = Mock()
         self.cc.options.on_date = None
+        self.cc._determine_whether_content_access_mode_is_sca = Mock(return_value=False)
         with Capture() as cap:
             self.cc._do_command()
         self.assertTrue('System Purpose Status: Mismatched' in cap.out)
@@ -2806,11 +2812,10 @@ class TestNoneWrap(unittest.TestCase):
 
 class TestColumnize(unittest.TestCase):
     def setUp(self):
-        self.old_method = managercli.get_terminal_width
-        managercli.get_terminal_width = Mock(return_value=500)
-
-    def tearDown(self):
-        managercli.get_terminal_width = self.old_method
+        patcher = patch("subscription_manager.printing_utils.get_terminal_width")
+        self.get_terminal_width_mock = patcher.start()
+        self.get_terminal_width_mock.return_value = 500
+        self.addCleanup(patcher.stop)
 
     def test_columnize(self):
         result = columnize(["Hello:", "Foo:"], echo_columnize_callback, "world", "bar")
@@ -2824,16 +2829,15 @@ class TestColumnize(unittest.TestCase):
         result = columnize(["Hello:", "Foo:"], echo_columnize_callback, [], "bar")
         self.assertEqual(result, "Hello: \nFoo:   bar")
 
-    @patch('subscription_manager.printing_utils.get_terminal_width')
-    def test_columnize_with_small_term(self, term_width_mock):
-        term_width_mock.return_value = None
+    def test_columnize_with_small_term(self):
+        self.get_terminal_width_mock.return_value = None
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
                 echo_columnize_callback, "This is a testing string", "This_is_another_testing_string")
         expected = 'Hello\nHello\nHello\nHello\n:     This\n      is a\n      ' \
                 'testin\n      g\n      string\nFoo\nFoo\nFoo\nFoo:  ' \
                 'This_i\n      s_anot\n      her_te\n      sting_\n      string'
         self.assertNotEqual(result, expected)
-        term_width_mock.return_value = 12
+        self.get_terminal_width_mock.return_value = 12
         result = columnize(["Hello Hello Hello Hello:", "Foo Foo Foo Foo:"],
                 echo_columnize_callback, "This is a testing string", "This_is_another_testing_string")
         self.assertEqual(result, expected)
@@ -2867,14 +2871,13 @@ class TestColumnize(unittest.TestCase):
         expected = 'a' * 9 + '\n ' + 'a' * 9 + '\n ' + 'aa'
         self.assertEqual(result, expected)
 
-    @patch('subscription_manager.printing_utils.get_terminal_width')
-    def test_columnize_multibyte(self, term_width_mock):
+    def test_columnize_multibyte(self):
         multibyte_str = u"このシステム用に"
-        term_width_mock.return_value = 40
+        self.get_terminal_width_mock.return_value = 40
         result = columnize([multibyte_str], echo_columnize_callback, multibyte_str)
         expected = u"このシステム用に このシステム用に"
         self.assertEqual(result, expected)
-        term_width_mock.return_value = 14
+        self.get_terminal_width_mock.return_value = 14
         result = columnize([multibyte_str], echo_columnize_callback, multibyte_str)
         expected = u"このシ\nステム\n用に   このシ\n       ステム\n       用に"
         self.assertEqual(result, expected)

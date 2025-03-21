@@ -3701,20 +3701,17 @@ class StatusCommand(CliCommand):
                 system_exit(os.EX_DATAERR, err)
         return on_date
 
-    def _print_status(self, service_status):
-        """
-        Print only status
-        :return: Print overall status
-        """
-
+    def _print_status_banner(self):
         print("+-------------------------------------------+")
         print("   " + _("System Status Details"))
         print("+-------------------------------------------+")
 
-        ca_message = ""
-        has_cert = _(
-            "Content Access Mode is set to Simple Content Access. This host has access to content, regardless of subscription status.\n"
-        )
+    def _determine_whether_content_access_mode_is_sca(self, service_status):
+        """
+        Try hard to determine whether the content access mode is SCA,
+        refreshing the caches if needed
+        :return: True if SCA, False if entitlement mode
+        """
 
         certs = self.entitlement_dir.list_with_content_access()
         sca_certs = [cert for cert in certs if cert.entitlement_type == CONTENT_ACCESS_CERT_TYPE]
@@ -3743,14 +3740,29 @@ class StatusCommand(CliCommand):
                     f"Found SCA cert, but status ID is not 'disabled' ({status_id}). Refreshing entitlement certs..."
                 )
                 refresh_service.refresh()
-            else:
-                ca_message = has_cert
+                sca_mode_detected = False
 
-        print(
-            _("Overall Status: {status}\n{message}").format(
-                status=service_status["status"], message=ca_message
+        return sca_mode_detected
+
+    def _print_status(self, service_status, is_sca):
+        """
+        Print only status
+        :return: Print overall status
+        """
+
+        self._print_status_banner()
+
+        ca_message = ""
+        status_message = service_status["status"]
+
+        if is_sca:
+            ca_message = _(
+                "Content Access Mode is set to Simple Content Access. "
+                "This host has access to content, regardless of subscription status.\n"
             )
-        )
+            status_message = _("Registered")
+
+        print(_("Overall Status: {status}\n{message}").format(status=status_message, message=ca_message))
 
     def _print_reasons(self, service_status):
         """
@@ -3799,13 +3811,23 @@ class StatusCommand(CliCommand):
         # First get/check if provided date is valid
         on_date = self._get_date_cli_option()
 
+        # In case we are not registered, then simply print that and avoid
+        # all the rest of the checks
+        if not self.is_consumer_cert_present():
+            self._print_status_banner()
+            print(_("Overall Status: Not registered\n"))
+            return 1
+
         service_status = entitlement.EntitlementService(cp=self.cp).get_status(on_date)
 
-        self._print_status(service_status)
+        is_sca = self._determine_whether_content_access_mode_is_sca(service_status)
 
-        self._print_reasons(service_status)
+        self._print_status(service_status, is_sca)
 
-        self._print_syspurpose_status(on_date)
+        if not is_sca:
+            self._print_reasons(service_status)
+
+            self._print_syspurpose_status(on_date)
 
         if service_status["valid"]:
             result = 0
