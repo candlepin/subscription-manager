@@ -676,12 +676,15 @@ class BaseRestLib:
                 log.debug(f"Closing HTTPS connection {self.__conn.sock}")
                 try:
                     self.__conn.sock.unwrap()
-                except ssl.SSLError as err:
-                    log.debug(f"Unable to close TLS connection properly: {err}")
+                except Exception as err:
+                    log.debug(f"Unable to close TLS connection: {err}")
                 else:
                     log.debug("TLS connection closed")
             # Then it is possible to close TCP connection
-            self.__conn.close()
+            try:
+                self.__conn.close()
+            except Exception as err:
+                log.info(f"Unable to close TCP connection: {err}")
         self.__conn = None
 
     def _get_cert_key_list(self) -> List[Tuple[str, str]]:
