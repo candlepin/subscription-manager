@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-22 08:09+0200\n"
+"POT-Creation-Date: 2025-03-21 14:27+0100\n"
 "PO-Revision-Date: 2023-01-25 22:20+0000\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Kannada <https://translate.fedoraproject.org/projects/"
@@ -268,8 +268,8 @@ msgstr ""
 msgid "Removals:"
 msgstr ""
 
-#: cockpit/src/insights.jsx:207 cockpit/src/insights.jsx:435
-#: cockpit/src/insights.jsx:440
+#: cockpit/src/insights.jsx:207 cockpit/src/insights.jsx:433
+#: cockpit/src/insights.jsx:438
 msgid "Details"
 msgstr ""
 
@@ -310,27 +310,27 @@ msgstr ""
 msgid "unknown"
 msgstr ""
 
-#: cockpit/src/insights.jsx:410
+#: cockpit/src/insights.jsx:408
 msgid "The last Insights data upload has failed."
 msgstr ""
 
-#: cockpit/src/insights.jsx:415
+#: cockpit/src/insights.jsx:413
 msgid "Connected to Red Hat Insights"
 msgstr ""
 
-#: cockpit/src/insights.jsx:421
+#: cockpit/src/insights.jsx:419
 msgid "Next Insights data upload"
 msgstr ""
 
-#: cockpit/src/insights.jsx:426
+#: cockpit/src/insights.jsx:424
 msgid "Last Insights data upload"
 msgstr ""
 
-#: cockpit/src/insights.jsx:443 cockpit/src/insights.jsx:447
+#: cockpit/src/insights.jsx:441 cockpit/src/insights.jsx:445
 msgid "Disconnect from Insights"
 msgstr ""
 
-#: cockpit/src/insights.jsx:445
+#: cockpit/src/insights.jsx:443
 msgid ""
 "If you disconnect this system from Insights, it will no longer report it's "
 "Insights status in Red Hat Cloud or Satellite."
@@ -338,7 +338,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: cockpit/src/insights.jsx:455 cockpit/src/insights.jsx:474
+#: cockpit/src/insights.jsx:453 cockpit/src/insights.jsx:472
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:262
 #: src/subscription_manager/gui/data/glade/registration_info.glade:261
 #: src/subscription_manager/gui/data/glade/repositories.glade:276
@@ -350,59 +350,59 @@ msgstr "ಮುಚ್ಚು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: cockpit/src/insights.jsx:463
+#: cockpit/src/insights.jsx:461
 #: src/subscription_manager/gui/data/glade/redeem.glade:29
 #: src/subscription_manager/gui/data/ui/redeem.ui:29
 msgid "Cancel"
 msgstr "ರದ್ದುಗೊಳಿಸು"
 
-#: cockpit/src/insights.jsx:533
+#: cockpit/src/insights.jsx:531
 msgid "No rule hits"
 msgstr ""
 
-#: cockpit/src/insights.jsx:541
+#: cockpit/src/insights.jsx:539
 msgid "$0 critical hit"
 msgid_plural "$0 hits, including critical"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:546
+#: cockpit/src/insights.jsx:544
 msgid "$0 important hit"
 msgid_plural "$0 hits, including important"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:551
+#: cockpit/src/insights.jsx:549
 msgid "$0 moderate hit"
 msgid_plural "$0 hits, including moderate"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:556
+#: cockpit/src/insights.jsx:554
 msgid "$0 low severity hit"
 msgid_plural "$0 low severity hits"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:562
+#: cockpit/src/insights.jsx:560
 msgid "$0 hit"
 msgid_plural "$0 hits"
 msgstr[0] ""
 msgstr[1] ""
 
-#: cockpit/src/insights.jsx:569
+#: cockpit/src/insights.jsx:567
 msgid "View your Insights results"
 msgstr ""
 
-#: cockpit/src/insights.jsx:575
+#: cockpit/src/insights.jsx:573
 msgid "Connected to Insights"
 msgstr ""
 
-#: cockpit/src/insights.jsx:587
+#: cockpit/src/insights.jsx:585
 msgid "Not connected"
 msgstr ""
 
-#: cockpit/src/insights.jsx:592 cockpit/src/subscriptions-register.jsx:85
+#: cockpit/src/insights.jsx:590 cockpit/src/subscriptions-register.jsx:85
 msgid "Insights"
 msgstr ""
 
@@ -460,12 +460,12 @@ msgstr ""
 #: src/subscription_manager/managercli.py:389
 #: src/subscription_manager/managercli.py:390
 #: src/subscription_manager/managercli.py:391
-#: src/subscription_manager/managercli.py:2821
+#: src/subscription_manager/managercli.py:2820
 #: src/subscription_manager/reasons.py:109
-#: src/subscription_manager/utils.py:277 src/subscription_manager/utils.py:293
-#: src/subscription_manager/utils.py:295 src/subscription_manager/utils.py:314
-#: src/subscription_manager/utils.py:315 src/subscription_manager/utils.py:316
-#: src/subscription_manager/utils.py:335
+#: src/subscription_manager/utils.py:282 src/subscription_manager/utils.py:298
+#: src/subscription_manager/utils.py:300 src/subscription_manager/utils.py:319
+#: src/subscription_manager/utils.py:320 src/subscription_manager/utils.py:321
+#: src/subscription_manager/utils.py:340
 msgid "Unknown"
 msgstr "ಅಜ್ಞಾತ"
 
@@ -1696,13 +1696,13 @@ msgstr "ಇದನ್ನು ಬರೆಯಲಾಗಿದೆ: %s"
 msgid "Unable to create zip file of system information: %s"
 msgstr "ವ್ಯವಸ್ಥೆಯ ಮಾಹಿತಿಯ ಜಿಪ್ ಕಡತವನ್ನು ರಚಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ: %s"
 
-#: src/rhsmlib/dbus/objects/register.py:105
+#: src/rhsmlib/dbus/objects/register.py:119
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
 
-#: src/rhsmlib/dbus/objects/register.py:120
+#: src/rhsmlib/dbus/objects/register.py:134
 #, python-format
 msgid "User %s is not member of any organization"
 msgstr ""
@@ -1750,7 +1750,7 @@ msgstr ""
 #: src/rhsmlib/services/entitlement.py:265
 #: src/subscription_manager/gui/mysubstab.py:297
 #: src/subscription_manager/gui/widgets.py:862
-#: src/subscription_manager/managercli.py:3420
+#: src/subscription_manager/managercli.py:3419
 msgid "Virtual"
 msgstr "ವರ್ಚುವಲ್"
 
@@ -1759,7 +1759,7 @@ msgstr "ವರ್ಚುವಲ್"
 #: src/rhsmlib/services/entitlement.py:267
 #: src/subscription_manager/gui/mysubstab.py:299
 #: src/subscription_manager/gui/widgets.py:861
-#: src/subscription_manager/managercli.py:3422
+#: src/subscription_manager/managercli.py:3421
 msgid "Physical"
 msgstr "ಭೌತಿಕ"
 
@@ -1767,7 +1767,7 @@ msgstr "ಭೌತಿಕ"
 # document keys
 #: src/rhsmlib/services/entitlement.py:270
 #: src/subscription_manager/gui/mysubstab.py:302
-#: src/subscription_manager/managercli.py:3425
+#: src/subscription_manager/managercli.py:3424
 msgid "Yes"
 msgstr "ಹೌದು"
 
@@ -1775,7 +1775,7 @@ msgstr "ಹೌದು"
 # document keys
 #: src/rhsmlib/services/entitlement.py:272
 #: src/subscription_manager/gui/mysubstab.py:304
-#: src/subscription_manager/managercli.py:3427
+#: src/subscription_manager/managercli.py:3426
 msgid "No"
 msgstr "ಇಲ್ಲ"
 
@@ -1807,21 +1807,21 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:453
-#: src/subscription_manager/managercli.py:3292
+#: src/subscription_manager/managercli.py:3291
 msgid "Error: --all is only applicable with --available"
 msgstr "ದೋಷ: --all ಎನ್ನುವುದು --available ನೊಂದಿಗೆ ಮಾತ್ರ ಅನ್ವಯಿಸುತ್ತದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:457
-#: src/subscription_manager/managercli.py:3294
+#: src/subscription_manager/managercli.py:3293
 msgid "Error: --ondate is only applicable with --available"
 msgstr "ದೋಷ: --ondate ಎನ್ನುವುದು --available ನೊಂದಿಗೆ ಮಾತ್ರ ಅನ್ವಯಿಸುತ್ತದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:462
-#: src/subscription_manager/managercli.py:3296
+#: src/subscription_manager/managercli.py:3295
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr ""
 "ದೋಷ: --servicelevel ಎನ್ನುವುದು --available ಅಥವ --consumed ನೊಂದಿಗೆ ಮಾತ್ರ "
@@ -1830,19 +1830,19 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:466
-#: src/subscription_manager/managercli.py:3300
+#: src/subscription_manager/managercli.py:3299
 msgid "Error: --match-installed is only applicable with --available"
 msgstr "ದೋಷ: --match-installed ಎನ್ನುವುದು --available ನೊಂದಿಗೆ ಮಾತ್ರ ಅನ್ವಯಿಸುತ್ತದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/entitlement.py:470
-#: src/subscription_manager/managercli.py:3302
+#: src/subscription_manager/managercli.py:3301
 msgid "Error: --no-overlap is only applicable with --available"
 msgstr "ದೋಷ: --no-overlap ಎನ್ನುವುದು --available ನೊಂದಿಗೆ ಮಾತ್ರ ಅನ್ವಯಿಸುತ್ತದೆ"
 
 #: src/rhsmlib/services/entitlement.py:475
-#: src/subscription_manager/managercli.py:3304
+#: src/subscription_manager/managercli.py:3303
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr ""
@@ -1859,12 +1859,12 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/register.py:165
-#: src/subscription_manager/managercli.py:1839
+#: src/subscription_manager/managercli.py:1838
 msgid "Error: system name can not be empty."
 msgstr "ದೋಷ: ವ್ಯವಸ್ಥೆಯ ಹೆಸರು ಖಾಲಿ ಇರುವಂತಿಲ್ಲ."
 
 #: src/rhsmlib/services/register.py:167
-#: src/subscription_manager/managercli.py:1858
+#: src/subscription_manager/managercli.py:1857
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
@@ -1874,21 +1874,21 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/register.py:175
-#: src/subscription_manager/managercli.py:1850
+#: src/subscription_manager/managercli.py:1849
 msgid "Error: Must specify an activation key"
 msgstr "ದೋಷ: ಸಕ್ರಿಯಗೊಳಿಕೆ ಕೀಲಿಯನ್ನು ಸೂಚಿಸಬೇಕು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/register.py:177
-#: src/subscription_manager/managercli.py:1841
+#: src/subscription_manager/managercli.py:1840
 msgid "Error: Activation keys do not require user credentials."
 msgstr "ದೋಷ: ಸಕ್ರಿಯಗೊಳಿಕೆ ಕೀಲಿಗಳಿಗೆ ಬಳಕೆದಾರ ಪರಿಚಯಗಳ ಅಗತ್ಯವಿರುವುದಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/register.py:179
-#: src/subscription_manager/managercli.py:1843
+#: src/subscription_manager/managercli.py:1842
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr ""
 "ದೋಷ: ಸಕ್ರಿಯಗೊಳಿಕೆ ಕೀಲಿಗಳನ್ನು ಈ ಹಿಂದೆ ನೋಂದಾಯಿಸಲಾದ ID ಗಳಲ್ಲಿ ಬಳಸಲು ಸಾಧ್ಯವಿರುವುದಿಲ್ಲ."
@@ -1896,7 +1896,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/rhsmlib/services/register.py:182
-#: src/subscription_manager/managercli.py:1845
+#: src/subscription_manager/managercli.py:1844
 msgid "Error: Activation keys do not allow environments to be specified."
 msgstr ""
 "ದೋಷ: ಸಕ್ರಿಯಗೊಳಿಕಾ ಕೀಲಿಗಳಿಗಾಗಿ ಯಾವುದೆ ಪರಿಸರಗಳನ್ನು ಸೂಚಿಸಲು ಅನುಮತಿಸಲಾಗುವುದಿಲ್ಲ."
@@ -1948,7 +1948,7 @@ msgstr "ವ್ಯವಸ್ಥೆಯನ್ನು ಸ್ಪೇಸ್‌ವಾಕ�
 # document keys
 #: src/subscription_manager/branding/__init__.py:85
 #: src/subscription_manager/branding/redhat_branding.py:12
-#: src/subscription_manager/managercli.py:3838
+#: src/subscription_manager/managercli.py:3859
 msgid "WARNING"
 msgstr "ಎಚ್ಚರಿಕೆ"
 
@@ -4204,7 +4204,7 @@ msgstr ""
 # document keys
 #: src/subscription_manager/gui/factsgui.py:153
 #: src/subscription_manager/gui/widgets.py:514
-#: src/subscription_manager/managercli.py:1346
+#: src/subscription_manager/managercli.py:1345
 #: src/subscription_manager/printing_utils.py:167
 #: src/subscription_manager/printing_utils.py:186
 msgid "None"
@@ -4600,8 +4600,8 @@ msgstr "<b>ವ್ಯವಸ್ಥೆಗೆ ನೋಂದಾಯಿಸಲು ಸಾ�
 #: src/subscription_manager/gui/registergui.py:210
 #: src/subscription_manager/gui/registergui.py:454
 #: src/subscription_manager/gui/registergui.py:1579
-#: src/subscription_manager/managercli.py:2208
-#: src/subscription_manager/utils.py:294
+#: src/subscription_manager/managercli.py:2207
+#: src/subscription_manager/utils.py:299
 msgid "This system is currently not registered."
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯನ್ನು ಪ್ರಸಕ್ತ ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ."
 
@@ -4800,7 +4800,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/gui/registergui.py:1839
-#: src/subscription_manager/managercli.py:528
+#: src/subscription_manager/managercli.py:527
 #, python-format
 msgid "Unable to reach the server at %s:%s%s"
 msgstr "%s:%s%s ಎಂಬಲ್ಲಿರುವ ಪೂರೈಕೆಗಣಕವನ್ನು ತಲುಪಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ"
@@ -4836,8 +4836,8 @@ msgstr "ಲಗತ್ತಿಸಲಾದ ಚಂದಾದಾರಿಕೆಗಳಿ�
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/gui/reposgui.py:56
-#: src/subscription_manager/managercli.py:3015
-#: src/subscription_manager/managercli.py:3590
+#: src/subscription_manager/managercli.py:3014
+#: src/subscription_manager/managercli.py:3589
 msgid "Repositories disabled by configuration."
 msgstr "ರೆಪೊಸಿಟರಿಗಳನ್ನು ಸಂರಚನೆಯಿಂದ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ."
 
@@ -4958,7 +4958,7 @@ msgstr "ಪ್ರಮಾಣವನ್ನು ಸರಿಹೊಂದಿಸಲು ಕ�
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/i18n_argparse.py:38
-#: src/subscription_manager/managercli.py:984
+#: src/subscription_manager/managercli.py:983
 #, fuzzy, python-format
 #| msgid "%prog [OPTIONS]"
 msgid "%(prog)s [OPTIONS]"
@@ -5340,85 +5340,85 @@ msgstr "baseurl ಅನ್ನು ಪಾರ್ಸ್ ಮಾಡುವಲ್ಲಿ �
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:536
+#: src/subscription_manager/managercli.py:535
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr "ದೋಷ: ಚಂದಾದಾರಿಕೆ ಸೇವೆಗಾಗಿ CA ಪ್ರಮಾಣಪತ್ರವನ್ನು ಅನುಸ್ಥಾಪಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:558
+#: src/subscription_manager/managercli.py:557
 msgid "System certificates corrupted. Please reregister."
 msgstr "ವ್ಯವಸ್ಥೆಯ ಪ್ರಮಾಣಪತ್ರಗಳು ಹಾಳಾಗಿವೆ. ದಯವಿಟ್ಟು ಮರು ನೋಂದಾಯಿಸಿ."
 
-#: src/subscription_manager/managercli.py:562
+#: src/subscription_manager/managercli.py:561
 #, python-format
 msgid ""
 "Consumer profile \"%s\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:595
+#: src/subscription_manager/managercli.py:594
 #, python-brace-format
 msgid "set {attr} of system purpose"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:602
+#: src/subscription_manager/managercli.py:601
 #, python-brace-format
 msgid "unset {attr} of system purpose"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:610
+#: src/subscription_manager/managercli.py:609
 #, python-brace-format
 msgid "add an item to the list ({attr})."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:618
+#: src/subscription_manager/managercli.py:617
 #, python-brace-format
 msgid "remove an item from the list ({attr})."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:625
+#: src/subscription_manager/managercli.py:624
 #, python-brace-format
 msgid "show this system's current {attr}"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:632
+#: src/subscription_manager/managercli.py:631
 #, python-brace-format
 msgid "list all {attr} available"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:670
+#: src/subscription_manager/managercli.py:669
 msgid "--unset cannot be used with --set, --add, or --remove"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:672
+#: src/subscription_manager/managercli.py:671
 msgid "--add cannot be used with --remove"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:681
+#: src/subscription_manager/managercli.py:680
 msgid "Error: you can specify --username or --token not both"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:686
+#: src/subscription_manager/managercli.py:685
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:702
-#: src/subscription_manager/managercli.py:1668
+#: src/subscription_manager/managercli.py:701
+#: src/subscription_manager/managercli.py:1667
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
 msgstr ""
 
 #. TRANSLATORS: this is used to quote a string
-#: src/subscription_manager/managercli.py:775
+#: src/subscription_manager/managercli.py:774
 #, python-brace-format
 msgid "\"{value}\""
 msgstr ""
 
-#: src/subscription_manager/managercli.py:778
+#: src/subscription_manager/managercli.py:777
 #, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
@@ -5427,7 +5427,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/subscription_manager/managercli.py:785
+#: src/subscription_manager/managercli.py:784
 #, python-brace-format
 msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
@@ -5435,57 +5435,57 @@ msgid ""
 "subscriptions."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:799
+#: src/subscription_manager/managercli.py:798
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:816
+#: src/subscription_manager/managercli.py:815
 #, python-brace-format
 msgid "{attr} unset."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:833
-#: src/subscription_manager/managercli.py:856
+#: src/subscription_manager/managercli.py:832
+#: src/subscription_manager/managercli.py:855
 #, python-brace-format
 msgid "{attr} updated."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:885
+#: src/subscription_manager/managercli.py:884
 #, python-brace-format
 msgid "Current {name}: {val}"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:888
+#: src/subscription_manager/managercli.py:887
 #, python-brace-format
 msgid "{name} not set."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:906
+#: src/subscription_manager/managercli.py:905
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:916
-#: src/subscription_manager/managercli.py:1768
+#: src/subscription_manager/managercli.py:915
+#: src/subscription_manager/managercli.py:1767
 #, python-brace-format
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:920
+#: src/subscription_manager/managercli.py:919
 #, python-brace-format
 msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:940
+#: src/subscription_manager/managercli.py:939
 msgid "Unable to connect to server using token"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:990
+#: src/subscription_manager/managercli.py:989
 #, python-brace-format
 msgid ""
 "Note: The currently configured entitlement server does not support System "
@@ -5494,95 +5494,95 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1018
+#: src/subscription_manager/managercli.py:1017
 msgid "username to use when authorizing against the server"
 msgstr "ಪರಿಚಾರಕದಲ್ಲಿ ದೃಢೀಕರಿಸುವಾಗ ಬಳಸಬೇಕಿರುವ ಬಳಕೆದಾರ ಹೆಸರು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1020
+#: src/subscription_manager/managercli.py:1019
 msgid "password to use when authorizing against the server"
 msgstr "ಪರಿಚಾರಕದಲ್ಲಿ ದೃಢೀಕರಿಸುವಾಗ ಬಳಸಬೇಕಿರುವ ಗುಪ್ತಪದ"
 
-#: src/subscription_manager/managercli.py:1022
+#: src/subscription_manager/managercli.py:1021
 msgid "token to use when authorizing against the server"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1033
+#: src/subscription_manager/managercli.py:1032
 msgid "Error: --username is a required parameter in non-interactive mode."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1035
+#: src/subscription_manager/managercli.py:1034
 msgid "Error: --password is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1037
+#: src/subscription_manager/managercli.py:1036
 msgid "Username: "
 msgstr "ಬಳಕೆದಾರಹೆಸರು: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1040
+#: src/subscription_manager/managercli.py:1039
 msgid "Password: "
 msgstr "ಗುಪ್ತಪದ: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1072
+#: src/subscription_manager/managercli.py:1071
 #, fuzzy
 #| msgid "specify organization"
 msgid "specify an organization"
 msgstr "ಸಂಸ್ಥೆಯನ್ನು ಸೂಚಿಸಿ"
 
-#: src/subscription_manager/managercli.py:1083
-#: src/subscription_manager/managercli.py:2187
+#: src/subscription_manager/managercli.py:1082
+#: src/subscription_manager/managercli.py:2186
 msgid "Error: --org is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1085
-#: src/subscription_manager/managercli.py:2191
+#: src/subscription_manager/managercli.py:1084
+#: src/subscription_manager/managercli.py:2190
 msgid "Organization: "
 msgstr "ಸಂಸ್ಥೆ: "
 
-#: src/subscription_manager/managercli.py:1099
+#: src/subscription_manager/managercli.py:1098
 #, python-brace-format
 msgid "Error: User {username} is not member of any organization."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1111
+#: src/subscription_manager/managercli.py:1110
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1133
+#: src/subscription_manager/managercli.py:1132
 msgid "Convenient module for managing all system purpose settings"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1143
+#: src/subscription_manager/managercli.py:1142
 msgid "show current system purpose"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1165
+#: src/subscription_manager/managercli.py:1164
 #, python-brace-format
 msgid "{prog} {name}"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1167
+#: src/subscription_manager/managercli.py:1166
 msgid "Syspurpose submodules"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1181
+#: src/subscription_manager/managercli.py:1180
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1244
+#: src/subscription_manager/managercli.py:1243
 msgid ""
 "Remove all local system and subscription data without affecting the server"
 msgstr ""
@@ -5591,24 +5591,24 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1250
-#: src/subscription_manager/managercli.py:1997
+#: src/subscription_manager/managercli.py:1249
+#: src/subscription_manager/managercli.py:1996
 msgid "All local data removed"
 msgstr "ಎಲ್ಲಾ ಸ್ಥಳೀಯ ಮಾಹಿತಿಯನ್ನು ತೆಗೆದುಹಾಕಲಾಗಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1263
+#: src/subscription_manager/managercli.py:1262
 msgid "Pull the latest subscription data from the server"
 msgstr "ಇತ್ತೀಚಿನ ಚಂದಾದಾರ ದತ್ತಾಂಶವನ್ನು ಪರಿಚಾರಕದಿಂದ ಪಡೆದುಕೊ"
 
-#: src/subscription_manager/managercli.py:1267
+#: src/subscription_manager/managercli.py:1266
 msgid "force certificate regeneration"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1279
+#: src/subscription_manager/managercli.py:1278
 #, fuzzy, python-brace-format
 #| msgid "Unable to perform refresh due to the following exception: %s"
 msgid "Unable to perform refresh due to the following exception: {e}"
@@ -5616,23 +5616,23 @@ msgstr "ಈ ಕೆಳಗಿನ ಆಕ್ಷೇಪಣೆಯ ಕಾರಣದಿಂ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1282
+#: src/subscription_manager/managercli.py:1281
 msgid "All local data refreshed"
 msgstr "ಎಲ್ಲಾ ಸ್ಥಳೀಯ ಮಾಹಿತಿಯನ್ನು ಪುನಶ್ಚೇತನಗೊಳಿಸಲಾಗಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1288
+#: src/subscription_manager/managercli.py:1287
 msgid "Display the identity certificate for this system or request a new one"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗಾಗಿ ಗುರುತಿನ ಪ್ರಮಾಣಪತ್ರವನ್ನು ತೋರಿಸು ಅಥವ ಹೊಸದೊಂದಕ್ಕೆ ಮನವಿ ಮಾಡು."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1294
+#: src/subscription_manager/managercli.py:1293
 msgid "request a new certificate be generated"
 msgstr "ಒಂದು ಹೊಸ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಉತ್ಪಾದಿಸಲು ಮನವಿ ಸಲ್ಲಿಸಿ"
 
-#: src/subscription_manager/managercli.py:1296
+#: src/subscription_manager/managercli.py:1295
 msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
@@ -5642,60 +5642,60 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1302
+#: src/subscription_manager/managercli.py:1301
 msgid "--force can only be used with --regenerate"
 msgstr "--force ಅನ್ನು --regenerate ನೊಂದಿಗೂ ಸಹ ಬಳಸಬಹುದು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1304
+#: src/subscription_manager/managercli.py:1303
 msgid "--username and --password can only be used with --force"
 msgstr "--username ಹಾಗು --password ಅನ್ನು --force ನೊಂದಿಗೆ ಮಾತ್ರ ಬಳಸಬಹುದಾಗಿರುತ್ತದೆ"
 
-#: src/subscription_manager/managercli.py:1306
+#: src/subscription_manager/managercli.py:1305
 msgid "--token can only be used with --force"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1315
-#: src/subscription_manager/managercli.py:1318
-#: src/subscription_manager/managercli.py:3675
+#: src/subscription_manager/managercli.py:1314
+#: src/subscription_manager/managercli.py:1317
+#: src/subscription_manager/managercli.py:3674
 #, python-format
 msgid "server type: %s"
 msgstr "ಪೂರೈಕೆಗಣಕದ ಬಗೆ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1330
+#: src/subscription_manager/managercli.py:1329
 #, python-format
 msgid "system identity: %s"
 msgstr "ವ್ಯವಸ್ಥೆಯ ಗುರುತು: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1331
+#: src/subscription_manager/managercli.py:1330
 #, python-format
 msgid "name: %s"
 msgstr "ಹೆಸರು: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1332
+#: src/subscription_manager/managercli.py:1331
 #, python-format
 msgid "org name: %s"
 msgstr "ಸಂಸ್ಥೆಯ ಹೆಸರು: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1333
+#: src/subscription_manager/managercli.py:1332
 #, python-format
 msgid "org ID: %s"
 msgstr "ಸಂಸ್ಥೆಯ ID: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1347
+#: src/subscription_manager/managercli.py:1346
 #, fuzzy, python-brace-format
 #| msgid "environment name: %s"
 msgid "environment name: {environment_name}"
@@ -5705,66 +5705,66 @@ msgstr[1] "ಪರಿಸರದ ಹೆಸರು: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1365
+#: src/subscription_manager/managercli.py:1364
 msgid "Identity certificate has been regenerated."
 msgstr "ಗುರುತು ಪ್ರಮಾಣಪತ್ರವನ್ನು ಮರಳಿ ಉತ್ಪಾದಿಸಲಾಗಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1377
+#: src/subscription_manager/managercli.py:1376
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "ದೋಷ: ವ್ಯವಸ್ಥೆಗಾಗಿ ಹೊಸ ಗುರುತನ್ನು (ಐಡೆಂಟಿಟಿ) ಉತ್ಪಾದಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1383
+#: src/subscription_manager/managercli.py:1382
 msgid "Display the organizations against which a user can register a system"
 msgstr ""
 "ಬಳಕೆದಾರರು ಯಾವ ವ್ಯವಸ್ಥೆಗಾಗಿ ನೋಂದಾಯಿಸಬಹುದೋ ಅದಕ್ಕೆ ಸಂಬಂಧಿಸಿದ ಸಂಸ್ಥೆಗಳನ್ನು ತೋರಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1402
+#: src/subscription_manager/managercli.py:1401
 msgid "Organizations"
 msgstr "ಸಂಸ್ಥೆಗಳು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1409
-#: src/subscription_manager/managercli.py:2171
+#: src/subscription_manager/managercli.py:1408
+#: src/subscription_manager/managercli.py:2170
 #, python-format
 msgid "%s cannot register with any organizations."
 msgstr "%s ಯಾವುದೆ ಸಂಸ್ಥೆಯೊಂದಿಗೆ ನೋಂದಾಯಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1416
+#: src/subscription_manager/managercli.py:1415
 msgid "Error: Unable to retrieve org list from server"
 msgstr "ದೋಷ: ಪೂರೈಕೆಗಣಕದಿಂದ ಸಂಸ್ಥೆಯ ಪಟ್ಟಿಯನ್ನು ಪಡೆಯಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1422
+#: src/subscription_manager/managercli.py:1421
 msgid "Display the environments available for a user"
 msgstr "ಬಳಕೆದಾರರಿಗೆ ಲಭ್ಯವಿರುವ ಪರಿಸರಗಳನ್ನು ತೋರಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1423
+#: src/subscription_manager/managercli.py:1422
 msgid "specify organization for environment list, using organization key"
 msgstr "ಸಂಸ್ಥೆಯ ಕೀಲಿಯನ್ನು ಬಳಸಿಕೊಂಡು, ಪರಿಸರದ ಪಟ್ಟಿಗಾಗಿ ಸಂಸ್ಥೆಯನ್ನು ಸೂಚಿಸಿ"
 
-#: src/subscription_manager/managercli.py:1429
+#: src/subscription_manager/managercli.py:1428
 msgid "set an ordered comma-separated list of environments for this consumer"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1431
+#: src/subscription_manager/managercli.py:1430
 msgid "list all environments for the organization"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1433
+#: src/subscription_manager/managercli.py:1432
 #, fuzzy
 #| msgid "Display the environments available for a user"
 msgid "list the environments enabled for this consumer in order"
@@ -5772,26 +5772,26 @@ msgstr "ಬಳಕೆದಾರರಿಗೆ ಲಭ್ಯವಿರುವ ಪರಿ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1435
+#: src/subscription_manager/managercli.py:1434
 #, fuzzy
 #| msgid "Display the environments available for a user"
 msgid "list the environments not enabled for this consumer"
 msgstr "ಬಳಕೆದಾರರಿಗೆ ಲಭ್ಯವಿರುವ ಪರಿಸರಗಳನ್ನು ತೋರಿಸು"
 
-#: src/subscription_manager/managercli.py:1443
+#: src/subscription_manager/managercli.py:1442
 msgid "You may not specify an --org for environments when registered."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1452
-#: src/subscription_manager/managercli.py:2135
+#: src/subscription_manager/managercli.py:1451
+#: src/subscription_manager/managercli.py:2134
 msgid "Error: Server does not support environments."
 msgstr "ದೋಷ: ಪರಿಚಾರಕವು ಪರಿಸರಗಳನ್ನು ಬೆಂಬಲಿಸುವುದಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1459
+#: src/subscription_manager/managercli.py:1458
 #, fuzzy
 #| msgid "%s option requires %d arguments"
 msgid "This operation requires user credentials"
@@ -5799,13 +5799,13 @@ msgstr "%s ಆಯ್ಕೆಗಾಗಿ %d ಆರ್ಗ್ಯುಮೆಂಟ್�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1473
+#: src/subscription_manager/managercli.py:1472
 msgid "Error: Unable to retrieve environment list from server"
 msgstr "ದೋಷ: ಪೂರೈಕೆಗಣಕದಿಂದ ಪರಿಸರದ ಪಟ್ಟಿಯನ್ನು ಪಡೆಯಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1490
+#: src/subscription_manager/managercli.py:1489
 #, fuzzy
 #| msgid "Environments"
 msgid "Environments updated."
@@ -5813,7 +5813,7 @@ msgstr "ಪರಿಸರಗಳು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1492
+#: src/subscription_manager/managercli.py:1491
 #, fuzzy
 #| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support environment updates."
@@ -5821,7 +5821,7 @@ msgstr "ದೋಷ: ಪರಿಚಾರಕವು ಪರಿಸರಗಳನ್ನು
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1500
+#: src/subscription_manager/managercli.py:1499
 #, fuzzy
 #| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support multi-environment operations."
@@ -5829,25 +5829,25 @@ msgstr "ದೋಷ: ಪರಿಚಾರಕವು ಪರಿಸರಗಳನ್ನು
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1518
+#: src/subscription_manager/managercli.py:1517
 msgid "Environments"
 msgstr "ಪರಿಸರಗಳು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1524
+#: src/subscription_manager/managercli.py:1523
 #, fuzzy
 #| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
 msgstr "ಈ ಸಂಸ್ಥೆಯು ಯಾವುದೆ ಪರಿಸರಗಳನ್ನು ಹೊಂದಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:1561
+#: src/subscription_manager/managercli.py:1560
 msgid "Error: The same environment may not be listed more than once. "
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1566
+#: src/subscription_manager/managercli.py:1565
 #, fuzzy, python-brace-format
 #| msgid "No such environment: %s"
 msgid "No such environment: {names}"
@@ -5857,14 +5857,14 @@ msgstr[1] "ಅಂತಹ ಯಾವುದೆ ಪರಿಸರಗಳಿಲ್ಲ: %s
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1579
+#: src/subscription_manager/managercli.py:1578
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
 "ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಒಂದು ಸೂಚಿಯಲ್ಲಿ ಲಗತ್ತಿಸಲಾಗಿದ್ದರೆ ಹೊಂದಿಸಿ (ಪ್ರತಿದಿನಿ ಪೂರ್ವನಿಯೋಜಿತ)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1580
+#: src/subscription_manager/managercli.py:1579
 msgid "specify whether to enable or disable auto-attaching of subscriptions"
 msgstr ""
 "ಚಂದಾದಾರಿಕೆಗಳ ಸ್ವಯಂ-ಲಗತ್ತನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಬೇಕೆ ಅಥವ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಬೇಕೆ ಎನ್ನುವುದನ್ನು "
@@ -5872,50 +5872,50 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1585
+#: src/subscription_manager/managercli.py:1584
 msgid "try to attach subscriptions for uncovered products each check-in"
 msgstr "ಪ್ರತಿ ಬಾರಿಯ ಚೆಕ್-ಇನ್‌ನಲ್ಲಿ ಅಡಿಯಲ್ಲಿ ಬರದೆ ಇರುವ ಉತ್ಪನ್ನಗಳನ್ನ ಲಗತ್ತಿಸಲು ಪ್ರಯತ್ನಿಸು."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1587
+#: src/subscription_manager/managercli.py:1586
 msgid "do not try to automatically attach subscriptions each check-in"
 msgstr ""
 "ಪ್ರತಿ ಬಾರಿಯ ಚೆಕ್-ಇನ್‌ನಲ್ಲಿ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಲಗತ್ತಿಸಲು ಪ್ರಯತ್ನಿಸದಿರು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1589
+#: src/subscription_manager/managercli.py:1588
 msgid "show the current auto-attach preference"
 msgstr "ಪ್ರಸಕ್ತ ಸ್ವಯಂ-ಲಗತ್ತಿನ ಆದ್ಯತೆಯನ್ನು ತೋರಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1601
+#: src/subscription_manager/managercli.py:1600
 msgid "Auto-attach preference: enabled"
 msgstr "ಸ್ವಯಂ-ಲಗತ್ತಿನ ಆದ್ಯತೆ: ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1603
+#: src/subscription_manager/managercli.py:1602
 msgid "Auto-attach preference: disabled"
 msgstr "ಸ್ವಯಂ-ಲಗತ್ತಿನ ಆದ್ಯತೆ: ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1618
+#: src/subscription_manager/managercli.py:1617
 #, fuzzy
 #| msgid "show this system's current service level"
 msgid "Show or modify the system purpose service-level setting"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯ ಪ್ರಸಕ್ತ ಸೇವೆಯ ಮಟ್ಟವನ್ನು ತೋರಿಸು"
 
-#: src/subscription_manager/managercli.py:1645
+#: src/subscription_manager/managercli.py:1644
 msgid "Error: --org is only supported with the --list or --set option"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1652
+#: src/subscription_manager/managercli.py:1651
 msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
@@ -5925,79 +5925,79 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1693
+#: src/subscription_manager/managercli.py:1692
 msgid "Error: Unable to retrieve service levels."
 msgstr "ದೋಷ: ಸೇವಾ ಮಟ್ಟಗಳನ್ನು ಪಡೆಯಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:1723
+#: src/subscription_manager/managercli.py:1722
 #, python-brace-format
 msgid "Service level set to: \"{val}\"."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1731
+#: src/subscription_manager/managercli.py:1730
 msgid "Service level preference has been unset"
 msgstr "ಸೇವಾ ಮಟ್ಟದ ಆದ್ಯತೆಯ ಹೊಂದಿಕೆಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1737
-#: src/subscription_manager/managercli.py:1744
-#: src/subscription_manager/managercli.py:1774
-#: src/subscription_manager/managercli.py:1779
+#: src/subscription_manager/managercli.py:1736
+#: src/subscription_manager/managercli.py:1743
+#: src/subscription_manager/managercli.py:1773
+#: src/subscription_manager/managercli.py:1778
 msgid "Error: The service-level command is not supported by the server."
 msgstr "ದೋಷ:  ಪೂರೈಕೆಗಣಕದಿಂದ ಸೇವಾ-ಮಟ್ಟದ ಆಜ್ಞೆಗೆ ಬೆಂಬಲವಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1747
+#: src/subscription_manager/managercli.py:1746
 #, python-format
 msgid "Current service level: %s"
 msgstr "ಪ್ರಸಕ್ತ ಸೇವೆಯ ಮಟ್ಟ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1749
+#: src/subscription_manager/managercli.py:1748
 msgid "Service level preference not set"
 msgstr "ಸೇವಾ ಮಟ್ಟದ ಆದ್ಯತೆಯನ್ನು ಹೊಂದಿಸಲಾಗಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1763
+#: src/subscription_manager/managercli.py:1762
 msgid "Available Service Levels"
 msgstr "ಲಭ್ಯವಿರುವ ಸೇವೆಯ ಮಟ್ಟಗಳು"
 
-#: src/subscription_manager/managercli.py:1789
+#: src/subscription_manager/managercli.py:1788
 msgid "Show or modify the system purpose usage setting"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:1808
+#: src/subscription_manager/managercli.py:1807
 msgid "base URL for content in form of https://hostname:port/prefix"
 msgstr "ಕಂಟೆಂಟ್‌ಗಾಗಿ https://hostname:port/prefix ರೂಪದಲ್ಲಿರುವ ಮೂಲ URL"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1812
+#: src/subscription_manager/managercli.py:1811
 msgid "name of the system to register, defaults to the hostname"
 msgstr "ನೋಂದಾಯಿಸಬೇಕಿರುವ ವ್ಯವಸ್ಥೆಯ ಹೆಸರು, ಪೂರ್ವನಿಯೋಜಿತವು ಆತಿಥೇಯ ಹೆಸರಾಗಿರುತ್ತದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1814
+#: src/subscription_manager/managercli.py:1813
 msgid "the existing system data is pulled from the server"
 msgstr "ಈಗಿರುವ ವ್ಯವಸ್ಥೆಯ ದತ್ತಾಂಶವನ್ನು ಪೂರೈಕೆಗಣಕದಿಂದ ತೆಗೆದುಕೊಳ್ಳಲಾಗುತ್ತದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1816
+#: src/subscription_manager/managercli.py:1815
 msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
 msgstr ""
 "ಸಂಸ್ಥೆಯ ಕೀಲಿಯನ್ನು ಬಳಸಿಕೊಂಡು, ಬಳಕೆದಾರರಿಗಾಗಿ ಹಲವು ಸಂಸ್ಥೆಗಳಲ್ಲಿ ಒಂದರೊಂದಿಗೆ ನೊಂದಾಯಿಸಿ"
 
-#: src/subscription_manager/managercli.py:1818
+#: src/subscription_manager/managercli.py:1817
 msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
@@ -6006,31 +6006,31 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1822
+#: src/subscription_manager/managercli.py:1821
 msgid "set a release version"
 msgstr "ಬಿಡುಗಡೆಯ ಆವೃತ್ತಿಯನ್ನು ಹೊಂದಿಸಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1824
+#: src/subscription_manager/managercli.py:1823
 msgid "Deprecated, see --auto-attach"
 msgstr "ಅಪ್ರಚಲಿತಗೊಳಿಸಲಾಗಿದೆ, --auto-attach ಅನ್ನು ನೋಡಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1826
+#: src/subscription_manager/managercli.py:1825
 msgid "automatically attach compatible subscriptions to this system"
 msgstr "ವ್ಯವಸ್ಥೆಗೆ ಹೊಂದಿಕೆಯಾಗುವ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಈ ಲಗತ್ತಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1828
+#: src/subscription_manager/managercli.py:1827
 msgid "register the system even if it is already registered"
 msgstr "ವ್ಯವಸ್ಥೆಯನ್ನು ಈಗಾಗಲೆ ನೋಂದಾಯಿಸಲಾಗಿದ್ದರೂ ಸಹ ಮತ್ತೊಮ್ಮೆ ನೋಂದಾಯಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1830
+#: src/subscription_manager/managercli.py:1829
 msgid ""
 "activation key to use for registration (can be specified more than once)"
 msgstr ""
@@ -6038,7 +6038,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1832
+#: src/subscription_manager/managercli.py:1831
 msgid ""
 "system preference used when subscribing automatically, requires --auto-attach"
 msgstr ""
@@ -6047,36 +6047,36 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1837
+#: src/subscription_manager/managercli.py:1836
 msgid "This system is already registered. Use --force to override"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯನ್ನು ಈಗಾಗಲೆ ನೋಂದಾಯಿಸಲಾಗಿದೆ. ಅತಿಕ್ರಮಿಸಲು --force ಅನ್ನು ಬಳಸಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1847
+#: src/subscription_manager/managercli.py:1846
 msgid "Error: Activation keys cannot be used with --auto-attach."
 msgstr "ದೋಷ: ಸಕ್ರಿಯಗೊಳಿಸುವ ಕೀಲಿಗಳನ್ನು --auto-attach ನೊಂದಿಗೆ ಬಳಸುವಂತಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1852
+#: src/subscription_manager/managercli.py:1851
 msgid "Error: Must use --auto-attach with --servicelevel."
 msgstr "ದೋಷ: --auto-attach. ಅನ್ನು --servicelevel ನೊಂದಿಗೆ ಬಳಸಬೇಕು."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1854
+#: src/subscription_manager/managercli.py:1853
 msgid "Error: Must provide --org with activation keys."
 msgstr "ದೋಷ: ಸಕ್ರಿಯಗೊಳಿಕೆ ಕೀಲಿಯೊಂದಿಗೆ ಒಂದು --org ಅನ್ನು ಸೂಚಿಸಬೇಕು"
 
-#: src/subscription_manager/managercli.py:1864
+#: src/subscription_manager/managercli.py:1863
 msgid "Error: The --type option has been deprecated and may not be used."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1867
-#: src/subscription_manager/managercli.py:2161
+#: src/subscription_manager/managercli.py:1866
+#: src/subscription_manager/managercli.py:2160
 #, fuzzy
 #| msgid "This org does not have any environments."
 msgid "The entitlement server does not allow multiple environments"
@@ -6084,8 +6084,8 @@ msgstr "ಈ ಸಂಸ್ಥೆಯು ಯಾವುದೆ ಪರಿಸರಗಳನ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1892
-#: src/subscription_manager/managercli.py:2571
+#: src/subscription_manager/managercli.py:1891
+#: src/subscription_manager/managercli.py:2570
 msgid ""
 "Error: The --servicelevel option is not supported by the server. Did not "
 "complete your request."
@@ -6093,56 +6093,56 @@ msgstr ""
 "ದೋಷ: --servicelevel ಆಯ್ಕೆಗೆ ಪೂರೈಕೆಗಣಕದಿಂದ ಬೆಂಬಲಿಸಲಾಗುವುದಿಲ್ಲ. ನಿಮ್ಮ ಮನವಿಯನ್ನು "
 "ಪೂರ್ಣಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:1979
-#: src/subscription_manager/managercli.py:2210
+#: src/subscription_manager/managercli.py:1978
+#: src/subscription_manager/managercli.py:2209
 #, python-format
 msgid "Unregistering from: %s:%s%s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:1986
+#: src/subscription_manager/managercli.py:1985
 #, python-format
 msgid "The system with UUID %s has been unregistered"
 msgstr "%s ಎಂಬ UUID ಅನ್ನು ಹೊಂದಿರುವ ವ್ಯವಸ್ಥೆಯನ್ನು ನೋಂದಾಯಿಸಲಾಗಿದೆ"
 
-#: src/subscription_manager/managercli.py:2009
+#: src/subscription_manager/managercli.py:2008
 #, python-format
 msgid "Registering to: %s:%s%s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2046
+#: src/subscription_manager/managercli.py:2045
 #, python-format
 msgid "Error during registration: %s"
 msgstr "ನೋಂದಾಯಿಸುವಾಗ ದೋಷ ಉಂಟಾಗಿದೆ: %s"
 
-#: src/subscription_manager/managercli.py:2049
+#: src/subscription_manager/managercli.py:2048
 #, python-format
 msgid "The system has been registered with ID: %s"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2050
+#: src/subscription_manager/managercli.py:2049
 #, python-format
 msgid "The registered system name is: %s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2052
-#: src/subscription_manager/managercli.py:2585
+#: src/subscription_manager/managercli.py:2051
+#: src/subscription_manager/managercli.py:2584
 #, python-format
 msgid "Service level set to: %s"
 msgstr "ಹೊಂದಿಸಬೇಕಿರುವ ಸೇವೆಯ ಮಟ್ಟ: %s"
 
-#: src/subscription_manager/managercli.py:2115
+#: src/subscription_manager/managercli.py:2114
 msgid "Error: --environments is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2117
+#: src/subscription_manager/managercli.py:2116
 #, fuzzy
 #| msgid "Environment: "
 msgid "Environments: "
@@ -6150,46 +6150,46 @@ msgstr "ಪರಿಸರ: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2119
+#: src/subscription_manager/managercli.py:2118
 msgid "Environment: "
 msgstr "ಪರಿಸರ: "
 
-#: src/subscription_manager/managercli.py:2157
+#: src/subscription_manager/managercli.py:2156
 #, python-format
 msgid "Hint: Organization \"%s\" contains following environments: %s"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2182
+#: src/subscription_manager/managercli.py:2181
 #, python-format
 msgid "Hint: User \"%s\" is member of following organizations: %s"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2236
+#: src/subscription_manager/managercli.py:2235
 msgid "System has been unregistered."
 msgstr "ವ್ಯವಸ್ಥೆಯ ನೋಂದಣಿಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ."
 
-#: src/subscription_manager/managercli.py:2242
+#: src/subscription_manager/managercli.py:2241
 msgid "Show or modify the system purpose addons setting"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2256
+#: src/subscription_manager/managercli.py:2255
 msgid "Attempt to redeem a subscription for a preconfigured system"
 msgstr ""
 "ಮೊದಲೇ ಸಂರಚಿತಗೊಂಡಿರುವ ಒಂದು ವ್ಯವಸ್ಥೆಗಾಗಿ ಚಂದಾದಾರಿಕೆಯನ್ನು ಬಿಡಿಸಿಕೊಳ್ಳಲಾಗುತ್ತಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2260
+#: src/subscription_manager/managercli.py:2259
 msgid "email address to notify when subscription redemption is complete"
 msgstr "ಚಂದಾದಾರಿಕೆ ಹಿಂಪಡೆಯುವಿಕೆಯು ಪೂರ್ಣಗೊಂಡಾಗ ಸೂಚಿಸಬೇಕಿರುವ ಇಮೈಲ್ ವಿಳಾಸ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2263
+#: src/subscription_manager/managercli.py:2262
 msgid ""
 "optional language to use for email notification when subscription redemption "
 "is complete (Examples: en-us, de-de)"
@@ -6199,7 +6199,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2269
+#: src/subscription_manager/managercli.py:2268
 msgid ""
 "Error: This command requires that you specify an email address with --email."
 msgstr ""
@@ -6207,62 +6207,62 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2310
+#: src/subscription_manager/managercli.py:2309
 msgid "Configure which operating system release to use"
 msgstr "ಯಾವ ಕಾರ್ಯವ್ಯವಸ್ಥೆಯನ್ನು ಬಳಸಬೇಕು ಎಂದು ಸಂರಚಿಸಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2314
+#: src/subscription_manager/managercli.py:2313
 msgid "shows current release setting; default command"
 msgstr "ಪ್ರಸಕ್ತ ಬಿಡುಗಡೆ ಸಿದ್ಧತೆಯನ್ನು ತೋರಿಸುತ್ತದೆ. ಪೂರ್ವನಿಯೋಜಿತ ಆಜ್ಞೆ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2316
+#: src/subscription_manager/managercli.py:2315
 msgid "list available releases"
 msgstr "ಲಭ್ಯವಿರುವ ಬಿಡುಗಡೆಗಳ ಪಟ್ಟಿಯನ್ನು ತೋರಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2319
+#: src/subscription_manager/managercli.py:2318
 msgid "set the release for this system"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗಾಗಿ ಬಿಡುಗಡೆಯನ್ನು ಹೊಂದಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2322
+#: src/subscription_manager/managercli.py:2321
 msgid "unset the release for this system"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗಾಗಿನ ಬಿಡುಗಡೆಯ ಹೊಂದಿಕೆಯನ್ನು ರದ್ದುಗೊಳಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2325
+#: src/subscription_manager/managercli.py:2324
 msgid "Error: The 'release' command is not supported by the server."
 msgstr "ದೋಷ:  'release' ಆಜ್ಞೆಗೆ ಪೂರೈಕೆಗಣಕದಿಂದ ಬೆಂಬಲವಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2334
+#: src/subscription_manager/managercli.py:2333
 #, python-format
 msgid "Release: %s"
 msgstr "ಬಿಡುಗಡೆ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2336
+#: src/subscription_manager/managercli.py:2335
 msgid "Release not set"
 msgstr "ಬಿಡುಗಡೆಯನ್ನು ಹೊಂದಿಸಲಾಗಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2357
+#: src/subscription_manager/managercli.py:2356
 msgid "Release preference has been unset"
 msgstr "ಬಿಡುಗಡೆಯ ಆದ್ಯತೆಯ ಹೊಂದಿಕೆಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2373
+#: src/subscription_manager/managercli.py:2372
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
 msgstr ""
@@ -6271,44 +6271,44 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2378
+#: src/subscription_manager/managercli.py:2377
 #, python-format
 msgid "Release set to: %s"
 msgstr "ಬಿಡುಗಡೆಯನ್ನು ಇದಕ್ಕೆ ಹೊಂದಿಸಲಾಗಿದೆ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2388
+#: src/subscription_manager/managercli.py:2387
 msgid "No release versions available, please check subscriptions."
 msgstr "ಯಾವುದೆ ಬಿಡುಗಡೆ ಆವೃತ್ತಿಗಳು ಲಭ್ಯವಿಲ್ಲ, ದಯವಿಟ್ಟು ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಪರೀಕ್ಷಿಸಿ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2391
+#: src/subscription_manager/managercli.py:2390
 msgid "Available Releases"
 msgstr "ಲಭ್ಯವಿರುವ ಬಿಡುಗಡೆಗಳು"
 
-#: src/subscription_manager/managercli.py:2412
+#: src/subscription_manager/managercli.py:2411
 msgid "The ID of the pool to attach (can be specified more than once)"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2414
+#: src/subscription_manager/managercli.py:2413
 msgid "Number of subscriptions to attach. May not be used with an auto-attach."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2416
+#: src/subscription_manager/managercli.py:2415
 msgid ""
 "Automatically attach compatible subscriptions to this system. This is the "
 "default action."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2419
+#: src/subscription_manager/managercli.py:2418
 msgid ""
 "Automatically attach only subscriptions matching the specified service "
 "level; only used with --auto"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2422
+#: src/subscription_manager/managercli.py:2421
 msgid ""
 "A file from which to read pool IDs. If a hyphen is provided, pool IDs will "
 "be read from stdin."
@@ -6318,19 +6318,19 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2426
+#: src/subscription_manager/managercli.py:2425
 msgid "All installed products are covered by valid entitlements."
 msgstr "ಅನುಸ್ಥಾಪಿಸಲಾದ ಎಲ್ಲಾ ಉತ್ಪನ್ನಗಳು ಮಾನ್ಯವಾದ ಎಂಟೈಟಲ್ಮೆಂಟ್‌ಗಳ ಅಡಿಯಲ್ಲಿ ಬರುತ್ತವೆ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2427
+#: src/subscription_manager/managercli.py:2426
 msgid "No need to update subscriptions at this time."
 msgstr "ಈ ಬಾರಿ ಚಂದಾದಾರಿಕೆಗಳಗಳನ್ನು ಅಪ್‌ಡೇಟ್ ಮಾಡುವ ಅಗತ್ಯವಿರುವುದಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2439
+#: src/subscription_manager/managercli.py:2438
 #, fuzzy
 #| msgid "Attach a specified subscription to the registered system"
 msgid ""
@@ -6338,39 +6338,39 @@ msgid ""
 "not use Simple Content Access mode"
 msgstr "ನೋಂದಾಯಿತ ವ್ಯವಸ್ಥೆಗೆ ಒಂದು ಸೂಚಿತ ಚಂದಾದಾರಿಕೆಯನ್ನು ಲಗತ್ತಿಸಿ"
 
-#: src/subscription_manager/managercli.py:2452
+#: src/subscription_manager/managercli.py:2451
 msgid "Error: --auto may not be used when specifying pools."
 msgstr "ದೋಷ: ಪೂಲ್‌ಗಳನ್ನು ಸೂಚಿಸುವಾಗ --auto ಅನ್ನು ಬಳಸಬಾರದಿರಬಹುದು."
 
-#: src/subscription_manager/managercli.py:2454
+#: src/subscription_manager/managercli.py:2453
 msgid "Error: The --servicelevel option cannot be used when specifying pools."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2459
+#: src/subscription_manager/managercli.py:2458
 msgid "Error: Quantity must be a positive integer."
 msgstr "ದೋಷ: ಪ್ರಮಾಣವು ಒಂದು ಧನಸಂಖ್ಯೆಯಾಗಿರಬೇಕು."
 
-#: src/subscription_manager/managercli.py:2461
+#: src/subscription_manager/managercli.py:2460
 msgid "Error: --quantity may not be used with an auto-attach"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2471
+#: src/subscription_manager/managercli.py:2470
 msgid "Error: Received data does not contain any pool IDs."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2473
+#: src/subscription_manager/managercli.py:2472
 #, python-format
 msgid "Error: The file \"%s\" does not contain any pool IDs."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2475
+#: src/subscription_manager/managercli.py:2474
 #, python-format
 msgid "Error: The file \"%s\" does not exist or cannot be read."
 msgstr "ದೋಷ: \"%s\" ಕಡತವು ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ ಅಥವ ಅದನ್ನು ಓದಲು ಸಾಧ್ಯವಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:2486
+#: src/subscription_manager/managercli.py:2485
 #, python-brace-format
 msgid ""
 "Ignoring the request to attach. Attaching subscriptions is disabled for "
@@ -6379,27 +6379,27 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2530
+#: src/subscription_manager/managercli.py:2529
 msgid "Please enter a valid numeric pool ID."
 msgstr "ದಯವಿಟ್ಟು ಒಂದು ಸಿಂಧುವಾದ ಪೂಲ್ ಐಡಿಯನ್ನು ನಮೂದಿಸಿ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2537
+#: src/subscription_manager/managercli.py:2536
 #, python-format
 msgid "Successfully attached a subscription for: %s"
 msgstr "ಇದಕ್ಕಾಗಿ ಒಂದು ಚಂದಾದಾರಿಕೆಯನ್ನು ಲಗತ್ತಿಸಲಾಗಿದೆ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2559
+#: src/subscription_manager/managercli.py:2558
 msgid "No Installed products on system. No need to attach subscriptions."
 msgstr ""
 "ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಅನುಸ್ಥಾಪಿಸಲಾದ ಯಾವುದೆ ಉತ್ಪನ್ನಗಳಿಲ್ಲ. ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಲಗತ್ತಿಸುವ ಅಗತ್ಯವಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2562
+#: src/subscription_manager/managercli.py:2561
 msgid ""
 "All installed products are covered by valid entitlements. No need to update "
 "subscriptions at this time."
@@ -6407,91 +6407,91 @@ msgstr ""
 "ಅನುಸ್ಥಾಪಿಸಲಾದ ಎಲ್ಲಾ ಉತ್ಪನಗಳನ್ನು ಮಾನ್ಯವಾದ ಎಂಟೈಟಲ್ಮೆಂಟುಗಳನ್ನು ಹೊಂದಿರುತ್ತವೆ. ಈ ಬಾರಿ "
 "ಚಂದಾದಾರಿಕೆಗಳನ್ನು ಅಪ್‌ಡೇಟ್ ಮಾಡುವ ಅಗತ್ಯವಿರುವುದಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:2594
+#: src/subscription_manager/managercli.py:2593
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
 msgstr "ಈ ಕೆಳಗಿನ ಕಾರಣಗಳಿಂದ ಎಂಟೈಟಲ್ಮೆಂಟ್ ಪ್ರಮಾಣಪತ್ರ(ಗಳು) ಅಪ್‌ಡೇಟ್ ಆಗುವಲ್ಲಿ ವಿಫಲಗೊಂಡಿವೆ:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2628
+#: src/subscription_manager/managercli.py:2627
 msgid "Deprecated, see attach"
 msgstr "ಅಪ್ರಚಲಿತಗೊಳಿಸಲಾಗಿದೆ, attach ಅನ್ನು ನೋಡಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2646
+#: src/subscription_manager/managercli.py:2645
 msgid "certificate serial number to remove (can be specified more than once)"
 msgstr ""
 "ತೆಗೆದುಹಾಕಬೇಕಿರುವ ಪ್ರಮಾಣಪತ್ರದ ಅನುಕ್ರಮ ಸಂಖ್ಯೆ (ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚು ಬಾರಿ ಸೂಚಿಸಬಹುದು)"
 
-#: src/subscription_manager/managercli.py:2648
+#: src/subscription_manager/managercli.py:2647
 msgid "the ID of the pool to remove (can be specified more than once)"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2650
+#: src/subscription_manager/managercli.py:2649
 msgid "remove all subscriptions from this system"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯಿಂದ ಎಲ್ಲಾ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ತೆಗೆದುಹಾಕು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2653
+#: src/subscription_manager/managercli.py:2652
 msgid "Remove all or specific subscriptions from this system"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯಿಂದ ಎಲ್ಲಾ ಅಥವ ನಿಶ್ಚಿತ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ತೆಗೆದುಹಾಕು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2666
+#: src/subscription_manager/managercli.py:2665
 #, python-format
 msgid "Error: '%s' is not a valid serial number"
 msgstr "ದೋಷ: '%s' ಎನ್ನುವುದು ಒಂದು ಮಾನ್ಯವಾದ ಅನುಕ್ರಮ ಸಂಖ್ಯೆಯಾಗಿಲ್ಲ"
 
-#: src/subscription_manager/managercli.py:2672
+#: src/subscription_manager/managercli.py:2671
 msgid ""
 "Error: The registered entitlement server does not support remove --pool.\n"
 "Instead, use the remove --serial option."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2675
+#: src/subscription_manager/managercli.py:2674
 msgid ""
 "Error: This command requires that you specify one of --serial, --pool or --"
 "all."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2680
+#: src/subscription_manager/managercli.py:2679
 msgid "The entitlement server successfully removed these pools:"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2682
+#: src/subscription_manager/managercli.py:2681
 msgid "The entitlement server successfully removed these serial numbers:"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2684
+#: src/subscription_manager/managercli.py:2683
 msgid "The entitlement server successfully removed these IDs:"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2689
+#: src/subscription_manager/managercli.py:2688
 msgid "The entitlement server failed to remove these pools:"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2691
+#: src/subscription_manager/managercli.py:2690
 msgid "The entitlement server failed to remove these serial numbers:"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2693
+#: src/subscription_manager/managercli.py:2692
 msgid "The entitlement server failed to remove these IDs:"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2711
+#: src/subscription_manager/managercli.py:2710
 msgid "All subscriptions have been removed at the server."
 msgstr "ಈ ಪೂರೈಕೆಗಣಕದಿಂದ ಎಲ್ಲಾ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ತೆಗೆದುಹಾಕಲಾಗಿದೆ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2714
+#: src/subscription_manager/managercli.py:2713
 #, python-format
 msgid "%s subscription removed at the server."
 msgid_plural "%s subscriptions removed at the server."
@@ -6500,69 +6500,69 @@ msgstr[1] "ಪೂರೈಕೆಗಣಕದಿಂದ %s ಚಂದಾದಾರಿ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2744
-#: src/subscription_manager/managercli.py:2768
+#: src/subscription_manager/managercli.py:2743
+#: src/subscription_manager/managercli.py:2767
 #, python-format
 msgid "Unable to perform remove due to the following exception: %s"
 msgstr "ಈ ಕೆಳಗಿನ ಆಕ್ಷೇಪಣೆಯ ಕಾರಣದಿಂದಾಗಿ ತೆಗೆದುಹಾಕುವಿಕೆಯನ್ನು ನಡೆಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2753
+#: src/subscription_manager/managercli.py:2752
 #, python-format
 msgid "%s subscriptions removed from this system."
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯಿಂದ %s ಚಂದಾದಾರಿಕೆಗಳನ್ನು ತೆಗೆದುಹಾಕಲಾಗಿದೆ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2763
+#: src/subscription_manager/managercli.py:2762
 #, python-format
 msgid "Subscription with serial number %s removed from this system"
 msgstr "%s ಅನುಕ್ರಮ ಸಂಖ್ಯೆಯ ಚಂದಾದಾರಿಕೆಯನ್ನು ಈ ವ್ಯವಸ್ಥೆಯಿಂದ ತೆಗೆದುಹಾಕಲಾಗುತ್ತದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2781
+#: src/subscription_manager/managercli.py:2780
 msgid "Deprecated, see remove"
 msgstr "ಅಪ್ರಚಲಿತಗೊಳಿಸಲಾಗಿದೆ, remove ಅನ್ನು ನೋಡಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2793
+#: src/subscription_manager/managercli.py:2792
 msgid "View or update the detected system information"
 msgstr "ಪತ್ತೆ ಮಾಡಲಾದ ವ್ಯವಸ್ಥೆಯ ಮಾಹಿತಿಯನ್ನು ನೋಡಿ ಅಥವ ಅಪ್‌ಡೇಟ ಮಾಡಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2797
+#: src/subscription_manager/managercli.py:2796
 msgid "list known facts for this system"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗಾಗಿನ ವಸ್ತುಸ್ಥಿತಿಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2799
+#: src/subscription_manager/managercli.py:2798
 msgid "update the system facts"
 msgstr "ವ್ಯವಸ್ಥೆಯ ವಸ್ತುಸ್ಥಿತಿಗಳನ್ನು ಅಪ್‌ಡೇಟ್ ಮಾಡು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2834
+#: src/subscription_manager/managercli.py:2833
 msgid "Successfully updated the system facts."
 msgstr "ವ್ಯವಸ್ಥೆಯ ವಸ್ತುಸ್ಥಿತಿಗಳನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಅಪ್‌ಡೇಟ್ ಮಾಡಲಾಗಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2839
+#: src/subscription_manager/managercli.py:2838
 msgid "Import certificates which were provided outside of the tool"
 msgstr "ಉಪಕರಣದ ಹೊರಗೆ ಒದಗಿಸಲಾದ ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಆಮದು ಮಾಡು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2843
+#: src/subscription_manager/managercli.py:2842
 msgid "certificate file to import (can be specified more than once)"
 msgstr "ಆಮದು ಮಾಡಬೇಕಿರುವ ಪ್ರಮಾಣಪತ್ರ (ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚುಬಾರಿ ಸೂಚಿಸಬಹುದು)"
 
-#: src/subscription_manager/managercli.py:2847
+#: src/subscription_manager/managercli.py:2846
 msgid ""
 "Error: You may not import certificates into a system that is registered to a "
 "subscription management service."
@@ -6570,7 +6570,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2849
+#: src/subscription_manager/managercli.py:2848
 msgid ""
 "Error: This command requires that you specify a certificate with --"
 "certificate."
@@ -6579,14 +6579,14 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2864
+#: src/subscription_manager/managercli.py:2863
 #, python-format
 msgid "Successfully imported certificate %s"
 msgstr "%s ಎಂಬ ಪ್ರಮಾಣಪತ್ರವನ್ನು ಯಶಸ್ವಿಯಾಗಿ ಆಮದು ಮಾಡಲಾಗಿದೆ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2870
+#: src/subscription_manager/managercli.py:2869
 #, python-format
 msgid "%s is not a valid certificate file. Please use a valid certificate."
 msgstr ""
@@ -6595,7 +6595,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2876
+#: src/subscription_manager/managercli.py:2875
 msgid ""
 "An error occurred while importing the certificate. Please check log file for "
 "more information."
@@ -6603,73 +6603,73 @@ msgstr ""
 "ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ಆಮದು ಮಾಡಿಕೊಳ್ಳುವಾಗ ಒಂದು ದೋಷವು ಎದುರಾಗಿದೆ. ಹೆಚ್ಚಿನ ಮಾಹಿತಿಗಾಗಿ "
 "ದಾಖಲೆ ಕಡತವನ್ನು ನೋಡಿ."
 
-#: src/subscription_manager/managercli.py:2880
+#: src/subscription_manager/managercli.py:2879
 #, python-format
 msgid "%s: file not found."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:2903
+#: src/subscription_manager/managercli.py:2902
 msgid "View and configure with 'subscription-manager plugins'"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys, author shanky
-#: src/subscription_manager/managercli.py:2907
+#: src/subscription_manager/managercli.py:2906
 #, python-format
 msgid "list %s plugins"
 msgstr "%s ಪ್ಲಗ್‌ಇನ್‌ಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys, author shanky
-#: src/subscription_manager/managercli.py:2909
+#: src/subscription_manager/managercli.py:2908
 #, python-format
 msgid "list %s plugin slots"
 msgstr "%s ಪ್ಲಗ್‌ಇನ್‌ಗಳ ಸ್ಲಾಟ್‌ಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys, author shanky
-#: src/subscription_manager/managercli.py:2911
+#: src/subscription_manager/managercli.py:2910
 #, python-format
 msgid "list %s plugin hooks"
 msgstr "%s ಪ್ಲಗ್‌ಇನ್‌ಗಳ ಹುಕ್‌‌ಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2914
+#: src/subscription_manager/managercli.py:2913
 msgid "show verbose plugin info"
 msgstr "ವರ್ಬೋಸ್ ಪ್ಲಗ್‌ಇನ್ ಮಾಹಿತಿಯನ್ನು ತೋರಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2928
+#: src/subscription_manager/managercli.py:2927
 msgid "disabled"
 msgstr "ನಿಷ್ಕ್ರಿಯಗೊಂಡ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2930
+#: src/subscription_manager/managercli.py:2929
 msgid "enabled"
 msgstr "ಸಕ್ರಿಯಗೊಂಡ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:2981
+#: src/subscription_manager/managercli.py:2980
 msgid "List the repositories which this system is entitled to use"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯು ಬಳಸಲು ಅನುಮತಿ ಇರುವ ರೆಪೊಸಿಟರಿಗಳ ಪಟ್ಟಿ"
 
-#: src/subscription_manager/managercli.py:2985
+#: src/subscription_manager/managercli.py:2984
 msgid "list all known repositories for this system"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗಾಗಿನ ಗೊತ್ತಿರುವ ಎಲ್ಲಾ ರೆಪೊಸಿಟರಿಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡು"
 
-#: src/subscription_manager/managercli.py:2987
+#: src/subscription_manager/managercli.py:2986
 msgid "list known, enabled repositories for this system"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗಾಗಿನ ಗೊತ್ತಿರುವ, ಸಕ್ರಿಯಗೊಂಡಿರುವ ರೆಪೊಸಿಟರಿಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡು"
 
-#: src/subscription_manager/managercli.py:2989
+#: src/subscription_manager/managercli.py:2988
 msgid "list known, disabled repositories for this system"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗಾಗಿನ ಗೊತ್ತಿರುವ, ನಿಷ್ಕ್ರಿಯಗೊಂಡಿರುವ ರೆಪೊಸಿಟರಿಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡು"
 
-#: src/subscription_manager/managercli.py:2992
+#: src/subscription_manager/managercli.py:2991
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
@@ -6677,7 +6677,7 @@ msgstr ""
 "ಸಕ್ರಿಯಗೊಳಿಸಬೇಕಿರುವ ರೆಪೊಸಿಟರಿ (ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚುಬಾರಿ ಸೂಚಿಸಬಹುದು). ವೈಲ್ಡ್‌ಕಾರ್ಡುಗಳಿಗೆ "
 "(* ಮತ್ತು ?) ಬೆಂಬಲವಿರುತ್ತದೆ."
 
-#: src/subscription_manager/managercli.py:2995
+#: src/subscription_manager/managercli.py:2994
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
@@ -6687,42 +6687,42 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3056
+#: src/subscription_manager/managercli.py:3055
 #, python-format
 msgid "    Available Repositories in %s"
 msgstr "    %s ನಲ್ಲಿನ ಲಭ್ಯವಿರುವ ರೆಪೊಸಿಟರಿಗಳು"
 
-#: src/subscription_manager/managercli.py:3066
+#: src/subscription_manager/managercli.py:3065
 msgid "There were no available repositories matching the specified criteria."
 msgstr "ಸೂಚಿಸಲಾದ ಮಾನದಂಡಕ್ಕೆ ಹೊಂದಿಕೆಯಾಗುವ ಯಾವುದೆ ರೆಪೊಸಿಟರಿಗಳು ಲಭ್ಯವಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3068
-#: src/subscription_manager/managercli.py:3087
+#: src/subscription_manager/managercli.py:3067
+#: src/subscription_manager/managercli.py:3086
 msgid "This system has no repositories available through subscriptions."
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯು ಚಂದಾದಾರಿಕೆಗಳ ಮೂಲಕ ಲಭ್ಯವಿರುವ ಯಾವುದೆ ರೆಪೊಸಿಟರಿಗಳನ್ನು ಹೊಂದಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:3094
+#: src/subscription_manager/managercli.py:3093
 #, python-format
 msgid ""
 "Error: '%s' does not match a valid repository ID. Use \"subscription-manager "
 "repos --list\" to see valid repositories."
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3141
+#: src/subscription_manager/managercli.py:3140
 #, python-format
 msgid "Repository '%s' is enabled for this system."
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗಾಗಿ '%s' ರೆಪೊಸಿಟರಿಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ."
 
-#: src/subscription_manager/managercli.py:3143
+#: src/subscription_manager/managercli.py:3142
 #, python-format
 msgid "Repository '%s' is disabled for this system."
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗಾಗಿನ '%s' ರೆಪೊಸಿಟರಿಯನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3150
+#: src/subscription_manager/managercli.py:3149
 msgid "List, set, or remove the configuration parameters in use by this system"
 msgstr ""
 "ಈ ವ್ಯವಸ್ಥೆಯಿಂದ ಬಳಸಲಾಗುತ್ತಿರುವ ನಿಯತಾಂಕಗಳ ಸಂರಚನೆಯನ್ನು ಪಟ್ಟಿ ಮಾಡಿ, ಹೊಂದಿಸಿ, ಅಥವ "
@@ -6730,26 +6730,26 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3154
+#: src/subscription_manager/managercli.py:3153
 msgid "list the configuration for this system"
 msgstr "ಈ ಗಣಕಯಂತ್ರಕ್ಕಾಗಿನ ಸಂರಚನೆಯನ್ನು ಪಟ್ಟಿ ಮಾಡಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3156
+#: src/subscription_manager/managercli.py:3155
 msgid "remove configuration entry by section.name"
 msgstr "ಸಂರಚನಾ ನಮೂದನೆಯ section.name ಎಂಬ ಆಧಾರದಲ್ಲಿ ತೆಗೆದುಹಾಕಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3163
+#: src/subscription_manager/managercli.py:3162
 #, python-format
 msgid "Section: %s, Name: %s"
 msgstr "ವಿಭಾಗ: %s, ಹೆಸರು: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3182
+#: src/subscription_manager/managercli.py:3181
 msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
@@ -6759,7 +6759,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3201
+#: src/subscription_manager/managercli.py:3200
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
@@ -6768,60 +6768,60 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3211
+#: src/subscription_manager/managercli.py:3210
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
 msgstr "ದೋಷ: %s ಎಂಬ ವಿಭಾಗ ಹಾಗು %s ಎಂಬ ಹೆಸರು ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3229
+#: src/subscription_manager/managercli.py:3228
 msgid "[] - Default value in use"
 msgstr "[] - ಬಳಕೆಯಲ್ಲಿರುವ ಪೂರ್ವನಿಯೋಜಿತ ಮೌಲ್ಯ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3238
-#: src/subscription_manager/managercli.py:3241
+#: src/subscription_manager/managercli.py:3237
+#: src/subscription_manager/managercli.py:3240
 #, python-format
 msgid "You have removed the value for section %s and name %s."
 msgstr "%s ಎಂಬ ವಿಭಾಗ ಹಾಗು %s ಎಂಬ ಹೆಸರಿಗಾಗಿ ನೀವು ಮೌಲ್ಯವನ್ನು ತೆಗೆದುಹಾಕಿದ್ದೀರಿ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3242
+#: src/subscription_manager/managercli.py:3241
 #, python-format
 msgid "The default value for %s will now be used."
 msgstr "%s ಗಾಗಿನ ಪೂರ್ವನಿಯೋಜಿತ ಮೌಲ್ಯವನ್ನು ಬಳಸಲಾಗಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3244
+#: src/subscription_manager/managercli.py:3243
 #, python-format
 msgid "Section %s and name %s cannot be removed."
 msgstr "%s ಎಂಬ ವಿಭಾಗ ಹಾಗು %s ಎಂಬ ಹೆಸರನ್ನು ತೆಗೆದುಹಾಕಲು ಸಾಧ್ಯವಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3263
+#: src/subscription_manager/managercli.py:3262
 msgid "List subscription and product information for this system"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗಾಗಿನ ಚಂದಾದಾರಿಕೆ ಹಾಗು ಉತ್ಪನ್ನ ಮಾಹಿತಿಯನ್ನು ಪಟ್ಟಿ ಮಾಡಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3267
+#: src/subscription_manager/managercli.py:3266
 msgid "list shows those products which are installed (default)"
 msgstr "ಪಟ್ಟಿಯು ಅನುಸ್ಥಾಪಿಸಲಾದ ಉತ್ಪನ್ನಗಳನ್ನು ತೋರಿಸುತ್ತದೆ (ಪೂರ್ವನಿಯೋಜಿತ)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3269
+#: src/subscription_manager/managercli.py:3268
 msgid "show those subscriptions which are available"
 msgstr "ಪಟ್ಟಿಯು ಲಭ್ಯವಿರುವ ಉತ್ಪನ್ನಗಳನ್ನು ತೋರಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3271
+#: src/subscription_manager/managercli.py:3270
 msgid "used with --available to ensure all subscriptions are returned"
 msgstr ""
 "ಎಲ್ಲಾ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ತೋರಿಸಲಾಗುತ್ತದೆ ಎನ್ನುವುದನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಲು --available "
@@ -6829,7 +6829,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3273
+#: src/subscription_manager/managercli.py:3272
 #, python-format
 msgid ""
 "date to search on, defaults to today's date, only used with --available "
@@ -6840,13 +6840,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3276
+#: src/subscription_manager/managercli.py:3275
 msgid "show the subscriptions being consumed by this system"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯಿಂದ ಬಳಸಲಾದ ಚಂದಾದಾರಿಕೆಗಳನ್ನು ತೋರಿಸು."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3278
+#: src/subscription_manager/managercli.py:3277
 msgid ""
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
@@ -6856,7 +6856,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3280
+#: src/subscription_manager/managercli.py:3279
 msgid ""
 "shows pools which provide products that are not already covered; only used "
 "with --available"
@@ -6866,7 +6866,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3282
+#: src/subscription_manager/managercli.py:3281
 msgid ""
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
@@ -6874,7 +6874,7 @@ msgstr ""
 "ಪ್ರಸಕ್ತ ಅನುಸ್ಥಾಪಿಸಲಾದ ಚಂದಾದಾರಿಕೆಗಳಿಗೆ ಹೊಂದಿಕೆಯಾಗುವ ಉತ್ಪನ್ನಗಳನ್ನು ಮಾತ್ರ "
 "ತೋರಿಸಲಾಗುತ್ತದೆ; --available ನೊಂದಿಗೆ ಮಾತ್ರ ಬಳಸಲಾಗುತ್ತದೆ"
 
-#: src/subscription_manager/managercli.py:3284
+#: src/subscription_manager/managercli.py:3283
 msgid ""
 "lists only subscriptions or products containing the specified expression in "
 "the subscription or product information, varying with the list requested and "
@@ -6884,7 +6884,7 @@ msgstr ""
 "ಚಂದಾದಾರಿಕೆಗಳು ಅಥವ ಉತ್ಪನ್ನಗಳನ್ನು ಮಾತ್ರ ಪಟ್ಟಿ ಮಾಡುತ್ತದೆ, ಮತ್ತು ಇದು ಮನವಿ ಮಾಡಿದ ಪಟ್ಟಿ "
 "ಮತ್ತು ಪೂರೈಕೆಗಣಕದ ಆವೃತ್ತಿಯೊಂದಿಗೆ  (ಕೇಸ್-ಸಂವೇದಿ) ಬದಲಾಗುತ್ತದೆ."
 
-#: src/subscription_manager/managercli.py:3286
+#: src/subscription_manager/managercli.py:3285
 msgid ""
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
@@ -6892,22 +6892,22 @@ msgstr ""
 "ಅನ್ವಯಿಸಲಾಗುವ ಲಭ್ಯವಿರುವ ಅಥವ ಬಳಸಲಾದ ಚಂದಾದಾರಿಕೆಗಳಿಗಾಗಿ ಪೂಲ್‌ IDಗಳನ್ನು ಮಾತ್ರ ಪಟ್ಟಿ "
 "ಮಾಡುತ್ತದೆ; --available ಮತ್ತು --consumed ನೊಂದಿಗೆ ಮಾತ್ರ ಬಳಸಬಹುದು"
 
-#: src/subscription_manager/managercli.py:3288
+#: src/subscription_manager/managercli.py:3287
 #, python-format
 msgid ""
 "show pools that are active on or after the given date; only used with --"
 "available (example: %s)"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3306
+#: src/subscription_manager/managercli.py:3305
 msgid "Error: --afterdate is only applicable with --available"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3308
+#: src/subscription_manager/managercli.py:3307
 msgid "Error: --afterdate cannot be used with --ondate"
 msgstr ""
 
-#: src/subscription_manager/managercli.py:3323
+#: src/subscription_manager/managercli.py:3322
 #, python-brace-format
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
@@ -6918,11 +6918,11 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3352
+#: src/subscription_manager/managercli.py:3351
 msgid "    Installed Product Status"
 msgstr "    ಅನುಸ್ಥಾಪಿಸಲಾದ ಉತ್ಪನ್ನದ ಸ್ಥಿತಿ"
 
-#: src/subscription_manager/managercli.py:3386
+#: src/subscription_manager/managercli.py:3385
 #, python-format
 msgid "No installed products were found matching the expression \"%s\"."
 msgstr ""
@@ -6931,17 +6931,17 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3388
+#: src/subscription_manager/managercli.py:3387
 msgid "No installed products to list"
 msgstr "ಪಟ್ಟಿ ಮಾಡಲು ಅನುಸ್ಥಾಪಿಸಲಾದ ಯಾವುದೆ ಉತ್ಪನ್ನಗಳಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3415
+#: src/subscription_manager/managercli.py:3414
 msgid "Available Subscriptions"
 msgstr "ಲಭ್ಯವಿರುವ ಚಂದಾದಾರಿಕೆಗಳು"
 
-#: src/subscription_manager/managercli.py:3453
+#: src/subscription_manager/managercli.py:3452
 #, python-format
 msgid ""
 "No available subscription pools were found matching the expression \"%s\" "
@@ -6950,7 +6950,7 @@ msgstr ""
 "\"%s\" ಎಂಬ ನಿಗದಿತ ವಾಕ್ಯಾಂಶಕ್ಕೆ  ಮತ್ತು \"%s\" ಎಂಬ ಸೇವಾ ಮಟ್ಟಕ್ಕೆ ಹೊಂದಿಕೆಯಾಗುವ "
 "ಯಾವುದೆ ಲಭ್ಯವಿರುವ ಚಂದಾದಾರಿಕೆ ಪೂಲ್‌ಗಳು ಕಂಡುಬಂದಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:3458
+#: src/subscription_manager/managercli.py:3457
 #, python-format
 msgid ""
 "No available subscription pools were found matching the expression \"%s\"."
@@ -6958,7 +6958,7 @@ msgstr ""
 "\"%s\" ಎಂಬ ನಿಗದಿತ ವಾಕ್ಯಾಂಶಕ್ಕೆ  ಹೊಂದಿಕೆಯಾಗುವ ಯಾವುದೆ ಲಭ್ಯವಿರುವ ಚಂದಾದಾರಿಕೆ ಪೂಲ್‌ಗಳು "
 "ಕಂಡುಬಂದಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:3463
+#: src/subscription_manager/managercli.py:3462
 #, python-format
 msgid ""
 "No available subscription pools were found matching the service level \"%s\"."
@@ -6968,17 +6968,17 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3467
+#: src/subscription_manager/managercli.py:3466
 msgid "No available subscription pools to list"
 msgstr "ಪಟ್ಟಿ ಮಾಡಲು ಲಭ್ಯವಿರುವ ಯಾವುದೆ ಚಂದಾದಾರಿಕೆ ಇಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3487
+#: src/subscription_manager/managercli.py:3486
 msgid "Consumed Subscriptions"
 msgstr "ಬಳಸಲಾದ ಚಂದಾದಾರಿಕೆಗಳು"
 
-#: src/subscription_manager/managercli.py:3503
+#: src/subscription_manager/managercli.py:3502
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the expression \"%s\" and "
@@ -6987,7 +6987,7 @@ msgstr ""
 "\"%s\" ಎಂಬ ನಿಗದಿತ ವಾಕ್ಯಾಂಶಕ್ಕೆ  ಮತ್ತು \"%s\" ಎಂಬ ಸೇವಾ ಮಟ್ಟಕ್ಕೆ ಹೊಂದಿಕೆಯಾಗುವ "
 "ಯಾವುದೆ ಬಳಸಲಾಗುತ್ತಿರುವ ಚಂದಾದಾರಿಕೆ ಪೂಲ್‌ಗಳು ಕಂಡುಬಂದಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:3508
+#: src/subscription_manager/managercli.py:3507
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the expression \"%s\"."
@@ -6995,7 +6995,7 @@ msgstr ""
 "\"%s\" ಎಂಬ ನಿಗದಿತ ವಾಕ್ಯಾಂಶಕ್ಕೆ  ಹೊಂದಿಕೆಯಾಗುವ ಯಾವುದೆ ಬಳಸಲಾಗುತ್ತಿರುವ ಚಂದಾದಾರಿಕೆ "
 "ಪೂಲ್‌ಗಳು ಕಂಡುಬಂದಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:3513
+#: src/subscription_manager/managercli.py:3512
 #, python-format
 msgid ""
 "No consumed subscription pools were found matching the service level \"%s\"."
@@ -7003,25 +7003,25 @@ msgstr ""
 "\"%s\" ಎಂಬ ಸೇವಾ ಮಟ್ಟಕ್ಕೆ ಹೊಂದಿಕೆಯಾಗುವ ಯಾವುದೆ ಬಳಸಲಾಗುತ್ತಿರುವ ಚಂದಾದಾರಿಕೆ ಪೂಲ್‌ಗಳು "
 "ಕಂಡುಬಂದಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:3517
+#: src/subscription_manager/managercli.py:3516
 msgid "No consumed subscription pools were found."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3522
+#: src/subscription_manager/managercli.py:3521
 msgid "Manage custom content repository settings"
 msgstr "ಅಗತ್ಯಾನುಗುಣ ಕಂಟೆಂಟ್ ರೆಪೊಸಿಟರಿ ಸಿದ್ಧತೆಗಳನ್ನು ವ್ಯವಸ್ಥಾಪಿಸಿ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3525
+#: src/subscription_manager/managercli.py:3524
 msgid "repository to modify (can be specified more than once)"
 msgstr "ಮಾರ್ಪಡಿಸಬೇಕಿರುವ ರೆಪೊಸಿಟರಿ (ಒಂದಕ್ಕಿಂತ ಹೆಚ್ಚು ಬಾರಿ ಸೂಚಿಸಬಹುದು)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3527
+#: src/subscription_manager/managercli.py:3526
 msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
@@ -7031,7 +7031,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3529
+#: src/subscription_manager/managercli.py:3528
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
@@ -7042,7 +7042,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3531
+#: src/subscription_manager/managercli.py:3530
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
 msgstr ""
@@ -7051,31 +7051,31 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3533
+#: src/subscription_manager/managercli.py:3532
 msgid "list all overrides; can be specific to a repository by providing --repo"
 msgstr ""
 "ಎಲ್ಲಾ ಅತಿಕ್ರಮಿಸುವಿಕೆಗಳನ್ನು ಪಟ್ಟಿ ಮಾಡು; --repo ಅನ್ನು ಒದಗಿಸುವ ಮೂಲಕ ಒಂದು ರೆಪೊಸಿಟರಿಗೆ "
 "ನಿಶ್ಚಿತವಾಗಿರಬಹುದು"
 
-#: src/subscription_manager/managercli.py:3540
+#: src/subscription_manager/managercli.py:3539
 msgid "You must specify an override in the form of \"name:value\" with --add."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3545
+#: src/subscription_manager/managercli.py:3544
 msgid "--add arguments should be in the form of \"name:value\""
 msgstr "--add ಆರ್ಗ್ಯುಮೆಂಟ್‌ಗಳು \"name:value\" ರೂಪದಲ್ಲಿ ಇರಬೇಕು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3555
+#: src/subscription_manager/managercli.py:3554
 msgid "Error: You must specify a repository to modify"
 msgstr "ದೋಷ: ನೀವು ಮಾರ್ಪಡಿಸಲು ಒಂದು ರೆಪೊಸಿಟರಿಯನ್ನು ಸೂಚಿಸಬೇಕು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3557
+#: src/subscription_manager/managercli.py:3556
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
 "ದೋಷ: ನೀವು --remove-all ಮತ್ತು --list ನೊಂದಿಗೆ --add ಅಥವ --remove ಅನ್ನು ಬಳಸಲು "
@@ -7083,35 +7083,35 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3559
+#: src/subscription_manager/managercli.py:3558
 msgid "Error: You may not use --list with --remove-all"
 msgstr "ದೋಷ: --remove-all ನೊಂದಿಗೆ --list ಅನ್ನು ಬಳಸುವಂತಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3562
+#: src/subscription_manager/managercli.py:3561
 msgid "Error: The --repo option must be used with --list or --add or --remove."
 msgstr "ದೋಷ: --repo ಆಯ್ಕೆಯನ್ನು --list ಅಥವ --add ಅಥವ --remove ನೊಂದಿಗೆ ಬಳಸುವಂತಿಲ್ಲ."
 
-#: src/subscription_manager/managercli.py:3566
+#: src/subscription_manager/managercli.py:3565
 msgid "Error: You must specify an override name with --remove."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3579
+#: src/subscription_manager/managercli.py:3578
 msgid "Error: The 'repo-override' command is not supported by the server."
 msgstr "ದೋಷ:  ಪೂರೈಕೆಗಣಕದಿಂದ 'repo-override' ಆಜ್ಞೆಗೆ ಬೆಂಬಲವಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3597
+#: src/subscription_manager/managercli.py:3596
 msgid "This system does not have any content overrides applied to it."
 msgstr "ಈ ವ್ಯವಸ್ಥೆಗೆ ಯಾವುದೆ ಕಂಟೆಂಟ್ ಅತಿಕ್ರಮಿಸುವಿಕೆಗಳನ್ನು ಅನ್ವಯಿಸಲಾಗುವುದಿಲ್ಲ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3616
+#: src/subscription_manager/managercli.py:3615
 #, python-format
 msgid ""
 "Repository '%s' does not currently exist, but the override has been added."
@@ -7120,49 +7120,49 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3640
+#: src/subscription_manager/managercli.py:3639
 #, python-format
 msgid "Nothing is known about '%s'"
 msgstr "'%s' ಕುರಿತು ತಿಳಿದಿಲ್ಲ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3645
+#: src/subscription_manager/managercli.py:3644
 #, python-format
 msgid "Repository: %s"
 msgstr "ರೆಪೊಸಿಟರಿ: %s"
 
-#: src/subscription_manager/managercli.py:3655
+#: src/subscription_manager/managercli.py:3654
 msgid "Show or modify the system purpose role setting"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3669
+#: src/subscription_manager/managercli.py:3668
 msgid "Print version information"
 msgstr "ಆವೃತ್ತಿಯ ಮಾಹಿತಿಯನ್ನು ಮುದ್ರಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3676
+#: src/subscription_manager/managercli.py:3675
 #, python-format
 msgid "subscription management server: %s"
 msgstr "ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾ ಪೂರೈಕೆಗಣಕ: %s"
 
-#: src/subscription_manager/managercli.py:3677
+#: src/subscription_manager/managercli.py:3676
 #, python-format
 msgid "subscription management rules: %s"
 msgstr "ಚಂದಾದಾರಿಕೆ ವ್ಯವಸ್ಥಾಪನಾ ನಿಯಮಗಳು: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3684
+#: src/subscription_manager/managercli.py:3683
 msgid "Show status information for this system's subscriptions and products"
 msgstr "ಈ ವ್ಯವಸ್ಥೆಯ ಚಂದಾದಾರಿಕೆಗಳು ಮತ್ತು ಉತ್ಪನ್ನಗಳಿಗಾಗಿನ ಸ್ಥಿತಿ ಮಾಹಿತಿಯನ್ನು ತೋರಿಸು"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3688
+#: src/subscription_manager/managercli.py:3687
 #, python-format
 msgid "future date to check status on, defaults to today's date (example: %s)"
 msgstr ""
@@ -7171,11 +7171,11 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3712
+#: src/subscription_manager/managercli.py:3706
 msgid "System Status Details"
 msgstr "ವ್ಯವಸ್ಥೆಯ ಸ್ಥಿತಿಯ ವಿವರಗಳು"
 
-#: src/subscription_manager/managercli.py:3717
+#: src/subscription_manager/managercli.py:3760
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
@@ -7183,7 +7183,15 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3751
+#: src/subscription_manager/managercli.py:3763
+#, fuzzy
+#| msgid "Register"
+msgid "Registered"
+msgstr "ನೋಂದಾಯಿಸಿ"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/managercli.py:3765
 #, fuzzy, python-brace-format
 #| msgid "Overall Status: %s\n"
 msgid ""
@@ -7193,11 +7201,19 @@ msgstr "ಒಟ್ಟಾರೆ ಸ್ಥಿತಿ: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/managercli.py:3785
+#: src/subscription_manager/managercli.py:3796
 #, fuzzy, python-brace-format
 #| msgid "System Status Details"
 msgid "System Purpose Status: {status}"
 msgstr "ವ್ಯವಸ್ಥೆಯ ಸ್ಥಿತಿಯ ವಿವರಗಳು"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/managercli.py:3818
+#, fuzzy
+#| msgid "System is not registered."
+msgid "Overall Status: Not registered\n"
+msgstr "ಈ ವ್ಯವಸ್ಥೆಯನ್ನು ನೋಂದಾಯಿಸಲಾಗಿಲ್ಲ."
 
 #: src/subscription_manager/plugin/container/__init__.py:234
 #: src/subscription_manager/plugin/ostree/action_invoker.py:147
@@ -7310,7 +7326,7 @@ msgstr "ಪ್ರಾರಂಭದಲ್ಲಿ ನೋಂದಣಿ ಸಂವಾದ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/utils.py:395
+#: src/subscription_manager/utils.py:400
 msgid "and"
 msgstr "ಮತ್ತು"
 
