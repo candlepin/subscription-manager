@@ -30,7 +30,7 @@ jobs:
             git-core dnf-plugins-core rpm-build sudo which make
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # We need to initiate the repository manually because Actions fallback
       # to REST API with Git < 2.18; CentOS 7/RHEL 7 have 1.8.
