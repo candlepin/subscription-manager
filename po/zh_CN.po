@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 18:24+0100\n"
+"POT-Creation-Date: 2025-03-21 14:41+0100\n"
 "PO-Revision-Date: 2023-12-09 14:44+0000\n"
 "Last-Translator: Jingge Chen <mariocanfly@hotmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
@@ -261,7 +261,7 @@ msgstr "指定参数无效：%s\n"
 msgid "Installed products updated."
 msgstr "已更新安装的产品。"
 
-#: src/plugins/dnf/subscription_manager.py:44
+#: src/plugins/dnf/subscription_manager.py:46
 #, python-format
 msgid ""
 "\n"
@@ -272,70 +272,78 @@ msgid ""
 "It is important that you apply an active subscription in order to resume "
 "access to security and other critical updates. If you don't have other "
 "active subscriptions, you can renew the expired subscription.  "
-msgstr "\n"
+msgstr ""
+"\n"
 "*** 警告 ***\n"
 "以下产品订阅已过期：\n"
 "%s\n"
-" 您不能访问提供这些产品的软件仓库。您必须申请活跃订阅方可继续访问安全及其他重要更新。如果您没有其他活跃订阅，则可以续订已过期订阅。  "
+" 您不能访问提供这些产品的软件仓库。您必须申请活跃订阅方可继续访问安全及其他重"
+"要更新。如果您没有其他活跃订阅，则可以续订已过期订阅。  "
 
-#: src/plugins/dnf/subscription_manager.py:55
+#: src/plugins/dnf/subscription_manager.py:57
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
-msgstr "\n"
+msgstr ""
+"\n"
 "本系统尚未在权利服务器中注册。可使用 subscription-manager 进行注册。\n"
 
-#: src/plugins/dnf/subscription_manager.py:61
-#| msgid ""
-#| "\n"
-#| "This system is not registered with an entitlement server. You can use "
-#| "subscription-manager to register.\n"
+#: src/plugins/dnf/subscription_manager.py:63
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "\"rhc\" or \"subscription-manager\" to register.\n"
-msgstr "\n"
-"本系统尚未在权利服务器中注册。可使用 \"rhc\" 或 \"subscription-manager\" 进行注册。\n"
+msgstr ""
+"\n"
+"本系统尚未在权利服务器中注册。可使用 \"rhc\" 或 \"subscription-manager\" 进行"
+"注册。\n"
 
-#: src/plugins/dnf/subscription_manager.py:68
+#: src/plugins/dnf/subscription_manager.py:70
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
-msgstr "\n"
-"本系统已在权利服务器中注册，但没有接收更新。可使用 subscription-manager 分配订阅。\n"
+msgstr ""
+"\n"
+"本系统已在权利服务器中注册，但没有接收更新。可使用 subscription-manager 分配"
+"订阅。\n"
 
-#: src/plugins/dnf/subscription_manager.py:75
+#: src/plugins/dnf/subscription_manager.py:77
 #, python-brace-format
 msgid ""
 "\n"
 "This system has release set to {release_version} and it receives updates "
 "only for this release.\n"
-msgstr "\n"
+msgstr ""
+"\n"
 "这个系统的发行版本被设置为 {release_version}，它只接收这个版本的更新。\n"
 
-#: src/plugins/dnf/subscription_manager.py:110
+#: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
 msgstr "不是 root 用户，未更新 Subscription Management 软件仓库"
 
-#: src/plugins/dnf/subscription_manager.py:138
+#: src/plugins/dnf/subscription_manager.py:140
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
-msgid_plural "subscription-manager plugin disabled %d system repositories with respect of configuration in /etc/dnf/plugins/subscription-manager.conf"
-msgstr[0] "subscription-manager 插件禁用了在 /etc/dnf/plugins/subscription-manager.conf 中有相应配置的%d 系统仓库"
+msgid_plural ""
+"subscription-manager plugin disabled %d system repositories with respect of "
+"configuration in /etc/dnf/plugins/subscription-manager.conf"
+msgstr[0] ""
+"subscription-manager 插件禁用了在 /etc/dnf/plugins/subscription-manager.conf "
+"中有相应配置的%d 系统仓库"
 
-#: src/plugins/dnf/subscription_manager.py:155
+#: src/plugins/dnf/subscription_manager.py:158
 msgid "Updating Subscription Management repositories."
 msgstr "正在更新 Subscription Management 软件仓库。"
 
-#: src/plugins/dnf/subscription_manager.py:164
+#: src/plugins/dnf/subscription_manager.py:167
 msgid "Unable to read consumer identity"
 msgstr "无法读取客户身份"
 
-#: src/plugins/dnf/subscription_manager.py:167
+#: src/plugins/dnf/subscription_manager.py:170
 msgid "subscription-manager is operating in container mode."
 msgstr "订阅管理器在容器模式中运行。"
 
@@ -343,7 +351,9 @@ msgstr "订阅管理器在容器模式中运行。"
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
-msgstr "将组合的配置文件上传到 Satellite 服务器（已安装的 RPM、已启用的仓库和模块的列表）"
+msgstr ""
+"将组合的配置文件上传到 Satellite 服务器（已安装的 RPM、已启用的仓库和模块的列"
+"表）"
 
 #: src/plugins/dnf/upload_profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
@@ -895,7 +905,9 @@ msgstr "无效的日志级别：{lvl}，应为这个运行设置为 INFO。"
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
-msgstr "请使用：subscription-manager config --logging.default_log_level=<Log Level> 将 default_log_level 设置为一个有效的值。"
+msgstr ""
+"请使用：subscription-manager config --logging.default_log_level=<Log Level> "
+"将 default_log_level 设置为一个有效的值。"
 
 #: src/rhsm/config.py:255
 #, python-brace-format
@@ -911,153 +923,153 @@ msgstr "获取支持的资源"
 msgid "Checking connection status"
 msgstr "检查连接状态"
 
-#: src/rhsm/connection.py:1529
+#: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
 msgstr "获取云令牌"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1602
+#: src/rhsm/connection.py:1607
 msgid "Registering system"
 msgstr "注册系统"
 
-#: src/rhsm/connection.py:1632 src/rhsm/connection.py:1644
+#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr "更新运行在给定主机上的检测到的虚拟机"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1667
+#: src/rhsm/connection.py:1672
 msgid "Updating hypervisor information"
 msgstr "更新 hypervisor 信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1742
+#: src/rhsm/connection.py:1747
 msgid "Updating consumer information"
 msgstr "更新消费者信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1747 src/rhsm/connection.py:1751
+#: src/rhsm/connection.py:1752 src/rhsm/connection.py:1756
 msgid "Fetching guest information"
 msgstr "获取客户机信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1755
+#: src/rhsm/connection.py:1760
 msgid "Removing guests"
 msgstr "删除客户机"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1785 src/rhsm/connection.py:1796
+#: src/rhsm/connection.py:1790 src/rhsm/connection.py:1801
 msgid "Updating profile information"
 msgstr "更新配置文件信息"
 
-#: src/rhsm/connection.py:1804
+#: src/rhsm/connection.py:1809
 msgid "Fetching consumer keys"
 msgstr "获取消费者密钥"
 
-#: src/rhsm/connection.py:1813
+#: src/rhsm/connection.py:1818
 msgid "Checking compliance status"
 msgstr "检查合规性状态"
 
-#: src/rhsm/connection.py:1822
+#: src/rhsm/connection.py:1827
 msgid "Checking system purpose compliance status"
 msgstr "检查系统用途合规性状态"
 
-#: src/rhsm/connection.py:1829
+#: src/rhsm/connection.py:1834
 msgid "Fetching available system purpose settings"
 msgstr "获取可用的系统用途设置"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1836 src/rhsm/connection.py:1844
+#: src/rhsm/connection.py:1841 src/rhsm/connection.py:1849
 msgid "Fetching organizations"
 msgstr "获取机构"
 
-#: src/rhsm/connection.py:1857
+#: src/rhsm/connection.py:1862
 msgid "Unregistering system"
 msgstr "取消系统注册"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1881
+#: src/rhsm/connection.py:1886
 msgid "Fetching certificates"
 msgstr "获取证书"
 
-#: src/rhsm/connection.py:1890
+#: src/rhsm/connection.py:1895
 msgid "Fetching certificate serial numbers"
 msgstr "获取证书序列号"
 
-#: src/rhsm/connection.py:1906
+#: src/rhsm/connection.py:1911
 msgid "Fetching content for a certificate"
 msgstr "获取证书的内容"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1919 src/rhsm/connection.py:1936
+#: src/rhsm/connection.py:1924 src/rhsm/connection.py:1941
 msgid "Updating subscriptions"
 msgstr "更新订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1945 src/rhsm/connection.py:1955
-#: src/rhsm/connection.py:1964
+#: src/rhsm/connection.py:1950 src/rhsm/connection.py:1960
+#: src/rhsm/connection.py:1969
 msgid "Unsubscribing"
 msgstr "取消订阅"
 
-#: src/rhsm/connection.py:2013
+#: src/rhsm/connection.py:2018
 msgid "Fetching pools"
 msgstr "获取池"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2024
+#: src/rhsm/connection.py:2029
 msgid "Fetching release information"
 msgstr "获取版本信息"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2038
+#: src/rhsm/connection.py:2043
 msgid "Fetching available releases"
 msgstr "获取可用的版本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2053
+#: src/rhsm/connection.py:2058
 msgid "Fetching entitlements"
 msgstr "获取授权"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2062
+#: src/rhsm/connection.py:2067
 msgid "Fetching service levels"
 msgstr "获取服务等级"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2073
+#: src/rhsm/connection.py:2078
 msgid "Fetching environments"
 msgstr "获取环境"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2083
+#: src/rhsm/connection.py:2088
 msgid "Updating certificate"
 msgstr "更新证书"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2102
+#: src/rhsm/connection.py:2107
 msgid "Updating certificates"
 msgstr "更新证书"
 
-#: src/rhsm/connection.py:2121
+#: src/rhsm/connection.py:2126
 msgid "Checking server status"
 msgstr "检查服务器状态"
 
-#: src/rhsm/connection.py:2129
+#: src/rhsm/connection.py:2134
 msgid "Fetching content overrides"
 msgstr "获取内容覆盖"
 
-#: src/rhsm/connection.py:2140
+#: src/rhsm/connection.py:2145
 msgid "Updating content overrides"
 msgstr "更新内容覆盖"
 
-#: src/rhsm/connection.py:2153
+#: src/rhsm/connection.py:2158
 msgid "Removing content overrides"
 msgstr "删除内容覆盖"
 
-#: src/rhsm/connection.py:2169
+#: src/rhsm/connection.py:2174
 msgid "Activating"
 msgstr "激活"
 
-#: src/rhsm/connection.py:2178
+#: src/rhsm/connection.py:2183
 msgid "Fetching job"
 msgstr "获取作业"
 
@@ -1104,7 +1116,9 @@ msgstr "通过“--destination”指定的目录必须已经存在。"
 msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
-msgstr "要使用 no-archive 选项，目标目录 '{destination}' 需要和数据组合目录 '{assembly}' 存在于相同的文件系统中。"
+msgstr ""
+"要使用 no-archive 选项，目标目录 '{destination}' 需要和数据组合目录 "
+"'{assembly}' 存在于相同的文件系统中。"
 
 #: src/rhsm_debug/debug_commands.py:212
 #, python-brace-format
@@ -1138,7 +1152,9 @@ msgstr "用户 %s 不是任何机构的成员"
 msgid ""
 "Warning: The following field was recently set for this system by the "
 "entitlement server administrator: {conflict_msg}"
-msgid_plural "Warning: The following fields were recently set for this system by the entitlement server administrator: {conflict_msg}"
+msgid_plural ""
+"Warning: The following fields were recently set for this system by the "
+"entitlement server administrator: {conflict_msg}"
 msgstr[0] "警告：这个系统的以下项已被权利服务器管理员设置：{conflict_msg}"
 
 #: src/rhsmlib/dbus/service_wrapper.py:54
@@ -1175,7 +1191,7 @@ msgstr "不允许使用过去的日期"
 msgid "Unknown"
 msgstr "未知的"
 
-#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:61
+#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:64
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr "未知的参数：%s"
@@ -1225,7 +1241,8 @@ msgstr "订阅管理服务不支持状态详情。"
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
-msgstr "错误：无效的列出类型。只允许 \"installed\"、\"consumed\" 或 \"available\""
+msgstr ""
+"错误：无效的列出类型。只允许 \"installed\"、\"consumed\" 或 \"available\""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:497
@@ -1267,49 +1284,61 @@ msgstr "错误：--pool-only 只能与 --available 和（/或者） --consumed �
 msgid "Error: this system is not registered"
 msgstr "错误：这个系统没有注册"
 
-#: src/rhsmlib/services/register.py:192
+#: src/rhsmlib/services/register.py:68
+msgid "Environment IDs and environment names are mutually exclusive"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:167
+#, python-brace-format
+msgid ""
+"Environment: '{env_names}' does not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:175
+#, python-brace-format
+msgid ""
+"Environments: '{env_names}' do not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:238
 msgid "This system is already registered. Add force to options to override."
 msgstr "这个系统已经注册。使用 force 选项覆盖。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:195
+#: src/rhsmlib/services/register.py:241
 #: src/subscription_manager/cli_command/register.py:146
 msgid "Error: system name can not be empty."
 msgstr "错误：系统名称不能为空。"
 
-#: src/rhsmlib/services/register.py:199
+#: src/rhsmlib/services/register.py:245
 #: src/subscription_manager/cli_command/register.py:168
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
 "use the clean command and try again without --force."
-msgstr "错误：尝试使用 consumerid 恢复注册时无法强制注册。请使用 --force 选项并除去 --consumerid 选项重新注册，或使用不带 --force 选项的 clean 命令再试一次。"
+msgstr ""
+"错误：尝试使用 consumerid 恢复注册时无法强制注册。请使用 --force 选项并除去 "
+"--consumerid 选项重新注册，或使用不带 --force 选项的 clean 命令再试一次。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:209
+#: src/rhsmlib/services/register.py:255
 #: src/subscription_manager/cli_command/register.py:159
 msgid "Error: Must specify an activation key"
 msgstr "错误：必须指定激活码"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:211
+#: src/rhsmlib/services/register.py:257
 #: src/subscription_manager/cli_command/register.py:148
 msgid "Error: Activation keys do not require user credentials."
 msgstr "错误：激活码不需要用户证书。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:214
+#: src/rhsmlib/services/register.py:260
 #: src/subscription_manager/cli_command/register.py:151
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "错误：激活码不能用于之前注册的 ID。"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:218
-#: src/subscription_manager/cli_command/register.py:154
-msgid "Error: Activation keys do not allow environments to be specified."
-msgstr "错误：激活码不允许指定环境。"
-
-#: src/rhsmlib/services/register.py:225
+#: src/rhsmlib/services/register.py:267
 msgid "Error: Missing username or password."
 msgstr "错误：缺失用户名或密码。"
 
@@ -1410,14 +1439,18 @@ msgstr "已经使用 RHN 传统订阅在 Red Hat 注册这个系统。"
 msgid ""
 "Your system is being registered again using Red Hat Subscription Management. "
 "Red Hat recommends that customers only register once."
-msgstr "您正在使用红帽订阅管理（Red Hat Subscription Management）再次注册您的系统。Red Hat 建议客户只注册一次。"
+msgstr ""
+"您正在使用红帽订阅管理（Red Hat Subscription Management）再次注册您的系统。"
+"Red Hat 建议客户只注册一次。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:24
 msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
-msgstr "要了解有关从以上任意服务中取消注册的信息，请查询知识库文章：https://access.redhat.com/kb/docs/DOC-45563"
+msgstr ""
+"要了解有关从以上任意服务中取消注册的信息，请查询知识库文章：https://access."
+"redhat.com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:28
@@ -1434,7 +1467,9 @@ msgstr "请输入您的 Red Hat 帐户信息："
 msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
-msgstr "这个系统同时使用 RHN 传统技术和红帽订阅管理（Red Hat Subscription Management）注册。"
+msgstr ""
+"这个系统同时使用 RHN 传统技术和红帽订阅管理（Red Hat Subscription "
+"Management）注册。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:34
@@ -1446,7 +1481,9 @@ msgstr "Red Hat 建议客户只使用一个服务注册。"
 msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
-msgstr "要了解更多有关 RHN 注册和技术的信息，请查询知识库文章：https://access.redhat.com/kb/docs/DOC-45563"
+msgstr ""
+"要了解更多有关 RHN 注册和技术的信息，请查询知识库文章：https://access.redhat."
+"com/kb/docs/DOC-45563"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:41
@@ -1457,14 +1494,17 @@ msgstr "RHN 传统订阅和 Red Hat 订阅管理注册"
 msgid ""
 "Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password"
-msgstr "提示：忘记您的登录名或者密码？请访问 https://redhat.com/forgot_password"
+msgstr ""
+"提示：忘记您的登录名或者密码？请访问 https://redhat.com/forgot_password"
 
 #: src/subscription_manager/cache.py:178
 #, python-brace-format
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
-msgstr "consumer_uuid={consumer_uuid} 不是一个有效的 consumer_uuid。未尝试将 {class_name} 缓存与服务器同步。"
+msgstr ""
+"consumer_uuid={consumer_uuid} 不是一个有效的 consumer_uuid。未尝试将 "
+"{class_name} 缓存与服务器同步。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cert_sorter.py:292
@@ -1509,7 +1549,9 @@ msgid ""
 "Warning: A {attr} of \"{download_value}\" was recently set for this system "
 "by the entitlement server administrator.\n"
 "{advice}"
-msgstr "警告：\"{download_value}\" 的 {attr} 是最近由授权服务器管理员为这个系统设置的。\n"
+msgstr ""
+"警告：\"{download_value}\" 的 {attr} 是最近由授权服务器管理员为这个系统设置"
+"的。\n"
 "{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
@@ -1575,7 +1617,8 @@ msgstr "错误：您必须注册或指定 --username 和 --password 来列出 {a
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
-msgstr "错误： --username、--password、--token 和 --org 只能在未注册的系统上使用"
+msgstr ""
+"错误： --username、--password、--token 和 --org 只能在未注册的系统上使用"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:251
@@ -1587,7 +1630,8 @@ msgstr "\"{value}\""
 #, python-brace-format
 msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
-msgid_plural "Warning: Provided values {vals} are not included in the list of valid values"
+msgid_plural ""
+"Warning: Provided values {vals} are not included in the list of valid values"
 msgstr[0] "警告：提供的值 {vals} 没有包括在有效值列表中"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -1597,7 +1641,9 @@ msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
-msgstr "警告：这个机构没有提供系统目的为 \"{attr}\" 的订阅。这个设置不会影响到自动附加订阅。"
+msgstr ""
+"警告：这个机构没有提供系统目的为 \"{attr}\" 的订阅。这个设置不会影响到自动附"
+"加订阅。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:278
 #, python-brace-format
@@ -1667,7 +1713,9 @@ msgstr "请注意：当前配置的权力服务器不支持系统目的 {attr}�
 msgid ""
 "Deprecated, this command will be removed from the future major releases. "
 "This command is no-op. Show or modify the system purpose addons setting"
-msgstr "已弃用，这个命令将在以后的主发行版本中删除。这个命令是 no-op (没有操作)。显示或修改系统目的 addons 设置"
+msgstr ""
+"已弃用，这个命令将在以后的主发行版本中删除。这个命令是 no-op (没有操作)。显示"
+"或修改系统目的 addons 设置"
 
 #: src/subscription_manager/cli_command/attach.py:51
 msgid "The ID of the pool to attach (can be specified more than once)"
@@ -1707,14 +1755,13 @@ msgstr "这次不需要更新订阅。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:98
-#| msgid ""
-#| "Attach a specified subscription to the registered system, when system "
-#| "does not use Simple Content Access mode"
 msgid ""
 "Deprecated, this command will be removed from the future major releases. "
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr "已弃用，这个命令将在以后的主发行版本中删除。系统没有使用简单内容访问模式时，将指定的订阅附加到注册系统"
+msgstr ""
+"已弃用，这个命令将在以后的主发行版本中删除。系统没有使用简单内容访问模式时，"
+"将指定的订阅附加到注册系统"
 
 #: src/subscription_manager/cli_command/attach.py:112
 msgid "Error: --auto may not be used when specifying pools."
@@ -1753,7 +1800,9 @@ msgstr "错误：文件 \"{file}\" 不存在或不可读。"
 msgid ""
 "Ignoring the request to attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr "忽略附加请求。机构 \"{owner_id}\" 附加订阅已被禁用，因为启用了 Simple Content Access (SCA)。"
+msgstr ""
+"忽略附加请求。机构 \"{owner_id}\" 附加订阅已被禁用，因为启用了 Simple "
+"Content Access (SCA)。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/attach.py:202
@@ -1797,11 +1846,12 @@ msgstr "授权证书更新失败，原因如下："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/autoheal.py:28
-#| msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgid ""
 "Deprecated, this option will be removed from the future major releases. Set "
 "if subscriptions are attached on a schedule (default of daily)"
-msgstr "已弃用，这个命令将在以后的主发行版本中删除。设置是否在调度中附加订阅（默认为每日）"
+msgstr ""
+"已弃用，这个命令将在以后的主发行版本中删除。设置是否在调度中附加订阅（默认为"
+"每日）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/autoheal.py:31
@@ -1851,7 +1901,9 @@ msgstr "已删除所有本地数据"
 msgid ""
 "Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
-msgstr "忽略自动附加请求。机构 \"{owner_id}\" 附加订阅已被禁用，因为启用了 Simple Content Access (SCA)。"
+msgstr ""
+"忽略自动附加请求。机构 \"{owner_id}\" 附加订阅已被禁用，因为启用了 Simple "
+"Content Access (SCA)。"
 
 #: src/subscription_manager/cli_command/cli.py:152
 msgid "server URL in the form of https://hostname:port/prefix"
@@ -1934,7 +1986,9 @@ msgstr "系统证书崩溃。请重新注册。"
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
-msgstr "已将消费者配置集 \"{uuid}\" 从服务器中删除。您可以使用 clean 或 unregister 命令删除本地配置集。"
+msgstr ""
+"已将消费者配置集 \"{uuid}\" 从服务器中删除。您可以使用 clean 或 unregister 命"
+"令删除本地配置集。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:28
@@ -2194,7 +2248,9 @@ msgid ""
 "Deprecated, this command will be removed from the future major releases. "
 "This command is no-op in simple content access mode. Import certificates "
 "which were provided outside of the tool"
-msgstr "已弃用，这个命令将在以后的主发行版本中删除。在简单内容访问模式中这个命令是 no-op。导入在工具之外提供的证书"
+msgstr ""
+"已弃用，这个命令将在以后的主发行版本中删除。在简单内容访问模式中这个命令是 "
+"no-op。导入在工具之外提供的证书"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/import_cert.py:41
@@ -2512,23 +2568,23 @@ msgstr "已弃用，这个选项将在以后的主发行版本中删除。显示
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:229
-#| msgid "used with --available to ensure all subscriptions are returned"
 msgid ""
 "deprecated, this option will be removed from the future major releases; used "
 "with --available to ensure all subscriptions are returned"
-msgstr "已弃用，这个命令将在以后的主发行版本中删除。和 --available 一起使用以确保返回所有订阅"
+msgstr ""
+"已弃用，这个命令将在以后的主发行版本中删除。和 --available 一起使用以确保返回"
+"所有订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:237
 #, python-brace-format
-#| msgid ""
-#| "date to search on, defaults to today's date, only used with --available "
-#| "(example: {example})"
 msgid ""
 "deprecated, this option will be removed from the future major releases; date "
 "to search on, defaults to today's date, only used with --available (example: "
 "{example})"
-msgstr "已弃用，这个选项将在以后的主发行版本中删除。要搜索的日期，默认为当天日期，只能与 --available 一同使用（例如：{example}）"
+msgstr ""
+"已弃用，这个选项将在以后的主发行版本中删除。要搜索的日期，默认为当天日期，只"
+"能与 --available 一同使用（例如：{example}）"
 
 #: src/subscription_manager/cli_command/list.py:246
 msgid ""
@@ -2538,36 +2594,33 @@ msgstr "已弃用，这个选项将在以后的主发行版本中删除。。显
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:254
-#| msgid ""
-#| "shows only subscriptions matching the specified service level; only used "
-#| "with --available and --consumed"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
-msgstr "已弃用，这个选项将在以后的主发行版本中删除。只显示与特定服务等级相匹配的订阅。只能与 --available 和 --consumed 一起使用"
+msgstr ""
+"已弃用，这个选项将在以后的主发行版本中删除。只显示与特定服务等级相匹配的订"
+"阅。只能与 --available 和 --consumed 一起使用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:263
-#| msgid ""
-#| "shows pools which provide products that are not already covered; only "
-#| "used with --available"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows pools which provide products that are not already covered; only used "
 "with --available"
-msgstr "已弃用，这个选项将在以后的主发行版本中删除。显示提供还没有覆盖的产品的池；只能与 --available 一同使用"
+msgstr ""
+"已弃用，这个选项将在以后的主发行版本中删除。显示提供还没有覆盖的产品的池；只"
+"能与 --available 一同使用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:272
-#| msgid ""
-#| "shows only subscriptions matching products that are currently installed; "
-#| "only used with --available"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
-msgstr "已弃用，这个选项将在以后的主发行版本中删除。只显示与目前安装产品相匹配的订阅，只能与 --available 一起使用"
+msgstr ""
+"已弃用，这个选项将在以后的主发行版本中删除。只显示与目前安装产品相匹配的订"
+"阅，只能与 --available 一起使用"
 
 #: src/subscription_manager/cli_command/list.py:281
 msgid ""
@@ -2577,25 +2630,23 @@ msgid ""
 msgstr "只列出在订阅或产品信息中包含指定表达式的订阅或产品（区分大小写）。"
 
 #: src/subscription_manager/cli_command/list.py:291
-#| msgid ""
-#| "lists only the pool IDs for applicable available or consumed "
-#| "subscriptions; only used with --available and --consumed"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
-msgstr "已弃用，这个选项将在以后的主发行版本中删除。只列出可用或已消耗订阅的池 ID，只能与 --available 及 --consumed 一起使用"
+msgstr ""
+"已弃用，这个选项将在以后的主发行版本中删除。只列出可用或已消耗订阅的池 ID，只"
+"能与 --available 及 --consumed 一起使用"
 
 #: src/subscription_manager/cli_command/list.py:300
 #, python-brace-format
-#| msgid ""
-#| "show pools that are active on or after the given date; only used with --"
-#| "available (example: {example})"
 msgid ""
 "deprecated, this option will be removed from the future major releases; show "
 "pools that are active on or after the given date; only used with --available "
 "(example: {example})"
-msgstr "已弃用，这个选项将在以后的主发行版本中删除。列出在指定时间及以后激活的池，只能与 --available 合用（例如：{example}）"
+msgstr ""
+"已弃用，这个选项将在以后的主发行版本中删除。列出在指定时间及以后激活的池，只"
+"能与 --available 合用（例如：{example}）"
 
 #: src/subscription_manager/cli_command/list.py:326
 msgid "Error: --afterdate is only applicable with --available"
@@ -2668,7 +2719,8 @@ msgstr "消耗的订阅"
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
-msgstr "未找到符合表达式 \"{filter}\" 以及服务等级 \"{level}\" 的已消耗订阅池。"
+msgstr ""
+"未找到符合表达式 \"{filter}\" 以及服务等级 \"{level}\" 的已消耗订阅池。"
 
 #: src/subscription_manager/cli_command/list.py:557
 #, python-brace-format
@@ -2882,7 +2934,9 @@ msgid ""
 "Deprecated, this command will be removed from the future major releases. "
 "This command is no-op in simple content access mode. Attempt to redeem a "
 "subscription for a preconfigured system"
-msgstr "已弃用，这个命令将在以后的主发行版本中删除。在简单内容访问模式中这个命令是 no-op。尝试为预配置的系统赎回订阅"
+msgstr ""
+"已弃用，这个命令将在以后的主发行版本中删除。在简单内容访问模式中这个命令是 "
+"no-op。尝试为预配置的系统赎回订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:40
@@ -2953,7 +3007,9 @@ msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
-msgstr "在目标机构中注册特定环境（单个值）或多个环境（以逗号分隔的列表）。使用多个环境的能力由授权服务器控制"
+msgstr ""
+"在目标机构中注册特定环境（单个值）或多个环境（以逗号分隔的列表）。使用多个环"
+"境的能力由授权服务器控制"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:107
@@ -2970,7 +3026,9 @@ msgid ""
 "Deprecated, this option will be removed from the future major releases. This "
 "option is no-op when simple content access is used. Automatically attach "
 "compatible subscriptions to this system"
-msgstr "已弃用，这个选项将在以后的主发行版本中删除。当使用简单的内容访问时这个选项是 no-op。自动将兼容订阅附加到这个系统"
+msgstr ""
+"已弃用，这个选项将在以后的主发行版本中删除。当使用简单的内容访问时这个选项是 "
+"no-op。自动将兼容订阅附加到这个系统"
 
 #: src/subscription_manager/cli_command/register.py:127
 msgid ""
@@ -2994,6 +3052,11 @@ msgstr "自动订阅时使用的系统首选设置，需要和 --auto-attach 一
 #: src/subscription_manager/cli_command/register.py:144
 msgid "This system is already registered. Use --force to override"
 msgstr "这个系统已经注册。使用 --force 覆盖"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/register.py:154
+msgid "Error: Activation keys do not allow environments to be specified."
+msgstr "错误：激活码不允许指定环境。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:156
@@ -3137,7 +3200,8 @@ msgstr "已取消发行版本属性设置"
 #, python-brace-format
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
-msgstr "没有与 '{release}' 匹配的发行版本。使用 'release --list' 查看完整列表。"
+msgstr ""
+"没有与 '{release}' 匹配的发行版本。使用 'release --list' 查看完整列表。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:113
@@ -3174,7 +3238,9 @@ msgid ""
 "Deprecated, this command will be removed from the future major releases. "
 "This command is no-op in simple content access mode. It tries to remove all "
 "or specific subscriptions from this system"
-msgstr "已弃用，这个命令将在以后的主发行版本中删除。在简单内容访问模式中这个命令是 no-op。它尝试从这个系统中删除所有或特定的订阅"
+msgstr ""
+"已弃用，这个命令将在以后的主发行版本中删除。在简单内容访问模式中这个命令是 "
+"no-op。它尝试从这个系统中删除所有或特定的订阅"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/remove.py:79
@@ -3186,7 +3252,8 @@ msgstr "错误： '{serial}' 为无效的序列号"
 msgid ""
 "Error: The registered entitlement server does not support remove --pool.\n"
 "Instead, use the remove --serial option."
-msgstr "错误：注册的权利服务器不支持 remove --pool。\n"
+msgstr ""
+"错误：注册的权利服务器不支持 remove --pool。\n"
 "应使用 remove --serial 选项。"
 
 #: src/subscription_manager/cli_command/remove.py:95
@@ -3301,7 +3368,9 @@ msgstr "这个系统没有可通过订阅使用的库。"
 msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
-msgstr "错误：'{repoid}' 与有效软件仓库 ID 不匹配。请使用 \"subscription-manager repos --list\" 查看有效软件仓库。"
+msgstr ""
+"错误：'{repoid}' 与有效软件仓库 ID 不匹配。请使用 \"subscription-manager "
+"repos --list\" 查看有效软件仓库。"
 
 #: src/subscription_manager/cli_command/repos.py:265
 #, python-brace-format
@@ -3336,7 +3405,9 @@ msgstr "错误：您必须注册或指定 --username 和 --password 方可列出
 msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
-msgstr "错误: --username、--password、-token、--org 和 --serverurl 只能在未注册的系统上使用"
+msgstr ""
+"错误: --username、--password、-token、--org 和 --serverurl 只能在未注册的系统"
+"上使用"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:126
@@ -3389,28 +3460,44 @@ msgid ""
 msgstr "查看将来某天的状态，默认为今天的日期（例如：{example}）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/status.py:70
+#: src/subscription_manager/cli_command/status.py:65
 msgid "System Status Details"
 msgstr "系统状态详情"
 
-#: src/subscription_manager/cli_command/status.py:75
+#: src/subscription_manager/cli_command/status.py:120
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
-msgstr "内容访问模式设置为简单内容访问。无论订阅状态如何，该主机都可以访问内容。\n"
+msgstr ""
+"内容访问模式设置为简单内容访问。无论订阅状态如何，该主机都可以访问内容。\n"
 
-#: src/subscription_manager/cli_command/status.py:111
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/status.py:123
+#, fuzzy
+#| msgid "Register"
+msgid "Registered"
+msgstr "注册"
+
+#: src/subscription_manager/cli_command/status.py:125
 #, python-brace-format
 msgid ""
 "Overall Status: {status}\n"
 "{message}"
-msgstr "总体状态：{status}\n"
+msgstr ""
+"总体状态：{status}\n"
 "{message}"
 
-#: src/subscription_manager/cli_command/status.py:145
+#: src/subscription_manager/cli_command/status.py:156
 #, python-brace-format
 msgid "System Purpose Status: {status}"
 msgstr "系统目的状态：{status}"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/status.py:178
+#, fuzzy
+#| msgid "Not registered"
+msgid "Overall Status: Not registered\n"
+msgstr "没有注册"
 
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
@@ -3557,7 +3644,8 @@ msgstr "连接错误： {message} （错误代码 {code}）"
 msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
-msgstr "未知服务器回复 (HTTP 错误代码 {code}: {title}):\n"
+msgstr ""
+"未知服务器回复 (HTTP 错误代码 {code}: {title}):\n"
 "{content}"
 
 #: src/subscription_manager/exceptions.py:37
@@ -3664,7 +3752,8 @@ msgstr "错误证书： {file}: [{library}] {message}"
 msgid ""
 "Bad certificate: [{library}] {message}\n"
 "{data}"
-msgstr "错误证书： [{library}] {message}\n"
+msgstr ""
+"错误证书： [{library}] {message}\n"
 "{data}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -3691,7 +3780,9 @@ msgstr "{message} （HTTP 错误码 {code} ：{title}）"
 msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} second)"
-msgid_plural "The server rate limit has been exceeded, please try again later. (Expires in {time} seconds)"
+msgid_plural ""
+"The server rate limit has been exceeded, please try again later. (Expires in "
+"{time} seconds)"
 msgstr[0] "已超过该服务器速率限制，请稍后再试（{time} 秒后即超过限制）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -3745,7 +3836,10 @@ msgid ""
 "The yum/dnf plugins: %s were automatically enabled for the benefit of Red "
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
-msgstr "yum/dnf plugins: %s 会为 Red Hat Subscription Management 自动启用。如果不需要，使用 \"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" 来禁用它。"
+msgstr ""
+"yum/dnf plugins: %s 会为 Red Hat Subscription Management 自动启用。如果不需"
+"要，使用 \"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" 来"
+"禁用它。"
 
 #: src/subscription_manager/repolib.py:678
 msgid "Repo updates"
@@ -3780,27 +3874,24 @@ msgstr "用户干扰的进程。"
 msgid "Error uploading package profile: %s\n"
 msgstr "长传软件包配置文件错误：%s\n"
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
-#| msgid "This system is already registered. Add force to options to override."
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
 msgstr "这个系统已经注册，忽略自动注册的请求。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
-#| msgid "Registering system"
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 msgid "Registering the system"
 msgstr "注册系统"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
-#| msgid "Updating entitlement certificates & repositories"
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 msgid "Updating entitlement certificates & repositories."
 msgstr "更新授权证书和软件仓库"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:415
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:430
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "无法更新授权证书和软件仓库"
 
@@ -3916,10 +4007,6 @@ msgstr "警告：提供的键 \"{key}\" 没有包括在有效键列表中："
 #~ "Network error. Please check the connection details, or see /var/log/rhsm/"
 #~ "rhsm.log for more information."
 #~ msgstr "网络出错。请查看连接详情，或者 /var/log/rhsm/rhsm.log。"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#~ msgid "Register"
-#~ msgstr "注册"
 
 #~ msgid "The $0 package is not available from any repository."
 #~ msgstr "所有仓库都不提供 $0。"
@@ -4183,10 +4270,6 @@ msgstr "警告：提供的键 \"{key}\" 没有包括在有效键列表中："
 
 #~ msgid "System purpose"
 #~ msgstr "系统用途"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#~ msgid "Not registered"
-#~ msgstr "没有注册"
 
 #~ msgid "Unregister"
 #~ msgstr "取消注册"
