@@ -224,7 +224,6 @@ class SubManFixture(unittest.TestCase):
         self.stub_cp_provider.content_connection.get_versions = self._get_release_versions
 
         inj.provide(inj.CP_PROVIDER, self.stub_cp_provider)
-        inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
         # setup and mock the plugin_manager
         plugin_manager_mock = MagicMock(name="FixturePluginManagerMock")
