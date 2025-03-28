@@ -27,13 +27,13 @@ OS_DIST ?= $(shell rpm --eval='%dist')
 PYTHON_VER ?= $(shell $(PYTHON) -c 'import sys; print("python%s.%s" % sys.version_info[:2])')
 
 ifeq ($(OS_DIST), debian)
-  PYTHON_SITELIB ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
+  PYTHON_SITEARCH ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
 else
-  PYTHON_SITELIB ?= $(PREFIX)/lib64/$(PYTHON_VER)/site-packages
+  PYTHON_SITEARCH ?= $(PREFIX)/lib64/$(PYTHON_VER)/site-packages
 endif
-DNF_PLUGIN_PYTHON_SITELIB ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
+PYTHON_SITELIB ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
 # Note the underscore used instead of a hyphen
-PYTHON_INST_DIR = $(PYTHON_SITELIB)/subscription_manager
+PYTHON_INST_DIR = $(PYTHON_SITEARCH)/subscription_manager
 
 # Where various bits of code live in the git repo
 SRC_DIR := src/subscription_manager
@@ -159,14 +159,14 @@ install-plugins:
 
 	if [ "$(INSTALL_DNF_PLUGINS)" = "true" ] ; then \
 		echo "Installing DNF plugins" ; \
-		install -d $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/ ; \
+		install -d $(DESTDIR)/$(PYTHON_SITELIB)/dnf-plugins/ ; \
 		install -d $(DESTDIR)/etc/dnf/plugins/ ; \
 		install -m 644 -p src/plugins/dnf/product_id.py \
-		    $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/product-id.py ; \
+		    $(DESTDIR)/$(PYTHON_SITELIB)/dnf-plugins/product-id.py ; \
 		install -m 644 -p src/plugins/dnf/subscription_manager.py \
-		    $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/subscription-manager.py ; \
+		    $(DESTDIR)/$(PYTHON_SITELIB)/dnf-plugins/subscription-manager.py ; \
 		install -m 644 -p src/plugins/dnf/upload_profile.py \
-		    $(DESTDIR)/$(DNF_PLUGIN_PYTHON_SITELIB)/dnf-plugins/upload-profile.py ; \
+		    $(DESTDIR)/$(PYTHON_SITELIB)/dnf-plugins/upload-profile.py ; \
 		install -m 644 etc-conf/plugin/product-id.conf $(DESTDIR)/etc/dnf/plugins/ ; \
 		install -m 644 etc-conf/plugin/subscription-manager.conf $(DESTDIR)/etc/dnf/plugins/ ; \
 	fi;
@@ -207,7 +207,7 @@ install-via-setup: install-subpackages-via-setup
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-facts-service $(DESTDIR)/$(LIBEXEC_DIR)/
 	mv $(DESTDIR)/$(PREFIX)/bin/rhsm-package-profile-uploader $(DESTDIR)/$(LIBEXEC_DIR)/
-	find $(DESTDIR)/$(PYTHON_SITELIB) -name requires.txt -exec sed -i '/dbus-python/d' {} \;
+	find $(DESTDIR)/$(PYTHON_SITEARCH) -name requires.txt -exec sed -i '/dbus-python/d' {} \;
 
 
 .PHONY: install-subpackages-via-setup
