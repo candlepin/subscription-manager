@@ -28,7 +28,6 @@ from rhsm.connection import RemoteServerException
 from rhsm.https import ssl
 from rhsm.utils import LiveStatusMessage
 
-from rhsmlib.facts.hwprobe import ClassicCheck
 from rhsmlib.services import unregister, register, exceptions
 
 from subscription_manager import identity
@@ -212,10 +211,6 @@ class RegisterCommand(UserPassCommand):
         """
 
         self.log_client_version()
-
-        # Always warn the user if registered to old RHN/Spacewalk
-        if ClassicCheck().is_registered_with_classic():
-            print(get_branding().REGISTERED_TO_OTHER_WARNING)
 
         self._validate_options()
 

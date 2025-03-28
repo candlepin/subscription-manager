@@ -18,12 +18,8 @@ import logging
 import os
 
 import rhsm.connection as connection
-import subscription_manager.injection as inj
-
-from rhsmlib.facts.hwprobe import ClassicCheck
 
 from subscription_manager import managerlib
-from subscription_manager.branding import get_branding
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import handle_exception
 from subscription_manager.cli_command.environments import MULTI_ENV
@@ -63,18 +59,6 @@ class IdentityCommand(UserPassCommand):
             system_exit(os.EX_USAGE, _("--username and --password can only be used with --force"))
 
     def _do_command(self):
-        # get current consumer identity
-        identity = inj.require(inj.IDENTITY)
-
-        # check for Classic before doing anything else
-        if ClassicCheck().is_registered_with_classic():
-            if identity.is_valid():
-                print(_("server type: {type}").format(type=get_branding().REGISTERED_TO_BOTH_SUMMARY))
-            else:
-                # no need to continue if user is only registered to Classic
-                print(_("server type: {type}").format(type=get_branding().REGISTERED_TO_OTHER_SUMMARY))
-                return
-
         try:
             self._validate_options()
             consumerid = self.identity.uuid
