@@ -9,7 +9,7 @@ jobs:
     name: "black & flake8 & rpmlint"
     runs-on: ubuntu-latest
     container:
-      image: fedora:latest
+      image: fedora:40
 
     steps:
     - name: Base setup
