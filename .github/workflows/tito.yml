@@ -34,7 +34,7 @@ jobs:
           dnf config-manager --enable powertools
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # This step is required so Tito can properly read git history
       # See https://github.com/actions/checkout/issues/766
