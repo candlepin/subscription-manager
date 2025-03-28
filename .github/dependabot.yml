@@ -7,3 +7,99 @@ updates:
     target-branch: "main"
     commit-message:
       prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.30.6"
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.29"
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.29.45"
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.29.40"
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.29.33"
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.29.26"
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.28"
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.28.36"
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.28.29"
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.28.13"
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.26"
+    commit-message:
+      prefix: "ci"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "subscription-manager-1.24"
+    commit-message:
+      prefix: "ci"
