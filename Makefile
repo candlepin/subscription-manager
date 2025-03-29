@@ -33,7 +33,7 @@ else
 endif
 DNF_PLUGIN_PYTHON_SITELIB ?= $(PREFIX)/lib/$(PYTHON_VER)/site-packages
 # Note the underscore used instead of a hyphen
-PYTHON_INST_DIR = $(PYTHON_SITELIB)/subscription_manager
+PYTHON_INST_DIR ?= $(PYTHON_SITELIB)/subscription_manager
 
 # Where various bits of code live in the git repo
 SRC_DIR := src/subscription_manager
