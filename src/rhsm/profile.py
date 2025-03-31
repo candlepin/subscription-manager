@@ -202,13 +202,17 @@ class EnabledReposProfile:
     Collect information about enabled repositories
     """
 
-    def __init__(self, repo_file: str = REPOSITORY_PATH) -> None:
+    def __init__(self, repo_file: str = None) -> None:
         self._content = []
 
-        directory_path = os.path.dirname(repo_file)
-        file_name = os.path.basename(repo_file)
-
         for repo_file_cls, _ in get_repo_file_classes():
+            if repo_file is not None:
+                directory_path = os.path.dirname(repo_file)
+                file_name = os.path.basename(repo_file)
+            else:
+                directory_path = repo_file_cls.PATH
+                file_name = repo_file_cls.NAME
+
             repo = repo_file_cls(directory_path, file_name)
             repo.read()
             self._content.extend(repo.enabled_repos())
