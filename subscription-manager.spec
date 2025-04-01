@@ -14,8 +14,6 @@
 
 %global completion_dir %{_datadir}/bash-completion/completions
 
-%global run_dir /run
-
 %global rhsm_plugins_dir  /usr/share/rhsm-plugins
 
 %if 0%{?suse_version}
@@ -24,17 +22,7 @@
 %endif
 
 %global use_dnf (0%{?fedora} || (0%{?rhel}))
-%global create_libdnf_rpm (0%{?fedora} || 0%{?rhel} > 8)
-
-%global python_sitearch %python3_sitearch
-%global python_sitelib %python3_sitelib
-%global __python %__python3
-%if 0%{?suse_version}
-%global py_package_prefix python3
-%else
-%global py_package_prefix python%{python3_pkgversion}
-%endif
-%global rhsm_package_name %{py_package_prefix}-subscription-manager-rhsm
+%global create_libdnf_rpm (0%{?fedora} || 0%{?rhel})
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
@@ -131,36 +119,34 @@ Source2: subscription-manager-rpmlintrc
 # at the start of a line making meaningful indentation impossible.
 
 Requires:  iproute
-Requires:  %{py_package_prefix}-iniparse
-Requires:  %{py_package_prefix}-decorator
+Requires:  python3-iniparse
+Requires:  python3-decorator
 Requires:  virt-what
-Requires:  %{rhsm_package_name} = %{version}-%{release}
+Requires:  python3-subscription-manager-rhsm = %{version}-%{release}
 Requires: subscription-manager-rhsm-certificates
 %ifarch %{dmidecode_arches}
 Requires: dmidecode
 %endif
 
 %if 0%{?suse_version}
-Requires: %{py_package_prefix}-python-dateutil
-Requires: %{py_package_prefix}-dbus-python
+Requires: python3-python-dateutil
+Requires: python3-dbus-python
 Requires: logrotate
 Requires: cron
-Requires: %{py_package_prefix}-gobject2
+Requires: python3-gobject2
 Requires: libzypp
-Requires: %{py_package_prefix}-zypp-plugin
+Requires: python3-zypp-plugin
 %else
-Requires: %{py_package_prefix}-dateutil
-Requires: %{py_package_prefix}-dbus
+Requires: python3-dateutil
+Requires: python3-dbus
 Requires: python3-gobject-base
 %endif
 
-# rhel 8 has different naming for setuptools going forward
-# on newer rhels and Fedora setuptools is not needed on runtime at all
-%if (0%{?rhel} && 0%{?rhel} == 8)
-Requires:  platform-python-setuptools
-%endif
-
 %if %{use_dnf}
+BuildRequires: cmake
+BuildRequires: gcc
+BuildRequires: json-c-devel
+BuildRequires: libdnf-devel >= 0.22.5
 %if %{create_libdnf_rpm}
 Requires: python3-dnf
 Requires: python3-dnf-plugins-core
@@ -177,7 +163,7 @@ Requires: dnf-plugin-subscription-manager = %{version}-%{release}
 %endif
 
 %if %use_inotify
-Requires:  %{py_package_prefix}-inotify
+Requires:  python3-inotify
 %endif
 
 Requires(post): systemd
@@ -186,10 +172,10 @@ Requires(postun): systemd
 
 Requires: python3-cloud-what = %{version}-%{release}
 
-BuildRequires: %{py_package_prefix}-devel
+BuildRequires: python3-devel
 BuildRequires: openssl-devel
 BuildRequires: gcc
-BuildRequires: %{py_package_prefix}-setuptools
+BuildRequires: python3-setuptools
 BuildRequires: gettext
 BuildRequires: glib2-devel
 
@@ -198,10 +184,10 @@ BuildRequires: distribution-release
 BuildRequires: libzypp
 BuildRequires: systemd-rpm-macros
 BuildRequires: python3-rpm-macros
-BuildRequires: %{py_package_prefix}-python-dateutil
+BuildRequires: python3-python-dateutil
 %else
 BuildRequires: system-release
-BuildRequires: %{py_package_prefix}-dateutil
+BuildRequires: python3-dateutil
 %endif
 
 BuildRequires: systemd
@@ -216,7 +202,7 @@ Obsoletes: rhsm-gtk <= %{version}-%{release}
 Obsoletes: subscription-manager-plugin-container <= %{version}
 %endif
 
-Obsoletes: %{py_package_prefix}-syspurpose <= %{version}
+Obsoletes: python3-syspurpose <= %{version}
 
 %description
 The Subscription Manager package provides programs and libraries to allow users
@@ -240,10 +226,6 @@ from the server. Populates /etc/docker/certs.d appropriately.
 %if %{create_libdnf_rpm}
 %package -n libdnf-plugin-subscription-manager
 Summary: Subscription Manager plugin for libdnf
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: json-c-devel
-BuildRequires: libdnf-devel >= 0.22.5
 
 Obsoletes: dnf-plugin-subscription-manager < 1.29.0
 
@@ -258,13 +240,7 @@ e.g. microdnf.
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
 
-%if (0%{?fedora} || 0%{?rhel})
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: json-c-devel
-BuildRequires: libdnf-devel >= 0.22.5
 Requires: libdnf%{?_isa} >= 0.22.5
-%endif
 
 Requires: python3-dnf-plugins-core
 Requires: python3-librepo
@@ -276,18 +252,6 @@ from the Red Hat entitlement platform; contains subscription-manager and
 product-id plugins.
 %endif
 
-# This redefinition of debuginfo package has to be here, because we
-# need to solve the issue described in this BZ:
-# https://bugzilla.redhat.com/show_bug.cgi?id=1920568
-# We need to obsolete old dnf-sub-man-plugin-debuginfo RPM
-%package -n libdnf-plugin-subscription-manager-debuginfo
-Summary: Debug information for package libdnf-plugin-subscription-manager
-Obsoletes: dnf-plugin-subscription-manager-debuginfo < 1.29.0
-%description -n libdnf-plugin-subscription-manager-debuginfo
-This package provides debug information for package libdnf-plugin-subscription-manager.
-Debug information is useful when developing applications that use this
-package or when debugging this package.
-
 %endif
 
 
@@ -295,9 +259,9 @@ package or when debugging this package.
 %package -n subscription-manager-plugin-ostree
 Summary: A plugin for handling OSTree content.
 
-Requires: %{py_package_prefix}-gobject-base
+Requires: python3-gobject-base
 # plugin needs a slightly newer version of python-iniparse for 'tidy'
-Requires:  %{py_package_prefix}-iniparse >= 0.4
+Requires:  python3-iniparse >= 0.4
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description -n subscription-manager-plugin-ostree
@@ -307,7 +271,7 @@ the remote in the currently deployed .origin file.
 %endif
 
 
-%package -n %{rhsm_package_name}
+%package -n python3-subscription-manager-rhsm
 Summary: A Python library to communicate with a Red Hat Unified Entitlement Platform
 %if 0%{?suse_version}
 Group: Development/Libraries/Python
@@ -315,14 +279,14 @@ Group: Development/Libraries/Python
 
 
 %if 0%{?suse_version}
-Requires:  %{py_package_prefix}-python-dateutil
+Requires:  python3-python-dateutil
 %else
-Requires: %{py_package_prefix}-dateutil
+Requires: python3-dateutil
 %endif
-Requires: %{py_package_prefix}-iniparse
+Requires: python3-iniparse
 Requires: subscription-manager-rhsm-certificates
 # Required by Fedora packaging guidelines
-%{?python_provide:%python_provide %{py_package_prefix}-rhsm}
+%{?python_provide:%python_provide python3-rhsm}
 Requires: python3-cloud-what = %{version}-%{release}
 Requires: python3-rpm
 Provides: python3-rhsm = %{version}-%{release}
@@ -330,7 +294,7 @@ Obsoletes: python3-rhsm <= 1.20.3-1
 Provides: python-rhsm = %{version}-%{release}
 Obsoletes: python-rhsm <= 1.20.3-1
 
-%description -n %{rhsm_package_name}
+%description -n python3-subscription-manager-rhsm
 A small library for communicating with the REST interface of a Red Hat Unified
 Entitlement Platform. This interface is used for the management of system
 entitlements, certificates, and access to content.
@@ -357,27 +321,23 @@ cloud metadata and signatures.
 
 %build
 make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
-    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python}" \
+    LDFLAGS="%{__global_ldflags}" OS_DIST="%{dist}" PYTHON="%{__python3}" \
     %{?subpackages} %{exclude_packages}
 
 %if %{use_dnf}
 pushd src/plugins/libdnf
 %cmake -DCMAKE_BUILD_TYPE="Release"
-%if (0%{?rhel} && 0%{?rhel} <= 8)
-%make_build
-%else
 %cmake_build
-%endif
 popd
 %endif
 
 %install
 make -f Makefile install VERSION=%{version}-%{release} \
-    PYTHON=%{__python} PREFIX=%{_prefix} \
-    DESTDIR=%{buildroot} PYTHON_SITELIB=%{python_sitearch} \
+    PYTHON=%{__python3} PREFIX=%{_prefix} \
+    DESTDIR=%{buildroot} PYTHON_SITELIB=%{python3_sitearch} \
     OS_VERSION=%{?fedora}%{?rhel}%{?suse_version} OS_DIST=%{dist} \
     COMPLETION_DIR=%{completion_dir} \
-    RUN_DIR=%{run_dir} \
+    RUN_DIR=%{_rundir} \
     SBIN_DIR=%{_sbindir} \
     %{?install_ostree} %{?install_container} \
     %{?install_dnf_plugins} \
@@ -388,11 +348,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
 %if %{use_dnf}
 pushd src/plugins/libdnf
 mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
-%if (0%{?rhel} && 0%{?rhel} <= 8)
-%make_install
-%else
 %cmake_install
-%endif
 popd
 %endif
 
@@ -453,19 +409,19 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %endif
 
-%dir %{python_sitearch}/rhsmlib/candlepin
-%dir %{python_sitearch}/rhsmlib/dbus
-%dir %{python_sitearch}/rhsmlib/dbus/facts
-%dir %{python_sitearch}/rhsmlib/dbus/objects
-%dir %{python_sitearch}/rhsmlib/facts
-%dir %{python_sitearch}/rhsmlib/services
-%dir %{python_sitearch}/subscription_manager-%{version}-*.egg-info
-%dir %{python_sitearch}/subscription_manager/api
-%dir %{python_sitearch}/subscription_manager/branding
-%dir %{python_sitearch}/subscription_manager/cli_command
-%dir %{python_sitearch}/subscription_manager/model
-%dir %{python_sitearch}/subscription_manager/plugin
-%dir %{python_sitearch}/subscription_manager/scripts
+%dir %{python3_sitearch}/rhsmlib/candlepin
+%dir %{python3_sitearch}/rhsmlib/dbus
+%dir %{python3_sitearch}/rhsmlib/dbus/facts
+%dir %{python3_sitearch}/rhsmlib/dbus/objects
+%dir %{python3_sitearch}/rhsmlib/facts
+%dir %{python3_sitearch}/rhsmlib/services
+%dir %{python3_sitearch}/subscription_manager-%{version}-*.egg-info
+%dir %{python3_sitearch}/subscription_manager/api
+%dir %{python3_sitearch}/subscription_manager/branding
+%dir %{python3_sitearch}/subscription_manager/cli_command
+%dir %{python3_sitearch}/subscription_manager/model
+%dir %{python3_sitearch}/subscription_manager/plugin
+%dir %{python3_sitearch}/subscription_manager/scripts
 %dir %{_var}/spool/rhsm
 
 %attr(755,root,root) %{_sbindir}/subscription-manager
@@ -501,7 +457,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(755,root,root) %dir %{_var}/log/rhsm
 %attr(755,root,root) %dir %{_var}/spool/rhsm/debug
-%ghost %attr(755,root,root) %dir %{run_dir}/rhsm
+%ghost %attr(755,root,root) %dir %{_rundir}/rhsm
 %attr(750,root,root) %dir %{_var}/lib/rhsm
 %attr(750,root,root) %dir %{_var}/lib/rhsm/facts
 %attr(750,root,root) %dir %{_var}/lib/rhsm/packages
@@ -515,24 +471,24 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %{_sysusersdir}/rhsm.conf
 
-%dir %{python_sitearch}/subscription_manager
+%dir %{python3_sitearch}/subscription_manager
 
 # code, python modules and packages
-%{python_sitearch}/subscription_manager-*.egg-info/*
-%{python_sitearch}/subscription_manager/*.py*
-%{python_sitearch}/subscription_manager/api/*.py*
-%{python_sitearch}/subscription_manager/branding/*.py*
-%{python_sitearch}/subscription_manager/cli_command/*.py*
-%{python_sitearch}/subscription_manager/model/*.py*
-%{python_sitearch}/subscription_manager/plugin/__init__.py*
-%{python_sitearch}/subscription_manager/scripts/*.py*
-%{python_sitearch}/subscription_manager/__pycache__
-%{python_sitearch}/subscription_manager/api/__pycache__
-%{python_sitearch}/subscription_manager/branding/__pycache__
-%{python_sitearch}/subscription_manager/cli_command/__pycache__
-%{python_sitearch}/subscription_manager/model/__pycache__
-%{python_sitearch}/subscription_manager/plugin/__pycache__
-%{python_sitearch}/subscription_manager/scripts/__pycache__
+%{python3_sitearch}/subscription_manager-*.egg-info/*
+%{python3_sitearch}/subscription_manager/*.py*
+%{python3_sitearch}/subscription_manager/api/*.py*
+%{python3_sitearch}/subscription_manager/branding/*.py*
+%{python3_sitearch}/subscription_manager/cli_command/*.py*
+%{python3_sitearch}/subscription_manager/model/*.py*
+%{python3_sitearch}/subscription_manager/plugin/__init__.py*
+%{python3_sitearch}/subscription_manager/scripts/*.py*
+%{python3_sitearch}/subscription_manager/__pycache__
+%{python3_sitearch}/subscription_manager/api/__pycache__
+%{python3_sitearch}/subscription_manager/branding/__pycache__
+%{python3_sitearch}/subscription_manager/cli_command/__pycache__
+%{python3_sitearch}/subscription_manager/model/__pycache__
+%{python3_sitearch}/subscription_manager/plugin/__pycache__
+%{python3_sitearch}/subscription_manager/scripts/__pycache__
 
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
@@ -540,30 +496,30 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 # When libdnf rpm is created, then dnf plugin is part of subscription-manager rpm
 %if %{create_libdnf_rpm}
-%{python_sitelib}/dnf-plugins/*
+%{python3_sitelib}/dnf-plugins/*
 %endif
 
 # rhsmlib
-%dir %{python_sitearch}/rhsmlib
-%{python_sitearch}/rhsmlib/*.py*
-%{python_sitearch}/rhsmlib/candlepin/*.py*
-%{python_sitearch}/rhsmlib/facts/*.py*
-%{python_sitearch}/rhsmlib/services/*.py*
-%{python_sitearch}/rhsmlib/dbus/*.py*
-%{python_sitearch}/rhsmlib/dbus/facts/*.py*
-%{python_sitearch}/rhsmlib/dbus/objects/*.py*
-%{python_sitearch}/rhsmlib/__pycache__
-%{python_sitearch}/rhsmlib/candlepin/__pycache__
-%{python_sitearch}/rhsmlib/dbus/__pycache__
-%{python_sitearch}/rhsmlib/dbus/facts/__pycache__
-%{python_sitearch}/rhsmlib/dbus/objects/__pycache__
-%{python_sitearch}/rhsmlib/facts/__pycache__
-%{python_sitearch}/rhsmlib/services/__pycache__
+%dir %{python3_sitearch}/rhsmlib
+%{python3_sitearch}/rhsmlib/*.py*
+%{python3_sitearch}/rhsmlib/candlepin/*.py*
+%{python3_sitearch}/rhsmlib/facts/*.py*
+%{python3_sitearch}/rhsmlib/services/*.py*
+%{python3_sitearch}/rhsmlib/dbus/*.py*
+%{python3_sitearch}/rhsmlib/dbus/facts/*.py*
+%{python3_sitearch}/rhsmlib/dbus/objects/*.py*
+%{python3_sitearch}/rhsmlib/__pycache__
+%{python3_sitearch}/rhsmlib/candlepin/__pycache__
+%{python3_sitearch}/rhsmlib/dbus/__pycache__
+%{python3_sitearch}/rhsmlib/dbus/facts/__pycache__
+%{python3_sitearch}/rhsmlib/dbus/objects/__pycache__
+%{python3_sitearch}/rhsmlib/facts/__pycache__
+%{python3_sitearch}/rhsmlib/services/__pycache__
 
 # syspurpose
-%dir %{python_sitearch}/syspurpose
-%{python_sitearch}/syspurpose/*.py*
-%{python_sitearch}/syspurpose/__pycache__
+%dir %{python3_sitearch}/syspurpose
+%{python3_sitearch}/syspurpose/*.py*
+%{python3_sitearch}/syspurpose/__pycache__
 
 %{_datadir}/polkit-1/actions/com.redhat.*.policy
 %{_datadir}/dbus-1/system-services/com.redhat.*.service
@@ -575,15 +531,15 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
 
 # Incude rt CLI tool
-%dir %{python_sitearch}/rct
-%{python_sitearch}/rct/*.py*
-%{python_sitearch}/rct/__pycache__
+%dir %{python3_sitearch}/rct
+%{python3_sitearch}/rct/*.py*
+%{python3_sitearch}/rct/__pycache__
 %attr(755,root,root) %{_bindir}/rct
 
 # Include consumer debug CLI tool
-%dir %{python_sitearch}/rhsm_debug
-%{python_sitearch}/rhsm_debug/*.py*
-%{python_sitearch}/rhsm_debug/__pycache__
+%dir %{python3_sitearch}/rhsm_debug
+%{python3_sitearch}/rhsm_debug/*.py*
+%{python3_sitearch}/rhsm_debug/__pycache__
 %attr(755,root,root) %{_bindir}/rhsm-debug
 
 %doc
@@ -600,8 +556,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %{_sysconfdir}/rhsm/pluginconf.d/container_content.ContainerContentPlugin.conf
 %{rhsm_plugins_dir}/container_content.py*
 %{rhsm_plugins_dir}/__pycache__/*container*
-%{python_sitearch}/subscription_manager/plugin/container/__pycache__
-%{python_sitearch}/subscription_manager/plugin/container/*.py*
+%{python3_sitearch}/subscription_manager/plugin/container/__pycache__
+%{python3_sitearch}/subscription_manager/plugin/container/*.py*
 
 # Copying Red Hat CA cert into each directory:
 %attr(755,root,root) %dir %{_sysconfdir}/docker/certs.d/cdn.redhat.com
@@ -613,8 +569,8 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %defattr(-,root,root,-)
 %{_sysconfdir}/rhsm/pluginconf.d/ostree_content.OstreeContentPlugin.conf
 %{rhsm_plugins_dir}/ostree_content.py*
-%{python_sitearch}/subscription_manager/plugin/ostree/*.py*
-%{python_sitearch}/subscription_manager/plugin/ostree/__pycache__
+%{python3_sitearch}/subscription_manager/plugin/ostree/*.py*
+%{python3_sitearch}/subscription_manager/plugin/ostree/__pycache__
 %{rhsm_plugins_dir}/__pycache__/*ostree*
 %endif
 
@@ -629,26 +585,26 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # DNF RPM
 %files -n dnf-plugin-subscription-manager
 %defattr(-,root,root,-)
-%{python_sitelib}/dnf-plugins/*
+%{python3_sitelib}/dnf-plugins/*
 %{_libdir}/libdnf/plugins/product-id.so
 %endif
 %endif
 
 
-%files -n %{rhsm_package_name}
+%files -n python3-subscription-manager-rhsm
 %defattr(-,root,root,-)
-%dir %{python_sitearch}/rhsm
-%{python_sitearch}/rhsm/*
+%dir %{python3_sitearch}/rhsm
+%{python3_sitearch}/rhsm/*
 
 %files -n python3-cloud-what
 %defattr(-,root,root,-)
 %attr(750,root,root) %dir %{_var}/cache/cloud-what
-%dir %{python_sitearch}/cloud_what
-%dir %{python_sitearch}/cloud_what/providers
-%{python_sitearch}/cloud_what/*.py*
-%{python_sitearch}/cloud_what/providers/*.py*
-%{python_sitearch}/cloud_what/__pycache__
-%{python_sitearch}/cloud_what/providers/__pycache__
+%dir %{python3_sitearch}/cloud_what
+%dir %{python3_sitearch}/cloud_what/providers
+%{python3_sitearch}/cloud_what/*.py*
+%{python3_sitearch}/cloud_what/providers/*.py*
+%{python3_sitearch}/cloud_what/__pycache__
+%{python3_sitearch}/cloud_what/providers/__pycache__
 
 %pre
 
@@ -669,15 +625,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
     %systemd_post rhsmcertd.service
 %endif
 
-# When subscription-manager is upgraded on RHEL 8 (from RHEL 8.2 to RHEL 8.3), then kill
-# instance of rhsmd, because it is not necessary anymore and it can cause issues.
-# See: https://bugzilla.redhat.com/show_bug.cgi?id=1840364
-%if ( 0%{?rhel} || 0%{?fedora} )
-if [ "$1" = "2" ] ; then
-    killall rhsmd 2> /dev/null || true
-fi
-%endif
-
 # Make all consumer certificates and keys readable by group rhsm
 find /etc/pki/consumer -mindepth 1 -maxdepth 1 -name '*.pem' | xargs --no-run-if-empty chgrp rhsm
 find /etc/pki/consumer -mindepth 1 -maxdepth 1 -name '*.pem' | xargs --no-run-if-empty chmod g+r
@@ -692,7 +639,7 @@ fi
 
 %if %{use_container_plugin}
 %post -n subscription-manager-plugin-container
-%{__python} %{rhsm_plugins_dir}/container_content.py || :
+%{__python3} %{rhsm_plugins_dir}/container_content.py || :
 %endif
 
 %preun
@@ -723,7 +670,7 @@ fi
 %systemd_posttrans_with_restart rhsm.service
 # Remove old *.egg-info empty directories not removed be previous versions of RPMs
 # due to this BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1927245
-rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-empty
+rmdir %{python3_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-empty
 # Remove old cache files
 # The -f flag ensures that exit code 0 will be returned even if the file does not exist.
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
