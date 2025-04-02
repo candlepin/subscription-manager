@@ -6,8 +6,13 @@
 # Plugin for container (docker, podman) is not supported on RHEL
 %if 0%{?rhel}
 %global use_container_plugin 0
+%global use_dnf 1
+%elif 0%{?fedora}
+%global use_container_plugin 1
+%global use_dnf 0
 %else
 %global use_container_plugin 1
+%global use_dnf 0
 %endif
 
 %global dmidecode_arches %{ix86} x86_64 aarch64
@@ -23,8 +28,7 @@
 %global use_inotify 0
 %endif
 
-%global use_dnf (0%{?fedora} || (0%{?rhel}))
-%global create_libdnf_rpm (0%{?fedora} || 0%{?rhel} > 8)
+%global create_libdnf_rpm (0%{?rhel} > 8)
 
 %global python_sitearch %python3_sitearch
 %global python_sitelib %python3_sitelib
@@ -96,7 +100,7 @@
 
 Name: subscription-manager
 Version: 1.30.6
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
 Group:   Productivity/Networking/System
@@ -161,6 +165,7 @@ Requires:  platform-python-setuptools
 %endif
 
 %if %{use_dnf}
+
 %if %{create_libdnf_rpm}
 Requires: python3-dnf
 Requires: python3-dnf-plugins-core
@@ -174,6 +179,12 @@ Obsoletes: dnf-plugin-subscription-manager < 1.29.0
 %else
 Requires: dnf-plugin-subscription-manager = %{version}-%{release}
 %endif
+
+%else
+
+Obsoletes: dnf-plugin-subscription-manager < 1.30.5-2
+Obsoletes: libdnf-plugin-subscription-manager < 1.30.5-2
+
 %endif
 
 %if %use_inotify
@@ -258,7 +269,7 @@ e.g. microdnf.
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
 
-%if (0%{?fedora} || 0%{?rhel})
+%if 0%{?rhel}
 BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
