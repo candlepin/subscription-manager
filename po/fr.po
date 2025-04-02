@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2025-02-19 12:38+0000\n"
+"PO-Revision-Date: 2025-03-31 11:53+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/fr/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -306,19 +306,14 @@ msgstr ""
 "subscription-manager pour l'enregistrer.\n"
 
 #: src/plugins/dnf/subscription_manager.py:63
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "This system is not registered with an entitlement server. You can use "
-#| "subscription-manager to register.\n"
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "\"rhc\" or \"subscription-manager\" to register.\n"
 msgstr ""
 "\n"
-"Le système n'est pas enregistré auprès un serveur de droits. Utilisez "
-"subscription-manager pour l'enregistrer.\n"
+"Le système n'est pas enregistré auprès un serveur de droits. Vous pouvez "
+"utiliser \"rhc\" ou \"subscription-manager\" pour l'enregistrer.\n"
 
 #: src/plugins/dnf/subscription_manager.py:70
 msgid ""
@@ -338,6 +333,9 @@ msgid ""
 "This system has release set to {release_version} and it receives updates "
 "only for this release.\n"
 msgstr ""
+"\n"
+"Ce système a pour version {release_version} et reçoit des mises à jour "
+"uniquement pour cette version.\n"
 
 #: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
@@ -1338,18 +1336,23 @@ msgstr "Erreur : ce système n'est pas enregistré"
 #: src/rhsmlib/services/register.py:68
 msgid "Environment IDs and environment names are mutually exclusive"
 msgstr ""
+"Les ID d'environnement et les noms d'environnement ne peuvent pas être "
+"utilisés en même temps"
 
 #: src/rhsmlib/services/register.py:167
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
 msgstr ""
+"L'environnement '{env_names}' n'a pas le type requis '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:175
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
 msgstr ""
+"Les environnements '{env_names}' n'ont pas le type requis "
+"'{environment_type}'"
 
 #: src/rhsmlib/services/register.py:238
 msgid "This system is already registered. Add force to options to override."
@@ -3718,10 +3721,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/status.py:123
-#, fuzzy
-#| msgid "Register"
 msgid "Registered"
-msgstr "Inscrire"
+msgstr "Enregistré"
 
 #: src/subscription_manager/cli_command/status.py:125
 #, python-brace-format
@@ -3739,10 +3740,8 @@ msgstr "État de la finalité du système : {status}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/status.py:178
-#, fuzzy
-#| msgid "Not registered"
 msgid "Overall Status: Not registered\n"
-msgstr "Non inscrit"
+msgstr "État général : Non enregistré\n"
 
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
@@ -4146,13 +4145,11 @@ msgid "Error uploading package profile: %s\n"
 msgstr "Erreur de téléchargement du profil du paquet : %s\n"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:343
-#, fuzzy
-#| msgid "This system is already registered. Add force to options to override."
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
 msgstr ""
-"Ce système est déjà enregistré. Ajoutez force aux options pour passer outre."
+"Ce système est déjà enregistré, requête d'enregistrement automatique ignorée."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:346
@@ -4163,10 +4160,8 @@ msgstr "Système d'enregistrement"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:357
-#, fuzzy
-#| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
-msgstr "Mise à jour des certificats de droits d'accès et des référentiels"
+msgstr "Mise à jour des certificats de droits d'accès et des dépôts."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:430
