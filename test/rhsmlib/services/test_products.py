@@ -16,15 +16,11 @@ import datetime
 from test.rhsmlib.base import InjectionMockingTest
 
 from subscription_manager import injection as inj
-from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.validity import ValidProductDateRangeCalculator
 
 from test import stubs
 
 from rhsm import connection
-
-from rhsmlib.services import products
-
 
 START_DATE = datetime.datetime.now() - datetime.timedelta(days=100)
 NOW_DATE = datetime.datetime.now()
@@ -164,16 +160,13 @@ CONTENT_JSON = [
 class TestProductService(InjectionMockingTest):
     def setUp(self):
         super(TestProductService, self).setUp()
-        self.mock_cert_sorter = mock.Mock(spec=CertSorter, name="CertSorter")
         self.mock_cp = mock.Mock(spec=connection.UEPConnection, name="UEPConnection")
         self.mock_calculator = mock.Mock(
             spec=ValidProductDateRangeCalculator, name="ValidProductDateRangeCalculator"
         )
 
     def injection_definitions(self, *args, **kwargs):
-        if args[0] == inj.CERT_SORTER:
-            return self.mock_cert_sorter
-        elif args[0] == inj.PRODUCT_DATE_RANGE_CALCULATOR:
+        if args[0] == inj.PRODUCT_DATE_RANGE_CALCULATOR:
             return self.mock_calculator
         else:
             return None
@@ -201,102 +194,3 @@ class TestProductService(InjectionMockingTest):
         cert.delete = mock.Mock()
         cert.write = mock.Mock()
         return cert
-
-    def test_list_no_installed_products(self):
-        self.mock_cp.getConsumer.return_value = NO_CONTENT_JSON
-        self.mock_cert_sorter.installed_products = []
-
-        result = products.InstalledProducts(self.mock_cp).list()
-        self.assertEqual([], result)
-
-    def test_list_installed_products_without_filter(self):
-        self.mock_cp.getConsumer.return_value = CONTENT_JSON
-        self.mock_cert_sorter.reasons = mock.Mock()
-        self.mock_cert_sorter.reasons.get_product_reasons = mock.Mock(return_value=[])
-        self.mock_cert_sorter.get_status = mock.Mock(return_value="subscribed")
-        # Mock methods in calculator
-        self.mock_calculator.calculate = mock.Mock()
-
-        self.mock_calculator.calculate.return_value.begin = mock.Mock()
-        self.mock_calculator.calculate.return_value.begin.return_value.astimezone = mock.Mock()
-        self.mock_calculator.calculate.return_value.begin.return_value.astimezone.return_value.strftime = (
-            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=START_DATE))
-        )
-        self.mock_calculator.calculate.return_value.end = mock.Mock()
-        self.mock_calculator.calculate.return_value.end.return_value.astimezone = mock.Mock()
-        self.mock_calculator.calculate.return_value.end.return_value.astimezone.return_value.strftime = (
-            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=END_DATE))
-        )
-
-        expected_result = [
-            (
-                "Red Hat Enterprise Linux Server",
-                "69",
-                "7.4",
-                "x86_64",
-                "subscribed",
-                [],
-                "{d.day}.{d.month}.{d.year}".format(d=START_DATE),
-                "{d.day}.{d.month}.{d.year}".format(d=END_DATE),
-            ),
-            (
-                "Red Hat Enterprise Linux Server - Extended Update Support",
-                "70",
-                "7.2",
-                "x86_64",
-                "subscribed",
-                [],
-                "{d.day}.{d.month}.{d.year}".format(d=START_DATE),
-                "{d.day}.{d.month}.{d.year}".format(d=END_DATE),
-            ),
-        ]
-
-        self.mock_cert_sorter.installed_products = {
-            "69": self._create_rhel74_cert(),
-            "70": self._create_rhel72_ues_cert(),
-        }
-
-        result = products.InstalledProducts(self.mock_cp).list()
-
-        self.assertEqual(expected_result, result)
-
-    def test_list_installed_products_with_filter(self):
-        self.mock_cp.getConsumer.return_value = CONTENT_JSON
-        self.mock_cert_sorter.reasons = mock.Mock()
-        self.mock_cert_sorter.reasons.get_product_reasons = mock.Mock(return_value=[])
-        self.mock_cert_sorter.get_status = mock.Mock(return_value="subscribed")
-        # Mock methods in calculator
-        self.mock_calculator.calculate = mock.Mock()
-
-        self.mock_calculator.calculate.return_value.begin = mock.Mock()
-        self.mock_calculator.calculate.return_value.begin.return_value.astimezone = mock.Mock()
-        self.mock_calculator.calculate.return_value.begin.return_value.astimezone.return_value.strftime = (
-            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=START_DATE))
-        )
-        self.mock_calculator.calculate.return_value.end = mock.Mock()
-        self.mock_calculator.calculate.return_value.end.return_value.astimezone = mock.Mock()
-        self.mock_calculator.calculate.return_value.end.return_value.astimezone.return_value.strftime = (
-            mock.Mock(return_value="{d.day}.{d.month}.{d.year}".format(d=END_DATE))
-        )
-
-        expected_result = [
-            (
-                "Red Hat Enterprise Linux Server - Extended Update Support",
-                "70",
-                "7.2",
-                "x86_64",
-                "subscribed",
-                [],
-                "{d.day}.{d.month}.{d.year}".format(d=START_DATE),
-                "{d.day}.{d.month}.{d.year}".format(d=END_DATE),
-            ),
-        ]
-
-        self.mock_cert_sorter.installed_products = {
-            "69": self._create_rhel74_cert(),
-            "70": self._create_rhel72_ues_cert(),
-        }
-
-        result = products.InstalledProducts(self.mock_cp).list("*Extended*")
-
-        self.assertEqual(expected_result, result)

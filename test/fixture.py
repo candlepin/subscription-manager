@@ -224,7 +224,6 @@ class SubManFixture(unittest.TestCase):
         self.stub_cp_provider.content_connection.get_versions = self._get_release_versions
 
         inj.provide(inj.CP_PROVIDER, self.stub_cp_provider)
-        inj.provide(inj.CERT_SORTER, stubs.StubCertSorter())
 
         # setup and mock the plugin_manager
         plugin_manager_mock = MagicMock(name="FixturePluginManagerMock")
@@ -242,7 +241,6 @@ class SubManFixture(unittest.TestCase):
         content_access_cache_mock = MagicMock(name="ContentAccessCacheMock")
         inj.provide(inj.CONTENT_ACCESS_CACHE, content_access_cache_mock)
 
-        self.dbus_patcher = patch("subscription_manager.cli_command.cli.CliCommand._request_validity_check")
         self.dbus_patcher.start()
 
         # No tests should be trying to connect to any configure or test server

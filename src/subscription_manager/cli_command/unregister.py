@@ -63,8 +63,6 @@ class UnRegisterCommand(CliCommand):
         except Exception:
             pass
 
-        self._request_validity_check()
-
         # We have new credentials, restart virt-who
         restart_virt_who()
 
