@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.33.2
+Version: 1.29.33.3
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -736,6 +736,15 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Tue Apr 08 2025 Jiri Hnidek <jhnidek@redhat.com> 1.29.33.3-1
+- fix: Handle improperly closed connections (mhorky@redhat.com)
+- ci: use Fedora 40 for stylish test (ptoscano@redhat.com)
+- ci: bump actions/upload-artifact from 3 to 4
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- ci: bump actions/checkout from 3 to 4
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- fix(test): Properly stop method mock (mhorky@redhat.com)
+
 * Mon Sep 11 2023 Pino Toscano <ptoscano@redhat.com> 1.29.33.2-1
 - test: add simple test for 2221711 (ptoscano@redhat.com)
 - 2221711: do not collect unentitled products in SCA mode (ptoscano@redhat.com)
