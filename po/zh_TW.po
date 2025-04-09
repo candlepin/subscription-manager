@@ -3,41 +3,40 @@
 # Chris Snyder <csnyder@redhat.com>, 2019. #zanata
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # John Sefler <jsefler@redhat.com>, 2021.
+# hsu zangmen <chzang55@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2021-08-10 19:35+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2025-04-09 03:53+0000\n"
+"Last-Translator: hsu zangmen <chzang55@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
-"projects/subscription-manager/subscription-manager-main/zh_TW/>\n"
+"projects/subscription-manager/subscription-manager-1-29/zh_TW/>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
-#, fuzzy
-#| msgid "Usage:  "
 msgid "usage: "
-msgstr "用法：  "
+msgstr "用法： "
 
 #: /usr/lib64/python3.9/argparse.py:861
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() 未定義"
 
 #: /usr/lib64/python3.9/argparse.py:1204
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "未知解析器 %(parser_name)r (選擇： %(choices)s)"
 
 #: /usr/lib64/python3.9/argparse.py:1264
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "模式為 %r 的參數 \"-\""
 
 #: /usr/lib64/python3.9/argparse.py:1273
 #, python-format
@@ -47,11 +46,11 @@ msgstr ""
 #: /usr/lib64/python3.9/argparse.py:1482
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "無法合併動作 - 兩個群組名稱為 %r"
 
 #: /usr/lib64/python3.9/argparse.py:1520
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "“required” 是無效的位置參數"
 
 #: /usr/lib64/python3.9/argparse.py:1542
 #, python-format
@@ -82,17 +81,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1728
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "positional arguments"
-msgstr "%s 選項需要一個引數"
+msgstr "選用引數"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1729
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "optional arguments"
-msgstr "%s 選項需要一個引數"
+msgstr "選用引數"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1744
@@ -130,10 +125,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2110
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "指定了錯誤的引數數量。\n"
+msgstr "其中一個參數 %s 是必需的"
 
 #: /usr/lib64/python3.9/argparse.py:2153
 msgid "expected one argument"
@@ -172,10 +166,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2495
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "選項 %s：無效的 %s 值：%r"
+msgstr "無效的 %(type)s 值：%(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2506
@@ -361,8 +354,6 @@ msgid "Unable to read consumer identity"
 msgstr "無法讀取消耗者身份"
 
 #: src/plugins/dnf/subscription_manager.py:170
-#, fuzzy
-#| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
 msgstr "訂閱管理程式正以容器模式運作。"
 
@@ -769,7 +760,7 @@ msgstr "使用方法"
 
 #: src/rct/printing.py:75
 msgid "Add-ons"
-msgstr ""
+msgstr "外掛插件"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:78 src/subscription_manager/managerlib.py:431
