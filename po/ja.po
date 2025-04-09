@@ -8,13 +8,14 @@
 # Transtats <suanand@redhat.com>, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2023.
 # 김인수 <simmon@nplob.com>, 2024.
+# Matyas Horky <mhorky@redhat.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2024-02-22 10:36+0000\n"
-"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"PO-Revision-Date: 2025-04-02 12:53+0000\n"
+"Last-Translator: Matyas Horky <mhorky@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ja/>\n"
 "Language: ja\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -6353,10 +6354,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:3763
-#, fuzzy
-#| msgid "Register"
 msgid "Registered"
-msgstr "登録"
+msgstr "登録済み"
 
 #: src/subscription_manager/managercli.py:3765
 #, python-brace-format
@@ -6374,10 +6373,8 @@ msgstr "システムの目的の状態: {status}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/managercli.py:3818
-#, fuzzy
-#| msgid "Not registered"
 msgid "Overall Status: Not registered\n"
-msgstr "登録されていません"
+msgstr "全体のステータス: 未登録\n"
 
 #: src/subscription_manager/plugin/container/__init__.py:234
 #: src/subscription_manager/plugin/ostree/action_invoker.py:147
