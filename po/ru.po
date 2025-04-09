@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 18:24+0100\n"
+"POT-Creation-Date: 2025-03-21 14:41+0100\n"
 "PO-Revision-Date: 2021-08-10 19:35+0000\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/"
@@ -276,7 +276,7 @@ msgstr "Неверный аргумент: %s\n"
 msgid "Installed products updated."
 msgstr "Установленные продукты обновлены."
 
-#: src/plugins/dnf/subscription_manager.py:44
+#: src/plugins/dnf/subscription_manager.py:46
 #, python-format
 msgid ""
 "\n"
@@ -297,7 +297,7 @@ msgstr ""
 "требуется активная подписка. Если у вас нет других активных подписок, вы "
 "можете продлить просроченную.  "
 
-#: src/plugins/dnf/subscription_manager.py:55
+#: src/plugins/dnf/subscription_manager.py:57
 #, fuzzy
 #| msgid ""
 #| "This system is not registered to Red Hat Subscription Management. You can "
@@ -310,7 +310,7 @@ msgstr ""
 "Система не зарегистрирована в службе управления подписками Red Hat. "
 "Используйте subscription-manager для регистрации."
 
-#: src/plugins/dnf/subscription_manager.py:61
+#: src/plugins/dnf/subscription_manager.py:63
 #, fuzzy
 #| msgid ""
 #| "This system is not registered to Red Hat Subscription Management. You can "
@@ -323,7 +323,7 @@ msgstr ""
 "Система не зарегистрирована в службе управления подписками Red Hat. "
 "Используйте subscription-manager для регистрации."
 
-#: src/plugins/dnf/subscription_manager.py:68
+#: src/plugins/dnf/subscription_manager.py:70
 #, fuzzy
 #| msgid ""
 #| "This system is registered to Red Hat Subscription Management, but is not "
@@ -338,7 +338,7 @@ msgstr ""
 "получает обновления. Используйте subscription-manager для назначения "
 "подписок."
 
-#: src/plugins/dnf/subscription_manager.py:75
+#: src/plugins/dnf/subscription_manager.py:77
 #, python-brace-format
 msgid ""
 "\n"
@@ -346,12 +346,12 @@ msgid ""
 "only for this release.\n"
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:110
+#: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 "Не пользователь root, репозитории службы управления подписками не обновлены"
 
-#: src/plugins/dnf/subscription_manager.py:138
+#: src/plugins/dnf/subscription_manager.py:140
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
@@ -363,15 +363,15 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: src/plugins/dnf/subscription_manager.py:155
+#: src/plugins/dnf/subscription_manager.py:158
 msgid "Updating Subscription Management repositories."
 msgstr "Обновление репозиториев службы управления подписками."
 
-#: src/plugins/dnf/subscription_manager.py:164
+#: src/plugins/dnf/subscription_manager.py:167
 msgid "Unable to read consumer identity"
 msgstr "Невозможно прочитать идентификатор клиента"
 
-#: src/plugins/dnf/subscription_manager.py:167
+#: src/plugins/dnf/subscription_manager.py:170
 #, fuzzy
 #| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
@@ -964,196 +964,196 @@ msgstr ""
 msgid "Checking connection status"
 msgstr "connectionStatusLabel"
 
-#: src/rhsm/connection.py:1529
+#: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1602
+#: src/rhsm/connection.py:1607
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "Регистрация"
 
-#: src/rhsm/connection.py:1632 src/rhsm/connection.py:1644
+#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1667
+#: src/rhsm/connection.py:1672
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
 msgstr "Вывод версии"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1742
+#: src/rhsm/connection.py:1747
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
 msgstr "Регистрация подписки"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1747 src/rhsm/connection.py:1751
+#: src/rhsm/connection.py:1752 src/rhsm/connection.py:1756
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
 msgstr "Печать информации о манифесте"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1755
+#: src/rhsm/connection.py:1760
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
 msgstr "Удаление"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1785 src/rhsm/connection.py:1796
+#: src/rhsm/connection.py:1790 src/rhsm/connection.py:1801
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "Вывод информации о сертификате"
 
-#: src/rhsm/connection.py:1804
+#: src/rhsm/connection.py:1809
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1813
+#: src/rhsm/connection.py:1818
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1822
+#: src/rhsm/connection.py:1827
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1829
+#: src/rhsm/connection.py:1834
 msgid "Fetching available system purpose settings"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1836 src/rhsm/connection.py:1844
+#: src/rhsm/connection.py:1841 src/rhsm/connection.py:1849
 #, fuzzy
 #| msgid "specify organization"
 msgid "Fetching organizations"
 msgstr "выберите организацию"
 
-#: src/rhsm/connection.py:1857
+#: src/rhsm/connection.py:1862
 #, fuzzy
 #| msgid "Unregistering"
 msgid "Unregistering system"
 msgstr "Отмена регистрации"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1881
+#: src/rhsm/connection.py:1886
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "Сертификат удостоверения"
 
-#: src/rhsm/connection.py:1890
+#: src/rhsm/connection.py:1895
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1906
+#: src/rhsm/connection.py:1911
 msgid "Fetching content for a certificate"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1919 src/rhsm/connection.py:1936
+#: src/rhsm/connection.py:1924 src/rhsm/connection.py:1941
 #, fuzzy
 #| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
 msgstr "Добавление подписок"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1945 src/rhsm/connection.py:1955
-#: src/rhsm/connection.py:1964
+#: src/rhsm/connection.py:1950 src/rhsm/connection.py:1960
+#: src/rhsm/connection.py:1969
 #, fuzzy
 #| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
 msgstr "Не удалось подписать: %s"
 
-#: src/rhsm/connection.py:2013
+#: src/rhsm/connection.py:2018
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2024
+#: src/rhsm/connection.py:2029
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
 msgstr "Вывод версии"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2038
+#: src/rhsm/connection.py:2043
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
 msgstr "список выпусков"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2053
+#: src/rhsm/connection.py:2058
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
 msgstr "Получение списка окружений"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2062
+#: src/rhsm/connection.py:2067
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
 msgstr "Текущий уровень обслуживания:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2073
+#: src/rhsm/connection.py:2078
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
 msgstr "Получение списка окружений"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2083
+#: src/rhsm/connection.py:2088
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Updating certificate"
 msgstr "Сертификат удостоверения"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2102
+#: src/rhsm/connection.py:2107
 #, fuzzy
 #| msgid "Import Certificates"
 msgid "Updating certificates"
 msgstr "Импорт сертификатов"
 
-#: src/rhsm/connection.py:2121
+#: src/rhsm/connection.py:2126
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2129
+#: src/rhsm/connection.py:2134
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2140
+#: src/rhsm/connection.py:2145
 #, fuzzy
 #| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
 msgstr "Обновление переопределений репозитория"
 
-#: src/rhsm/connection.py:2153
+#: src/rhsm/connection.py:2158
 #, fuzzy
 #| msgid "Removing Repository Overrides"
 msgid "Removing content overrides"
 msgstr "Удаление переопределений репозитория"
 
-#: src/rhsm/connection.py:2169
+#: src/rhsm/connection.py:2174
 #, fuzzy
 #| msgid "Activation Key"
 msgid "Activating"
 msgstr "Ключ активации"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2178
+#: src/rhsm/connection.py:2183
 #, fuzzy
 #| msgid "Cancel"
 msgid "Fetching job"
@@ -1289,7 +1289,7 @@ msgstr "Необходимо выбрать будущую дату"
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:61
+#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:64
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr "Неизвестные аргументы: %s"
@@ -1386,19 +1386,35 @@ msgstr ""
 msgid "Error: this system is not registered"
 msgstr "Ошибка: Эта система не зарегистрирована"
 
-#: src/rhsmlib/services/register.py:192
+#: src/rhsmlib/services/register.py:68
+msgid "Environment IDs and environment names are mutually exclusive"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:167
+#, python-brace-format
+msgid ""
+"Environment: '{env_names}' does not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:175
+#, python-brace-format
+msgid ""
+"Environments: '{env_names}' do not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:238
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 "Эта система уже зарегистрированы. Добавьте силу параметры для "
 "переопределения."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:195
+#: src/rhsmlib/services/register.py:241
 #: src/subscription_manager/cli_command/register.py:146
 msgid "Error: system name can not be empty."
 msgstr "Ошибка. Имя системы не может быть пустым."
 
-#: src/rhsmlib/services/register.py:199
+#: src/rhsmlib/services/register.py:245
 #: src/subscription_manager/cli_command/register.py:168
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
@@ -1411,32 +1427,26 @@ msgstr ""
 "и повторите попытку без параметра «--force»."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:209
+#: src/rhsmlib/services/register.py:255
 #: src/subscription_manager/cli_command/register.py:159
 msgid "Error: Must specify an activation key"
 msgstr "Ошибка. Необходимо указать ключ активации."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:211
+#: src/rhsmlib/services/register.py:257
 #: src/subscription_manager/cli_command/register.py:148
 msgid "Error: Activation keys do not require user credentials."
 msgstr "Ошибка. Ключи активации не требуют указания реквизитов пользователя."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:214
+#: src/rhsmlib/services/register.py:260
 #: src/subscription_manager/cli_command/register.py:151
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr ""
 "Ошибка. Ключи активации не могут использоваться с ранее зарегистрированными "
 "ID."
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:218
-#: src/subscription_manager/cli_command/register.py:154
-msgid "Error: Activation keys do not allow environments to be specified."
-msgstr "Ошибка. Ключи активации не допускают определение окружений."
-
-#: src/rhsmlib/services/register.py:225
+#: src/rhsmlib/services/register.py:267
 msgid "Error: Missing username or password."
 msgstr "Ошибка: Отсутствует имя пользователя или пароль."
 
@@ -3301,6 +3311,11 @@ msgstr ""
 "настройки."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/register.py:154
+msgid "Error: Activation keys do not allow environments to be specified."
+msgstr "Ошибка. Ключи активации не допускают определение окружений."
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:156
 msgid "Error: Activation keys cannot be used with --auto-attach."
 msgstr ""
@@ -3741,17 +3756,24 @@ msgid ""
 msgstr "дата проверки состояния (по умолчанию сегодня). Пример: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/status.py:70
+#: src/subscription_manager/cli_command/status.py:65
 msgid "System Status Details"
 msgstr "Состояние системы"
 
-#: src/subscription_manager/cli_command/status.py:75
+#: src/subscription_manager/cli_command/status.py:120
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr ""
 
-#: src/subscription_manager/cli_command/status.py:111
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/status.py:123
+#, fuzzy
+#| msgid "Register"
+msgid "Registered"
+msgstr "Регистрация"
+
+#: src/subscription_manager/cli_command/status.py:125
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "Overall Status: %s\n"
@@ -3763,11 +3785,18 @@ msgstr ""
 "Общее состояние: %s\n"
 "%s"
 
-#: src/subscription_manager/cli_command/status.py:145
+#: src/subscription_manager/cli_command/status.py:156
 #, fuzzy, python-brace-format
 #| msgid "System Purpose Status: %s\n"
 msgid "System Purpose Status: {status}"
 msgstr "Состояние цели системы: %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/status.py:178
+#, fuzzy
+#| msgid "System is not registered."
+msgid "Overall Status: Not registered\n"
+msgstr "Система не зарегистрирована."
 
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
@@ -4169,7 +4198,7 @@ msgstr "Пользователь прервал процесс."
 msgid "Error uploading package profile: %s\n"
 msgstr ""
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 #, fuzzy
 #| msgid "This system is already registered. Add force to options to override."
 msgid ""
@@ -4180,21 +4209,21 @@ msgstr ""
 "переопределения."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering the system"
 msgstr "Регистрация"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 #, fuzzy
 #| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
 msgstr "Обновление сертификатов и репозиториев..."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:415
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:430
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "Не удалось обновить сертификаты и репозитории"
 
@@ -4329,10 +4358,6 @@ msgstr ""
 #~ "rhsm/rhsm.log"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#~ msgid "Register"
-#~ msgstr "Регистрация"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "Close"
 #~ msgstr "Закрыть"
 
@@ -4447,12 +4472,6 @@ msgstr ""
 #~| msgid "System Purpose"
 #~ msgid "System purpose"
 #~ msgstr "Назначение системы"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#, fuzzy
-#~| msgid "System is not registered."
-#~ msgid "Not registered"
-#~ msgstr "Система не зарегистрирована."
 
 #~ msgid "Unregister"
 #~ msgstr "Удалить регистрацию"
