@@ -8,13 +8,14 @@
 # Transtats <suanand@redhat.com>, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2023.
 # Jingge Chen <mariocanfly@hotmail.com>, 2023.
+# Matyas Horky <mhorky@redhat.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2023-12-09 14:43+0000\n"
-"Last-Translator: Jingge Chen <mariocanfly@hotmail.com>\n"
+"PO-Revision-Date: 2025-04-02 12:53+0000\n"
+"Last-Translator: Matyas Horky <mhorky@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-1-28/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -6210,10 +6211,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3763
-#, fuzzy
-#| msgid "Register"
 msgid "Registered"
-msgstr "注册"
+msgstr "已注册"
 
 #: src/subscription_manager/managercli.py:3765
 #, python-brace-format
@@ -6231,10 +6230,8 @@ msgstr "系统目的状态：{status}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/managercli.py:3818
-#, fuzzy
-#| msgid "Not registered"
 msgid "Overall Status: Not registered\n"
-msgstr "没有注册"
+msgstr "总体状态：未注册\n"
 
 #: src/subscription_manager/plugin/container/__init__.py:234
 #: src/subscription_manager/plugin/ostree/action_invoker.py:147
