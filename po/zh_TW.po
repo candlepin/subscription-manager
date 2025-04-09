@@ -3,13 +3,14 @@
 # Chris Snyder <csnyder@redhat.com>, 2019. #zanata
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # John Sefler <jsefler@redhat.com>, 2021.
+# hsu zangmen <chzang55@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2021-02-04 18:25+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2025-04-09 03:53+0000\n"
+"Last-Translator: hsu zangmen <chzang55@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-1-28/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -17,41 +18,39 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
-#, fuzzy
-#| msgid "Usage:  "
 msgid "usage: "
-msgstr "用法：  "
+msgstr "用法： "
 
 #: /usr/lib64/python3.6/argparse.py:830
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() 未定義"
 
 #: /usr/lib64/python3.6/argparse.py:1127
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "未知解析器 %(parser_name)r (選擇： %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:1181
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "模式為 %r 的參數 \"-\""
 
 #: /usr/lib64/python3.6/argparse.py:1189
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "無法開啟 '%s': %s"
 
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "無法合併動作 - 兩個群組名稱為 %r"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "“required” 是無效的位置參數"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
@@ -82,17 +81,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1637
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "positional arguments"
-msgstr "%s 選項需要一個引數"
+msgstr "選用引數"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1638
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "optional arguments"
-msgstr "%s 選項需要一個引數"
+msgstr "選用引數"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:1653
@@ -131,10 +126,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2015
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "指定了錯誤的引數數量。\n"
+msgstr "其中一個參數 %s 是必需的"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
@@ -173,10 +167,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2306
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "選項 %s：無效的 %s 值：%r"
+msgstr "無效的 %(type)s 值：%(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.6/argparse.py:2317
@@ -244,7 +237,7 @@ msgstr[0] ""
 
 #: cockpit/src/insights.jsx:193
 msgid "Additional packages:"
-msgstr ""
+msgstr "附加包："
 
 #: cockpit/src/insights.jsx:201
 msgid "Removals:"
@@ -262,7 +255,7 @@ msgstr ""
 
 #: cockpit/src/insights.jsx:220 cockpit/src/insights.jsx:315
 msgid "Checking installed software"
-msgstr ""
+msgstr "檢查已安裝的軟體"
 
 #: cockpit/src/insights.jsx:233
 msgid "Downloading $0"
@@ -286,7 +279,7 @@ msgstr ""
 
 #: cockpit/src/insights.jsx:267
 msgid "Connect"
-msgstr ""
+msgstr "連接"
 
 #: cockpit/src/insights.jsx:357
 msgid "unknown"
@@ -480,10 +473,8 @@ msgstr "啟動金鑰"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-register.jsx:132
-#, fuzzy
-#| msgid "Organization: "
 msgid "Organization ID"
-msgstr "組織： "
+msgstr "組織 ID"
 
 #: cockpit/src/subscriptions-register.jsx:142
 msgid "Default"
@@ -514,7 +505,7 @@ msgstr "帳號"
 
 #: cockpit/src/subscriptions-register.jsx:168
 msgid "Activation key"
-msgstr ""
+msgstr "啟動金鑰"
 
 #: cockpit/src/subscriptions-register.jsx:174
 msgid "Subscriptions"
@@ -522,7 +513,7 @@ msgstr "訂閱"
 
 #: cockpit/src/subscriptions-register.jsx:176
 msgid "Attach automatically"
-msgstr ""
+msgstr "自動附加"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:42 cockpit/src/subscriptions-view.jsx:61
@@ -536,11 +527,9 @@ msgstr "自動連接"
 
 #: cockpit/src/subscriptions-view.jsx:55
 msgid "Auto-attaching ..."
-msgstr ""
+msgstr "正在自動連接。。。"
 
 #: cockpit/src/subscriptions-view.jsx:74 cockpit/src/subscriptions-view.jsx:175
-#, fuzzy
-#| msgid "Product Name"
 msgid "Product name"
 msgstr "產品名稱"
 
@@ -553,38 +542,28 @@ msgstr "已訂閱"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:115
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed"
 msgstr "部分已訂閱"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:117
-#, fuzzy
-#| msgid "Partially Subscribed"
 msgid "Partially subscribed ($0)"
-msgstr "部分已訂閱"
+msgstr "部分已訂閱 ($0)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:121
-#, fuzzy
-#| msgid "Not Subscribed"
 msgid "Not subscribed"
 msgstr "未訂閱"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:123
-#, fuzzy
-#| msgid "Not Subscribed"
 msgid "Not subscribed ($0)"
-msgstr "未訂閱"
+msgstr "未訂閱 ($0)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:128
-#, fuzzy
-#| msgid "Unknown"
 msgid "Unknown status"
-msgstr "不明"
+msgstr "不明狀態"
 
 #: cockpit/src/subscriptions-view.jsx:179
 msgid "Product ID"
@@ -624,21 +603,14 @@ msgstr "已安裝的產品"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:233
-#, fuzzy
-#| msgid "No installed products detected."
 msgid "No installed products detected"
-msgstr "未偵測到已安裝的產品。"
+msgstr "未偵測到已安裝的產品"
 
 #: cockpit/src/subscriptions-view.jsx:307
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Organization/Environment Access. This host "
-#| "has access to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of system purpose status."
-msgstr ""
-"內容訪問模式設置為組織/環境訪問。無論訂閱狀態如何，此主機都可以訪問內容。\n"
+msgstr "內容存取模式設定為簡單內容存取。 不論系統目的狀態為何，此主機都可以存取內容。"
 
 #: cockpit/src/subscriptions-view.jsx:313
 #: cockpit/src/subscriptions-view.jsx:428
@@ -648,15 +620,11 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:320
 #: cockpit/src/subscriptions-view.jsx:435
-#, fuzzy
-#| msgid "Subscription Registration"
 msgid "Subscriptions information"
-msgstr "訂閱註冊"
+msgstr "訂閱資訊"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:345
-#, fuzzy
-#| msgid "Service Level"
 msgid "Service level"
 msgstr "服務等級"
 
@@ -666,48 +634,37 @@ msgid "Usage"
 msgstr "使用方法"
 
 #: cockpit/src/subscriptions-view.jsx:357
-#, fuzzy
-#| msgid "Role:  "
 msgid "Role"
-msgstr "角色：  "
+msgstr "角色："
 
 #: cockpit/src/subscriptions-view.jsx:363 src/rct/printing.py:86
 msgid "Add-ons"
-msgstr ""
+msgstr "外掛插件"
 
 #: cockpit/src/subscriptions-view.jsx:381
-#, fuzzy
-#| msgid "System Purpose Status: %s\n"
 msgid "No system purpose attributes set"
-msgstr "系統目的狀態： %s\n"
+msgstr "未設定系統用途屬性"
 
 #: cockpit/src/subscriptions-view.jsx:392
-#, fuzzy
-#| msgid "System Purpose"
 msgid "System purpose"
 msgstr "系統目的"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:406
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Not registered"
-msgstr "系統尚未註冊。"
+msgstr "系統尚未註冊"
 
 #: cockpit/src/subscriptions-view.jsx:415
 msgid "Unregister"
 msgstr "取消註冊"
 
 #: cockpit/src/subscriptions-view.jsx:422
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Organization/Environment Access. This host "
-#| "has access to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status."
 msgstr ""
-"內容訪問模式設置為組織/環境訪問。無論訂閱狀態如何，此主機都可以訪問內容。\n"
+"Content Access Mode（內容存取模式）設為 Simple Content "
+"Access（簡單內容存取）。 無論訂閱狀態如何，此主機都可以存取內容。"
 
 #: cockpit/src/subscriptions-view.jsx:449
 msgid "Overview"
@@ -715,10 +672,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:455
-#, fuzzy
-#| msgid "Subscription "
 msgid "Subscription status"
-msgstr "訂閱 "
+msgstr "訂閱狀態"
 
 #: cockpit/src/subscriptions-view.jsx:491
 msgid "Updating"
@@ -737,14 +692,12 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: cockpit/src/subscriptions-view.jsx:507
-#, fuzzy
-#| msgid "Unable to reach the server at %s:%s%s"
 msgid "Unable to the reach the rhsm service."
-msgstr "無法連上位於 %s:%s%s 的伺服器"
+msgstr "無法連線到 rhsm 服務。"
 
 #: cockpit/src/subscriptions-view.jsx:509
 msgid "Access denied"
-msgstr ""
+msgstr "拒絕存取"
 
 #: cockpit/src/subscriptions-view.jsx:510
 msgid "The current user isn't allowed to access system subscription status."
@@ -755,14 +708,10 @@ msgid "Unable to connect"
 msgstr "無法連線"
 
 #: cockpit/src/subscriptions-view.jsx:514
-#, fuzzy
-#| msgid ""
-#| "Couldn't get system subscription status. Please ensure subscription-"
-#| "manager is installed."
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed. Reported status: $0 ($1)"
-msgstr "無法獲得系統訂閱狀態。 請確保已安裝subscription-manager。"
+msgstr "無法取得系統訂閱狀態。 請確認已安裝 subscription-manager。 報告狀態：$0 ($1)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:111
@@ -910,8 +859,6 @@ msgid "Unable to read consumer identity"
 msgstr "無法讀取消耗者身份"
 
 #: src/dnf-plugins/subscription-manager.py:136
-#, fuzzy
-#| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
 msgstr "訂閱管理程式正以容器模式運作。"
 
