@@ -1,12 +1,13 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2021.
+# hsu zangmen <chzang55@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-02 12:40+0100\n"
-"PO-Revision-Date: 2021-02-11 01:40+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2025-04-09 03:53+0000\n"
+"Last-Translator: hsu zangmen <chzang55@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/syspurpose-1-28/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -14,39 +15,39 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
-msgstr ""
+msgstr "用法： "
 
 #: /usr/lib64/python3.6/argparse.py:830
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() 未定義"
 
 #: /usr/lib64/python3.6/argparse.py:1127
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "未知解析器 %(parser_name)r (選擇： %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:1181
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "模式為 %r 的參數 \"-\""
 
 #: /usr/lib64/python3.6/argparse.py:1189
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "無法開啟 '%s': %s"
 
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "無法合併動作 - 兩個群組名稱為 %r"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "“required” 是無效的位置參數"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
@@ -77,15 +78,15 @@ msgstr ""
 
 #: /usr/lib64/python3.6/argparse.py:1637
 msgid "positional arguments"
-msgstr ""
+msgstr "選用引數"
 
 #: /usr/lib64/python3.6/argparse.py:1638
 msgid "optional arguments"
-msgstr ""
+msgstr "選用引數"
 
 #: /usr/lib64/python3.6/argparse.py:1653
 msgid "show this help message and exit"
-msgstr ""
+msgstr "顯示此協助訊息並退出"
 
 #: /usr/lib64/python3.6/argparse.py:1684
 msgid "cannot have multiple subparser arguments"
@@ -114,7 +115,7 @@ msgstr ""
 #: /usr/lib64/python3.6/argparse.py:2015
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr ""
+msgstr "其中一個參數 %s 是必需的"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
@@ -152,7 +153,7 @@ msgstr ""
 #: /usr/lib64/python3.6/argparse.py:2306
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr ""
+msgstr "無效的 %(type)s 值：%(value)r"
 
 #: /usr/lib64/python3.6/argparse.py:2317
 #, python-format
@@ -175,13 +176,12 @@ msgstr ""
 #: src/syspurpose/cli.py:31
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr ""
+msgstr "如果您想覆蓋服務器端更改，請運行： {command}"
 
 #: src/syspurpose/cli.py:47
-#, fuzzy, python-brace-format
-#| msgid "Added {} to {}"
+#, python-brace-format
 msgid "Added \"{value}\" to {prop_name}."
-msgstr "添加到 {}"
+msgstr "己新增 \"{value}\" 至 {prop_name}。"
 
 #: src/syspurpose/cli.py:50
 #, python-brace-format
@@ -191,7 +191,7 @@ msgstr ""
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} 更新。"
 
 #: src/syspurpose/cli.py:79
 #, python-brace-format
@@ -211,7 +211,7 @@ msgstr ""
 #: src/syspurpose/cli.py:129
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} 未設置。"
 
 #: src/syspurpose/cli.py:157
 msgid "System Syspurpose Management Tool"
@@ -301,14 +301,12 @@ msgid "Show the current system syspurpose"
 msgstr "顯示當前系統syspurpose"
 
 #: src/syspurpose/cli.py:350
-#, fuzzy
-#| msgid ""
-#| "WARNING: Setting syspurpose in containers has no effect.Please run "
-#| "syspurpose on the host.\n"
 msgid ""
 "WARNING: Setting syspurpose in containers has no effect.\n"
 "Please run syspurpose on the host.\n"
-msgstr "警告：在容器中設置syspurpose無效。請在主機上運行syspurpose。\n"
+msgstr ""
+"警告：在容器中設置syspurpose無效。\n"
+"請在主機上運行syspurpose。\n"
 
 #: src/syspurpose/cli.py:364
 msgid ""
