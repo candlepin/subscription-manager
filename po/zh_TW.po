@@ -3,13 +3,14 @@
 # Chris Snyder <csnyder@redhat.com>, 2019. #zanata
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # John Sefler <jsefler@redhat.com>, 2021.
+# hsu zangmen <chzang55@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2021-08-10 19:35+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2025-04-08 06:53+0000\n"
+"Last-Translator: hsu zangmen <chzang55@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -25,10 +26,8 @@ msgid "%(heading)s:"
 msgstr ""
 
 #: /usr/lib64/python3.12/argparse.py:299
-#, fuzzy
-#| msgid "Usage:  "
 msgid "usage: "
-msgstr "用法：  "
+msgstr "用法： "
 
 #: /usr/lib64/python3.12/argparse.py:722
 #, python-format
@@ -113,10 +112,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1807
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "positional arguments"
-msgstr "%s 選項需要一個引數"
+msgstr "選用引數"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1808
@@ -381,8 +378,6 @@ msgid "Unable to read consumer identity"
 msgstr "無法讀取消耗者身份"
 
 #: src/plugins/dnf/subscription_manager.py:170
-#, fuzzy
-#| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
 msgstr "訂閱管理程式正以容器模式運作。"
 
@@ -789,7 +784,7 @@ msgstr "使用方法"
 
 #: src/rct/printing.py:75
 msgid "Add-ons"
-msgstr ""
+msgstr "外掛插件"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:78 src/subscription_manager/managerlib.py:431
