@@ -1010,6 +1010,10 @@ class DriftTest(unittest.TestCase):
         self.assertTrue(drift > datetime.timedelta(hours=6))
 
     def test_no_drift(self):
+        # Make sure that locale for generated testing time
+        # do not use locale. Server should always send
+        # time stamp using RFC 1123 format.
+        locale.setlocale(locale.LC_TIME, "en_US")
         now = datetime.datetime.now(datetime.timezone.utc)
         header = now.strftime("%a, %d %b %Y %H:%M:%S GMT")
         drift = get_time_drift(header)
