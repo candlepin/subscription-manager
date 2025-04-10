@@ -225,7 +225,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.42
+Version: 1.28.43
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1381,6 +1381,66 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Thu Apr 10 2025 Jiri Hnidek <jhnidek@redhat.com> 1.28.43-1
+- Translated using Weblate (Chinese (Traditional) (zh_TW)) (chzang55@gmail.com)
+- Translated using Weblate (Chinese (Simplified) (zh_CN)) (mhorky@redhat.com)
+- Translated using Weblate (French) (leane.grasser@proton.me)
+- Translated using Weblate (French) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Update translation files (noreply@weblate.org)
+- New extraction for translatable strings (ptoscano@redhat.com)
+- Translated using Weblate (Italian) (toscano.pino@tiscali.it)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Italian) (info@salvatorecocuzza.it)
+- Translated using Weblate (French) (leane.grasser@proton.me)
+- Translated using Weblate (German) (atalanttore@googlemail.com)
+- Translated using Weblate (Russian) (aleksejfedorov963@gmail.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- tests: fix mocking of get_terminal_width() in TestColumnize
+  (ptoscano@redhat.com)
+- feat: print compliance errors & syspurpose status only in entitlement mode
+  (ptoscano@redhat.com)
+- feat: print "registered" as status when using SCA (ptoscano@redhat.com)
+- feat: print "not registered" on status when not registered
+  (ptoscano@redhat.com)
+- tests: force syspurpose tests in test_status to non-SCA (ptoscano@redhat.com)
+- refactor: move determination of content access mode in own method
+  (ptoscano@redhat.com)
+- tests: move StubIdentity to stubs (ptoscano@redhat.com)
+- tests: cleanup dead/broken bits in test_status (ptoscano@redhat.com)
+- chore: move banner printing to its own function (ptoscano@redhat.com)
+- ci: bump actions/upload-artifact from 3 to 4
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- ci: bump actions/checkout from 3 to 4
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- test: cockpit: switch to CERT auth for insights-client (ptoscano@redhat.com)
+- test: cockpit: mock-insights: implement upload and delete platform endpoints
+  (ptoscano@redhat.com)
+- test: cockpit: mock-insights: fix/improve handling of IDs
+  (ptoscano@redhat.com)
+- test: cockpit: mock-insights: refactor of two platform endpoints
+  (ptoscano@redhat.com)
+- feat: cockpit: switch from .last-upload.results to .lastupload
+  (ptoscano@redhat.com)
+- chore: cockpit: test: use the new syspurpose command (ptoscano@redhat.com)
+- test: cockpit: wait more when registering to Insights (ptoscano@redhat.com)
+- test: cockpit: break insights-client in a different way (ptoscano@redhat.com)
+- test: cockpit: mock-insights: return 404 for missing systems in /systems
+  (ptoscano@redhat.com)
+- test: cockpit: wait longer in certain situations (ptoscano@redhat.com)
+- test: cockpit: assume /root/run-candlepin to start candlepin
+  (ptoscano@redhat.com)
+- chore(ci): Use Vault for CentOS Stream 8 (mhorky@redhat.com)
+- fix: Hide subscription management "errors" in container mode
+  (mhorky@redhat.com)
+- feat: 1.28 Added more AWS cloud facts (jhnidek@redhat.com)
+- feat: 1.28 Added zone GCP fact (jhnidek@redhat.com)
+- feat: 1.28 Azure: added extended location and type of location fact
+  (jhnidek@redhat.com)
+- fix: 1.28 Update version of Azure metadata (jhnidek@redhat.com)
+- feat: 1.28 Added Azure location to facts (jhnidek@redhat.com)
+
 * Thu Jan 25 2024 Pino Toscano <ptoscano@redhat.com> 1.28.42-1
 - Translated using Weblate (Korean) (simmon@nplob.com)
 - Translated using Weblate (Chinese (Simplified) (zh_CN))
