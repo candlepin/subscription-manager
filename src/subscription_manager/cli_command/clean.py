@@ -30,8 +30,6 @@ class CleanCommand(CliCommand):
         managerlib.clean_all_data(False)
         print(_("All local data removed"))
 
-        self._request_validity_check()
-
         # We have new credentials, restart virt-who
         restart_virt_who()
 

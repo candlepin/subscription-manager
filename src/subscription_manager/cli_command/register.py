@@ -348,8 +348,6 @@ class RegisterCommand(UserPassCommand):
 
         self._upload_profile(consumer)
 
-        self._request_validity_check()
-
     def _prompt_for_environment(self):
         """
         By breaking this code out, we can write cleaner tests

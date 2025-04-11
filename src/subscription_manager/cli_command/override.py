@@ -130,7 +130,6 @@ class OverrideCommand(CliCommand):
         # CertLib.update() will call RepoActionInvoker.update().
         self.entcertlib.update()
         # make sure the EntitlementDirectory singleton is refreshed
-        self._request_validity_check()
 
         overrides = Overrides()
 
