@@ -32,11 +32,10 @@ candlepin.prefix = "/candlepin"
 candlepin.username = "duey"
 candlepin.password = "password"
 candlepin.org = "donaldduck"
-candlepin.activation_keys = ["act-key-01","act-key-02"]
+candlepin.activation_keys = ["default_key","awesome_os_pool"]
 candlepin.environment.names = ["env-name-01","env-name-02"]
 candlepin.environment.ids =   ["env-id-01","env-id-02"]
 EOF
-
 
 # run local candlepin for testing purpose
 ./integration-tests/scripts/run-local-candlepin.sh
