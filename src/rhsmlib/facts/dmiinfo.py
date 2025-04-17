@@ -11,9 +11,7 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 #
-"""Load and collect DMI data.
-
-"""
+"""Load and collect DMI data."""
 import contextlib
 import logging
 from typing import Dict, List, Union

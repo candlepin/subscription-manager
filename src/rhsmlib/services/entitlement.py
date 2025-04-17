@@ -22,7 +22,6 @@ from subscription_manager.i18n import ugettext as _
 from subscription_manager import managerlib, utils
 from subscription_manager.entcertlib import EntCertActionInvoker
 
-from rhsm import certificate
 from rhsmlib.services import exceptions, products
 import rhsm.connection as connection
 
@@ -58,12 +57,6 @@ class EntitlementService:
         return on_date
 
     def get_status(self, on_date: str = None, force: bool = False) -> dict:
-        sorter = inj.require(inj.CERT_SORTER, on_date)
-        # When singleton CertSorter was created with different argument on_date, then
-        # it is necessary to update corresponding attribute in object (dependency
-        # injection doesn't do it automatically).
-        if sorter.on_date != on_date:
-            sorter.on_date = on_date
 
         # Force reload status from the server to be sure that we get valid status for new date.
         # It is necessary to do it for rhsm.service, because it can run for very long time without
@@ -74,29 +67,13 @@ class EntitlementService:
             status_cache.server_status = None
             status_cache.delete_cache()
 
-        sorter.load()
-
-        if self.identity.is_valid():
-            overall_status = sorter.get_system_status()
-            overall_status_id = sorter.get_system_status_id()
-            reasons = sorter.reasons.get_name_message_map()
-            reason_ids = sorter.reasons.get_reason_ids_map()
-            valid = sorter.is_valid()
-            status = {
-                "status": overall_status,
-                "status_id": overall_status_id,
-                "reasons": reasons,
-                "reason_ids": reason_ids,
-                "valid": valid,
-            }
-        else:
-            status = {
-                "status": _("Unknown"),
-                "status_id": "unknown",
-                "reasons": {},
-                "reason_ids": {},
-                "valid": False,
-            }
+        status = {
+            "status": _("Unknown"),
+            "status_id": "unknown",
+            "reasons": {},
+            "reason_ids": {},
+            "valid": False,
+        }
         log.debug("entitlement status: %s" % str(status))
         return status
 
@@ -228,9 +205,6 @@ class EntitlementService:
                 "system_type",
             ],
         )
-        sorter = inj.require(inj.CERT_SORTER)
-        cert_reasons_map = sorter.reasons.get_subscription_reasons_map()
-        pooltype_cache = inj.require(inj.POOLTYPE_CACHE)
 
         consumed_statuses = []
         # FIXME: the cache of CertificateDirectory should be smart enough and refreshing
@@ -303,24 +277,6 @@ class EntitlementService:
 
             reasons = []
             pool_type = ""
-
-            if inj.require(inj.CERT_SORTER).are_reasons_supported():
-                if cert.subject and "CN" in cert.subject:
-                    if cert.subject["CN"] in cert_reasons_map:
-                        reasons = cert_reasons_map[cert.subject["CN"]]
-                    pool_type = pooltype_cache.get(pool_id)
-
-                # 1180400: Status details is empty when GUI is not
-                if not reasons:
-                    if cert in sorter.valid_entitlement_certs:
-                        reasons.append(_("Subscription is current"))
-                    else:
-                        if cert.valid_range.end() < datetime.datetime.now(certificate.GMT()):
-                            reasons.append(_("Subscription is expired"))
-                        else:
-                            reasons.append(_("Subscription has not begun"))
-            else:
-                reasons.append(_("Subscription management service doesn't support Status Details."))
 
             if roles is None and usage is None and addons is None:
                 consumed_statuses.append(
@@ -524,11 +480,10 @@ class EntitlementService:
         This callback function is called, when there is detected any change in directory with entitlement
         certificates (e.g. certificate is installed or removed)
         """
-        sorter = inj.require(inj.CERT_SORTER, on_date=None)
+
         status_cache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
         log.debug("Clearing in-memory cache of file %s" % status_cache.CACHE_FILE)
         status_cache.server_status = None
-        sorter.load()
 
     def refresh(self, remove_cache: bool = False, force: bool = False) -> None:
         """
