@@ -2,13 +2,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the rhsm package.
 # Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2022, 2023, 2024, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2025-02-26 12:38+0000\n"
-"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"PO-Revision-Date: 2025-04-12 05:53+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/ka/>\n"
 "Language: ka\n"
@@ -16,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -3008,10 +3010,8 @@ msgid "System Purpose Status: {status}"
 msgstr ""
 
 #: src/subscription_manager/cli_command/status.py:178
-#, fuzzy
-#| msgid "Not registered"
 msgid "Overall Status: Not registered\n"
-msgstr "არაა რეგისტრირებული"
+msgstr "საერთო სტატუსი: რეგისტრაციის გარეშე\n"
 
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
@@ -3355,16 +3355,12 @@ msgid ""
 msgstr ""
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:346
-#, fuzzy
-#| msgid "Registering system"
 msgid "Registering the system"
-msgstr "სისტემის რეგისტრაცია"
+msgstr "მიმდინარეობს სისტემის რეგისტრაცია"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:357
-#, fuzzy
-#| msgid "Updating certificates"
 msgid "Updating entitlement certificates & repositories."
-msgstr "სერტიფიკატების განახლება"
+msgstr "საკუთრების სერტიფიკატებისა და რეპოზიტორიების განახლება."
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:430
 msgid "Unable to update entitlement certificates and repositories"
