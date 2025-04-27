@@ -28,7 +28,12 @@ from subscription_manager.injection import IDENTITY, require
 from subscription_manager import rhelentbranding
 import subscription_manager.injection as inj
 
+from subscription_manager import repolib
 from subscription_manager.i18n import ungettext, ugettext as _
+
+from typing import TYPE_CHECKING, Dict, List, Optional
+if TYPE_CHECKING:
+    from rhsm.connection import UEPConnection
 
 log = logging.getLogger(__name__)
 
@@ -477,3 +482,54 @@ class EntCertUpdateReport(certlib.ActionReport):
         self.write(s, _('Added (new)'), self.added)
         self.write(s, _('Deleted (rogue):'), self.rogue)
         return '\n'.join(s)
+
+
+class AnonymousCertificateManager:
+    """Manage anonymous entitlement certificates.
+
+    Anonymous certificate can be obtained from Candlepin via JWT/bearer token
+    when the system is deployed as a cloud VM.
+
+    These certificates are short-lived and are meant to be replaced by a proper
+    certificate in a short time.
+    """
+
+    def __init__(self, uep: "UEPConnection"):
+        self.uep = uep
+
+    def install_temporary_certificates(self, uuid: str, jwt: str) -> None:
+        """Obtain temporary entitlement certificates.
+
+        - Download and install temporary entitlement certificates and keys
+          without obtaining an identity certificate.
+        - Generate 'redhat.repo' file out of them.
+
+        :param uuid: The anonymous UUID assigned by Candlepin.
+        :param jwt: The Bearer token sent by Candlepin.
+        """
+        log.debug("Obtaining anonymous entitlement certificates and keys.")
+        certificates: List[Dict] = self.uep.getCertificates(consumer_uuid=uuid, jwt=jwt)
+        if not len(certificates):
+            log.debug("No anonymous entitlement certificates were received.")
+            return
+
+        log.debug("Installing anonymous entitlement certificates and keys.")
+        report = EntCertUpdateReport()
+        installer = EntitlementCertBundlesInstaller(report=report)
+        entitlement_ids: List[int] = installer.install(cert_bundles=certificates)
+
+        log.debug(
+            "The following anonymous entitlement certificates and keys were installed: " +
+            ", ".join(str(c) for c in entitlement_ids)
+        )
+
+        update_repo = repolib.RepoUpdateActionCommand()
+        update_repo_report: Optional[repolib.RepoActionReport] = update_repo.perform()
+
+        if update_repo_report is None:
+            log.debug("Anonymous entitlement certificate did not cause repository updates.")
+        else:
+            log.debug(
+                "Anonymous entitlement certificate caused "
+                f"{update_repo_report.updates()} repositories to be updated."
+            )
