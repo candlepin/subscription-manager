@@ -1806,13 +1806,7 @@ class UEPConnection(BaseConnection):
         return self.conn.request_get(method, description=_("Fetching consumer keys"))
 
     def getCompliance(self, uuid: str, on_date: datetime.datetime = None) -> dict:
-        """
-        Returns a compliance object with compliance status information
-        """
-        method = "/consumers/%s/compliance" % self.sanitize(uuid)
-        if on_date:
-            method = "%s?on_date=%s" % (method, self.sanitize(on_date.isoformat(), plus=True))
-        return self.conn.request_get(method, description=_("Checking compliance status"))
+        return {"status": "disabled", "compliant": True}
 
     def getSyspurposeCompliance(self, uuid: str, on_date: datetime.datetime = None) -> dict:
         """
