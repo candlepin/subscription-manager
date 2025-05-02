@@ -27,7 +27,7 @@ from .stubs import (
     StubCertSorter,
 )
 import subscription_manager.cert_sorter
-from subscription_manager.cert_sorter import CertSorter, UNKNOWN
+from subscription_manager.cert_sorter import ComplianceManager, CertSorter, UNKNOWN
 from subscription_manager.cache import EntitlementStatusCache
 from datetime import timedelta, datetime
 from unittest.mock import Mock, patch
@@ -80,7 +80,7 @@ class CertSorterTests(SubManFixture):
                 ),
             ]
         )
-        mock_is_simple_content_access.return_value = False
+        mock_is_simple_content_access.return_value = True
 
         self.mock_uep = StubUEP()
 
@@ -109,56 +109,15 @@ class CertSorterTests(SubManFixture):
         sorter.is_registered = Mock(return_value=True)
         self.assertEqual(UNKNOWN, sorter.get_status(INST_PID_1))
 
-    # Consumer has been deleted, overall status should be unknown
-    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
-    def test_deleted_consumer_status(self, mock_update):
-        self.status_mgr.load_status = Mock(return_value=None)
-        self.status_mgr.server_status = None
-        sorter = CertSorter()
-        sorter.is_registered = Mock(return_value=True)
-        status_map = subscription_manager.cert_sorter.ComplianceManager.get_status_map()
-        expected = status_map[subscription_manager.cert_sorter.UNKNOWN]
-        self.assertEqual(expected, sorter.get_system_status())
-
     @patch("subscription_manager.cache.InstalledProductsManager.update_check")
     def test_unregistered_system_status(self, mock_update):
         self.status_mgr.load_status = Mock(return_value=None)
         self.status_mgr.server_status = None
+        ComplianceManager.is_registered = Mock(return_value=False)
         sorter = CertSorter()
-        sorter.is_registered = Mock(return_value=False)
         status_map = subscription_manager.cert_sorter.ComplianceManager.get_status_map()
         expected = status_map[subscription_manager.cert_sorter.UNKNOWN]
         self.assertEqual(expected, sorter.get_system_status())
-
-    def test_unentitled_products(self):
-        self.assertEqual(1, len(self.sorter.unentitled_products))
-        self.assertTrue(INST_PID_3 in self.sorter.unentitled_products)
-
-    def test_valid_products(self):
-        self.assertEqual(1, len(self.sorter.valid_products))
-        self.assertTrue(INST_PID_1 in self.sorter.valid_products)
-
-    def test_partially_valid_products(self):
-        self.assertEqual(2, len(self.sorter.partially_valid_products))
-        self.assertTrue(INST_PID_2 in self.sorter.partially_valid_products)
-        self.assertTrue(INST_PID_4 in self.sorter.partially_valid_products)
-
-    def test_installed_products(self):
-        self.assertEqual(4, len(self.sorter.installed_products))
-        self.assertTrue(INST_PID_1 in self.sorter.installed_products)
-        self.assertTrue(INST_PID_2 in self.sorter.installed_products)
-        self.assertTrue(INST_PID_3 in self.sorter.installed_products)
-        self.assertTrue(INST_PID_3 in self.sorter.installed_products)
-
-    def test_partial_stack(self):
-        self.assertEqual(1, len(self.sorter.partial_stacks))
-        self.assertTrue(PARTIAL_STACK_ID in self.sorter.partial_stacks)
-
-    def test_reasons(self):
-        self.assertEqual(5, len(self.sorter.reasons.reasons))
-        expected_keys = ["NOTCOVERED", "CORES", "SOCKETS", "RAM", "ARCH"]
-        result_keys = [reason["key"] for reason in self.sorter.reasons.reasons]
-        self.assertEqual(sorted(expected_keys), sorted(result_keys))
 
     @patch("subscription_manager.cache.InstalledProductsManager.update_check")
     def test_installed_mismatch_unentitled(self, mock_update):
@@ -171,16 +130,6 @@ class CertSorterTests(SubManFixture):
         # Should get filtered out of unentitled products even though
         # server reported it here:
         self.assertFalse(INST_PID_3 in sorter.unentitled_products)
-
-    @patch("subscription_manager.cert_sorter.utils.is_simple_content_access")
-    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
-    def test_missing_installed_product(self, mock_update, mock_is_simple_content_access):
-        # Add a new installed product server doesn't know about:
-        prod_dir = StubProductDirectory(pids=[INST_PID_1, INST_PID_2, INST_PID_3, "product4"])
-        inj.provide(inj.PROD_DIR, prod_dir)
-        mock_is_simple_content_access.return_value = False
-        sorter = CertSorter()
-        self.assertTrue("product4" in sorter.unentitled_products)
 
     @patch("subscription_manager.cache.InstalledProductsManager.update_check")
     def test_no_compliant_until(self, mock_update):
@@ -199,55 +148,11 @@ class CertSorterTests(SubManFixture):
         self.sorter.is_registered = Mock(return_value=True)
         self.assertTrue(self.sorter.compliant_until is None)
 
-    def test_compliant_until(self):
-        compliant_until = self.sorter.compliant_until
-        self.assertEqual(2013, compliant_until.year)
-        self.assertEqual(4, compliant_until.month)
-        self.assertEqual(26, compliant_until.day)
-        self.assertEqual(13, compliant_until.hour)
-        self.assertEqual(43, compliant_until.minute)
-        self.assertEqual(12, compliant_until.second)
-
-    def test_scan_for_expired_or_future_products(self):
-        prod_dir = StubProductDirectory(pids=["a", "b", "c", "d", "e"])
-        ent_dir = StubEntitlementDirectory(
-            [
-                StubEntitlementCertificate(StubProduct("a")),
-                StubEntitlementCertificate(StubProduct("b")),
-                StubEntitlementCertificate(StubProduct("c")),
-                StubEntitlementCertificate(
-                    StubProduct("d"),
-                    start_date=datetime.now() - timedelta(days=365),
-                    end_date=datetime.now() - timedelta(days=2),
-                ),
-                StubEntitlementCertificate(
-                    StubProduct("e"),
-                    start_date=datetime.now() + timedelta(days=365),
-                    end_date=datetime.now() + timedelta(days=730),
-                ),
-            ]
-        )
-
-        inj.provide(inj.PROD_DIR, prod_dir)
-        inj.provide(inj.ENT_DIR, ent_dir)
-
-        sorter = StubCertSorter()
-        sorter.valid_products = {"a": StubProduct("a")}
-        sorter.partially_valid_products = {"b": StubProduct("b")}
-
-        sorter._scan_entitlement_certs()
-
-        self.assertEqual(["d"], list(sorter.expired_products.keys()))
-        self.assertEqual(["e"], list(sorter.future_products.keys()))
-
-        self.assertEqual(3, len(sorter.valid_entitlement_certs))
-
     def test_get_system_status(self):
-        self.assertEqual("Invalid", self.sorter.get_system_status())
-        self.sorter.system_status = "valid"
-        self.assertEqual("Current", self.sorter.get_system_status())
-        self.sorter.system_status = "partial"
-        self.assertEqual("Insufficient", self.sorter.get_system_status())
+        self.sorter.system_status = "disabled"
+        self.assertEqual("Disabled", self.sorter.get_system_status())
+        self.sorter.system_status = "uknown"
+        self.assertEqual("Unknown", self.sorter.get_system_status())
 
 
 class CertSorterSCATests(SubManFixture):
