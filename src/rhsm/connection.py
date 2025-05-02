@@ -1808,9 +1808,6 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s" % self.sanitize(uuid)
         return self.conn.request_get(method, description=_("Fetching consumer keys"))
 
-    def getCompliance(self, uuid: str, on_date: datetime.datetime = None) -> dict:
-        return {"status": "disabled", "compliant": True}
-
     def getSyspurposeCompliance(self, uuid: str, on_date: datetime.datetime = None) -> dict:
         """
         Returns a system purpose compliance object with compliance status information

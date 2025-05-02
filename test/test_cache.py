@@ -15,7 +15,6 @@ import unittest
 import datetime
 import os
 import logging
-import random
 import shutil
 import socket
 import tempfile
@@ -39,7 +38,6 @@ from rhsm import ourjson as json
 from subscription_manager.cache import (
     ProfileManager,
     InstalledProductsManager,
-    EntitlementStatusCache,
     PoolTypeCache,
     ReleaseStatusCache,
     ContentAccessCache,
@@ -55,7 +53,6 @@ from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfil
 from rhsm.connection import (
     UEPConnection,
     RestlibException,
-    UnauthorizedException,
     RateLimitExceededException,
     ProxyException,
 )
@@ -823,101 +820,6 @@ class TestReleaseStatusCache(SubManFixture):
         self.assertEqual(dummy_release, release)
         self.assertEqual(1, self.release_cache.write_cache.call_count)
         self.assertEqual(1, uep.getRelease.call_count)
-
-
-class TestEntitlementStatusCache(SubManFixture):
-    def setUp(self):
-        super(TestEntitlementStatusCache, self).setUp()
-        self.status_cache = EntitlementStatusCache()
-        self.status_cache.write_cache = Mock()
-
-    def test_load_from_server(self):
-        uep = Mock()
-        dummy_status = {"a": "1"}
-        uep.getCompliance = Mock(return_value=dummy_status)
-
-        self.status_cache.load_status(uep, "SOMEUUID")
-
-        self.assertEqual(dummy_status, self.status_cache.server_status)
-        self.assertEqual(1, self.status_cache.write_cache.call_count)
-
-    def test_load_from_server_on_date_args(self):
-        uep = Mock()
-        dummy_status = {"a": "1"}
-        uep.getCompliance = Mock(return_value=dummy_status)
-
-        self.status_cache.load_status(uep, "SOMEUUID", "2199-12-25")
-
-        self.assertEqual(dummy_status, self.status_cache.server_status)
-        self.assertEqual(1, self.status_cache.write_cache.call_count)
-
-    def test_load_from_server_on_date_kwargs(self):
-        uep = Mock()
-        dummy_status = {"a": "1"}
-        uep.getCompliance = Mock(return_value=dummy_status)
-
-        self.status_cache.load_status(uep, "SOMEUUID", on_date="2199-12-25")
-
-        self.assertEqual(dummy_status, self.status_cache.server_status)
-        self.assertEqual(1, self.status_cache.write_cache.call_count)
-
-    def test_server_no_compliance_call(self):
-        uep = Mock()
-        uep.getCompliance = Mock(side_effect=RestlibException("boom"))
-        status = self.status_cache.load_status(uep, "SOMEUUID")
-        self.assertEqual(None, status)
-
-    def test_server_network_error(self):
-        dummy_status = {"a": "1"}
-        uep = Mock()
-        uep.getCompliance = Mock(side_effect=socket.error("boom"))
-        self.status_cache._cache_exists = Mock(return_value=True)
-        self.status_cache._read_cache = Mock(return_value=dummy_status)
-        status = self.status_cache.load_status(uep, "SOMEUUID")
-        self.assertEqual(dummy_status, status)
-        self.assertEqual(1, self.status_cache._read_cache.call_count)
-
-    # Extremely unlikely but just in case:
-    def test_server_network_error_no_cache(self):
-        uep = Mock()
-        uep.getCompliance = Mock(side_effect=socket.error("boom"))
-        self.status_cache._cache_exists = Mock(return_value=False)
-        self.assertEqual(None, self.status_cache.load_status(uep, "SOMEUUID"))
-
-    def test_write_cache(self):
-        mock_server_status = {"fake server status": random.uniform(1, 2**32)}
-        status_cache = EntitlementStatusCache()
-        status_cache.server_status = mock_server_status
-        cache_dir = tempfile.mkdtemp()
-        cache_file = os.path.join(cache_dir, "status_cache.json")
-        status_cache.CACHE_FILE = cache_file
-        status_cache.write_cache()
-
-        # try to load the file 5 times, if
-        # we still can't read it, fail
-        # we don't know when the write_cache thread ends or
-        # when it starts. Need to track the cache threads
-        # but we do not...
-
-        tries = 0
-        while tries <= 5:
-            try:
-                new_status_buf = open(cache_file).read()
-                new_status = json.loads(new_status_buf)
-                break
-            except Exception as e:
-                log.exception(e)
-                tries += 1
-                time.sleep(0.1)
-                continue
-
-        shutil.rmtree(cache_dir)
-        self.assertEqual(new_status, mock_server_status)
-
-    def test_unauthorized_exception_handled(self):
-        uep = Mock()
-        uep.getCompliance = Mock(side_effect=UnauthorizedException(401, "GET"))
-        self.assertEqual(None, self.status_cache.load_status(uep, "aaa"))
 
 
 class TestPoolStatusCache(SubManFixture):

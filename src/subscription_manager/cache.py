@@ -371,7 +371,7 @@ class EntitlementStatusCache(StatusCache):
     def _sync_with_server(
         self, uep: connection.UEPConnection, consumer_uuid: str, on_date: Optional[datetime.datetime] = None
     ) -> None:
-        self.server_status = uep.getCompliance(consumer_uuid, on_date)
+        self.server_status = {"status": "disabled", "compliant": True}
 
 
 class SyspurposeComplianceStatusCache(StatusCache):

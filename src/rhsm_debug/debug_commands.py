@@ -146,7 +146,6 @@ class SystemCommand(CliCommand):
             owner = self.cp.getOwner(consumer.uuid)
 
             self._write_flat_file(content_path, "consumer.json", self.cp.getConsumer(consumer.uuid))
-            self._write_flat_file(content_path, "compliance.json", self.cp.getCompliance(consumer.uuid))
             self._write_flat_file(
                 content_path, "entitlements.json", self.cp.getEntitlementList(consumer.uuid)
             )
