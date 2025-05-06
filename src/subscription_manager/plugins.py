@@ -367,40 +367,6 @@ class UpdateContentConduit(BaseConduit):
         self.ent_source: EntitlementSource = ent_source
 
 
-class SubscriptionConduit(BaseConduit):
-    """Conduit for subscription info."""
-
-    slots = ["pre_subscribe"]
-
-    def __init__(self, clazz: Type[SubManPlugin], consumer_uuid: str, pool_id: str, quantity: int):
-        """init for SubscriptionConduit
-
-        Args:
-            consumer_uuid: the UUID of the consumer being subscribed
-            pool_id: the id of the pool the subscription will come from (None if 'auto' is False)
-            quantity: the quantity to consume from the pool (None if 'auto' is False).
-        """
-        super(SubscriptionConduit, self).__init__(clazz)
-        self.consumer_uuid: str = consumer_uuid
-        self.pool_id: str = pool_id
-        self.quantity: int = quantity
-
-
-class PostSubscriptionConduit(BaseConduit):
-    slots = ["post_subscribe"]
-
-    def __init__(self, clazz: Type[SubManPlugin], consumer_uuid: str, entitlement_data: Dict):
-        """init for PostSubscriptionConduit
-
-        Args:
-            consumer_uuid: the UUID of the consumer subscribed
-            entitlement_data: the data returned by the server
-        """
-        super(PostSubscriptionConduit, self).__init__(clazz)
-        self.consumer_uuid: str = consumer_uuid
-        self.entitlement_data: Dict = entitlement_data
-
-
 class PluginConfig:
     """Represents configuation for each rhsm plugin.
 
@@ -886,9 +852,7 @@ class PluginManager(BasePluginManager):
             RegistrationConduit,
             PostRegistrationConduit,
             FactsConduit,
-            SubscriptionConduit,
             UpdateContentConduit,
-            PostSubscriptionConduit,
         ]
 
     def _get_modules(self):
