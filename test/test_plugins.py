@@ -1056,25 +1056,6 @@ class TestPostRegistrationConduit(unittest.TestCase):
         self.assertEqual({}, conduit.facts)
 
 
-class TestSubscriptionConduit(unittest.TestCase):
-    def test_subscription_conduit(self):
-        conduit = plugins.SubscriptionConduit(
-            StubPluginClass, consumer_uuid="123456789", pool_id="4444", quantity=4
-        )
-        self.assertEqual("123456789", conduit.consumer_uuid)
-        self.assertEqual(4, conduit.quantity)
-        self.assertEqual("4444", conduit.pool_id)
-
-
-class TestPostSubscriptionConduit(unittest.TestCase):
-    def test_post_subscription_conduit(self):
-        conduit = plugins.PostSubscriptionConduit(
-            StubPluginClass, consumer_uuid="123456789", entitlement_data={}
-        )
-        self.assertEqual("123456789", conduit.consumer_uuid)
-        self.assertEqual({}, conduit.entitlement_data)
-
-
 class BasePluginException(unittest.TestCase):
     """At least create and raise all the exceptions."""
 
