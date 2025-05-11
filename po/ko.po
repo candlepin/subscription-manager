@@ -16,7 +16,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
 "PO-Revision-Date: 2025-03-28 10:00+0000\n"
-"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/ko/>\n"
 "Language: ko\n"
@@ -3965,14 +3966,10 @@ msgid "Error uploading package profile: %s\n"
 msgstr "꾸러미 프로파일 적재 중 오류 발생: %s\n"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:343
-#, fuzzy
-#| msgid "This system is already registered. Add force to options to override."
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
-msgstr ""
-"이 시스템은 이미 등록되어 있습니다. 덮어쓰기 하려면 옵션에 force를 추가합니"
-"다."
+msgstr "이 시스템은 이미 등록되어 있어, 자동으로 등록되는 요청은 무시합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:346
