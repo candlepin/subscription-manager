@@ -9,13 +9,15 @@
 # Pino Toscano <ptoscano@redhat.com>, 2021.
 # Kim InSoo <simmon@nplob.com>, 2022.
 # 김인수 <simmon@nplob.com>, 2022, 2023, 2024, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2025-01-12 16:02+0000\n"
-"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"PO-Revision-Date: 2025-03-28 09:59+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/ko/>\n"
 "Language: ko\n"
@@ -23,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -1299,19 +1301,19 @@ msgstr "오류: 이 시스템은 등록되어 있지 않습니다"
 
 #: src/rhsmlib/services/register.py:68
 msgid "Environment IDs and environment names are mutually exclusive"
-msgstr ""
+msgstr "환경 IDs 및 환경 이름은 상호 베타적입니다"
 
 #: src/rhsmlib/services/register.py:167
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
-msgstr ""
+msgstr "환경: '{env_names}'는 필수 유형 '{environment_type}' 를 갖고 있지 않습니다"
 
 #: src/rhsmlib/services/register.py:175
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
-msgstr ""
+msgstr "환경: '{env_names}'는 필수 유형 '{environment_type}' 를 갖고 있지 않습니다"
 
 #: src/rhsmlib/services/register.py:238
 msgid "This system is already registered. Add force to options to override."
@@ -3562,10 +3564,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:123
-#, fuzzy
-#| msgid "Register"
 msgid "Registered"
-msgstr "시스템 등록"
+msgstr "등록됨."
 
 #: src/subscription_manager/cli_command/status.py:125
 #, python-brace-format
