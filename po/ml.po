@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 18:24+0100\n"
+"POT-Creation-Date: 2025-03-21 14:41+0100\n"
 "PO-Revision-Date: 2015-09-25 03:38-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Malayalam\n"
@@ -293,7 +293,7 @@ msgstr "തെറ്റായ ആര്‍ഗ്യുമെന്റ് നല�
 msgid "Installed products updated."
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:44
+#: src/plugins/dnf/subscription_manager.py:46
 #, python-format
 msgid ""
 "\n"
@@ -308,7 +308,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/plugins/dnf/subscription_manager.py:55
+#: src/plugins/dnf/subscription_manager.py:57
 #, fuzzy
 #| msgid ""
 #| "This system is registered using both RHN Classic and Red Hat Subscription "
@@ -323,7 +323,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/plugins/dnf/subscription_manager.py:61
+#: src/plugins/dnf/subscription_manager.py:63
 #, fuzzy
 #| msgid ""
 #| "This system is registered using both RHN Classic and Red Hat Subscription "
@@ -338,7 +338,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/plugins/dnf/subscription_manager.py:68
+#: src/plugins/dnf/subscription_manager.py:70
 #, fuzzy
 #| msgid ""
 #| "This system is registered using both RHN Classic and Red Hat Subscription "
@@ -351,7 +351,7 @@ msgstr ""
 "ആര്‍എച്എന്‍ ക്ലാസ്സിക്, Red Hat സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് എന്നിവ  ഉപയോഗിച്ചു് ഈ സിസ്റ്റം രജിസ്ടര്‍ "
 "ചെയ്തിരിയ്ക്കുന്നു."
 
-#: src/plugins/dnf/subscription_manager.py:75
+#: src/plugins/dnf/subscription_manager.py:77
 #, python-brace-format
 msgid ""
 "\n"
@@ -359,11 +359,11 @@ msgid ""
 "only for this release.\n"
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:110
+#: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:138
+#: src/plugins/dnf/subscription_manager.py:140
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
@@ -374,15 +374,15 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/plugins/dnf/subscription_manager.py:155
+#: src/plugins/dnf/subscription_manager.py:158
 msgid "Updating Subscription Management repositories."
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:164
+#: src/plugins/dnf/subscription_manager.py:167
 msgid "Unable to read consumer identity"
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:167
+#: src/plugins/dnf/subscription_manager.py:170
 msgid "subscription-manager is operating in container mode."
 msgstr ""
 
@@ -1068,25 +1068,25 @@ msgstr ""
 msgid "Checking connection status"
 msgstr "connectionStatusLabel"
 
-#: src/rhsm/connection.py:1529
+#: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1602
+#: src/rhsm/connection.py:1607
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുക"
 
-#: src/rhsm/connection.py:1632 src/rhsm/connection.py:1644
+#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1667
+#: src/rhsm/connection.py:1672
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
@@ -1094,7 +1094,7 @@ msgstr "പ്രിന്റ് പതിപ്പിന്റെ വിവര�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1742
+#: src/rhsm/connection.py:1747
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
@@ -1102,7 +1102,7 @@ msgstr "സബ്സ്ക്രിപ്ഷന്‍ രജിസ്ട്ര�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1747 src/rhsm/connection.py:1751
+#: src/rhsm/connection.py:1752 src/rhsm/connection.py:1756
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
@@ -1110,7 +1110,7 @@ msgstr "മാനിഫസ്റ്റ് വിവരം പ്രിന്റ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1755
+#: src/rhsm/connection.py:1760
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
@@ -1118,31 +1118,31 @@ msgstr "നീക്കം ചെയ്യുന്നു"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1785 src/rhsm/connection.py:1796
+#: src/rhsm/connection.py:1790 src/rhsm/connection.py:1801
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "സര്‍ട്ടിഫിക്കേറ്റ് വിവരങ്ങള്‍ പ്രിന്റ് ചെയ്യുക"
 
-#: src/rhsm/connection.py:1804
+#: src/rhsm/connection.py:1809
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1813
+#: src/rhsm/connection.py:1818
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1822
+#: src/rhsm/connection.py:1827
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1829
+#: src/rhsm/connection.py:1834
 msgid "Fetching available system purpose settings"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1836 src/rhsm/connection.py:1844
+#: src/rhsm/connection.py:1841 src/rhsm/connection.py:1849
 #, fuzzy
 #| msgid "specify organization"
 msgid "Fetching organizations"
@@ -1150,7 +1150,7 @@ msgstr "സ്ഥാപനം നിഷ്കര്‍ഷിയ്ക്കു�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1857
+#: src/rhsm/connection.py:1862
 #, fuzzy
 #| msgid "Register System"
 msgid "Unregistering system"
@@ -1158,23 +1158,23 @@ msgstr "സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യു�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1881
+#: src/rhsm/connection.py:1886
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "തിരിച്ചറിയല്‍ സമ്മതപത്രം"
 
-#: src/rhsm/connection.py:1890
+#: src/rhsm/connection.py:1895
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1906
+#: src/rhsm/connection.py:1911
 msgid "Fetching content for a certificate"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1919 src/rhsm/connection.py:1936
+#: src/rhsm/connection.py:1924 src/rhsm/connection.py:1941
 #, fuzzy
 #| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
@@ -1182,20 +1182,20 @@ msgstr "സബ്സ്ക്രിപ്ഷനുകള്‍ ചേര്‍�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1945 src/rhsm/connection.py:1955
-#: src/rhsm/connection.py:1964
+#: src/rhsm/connection.py:1950 src/rhsm/connection.py:1960
+#: src/rhsm/connection.py:1969
 #, fuzzy
 #| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
 msgstr "അംഗമാകുന്നതില്‍ പിശക്: %s"
 
-#: src/rhsm/connection.py:2013
+#: src/rhsm/connection.py:2018
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2024
+#: src/rhsm/connection.py:2029
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
@@ -1203,7 +1203,7 @@ msgstr "പ്രിന്റ് പതിപ്പിന്റെ വിവര�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2038
+#: src/rhsm/connection.py:2043
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
@@ -1211,7 +1211,7 @@ msgstr "ലഭ്യമായ പതിപ്പുകള്‍ ലഭ്യമ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2053
+#: src/rhsm/connection.py:2058
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
@@ -1219,7 +1219,7 @@ msgstr "സാധ്യമായ എന്‍വയണ്മെന്റുക�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2062
+#: src/rhsm/connection.py:2067
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
@@ -1227,7 +1227,7 @@ msgstr "സര്‍വീസ് ലവല്‍ ഉപയോഗിയ്ക്�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2073
+#: src/rhsm/connection.py:2078
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
@@ -1235,7 +1235,7 @@ msgstr "സാധ്യമായ എന്‍വയണ്മെന്റുക�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2083
+#: src/rhsm/connection.py:2088
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Updating certificate"
@@ -1243,39 +1243,39 @@ msgstr "തിരിച്ചറിയല്‍ സമ്മതപത്രം"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2102
+#: src/rhsm/connection.py:2107
 #, fuzzy
 #| msgid "Import Certificates"
 msgid "Updating certificates"
 msgstr "സര്‍ട്ടിഫിക്കേറ്റുകള്‍ ഇംപോര്‍ട്ട് ചെയ്യുക"
 
-#: src/rhsm/connection.py:2121
+#: src/rhsm/connection.py:2126
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2129
+#: src/rhsm/connection.py:2134
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2140
+#: src/rhsm/connection.py:2145
 msgid "Updating content overrides"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2153
+#: src/rhsm/connection.py:2158
 #, fuzzy
 #| msgid "Remove All Overrides"
 msgid "Removing content overrides"
 msgstr "എല്ലാ ഓവര്‍റൈഡുകളും നീക്കം ചെയ്യുക"
 
-#: src/rhsm/connection.py:2169
+#: src/rhsm/connection.py:2174
 msgid "Activating"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2178
+#: src/rhsm/connection.py:2183
 #, fuzzy
 #| msgid "Cancel"
 msgid "Fetching job"
@@ -1415,7 +1415,7 @@ msgstr "കഴിഞ്ഞു പോയ തീയതികള്‍ അനുദ
 msgid "Unknown"
 msgstr "അപരിചിതം"
 
-#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:61
+#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:64
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr ""
@@ -1519,18 +1519,34 @@ msgstr "പിശക്: --pool-only,  --available അല്ലെങ്കി�
 msgid "Error: this system is not registered"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:192
+#: src/rhsmlib/services/register.py:68
+msgid "Environment IDs and environment names are mutually exclusive"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:167
+#, python-brace-format
+msgid ""
+"Environment: '{env_names}' does not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:175
+#, python-brace-format
+msgid ""
+"Environments: '{env_names}' do not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:238
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:195
+#: src/rhsmlib/services/register.py:241
 #: src/subscription_manager/cli_command/register.py:146
 msgid "Error: system name can not be empty."
 msgstr "പിശക്: സിസ്റ്റത്തിന്റെ പേരു് കാലിയാകുവാന്‍ പാടില്ല."
 
-#: src/rhsmlib/services/register.py:199
+#: src/rhsmlib/services/register.py:245
 #: src/subscription_manager/cli_command/register.py:168
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
@@ -1540,34 +1556,27 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:209
+#: src/rhsmlib/services/register.py:255
 #: src/subscription_manager/cli_command/register.py:159
 msgid "Error: Must specify an activation key"
 msgstr "പിശക്: ഒരു ആക്ടിവേഷന്‍ കീ നല്‍കേണ്ടതുണ്ടു്"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:211
+#: src/rhsmlib/services/register.py:257
 #: src/subscription_manager/cli_command/register.py:148
 msgid "Error: Activation keys do not require user credentials."
 msgstr "പിശക്: ആക്ടിവേഷന്‍ കീകള്‍ക്കു് ഉപയോക്താവിനുള്ള ആധികരികത ഉറപ്പാക്കല്‍ വിവരങ്ങള്‍ ആവശ്യമില്ല."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:214
+#: src/rhsmlib/services/register.py:260
 #: src/subscription_manager/cli_command/register.py:151
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr ""
 "പിശക്: മുമ്പു് രജിസ്ടര്‍ ചെയ്തിരിയ്ക്കുന്ന ഐഡിയുമായി ആക്ടിവേഷന്‍ കീകള്‍ ഉപയോഗിയ്ക്കുവാന്‍ സാധ്യമല്ല."
 
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#: src/rhsmlib/services/register.py:218
-#: src/subscription_manager/cli_command/register.py:154
-msgid "Error: Activation keys do not allow environments to be specified."
-msgstr "പിശക്: ആക്ടിവേഷന്‍ കീകള്‍ എന്‍വയണ്മെന്റുകള്‍ നല്‍കുവാന്‍ അനുവദിയ്ക്കുന്നില്ല."
-
-#: src/rhsmlib/services/register.py:225
+#: src/rhsmlib/services/register.py:267
 msgid "Error: Missing username or password."
 msgstr ""
 
@@ -3602,6 +3611,12 @@ msgstr "ഈ സിസ്റ്റം രജിസ്ടര്‍ ചെയ്ത
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
+#: src/subscription_manager/cli_command/register.py:154
+msgid "Error: Activation keys do not allow environments to be specified."
+msgstr "പിശക്: ആക്ടിവേഷന്‍ കീകള്‍ എന്‍വയണ്മെന്റുകള്‍ നല്‍കുവാന്‍ അനുവദിയ്ക്കുന്നില്ല."
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
 #: src/subscription_manager/cli_command/register.py:156
 msgid "Error: Activation keys cannot be used with --auto-attach."
 msgstr "പിശക്: ആക്ടിവേഷന്‍ കീകള്‍ --auto-attach-നൊപ്പം ഉപയോഗിയ്ക്കുവാന്‍ പാടില്ല."
@@ -4079,11 +4094,11 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/status.py:70
+#: src/subscription_manager/cli_command/status.py:65
 msgid "System Status Details"
 msgstr "സിസ്റ്റത്തിന്റെ അവസ്ഥ വിവരങ്ങള്‍"
 
-#: src/subscription_manager/cli_command/status.py:75
+#: src/subscription_manager/cli_command/status.py:120
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
@@ -4091,7 +4106,15 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/status.py:111
+#: src/subscription_manager/cli_command/status.py:123
+#, fuzzy
+#| msgid "Register"
+msgid "Registered"
+msgstr "രജിസ്ടര്‍ ചെയ്യുക"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/cli_command/status.py:125
 #, fuzzy, python-brace-format
 #| msgid "Overall Status: %s\n"
 msgid ""
@@ -4101,11 +4124,19 @@ msgstr "മൊത്തം അവസ്ഥ: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/status.py:145
+#: src/subscription_manager/cli_command/status.py:156
 #, fuzzy, python-brace-format
 #| msgid "System Status Details"
 msgid "System Purpose Status: {status}"
 msgstr "സിസ്റ്റത്തിന്റെ അവസ്ഥ വിവരങ്ങള്‍"
+
+# translation auto-copied from project subscription-manager, version 1.11.X,
+# document keys
+#: src/subscription_manager/cli_command/status.py:178
+#, fuzzy
+#| msgid "System is not registered."
+msgid "Overall Status: Not registered\n"
+msgstr "സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടില്ല."
 
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
@@ -4526,7 +4557,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 #, fuzzy
 #| msgid "This system is already registered. Use --force to override"
 msgid ""
@@ -4536,7 +4567,7 @@ msgstr "ഈ സിസ്റ്റം രജിസ്ടര്‍ ചെയ്ത
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering the system"
@@ -4544,7 +4575,7 @@ msgstr "സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യു�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 #, fuzzy
 #| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
@@ -4552,7 +4583,7 @@ msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍ട�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:415
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:430
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകളും റിപ്പോസിറ്ററികളും പരിഷ്കരിയ്ക്കുവാന്‍ സാധ്യമല്ല"
 
@@ -4706,11 +4737,6 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#~ msgid "Register"
-#~ msgstr "രജിസ്ടര്‍ ചെയ്യുക"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
 #~ msgid "Close"
 #~ msgstr "അടയ്ക്കുക"
 
@@ -4819,13 +4845,6 @@ msgstr ""
 #~| msgid "System Type:"
 #~ msgid "System purpose"
 #~ msgstr "സിസ്റ്റം രീതി:"
-
-# translation auto-copied from project subscription-manager, version 1.11.X,
-# document keys
-#, fuzzy
-#~| msgid "System is not registered."
-#~ msgid "Not registered"
-#~ msgstr "സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടില്ല."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
