@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-07 18:24+0100\n"
+"POT-Creation-Date: 2025-03-21 14:41+0100\n"
 "PO-Revision-Date: 2021-08-10 19:35+0000\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
@@ -271,7 +271,7 @@ msgstr "指定了無效的引數：%s\n"
 msgid "Installed products updated."
 msgstr "安裝的產品已更新。"
 
-#: src/plugins/dnf/subscription_manager.py:44
+#: src/plugins/dnf/subscription_manager.py:46
 #, python-format
 msgid ""
 "\n"
@@ -290,7 +290,7 @@ msgstr ""
 "您已無法再存取提供這些產品的軟體庫。請注意，您必須套用啟用的訂閱，才能繼續取"
 "得安全性及其他重大更新。如果您沒有其他啟用的訂閱，可以續訂已過期的訂閱。  "
 
-#: src/plugins/dnf/subscription_manager.py:55
+#: src/plugins/dnf/subscription_manager.py:57
 #, fuzzy
 #| msgid ""
 #| "This system is not registered to Red Hat Subscription Management. You can "
@@ -303,7 +303,7 @@ msgstr ""
 "此系統尚未在 Red Hat 訂閱管理程式註冊，您可以使用 subscription-manager 進行註"
 "冊。"
 
-#: src/plugins/dnf/subscription_manager.py:61
+#: src/plugins/dnf/subscription_manager.py:63
 #, fuzzy
 #| msgid ""
 #| "This system is not registered to Red Hat Subscription Management. You can "
@@ -316,7 +316,7 @@ msgstr ""
 "此系統尚未在 Red Hat 訂閱管理程式註冊，您可以使用 subscription-manager 進行註"
 "冊。"
 
-#: src/plugins/dnf/subscription_manager.py:68
+#: src/plugins/dnf/subscription_manager.py:70
 #, fuzzy
 #| msgid ""
 #| "This system is registered to Red Hat Subscription Management, but is not "
@@ -330,7 +330,7 @@ msgstr ""
 "系統已在 Red Hat 訂閱管理程式註冊，但沒有接收更新，您可以使用 subscription-"
 "manager 指派訂閱項。"
 
-#: src/plugins/dnf/subscription_manager.py:75
+#: src/plugins/dnf/subscription_manager.py:77
 #, python-brace-format
 msgid ""
 "\n"
@@ -338,11 +338,11 @@ msgid ""
 "only for this release.\n"
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:110
+#: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
 msgstr "不是根目錄，訂閱管理程式軟體庫未更新"
 
-#: src/plugins/dnf/subscription_manager.py:138
+#: src/plugins/dnf/subscription_manager.py:140
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
@@ -352,15 +352,15 @@ msgid_plural ""
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr[0] ""
 
-#: src/plugins/dnf/subscription_manager.py:155
+#: src/plugins/dnf/subscription_manager.py:158
 msgid "Updating Subscription Management repositories."
 msgstr "正在更新訂閱管理程式軟體庫。"
 
-#: src/plugins/dnf/subscription_manager.py:164
+#: src/plugins/dnf/subscription_manager.py:167
 msgid "Unable to read consumer identity"
 msgstr "無法讀取消耗者身份"
 
-#: src/plugins/dnf/subscription_manager.py:167
+#: src/plugins/dnf/subscription_manager.py:170
 #, fuzzy
 #| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
@@ -952,196 +952,196 @@ msgstr ""
 msgid "Checking connection status"
 msgstr "connectionStatusLabel"
 
-#: src/rhsm/connection.py:1529
+#: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1602
+#: src/rhsm/connection.py:1607
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "註冊系統"
 
-#: src/rhsm/connection.py:1632 src/rhsm/connection.py:1644
+#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1667
+#: src/rhsm/connection.py:1672
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
 msgstr "列印版本資訊"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1742
+#: src/rhsm/connection.py:1747
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
 msgstr "訂閱註冊"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1747 src/rhsm/connection.py:1751
+#: src/rhsm/connection.py:1752 src/rhsm/connection.py:1756
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
 msgstr "列印清單資訊"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1755
+#: src/rhsm/connection.py:1760
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
 msgstr "移除"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1785 src/rhsm/connection.py:1796
+#: src/rhsm/connection.py:1790 src/rhsm/connection.py:1801
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "印出憑證資訊"
 
-#: src/rhsm/connection.py:1804
+#: src/rhsm/connection.py:1809
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1813
+#: src/rhsm/connection.py:1818
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1822
+#: src/rhsm/connection.py:1827
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1829
+#: src/rhsm/connection.py:1834
 msgid "Fetching available system purpose settings"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1836 src/rhsm/connection.py:1844
+#: src/rhsm/connection.py:1841 src/rhsm/connection.py:1849
 #, fuzzy
 #| msgid "specify organization"
 msgid "Fetching organizations"
 msgstr "指定組織"
 
-#: src/rhsm/connection.py:1857
+#: src/rhsm/connection.py:1862
 #, fuzzy
 #| msgid "Unregistering"
 msgid "Unregistering system"
 msgstr "取消註冊"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1881
+#: src/rhsm/connection.py:1886
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "身份憑證"
 
-#: src/rhsm/connection.py:1890
+#: src/rhsm/connection.py:1895
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1906
+#: src/rhsm/connection.py:1911
 msgid "Fetching content for a certificate"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1919 src/rhsm/connection.py:1936
+#: src/rhsm/connection.py:1924 src/rhsm/connection.py:1941
 #, fuzzy
 #| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
 msgstr "連接訂閱服務"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:1945 src/rhsm/connection.py:1955
-#: src/rhsm/connection.py:1964
+#: src/rhsm/connection.py:1950 src/rhsm/connection.py:1960
+#: src/rhsm/connection.py:1969
 #, fuzzy
 #| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
 msgstr "訂閱發生錯誤：%s"
 
-#: src/rhsm/connection.py:2013
+#: src/rhsm/connection.py:2018
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2024
+#: src/rhsm/connection.py:2029
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
 msgstr "列印版本資訊"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2038
+#: src/rhsm/connection.py:2043
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
 msgstr "列出可用的發行版本"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2053
+#: src/rhsm/connection.py:2058
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
 msgstr "取得可用環境的清單"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2062
+#: src/rhsm/connection.py:2067
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
 msgstr "使用服務等級："
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2073
+#: src/rhsm/connection.py:2078
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
 msgstr "取得可用環境的清單"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2083
+#: src/rhsm/connection.py:2088
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Updating certificate"
 msgstr "身份憑證"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2102
+#: src/rhsm/connection.py:2107
 #, fuzzy
 #| msgid "Import Certificates"
 msgid "Updating certificates"
 msgstr "匯入憑證"
 
-#: src/rhsm/connection.py:2121
+#: src/rhsm/connection.py:2126
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2129
+#: src/rhsm/connection.py:2134
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2140
+#: src/rhsm/connection.py:2145
 #, fuzzy
 #| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
 msgstr "正在更新軟體庫覆寫項目。"
 
-#: src/rhsm/connection.py:2153
+#: src/rhsm/connection.py:2158
 #, fuzzy
 #| msgid "Removing Repository Overrides"
 msgid "Removing content overrides"
 msgstr "正在移除軟體庫覆寫項目"
 
-#: src/rhsm/connection.py:2169
+#: src/rhsm/connection.py:2174
 #, fuzzy
 #| msgid "Activation Key"
 msgid "Activating"
 msgstr "啟動金鑰"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsm/connection.py:2178
+#: src/rhsm/connection.py:2183
 #, fuzzy
 #| msgid "Cancel"
 msgid "Fetching job"
@@ -1275,7 +1275,7 @@ msgstr "不允許使用過去的日期"
 msgid "Unknown"
 msgstr "不明"
 
-#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:61
+#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:64
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr "不明的引數：%s"
@@ -1369,17 +1369,33 @@ msgstr "錯誤：--pool-only 只能與 --available 與（或）--consumed 合用
 msgid "Error: this system is not registered"
 msgstr "錯誤：這部系統尚未註冊"
 
-#: src/rhsmlib/services/register.py:192
+#: src/rhsmlib/services/register.py:68
+msgid "Environment IDs and environment names are mutually exclusive"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:167
+#, python-brace-format
+msgid ""
+"Environment: '{env_names}' does not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:175
+#, python-brace-format
+msgid ""
+"Environments: '{env_names}' do not have required type '{environment_type}'"
+msgstr ""
+
+#: src/rhsmlib/services/register.py:238
 msgid "This system is already registered. Add force to options to override."
 msgstr "此系統已經註冊。將力添加到選項重寫。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:195
+#: src/rhsmlib/services/register.py:241
 #: src/subscription_manager/cli_command/register.py:146
 msgid "Error: system name can not be empty."
 msgstr "錯誤：系統名稱不能是空白的。"
 
-#: src/rhsmlib/services/register.py:199
+#: src/rhsmlib/services/register.py:245
 #: src/subscription_manager/cli_command/register.py:168
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
@@ -1390,30 +1406,24 @@ msgstr ""
 "--consumerid 以重新註冊，或使用 clean 指令而不加上 --force。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:209
+#: src/rhsmlib/services/register.py:255
 #: src/subscription_manager/cli_command/register.py:159
 msgid "Error: Must specify an activation key"
 msgstr "錯誤：必須指定一組啟動金鑰。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:211
+#: src/rhsmlib/services/register.py:257
 #: src/subscription_manager/cli_command/register.py:148
 msgid "Error: Activation keys do not require user credentials."
 msgstr "錯誤：啟動金鑰不需要使用者憑證資訊。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:214
+#: src/rhsmlib/services/register.py:260
 #: src/subscription_manager/cli_command/register.py:151
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr "錯誤：啟動金鑰無法與先前註冊的 ID 搭配使用。"
 
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/rhsmlib/services/register.py:218
-#: src/subscription_manager/cli_command/register.py:154
-msgid "Error: Activation keys do not allow environments to be specified."
-msgstr "錯誤：啟動金鑰不允許指定環境。"
-
-#: src/rhsmlib/services/register.py:225
+#: src/rhsmlib/services/register.py:267
 msgid "Error: Missing username or password."
 msgstr "錯誤： 缺少使用者名或密碼。"
 
@@ -3216,6 +3226,11 @@ msgid "This system is already registered. Use --force to override"
 msgstr "這部系統已註冊。請使用 --force 來覆寫"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/register.py:154
+msgid "Error: Activation keys do not allow environments to be specified."
+msgstr "錯誤：啟動金鑰不允許指定環境。"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:156
 msgid "Error: Activation keys cannot be used with --auto-attach."
 msgstr "錯誤：啟動金鑰不可與 --auto-attach 搭配使用。"
@@ -3643,17 +3658,24 @@ msgid ""
 msgstr "檢查狀態的未來日期，預設值為當天的日期（例如：%s）"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/cli_command/status.py:70
+#: src/subscription_manager/cli_command/status.py:65
 msgid "System Status Details"
 msgstr "系統狀態的詳細資料"
 
-#: src/subscription_manager/cli_command/status.py:75
+#: src/subscription_manager/cli_command/status.py:120
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr ""
 
-#: src/subscription_manager/cli_command/status.py:111
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/status.py:123
+#, fuzzy
+#| msgid "Register"
+msgid "Registered"
+msgstr "註冊"
+
+#: src/subscription_manager/cli_command/status.py:125
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "Overall Status: %s\n"
@@ -3665,11 +3687,18 @@ msgstr ""
 "總體狀況： %s\n"
 "%s"
 
-#: src/subscription_manager/cli_command/status.py:145
+#: src/subscription_manager/cli_command/status.py:156
 #, fuzzy, python-brace-format
 #| msgid "System Purpose Status: %s\n"
 msgid "System Purpose Status: {status}"
 msgstr "系統目的狀態： %s\n"
+
+# translation auto-copied from project subscription-manager, version 1.11.X, document keys
+#: src/subscription_manager/cli_command/status.py:178
+#, fuzzy
+#| msgid "System is not registered."
+msgid "Overall Status: Not registered\n"
+msgstr "系統尚未註冊。"
 
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
@@ -4059,7 +4088,7 @@ msgstr "被使用者干擾的程序。"
 msgid "Error uploading package profile: %s\n"
 msgstr ""
 
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:328
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 #, fuzzy
 #| msgid "This system is already registered. Add force to options to override."
 msgid ""
@@ -4068,21 +4097,21 @@ msgid ""
 msgstr "此系統已經註冊。將力添加到選項重寫。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:331
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering the system"
 msgstr "註冊系統"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:342
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 #, fuzzy
 #| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
 msgstr "更新權利憑證與軟體庫"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:415
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:430
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "無法更新權利憑證與軟體庫"
 
@@ -4217,10 +4246,6 @@ msgstr ""
 #~ "訊。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#~ msgid "Register"
-#~ msgstr "註冊"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "Close"
 #~ msgstr "關閉"
 
@@ -4335,12 +4360,6 @@ msgstr ""
 #~| msgid "System Purpose"
 #~ msgid "System purpose"
 #~ msgstr "系統目的"
-
-# translation auto-copied from project subscription-manager, version 1.11.X, document keys
-#, fuzzy
-#~| msgid "System is not registered."
-#~ msgid "Not registered"
-#~ msgstr "系統尚未註冊。"
 
 #~ msgid "Unregister"
 #~ msgstr "取消註冊"
