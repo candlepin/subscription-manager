@@ -10,9 +10,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2025-04-08 06:53+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2025-04-27 05:53+0000\n"
+"Last-Translator: hsu zangmen <chzang55@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -20,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -43,7 +42,7 @@ msgstr ""
 
 #: /usr/lib64/python3.12/argparse.py:890
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() 未定義"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1161
@@ -64,12 +63,12 @@ msgstr ""
 #: /usr/lib64/python3.12/argparse.py:1262
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "未知解析器 %(parser_name)r (選擇： %(choices)s)"
 
 #: /usr/lib64/python3.12/argparse.py:1323
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "模式為 %r 的參數 \"-\""
 
 #: /usr/lib64/python3.12/argparse.py:1332
 #, python-format
@@ -79,11 +78,11 @@ msgstr ""
 #: /usr/lib64/python3.12/argparse.py:1541
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "無法合併動作 - 兩個群組名稱為 %r"
 
 #: /usr/lib64/python3.12/argparse.py:1583
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "“required” 是無效的位置參數"
 
 #: /usr/lib64/python3.12/argparse.py:1604
 #, python-format
@@ -153,10 +152,9 @@ msgstr "不明的引數：%s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:2030
-#, fuzzy, python-format
-#| msgid "ambiguous option: %s (%s?)"
+#, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "含糊不清的選項：%s（%s?）"
+msgstr "模棱兩可的選項：%(option)s 可以匹配 %(matches)s"
 
 #: /usr/lib64/python3.12/argparse.py:2062
 #: /usr/lib64/python3.12/argparse.py:2094
@@ -171,10 +169,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:2245
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "指定了錯誤的引數數量。\n"
+msgstr "其中一個參數 %s 是必需的"
 
 #: /usr/lib64/python3.12/argparse.py:2289
 msgid "expected one argument"
@@ -206,24 +203,21 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:2557
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "選項 %s：無效的 %s 值：%r"
+msgstr "無效的 %(type)s 值：%(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:2572
-#, fuzzy, python-format
-#| msgid "option %s: invalid choice: %r (choose from %s)"
+#, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "選項 %s：無效的選擇：%r（由 %s 選擇）"
+msgstr "無效選擇：%(value)r (從 %(choices)s 中選擇)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:2650
-#, fuzzy, python-format
-#| msgid "%s: error: %s"
+#, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%s：錯誤：%s"
+msgstr "%(prog)s：錯誤： %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:100
@@ -308,44 +302,33 @@ msgstr ""
 "得安全性及其他重大更新。如果您沒有其他啟用的訂閱，可以續訂已過期的訂閱。  "
 
 #: src/plugins/dnf/subscription_manager.py:57
-#, fuzzy
-#| msgid ""
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register."
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
-"此系統尚未在 Red Hat 訂閱管理程式註冊，您可以使用 subscription-manager 進行註"
-"冊。"
+"\n"
+"本系統未向權限伺服器註冊。您可以使用 subscription-manager 註冊。\n"
 
 #: src/plugins/dnf/subscription_manager.py:63
-#, fuzzy
-#| msgid ""
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register."
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "\"rhc\" or \"subscription-manager\" to register.\n"
 msgstr ""
-"此系統尚未在 Red Hat 訂閱管理程式註冊，您可以使用 subscription-manager 進行註"
-"冊。"
+"\n"
+"本系統未向權限伺服器註冊。您可以使用 \"rhc\" 或 \"subscription-manager \" "
+"進行註冊。\n"
 
 #: src/plugins/dnf/subscription_manager.py:70
-#, fuzzy
-#| msgid ""
-#| "This system is registered to Red Hat Subscription Management, but is not "
-#| "receiving updates. You can use subscription-manager to assign "
-#| "subscriptions."
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
-"系統已在 Red Hat 訂閱管理程式註冊，但沒有接收更新，您可以使用 subscription-"
-"manager 指派訂閱項。"
+"\n"
+"此系統已向權限伺服器註冊，但未接收更新。 您可以使用 subscription-manager "
+"分配訂閱。\n"
 
 #: src/plugins/dnf/subscription_manager.py:77
 #, python-brace-format
@@ -399,17 +382,15 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:33
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] CERT_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] CERT_FILE"
-msgstr "%%prog %s [選項] CERT_FILE"
+msgstr "%(prog)s {name} [選項] CERT_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:41
-#, fuzzy, python-brace-format
-#| msgid "Unable to read certificate file '%s': %s"
+#, python-brace-format
 msgid "Unable to read certificate file '{certificate}': {exception}"
-msgstr "無法讀取憑證檔案「%s」：%s"
+msgstr "無法讀取憑證檔案 '{certificate}': {exception}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:49
@@ -448,31 +429,27 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:100
-#, fuzzy, python-brace-format
-#| msgid "Certificate Version"
+#, python-brace-format
 msgid "Version: {certificate_version}"
-msgstr "憑證版本"
+msgstr "憑證版本: {certificate_version}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:101
-#, fuzzy, python-brace-format
-#| msgid "DER size: %db"
+#, python-brace-format
 msgid "DER size: {size}b"
-msgstr "DER 大小：%db"
+msgstr "DER 大小：{size}b"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:106
-#, fuzzy, python-brace-format
-#| msgid "Subject Key ID size: %db"
+#, python-brace-format
 msgid "Subject Key ID size: {len_subject_key_id}b"
-msgstr "主體金鑰 ID 大小：%db"
+msgstr "主體金鑰 ID 大小：{len_subject_key_id}b"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:113
-#, fuzzy, python-brace-format
-#| msgid "Content sets: %s"
+#, python-brace-format
 msgid "Content sets: {content_length}"
-msgstr "內容集：%s"
+msgstr "內容集： {content_length}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:62
@@ -498,10 +475,9 @@ msgstr "無法追蹤符號連結。可能是環狀連結。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:138
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
-msgstr "%%prog %s [選項] MANIFEST_FILE"
+msgstr "%(prog)s {name} [選項] MANIFEST_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:143
@@ -1123,10 +1099,8 @@ msgid "Fetching content overrides"
 msgstr ""
 
 #: src/rhsm/connection.py:2088
-#, fuzzy
-#| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
-msgstr "正在更新軟體庫覆寫項目。"
+msgstr "正在更新軟體庫覆寫項目"
 
 #: src/rhsm/connection.py:2101
 #, fuzzy
@@ -1173,10 +1147,9 @@ msgstr "只有未包含在 sos 報告中的資料會被蒐集"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:106
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] "
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] "
-msgstr "%%prog %s [選項] "
+msgstr "%(prog)s {name} [選項] "
 
 #: src/rhsm_debug/debug_commands.py:110
 msgid "The directory specified by '--destination' must already exist."
@@ -1398,7 +1371,7 @@ msgstr ""
 #: src/rhsmlib/services/register.py:260
 #: src/subscription_manager/cli_command/register.py:132
 msgid "Error: Must specify an activation key"
-msgstr "錯誤：必須指定一組啟動金鑰。"
+msgstr "錯誤：必須指定一組啟動金鑰"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:262
@@ -1489,14 +1462,14 @@ msgstr "Red Hat 訂閱管理程式"
 msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
-msgstr "將此系統註冊至客戶端入口網站，或另一項訂閱管理服務。"
+msgstr "將此系統註冊至客戶端入口網站，或另一項訂閱管理服務"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:10
 msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
-msgstr "將此系統由客戶端入口網站，或另一訂閱管理服務取消註冊。"
+msgstr "將此系統由客戶端入口網站，或另一訂閱管理服務取消註冊"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:12
@@ -1596,10 +1569,9 @@ msgstr "無效"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli.py:83
-#, fuzzy, python-format, python-brace-format
-#| msgid "%prog [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS]"
-msgstr "%prog [選項]"
+msgstr "%(prog)s {name} [選項]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli.py:123
@@ -1670,7 +1642,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:142
 msgid "--unset cannot be used with --set, --add, or --remove"
-msgstr "--unset不能與--set， -  add或--remove一起使用"
+msgstr "--unset不能與--set， - add或--remove一起使用"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:144
 msgid "--add cannot be used with --remove"
@@ -1761,10 +1733,9 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:461
 #: src/subscription_manager/i18n_argparse.py:35
-#, fuzzy, python-format
-#| msgid "%prog [OPTIONS]"
+#, python-format
 msgid "%(prog)s [OPTIONS]"
-msgstr "%prog [選項]"
+msgstr "%(prog)s {name} [選項]"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:470
 #, python-brace-format
@@ -1777,7 +1748,7 @@ msgstr "注意：當前配置的授權服務器不支持系統用途 {attr}。"
 #: src/subscription_manager/cli_command/clean.py:25
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr "移除所有本機系統與訂閱資料，而不影響伺服器。"
+msgstr "移除所有本機系統與訂閱資料，而不影響伺服器"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/clean.py:31
@@ -2022,10 +1993,8 @@ msgstr "錯誤：無法由伺服器取得環境清單"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:128
-#, fuzzy
-#| msgid "Environments"
 msgid "Environments updated."
-msgstr "環境"
+msgstr "環境已更新。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:130
@@ -2248,10 +2217,9 @@ msgstr "組織： "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/org.py:62
-#, fuzzy, python-brace-format
-#| msgid "%s cannot register with any organizations."
+#, python-brace-format
 msgid "Error: User {username} is not member of any organization."
-msgstr "%s 無法向任何組織進行註冊。"
+msgstr "錯誤： 使用者 {username} 不是任何組織的成員。"
 
 #: src/subscription_manager/cli_command/org.py:74
 #: src/subscription_manager/cli_command/register.py:440
@@ -2764,11 +2732,11 @@ msgstr "這部系統的軟體庫 '%s' 已停用。"
 
 #: src/subscription_manager/cli_command/role.py:24
 msgid "Show or modify the system purpose role setting"
-msgstr ""
+msgstr "顯示或修改系統目的角色設定"
 
 #: src/subscription_manager/cli_command/service_level.py:42
 msgid "Show or modify the system purpose service-level setting"
-msgstr ""
+msgstr "顯示或修改系統目的服務層級設定"
 
 #: src/subscription_manager/cli_command/service_level.py:70
 msgid "Error: --org is only supported with the --list or --set option"
@@ -2840,17 +2808,13 @@ msgstr "系統狀態的詳細資料"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:49
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Overall Status: Not registered\n"
-msgstr "系統尚未註冊。"
+msgstr "整體狀態： 未註冊\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:52
-#, fuzzy
-#| msgid "Overall Status"
 msgid "Overall Status: Registered\n"
-msgstr "整體狀態"
+msgstr "整體狀態： 已註冊\n"
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
@@ -2858,7 +2822,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/syspurpose.py:57
 msgid "show current system purpose"
-msgstr ""
+msgstr "顯示目前系統用途"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:74
@@ -2873,10 +2837,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:90
-#, fuzzy, python-format, python-brace-format
-#| msgid "%prog [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr "%prog [選項]"
+msgstr "%(prog)s {name} [SUBMODULE] [選項]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:38
@@ -2891,7 +2854,7 @@ msgstr "系統已取消註冊。"
 
 #: src/subscription_manager/cli_command/usage.py:24
 msgid "Show or modify the system purpose usage setting"
-msgstr ""
+msgstr "顯示或修改系統用途使用設定"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/user_pass.py:40
@@ -2973,7 +2936,7 @@ msgstr "已新增（新增）"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/entcertlib.py:455
 msgid "Deleted (rogue):"
-msgstr "已刪除（rogue）"
+msgstr "已刪除（rogue）:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:32
@@ -3006,23 +2969,20 @@ msgid "Unknown server reply (HTTP error code {code}: {title})"
 msgstr ""
 
 #: src/subscription_manager/exceptions.py:39
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
-msgstr "代理伺服器發生錯誤，無法連上代理伺服器。"
+msgstr "代理錯誤：無法連線到 {hostname}： {message} (錯誤代碼 {code})"
 
 #: src/subscription_manager/exceptions.py:41
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}: {message}"
-msgstr "代理伺服器發生錯誤，無法連上代理伺服器。"
+msgstr "代理錯誤：無法連線到 {hostname}：{message}。"
 
 #: src/subscription_manager/exceptions.py:42
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}"
-msgstr "代理伺服器發生錯誤，無法連上代理伺服器。"
+msgstr "代理錯誤：無法連線到 {hostname}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:43
@@ -3253,10 +3213,8 @@ msgstr "註冊系統"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:357
-#, fuzzy
-#| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
-msgstr "更新權利憑證與軟體庫"
+msgstr "更新權利憑證與軟體庫。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:419
