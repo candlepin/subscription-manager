@@ -15,9 +15,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2025-03-28 10:00+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2025-04-19 21:48+0000\n"
+"Last-Translator: 김인수 <simmon@nplob.com>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/ko/>\n"
 "Language: ko\n"
@@ -25,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -322,8 +321,8 @@ msgid ""
 "only for this release.\n"
 msgstr ""
 "\n"
-"이와 같은 시스템은 {release_version} 으로 설정되어 출시되었고 해당 출시에 대"
-"해서만 최신화를 수신합니다.\n"
+"이와 같은 시스템은 {release_version} 으로 설정되어 출시되었고 해당 출시에 "
+"대해서만 최신화를 받습니다.\n"
 
 #: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
@@ -3973,17 +3972,13 @@ msgstr "이 시스템은 이미 등록되어 있어, 자동으로 등록되는 �
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:346
-#, fuzzy
-#| msgid "Registering system"
 msgid "Registering the system"
 msgstr "시스템 등록하기"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:357
-#, fuzzy
-#| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
-msgstr "자격 인증서 & 저장소를 최신화하기"
+msgstr "자격 인증서 & 저장소를 최신화하기."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:430
