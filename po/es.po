@@ -4,25 +4,27 @@
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # Emilio Herrera <ehespinosa57@gmail.com>, 2021.
 # Pino Toscano <ptoscano@redhat.com>, 2023.
+# Javier Francisco <fserrador@gmail.com>, 2025.
+# "Fco. Javier F. Serrador" <fserrador@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2023-01-20 19:20+0000\n"
-"Last-Translator: Pino Toscano <ptoscano@redhat.com>\n"
+"PO-Revision-Date: 2025-04-21 19:53+0000\n"
+"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
-"subscription-manager/subscription-manager-main/es/>\n"
+"subscription-manager/subscription-manager-1-29/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 5.11\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
-msgstr "uso: "
+msgstr "modo de empleo: "
 
 #: /usr/lib64/python3.9/argparse.py:861
 msgid ".__call__() not defined"
@@ -31,7 +33,7 @@ msgstr ".__call__() no definido"
 #: /usr/lib64/python3.9/argparse.py:1204
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr "analizador desconocido %(parser_name)r (opciones: %(choices)s)"
+msgstr "interpretación %(parser_name)r desconocida (elija: %(choices)s)"
 
 #: /usr/lib64/python3.9/argparse.py:1264
 #, python-format
@@ -41,7 +43,7 @@ msgstr "argumento \"-\" con modo %r"
 #: /usr/lib64/python3.9/argparse.py:1273
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr ""
+msgstr "no puedo abrir '%(filename)s': %(error)s"
 
 #: /usr/lib64/python3.9/argparse.py:1482
 #, python-format
@@ -58,13 +60,13 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
-"opción de cadena no válida %(option)r: debe empezar con un carácter "
+"opción de cadena %(option)r inválida: debe iniciar con un carácter "
 "%(prefix_chars)r"
 
 #: /usr/lib64/python3.9/argparse.py:1560
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr "dest= se requiere para opciones como %r"
+msgstr "dest= está requerido para opciones como %r"
 
 #: /usr/lib64/python3.9/argparse.py:1577
 #, python-format
@@ -75,22 +77,22 @@ msgstr "valor no válido de conflict_resolution: %r"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "cadena de opciones en conflicto: %s"
-msgstr[1] "cadenas de opciones en conflicto: %s"
+msgstr[0] "cadena con opción en conflicto: %s"
+msgstr[1] "cadenas con opción en conflicto: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1661
 msgid "mutually exclusive arguments must be optional"
-msgstr "los argumentos mutuamente excluyentes deben ser opcionales"
+msgstr "argumentos mutuamente exclusivos deben ser opcionales"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1728
 msgid "positional arguments"
-msgstr "Argumentos posicionales"
+msgstr "argumentos posicionales"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1729
 msgid "optional arguments"
-msgstr "Argumentos opcionales"
+msgstr "argumentos opcionales"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:1744
@@ -100,33 +102,33 @@ msgstr "mostrar este mensaje de ayuda y salir"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: /usr/lib64/python3.9/argparse.py:1775
 msgid "cannot have multiple subparser arguments"
-msgstr "no se pueden tener varios argumento de sub analizador"
+msgstr "no se pueden tener múltiples argumentos de sub-intérprete"
 
 #: /usr/lib64/python3.9/argparse.py:1827 /usr/lib64/python3.9/argparse.py:2338
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr "Argumentos no reconocidos: %s"
+msgstr "argumentos no reconocidos: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1928
 #, python-format
 msgid "not allowed with argument %s"
-msgstr "no permitido con argumento: %s"
+msgstr "no permitido con argumento %s"
 
 #: /usr/lib64/python3.9/argparse.py:1974 /usr/lib64/python3.9/argparse.py:1988
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr "argumento explícito ignorado %r"
+msgstr "se hace caso omiso al argumento explícito %r"
 
 #: /usr/lib64/python3.9/argparse.py:2095
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr "se requieren los siguientes argumentos: %s"
+msgstr "los argumentos siguientes son requeridos: %s"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2110
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr "se requiere uno de los argumentos %s"
+msgstr "uno se los argumentos de %s es requerido"
 
 #: /usr/lib64/python3.9/argparse.py:2153
 msgid "expected one argument"
@@ -138,7 +140,7 @@ msgstr "se espera como máximo un argumento"
 
 #: /usr/lib64/python3.9/argparse.py:2155
 msgid "expected at least one argument"
-msgstr "se espera al menos un argumento"
+msgstr "esperaba al menos un argumento"
 
 #: /usr/lib64/python3.9/argparse.py:2159
 #, python-format
@@ -151,7 +153,7 @@ msgstr[1] "argumentos esperados %s"
 #: /usr/lib64/python3.9/argparse.py:2217
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "opción ambigua: %(option)s podría coincidir %(matches)s"
+msgstr "opciones ambiguas: %(option)s pudo coincidir con %(matches)s"
 
 #: /usr/lib64/python3.9/argparse.py:2281
 #, python-format
@@ -167,13 +169,13 @@ msgstr "%r no es invocable"
 #: /usr/lib64/python3.9/argparse.py:2495
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "%(type)s no válido valor: %(value)r"
+msgstr "valor %(type)s no válido: %(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2506
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "opción no válida: %(value)r (escoja de %(choices)s)"
+msgstr "elección no válida: %(value)r (elija desde %(choices)s)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: /usr/lib64/python3.9/argparse.py:2582
@@ -243,7 +245,7 @@ msgstr "El argumento especificado es inválido.\n"
 #: src/daemons/rhsmcertd.c:769
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
-msgstr "ADVERTENCIA: Se están utilizando argumentos CLI depreciados.\n"
+msgstr "AVISO: Se están utilizando argumentos CLI depreciados.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:784
@@ -284,29 +286,26 @@ msgstr ""
 "ha expirado.  "
 
 #: src/plugins/dnf/subscription_manager.py:57
-#, fuzzy
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
 "\n"
-"Este sistema no está registrado con un servidor de derechos. Puede usar el "
-"administrador de registro para registrar.\n"
+"Este sistema no está registrado con un servidor de derechos. Puede utilizar "
+"el subscription-manager para registrar.\n"
 
 #: src/plugins/dnf/subscription_manager.py:63
-#, fuzzy
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "\"rhc\" or \"subscription-manager\" to register.\n"
 msgstr ""
 "\n"
-"Este sistema no está registrado con un servidor de derechos. Puede usar el "
-"administrador de registro para registrar.\n"
+"Este sistema no está registrado con un servidor de derechos. Puede usar "
+"\"rhc\" o \"subscription-manager\" para registrar.\n"
 
 #: src/plugins/dnf/subscription_manager.py:70
-#, fuzzy
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
@@ -314,8 +313,8 @@ msgid ""
 msgstr ""
 "\n"
 "Este sistema está registrado con un servidor de derechos, pero no está "
-"recibiendo actualizaciones. Puede usar el administrador de suscripción para "
-"asignar suscripciones.\n"
+"recibiendo actualizaciones. Puede usar el subscription-manager para asignar "
+"suscripciones.\n"
 
 #: src/plugins/dnf/subscription_manager.py:77
 #, python-brace-format
@@ -324,6 +323,9 @@ msgid ""
 "This system has release set to {release_version} and it receives updates "
 "only for this release.\n"
 msgstr ""
+"\n"
+"Este sistema tiene un conjunto de liberación para {release_version} y recibe "
+"actualizaciones solo para esta liberación.\n"
 
 #: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
@@ -331,10 +333,7 @@ msgstr ""
 "No root, los repositorios de Subscription Management no están actualizados"
 
 #: src/plugins/dnf/subscription_manager.py:140
-#, fuzzy, python-format
-#| msgid ""
-#| "subscription-manager plugin disabled %d system repositories with respect "
-#| "of configuration in /etc/dnf/plugins/subscription-manager.conf"
+#, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
@@ -342,7 +341,7 @@ msgid_plural ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr[0] ""
-"plugin subscription-manager deshabilita %d repositorios de sistema con "
+"plugin subscription-manager deshabilita %d repositorio de sistema con "
 "respecto de la configuración en /etc/dnf/plugins/subscription-manager.conf"
 msgstr[1] ""
 "plugin subscription-manager deshabilita %d repositorios de sistema con "
@@ -357,22 +356,16 @@ msgid "Unable to read consumer identity"
 msgstr "No se pudo leer identidad del consumidor"
 
 #: src/plugins/dnf/subscription_manager.py:170
-#, fuzzy
-#| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
 msgstr "Subscription Manager está operando en modo de contenedor."
 
 #: src/plugins/dnf/upload_profile.py:37
-#, fuzzy
-#| msgid ""
-#| "Upload combined profile to Satellite server (list of installed rpms, "
-#| "enabled repositories and modules"
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
 msgstr ""
-"Subir el perfil combinado al servidor Satellite (lista de los rpms "
-"instalados, repositorios habilitados y módulos"
+"Suba el perfil combinado al servidor Satellite (lista de los RPMs "
+"instalados, repositorios y módulos habilitados)"
 
 #: src/plugins/dnf/upload_profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
@@ -394,10 +387,10 @@ msgstr "%(prog)s {name} [OPTIONS] CERT_FILE"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rct/cert_commands.py:41
-#, fuzzy, python-brace-format
-#| msgid "Unable to read certificate file '%s': %s"
+#, python-brace-format
 msgid "Unable to read certificate file '{certificate}': {exception}"
-msgstr "No se puede leer el archivo de certificado '%s': %s"
+msgstr ""
+"No es capaz de leer el archivo del certificado '{certificate}': {exception}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:49
@@ -432,35 +425,31 @@ msgstr "Imprima estadística y tamaños de certificado"
 #: src/rct/cert_commands.py:99
 #, python-brace-format
 msgid "Type: {certificate_type}"
-msgstr ""
+msgstr "Tipo: {certificate_type}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rct/cert_commands.py:100
-#, fuzzy, python-brace-format
-#| msgid "Certificate Version"
+#, python-brace-format
 msgid "Version: {certificate_version}"
-msgstr "Versión de certificado"
+msgstr "Versión: {certificate_version}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:101
-#, fuzzy, python-brace-format
-#| msgid "DER size: %db"
+#, python-brace-format
 msgid "DER size: {size}b"
-msgstr "Tamaño DER: %db"
+msgstr "Tamaño DER: {size}b"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:106
-#, fuzzy, python-brace-format
-#| msgid "Subject Key ID size: %db"
+#, python-brace-format
 msgid "Subject Key ID size: {len_subject_key_id}b"
-msgstr "Tamaño de ID de llave de asunto: %db"
+msgstr "Asunto del tamaño de ID de clave: {len_subject_key_id}b"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:113
-#, fuzzy, python-brace-format
-#| msgid "Content sets: %s"
+#, python-brace-format
 msgid "Content sets: {content_length}"
-msgstr "Conjuntos de contenido:%s"
+msgstr "Conjuntos de contenido: {content_length}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/rct/manifest_commands.py:62
@@ -469,10 +458,9 @@ msgstr "El zip de manifiesto no es válido."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/rct/manifest_commands.py:83
-#, fuzzy, python-brace-format
-#| msgid "Unable to find file \"%s\" in manifest."
+#, python-brace-format
 msgid "Unable to find file \"{file_path}\" in manifest."
-msgstr "No se encontró el archivo \"%s\" en el manifiesto."
+msgstr "No es capaz de encontrar archivo \"{file_path}\" en el manifiesto."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/rct/manifest_commands.py:108
@@ -649,10 +637,10 @@ msgstr "Archivo de certificados"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rct/manifest_commands.py:273
-#, fuzzy, python-brace-format
-#| msgid "Unable to read certificate file '%s': %s"
+#, python-brace-format
 msgid "Unable to read certificate file '{certificate_file}': {exception}"
-msgstr "No se puede leer el archivo de certificado '%s': %s"
+msgstr ""
+"No es capaz de leer certificado del archivo '{certificate_file}': {exception}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rct/manifest_commands.py:277
@@ -700,11 +688,11 @@ msgstr "Sobrescriba archivos pueden existir"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/rct/manifest_commands.py:348
-#, fuzzy, python-brace-format
-#| msgid "File \"%s\" exists. Use -f to force overwriting the file."
+#, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
 msgstr ""
-"El archivo \"%s\" existe. Use -f para forzar la sobrescritura del archivo."
+"El archivo \"{filename}\" existe. Emplee -f para forzar sobrescribir el "
+"archivo."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/rct/manifest_commands.py:354
@@ -713,10 +701,9 @@ msgstr "No se pudo escribir el manifiesto:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rct/manifest_commands.py:368
-#, fuzzy, python-brace-format
-#| msgid "The manifest has been dumped to the %s directory"
+#, python-brace-format
 msgid "The manifest has been dumped to the {destination} directory"
-msgstr "El manifiesto ha sido vaciado al directorio %s"
+msgstr "El manifiesto ha sido volcado al directorio {destination}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rct/manifest_commands.py:374
@@ -769,7 +756,7 @@ msgstr "Roles"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/printing.py:74
 msgid "Usage"
-msgstr "Uso"
+msgstr "Modo de empleo"
 
 #: src/rct/printing.py:75
 msgid "Add-ons"
@@ -932,231 +919,181 @@ msgstr "Tipo de certificado desconocido"
 #: src/rhsm/config.py:244
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
-msgstr ""
+msgstr "Nivel Bitácora Inválido: {lvl}, opciones a INFO para esta ejecución."
 
 #: src/rhsm/config.py:249
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
+"Utilice:  subscription-manager config --logging.default_log_level=<Log "
+"Level> para poner el default_log_level a un valor válido."
 
 #: src/rhsm/config.py:255
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
-msgstr ""
+msgstr "Valores válidos: {valid_str}"
 
 #: src/rhsm/connection.py:1444
 msgid "Fetching supported resources"
-msgstr ""
+msgstr "Obteniendo recursos admitidos"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rhsm/connection.py:1504
-#, fuzzy
-#| msgid "connectionStatusLabel"
 msgid "Checking connection status"
-msgstr "connectionStatusLabel"
+msgstr "Comprobando estado de conexión"
 
 #: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
-msgstr ""
+msgstr "Obteniendo vale de nube"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1607
-#, fuzzy
-#| msgid "Register System"
 msgid "Registering system"
 msgstr "Registrar sistema"
 
 #: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
+"Actualizando las máquinas virtuales detectadas que ejecutan en host "
+"proporcionado"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rhsm/connection.py:1672
-#, fuzzy
-#| msgid "Print version information"
 msgid "Updating hypervisor information"
-msgstr "Imprime información de versión"
+msgstr "Actualizando información de hipervisor"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rhsm/connection.py:1747
-#, fuzzy
-#| msgid "Subscriptions information"
 msgid "Updating consumer information"
-msgstr "Información de suscripciones"
+msgstr "Actualizar información de consumidor"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rhsm/connection.py:1752 src/rhsm/connection.py:1756
-#, fuzzy
-#| msgid "Print manifest information"
 msgid "Fetching guest information"
-msgstr "Imprime información de manifiesto"
+msgstr "Obteniendo información de invitado"
 
 #: src/rhsm/connection.py:1760
-#, fuzzy
-#| msgid "Removing"
 msgid "Removing guests"
-msgstr "Eliminando..."
+msgstr "Quitando invitados"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1790 src/rhsm/connection.py:1801
-#, fuzzy
-#| msgid "Print certificate information"
 msgid "Updating profile information"
-msgstr "Imprima información de certificado"
+msgstr "Actualizando información del perfil"
 
 #: src/rhsm/connection.py:1809
 msgid "Fetching consumer keys"
-msgstr ""
+msgstr "Obteniendo claves del consumidor"
 
 #: src/rhsm/connection.py:1818
-#, fuzzy
-#| msgid "Checking installed software"
 msgid "Checking compliance status"
-msgstr "Comprobando el software instalado"
+msgstr "Comprobando estado de cumplimiento"
 
 #: src/rhsm/connection.py:1827
 msgid "Checking system purpose compliance status"
-msgstr ""
+msgstr "Comprobando estado de conformidad de propósito de sistema"
 
 #: src/rhsm/connection.py:1834
-#, fuzzy
-#| msgid "Convenient module for managing all system purpose settings"
 msgid "Fetching available system purpose settings"
-msgstr ""
-"Módulo conveniente para administrar todos los ajustes de propósito del "
-"sistema"
+msgstr "Obteniendo parámetros de propósito del sistema disponible"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rhsm/connection.py:1841 src/rhsm/connection.py:1849
-#, fuzzy
-#| msgid "specify an organization"
 msgid "Fetching organizations"
-msgstr "especificar una organización"
+msgstr "Obteniendo organizaciones"
 
 #: src/rhsm/connection.py:1862
-#, fuzzy
-#| msgid "Unregistering"
 msgid "Unregistering system"
-msgstr "Cancelando el registro"
+msgstr "Des-registrando sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1886
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Fetching certificates"
-msgstr "Certificado de identidad"
+msgstr "Obteniendo certificados"
 
 #: src/rhsm/connection.py:1895
 msgid "Fetching certificate serial numbers"
-msgstr ""
+msgstr "Obteniendo números seriales del certificado"
 
 #: src/rhsm/connection.py:1911
 msgid "Fetching content for a certificate"
-msgstr ""
+msgstr "Obteniendo contenido para un certificado"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1924 src/rhsm/connection.py:1941
-#, fuzzy
-#| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
-msgstr "Vincular suscripciones"
+msgstr "Actualizando suscripciones"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:1950 src/rhsm/connection.py:1960
 #: src/rhsm/connection.py:1969
-#, fuzzy
-#| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
-msgstr "Error al suscribir: %s"
+msgstr "Desuscribir"
 
 #: src/rhsm/connection.py:2018
 msgid "Fetching pools"
-msgstr ""
+msgstr "Obteniendo consorcio"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rhsm/connection.py:2029
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching release information"
-msgstr "Imprime información de versión"
+msgstr "Obteniendo información de versión"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rhsm/connection.py:2043
-#, fuzzy
-#| msgid "list available releases"
 msgid "Fetching available releases"
-msgstr "Liste los lanzamientos disponibles"
+msgstr "Obteniendo publicaciones disponibles"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rhsm/connection.py:2058
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
-msgstr "Buscando la lista de posibles entornos..."
+msgstr "Obteniendo derechos"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:2067
-#, fuzzy
-#| msgid "Using service level:"
 msgid "Fetching service levels"
-msgstr "Uso del nivel del servicio"
+msgstr "Obteniendo niveles de servicio"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rhsm/connection.py:2078
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
-msgstr "Buscando la lista de posibles entornos..."
+msgstr "Obteniendo entornos"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:2088
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Updating certificate"
-msgstr "Certificado de identidad"
+msgstr "Actualizando certificado"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/rhsm/connection.py:2107
-#, fuzzy
-#| msgid "Import Certificates"
 msgid "Updating certificates"
-msgstr "Importar certificados"
+msgstr "Actualizar certificados"
 
 #: src/rhsm/connection.py:2126
-#, fuzzy
-#| msgid "Checking installed software"
 msgid "Checking server status"
-msgstr "Comprobando el software instalado"
+msgstr "Comprobando estado de servicio"
 
 #: src/rhsm/connection.py:2134
 msgid "Fetching content overrides"
-msgstr ""
+msgstr "Obteniendo anulaciones del contenido"
 
 #: src/rhsm/connection.py:2145
-#, fuzzy
-#| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
-msgstr "Actualizando las anulaciones de repositiorio"
+msgstr "Actualizando anulación del contenido"
 
 #: src/rhsm/connection.py:2158
-#, fuzzy
-#| msgid "Removing Repository Overrides"
 msgid "Removing content overrides"
-msgstr "Retirando las anulaciones de repositorio"
+msgstr "Retirando anulaciones de contenido"
 
 #: src/rhsm/connection.py:2174
-#, fuzzy
-#| msgid "Activation Key"
 msgid "Activating"
-msgstr "Clave de activación"
+msgstr "Activando"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:2183
-#, fuzzy
-#| msgid "Cancel"
 msgid "Fetching job"
-msgstr "Cancelar"
+msgstr "Obteniendo tarea"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_debug/debug_commands.py:39
@@ -1196,32 +1133,30 @@ msgid "The directory specified by '--destination' must already exist."
 msgstr "El directorio especificado por '--destination' ya debe existir."
 
 #: src/rhsm_debug/debug_commands.py:115
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "To use the no-archive option, the destination directory '%s' must exist "
-#| "on the same file system as the data assembly directory '%s'."
+#, python-brace-format
 msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
 msgstr ""
-"Para usar la opción no-archive, debe existir el directorio '%s' en el mismo "
-"sistema de archivos como el directorio de conjunto de datos '%s'."
+"Para usar la opción no-archive, debe existir el directorio de destino "
+"'{destination}' en el mismo sistema de archivos como el directorio "
+"ensamblador de conjunto de datos '{assembly}'."
 
 #: src/rhsm_debug/debug_commands.py:212
 #, python-brace-format
 msgid "Wrote: {final_path}"
-msgstr ""
+msgstr "Escribió: {final_path}"
 
 #: src/rhsm_debug/debug_commands.py:226
 #, python-brace-format
 msgid "Wrote: {destination_dir_name}"
-msgstr ""
+msgstr "Escribió: {destination_dir_name}"
 
 #: src/rhsm_debug/debug_commands.py:229
-#, fuzzy, python-brace-format
-#| msgid "Unable to create zip file of system information: %s"
+#, python-brace-format
 msgid "Unable to create zip file of system information: {error}"
-msgstr "No se pudo crear el archivo zip de información del sistema: %s"
+msgstr ""
+"No fue capaz de crear el archivo zip de información del sistema: {error}"
 
 #: src/rhsmlib/dbus/objects/register.py:148
 #, python-format
@@ -1245,7 +1180,11 @@ msgid_plural ""
 "Warning: The following fields were recently set for this system by the "
 "entitlement server administrator: {conflict_msg}"
 msgstr[0] ""
+"Aviso: El campo siguiente era recientemente puesto para este sistema por el "
+"derecho administrador de servidor: {conflict_msg}"
 msgstr[1] ""
+"Aviso: Los campos siguientes eran recientemente puestos para este sistema "
+"por el derecho administrador de servidor: {conflict_msg}"
 
 #: src/rhsmlib/dbus/service_wrapper.py:54
 #, python-brace-format
@@ -1253,16 +1192,13 @@ msgid "Error: Unable to load bus '{name}'"
 msgstr "Error: Incapaz de cargar el bus '{name}'"
 
 #: src/rhsmlib/services/entitlement.py:52
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-#| "{dateexample})"
+#, python-brace-format
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{date})"
 msgstr ""
-"La fecha que ingresó no es válida. El formato de fecha debe ser AAAA-MM-DD "
-"(ejemplo: {dateexample})"
+"La fecha que ingresó no es válida. El formato de fecha sería AAAA-MM-DD "
+"(ejemplo: {date})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/rhsmlib/services/entitlement.py:57
@@ -1382,19 +1318,19 @@ msgstr "Error: este sistema no está registrado"
 
 #: src/rhsmlib/services/register.py:68
 msgid "Environment IDs and environment names are mutually exclusive"
-msgstr ""
+msgstr "Entorno IDs y nombres de entorno son mutuamente exclusivos"
 
 #: src/rhsmlib/services/register.py:167
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
-msgstr ""
+msgstr "Entorno: '{env_names}' no ha requerido tipo '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:175
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
-msgstr ""
+msgstr "Entornos: '{env_names}' no ha requerido tipo '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:238
 msgid "This system is already registered. Add force to options to override."
@@ -1445,7 +1381,7 @@ msgstr "Error: Nombre de usuario o contraseña."
 #: src/rhsmlib/services/syspurpose.py:100
 #: src/rhsmlib/services/syspurpose.py:103
 msgid "Matched"
-msgstr "Ajustado"
+msgstr "Emparejado"
 
 #: src/rhsmlib/services/syspurpose.py:101
 #: src/rhsmlib/services/syspurpose.py:104
@@ -1463,7 +1399,7 @@ msgstr "No especificado"
 #: src/rhsmlib/services/syspurpose.py:106
 #: src/subscription_manager/cert_sorter.py:295
 msgid "Disabled"
-msgstr "Deshabilitado"
+msgstr "Inhabilitado"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/__init__.py:76
@@ -1562,7 +1498,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/branding/redhat_branding.py:28
 msgid "RHN Classic"
-msgstr "RHN Classic"
+msgstr "RHN Clásico"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/branding/redhat_branding.py:30
@@ -1607,16 +1543,13 @@ msgstr ""
 "forgot_password"
 
 #: src/subscription_manager/cache.py:178
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
-#| "cache with server."
+#, python-brace-format
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
 msgstr ""
-"consumer_uuid=%s no es un consumer_uuid váĺido. No está intentando "
-"sincronizar la memoria caché %s con el servidor."
+"consumidor_uuid={consumer_uuid} no es un consumidor consumer_uuid válido. No "
+"intentando sincronizar caché {class_name} con servidor."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cert_sorter.py:292
@@ -1643,7 +1576,7 @@ msgstr "%(prog)s {name} [OPCIONES]"
 #: src/subscription_manager/cli.py:123
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "Uso: %s MÓDULO-NOMBRE [MÓDULO-OPCIONES] [--help]"
+msgstr "Modo de empleo: %s MÓDULO-NOMBRE [MÓDULO-OPCIONES] [--help]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli.py:138
@@ -1681,12 +1614,12 @@ msgstr "Obsoleto, ver 'syspurpose'"
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:75
 #, python-brace-format
 msgid "set {attr} of system purpose"
-msgstr "Establecer {attr} del propósito del sistema"
+msgstr "poner {attr} del propósito del sistema"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:82
 #, python-brace-format
 msgid "unset {attr} of system purpose"
-msgstr "Quitar {attr} del propósito del sistema"
+msgstr "quitar {attr} del propósito del sistema"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:90
 #, python-brace-format
@@ -1842,6 +1775,9 @@ msgid ""
 "Deprecated, this command will be removed from the future major releases. "
 "This command is no-op. Show or modify the system purpose addons setting"
 msgstr ""
+"Obsoleto, este comando será retirado de las liberaciones futuras mayores. "
+"Este comando es no-op. Mostrar o modificar el propósito de sistema añadidos "
+"poniendo"
 
 #: src/subscription_manager/cli_command/attach.py:51
 msgid "The ID of the pool to attach (can be specified more than once)"
@@ -1857,6 +1793,8 @@ msgid ""
 "Automatically attach the best-matched compatible subscriptions to this "
 "system. This is the default action."
 msgstr ""
+"Automáticamente adjuntar las suscripciones compatibles con mejor "
+"coincidencia a este sistema. Esto es la acción por defecto."
 
 #: src/subscription_manager/cli_command/attach.py:71
 msgid ""
@@ -1886,13 +1824,14 @@ msgstr "No hay necesidad de actualizar suscripciones en este momento."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/attach.py:98
-#, fuzzy
-#| msgid "Attach a specified subscription to the registered system"
 msgid ""
 "Deprecated, this command will be removed from the future major releases. "
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr "Vincular una suscripción especificada al sistema registrado"
+msgstr ""
+"Obsoleto, este comando será retirado desde la publicación mayor futura. "
+"Adjunta una suscripción especificada para el sistema registrado, cuando el "
+"sistema no utiliza modo de Acceso de Contenido Simple"
 
 #: src/subscription_manager/cli_command/attach.py:112
 msgid "Error: --auto may not be used when specifying pools."
@@ -1917,28 +1856,24 @@ msgid "Error: Received data does not contain any pool IDs."
 msgstr "Error: Los datos recibidos no contienen ningún ID de grupo."
 
 #: src/subscription_manager/cli_command/attach.py:137
-#, fuzzy, python-brace-format
-#| msgid "Error: The file \"%s\" does not contain any pool IDs."
+#, python-brace-format
 msgid "Error: The file \"{file}\" does not contain any pool IDs."
-msgstr "Error: El archivo \"%s\" no contiene ningún ID de grupo."
+msgstr "Error: El archivo \"{file}\" no contiene ningún ID de consorcio."
 
 #: src/subscription_manager/cli_command/attach.py:144
-#, fuzzy, python-brace-format
-#| msgid "Error: The file \"%s\" does not exist or cannot be read."
+#, python-brace-format
 msgid "Error: The file \"{file}\" does not exist or cannot be read."
-msgstr "Error: el archivo '%s' no existe o no puede ser leído."
+msgstr "Error: el archivo \"{file}\" no existe o no puede ser leído."
 
 #: src/subscription_manager/cli_command/attach.py:158
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
-#| "because of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring the request to attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
-"Ignorar la petición para auto-attach. Está deshabilitado por la organización "
-"\"{owner_id}\" por el ajuste de modo de acceso al contenido."
+"Ignorar la solicitud para adjuntar. Está suscripción adjunta está "
+"deshabilitada por la organización «{owner_id}» debido a Acceso de Contenido "
+"Simple (SCA) está habilitado."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/attach.py:202
@@ -1947,10 +1882,9 @@ msgstr "Por favor ingrese un ID de grupo numérico válido."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/attach.py:210
-#, fuzzy, python-brace-format
-#| msgid "Successfully attached a subscription for: %s"
+#, python-brace-format
 msgid "Successfully attached a subscription for: {name}"
-msgstr "Ha sido vinculada una suscripción para: %s"
+msgstr "Una suscripción ha sido adjuntada para: {name}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cli_command/attach.py:240
@@ -1980,10 +1914,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/attach.py:272
-#, fuzzy
-#| msgid "Service level set to: %s"
 msgid "Service level set to: {}"
-msgstr "Nivel de servicio establecido a: %s"
+msgstr "Nivel de servicio establecido a: {}"
 
 #: src/subscription_manager/cli_command/attach.py:281
 msgid "Entitlement Certificate(s) update failed due to the following reasons:"
@@ -1992,14 +1924,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cli_command/autoheal.py:28
-#, fuzzy
-#| msgid "Set if subscriptions are attached on a schedule (default of daily)"
 msgid ""
 "Deprecated, this option will be removed from the future major releases. Set "
 "if subscriptions are attached on a schedule (default of daily)"
 msgstr ""
-"Establece si las suscripciones están vinculadas en un programa "
-"(predeterminado de diario)"
+"Obsoleto, esta opción será retirada desde la futura liberación mayor. "
+"Establezca si suscripciones están adjuntadas en una planificación (por "
+"defecto diariamente)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cli_command/autoheal.py:31
@@ -2049,16 +1980,14 @@ msgid "All local data removed"
 msgstr "Todos los datos eliminados"
 
 #: src/subscription_manager/cli_command/cli.py:131
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Ignoring request to auto-attach. It is disabled for org \"{owner_id}\" "
-#| "because of the content access mode setting."
+#, python-brace-format
 msgid ""
 "Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
-"Ignorar la petición para auto-attach. Está deshabilitado por la organización "
-"\"{owner_id}\" por el ajuste de modo de acceso al contenido."
+"Se hace caso omiso a la petición para auto-adjuntar. Adjuntar suscripciones "
+"está deshabilitado para la organización “{owner_id}” porque está activado "
+"SCA (Simple Content Access)."
 
 #: src/subscription_manager/cli_command/cli.py:152
 msgid "server URL in the form of https://hostname:port/prefix"
@@ -2091,7 +2020,7 @@ msgstr "sufijos de host que deben eludir el proxy HTTP"
 
 #: src/subscription_manager/cli_command/cli.py:197
 msgid "Do not display progress messages"
-msgstr ""
+msgstr "No exhibe mensajes de progreso"
 
 #: src/subscription_manager/cli_command/cli.py:209
 msgid ""
@@ -2101,17 +2030,12 @@ msgstr ""
 "help"
 
 #: src/subscription_manager/cli_command/cli.py:267
-#, fuzzy
-#| msgid ""
-#| "subscription-manager is disabled when running inside a container. Please "
-#| "refer to your host system for subscription management.\n"
 msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
 msgstr ""
-"subscription-manager se desactiva cuando se ejecuta dentro de un contenedor. "
-"Por favor, consulte a su sistema host para la administración de "
-"suscripciones.\n"
+"subscription-manager está operando en modo contenedor. Utilice su sistema de "
+"host para administrar suscripciones.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/cli.py:282
@@ -2129,10 +2053,9 @@ msgstr "Error al leer baseurl:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/cli.py:389
-#, fuzzy, python-brace-format
-#| msgid "Unable to reach the server at %s:%s%s"
+#, python-brace-format
 msgid "Unable to reach the server at {host}:{port}{handler}"
-msgstr "No se puede conectar el servidor en %s:%s%s"
+msgstr "Incapaz de lograr el servidor en {host}:{port}{handler}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/cli.py:399
@@ -2146,16 +2069,13 @@ msgid "System certificates corrupted. Please reregister."
 msgstr "Certificados del sistema corruptos. Por favor vuelva a registrarse."
 
 #: src/subscription_manager/cli_command/cli.py:432
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Consumer profile \"%s\" has been deleted from the server. You can use "
-#| "command clean or unregister to remove local profile."
+#, python-brace-format
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr ""
-"El perfil del consumidor \"%s\" ha sido borrado del servidor. Use el comando "
-"'clean' o cancele el registro para quitar el perfil local."
+"El perfil del consumidor \"{uuid}\" ha sido borrado del servidor. Puede "
+"utilizar el comando 'clean' o desregistrar para quitar el perfil local."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/config.py:28
@@ -2176,10 +2096,9 @@ msgstr "Retire la entrada de configuración por sección.nombre"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/config.py:45
-#, fuzzy, python-brace-format
-#| msgid "Section: %s, Name: %s"
+#, python-brace-format
 msgid "Section: {s}, Name: {name}"
-msgstr "Sección: %s, Nombre: %s"
+msgstr "Sección: {s}, Nombre: {name}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/config.py:68
@@ -2201,10 +2120,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/config.py:108
-#, fuzzy, python-brace-format
-#| msgid "Error: Section %s and name %s does not exist."
+#, python-brace-format
 msgid "Error: Section {section} and name {name} does not exist."
-msgstr "Error: La sección %s y nombre %s no existen."
+msgstr "Error: La sección {section} y nombre {name} no existen."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/config.py:133
@@ -2214,24 +2132,21 @@ msgstr "[] - Valor predeterminado en uso"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/config.py:143
 #: src/subscription_manager/cli_command/config.py:150
-#, fuzzy, python-brace-format
-#| msgid "You have removed the value for section %s and name %s."
+#, python-brace-format
 msgid "You have removed the value for section {section} and name {name}."
-msgstr "Ha retirado el valor para la sección %s y nombre %s."
+msgstr "Ha retirado el valor para la sección {section} y nombre {name}."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/config.py:154
-#, fuzzy, python-brace-format
-#| msgid "The default value for %s will now be used."
+#, python-brace-format
 msgid "The default value for {name} will now be used."
-msgstr "El valor predeterminado para %s será utilizado ahora."
+msgstr "El valor predeterminado para {name} será utilizado ahora."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/config.py:157
-#, fuzzy, python-brace-format
-#| msgid "Section %s and name %s cannot be removed."
+#, python-brace-format
 msgid "Section {section} and name {name} cannot be removed."
-msgstr "La sección %s y nombre %s no se pueden eliminar."
+msgstr "La sección {section} y nombre {name} no puede ser eliminado."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/environments.py:44
@@ -2246,32 +2161,28 @@ msgstr ""
 "la organización"
 
 #: src/subscription_manager/cli_command/environments.py:52
-#, fuzzy
-#| msgid "comma-separated list of hostnames/domains"
 msgid "set an ordered comma-separated list of environments for this consumer"
-msgstr "lista separada por comas de nombres de host/dominios"
+msgstr ""
+"establezca un listado ordenado separado por comas de entornos para este "
+"consumidor"
 
 #: src/subscription_manager/cli_command/environments.py:58
 msgid "list all environments for the organization"
-msgstr ""
+msgstr "lista todos los entornos para la organización"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/environments.py:65
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments enabled for this consumer in order"
-msgstr "Mostrar los entornos disponibles para un usuario"
+msgstr "lista el entorno habilitado por este consumidor en orden"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/environments.py:72
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments not enabled for this consumer"
-msgstr "Mostrar los entornos disponibles para un usuario"
+msgstr "lista los entornos no habilitados para este consumidor"
 
 #: src/subscription_manager/cli_command/environments.py:81
 msgid "You may not specify an --org for environments when registered."
-msgstr ""
+msgstr "Puede que no especifique un --org para entornos cuando registró."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/environments.py:90
@@ -2281,10 +2192,8 @@ msgstr "ERROR: El servidor no admite entornos."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/environments.py:97
-#, fuzzy
-#| msgid "%s option requires %d arguments"
 msgid "This operation requires user credentials"
-msgstr "opción %s requiere argumentos de %d"
+msgstr "Esta operación requiere credenciales de usuario"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/environments.py:111
@@ -2293,24 +2202,18 @@ msgstr "Error: No se puede recuperar lista de entornos desde el servidor"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/environments.py:126
-#, fuzzy
-#| msgid "Environments"
 msgid "Environments updated."
-msgstr "Entornos"
+msgstr "Entornos actualizados."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/environments.py:128
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support environment updates."
-msgstr "ERROR: El servidor no admite entornos."
+msgstr "Error: El servidor no admite actualizaciones de entornos."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/environments.py:136
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support multi-environment operations."
-msgstr "ERROR: El servidor no admite entornos."
+msgstr "Error: El servidor no admite operaciones de multi-entorno."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/environments.py:154
@@ -2318,23 +2221,20 @@ msgid "Environments"
 msgstr "Entornos"
 
 #: src/subscription_manager/cli_command/environments.py:167
-#, fuzzy
-#| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
-msgstr "Esta organización no tiene entornos."
+msgstr "Esta operación de listado no tiene ningún entorno para reportar."
 
 #: src/subscription_manager/cli_command/environments.py:203
 msgid "Error: The same environment may not be listed more than once. "
-msgstr ""
+msgstr "Error: El mismo entorno no puede ser listado más de una vez. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/environments.py:209
-#, fuzzy, python-brace-format
-#| msgid "No such environment: %s"
+#, python-brace-format
 msgid "No such environment: {names}"
 msgid_plural "No such environments: {names}"
-msgstr[0] "No existe tal entorno:%s"
-msgstr[1] "No existe tal entorno:%s"
+msgstr[0] "No existe tal entorno: {names}"
+msgstr[1] "No existen tales entornos: {names}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/facts.py:32
@@ -2393,33 +2293,30 @@ msgstr "--token sólo puede ser usado con --force"
 #: src/subscription_manager/cli_command/identity.py:74
 #: src/subscription_manager/cli_command/identity.py:77
 #: src/subscription_manager/cli_command/version.py:33
-#, fuzzy, python-brace-format
-#| msgid "server type: %s"
+#, python-brace-format
 msgid "server type: {type}"
-msgstr "Tipo de servidor: %s"
+msgstr "tipo de servidor: {type}"
 
 #: src/subscription_manager/cli_command/identity.py:89
-#, fuzzy, python-brace-format
-#| msgid "system identity: %s"
+#, python-brace-format
 msgid "system identity: {consumerid}"
-msgstr "Identidad de sistema: %s"
+msgstr "identidad de sistema: {consumerid}"
 
 #: src/subscription_manager/cli_command/identity.py:90
 #, python-brace-format
 msgid "name: {consumer_name}"
-msgstr ""
+msgstr "nombre: {consumer_name}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/identity.py:91
-#, fuzzy, python-brace-format
-#| msgid "org name: %s"
+#, python-brace-format
 msgid "org name: {ownername}"
-msgstr "Nombre de organización: %s"
+msgstr "org nombre: {ownername}"
 
 #: src/subscription_manager/cli_command/identity.py:92
 #, python-brace-format
 msgid "org ID: {ownerid}"
-msgstr ""
+msgstr "org ID: {ownerid}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/identity.py:107
@@ -2430,12 +2327,11 @@ msgstr "Ninguno"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/identity.py:110
-#, fuzzy, python-brace-format
-#| msgid "environment name: %s"
+#, python-brace-format
 msgid "environment name: {environment_name}"
 msgid_plural "environment names: {environment_name}"
-msgstr[0] "nombre de entorno: %s"
-msgstr[1] "nombre de entorno: %s"
+msgstr[0] "nombre de entorno: {environment_name}"
+msgstr[1] "nombres de entorno: {environment_name}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/identity.py:130
@@ -2453,6 +2349,10 @@ msgid ""
 "This command is no-op in simple content access mode. Import certificates "
 "which were provided outside of the tool"
 msgstr ""
+"Obsoleto, este comando será retirado de las publicaciones mayores futuras. "
+"Esta instrucción es no-op en modo de acceso de contenido sencillo. "
+"Certificados de importación qué estuvo proporcionado exterior de la "
+"herramienta"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/import_cert.py:41
@@ -2478,18 +2378,16 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/import_cert.py:73
-#, fuzzy, python-brace-format
-#| msgid "Successfully imported certificate %s"
+#, python-brace-format
 msgid "Successfully imported certificate {file}"
-msgstr "Certificado %s importado correctamente"
+msgstr "Certificado {file} importado correctamente"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/import_cert.py:85
-#, fuzzy, python-brace-format
-#| msgid "%s is not a valid certificate file. Please use a valid certificate."
+#, python-brace-format
 msgid "{file} is not a valid certificate file. Please use a valid certificate."
 msgstr ""
-"%s no es un archivo de certificado válido. Por favor use el certificado "
+"{file} no es un archivo de certificado válido. Por favor use el certificado "
 "válido."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
@@ -2502,10 +2400,9 @@ msgstr ""
 "registro para obtener mayor información."
 
 #: src/subscription_manager/cli_command/import_cert.py:100
-#, fuzzy, python-brace-format
-#| msgid "%s: file not found."
+#, python-brace-format
 msgid "{file}: file not found."
-msgstr "%s: archivo no encontrado."
+msgstr "{file}: archivo no encontrado."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:49
@@ -2778,76 +2675,68 @@ msgid ""
 "deprecated, this option will be removed from the future major releases; show "
 "those subscriptions which are available"
 msgstr ""
+"obsoleto, esta opción será retirada de las publicaciones importantes futuras;"
+" muestra aquellas suscripciones las cuales estén disponibles"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/list.py:229
-#, fuzzy
-#| msgid "used with --available to ensure all subscriptions are returned"
 msgid ""
 "deprecated, this option will be removed from the future major releases; used "
 "with --available to ensure all subscriptions are returned"
 msgstr ""
-"Utilizado con --available para garantizar que todas las suscripciones se "
-"devuelvan"
+"obsoleto, esta opción será retirada de las publicaciones mayores futuras; "
+"utilizado con --avaliable para asegurar todas las suscripciones estén "
+"devueltas"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cli_command/list.py:237
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "date to search on, defaults to today's date, only used with --available "
-#| "(example: %s)"
+#, python-brace-format
 msgid ""
 "deprecated, this option will be removed from the future major releases; date "
 "to search on, defaults to today's date, only used with --available (example: "
 "{example})"
 msgstr ""
-"Fecha para buscar, se predetermina a la fecha de hoy, únicamente utilizados "
-"con --available (Por ejemplo: %s)"
+"obsoleto, esta opción será retirada de las publicaciones mayores futuras; "
+"fecha para búsqueda, por defecto a la fecha de hoy, utilizado solo con --"
+"available (ejemplo: {example})"
 
 #: src/subscription_manager/cli_command/list.py:246
 msgid ""
 "deprecated, this option will be removed from the future major releases; show "
 "the subscriptions being consumed by this system"
 msgstr ""
+"obsoleto, esta opción será eliminada de la publicación principal futura; "
+"muestra la suscripción siendo consumida por este sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:254
-#, fuzzy
-#| msgid ""
-#| "shows only subscriptions matching the specified service level; only used "
-#| "with --available and --consumed"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows only subscriptions matching the specified service level; only used "
 "with --available and --consumed"
 msgstr ""
-"solamente muestra las suscripciones que coinciden con el nivel de servicio "
+"obsoleto, esta opción será eliminada desde el publicación principal futura; "
+"solo muestra las suscripciones que coinciden con el nivel de servicio "
 "especificado; sólo se utiliza con --available y --consumed"
 
 #: src/subscription_manager/cli_command/list.py:263
-#, fuzzy
-#| msgid ""
-#| "shows pools which provide products that are not already covered; only "
-#| "used with --available"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows pools which provide products that are not already covered; only used "
 "with --available"
 msgstr ""
-"Muestra grupos que ofrecen productos que ya están cubiertos; sólo se utiliza "
+"obsoleta, esta opción será eliminada desde las publicaciones mayores futura; "
+"muestra grupos que ofrecen productos que ya están cubiertos; sólo se utiliza "
 "con --available"
 
 #: src/subscription_manager/cli_command/list.py:272
-#, fuzzy
-#| msgid ""
-#| "shows only subscriptions matching products that are currently installed; "
-#| "only used with --available"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "shows only subscriptions matching products that are currently installed; "
 "only used with --available"
 msgstr ""
-"muestra únicamente los productos correspondientes a las suscripciones que "
+"obsoleto, esta opción será eliminada desde las futuras publicaciones mayores;"
+" muestra únicamente los productos correspondientes a las suscripciones que "
 "actualmente están instaladas; sólo se utiliza con --available"
 
 #: src/subscription_manager/cli_command/list.py:281
@@ -2861,30 +2750,25 @@ msgstr ""
 "lista solicitada y la versión de servidor (no es sensible a mayúsculas)."
 
 #: src/subscription_manager/cli_command/list.py:291
-#, fuzzy
-#| msgid ""
-#| "lists only the pool IDs for applicable available or consumed "
-#| "subscriptions; only used with --available and --consumed"
 msgid ""
 "deprecated, this option will be removed from the future major releases; "
 "lists only the pool IDs for applicable available or consumed subscriptions; "
 "only used with --available and --consumed"
 msgstr ""
-"Lista únicamente los ID de grupos para suscripciones consumidas aplicables o "
-"disponibles; solo se utiliza con --available y --consumed"
+"obsoleta, esta opción será eliminada desde las futuras publicaciones "
+"principales; lista únicamente los ID de grupos para suscripciones consumidas "
+"aplicables o disponibles; solo se utiliza con --available y --consumed"
 
 #: src/subscription_manager/cli_command/list.py:300
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "show pools that are active on or after the given date; only used with --"
-#| "available (example: %s)"
+#, python-brace-format
 msgid ""
 "deprecated, this option will be removed from the future major releases; show "
 "pools that are active on or after the given date; only used with --available "
 "(example: {example})"
 msgstr ""
-"Mostrar grupos que están activos en o después de la fecha dada; solo se usa "
-"con --available (ejemplo: %s)"
+"obsoleto, esta opción será eliminada desde las publicaciones mayor futura; "
+"muestra grupos que están activos en o después de la fecha dada; solo se usa "
+"con --available (ejemplo: {example})"
 
 #: src/subscription_manager/cli_command/list.py:326
 msgid "Error: --afterdate is only applicable with --available"
@@ -2909,10 +2793,11 @@ msgid "    Installed Product Status"
 msgstr "    Estatus de productos instalados"
 
 #: src/subscription_manager/cli_command/list.py:407
-#, fuzzy, python-brace-format
-#| msgid "No installed products were found matching the expression \"%s\"."
+#, python-brace-format
 msgid "No installed products were found matching the expression \"{filter}\"."
-msgstr "No se encontraron productos coincidentes con la expresión \"%s\"."
+msgstr ""
+"No fueron encontrados productos instalados coincidentes con la expresión "
+"«{filter}»."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:412
@@ -2925,39 +2810,31 @@ msgid "Available Subscriptions"
 msgstr "Suscripciones disponibles"
 
 #: src/subscription_manager/cli_command/list.py:487
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No available subscription pools were found matching the expression \"%s\" "
-#| "and the service level \"%s\"."
+#, python-brace-format
 msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
 msgstr ""
-"No se encontraron grupos de suscripciones disponibles coincidentes con la "
-"expresión \"%s\" y el nivel de servicio \"%s\"."
+"No fueron encontrados grupos de suscripciones disponibles coincidentes con "
+"la expresión \"{filter}\" y el nivel de servicio \"{level}\"."
 
 #: src/subscription_manager/cli_command/list.py:494
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No available subscription pools were found matching the expression \"%s\"."
+#, python-brace-format
 msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\"."
 msgstr ""
 "No se encontraron grupos de suscripciones disponibles coincidentes con la "
-"expresión \"%s\"."
+"expresión \"{filter}."
 
 #: src/subscription_manager/cli_command/list.py:500
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No available subscription pools were found matching the service level "
-#| "\"%s\"."
+#, python-brace-format
 msgid ""
 "No available subscription pools were found matching the service level "
 "\"{level}\"."
 msgstr ""
 "No se encontraron grupos de suscripciones disponibles coincidentes con el "
-"nivel de servicio \"%s\"."
+"nivel de servicio \"{level}\"."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:504
@@ -2970,39 +2847,31 @@ msgid "Consumed Subscriptions"
 msgstr "Suscripciones consumidas"
 
 #: src/subscription_manager/cli_command/list.py:551
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No consumed subscription pools were found matching the expression \"%s\" "
-#| "and the service level \"%s\"."
+#, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\" and the service level \"{level}\"."
 msgstr ""
 "No se encontraron grupos de suscripciones consumidas coincidentes con la "
-"expresión \"%s\" y el nivel de servicio \"%s\"."
+"expresión \"{filter}\" y el nivel de servicio \"{level}\"."
 
 #: src/subscription_manager/cli_command/list.py:557
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No consumed subscription pools were found matching the expression \"%s\"."
+#, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\"."
 msgstr ""
 "No se encontraron grupos de suscripciones consumidas coincidentes con la "
-"expresión \"%s\"."
+"expresión \"{filter}\"."
 
 #: src/subscription_manager/cli_command/list.py:564
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No consumed subscription pools were found matching the service level "
-#| "\"%s\"."
+#, python-brace-format
 msgid ""
 "No consumed subscription pools were found matching the service level "
 "\"{level}\"."
 msgstr ""
 "No se encontraron grupos de suscripciones consumidas coincidentes con el "
-"nivel de servicio \"%s\"."
+"nivel de servicio \"{level}\"."
 
 #: src/subscription_manager/cli_command/list.py:568
 msgid "No consumed subscription pools were found."
@@ -3016,7 +2885,7 @@ msgstr "especificar una organización"
 #: src/subscription_manager/cli_command/org.py:46
 #: src/subscription_manager/cli_command/register.py:526
 msgid "Error: --org is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "Error: --org es un parámetro requerido en modo non-interactive."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/org.py:48
@@ -3025,16 +2894,16 @@ msgid "Organization: "
 msgstr "Organización: "
 
 #: src/subscription_manager/cli_command/org.py:62
-#, fuzzy, python-brace-format
-#| msgid "User %s is not member of any organization"
+#, python-brace-format
 msgid "Error: User {username} is not member of any organization."
-msgstr "El usuario %s no es miembro de ninguna organización"
+msgstr "Error: Usuario {username} no es miembro de cualquier organización."
 
 #: src/subscription_manager/cli_command/org.py:74
 #: src/subscription_manager/cli_command/register.py:517
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr ""
+"Consejo: Usuario \"{name}\" es miembro de organizaciones siguientes: {orgs}"
 
 #: src/subscription_manager/cli_command/override.py:32
 msgid "Manage custom content repository settings"
@@ -3117,27 +2986,23 @@ msgid "This system does not have any content overrides applied to it."
 msgstr "Este sistema no tiene aplicadas anulaciones de contenido."
 
 #: src/subscription_manager/cli_command/override.py:170
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Repository '%s' does not currently exist, but the override has been added."
+#, python-brace-format
 msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
 msgstr ""
-"El repositorio '%s' no existe actualmente, pero el sobrescrito se ha "
+"El repositorio '{repo}' no existe actualmente, pero el sobrescrito se ha "
 "agregado."
 
 #: src/subscription_manager/cli_command/override.py:198
-#, fuzzy, python-brace-format
-#| msgid "Nothing is known about '%s'"
+#, python-brace-format
 msgid "Nothing is known about '{r}'"
-msgstr "No se sabe nada de '%s'"
+msgstr "No se sabe nada acerca de '{r}'"
 
 #: src/subscription_manager/cli_command/override.py:203
-#, fuzzy, python-brace-format
-#| msgid "Repository: %s"
+#, python-brace-format
 msgid "Repository: {repo}"
-msgstr "Repositorio: %s"
+msgstr "Repositorio: {repo}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/owners.py:34
@@ -3153,10 +3018,9 @@ msgstr "Organizaciones"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/owners.py:61
-#, fuzzy, python-brace-format
-#| msgid "%s cannot register with any organizations."
+#, python-brace-format
 msgid "{username} cannot register with any organizations."
-msgstr "%s no se puede registrar con ninguna organización."
+msgstr "{username} no se puede registrar con ninguna organización."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/owners.py:69
@@ -3170,39 +3034,36 @@ msgstr "Vea y configure con 'subscription-manager plugins'"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author Gladys Guerrero
 #: src/subscription_manager/cli_command/plugins.py:31
-#, fuzzy, python-brace-format
-#| msgid "list %s plugins"
+#, python-brace-format
 msgid "list {SM} plugins"
-msgstr "Lista %s conectores"
+msgstr "Lista {SM} de conectores"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author Gladys Guerrero
 #: src/subscription_manager/cli_command/plugins.py:34
-#, fuzzy, python-brace-format
-#| msgid "list %s plugin slots"
+#, python-brace-format
 msgid "list {SM} plugin slots"
-msgstr "Lista %s ranuras de conectores"
+msgstr "Lista {SM} de ranuras de conector"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author Gladys Guerrero
 #: src/subscription_manager/cli_command/plugins.py:37
-#, fuzzy, python-brace-format
-#| msgid "list %s plugin hooks"
+#, python-brace-format
 msgid "list {SM} plugin hooks"
-msgstr "Lista %s ganchos de conectores"
+msgstr "lista {SM} ganchos de conectores"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cli_command/plugins.py:40
 msgid "show verbose plugin info"
-msgstr "Mostrar información verbosa de complemento"
+msgstr "muestra información verbosa de complemento"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/plugins.py:53
 msgid "disabled"
-msgstr "Inhabilitado"
+msgstr "inhabilitado"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/plugins.py:55
 msgid "enabled"
-msgstr "Habilitado"
+msgstr "habilitado"
 
 #: src/subscription_manager/cli_command/redeem.py:30
 msgid ""
@@ -3210,6 +3071,10 @@ msgid ""
 "This command is no-op in simple content access mode. Attempt to redeem a "
 "subscription for a preconfigured system"
 msgstr ""
+"Obsoleto, esta instrucción será eliminada desde las publicaciones "
+"principales futuras. Esta instrucción es no-op en modo de acceso de "
+"contenido simple. Intente canjear una suscripción por un sistema pre-"
+"configurado"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/redeem.py:40
@@ -3236,10 +3101,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/redeem.py:78
-#, fuzzy
-#| msgid "Error: Unable to generate a new identity for the system"
 msgid "Error: Unable to redeem subscription for this system."
-msgstr "Error: No se puede generar nueva identidad para el sistema"
+msgstr "Error: no es capaz de canjear suscripción para este sistema."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:32
@@ -3252,10 +3115,9 @@ msgstr "forzar la regeneración del certificado"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:46
-#, fuzzy, python-brace-format
-#| msgid "Unable to perform refresh due to the following exception: %s"
+#, python-brace-format
 msgid "Unable to perform refresh due to the following exception: {e}"
-msgstr "No se pudo actualizar debido a la siguiente excepción: %s"
+msgstr "Incapaz de realizar refresh debido a la excepción siguiente: {e}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:49
@@ -3282,7 +3144,7 @@ msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
 msgstr ""
-"Inscríbase en una de las múltiples organizaciones para el usuario, mediante "
+"inscríbase en una de las múltiples organizaciones para el usuario, mediante "
 "la llave de organización"
 
 #: src/subscription_manager/cli_command/register.py:99
@@ -3291,11 +3153,14 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
+"inscríbase con un entorno concreto (un solo valor) o múltiples entornos (una "
+"lista separada por coma) en el destino org. La capacidad de utilizar los "
+"entornos múltiples está controlado por el servidor de derechos"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:107
 msgid "set a release version"
-msgstr "Establezca una versión de lanzamiento"
+msgstr "establezca una versión de lanzamiento"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/register.py:112
@@ -3308,12 +3173,17 @@ msgid ""
 "option is no-op when simple content access is used. Automatically attach "
 "compatible subscriptions to this system"
 msgstr ""
+"Obsoleto, esta opción será eliminada desde la futura liberación mayor. Esta "
+"opción es no-op cuando accede el contenido simple es utilizado. "
+"Automáticamente adjunta suscripciones compatibles para este sistema"
 
 #: src/subscription_manager/cli_command/register.py:127
 msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
 msgstr ""
+"incluye un intento implícito para no registrador antes de registrar una "
+"identidad de sistema nueva"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:133
@@ -3355,7 +3225,7 @@ msgstr "Error: Tiene que utilizar --auto-attach con --servicelevel."
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:163
 msgid "Error: Must provide --org with activation keys."
-msgstr "Error: Se debe especificar --org con llaves de activación."
+msgstr "Error: se debe especificar --org con llaves de activación."
 
 #: src/subscription_manager/cli_command/register.py:177
 msgid "Error: The --type option has been deprecated and may not be used."
@@ -3363,30 +3233,24 @@ msgstr "Error: la opción --type ha sido obsoleta y no puede utilizarse."
 
 #: src/subscription_manager/cli_command/register.py:180
 #: src/subscription_manager/cli_command/register.py:495
-#, fuzzy
-#| msgid "The entitlement server failed to remove these serial numbers:"
 msgid "The entitlement server does not allow multiple environments"
-msgstr "El servidor para los derechos no pudo eliminar estos números seriales:"
+msgstr "El servidor de derecho no permite múltiples entornos"
 
 #: src/subscription_manager/cli_command/register.py:224
-#, fuzzy
-#| msgid "Uploading package profile"
 msgid "Uploading DNF profile"
-msgstr "Descargando el perfil de paquete"
+msgstr "Subiendo perfil DNF"
 
 #: src/subscription_manager/cli_command/register.py:294
 #: src/subscription_manager/cli_command/unregister.py:41
-#, fuzzy, python-brace-format
-#| msgid "Unregistering from: %s:%s%s"
+#, python-brace-format
 msgid "Unregistering from: {hostname}:{port}{prefix}"
-msgstr "Anulando el registro de: %s:%s%s"
+msgstr "Anulando el registro desde: {hostname}:{port}{prefix}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:305
-#, fuzzy, python-brace-format
-#| msgid "The system with UUID %s has been unregistered"
+#, python-brace-format
 msgid "The system with UUID {old_uuid} has been unregistered"
-msgstr "Se ha cancelado el registro del sistema con UUID %s"
+msgstr "El sistema con UUID {old_uuid} ha sido desregistrado"
 
 #: src/subscription_manager/cli_command/register.py:329
 #, python-brace-format
@@ -3395,40 +3259,36 @@ msgstr "Registrándose a: {hostname}:{port}{prefix}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:369
-#, fuzzy, python-brace-format
-#| msgid "Error during registration: %s"
+#, python-brace-format
 msgid "Error during registration: {e}"
-msgstr "Error durante el registro: %s"
+msgstr "Error durante el registro: {e}"
 
 #: src/subscription_manager/cli_command/register.py:372
-#, fuzzy, python-brace-format
-#| msgid "The system has been registered with ID: %s"
+#, python-brace-format
 msgid "The system has been registered with ID: {id}"
-msgstr "El sistema ha sido registrado con ID: %s"
+msgstr "El sistema ha sido registrado con ID: {id}"
 
 #: src/subscription_manager/cli_command/register.py:373
-#, fuzzy, python-brace-format
-#| msgid "The registered system name is: %s"
+#, python-brace-format
 msgid "The registered system name is: {name}"
-msgstr "El nombre del sistema registrado es: %s"
+msgstr "El nombre del sistema registrado es: {name}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:375
-#, fuzzy, python-brace-format
-#| msgid "Service level set to: %s"
+#, python-brace-format
 msgid "Service level set to: {level}"
-msgstr "Nivel de servicio establecido a: %s"
+msgstr "Nivel de servicio establecido a: {level}"
 
 #: src/subscription_manager/cli_command/register.py:442
 msgid "Error: --environments is a required parameter in non-interactive mode."
 msgstr ""
+"Error: los entornos --environments es un parámetro requerido en modo no "
+"interactivo."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/register.py:446
-#, fuzzy
-#| msgid "Environment: "
 msgid "Environments: "
-msgstr "Entorno: "
+msgstr "Entornos: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/register.py:448
@@ -3438,14 +3298,13 @@ msgstr "Entorno: "
 #: src/subscription_manager/cli_command/register.py:489
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
-msgstr ""
+msgstr "Pista: Organización \"{key}\" contiene seguir entornos: {list}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/register.py:505
-#, fuzzy, python-brace-format
-#| msgid "%s cannot register with any organizations."
+#, python-brace-format
 msgid "{name} cannot register with any organizations."
-msgstr "%s no se puede registrar con ninguna organización."
+msgstr "{name} no se puede registrar con ninguna organización."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/release.py:33
@@ -3479,10 +3338,9 @@ msgstr "Error: el comando 'release' no está soportado por el servidor."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/release.py:72
-#, fuzzy, python-brace-format
-#| msgid "Release: %s"
+#, python-brace-format
 msgid "Release: {release}"
-msgstr "Lanzamiento: %s"
+msgstr "Lanzamiento: {release}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/release.py:74
@@ -3496,21 +3354,18 @@ msgstr "Se ha deshecho la preferencia de lanzamiento"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cli_command/release.py:108
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No releases match '%s'.  Consult 'release --list' for a full listing."
+#, python-brace-format
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
 msgstr ""
-"No hay lanzamientos que coincidan con '%s'. Consulte 'release --list' para "
+"No coinciden lanzamientos con '{release}'. Consulte 'release --list' para "
 "obtener todo el listado."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cli_command/release.py:113
-#, fuzzy, python-brace-format
-#| msgid "Release set to: %s"
+#, python-brace-format
 msgid "Release set to: {release}"
-msgstr "Lanzamiento establecido a: %s"
+msgstr "Lanzamiento establecido a: {release}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/release.py:122
@@ -3543,13 +3398,15 @@ msgid ""
 "This command is no-op in simple content access mode. It tries to remove all "
 "or specific subscriptions from this system"
 msgstr ""
+"Obsoleto, esta instrucción será eliminada de la liberación superior futura. "
+"Esta instrucción es no-op en modo de acceso a contenido simple. Intenta "
+"eliminar todo o especifique suscripciones desde este sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/remove.py:79
-#, fuzzy, python-brace-format
-#| msgid "Error: '%s' is not a valid serial number"
+#, python-brace-format
 msgid "Error: '{serial}' is not a valid serial number"
-msgstr "Error: '%s' no es un número de serie válido"
+msgstr "Error: '{serial}' no es un número de serie válido"
 
 #: src/subscription_manager/cli_command/remove.py:88
 msgid ""
@@ -3593,39 +3450,36 @@ msgstr "El servidor para los derechos no pudo eliminar estos ID:"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/remove.py:132
 msgid "All subscriptions have been removed at the server."
-msgstr "Todas las suscripciones han sido borradas en el servidor."
+msgstr "Todas las suscripciones han sido eliminadas en el servidor."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/remove.py:137
 #, python-format
 msgid "%s subscription removed at the server."
 msgid_plural "%s subscriptions removed at the server."
-msgstr[0] "%s suscripción ha sido borrada en el servidor."
-msgstr[1] "%s suscripciones han sido borradas en el servidor."
+msgstr[0] "%s suscripción ha sido eliminada en el servidor."
+msgstr[1] "%s suscripciones han sido eliminadas en el servidor."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/remove.py:178
 #: src/subscription_manager/cli_command/remove.py:214
-#, fuzzy, python-brace-format
-#| msgid "Unable to perform remove due to the following exception: %s"
+#, python-brace-format
 msgid "Unable to perform remove due to the following exception: {e}"
-msgstr "No se pudo realizar el borrado debido a la siguiente excepción: %s"
+msgstr "No se pudo realizar la eliminación debido a la siguiente excepción: {e}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/remove.py:190
-#, fuzzy, python-brace-format
-#| msgid "%s subscriptions removed from this system."
+#, python-brace-format
 msgid "{total} subscription removed from this system."
 msgid_plural "{total} subscriptions removed from this system."
-msgstr[0] "%s suscripciones borradas de este sistema."
-msgstr[1] "%s suscripciones borradas de este sistema."
+msgstr[0] "{total} suscripción eliminada de este sistema."
+msgstr[1] "{total} suscripciones eliminadas de este sistema."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/remove.py:206
-#, fuzzy, python-brace-format
-#| msgid "Subscription with serial number %s removed from this system"
+#, python-brace-format
 msgid "Subscription with serial number {serial} removed from this system"
-msgstr "La suscripción con el número serial %s se borró de este sistema"
+msgstr "La suscripción con el número serial {serial} se eliminó de este sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/repos.py:60
@@ -3634,15 +3488,15 @@ msgstr "Lista los repositorios que este sistema tiene derecho a utilizar"
 
 #: src/subscription_manager/cli_command/repos.py:67
 msgid "list all known repositories for this system"
-msgstr "Listar repositorios conocidos para este sistema"
+msgstr "listar repositorios conocidos para este sistema"
 
 #: src/subscription_manager/cli_command/repos.py:73
 msgid "list known, enabled repositories for this system"
-msgstr "Listar repositorios habilitados para este sistema"
+msgstr "listar repositorios habilitados para este sistema"
 
 #: src/subscription_manager/cli_command/repos.py:79
 msgid "list known, disabled repositories for this system"
-msgstr "Listar repositorios inhabilitados para este sistema"
+msgstr "listar repositorios inhabilitados para este sistema"
 
 #: src/subscription_manager/cli_command/repos.py:87
 msgid ""
@@ -3662,10 +3516,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/repos.py:165
-#, fuzzy, python-brace-format
-#| msgid "    Available Repositories in %s"
+#, python-brace-format
 msgid "    Available Repositories in {file}"
-msgstr "    Repositorios disponibles en %s"
+msgstr "    Repositorios disponibles en {file}"
 
 #: src/subscription_manager/cli_command/repos.py:181
 msgid "There were no available repositories matching the specified criteria."
@@ -3681,28 +3534,23 @@ msgstr ""
 "Este sistema no tiene repositorios disponibles a través de suscripciones."
 
 #: src/subscription_manager/cli_command/repos.py:210
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Error: '%s' does not match a valid repository ID. Use \"subscription-"
-#| "manager repos --list\" to see valid repositories."
+#, python-brace-format
 msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
 msgstr ""
-"Error: %s no coincide con un ID de repositorio válido. Use la opción "
+"Error: '{repoid}' no coincide con un ID de repositorio válido. Use la opción "
 "\"subscription-manager repos --list\" para ver los repositorios válidos."
 
 #: src/subscription_manager/cli_command/repos.py:265
-#, fuzzy, python-brace-format
-#| msgid "Repository '%s' is enabled for this system."
+#, python-brace-format
 msgid "Repository '{repoid}' is enabled for this system."
-msgstr "El repositorio '%s' está habilitado para este sistema."
+msgstr "El repositorio '{repoid}' está habilitado para este sistema."
 
 #: src/subscription_manager/cli_command/repos.py:267
-#, fuzzy, python-brace-format
-#| msgid "Repository '%s' is disabled for this system."
+#, python-brace-format
 msgid "Repository '{repoid}' is disabled for this system."
-msgstr "El repositorio '%s' está inhabilitado para este sistema."
+msgstr "El repositorio '{repoid}' está inhabilitado para este sistema."
 
 #: src/subscription_manager/cli_command/role.py:24
 msgid "Show or modify the system purpose role setting"
@@ -3727,16 +3575,12 @@ msgstr ""
 "niveles de servicios"
 
 #: src/subscription_manager/cli_command/service_level.py:99
-#, fuzzy
-#| msgid ""
-#| "Error: --username, --password, --token and --org can be used only on "
-#| "unregistered systems"
 msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
 msgstr ""
-"Error: --username, --password, --token y --org se pueden usar sólo sobre "
-"sistemas no registrados"
+"Error: --username, --password, --token, --org y --serverurl se pueden usar "
+"sólo sobre sistemas no registrados"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:126
@@ -3758,14 +3602,13 @@ msgstr "La preferencia de nivel de servicio no se ha establecido"
 #: src/subscription_manager/cli_command/service_level.py:222
 #: src/subscription_manager/cli_command/service_level.py:229
 msgid "Error: The service-level command is not supported by the server."
-msgstr "ERROR: El comando service-level no es soportado por el servidor."
+msgstr "ERROR: no es soportado el comando service-level por el servidor."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:192
-#, fuzzy, python-brace-format
-#| msgid "Current service level: %s"
+#, python-brace-format
 msgid "Current service level: {level}"
-msgstr "Nivel del servicio actual: %s"
+msgstr "Nivel del servicio actual: {level}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/service_level.py:194
@@ -3786,14 +3629,12 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cli_command/status.py:45
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "future date to check status on, defaults to today's date (example: %s)"
+#, python-brace-format
 msgid ""
 "future date to check status on, defaults to today's date (example: {example})"
 msgstr ""
-"Próxima fecha para revisar el estatus, se predetermina a la fecha de hoy "
-"(por ejemplo: %s)"
+"próxima fecha para revisar el estado, se predetermina a la fecha de hoy (por "
+"ejemplo: {example})"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/cli_command/status.py:65
@@ -3811,35 +3652,27 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/status.py:123
-#, fuzzy
-#| msgid "Register"
 msgid "Registered"
-msgstr "Registrar"
+msgstr "Registrado"
 
 #: src/subscription_manager/cli_command/status.py:125
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Overall Status: %s\n"
-#| "%s"
+#, python-brace-format
 msgid ""
 "Overall Status: {status}\n"
 "{message}"
 msgstr ""
-"Estado general: %s\n"
-"%s"
+"Estado general:{status}\n"
+"{message}"
 
 #: src/subscription_manager/cli_command/status.py:156
-#, fuzzy, python-brace-format
-#| msgid "System Purpose Status: %s\n"
+#, python-brace-format
 msgid "System Purpose Status: {status}"
-msgstr "Estado del propósito del sistema: %s\n"
+msgstr "Estado de Propósito del Sistema: {status}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/cli_command/status.py:178
-#, fuzzy
-#| msgid "Not registered"
 msgid "Overall Status: Not registered\n"
-msgstr "No registrado"
+msgstr "Estado completo: no registrado\n"
 
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
@@ -3865,7 +3698,7 @@ msgstr "Sub módulos de propósito del sistema"
 #: src/subscription_manager/cli_command/syspurpose.py:92
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr "%(prog)s {name} [SUB MÓDULO] [OPCIONES]"
+msgstr "%(prog)s {name} [SUB-MÓDULO] [OPCIONES]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:38
@@ -3898,16 +3731,16 @@ msgstr "token a usar cuando se autorice contra el servidor"
 
 #: src/subscription_manager/cli_command/user_pass.py:64
 msgid "Error: --username is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "Error: --username es un parámetro de requisito en modo no interactivo."
 
 #: src/subscription_manager/cli_command/user_pass.py:69
 msgid "Error: --password is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "Error: --password es un parámetro requerido en modo non-interactive."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/user_pass.py:73
 msgid "Username: "
-msgstr "Nombre de usuario: "
+msgstr "ID usuario: "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/user_pass.py:76
@@ -3921,16 +3754,14 @@ msgstr "Imprime información de versión"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/version.py:35
-#, fuzzy, python-brace-format
-#| msgid "subscription management server: %s"
+#, python-brace-format
 msgid "subscription management server: {version}"
-msgstr "Servidor de administración de suscripción: %s"
+msgstr "servidor de administración de suscripción: {version}"
 
 #: src/subscription_manager/cli_command/version.py:38
-#, fuzzy, python-brace-format
-#| msgid "subscription management rules: %s"
+#, python-brace-format
 msgid "subscription management rules: {version}"
-msgstr "reglas de administración de suscripciones: %s"
+msgstr "reglas de administración de suscripciones: {version}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/entcertlib.py:296
@@ -3979,49 +3810,47 @@ msgstr ""
 "rhsm/rhsm.log para obtener más información."
 
 #: src/subscription_manager/exceptions.py:34
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Network error: {message} (error code {code})"
-msgstr "{message} (código de error HTTP{code}: {title})"
+msgstr "Error de red: {message} (código de error {code})"
 
 #: src/subscription_manager/exceptions.py:35
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Connection error: {message} (error code {code})"
-msgstr "{message} (código de error HTTP{code}: {title})"
+msgstr "Error de conexión: {message} (código de error {code})"
 
 #: src/subscription_manager/exceptions.py:36
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
-msgstr "{message} (código de error HTTP{code}: {title})"
+msgstr ""
+"Respuesta de servidor desconocida (Código de error HTTP {code}: {title}):\n"
+"{content}"
 
 #: src/subscription_manager/exceptions.py:37
-#, fuzzy, python-brace-format
-#| msgid "{message} (HTTP error code {code}: {title})"
+#, python-brace-format
 msgid "Unknown server reply (HTTP error code {code}: {title})"
-msgstr "{message} (código de error HTTP{code}: {title})"
+msgstr ""
+"Respuesta de servidor desconocida (Código de error HTTP: {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:39
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
-msgstr "Error de proxy, no se puede conectar al servidor proxy."
+msgstr ""
+"Error de proxy: no es capaz de conectar a {hostname}: {message} (código de "
+"error {code})"
 
 #: src/subscription_manager/exceptions.py:41
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}: {message}"
-msgstr "Error de proxy, no se puede conectar al servidor proxy."
+msgstr "Error de proxy: no es capaz de conectar a {hostname}: {message}"
 
 #: src/subscription_manager/exceptions.py:42
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}"
-msgstr "Error de proxy, no se puede conectar al servidor proxy."
+msgstr "Error de proxy: no es capaz de conectar al {hostname}"
 
 #: src/subscription_manager/exceptions.py:43
 msgid "Unauthorized: Invalid credentials for request."
@@ -4046,10 +3875,9 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/exceptions.py:50
-#, fuzzy, python-brace-format
-#| msgid "Bad CA certificate: %s"
+#, python-brace-format
 msgid "Bad CA certificate: {file}: {reason}"
-msgstr "Certificado CA incorrecto: %s"
+msgstr "Certificado AC incorrecto: {file}: {reason}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/exceptions.py:51
@@ -4100,12 +3928,12 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:59
 #, python-brace-format
 msgid "Bad product certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "Certificado del producto incorrecto: {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:60
 #, python-brace-format
 msgid "Bad certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "Certificado incorrecto: {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:61
 #, python-brace-format
@@ -4113,20 +3941,20 @@ msgid ""
 "Bad certificate: [{library}] {message}\n"
 "{data}"
 msgstr ""
+"Certificado incorrecto: [{library}] {message}\n"
+"{data}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/exceptions.py:62
-#, fuzzy, python-brace-format
-#| msgid "Bad CA certificate: %s"
+#, python-brace-format
 msgid "Bad certificate: [{library}] {message}"
-msgstr "Certificado CA incorrecto: %s"
+msgstr "Certificado incorrecto: [{library}] {message}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author gguerrer
 #: src/subscription_manager/exceptions.py:63
-#, fuzzy, python-brace-format
-#| msgid "Unable to reach the server at %s:%s%s"
+#, python-brace-format
 msgid "Unable to reach the server at {host}: {message}"
-msgstr "No se puede conectar el servidor en %s:%s%s"
+msgstr "No es capaz de alcanzar el servidor en {host}: {message}"
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
@@ -4136,10 +3964,7 @@ msgid "{message} (HTTP error code {code}: {title})"
 msgstr "{message} (código de error HTTP{code}: {title})"
 
 #: src/subscription_manager/exceptions.py:168
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The server rate limit has been exceeded, please try again later. (Expires "
-#| "in %s seconds)"
+#, python-brace-format
 msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} second)"
@@ -4148,10 +3973,10 @@ msgid_plural ""
 "{time} seconds)"
 msgstr[0] ""
 "Se superó el límite de velocidad del servidor, intente nuevamente más tarde. "
-"(Vence en %s segundos)"
+"(Vence en {time} segundo)"
 msgstr[1] ""
 "Se superó el límite de velocidad del servidor, intente nuevamente más tarde. "
-"(Vence en %s segundos)"
+"(Vence en {time} segundos)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:50
@@ -4245,27 +4070,21 @@ msgid "Error uploading package profile: %s\n"
 msgstr "Error cargando el perfil de paquete: %s\n"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:343
-#, fuzzy
-#| msgid "This system is already registered. Add force to options to override."
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
 msgstr ""
-"Este sistema ya está registrado. Añadir fuerza a las opciones de reemplazar."
+"Este sistema ya está registrado, ignora solicitud para registro automático."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:346
-#, fuzzy
-#| msgid "Register System"
 msgid "Registering the system"
-msgstr "Registrar sistema"
+msgstr "Registrando el sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:357
-#, fuzzy
-#| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
-msgstr "Actualizando certificados de derechos y repositorios"
+msgstr "Actualizando certificados de derechos y repositorios."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author Gladys Guerrero Lozano
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:430
@@ -4283,12 +4102,16 @@ msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
 msgstr ""
+"Aviso: valor proporcionado \"{val}\" no es incluido en la lista de valores "
+"válidos para el atributo {attr}:"
 
 #: src/syspurpose/files.py:472
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
+"Aviso: clave \"{key}\" proporcionada no está incluida en la lista de claves "
+"válidas:"
 
 #~ msgid "Show or modify the system purpose addons setting"
 #~ msgstr ""
