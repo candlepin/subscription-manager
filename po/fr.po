@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2025-02-19 12:38+0000\n"
+"PO-Revision-Date: 2025-03-31 12:53+0000\n"
 "Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -331,8 +331,8 @@ msgid ""
 "\"rhc\" or \"subscription-manager\" to register.\n"
 msgstr ""
 "\n"
-"Le système n'est pas enregistré auprès d’un serveur octroyant des droits. "
-"Utilisez subscription-manager pour l'enregistrer.\n"
+"Le système n'est pas enregistré auprès un serveur de droits. Vous pouvez "
+"utiliser \"rhc\" ou \"subscription-manager\" pour l'enregistrer.\n"
 
 #: src/plugins/dnf/subscription_manager.py:70
 msgid ""
@@ -353,8 +353,8 @@ msgid ""
 "only for this release.\n"
 msgstr ""
 "\n"
-"Ce système a une version définie sur{release_version} et il reçoit des mises "
-"à jour uniquement pour cette version.\n"
+"Ce système a pour version {release_version} et reçoit des mises à jour "
+"uniquement pour cette version.\n"
 
 #: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
@@ -1328,21 +1328,24 @@ msgstr "Erreur : ce système n'est pas enregistré"
 
 #: src/rhsmlib/services/register.py:73
 msgid "Environment IDs and environment names are mutually exclusive"
-msgstr "Les identifiants et les noms d'environnement s'excluent mutuellement"
+msgstr ""
+"Les ID d'environnement et les noms d'environnement ne peuvent pas être "
+"utilisés en même temps"
 
 #: src/rhsmlib/services/register.py:174
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
 msgstr ""
-"Environnement: '{env_names} ' n'a pas le type requis '{environment_type} '"
+"L'environnement '{env_names}' n'a pas le type requis '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:182
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
 msgstr ""
-"Environnements : '{env_names} « n'a pas le type requis »{environment_type} '"
+"Les environnements '{env_names}' n'ont pas le type requis "
+"'{environment_type}'"
 
 #: src/rhsmlib/services/register.py:202
 msgid ""
@@ -3252,8 +3255,7 @@ msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
 msgstr ""
-"Ce système est déjà enregistré; ignorer le demandes d’enregistrement "
-"automatiques."
+"Ce système est déjà enregistré, requête d'enregistrement automatique ignorée."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:346
@@ -3263,7 +3265,7 @@ msgstr "Enregistrement du système"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 msgid "Updating entitlement certificates & repositories."
-msgstr "Mise à jour des certificats de droits d'accès et des référentiels"
+msgstr "Mise à jour des certificats de droits d'accès et des dépôts."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:419
