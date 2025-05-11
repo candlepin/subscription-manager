@@ -8,21 +8,22 @@
 # Pino Toscano <ptoscano@redhat.com>, 2021, 2023, 2025.
 # Transtats <suanand@redhat.com>, 2022, 2023.
 # Jingge Chen <mariocanfly@hotmail.com>, 2023.
+# Matyas Horky <mhorky@redhat.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2023-12-09 14:44+0000\n"
-"Last-Translator: Jingge Chen <mariocanfly@hotmail.com>\n"
+"PO-Revision-Date: 2025-04-02 12:53+0000\n"
+"Last-Translator: Matyas Horky <mhorky@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
-"projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
+"projects/subscription-manager/subscription-manager-1-29/zh_CN/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -1286,19 +1287,19 @@ msgstr "错误：这个系统没有注册"
 
 #: src/rhsmlib/services/register.py:68
 msgid "Environment IDs and environment names are mutually exclusive"
-msgstr ""
+msgstr "环境 ID 和环境名称是互斥的"
 
 #: src/rhsmlib/services/register.py:167
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
-msgstr ""
+msgstr "环境: '{env_names}' 没有需要的类型 '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:175
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
-msgstr ""
+msgstr "环境: '{env_names}' 没有需要的类型 '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:238
 msgid "This system is already registered. Add force to options to override."
@@ -3473,10 +3474,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:123
-#, fuzzy
-#| msgid "Register"
 msgid "Registered"
-msgstr "注册"
+msgstr "已注册"
 
 #: src/subscription_manager/cli_command/status.py:125
 #, python-brace-format
@@ -3494,10 +3493,8 @@ msgstr "系统目的状态：{status}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:178
-#, fuzzy
-#| msgid "Not registered"
 msgid "Overall Status: Not registered\n"
-msgstr "没有注册"
+msgstr "总体状态：未注册\n"
 
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"

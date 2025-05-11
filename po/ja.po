@@ -7,21 +7,22 @@
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021, 2023, 2025.
 # Transtats <suanand@redhat.com>, 2022, 2023.
+# Matyas Horky <mhorky@redhat.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2023-11-04 01:48+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2025-04-02 12:53+0000\n"
+"Last-Translator: Matyas Horky <mhorky@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
-"subscription-manager/subscription-manager-main/ja/>\n"
+"subscription-manager/subscription-manager-1-29/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.1.1\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -1304,19 +1305,19 @@ msgstr "エラー: このシステムは登録されていません"
 
 #: src/rhsmlib/services/register.py:68
 msgid "Environment IDs and environment names are mutually exclusive"
-msgstr ""
+msgstr "環境 ID と環境名は同時に使用できません"
 
 #: src/rhsmlib/services/register.py:167
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
-msgstr ""
+msgstr "環境: '{env_names}' に必要なタイプ ('{environment_type}') がありません"
 
 #: src/rhsmlib/services/register.py:175
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
-msgstr ""
+msgstr "環境: '{env_names} ' に必要なタイプ ('{environment_type}') がありません"
 
 #: src/rhsmlib/services/register.py:238
 msgid "This system is already registered. Add force to options to override."
@@ -3606,10 +3607,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/status.py:123
-#, fuzzy
-#| msgid "Register"
 msgid "Registered"
-msgstr "登録"
+msgstr "登録済み"
 
 #: src/subscription_manager/cli_command/status.py:125
 #, python-brace-format
@@ -3627,10 +3626,8 @@ msgstr "システムの目的の状態: {status}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/status.py:178
-#, fuzzy
-#| msgid "Not registered"
 msgid "Overall Status: Not registered\n"
-msgstr "登録されていません"
+msgstr "全体のステータス: 未登録\n"
 
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
