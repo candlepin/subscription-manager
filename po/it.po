@@ -3,13 +3,15 @@
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
 # Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023, 2025.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2025-04-27 16:35+0000\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"PO-Revision-Date: 2025-04-28 09:56+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/it/>\n"
 "Language: it\n"
@@ -1321,7 +1323,7 @@ msgstr "Gli ID ambiente e i nomi ambiente si escludono a vicenda"
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
-msgstr ""
+msgstr "L'ambiente: '{env_names}' non ha il tipo richiesto '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:175
 #, python-brace-format
@@ -3679,10 +3681,8 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/status.py:123
-#, fuzzy
-#| msgid "Register"
 msgid "Registered"
-msgstr "Registra"
+msgstr "Registrato."
 
 #: src/subscription_manager/cli_command/status.py:125
 #, python-brace-format
