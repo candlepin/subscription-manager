@@ -3,13 +3,15 @@
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
 # Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023, 2025.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2025-04-27 16:35+0000\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
 "Language: it\n"
@@ -1003,17 +1005,15 @@ msgstr "Aggiornamento delle informazioni del profilo"
 
 #: src/rhsm/connection.py:1806
 msgid "Fetching consumer keys"
-msgstr ""
+msgstr "Recupero delle chiavi del consumatore"
 
 #: src/rhsm/connection.py:1815
-#, fuzzy
-#| msgid "Checking installed software"
 msgid "Checking compliance status"
-msgstr "Verifica del software installato"
+msgstr "Verifica dello stato di conformità"
 
 #: src/rhsm/connection.py:1824
 msgid "Checking system purpose compliance status"
-msgstr ""
+msgstr "Verifica dello stato di conformità dello scopo del sistema"
 
 #: src/rhsm/connection.py:1831
 msgid "Fetching available system purpose settings"
@@ -1086,23 +1086,19 @@ msgstr "Verifica dello stato del server"
 
 #: src/rhsm/connection.py:2077
 msgid "Fetching content overrides"
-msgstr ""
+msgstr "Il recupero del contenuto esegue l'override"
 
 #: src/rhsm/connection.py:2088
 msgid "Updating content overrides"
-msgstr ""
+msgstr "L'aggiornamento del contenuto ha la precedenza"
 
 #: src/rhsm/connection.py:2101
-#, fuzzy
-#| msgid "Removing Repository Overrides"
 msgid "Removing content overrides"
-msgstr "Rimozione override del repository"
+msgstr "Rimozione delle sostituzioni del contenuto"
 
 #: src/rhsm/connection.py:2110
-#, fuzzy
-#| msgid "Fetching pools"
 msgid "Fetching job"
-msgstr "Recupero dei pool"
+msgstr "Recupero lavoro"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm_debug/debug_commands.py:39
@@ -1605,6 +1601,9 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Avvertimento: Un {attr} di \"{download_value}\" è stato recentemente "
+"impostato per questo sistema dall'amministratore del server dei diritti.\n"
+"{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
 #, python-brace-format
@@ -1968,10 +1967,10 @@ msgstr ""
 "dell'organizzazione"
 
 #: src/subscription_manager/cli_command/environments.py:57
-#, fuzzy
-#| msgid "comma-separated list of hostnames/domains"
 msgid "set an ordered comma-separated list of environments for this consumer"
-msgstr "elenco delimitato da virgole di nomi host/domini"
+msgstr ""
+"imposta un elenco ordinato di ambienti separati da virgole per questo "
+"consumatore"
 
 #: src/subscription_manager/cli_command/environments.py:63
 msgid "list all environments for the organization"
@@ -1979,17 +1978,13 @@ msgstr "elencare tutti gli ambienti disponibili per l'organizzazione"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/environments.py:70
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments enabled for this consumer in order"
-msgstr "Mostra gli ambienti disponibili per un utente"
+msgstr "elenca in ordine gli ambienti abilitati per questo consumer"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/environments.py:77
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments not enabled for this consumer"
-msgstr "Mostra gli ambienti disponibili per un utente"
+msgstr "elenca gli ambienti non abilitati per questo consumer"
 
 #: src/subscription_manager/cli_command/environments.py:86
 msgid "You may not specify an --org for environments when registered."
@@ -2451,6 +2446,10 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
+"registrarsi con un ambiente specifico (valore singolo) o più ambienti (un "
+"elenco separato da virgole) nell'organizzazione di destinazione. La "
+"possibilità di utilizzare più ambienti è controllata dal server di "
+"autorizzazione"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:103
@@ -2496,12 +2495,8 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/register.py:151
 #: src/subscription_manager/cli_command/register.py:418
-#, fuzzy
-#| msgid "The entitlement server failed to remove these serial numbers:"
 msgid "The entitlement server does not allow multiple environments"
-msgstr ""
-"Il server per l'entitlement non è riuscito a rimuovere questi numeri di "
-"serie:"
+msgstr "Il server di autorizzazione non consente più ambienti"
 
 #: src/subscription_manager/cli_command/register.py:164
 msgid "Uploading DNF profile"
@@ -2733,11 +2728,13 @@ msgstr "Il repository '{repoid}' è disabilitato per questo sistema."
 
 #: src/subscription_manager/cli_command/role.py:24
 msgid "Show or modify the system purpose role setting"
-msgstr ""
+msgstr "Mostra o modifica l'impostazione del ruolo dello scopo del sistema"
 
 #: src/subscription_manager/cli_command/service_level.py:42
 msgid "Show or modify the system purpose service-level setting"
 msgstr ""
+"Mostra o modifica l'impostazione del livello di servizio dello scopo del "
+"sistema"
 
 #: src/subscription_manager/cli_command/service_level.py:70
 msgid "Error: --org is only supported with the --list or --set option"
@@ -2772,7 +2769,7 @@ msgstr "Livello del servizio impostato a: \"{val}\"."
 
 #: src/subscription_manager/cli_command/service_level.py:162
 msgid "Service level preference has been unset"
-msgstr ""
+msgstr "La preferenza del livello di servizio è stata annullata"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/service_level.py:169
