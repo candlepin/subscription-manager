@@ -2,14 +2,14 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
 # Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023, 2025.
-# Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024.
+# Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2025-02-27 12:38+0000\n"
-"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
+"PO-Revision-Date: 2025-04-27 16:35+0000\n"
+"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.11\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -320,6 +320,9 @@ msgid ""
 "This system has release set to {release_version} and it receives updates "
 "only for this release.\n"
 msgstr ""
+"\n"
+"La versione di questo sistema è impostata su {release_version} e riceve "
+"aggiornamenti solo per questa versione.\n"
 
 #: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
@@ -351,7 +354,7 @@ msgstr "Impossibile leggere l'identità dell'utente"
 
 #: src/plugins/dnf/subscription_manager.py:170
 msgid "subscription-manager is operating in container mode."
-msgstr "il gestore degli abbonamenti funziona in modalità contenitore."
+msgstr "subscription-manager sta funzionando in modalità per container."
 
 #: src/plugins/dnf/upload_profile.py:37
 msgid ""
@@ -876,7 +879,7 @@ msgstr "Distributore:"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/printing.py:162
 msgid "Alt Name"
-msgstr "Nome alt."
+msgstr "Nome alt"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rct/printing.py:217 src/rhsmlib/services/entitlement.py:298
@@ -963,7 +966,7 @@ msgstr "Aggiornamento delle informazioni dell'hypervisor"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rhsm/connection.py:1747
 msgid "Updating consumer information"
-msgstr "Aggiornamento delle informazioni sui consumatori"
+msgstr "Aggiornamento delle informazioni per i consumatori"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rhsm/connection.py:1752 src/rhsm/connection.py:1756
@@ -1045,7 +1048,7 @@ msgstr "Recupero dei rilasci disponibili"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rhsm/connection.py:2058
 msgid "Fetching entitlements"
-msgstr "Recupero dei diritti"
+msgstr "Recupero degli ambienti"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsm/connection.py:2067
@@ -1073,11 +1076,11 @@ msgstr "Verifica dello stato del server"
 
 #: src/rhsm/connection.py:2134
 msgid "Fetching content overrides"
-msgstr ""
+msgstr "Il recupero del contenuto esegue l'override"
 
 #: src/rhsm/connection.py:2145
 msgid "Updating content overrides"
-msgstr ""
+msgstr "L'aggiornamento del contenuto ha la precedenza"
 
 #: src/rhsm/connection.py:2158
 msgid "Removing content overrides"
@@ -1174,11 +1177,11 @@ msgid_plural ""
 "Warning: The following fields were recently set for this system by the "
 "entitlement server administrator: {conflict_msg}"
 msgstr[0] ""
-"Avvertenza: il seguente campo è stato recentemente impostato per questo "
-"sistema dall'amministratore del server dei diritti: {conflict_msg}"
+"Attenzione: il seguente campo è stato recentemente impostato per questo "
+"sistema dall'amministratore del server di autorizzazione: {conflict_msg}"
 msgstr[1] ""
-"Avvertenza: i seguenti campi sono stati impostati di recente per questo "
-"sistema dall'amministratore del server dei diritti: {conflict_msg}"
+"Attenzione: i seguenti campi sono stati recentemente impostati per questo "
+"sistema dall'amministratore del server di autorizzazione: {conflict_msg}"
 
 #: src/rhsmlib/dbus/service_wrapper.py:54
 #, python-brace-format
@@ -1312,7 +1315,7 @@ msgstr "Errore: questo sistema non è registrato"
 
 #: src/rhsmlib/services/register.py:68
 msgid "Environment IDs and environment names are mutually exclusive"
-msgstr ""
+msgstr "Gli ID ambiente e i nomi ambiente si escludono a vicenda"
 
 #: src/rhsmlib/services/register.py:167
 #, python-brace-format
@@ -1325,6 +1328,7 @@ msgstr ""
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
 msgstr ""
+"Gli ambienti: '{env_names}' non hanno il tipo richiesto '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:238
 msgid "This system is already registered. Add force to options to override."
@@ -1444,7 +1448,7 @@ msgstr ""
 #: src/subscription_manager/branding/__init__.py:87
 #: src/subscription_manager/branding/redhat_branding.py:29
 msgid "Red Hat Subscription Management"
-msgstr "Red Hat Subscription Management"
+msgstr "Gestione degli abbonamenti Red Hat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:7
@@ -1594,6 +1598,9 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Avvertimento: Un {attr} di \"{download_value}\" è stato recentemente "
+"impostato per questo sistema dall'amministratore del server dei diritti.\n"
+"{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
 #, python-brace-format
@@ -1629,7 +1636,7 @@ msgstr "rimuovi un elemento dalla lista ({attr})."
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:105
 #, python-brace-format
 msgid "show this system's current {attr}"
-msgstr "mostra il valore corrente di \"{attr}\" di questo sistema"
+msgstr "mostra l'{attr} corrente di questo sistema"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:112
 #, python-brace-format
@@ -3011,8 +3018,7 @@ msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
 msgstr ""
-"Il repository '{repo}' attualmente non esiste, ma è stata aggiunta la "
-"sostituzione."
+"Il repository '{repo}' al momento non esiste, ma è stato aggiunto l'override."
 
 #: src/subscription_manager/cli_command/override.py:198
 #, python-brace-format
@@ -4098,14 +4104,12 @@ msgid "Error uploading package profile: %s\n"
 msgstr "Errore durante l'invio del profilo di pacchetti: %s\n"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:343
-#, fuzzy
-#| msgid "This system is already registered. Add force to options to override."
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
 msgstr ""
-"Questo sistema è già registrato. Aggiungere \"force\" alle opzioni per "
-"eseguire sovrascrivere."
+"Questo sistema è già registrato e la richiesta di registrazione automatica "
+"verrà ignorata."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:346
@@ -4116,10 +4120,8 @@ msgstr "Registrazione del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:357
-#, fuzzy
-#| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
-msgstr "Aggiornamento certificati per l'entitlement & repository in corso"
+msgstr "Aggiornamento dei certificati di autorizzazione e dei repository."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:430
