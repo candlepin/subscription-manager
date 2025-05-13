@@ -32,5 +32,5 @@ class TestEntitlementDBusObject(SubManDBusFixture):
         expected = {"status": "Unknown", "reasons": {}, "valid": False}
         self.patches["get_status_patch"].return_value = expected
 
-        result = self.impl.get_status("")
+        result = self.impl.get_status()
         self.assertEqual(expected, result)

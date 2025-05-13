@@ -24,12 +24,10 @@ from .stubs import (
     StubEntitlementDirectory,
     StubProductDirectory,
     StubUEP,
-    StubCertSorter,
 )
 import subscription_manager.cert_sorter
 from subscription_manager.cert_sorter import ComplianceManager, CertSorter, UNKNOWN
 from subscription_manager.cache import EntitlementStatusCache
-from datetime import timedelta, datetime
 from unittest.mock import Mock, patch
 from rhsm import ourjson as json
 
@@ -97,16 +95,6 @@ class CertSorterTests(SubManFixture):
     def test_unregistered_status(self, mock_update):
         sorter = CertSorter()
         sorter.is_registered = Mock(return_value=False)
-        self.assertEqual(UNKNOWN, sorter.get_status(INST_PID_1))
-
-    # Server doesn't support compliance API, or server is unreachable and
-    # we cannot use the cache for some reason.
-    @patch("subscription_manager.cache.InstalledProductsManager.update_check")
-    def test_no_usable_status(self, mock_update):
-        self.status_mgr.load_status = Mock(return_value=None)
-        self.status_mgr.server_status = None
-        sorter = CertSorter()
-        sorter.is_registered = Mock(return_value=True)
         self.assertEqual(UNKNOWN, sorter.get_status(INST_PID_1))
 
     @patch("subscription_manager.cache.InstalledProductsManager.update_check")
