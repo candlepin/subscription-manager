@@ -232,16 +232,6 @@ class ComplianceManager:
                 return True
         return False
 
-    # Assumes classic and identity validity have been tested
-    def get_status_for_icon(self) -> int:
-        if self.system_status == "invalid":
-            return RHSM_EXPIRED
-        if self.system_status == "partial":
-            return RHSM_PARTIALLY_VALID
-        if self.in_warning_period():
-            return RHSM_WARNING
-        return RHSM_VALID  # Correct when unknown
-
 
 class CertSorter(ComplianceManager):
     """
