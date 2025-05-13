@@ -34,22 +34,15 @@ if TYPE_CHECKING:
 
 log = logging.getLogger(__name__)
 
-# Strings used for status of products
-FUTURE_SUBSCRIBED = "future_subscribed"
-SUBSCRIBED = "subscribed"
-NOT_SUBSCRIBED = "not_subscribed"
-EXPIRED = "expired"
-PARTIALLY_SUBSCRIBED = "partially_subscribed"
 
 # Strings used fot status of system
 # Warning: Do not change following strings, because these strings
 # are in D-Bus API. The API is used by other applications (Anaconda,
 # Cockpit, GNOME, ...)
-VALID = "valid"
-INVALID = "invalid"
-PARTIAL = "partial"
 DISABLED = "disabled"
+"""Registered system"""
 UNKNOWN = "unknown"
+"""Not registered system"""
 
 
 SOCKET_FACT = "cpu.cpu_socket(s)"
@@ -124,13 +117,14 @@ class ComplianceManager:
         # Reasons that products aren't fully compliant
         self.reasons = Reasons([], self)
         self.supports_reasons = False
-        self.system_status = DISABLED
+        self.system_status = UNKNOWN
         self.valid_entitlement_certs = []
         self.compliant_until = None
 
         if self.is_registered():
             self._scan_entitlement_certs()
             self.log_products()
+            self.system_status = DISABLED
 
     def log_products(self) -> None:
         fj: Callable = utils.friendly_join
@@ -202,9 +196,6 @@ class ComplianceManager:
         # when function is called (not during start of application) due to
         # rhsm.service which can run for very long time
         status_map = {
-            VALID: _("Current"),
-            PARTIAL: _("Insufficient"),
-            INVALID: _("Invalid"),
             DISABLED: _("Disabled"),
             UNKNOWN: _("Unknown"),
         }
@@ -224,7 +215,7 @@ class ComplianceManager:
         Return true if the results of this cert sort indicate our
         entitlements are completely valid.
         """
-        return self.system_status == VALID or self.system_status == DISABLED
+        return self.system_status == DISABLED
 
     def is_registered(self) -> bool:
         return inj.require(inj.IDENTITY).is_valid()
@@ -233,20 +224,7 @@ class ComplianceManager:
         """Return the status of a given product"""
         if not self.is_registered():
             return UNKNOWN
-        if product_id in self.partially_valid_products:
-            return PARTIALLY_SUBSCRIBED
-        if product_id in self.valid_products:
-            return SUBSCRIBED
-        if product_id in self.future_products:
-            return FUTURE_SUBSCRIBED
-        if product_id in self.expired_products:
-            return EXPIRED
-        if product_id in self.unentitled_products:
-            return NOT_SUBSCRIBED
-        else:
-            # Can only really happen if server doesn't support compliance
-            # API call:
-            return UNKNOWN
+        return DISABLED
 
     def in_warning_period(self) -> bool:
         for entitlement in self.valid_entitlement_certs:

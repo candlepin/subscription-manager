@@ -18,9 +18,11 @@ import time
 from typing import Union
 
 from subscription_manager import injection as inj
+from subscription_manager.cert_sorter import CertSorter
 from subscription_manager.i18n import ugettext as _
 from subscription_manager import managerlib, utils
 from subscription_manager.entcertlib import EntCertActionInvoker
+from subscription_manager.identity import Identity
 
 from rhsm import certificate
 from rhsmlib.services import exceptions, products
@@ -32,7 +34,7 @@ log = logging.getLogger(__name__)
 class EntitlementService:
     def __init__(self, cp: connection.UEPConnection = None) -> None:
         self.cp = cp
-        self.identity = inj.require(inj.IDENTITY)
+        self.identity: Identity = inj.require(inj.IDENTITY)
         self.product_dir = inj.require(inj.PROD_DIR)
         self.entitlement_dir = inj.require(inj.ENT_DIR)
         self.entcertlib = EntCertActionInvoker()
@@ -57,13 +59,8 @@ class EntitlementService:
             raise ValueError(_("Past dates are not allowed"))
         return on_date
 
-    def get_status(self, on_date: str = None, force: bool = False) -> dict:
-        sorter = inj.require(inj.CERT_SORTER, on_date)
-        # When singleton CertSorter was created with different argument on_date, then
-        # it is necessary to update corresponding attribute in object (dependency
-        # injection doesn't do it automatically).
-        if sorter.on_date != on_date:
-            sorter.on_date = on_date
+    def get_status(self, force: bool = False) -> dict:
+        sorter: CertSorter = inj.require(inj.CERT_SORTER)
 
         # Force reload status from the server to be sure that we get valid status for new date.
         # It is necessary to do it for rhsm.service, because it can run for very long time without
@@ -76,27 +73,14 @@ class EntitlementService:
 
         sorter.load()
 
-        if self.identity.is_valid():
-            overall_status = sorter.get_system_status()
-            overall_status_id = sorter.get_system_status_id()
-            reasons = sorter.reasons.get_name_message_map()
-            reason_ids = sorter.reasons.get_reason_ids_map()
-            valid = sorter.is_valid()
-            status = {
-                "status": overall_status,
-                "status_id": overall_status_id,
-                "reasons": reasons,
-                "reason_ids": reason_ids,
-                "valid": valid,
-            }
-        else:
-            status = {
-                "status": _("Unknown"),
-                "status_id": "unknown",
-                "reasons": {},
-                "reason_ids": {},
-                "valid": False,
-            }
+        status = {
+            "status": sorter.get_system_status(),
+            "status_id": sorter.get_system_status_id(),
+            "reasons": {},
+            "reason_ids": {},
+            "valid": sorter.is_valid(),
+        }
+
         log.debug("entitlement status: %s" % str(status))
         return status
 
