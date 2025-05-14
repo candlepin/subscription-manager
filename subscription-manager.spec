@@ -83,7 +83,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.6
+Version: 1.30.7
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -677,6 +677,57 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Wed May 14 2025 Jiri Hnidek <jhnidek@redhat.com> 1.30.7-1
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Italian) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Translated using Weblate (Italian) (info@salvatorecocuzza.it)
+- Translated using Weblate (Spanish) (fserrador@gmail.com)
+- Translated using Weblate (Chinese (Traditional) (zh_TW)) (chzang55@gmail.com)
+- Translated using Weblate (Chinese (Traditional) (zh_TW)) (noreply-mt-weblate-
+  translation-memory@weblate.org)
+- Translated using Weblate (Chinese (Traditional) (zh_TW)) (chzang55@gmail.com)
+- Translated using Weblate (Japanese) (mhorky@redhat.com)
+- Translated using Weblate (French) (leane.grasser@proton.me)
+- fix: Unit test should ignore locale, when generating test timestamp
+  (jhnidek@redhat.com)
+- fix: Handle improperly closed connections (mhorky@redhat.com)
+- test: Added integration tests for activation keys (jstavel@redhat.com)
+- test: Integration tests for DBus Unregister call (jhnidek@redhat.com)
+- fix: Do not call removed bash script from tesh.sh (jhnidek@redhat.com)
+- spec: drop old libdnf-plugin-subscription-manager-debuginfo definition
+  (ptoscano@redhat.com)
+- spec: switch from an own run_dir to _rundir (ptoscano@redhat.com)
+- spec: switch from python_sitelib to python3_sitelib (ptoscano@redhat.com)
+- spec: switch from python_sitearch to python3_sitearch (ptoscano@redhat.com)
+- spec: inline & drop rhsm_package_name (ptoscano@redhat.com)
+- spec: switch from __python to __python3 (ptoscano@redhat.com)
+- spec: inline & drop py_package_prefix (ptoscano@redhat.com)
+- spec: remove redundant check (ptoscano@redhat.com)
+- spec: deduplicate BuildRequires for use_dnf (ptoscano@redhat.com)
+- spec: drop old %%post snippet for rhsmd (ptoscano@redhat.com)
+- spec: drop EL 8 bits (ptoscano@redhat.com)
+- ci: tweak the dependabot config for branches a bit (ptoscano@redhat.com)
+- feat: remove no more needed branding strings (ptoscano@redhat.com)
+- feat: drop ClassicCheck (ptoscano@redhat.com)
+- ci: track also active stable branches with dependabot for GitHub actions
+  (ptoscano@redhat.com)
+- tests: update location of pytest-client-tools (ptoscano@redhat.com)
+- Handle URL params for AptRepoFiles (grigo@atix.de)
+- fix: Append two additional facts to the graylist (pkoprda@redhat.com)
+- refactor: Use class constant instead of variable graylist
+  (pkoprda@redhat.com)
+- spec: Require subpackages from the same build as the base package
+  (debarshir@gnome.org)
+- spec: Consolidate dependencies on the DNF & libdnf plugins in one place
+  (debarshir@gnome.org)
+- spec: Fix grammar and spelling mistakes (debarshir@gnome.org)
+- build: use cmake pkg-config imported targets (ptoscano@redhat.com)
+- build: fix order of parameters for pkg_check_modules() (ptoscano@redhat.com)
+- build: drop manual setting of -std=c99 (ptoscano@redhat.com)
+- build: remove check for in source cmake builddir (ptoscano@redhat.com)
+- build: bump cmake required version to 3.20 (ptoscano@redhat.com)
+
 * Thu Mar 06 2025 Pino Toscano <ptoscano@redhat.com> 1.30.6-1
 - Translated using Weblate (Italian) (toscano.pino@tiscali.it)
 - Translated using Weblate (Japanese) (ptoscano@redhat.com)
