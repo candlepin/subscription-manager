@@ -308,7 +308,7 @@ class TestSystemExit(unittest.TestCase):
         self.assertEqual("%s\n" % msg, cap.err)
 
     def test_msg_unicode(self):
-        msg: str = "\u2620 \u2603 \u203D"
+        msg: str = "\u2620 \u2603 \u203d"
         with Capture() as cap:
             try:
                 system_exit(1, msg)
@@ -327,7 +327,7 @@ class TestSystemExit(unittest.TestCase):
         self.assertEqual("%s\n" % str(ex), cap.err)
 
     def test_only_exception_unicode(self):
-        ex: ValueError = ValueError("\u2620 \u2603 \u203D")
+        ex: ValueError = ValueError("\u2620 \u2603 \u203d")
         with Capture() as cap:
             try:
                 system_exit(1, ex)

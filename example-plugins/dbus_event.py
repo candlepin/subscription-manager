@@ -83,9 +83,3 @@ class DbusEventPlugin(SubManPlugin):
 
     def post_product_id_install_hook(self, conduit):
         self._dbus_event("post_product_id_install", conduit)
-
-    def pre_subscribe_hook(self, conduit):
-        self._dbus_event("pre_subscribe", conduit)
-
-    def post_subscribe_hook(self, conduit):
-        self._dbus_event("post_subscribe", conduit)
