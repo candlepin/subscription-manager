@@ -72,7 +72,6 @@ class TestCompileCommand(TestCliCommand):
 
         self.expected_paths = [
             "consumer.json",
-            "compliance.json",
             "entitlements.json",
             "pools.json",
             "version.json",

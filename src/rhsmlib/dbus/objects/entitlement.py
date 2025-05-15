@@ -11,7 +11,6 @@
 # granted to use or replicate Red Hat trademarks that are incorporated
 # in this software or its documentation.
 import datetime
-from typing import Union
 
 import dbus
 import json
@@ -31,14 +30,12 @@ log = logging.getLogger(__name__)
 
 
 class EntitlementDBusImplementation(base_object.BaseImplementation):
-    def get_status(self, on_date: str) -> dict:
+    def get_status(self) -> dict:
         """Get status of entitlements."""
-        on_date: Union[str, datetime.datetime] = None if on_date == "" else self._parse_date(on_date)
-
         uep: UEPConnection = self.build_uep(options={})
         service = EntitlementService(uep)
         try:
-            status: dict = service.get_status(on_date=on_date, force=True)
+            status: dict = service.get_status(force=True)
         except Exception as exc:
             log.exception(exc)
             raise dbus.DBusException(str(exc))
@@ -106,7 +103,7 @@ class EntitlementDBusObject(base_object.BaseObject):
     def GetStatus(self, on_date, locale, sender=None):
         """
         Get status of entitlements
-        :param on_date: Date
+        :param on_date: Date (ignored)
         :param locale: String with locale (e.g. de_DE.UTF-8)
         :param sender: Not used argument
         :return: String with JSON dump
@@ -116,7 +113,10 @@ class EntitlementDBusObject(base_object.BaseObject):
 
         Locale.set(locale)
 
-        status: dict = self.impl.get_status(on_date)
+        if on_date != "":
+            logging.debug(f"Ignoring: 'on_date={on_date}'.")
+
+        status: dict = self.impl.get_status()
         return json.dumps(status)
 
     @util.dbus_service_signal(
