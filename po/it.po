@@ -10,8 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
 "PO-Revision-Date: 2025-04-28 13:53+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/it/>\n"
 "Language: it\n"
@@ -565,8 +564,6 @@ msgstr "Sottoscritto parzialmente ($0)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: cockpit/src/subscriptions-view.jsx:121
-#, fuzzy
-#| msgid "Not Subscribed"
 msgid "Not subscribed"
 msgstr "Non sottoscritte"
 
@@ -677,17 +674,13 @@ msgid "Unregister"
 msgstr "Rimuovi registrazione"
 
 #: cockpit/src/subscriptions-view.jsx:422
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Organization/Environment Access. This host "
-#| "has access to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status."
 msgstr ""
 "La modalità di accesso al contenuto è impostata su Organizzazione / Accesso "
 "all'ambiente. Questo host ha accesso ai contenuti, indipendentemente dallo "
-"stato dell'abbonamento.\n"
+"stato dell'abbonamento."
 
 #: cockpit/src/subscriptions-view.jsx:449
 msgid "Overview"
@@ -5532,11 +5525,10 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:2259
-#, fuzzy
 msgid "email address to notify when subscription redemption is complete"
 msgstr ""
-"indirizzo di posta elettronica da usare quando l'acquisizione della "
-"sottoscrizione è stata completata"
+"indirizzo email per ricevere una notifica quando il riscatto "
+"dell'abbonamento è completato"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:2262
@@ -6454,13 +6446,14 @@ msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr ""
+"La modalità di accesso al contenuto è impostata su Organizzazione / Accesso "
+"all'ambiente. Questo host ha accesso ai contenuti, indipendentemente dallo "
+"stato dell'abbonamento.\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:3763
-#, fuzzy
-#| msgid "Register"
 msgid "Registered"
-msgstr "Registra"
+msgstr "Registrato"
 
 #: src/subscription_manager/managercli.py:3765
 #, python-brace-format
@@ -6479,10 +6472,8 @@ msgstr "Stato dello scopo di sistema: {status}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:3818
-#, fuzzy
-#| msgid "Not registered"
 msgid "Overall Status: Not registered\n"
-msgstr "Non è registrato"
+msgstr "Stato generale: non registrato\n"
 
 #: src/subscription_manager/plugin/container/__init__.py:234
 #: src/subscription_manager/plugin/ostree/action_invoker.py:147
