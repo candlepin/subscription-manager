@@ -1,13 +1,15 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2021.
 # Emilio Herrera <ehespinosa57@gmail.com>, 2021.
+# Javier Francisco <fserrador@gmail.com>, 2025.
+# "Fco. Javier F. Serrador" <fserrador@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-02 12:40+0100\n"
-"PO-Revision-Date: 2021-12-29 03:16+0000\n"
-"Last-Translator: Emilio Herrera <ehespinosa57@gmail.com>\n"
+"PO-Revision-Date: 2025-04-21 19:53+0000\n"
+"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/es/>\n"
 "Language: es\n"
@@ -15,30 +17,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 5.11\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
-msgstr ""
+msgstr "modo de empleo: "
 
 #: /usr/lib64/python3.6/argparse.py:830
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() no definido"
 
 #: /usr/lib64/python3.6/argparse.py:1127
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "interpretación %(parser_name)r desconocida (elija: %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:1181
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "argumento \"-\" con modo %r"
 
 #: /usr/lib64/python3.6/argparse.py:1189
 #, python-format
 msgid "can't open '%s': %s"
-msgstr ""
+msgstr "no puedo abrir '%s': %s"
 
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
@@ -55,11 +57,13 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"opción de cadena %(option)r inválida: debe iniciar con un carácter "
+"%(prefix_chars)r"
 
 #: /usr/lib64/python3.6/argparse.py:1473
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= está requerido para opciones como %r"
 
 #: /usr/lib64/python3.6/argparse.py:1490
 #, python-format
@@ -70,20 +74,20 @@ msgstr "valor no válido de conflict_resolution: %r"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "cadena con opción en conflicto: %s"
+msgstr[1] "cadenas con opción en conflicto: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1574
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "argumentos mutuamente exclusivos deben ser opcionales"
 
 #: /usr/lib64/python3.6/argparse.py:1637
 msgid "positional arguments"
-msgstr ""
+msgstr "argumentos posicionales"
 
 #: /usr/lib64/python3.6/argparse.py:1638
 msgid "optional arguments"
-msgstr ""
+msgstr "argumentos opcionales"
 
 #: /usr/lib64/python3.6/argparse.py:1653
 msgid "show this help message and exit"
@@ -91,32 +95,32 @@ msgstr "mostrar este mensaje de ayuda y salir"
 
 #: /usr/lib64/python3.6/argparse.py:1684
 msgid "cannot have multiple subparser arguments"
-msgstr ""
+msgstr "no se pueden tener múltiples argumentos de sub-intérprete"
 
 #: /usr/lib64/python3.6/argparse.py:1736
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "argumentos no reconocidos: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1833
 #, python-format
 msgid "not allowed with argument %s"
-msgstr ""
+msgstr "no permitido con argumento %s"
 
 #: /usr/lib64/python3.6/argparse.py:1879 /usr/lib64/python3.6/argparse.py:1893
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "se hace caso omiso al argumento explícito %r"
 
 #: /usr/lib64/python3.6/argparse.py:2000
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "los argumentos siguientes son requeridos: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2015
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr ""
+msgstr "uno se los argumentos de %s es requerido"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
@@ -128,7 +132,7 @@ msgstr "se espera como máximo un argumento"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
-msgstr ""
+msgstr "esperaba al menos un argumento"
 
 #: /usr/lib64/python3.6/argparse.py:2062
 #, python-format
@@ -140,12 +144,12 @@ msgstr[1] "argumentos esperados %s"
 #: /usr/lib64/python3.6/argparse.py:2122
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "opciones ambiguas: %(option)s pudo coincidir con %(matches)s"
 
 #: /usr/lib64/python3.6/argparse.py:2185
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "cadena de opción inesperada: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2289
 #, python-format
@@ -155,17 +159,17 @@ msgstr "%r no es invocable"
 #: /usr/lib64/python3.6/argparse.py:2306
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "%(type)s no válido valor: %(value)r"
+msgstr "valor %(type)s no válido: %(value)r"
 
 #: /usr/lib64/python3.6/argparse.py:2317
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr ""
+msgstr "elección no válida: %(value)r (elija desde %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:2393
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: error: %(message)s\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -185,30 +189,29 @@ msgstr ""
 "Si desea sobrescribir el cambio del lado del servidor, ejecute: {command}"
 
 #: src/syspurpose/cli.py:47
-#, fuzzy, python-brace-format
-#| msgid "Added {} to {}"
+#, python-brace-format
 msgid "Added \"{value}\" to {prop_name}."
-msgstr "Añadido {} a {}"
+msgstr "Añadido \"{value}\" a {prop_name}."
 
 #: src/syspurpose/cli.py:50
 #, python-brace-format
 msgid "Not adding value \"{value}\" to {prop_name}; it already exists."
-msgstr ""
+msgstr "No adjuntando valor \"{value}\" a {prop_name}; ya existe."
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} actualizado."
 
 #: src/syspurpose/cli.py:79
 #, python-brace-format
 msgid "Removed \"{val}\" from {name}."
-msgstr ""
+msgstr "Quitado \"{val}\" desde {name}."
 
 #: src/syspurpose/cli.py:81
 #, python-brace-format
 msgid "Not removing value \"{val}\" from {name}; it was not there."
-msgstr ""
+msgstr "No quitando valor \"{val}\" desde {name}; no estaba allí."
 
 #: src/syspurpose/cli.py:108
 #, python-brace-format
@@ -222,7 +225,7 @@ msgstr "{attr} desarmado."
 
 #: src/syspurpose/cli.py:157
 msgid "System Syspurpose Management Tool"
-msgstr ""
+msgstr "Herramienta de Gestión de Syspurpose del Sistema"
 
 #: src/syspurpose/cli.py:158 src/syspurpose/cli.py:353
 msgid ""
@@ -230,6 +233,9 @@ msgid ""
 "release. Please use the 'subscription-manager syspurpose' command going "
 "forward."
 msgstr ""
+"El comando 'syspurpose' está obsoleto y será eliminado en una liberación "
+"mayor futura. Utilice el comando 'subscription-manager syspurpose' desde "
+"ahora."
 
 #: src/syspurpose/cli.py:165 src/syspurpose/cli.py:230
 msgid "The value(s) to add"
@@ -269,23 +275,23 @@ msgstr "Elimina el valor o valores de la propiedad en cuestión"
 
 #: src/syspurpose/cli.py:262
 msgid "Set the system role to the system syspurpose"
-msgstr ""
+msgstr "Establece el rol del sistema para el syspurpose del sistema"
 
 #: src/syspurpose/cli.py:270
 msgid "Clear set role"
-msgstr ""
+msgstr "Vaciar establecer rol"
 
 #: src/syspurpose/cli.py:278
 msgid "Add addons to the system syspurpose"
-msgstr ""
+msgstr "Añadir añadidos para el sistema syspurpose"
 
 #: src/syspurpose/cli.py:286
 msgid "Remove addons from the system syspurpose"
-msgstr ""
+msgstr "Desinstala adjuntos desde el sistema syspurpose"
 
 #: src/syspurpose/cli.py:293
 msgid "Clear set addons"
-msgstr ""
+msgstr "Vaciar conjunto de agregados"
 
 #: src/syspurpose/cli.py:301
 msgid "Set the system sla"
@@ -301,33 +307,32 @@ msgstr "Fijar la utilización del sistema"
 
 #: src/syspurpose/cli.py:324
 msgid "Clear set usage"
-msgstr ""
+msgstr "Vaciar conjunto de uso"
 
 #: src/syspurpose/cli.py:332
 msgid "Show the current system syspurpose"
 msgstr "Mostrar el propósito del sistema actual"
 
 #: src/syspurpose/cli.py:350
-#, fuzzy
-#| msgid ""
-#| "WARNING: Setting syspurpose in containers has no effect.Please run "
-#| "syspurpose on the host.\n"
 msgid ""
 "WARNING: Setting syspurpose in containers has no effect.\n"
 "Please run syspurpose on the host.\n"
 msgstr ""
 "ADVERTENCIA: La configuración de syspurpose en los contenedores no tiene "
-"ningún efecto, por favor ejecute syspurpose en el host.\n"
+"ningún efecto.\n"
+"Ejecute syspurpose en el host.\n"
 
 #: src/syspurpose/cli.py:364
 msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
 msgstr ""
+"Aviso: no es capaz de sincronizar el sistema de propósito con gestor de "
+"suscripción del servidor: módulo subscription_manager no está disponible."
 
 #: src/syspurpose/files.py:106
 msgid "Error: Malformed data in file {}; please review and correct."
-msgstr ""
+msgstr "Error: datos malformados en el archivo {}; revise y corrija."
 
 #: src/syspurpose/files.py:112
 msgid ""
@@ -343,12 +348,16 @@ msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
 msgstr ""
+"Aviso: valor proporcionado \"{val}\" no es incluido en la lista de valores "
+"válidos para el atributo {attr}:"
 
 #: src/syspurpose/files.py:473
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
+"Aviso: clave \"{key}\" proporcionada no está incluida en la lista de claves "
+"válidas:"
 
 #: src/syspurpose/main.py:32
 msgid "User interrupted process"
