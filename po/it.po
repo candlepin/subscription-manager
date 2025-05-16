@@ -2,14 +2,14 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
 # Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023, 2025.
-# Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024.
+# Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2025-02-27 12:38+0000\n"
-"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
+"PO-Revision-Date: 2025-04-27 16:35+0000\n"
+"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.11\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -888,10 +888,8 @@ msgid "Unable to read consumer identity"
 msgstr "Impossibile leggere l'identità dell'utente"
 
 #: src/dnf-plugins/subscription-manager.py:136
-#, fuzzy
-#| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
-msgstr "Subscription Manager sta funzionando in modalità per container."
+msgstr "subscription-manager sta funzionando in modalità per container."
 
 #: src/dnf-plugins/upload-profile.py:36
 msgid ""
@@ -1416,7 +1414,7 @@ msgstr "Distributore:"
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/printing.py:176
 msgid "Alt Name"
-msgstr "Nome alt."
+msgstr "Nome alt"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rct/printing.py:228 src/rhsmlib/services/entitlement.py:274
@@ -1780,7 +1778,7 @@ msgstr ""
 #: src/subscription_manager/branding/__init__.py:94
 #: src/subscription_manager/branding/redhat_branding.py:20
 msgid "Red Hat Subscription Management"
-msgstr "Red Hat Subscription Management"
+msgstr "Gestione degli abbonamenti Red Hat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:8
@@ -4641,6 +4639,9 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Avvertimento: Un {attr} di \"{download_value}\" è stato recentemente "
+"impostato per questo sistema dall'amministratore del server dei diritti.\n"
+"{advice}"
 
 #: src/subscription_manager/managercli.py:211
 #, python-brace-format
@@ -4782,7 +4783,7 @@ msgstr "rimuovi un elemento dalla lista ({attr})."
 #: src/subscription_manager/managercli.py:624
 #, python-brace-format
 msgid "show this system's current {attr}"
-msgstr "mostra il valore corrente di \"{attr}\" di questo sistema"
+msgstr "mostra l'{attr} corrente di questo sistema"
 
 #: src/subscription_manager/managercli.py:631
 #, python-brace-format
@@ -5148,10 +5149,10 @@ msgstr ""
 "dell'organizzazione"
 
 #: src/subscription_manager/managercli.py:1428
-#, fuzzy
-#| msgid "comma-separated list of hostnames/domains"
 msgid "set an ordered comma-separated list of environments for this consumer"
-msgstr "elenco delimitato da virgole di nomi host/domini"
+msgstr ""
+"imposta un elenco ordinato di ambienti separati da virgole per questo "
+"consumatore"
 
 #: src/subscription_manager/managercli.py:1430
 msgid "list all environments for the organization"
@@ -5159,17 +5160,13 @@ msgstr "elencare tutti gli ambienti disponibili per l'organizzazione"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:1432
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments enabled for this consumer in order"
-msgstr "Mostra gli ambienti disponibili per un utente"
+msgstr "elenca in ordine gli ambienti abilitati per questo consumer"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:1434
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments not enabled for this consumer"
-msgstr "Mostra gli ambienti disponibili per un utente"
+msgstr "elenca gli ambienti non abilitati per questo consumer"
 
 #: src/subscription_manager/managercli.py:1442
 msgid "You may not specify an --org for environments when registered."
@@ -5274,6 +5271,8 @@ msgstr "Associazione automatica: disabilitata"
 #: src/subscription_manager/managercli.py:1617
 msgid "Show or modify the system purpose service-level setting"
 msgstr ""
+"Mostra o modifica l'impostazione del livello di servizio dello scopo del "
+"sistema"
 
 #: src/subscription_manager/managercli.py:1644
 msgid "Error: --org is only supported with the --list or --set option"
@@ -5300,7 +5299,7 @@ msgstr "Livello del servizio impostato a: \"{val}\"."
 
 #: src/subscription_manager/managercli.py:1730
 msgid "Service level preference has been unset"
-msgstr ""
+msgstr "La preferenza del livello di servizio è stata annullata"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:1736
@@ -5327,10 +5326,8 @@ msgid "Available Service Levels"
 msgstr "Livelli di servizio disponibili"
 
 #: src/subscription_manager/managercli.py:1788
-#, fuzzy
-#| msgid "Modify system purpose role"
 msgid "Show or modify the system purpose usage setting"
-msgstr "Modifica il ruolo dello scopo del sistema"
+msgstr "Mostra o modifica l'impostazione di utilizzo dello scopo del sistema"
 
 #: src/subscription_manager/managercli.py:1807
 msgid "base URL for content in form of https://hostname:port/prefix"
@@ -5362,6 +5359,10 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
+"registrarsi con un ambiente specifico (valore singolo) o più ambienti (un "
+"elenco separato da virgole) nell'organizzazione di destinazione. La "
+"possibilità di utilizzare più ambienti è controllata dal server di "
+"autorizzazione"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1821
@@ -5427,12 +5428,8 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:1866
 #: src/subscription_manager/managercli.py:2160
-#, fuzzy
-#| msgid "The entitlement server failed to remove these serial numbers:"
 msgid "The entitlement server does not allow multiple environments"
-msgstr ""
-"Il server per l'entitlement non è riuscito a rimuovere questi numeri di "
-"serie:"
+msgstr "Il server di autorizzazione non consente più ambienti"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1891
@@ -6406,7 +6403,7 @@ msgstr "Repository: %s"
 
 #: src/subscription_manager/managercli.py:3654
 msgid "Show or modify the system purpose role setting"
-msgstr ""
+msgstr "Mostra o modifica l'impostazione del ruolo dello scopo del sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:3668
