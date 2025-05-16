@@ -3,13 +3,15 @@
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
 # Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023, 2025.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2025-04-27 16:35+0000\n"
-"Last-Translator: Salvatore Cocuzza <info@salvatorecocuzza.it>\n"
+"PO-Revision-Date: 2025-04-28 13:53+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/it/>\n"
 "Language: it\n"
@@ -218,6 +220,10 @@ msgid ""
 "availability, and stability with Red Hat Insights — with predictive "
 "analytics, avoid problems and unplanned downtime in your Red Hat environment."
 msgstr ""
+"Identifica e risolvi in modo proattivo le minacce alla sicurezza, alle "
+"prestazioni, alla disponibilità e alla stabilità con Red Hat Insights: con "
+"analisi predittive, evita problemi e tempi di inattività non pianificati nel "
+"tuo ambiente Red Hat."
 
 #: cockpit/src/insights.jsx:169 cockpit/src/subscriptions-register.jsx:94
 msgid "The $0 package will be installed."
@@ -333,7 +339,7 @@ msgstr "Annulla"
 
 #: cockpit/src/insights.jsx:531
 msgid "No rule hits"
-msgstr ""
+msgstr "Nessuna regola trovata"
 
 #: cockpit/src/insights.jsx:539
 msgid "$0 critical hit"
@@ -616,22 +622,18 @@ msgid "No installed products detected"
 msgstr "Non è stato rilevato alcun prodotto installato"
 
 #: cockpit/src/subscriptions-view.jsx:307
-#, fuzzy
-#| msgid ""
-#| "Content Access Mode is set to Organization/Environment Access. This host "
-#| "has access to content, regardless of subscription status.\n"
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of system purpose status."
 msgstr ""
-"La modalità di accesso al contenuto è impostata su Organizzazione / Accesso "
-"all'ambiente. Questo host ha accesso ai contenuti, indipendentemente dallo "
-"stato dell'abbonamento.\n"
+"La modalità di accesso al contenuto è impostata su Accesso semplice al "
+"contenuto. Questo host ha accesso al contenuto, indipendentemente dallo "
+"stato dello scopo del sistema."
 
 #: cockpit/src/subscriptions-view.jsx:313
 #: cockpit/src/subscriptions-view.jsx:428
 msgid "Popover with explanation of SCA mode"
-msgstr ""
+msgstr "Popover con spiegazione della modalità SCA"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: cockpit/src/subscriptions-view.jsx:320
@@ -1714,7 +1716,7 @@ msgstr "Errore: nome utente o password mancante."
 
 #: src/rhsmlib/services/syspurpose.py:98 src/rhsmlib/services/syspurpose.py:101
 msgid "Matched"
-msgstr ""
+msgstr "Abbinato"
 
 #: src/rhsmlib/services/syspurpose.py:99 src/rhsmlib/services/syspurpose.py:102
 msgid "Mismatched"
@@ -2017,7 +2019,7 @@ msgstr "Non autorizzato: credenziali non valide per la richiesta."
 
 #: src/subscription_manager/exceptions.py:43
 msgid "Token authentication not supported by the entitlement server"
-msgstr ""
+msgstr "Autenticazione token non supportata dal server di autorizzazione"
 
 #: src/subscription_manager/exceptions.py:44
 msgid "Forbidden: Invalid credentials for request."
@@ -4565,7 +4567,7 @@ msgstr "Tipo di sottoscrizione:"
 #: src/subscription_manager/managercli.py:133
 #: src/subscription_manager/managercli.py:206
 msgid "Entitlement Type:"
-msgstr ""
+msgstr "Tipo di diritto:"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:145
@@ -4677,6 +4679,9 @@ msgid ""
 "Ignoring the request to auto-attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
+"Ignorando la richiesta di allegato automatico. Il collegamento delle "
+"sottoscrizioni è disabilitato per l'organizzazione \"{owner_id}\" perché è "
+"abilitato Simple Content Access (SCA)."
 
 #: src/subscription_manager/managercli.py:338
 msgid "server URL in the form of https://hostname:port/prefix"
@@ -4995,7 +5000,7 @@ msgstr "Sottomoduli di syspurpose"
 #: src/subscription_manager/managercli.py:1180
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr ""
+msgstr "%(prog)s {name} [SOTTOMODULO] [OPZIONI]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:1243
@@ -5514,10 +5519,10 @@ msgid "System has been unregistered."
 msgstr "Il sistema non è più registrato."
 
 #: src/subscription_manager/managercli.py:2241
-#, fuzzy
-#| msgid "Modify system purpose role"
 msgid "Show or modify the system purpose addons setting"
-msgstr "Modifica il ruolo dello scopo del sistema"
+msgstr ""
+"Mostra o modifica l'impostazione dei componenti aggiuntivi per lo scopo del "
+"sistema"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:2255
@@ -5535,13 +5540,13 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:2262
-#, fuzzy
 msgid ""
 "optional language to use for email notification when subscription redemption "
 "is complete (Examples: en-us, de-de)"
 msgstr ""
-"lingua facoltativa da usare per la notifica via posta elettronica quando "
-"l'acquisizione della sottoscrizione è stata completata (esempi: en-us, de-de)"
+"lingua facoltativa da usare per la notifica delle email quando "
+"l'acquisizione della sottoscrizione è stata completata. (Esempi: en-us, de-"
+"de)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:2268
@@ -5669,12 +5674,12 @@ msgstr "In questo momento non è necessario aggiornare le sottoscrizioni."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:2438
-#, fuzzy
-#| msgid "Attach a specified subscription to the registered system"
 msgid ""
 "Attach a specified subscription to the registered system, when system does "
 "not use Simple Content Access mode"
-msgstr "Assegnare una sottoscrizione specifica al sistema registrato"
+msgstr ""
+"Allega un abbonamento specificato al sistema registrato, quando il sistema "
+"non utilizza la modalità di accesso semplice al contenuto"
 
 #: src/subscription_manager/managercli.py:2451
 msgid "Error: --auto may not be used when specifying pools."
@@ -5716,6 +5721,9 @@ msgid ""
 "Ignoring the request to attach. Attaching subscriptions is disabled for "
 "organization \"{owner_id}\" because Simple Content Access (SCA) is enabled."
 msgstr ""
+"Ignorando la richiesta di allegare. Il collegamento delle sottoscrizioni è "
+"disabilitato per l'organizzazione \"{owner_id}\" perché è abilitato Simple "
+"Content Access (SCA)."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/managercli.py:2529
