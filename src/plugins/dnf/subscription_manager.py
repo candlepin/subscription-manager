@@ -16,6 +16,7 @@ import os
 import logging
 import shutil
 import signal
+import datetime
 
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
@@ -26,7 +27,7 @@ from subscription_manager.i18n import ungettext, ugettext as _
 from rhsm import logutil
 from rhsm import config
 from rhsm.utils import LiveStatusMessage
-from rhsm.connection import RemoteServerException
+from rhsm.connection import RemoteServerException, BaseRestLib
 
 from dnfpluginscore import logger
 import dnf
@@ -78,6 +79,13 @@ This system has release set to {release_version} and it receives updates only fo
 """
 )
 
+skew_clock_warning = _(
+    """
+The system clock is skewed. There is a time difference of {time_drift} seconds with the entitlement server. \
+Please check your clock settings to ensure access to all entitled content.
+"""
+)
+
 log = logging.getLogger("rhsm-app." + __name__)
 
 
@@ -110,6 +118,7 @@ class SubscriptionManager(dnf.Plugin):
             else:
                 logger.info(_("Not root, Subscription Management repositories not updated"))
             self._warn_expired()
+            self._warn_skew_clock()
         except Exception as e:
             log.error(str(e))
 
@@ -181,6 +190,20 @@ class SubscriptionManager(dnf.Plugin):
         log.debug("Generating redhat.repo")
         repo_action_invoker = RepoActionInvoker(cache_only=cache_only)
         repo_action_invoker.update()
+
+    @staticmethod
+    def _warn_skew_clock():
+        """
+        Display warning, when the time drift between host and candlepin server
+        is too big, and it could cause issue with accessing content on CDN or Pulp.
+        """
+        time_drift: datetime.timedelta = BaseRestLib.get_time_drift()
+        if time_drift is None:
+            return
+        elif time_drift > datetime.timedelta(seconds=2):
+            time_drift_seconds = time_drift.total_seconds()
+            msg = skew_clock_warning.format(time_drift=time_drift_seconds)
+            logger.info(msg)
 
     @staticmethod
     def _warn_expired():
