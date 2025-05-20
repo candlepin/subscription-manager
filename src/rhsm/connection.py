@@ -595,6 +595,10 @@ class BaseRestLib:
 
     __conn = None
 
+    # The latest time drift (time difference between host and candlepin
+    # server) of the latest connection(s) to candlepin server.
+    __latest_time_drift = None
+
     ALPHA: float = 0.9
 
     # Default value of timeout. This value is set according observed timeout
@@ -1210,9 +1214,10 @@ class BaseRestLib:
                 message: str = (
                     f"Local system clock seems to be off by {drift}, please check your system time."
                 )
-                if drift > datetime.timedelta(hours=1):
+                self.set_time_drift(drift)
+                if drift > datetime.timedelta(minutes=15):
                     log.warning(message)
-                elif drift > datetime.timedelta(minutes=15):
+                elif drift > datetime.timedelta(seconds=2):
                     log.debug(message)
             except Exception:
                 log.exception(
@@ -1225,6 +1230,20 @@ class BaseRestLib:
         self.validateResult(result, request_type, handler)
 
         return result
+
+    @classmethod
+    def get_time_drift(cls) -> datetime.timedelta:
+        """
+        Get the drift of the latest connection.
+        """
+        return cls.__latest_time_drift
+
+    @classmethod
+    def set_time_drift(cls, drift: datetime.timedelta) -> None:
+        """
+        Set the drift of the current connection.
+        """
+        cls.__latest_time_drift = drift
 
     def _update_smoothed_response_time(self, response_time: float):
         """
