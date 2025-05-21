@@ -225,7 +225,7 @@
 %global use_rhsm_icons 0%{use_cockpit} || 0%{use_rhsm_gtk}
 
 Name: subscription-manager
-Version: 1.28.43
+Version: 1.28.44
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -1381,6 +1381,15 @@ gtk-update-icon-cache -f %{_datadir}/icons/hicolor &>/dev/null || :
 %endif
 
 %changelog
+* Wed May 21 2025 Jiri Hnidek <jhnidek@redhat.com> 1.28.44-1
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Italian) (info@salvatorecocuzza.it)
+- Translated using Weblate (Italian) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Translated using Weblate (Italian) (info@salvatorecocuzza.it)
+- Translated using Weblate (Chinese (Traditional) (zh_TW)) (chzang55@gmail.com)
+- Translated using Weblate (Spanish) (fserrador@gmail.com)
+
 * Thu Apr 10 2025 Jiri Hnidek <jhnidek@redhat.com> 1.28.43-1
 - Translated using Weblate (Chinese (Traditional) (zh_TW)) (chzang55@gmail.com)
 - Translated using Weblate (Chinese (Simplified) (zh_CN)) (mhorky@redhat.com)
