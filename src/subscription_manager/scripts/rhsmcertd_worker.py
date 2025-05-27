@@ -259,6 +259,15 @@ def _auto_register_standard(uep: "UEPConnection", token: Dict[str, str]) -> None
     service = RegisterService(cp=uep)
     service.register(org=None, jwt_token=token["token"])
 
+    # When the system is configured to manage repositories, then install entitlement
+    # certificates and generate the redhat.repo file
+    manage_repos = config.get_config_parser().get("rhsm", "manage_repos")
+    log.debug(f"Manage repositories: {manage_repos}")
+    if manage_repos == "1":
+        log.debug("Installing SCA entitlement certificate and generating redhat.repo file...")
+        report = entcertlib.EntCertUpdateAction().perform()
+        log.debug(report)
+
 
 def _auto_register_anonymous(uep: "UEPConnection", token: Dict[str, str]) -> None:
     """Perform anonymous automatic registration.
