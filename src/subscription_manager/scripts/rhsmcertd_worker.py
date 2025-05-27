@@ -31,6 +31,7 @@ import subscription_manager.injection as inj
 from subscription_manager import cache
 from subscription_manager import entcertlib
 from subscription_manager import managerlib
+from subscription_manager import repolib
 from subscription_manager.action_client import HealingActionClient, ActionClient
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.i18n_argparse import ArgumentParser, USAGE
@@ -258,6 +259,19 @@ def _auto_register_standard(uep: "UEPConnection", token: Dict[str, str]) -> None
 
     service = RegisterService(cp=uep)
     service.register(org=None, jwt_token=token["token"])
+
+    # When the system is configured to manage repositories, then install entitlement
+    # certificates and generate the redhat.repo file
+    manage_repos = repolib.manage_repos_enabled()
+    log.debug(f"Manage repositories: {manage_repos}")
+    if manage_repos is True:
+        log.debug("Installing SCA entitlement certificate and generating redhat.repo file...")
+        try:
+            report = entcertlib.EntCertUpdateAction().perform()
+        except Exception:
+            log.exception("Failed to install SCA entitlement certificate.")
+        else:
+            log.debug(report)
 
 
 def _auto_register_anonymous(uep: "UEPConnection", token: Dict[str, str]) -> None:
