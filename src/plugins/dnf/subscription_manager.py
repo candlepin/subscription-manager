@@ -275,6 +275,7 @@ class SubscriptionManager(dnf.Plugin):
                 rhsmcertd_pid = int(lock_file.readline())
         except (IOError, ValueError) as err:
             log.info(f"Unable to read rhsmcertd lock file: {err}")
+            self._upload_profile_blocking()
         else:
             if is_process_running("rhsmcertd", rhsmcertd_pid) is True:
                 # This will only send SIGUSR1 signal, which triggers gathering and uploading
