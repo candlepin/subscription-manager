@@ -270,22 +270,26 @@ class SubscriptionManager(dnf.Plugin):
         various reasons, then we try to do it ourselves in blocking way.
         """
         # First try to get PID of rhsmcertd from lock file
+        rhsmcertd_pid = None
         try:
             with open("/var/lock/subsys/rhsmcertd", "r") as lock_file:
                 rhsmcertd_pid = int(lock_file.readline())
         except (IOError, ValueError) as err:
             log.info(f"Unable to read rhsmcertd lock file: {err}")
+
+        if rhsmcertd_pid is not None and is_process_running("rhsmcertd", rhsmcertd_pid) is True:
+            # This will only send SIGUSR1 signal, which triggers gathering and uploading
+            # of DNF profile by rhsmcertd. We try to "outsource" this activity to rhsmcertd
+            # server to not block registration process
+            log.debug(f"Sending SIGUSR1 signal to rhsmcertd process ({rhsmcertd_pid})")
+            try:
+                os.kill(rhsmcertd_pid, signal.SIGUSR1)
+            except OSError as err:
+                log.debug(f"Unable to send SIGUSR1 signal to rhsmcertd process: {err}")
+                self._upload_profile_blocking()
         else:
-            if is_process_running("rhsmcertd", rhsmcertd_pid) is True:
-                # This will only send SIGUSR1 signal, which triggers gathering and uploading
-                # of DNF profile by rhsmcertd. We try to "outsource" this activity to rhsmcertd
-                # server to not block registration process
-                log.debug(f"Sending SIGUSR1 signal to rhsmcertd process ({rhsmcertd_pid})")
-                try:
-                    os.kill(rhsmcertd_pid, signal.SIGUSR1)
-                except OSError as err:
-                    log.debug(f"Unable to send SIGUSR1 signal to rhsmcertd process: {err}")
-                    self._upload_profile_blocking()
+            if rhsmcertd_pid is None:
+                log.info("rhsmcertd process is not running at all")
             else:
                 log.info(f"rhsmcertd process with given PID: {rhsmcertd_pid} is not running")
-                self._upload_profile_blocking()
+            self._upload_profile_blocking()
