@@ -60,6 +60,9 @@ class SupportedArchesCollector(collector.FactsCollector):
         except Exception as e:
             log.error("Error getting dpkg foreign architecture: %s", e)
 
+        # All debian systems supports no-architecture packages (= 'all'), too
+        arches.append("all")
+
         return {"supported_architectures": ",".join(arches)}
 
     def get_all(self) -> Dict[str, str]:
