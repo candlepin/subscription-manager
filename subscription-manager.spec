@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.40
+Version: 1.29.40.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,14 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Tue Jun 03 2025 Jiri Hnidek <jhnidek@redhat.com> 1.29.40.1-1
+- fix: Handle improperly closed connections (mhorky@redhat.com)
+- fix: 1.29 Do not try to test this branch for Fedora latest
+  (jhnidek@redhat.com)
+- fix: 1.29 Do not try to test this branch for Fedora rawhide
+  (jhnidek@redhat.com)
+- fix(test): Properly stop method mock (mhorky@redhat.com)
+
 * Thu Jan 18 2024 Pino Toscano <ptoscano@redhat.com> 1.29.40-1
 - Translated using Weblate (Korean) (simmon@nplob.com)
 - Translated using Weblate (Chinese (Simplified) (zh_CN))
