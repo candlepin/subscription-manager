@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.6
+Version: 1.30.6.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,11 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Thu Jun 05 2025 Jiri Hnidek <jhnidek@redhat.com> 1.30.6.1-1
+- fix: Handle improperly closed connections (mhorky@redhat.com)
+- ci: drop Fedora from testing OSes (ptoscano@redhat.com)
+- tests: update location of pytest-client-tools (ptoscano@redhat.com)
+
 * Thu Mar 06 2025 Pino Toscano <ptoscano@redhat.com> 1.30.6-1
 - Translated using Weblate (Italian) (toscano.pino@tiscali.it)
 - Translated using Weblate (Japanese) (ptoscano@redhat.com)
