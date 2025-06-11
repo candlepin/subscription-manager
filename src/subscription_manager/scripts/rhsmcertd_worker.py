@@ -170,8 +170,33 @@ def _auto_register_wait() -> None:
     if cfg.get("rhsmcertd", "splay") == "0":
         log.debug("Trying to obtain the identity immediately, splay is disabled.")
     else:
-        registration_interval = int(cfg.get("rhsmcertd", "auto_registration_interval"))
-        splay_interval: int = random.randint(60, registration_interval * 60)
+        splay_interval: int = 0
+        registration_interval: int = int(cfg.get("rhsmcertd", "auto_registration_interval"))
+        registration_sec_interval: int = int(cfg.get("rhsmcertd", "auto_registration_sec_interval"))
+
+        if registration_sec_interval > 0:
+            # Tha randint() interval begins with 0, because auto-registration v2 has to provide
+            # content as fast as possible, but we still want to use some splay (in seconds).
+            if registration_interval > 0:
+                log.debug(
+                    f"Using auto-registration intervals: {registration_interval} [minutes] "
+                    f"and {registration_sec_interval} [seconds] for random input"
+                )
+                splay_interval: int = random.randint(
+                    0, registration_sec_interval + 60 * registration_interval
+                )
+            else:
+                log.debug(
+                    f"Using auto-registration interval: {registration_sec_interval} [seconds] "
+                    "for random input"
+                )
+                splay_interval: int = random.randint(0, registration_sec_interval)
+        elif registration_interval > 0:
+            log.debug(f"Using auto-registration interval: {registration_interval} [minutes] for random input")
+            # The randint() interval begins from 60 seconds to be compatible
+            # with auto-registration v1
+            splay_interval: int = random.randint(60, registration_interval * 60)
+
         log.debug(
             f"Waiting a period of {splay_interval} seconds "
             f"(about {splay_interval // 60} minutes) before attempting to obtain the identity."
@@ -204,6 +229,10 @@ def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
     if len(cloud_info) == 0:
         log.warning("Cloud metadata could not be collected. Unable to perform automatic registration.")
         return ExitStatus.NO_CLOUD_METADATA
+
+    # We wait here some random time [seconds] (when it is not disabled in rhsm.conf) to not
+    # cause DDoS to candlepin
+    _auto_register_wait()
 
     # Get connection not using any authentication
     uep: UEPConnection = cp_provider.get_no_auth_cp()
@@ -254,8 +283,6 @@ def _auto_register_standard(uep: "UEPConnection", token: Dict[str, str]) -> None
     """
     log.debug("Registering the system through standard automatic registration.")
 
-    _auto_register_wait()
-
     service = RegisterService(cp=uep)
     service.register(org=None, jwt_token=token["token"])
 
@@ -280,10 +307,7 @@ def _auto_register_anonymous(uep: "UEPConnection", token: Dict[str, str]) -> Non
     manager = entcertlib.AnonymousCertificateManager(uep=uep)
     manager.install_temporary_certificates(uuid=token["anonymousConsumerUuid"], jwt=token["token"])
 
-    # Step 2: Wait
-    _auto_register_wait()
-
-    # Step 3: Obtain the identity certificate
+    # Step 2: Obtain the identity certificate
     log.debug("Obtaining system identity")
 
     service = RegisterService(cp=uep)
