@@ -182,7 +182,15 @@ class YumPluginManager:
 
         dist_info = HardwareCollector().get_distribution()
 
-        if dist_info[4] == "debian" or "debian" in dist_info[5]:
+        dist_id = dist_info[4]
+        dist_id_like = dist_info[5]
+
+        # If the system is Debian/SUSE based, do not enable yum plugins
+        if (
+            dist_id == "debian" or "debian" in dist_id_like or
+            dist_id == "sles" or "suse" in dist_id_like
+        ):
+            log.debug("The system is Debian/SUSE based. Skipping the enablement of yum plugins.")
             return []
 
         log.debug("The rhsm.auto_enable_yum_plugins is enabled")
