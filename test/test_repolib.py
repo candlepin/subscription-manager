@@ -1432,6 +1432,28 @@ class TestYumPluginManager(unittest.TestCase):
         plugin_list = YumPluginManager.enable_pkg_plugins()
         self.assertEqual(len(plugin_list), 0)
 
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "sles", []),
+    )
+    def test_enable_pkg_plugins_sles(self, mock_get_distribution):
+        """
+        Test not enabling of yum plugins on sles based systems (Test 1 of 2)
+        """
+        plugin_list = YumPluginManager.enable_pkg_plugins()
+        self.assertEqual(len(plugin_list), 0)
+
+    @patch(
+        "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
+        return_value=("", "", "", "", "", ["suse"]),
+    )
+    def test_enable_pkg_plugins_suse_like(self, mock_get_distribution):
+        """
+        Test not enabling of yum plugins on suse based systems (Test 2 of 2)
+        """
+        plugin_list = YumPluginManager.enable_pkg_plugins()
+        self.assertEqual(len(plugin_list), 0)
+
     @patch.object(repolib, "conf", ConfigFromString(config_string=AUTO_ENABLE_PKG_PLUGINS_ENABLED))
     @patch(
         "rhsmlib.facts.hwprobe.HardwareCollector.get_distribution",
