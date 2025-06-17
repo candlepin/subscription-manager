@@ -33,6 +33,7 @@ from subscription_manager.cache import (
     SyspurposeValidFieldsCache,
     CurrentOwnerCache,
     SyspurposeComplianceStatusCache,
+    CapabilitiesCache,
 )
 from subscription_manager.facts import Facts
 from rhsm.certificate import GMT
@@ -471,6 +472,48 @@ class StubIdentity(Identity):
         return self._consumer
 
 
+STATUS_RESPONSE = {
+    "mode": "NORMAL",
+    "modeReason": None,
+    "modeChangeTime": None,
+    "result": None,
+    "version": "4.6.2",
+    "release": "3",
+    "standalone": False,
+    "timeUTC": "2025-01-01T01:01:01+0000",
+    "rulesSource": "default",
+    "rulesVersion": "5.44",
+    "managerCapabilities": [
+        "cloud_registration",
+        "instance_multiplier",
+        "derived_product",
+        "vcpu",
+        "cert_v3",
+        "hypervisors_heartbeat",
+        "remove_by_pool_id",
+        "syspurpose",
+        "storage_band",
+        "cores",
+        "ssl_verify_status",
+        "multi_environment",
+        "hypervisors_async",
+        "org_level_content_access",
+        "typed_environments",
+        "guest_limit",
+        "ram",
+        "batch_bind",
+        "combined_reporting",
+    ],
+    "keycloakRealm": None,
+    "keycloakAuthUrl": None,
+    "keycloakResource": None,
+    "deviceAuthRealm": None,
+    "deviceAuthUrl": None,
+    "deviceAuthClientId": None,
+    "deviceAuthScope": None,
+}
+
+
 class StubUEP:
     def __init__(
         self,
@@ -589,6 +632,9 @@ class StubUEP:
             "owner": {"key": "ff80808172dc51a10172dc51cb3e000"},
             "systemPurposeAttributes": {"addons": [], "usage": [], "support_level": [], "roles": []},
         }
+
+    def getStatus(self):
+        return STATUS_RESPONSE
 
 
 class StubBackend:
@@ -772,6 +818,14 @@ class StubReleaseStatusCache(ReleaseStatusCache):
 
 
 class StubAvailableEntitlementsCache(AvailableEntitlementsCache):
+    def write_cache(self, debug=False):
+        pass
+
+    def delete_cache(self):
+        self.server_status = None
+
+
+class StubCapabilitiesCache(CapabilitiesCache):
     def write_cache(self, debug=False):
         pass
 
