@@ -967,6 +967,26 @@ class ConsumerCache(CacheManager):
         return current_data
 
 
+class CapabilityCache(ConsumerCache):
+    """
+    This cache tries to cache capabilities of candlepin server
+    """
+
+    CACHE_FILE = "/var/lib/rhsm/cache/capabilities.json"
+
+    DEFAULT_VALUE = []
+
+    def __init__(self, data: Any = None):
+        super().__init__(data)
+
+    def _sync_with_server(
+            self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> dict:
+        status = uep.getStatus()
+        capabilities = status.get("managerCapabilities")
+        return capabilities
+
+
 class SyspurposeValidFieldsCache(ConsumerCache):
     """
     Cache the valid syspurpose fields for current owner
