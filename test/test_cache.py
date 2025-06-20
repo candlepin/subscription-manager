@@ -46,6 +46,7 @@ from subscription_manager.cache import (
     AvailableEntitlementsCache,
     CurrentOwnerCache,
     SyspurposeComplianceStatusCache,
+    CapabilitiesCache,
 )
 
 from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfile
@@ -1063,6 +1064,83 @@ after
         self.mock_uep.getAccessibleContent = Mock(side_effect=RestlibException(404))
         self.cache.check_for_update()
         # getting this far means we did not raise an exception :-)
+
+
+class TestCapabilitiesCache(SubManFixture):
+    MOCK_CAPABILITIES_RESPONSE = {
+        "mode": "NORMAL",
+        "modeReason": None,
+        "modeChangeTime": None,
+        "result": None,
+        "version": "4.6.2",
+        "release": "3",
+        "standalone": False,
+        "timeUTC": "2025-06-18T09:43:40+0000",
+        "rulesSource": "default",
+        "rulesVersion": "5.44",
+        "managerCapabilities": ["hypervisors_heartbeat", "syspurpose", "cores", "ssl_verify_status"],
+        "keycloakRealm": None,
+        "keycloakAuthUrl": None,
+        "keycloakResource": None,
+        "deviceAuthRealm": None,
+        "deviceAuthUrl": None,
+        "deviceAuthClientId": None,
+        "deviceAuthScope": None,
+    }
+
+    MOCK_CACHE_FILE_CONTENT = """{
+    "12345678-abcd-ef12-3456-000000001234": [
+        "instance_multiplier",
+        "derived_product",
+        "vcpu",
+        "cert_v3"
+    ]
+}
+"""
+
+    def setUp(self):
+        super().setUp()
+        self.cache = CapabilitiesCache()
+
+    def test_reading_nonexistent_cache(self):
+        data = self.cache.read_cache_only()
+        self.assertIsNone(data)
+
+    def test_reading_existing_cache(self):
+        temp_cache_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, temp_cache_dir)
+        self.cache.CACHE_FILE = os.path.join(temp_cache_dir, "supported_resources.json")
+        with open(self.cache.CACHE_FILE, "w") as cache_file:
+            cache_file.write(self.MOCK_CACHE_FILE_CONTENT)
+        data = self.cache.read_cache_only()
+        self.assertTrue("12345678-abcd-ef12-3456-000000001234" in data)
+        self.assertEqual(
+            data["12345678-abcd-ef12-3456-000000001234"],
+            ["instance_multiplier", "derived_product", "vcpu", "cert_v3"],
+        )
+
+    def test_reading_corrupted_cache(self):
+        temp_cache_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, temp_cache_dir)
+        self.cache.CACHE_FILE = os.path.join(temp_cache_dir, "supported_resources.json")
+        with open(self.cache.CACHE_FILE, "w") as cache_file:
+            # Write something corrupted to cache file
+            cache_file.write('/{foo"[(bar])')
+        data = self.cache.read_cache_only()
+        self.assertIsNone(data)
+
+    def test_cache_is_obsoleted_by_new_identity(self):
+        temp_cache_dir = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, temp_cache_dir)
+        self.cache.CACHE_FILE = os.path.join(temp_cache_dir, "supported_resources.json")
+        with open(self.cache.CACHE_FILE, "w") as cache_file:
+            cache_file.write(self.MOCK_CACHE_FILE_CONTENT)
+        mock_uep = Mock()
+        mock_uep.getStatus = Mock(return_value=self.MOCK_CAPABILITIES_RESPONSE)
+        mock_identity = Mock()
+        mock_identity.uuid = "f0000000-aaaa-bbbb-bbbb-cccccccccccc"
+        data = self.cache.read_data(uep=mock_uep, identity=mock_identity)
+        self.assertEqual(data, ["hypervisors_heartbeat", "syspurpose", "cores", "ssl_verify_status"])
 
 
 class TestSupportedResourcesCache(SubManFixture):
