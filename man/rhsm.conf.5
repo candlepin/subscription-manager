@@ -259,7 +259,13 @@ Set to 1 to enable automatic registration. Automatic registration can only work 
 .PP
 auto_registration_interval
 .RS 4
-The number of minutes between attempts to run auto\-registration on this system
+The number of minutes between attempts to run auto\-registration on this system.
+.RE
+.PP
+auto_registration_sec_interval
+.RS 4
+The number of seconds between attempts to run auto\-registration on this system.
+This option can be used together with auto_registration_interval. The value of (60 * auto_registration_interval) is added to value auto_registration_sec_interval then.
 .SH "[LOGGING] OPTIONS"
 .PP
 default_log_level

@@ -86,6 +86,7 @@ RHSMCERTD_DEFAULTS = {
     "disable": "0",
     "auto_registration": "0",
     "auto_registration_interval": "60",
+    "auto_registration_sec_interval": "0",
 }
 
 LOGGING_DEFAULTS = {
