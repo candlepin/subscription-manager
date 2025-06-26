@@ -135,3 +135,31 @@ def test_register_with_wrong_values(external_candlepin, subman, test_config, cre
             else:
                 assert "Invalid Credentials" in str(excinfo.value)
             assert not subman.is_registered
+
+
+def test_getEnvironments(any_candlepin, subman, test_config):
+    """
+    A method GetEnvironments should return detail about all environments for the given organization.
+    """
+    candlepin_config = partial(test_config.get, "candlepin")
+
+    proxy = RHSM.get_proxy(RHSM_REGISTER_SERVER)
+    with RHSMPrivateBus(proxy) as private_bus:
+        private_proxy = private_bus.get_proxy(RHSM.service_name, RHSM_REGISTER.object_path)
+        response = private_proxy.GetEnvironments(
+            candlepin_config("username"),
+            candlepin_config("password"),
+            candlepin_config("org"),
+            {},
+            locale,
+        )
+        data = json.loads(response)
+        # I will make reprezetation of items to be easy comparable
+        # ... rather than implementing all __lt__, __gt__, ... methods
+        items_from_response = [f"id:{ii['id']},name:{ii['name']}" for ii in data]
+        orig_items = [f"id:{ii[0]},name:{ii[1]}" for ii in zip(
+                candlepin_config("environment","ids"),
+                candlepin_config("environment","names"),
+            )
+        ]
+        assert frozenset(items_from_response) == frozenset(orig_items)
