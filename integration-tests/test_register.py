@@ -163,3 +163,27 @@ def test_getEnvironments(any_candlepin, subman, test_config):
             )
         ]
         assert frozenset(items_from_response) == frozenset(orig_items)
+
+
+@pytest.mark.skip
+def test_getEnvironments_with_empty_org(any_candlepin, subman, test_config):
+    """
+    A method GetEnvironments should return an error message to inform a user
+    that a property 'organization' is required.
+    
+    The message should be easy to understand for a user.
+    """
+    candlepin_config = partial(test_config.get, "candlepin")
+
+    proxy = RHSM.get_proxy(RHSM_REGISTER_SERVER)
+    with RHSMPrivateBus(proxy) as private_bus:
+        private_proxy = private_bus.get_proxy(RHSM.service_name, RHSM_REGISTER.object_path)
+        with pytest.raises(DBusError) as excinfo:
+            private_proxy.GetEnvironments(
+                candlepin_config("username"),
+                candlepin_config("password"),
+                "",
+                {},
+                locale,
+            )
+        assert "Organization property is required" in str(excinfo.value)
