@@ -105,9 +105,16 @@ def test_register_with_enable_content(external_candlepin, subman, test_config, e
     assert subman.is_registered
 
 
+wrong_org = "wrong organization"
+
+
 @pytest.mark.parametrize(
     "credentials",
-    [("wrong username", None, None), (None, "wrong password", None), (None, None, "wrong organization")],
+    [
+        pytest.param(("wrong username", None, None), id="wrong username"),
+        pytest.param((None, "wrong password", None), id="wrong password"),
+        pytest.param((None, None, wrong_org), id="wrong organization"),
+    ],
 )
 def test_register_with_wrong_values(external_candlepin, subman, test_config, credentials):
     """
@@ -121,8 +128,6 @@ def test_register_with_wrong_values(external_candlepin, subman, test_config, cre
     with RHSMPrivateBus(proxy) as private_bus:
         private_proxy = private_bus.get_proxy(RHSM.service_name, RHSM_REGISTER.object_path)
 
-        wrong_org = "wrong-organization"
-
         username = credentials[0] or candlepin_config("username")
         password = credentials[1] or candlepin_config("password")
         organization = credentials[2] or ""
@@ -130,8 +135,8 @@ def test_register_with_wrong_values(external_candlepin, subman, test_config, cre
         with pytest.raises(DBusError) as excinfo:
             private_proxy.Register(organization, username, password, {}, {}, locale)
             logger.debug(f"raised exception: {excinfo}")
-            if credentials.organization == wrong_org:
-                assert f"Organization {wrong_org} does not exist." in str(excinfo.value)
-            else:
-                assert "Invalid Credentials" in str(excinfo.value)
-            assert not subman.is_registered
+        if organization == wrong_org:
+            assert f"Organization {wrong_org} does not exist." in str(excinfo.value)
+        else:
+            assert "Invalid Credentials" in str(excinfo.value)
+        assert not subman.is_registered
