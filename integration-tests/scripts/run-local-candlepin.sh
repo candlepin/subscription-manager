@@ -6,4 +6,4 @@
 #
 # For most information see https://github.com/ptoscano/candlepin-container-unofficial
 #
-podman run -d --name candlepin -p 8080:8080 -p 8443:8443 --hostname candlepin.local ghcr.io/ptoscano/candlepin-unofficial:latest
+podman run -d --name candlepin -p 8080:8080 -p 8443:8443 --hostname candlepin.local ghcr.io/candlepin/candlepin-unofficial:latest

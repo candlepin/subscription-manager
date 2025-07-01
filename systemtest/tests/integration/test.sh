@@ -40,6 +40,8 @@ EOF
 # run local candlepin for testing purpose
 ./integration-tests/scripts/run-local-candlepin.sh
 
+sleep 10
+
 # create testing data in local candlepin
 ./integration-tests/scripts/post-environments.sh
 
