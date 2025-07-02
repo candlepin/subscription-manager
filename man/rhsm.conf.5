@@ -259,7 +259,12 @@ Set to 1 to enable automatic registration. Automatic registration can only work 
 .PP
 auto_registration_interval
 .RS 4
-The number of minutes between attempts to run auto\-registration on this system
+The time used for input for randomizing splay of auto\-registration. The value can use two formats. First format is HH:MM:SS. Second format is number meaning minutes. Default value is 1 minute.
+.RE
+.PP
+auto_registration_identity_interval
+.RS 4
+The time used for input for randomizing splay of gathering identity from entitlement server. Default value is 60 minutes.
 .SH "[LOGGING] OPTIONS"
 .PP
 default_log_level
