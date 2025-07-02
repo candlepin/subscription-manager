@@ -283,6 +283,13 @@ def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
     # Get connection not using any authentication
     uep: UEPConnection = cp_provider.get_no_auth_cp()
 
+    # Try to initialize state of random generator using cloud metadata. This is necessary
+    # to do shortly after start, because random generator does not have enough random data
+    # in the input and many VMs tend to generate similar random values. This could cause
+    # burst of requests on candlepin server.
+    log.debug("Initialize state of random generator using cloud provider metadata...")
+    random.seed(cloud_info["metadata"])
+
     # Wait random time interval before getting token from candlepin server
     _auto_register_wait()
 
