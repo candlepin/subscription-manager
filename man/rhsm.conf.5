@@ -259,7 +259,12 @@ Set to 1 to enable automatic registration. Automatic registration can only work 
 .PP
 auto_registration_interval
 .RS 4
-The number of minutes between attempts to run auto\-registration on this system
+When auto_registration=1 and rhsmcertd is started, the auto_registration_interval is a maximum time delay to wait before attempting to register the system automatically. When splay=1, the attempt to register happens at a random point in time within the auto_registration_interval. When splay=0, the attempt to register happens immediately following the start of rhsmcertd. The format for this value is either HH:MM:SS or an integer number of minutes (default is 1).
+.RE
+.PP
+auto_registration_identity_interval
+.RS 4
+When auto_registration=1 and the attempt to register within the auto_registration_interval results in an anonymous registration (a temporary entitlement is granted without an identity certificate), then the auto_registration_identity_interval is used as a maximum time delay to wait following the anonymous registration before attempting to get a proper identity certificate (and subsequently a non-temporary entitlement certificate) from the entitlement server. When splay=1, the actual time delay to wait before getting the identity certificate is random within the auto_registration_identity_interval. When splay=0, the attempt to get an identity certificate happens immediately following the anonymous registration. The format for this value is either HH:MM:SS or an integer number of minutes (default is 10).
 .SH "[LOGGING] OPTIONS"
 .PP
 default_log_level
