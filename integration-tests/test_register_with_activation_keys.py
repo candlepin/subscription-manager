@@ -3,6 +3,7 @@ from conftest import RHSMPrivateBus
 from constants import RHSM, RHSM_REGISTER_SERVER, RHSM_REGISTER
 from dasbus.error import DBusError
 from funcy import partial, take
+from dasbus.typing import get_variant, Str
 
 import json
 import logging
@@ -16,10 +17,18 @@ And it provides a unix socket connection.
 """
 
 
+@pytest.mark.parametrize("enable_content", ["true", "false", "wrong-value", "not-applied"])
 @pytest.mark.parametrize("num_of_act_keys_to_use", [1, 2])
-def test_register_with_activation_keys(external_candlepin, subman, test_config, num_of_act_keys_to_use):
+def test_register_with_activation_keys_and_enable_content(
+    external_candlepin, subman, test_config, num_of_act_keys_to_use, enable_content
+):
     """
     https://www.candlepinproject.org/docs/subscription-manager/dbus_objects.html#methods-6
+    enable_content is tested for historical reason.
+
+    It should not have any impact on registration to use enable_content True/False.
+
+    There is even wrong case of a value for enable_content.
     """
     assert not subman.is_registered
 
@@ -33,16 +42,22 @@ def test_register_with_activation_keys(external_candlepin, subman, test_config, 
         private_proxy = private_bus.get_proxy(
             service_name=RHSM.service_name, object_path=RHSM_REGISTER.object_path
         )
-        response = json.loads(
-            private_proxy.RegisterWithActivationKeys(candlepin_config("org"), act_keynames, {}, {}, locale)
-        )
-        if num_of_act_keys_to_use == 0:
-            assert "No activation key specified" in response
+        if enable_content == "not-applied":
+            options = {}
         else:
-            assert (
-                "activationKeys" in response
-            ), "DBus method returns which activation keys were used to register a system"
-
+            options = {"enable_content": get_variant(Str, enable_content)}
+        response = json.loads(
+            private_proxy.RegisterWithActivationKeys(
+                candlepin_config("org"),
+                act_keynames,
+                options,
+                {},
+                locale,
+            )
+        )
+        assert (
+            "activationKeys" in response
+        ), "DBus method should return activation keys that were used to register a system"
         logger.debug(response["activationKeys"])
         assert sorted([ii["activationKeyName"] for ii in response["activationKeys"]]) == sorted(act_keynames)
 
