@@ -186,10 +186,7 @@ class YumPluginManager:
         dist_id_like = dist_info[5]
 
         # If the system is Debian/SUSE based, do not enable yum plugins
-        if (
-            dist_id == "debian" or "debian" in dist_id_like or
-            dist_id == "sles" or "suse" in dist_id_like
-        ):
+        if dist_id == "debian" or "debian" in dist_id_like or dist_id == "sles" or "suse" in dist_id_like:
             log.debug("The system is Debian/SUSE based. Skipping the enablement of yum plugins.")
             return []
 
