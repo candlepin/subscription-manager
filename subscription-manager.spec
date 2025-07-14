@@ -83,7 +83,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.7
+Version: 1.30.8
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -677,6 +677,27 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Mon Jul 14 2025 Jiri Hnidek <jhnidek@redhat.com> 1.30.8-1
+- fix: Enable content during auto-registration v2 (jhnidek@redhat.com)
+- CCT-1490: blackified repolib.py (jstavel@redhat.com)
+- CCT-1473: new url for local candlepin image, fixed register test (#3580)
+  (jstavel@redhat.com)
+- fix: Create consumer cert & key, when chown failed (jhnidek@redhat.com)
+- Skip to load default plugins on suse/sles (suttner@atix.de)
+- CCT-739: tests for GetUuid method (jstavel@redhat.com)
+- feat: Added warning to dnf4 plugin about skewed clock (jhnidek@redhat.com)
+- CCT-1081 FEAT Remove unused classes and functions - including
+  Conduits/Slots/Hooks for pre/post_subscribe Remove "pre_subscribe" and
+  "post_subscribe" plugin slots by removing classes SubscriptionConduit and
+  PostSubscriptionConduit. (mgrunwal@redhat.com)
+- Fix upload profile if rhsmcertd is not running at all (suttner@atix.de)
+- chore: Drop get_status_for_icon (mhorky@redhat.com)
+- chore: Remove getCompliance method from connection.py (mhorky@redhat.com)
+- chore: Clean up compliance status of ComplianceManager (mhorky@redhat.com)
+- chore: Hardcode SCA-relevant values to ComplianceManager (mhorky@redhat.com)
+- chore: Drop HTTP call to /consumers/{uuid}/compliance (mhorky@redhat.com)
+- feat: adding sourcery config (jmolet@redhat.com)
+
 * Wed May 14 2025 Jiri Hnidek <jhnidek@redhat.com> 1.30.7-1
 - Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
 - Translated using Weblate (Italian) (noreply-mt-weblate-translation-
