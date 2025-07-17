@@ -38,6 +38,7 @@ candlepin.environment.ids =   ["env-id-01","env-id-02"]
 EOF
 
 # run local candlepin for testing purpose
+./integration-tests/scripts/post-activation-keys.sh
 ./integration-tests/scripts/run-local-candlepin.sh
 
 sleep 10
