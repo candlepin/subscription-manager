@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2025-05-11 06:52+0000\n"
+"PO-Revision-Date: 2025-07-21 06:53+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/ka/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.3\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -72,8 +72,8 @@ msgstr ""
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "კონფლიქტური პარამეტრის სტრიქონი: %s"
+msgstr[1] "კონფლიქტური პარამეტრების სტრიქონი: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1661
 msgid "mutually exclusive arguments must be optional"
@@ -292,7 +292,11 @@ msgid_plural ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr[0] ""
+"subscription-manager-ის დამატებამ გამორთო %d სისტემური რეპოზიტორია, როგორც "
+"ეს აღწერილია კონფიგურაციის ფაილში /etc/dnf/plugins/subscription-manager.conf"
 msgstr[1] ""
+"subscription-manager-ის დამატებამ გამორთო %d სისტემური რეპოზიტორია, როგორც "
+"ეს აღწერილია კონფიგურაციის ფაილში /etc/dnf/plugins/subscription-manager.conf"
 
 #: src/plugins/dnf/subscription_manager.py:158
 msgid "Updating Subscription Management repositories."
@@ -777,15 +781,15 @@ msgstr ""
 
 #: src/rhsm/connection.py:1444
 msgid "Fetching supported resources"
-msgstr ""
+msgstr "მხარდაჭერილი რესურსების გამოთხოვა"
 
 #: src/rhsm/connection.py:1504
 msgid "Checking connection status"
-msgstr ""
+msgstr "კავშირის სტატუსის შემოწმება"
 
 #: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
-msgstr ""
+msgstr "ღრუბლის ტოკენის გამოთხოვა"
 
 #: src/rhsm/connection.py:1607
 msgid "Registering system"
@@ -1841,8 +1845,8 @@ msgstr ""
 #, python-brace-format
 msgid "No such environment: {names}"
 msgid_plural "No such environments: {names}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ასეთი გარემო არ არსებობს: {names}"
+msgstr[1] "ასეთი გარემოები არ არსებობს: {names}"
 
 #: src/subscription_manager/cli_command/facts.py:32
 msgid "View or update the detected system information"
@@ -2740,7 +2744,7 @@ msgstr "რელიზი: {release}"
 
 #: src/subscription_manager/cli_command/release.py:74
 msgid "Release not set"
-msgstr ""
+msgstr "რელიზი დაყენებული არაა"
 
 #: src/subscription_manager/cli_command/release.py:93
 msgid "Release preference has been unset"
@@ -2968,7 +2972,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/service_level.py:206
 msgid "Available Service Levels"
-msgstr ""
+msgstr "ხელმისაწვდომი სერვისის დონეები"
 
 #: src/subscription_manager/cli_command/status.py:40
 msgid "Show status information for this system's subscriptions and products"
@@ -2982,7 +2986,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/status.py:65
 msgid "System Status Details"
-msgstr ""
+msgstr "სისტემის სტატუსის დეტალები"
 
 #: src/subscription_manager/cli_command/status.py:120
 msgid ""
@@ -3091,13 +3095,13 @@ msgstr ""
 #, python-format
 msgid "%s local certificate has been deleted."
 msgid_plural "%s local certificates have been deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s ლოკალური სერტიფიკატი წაიშალა."
+msgstr[1] "%s ლოკალური სერტიფიკატი წაიშალა."
 
 #: src/subscription_manager/entcertlib.py:453
 #, python-format
 msgid "Total updates: %d"
-msgstr ""
+msgstr "სულ განახლებები: %d"
 
 #: src/subscription_manager/entcertlib.py:454
 #, python-format
@@ -3267,7 +3271,7 @@ msgstr[1] ""
 #: src/subscription_manager/i18n_argparse.py:50
 #, python-brace-format
 msgid "{prog}: error: {msg}"
-msgstr ""
+msgstr "{prog}: შეცდომა: {msg}"
 
 #: src/subscription_manager/plugin/container/__init__.py:228
 #: src/subscription_manager/plugin/ostree/action_invoker.py:142
@@ -3338,7 +3342,7 @@ msgstr ""
 #: src/subscription_manager/scripts/rct.py:45
 #: src/subscription_manager/scripts/rhsm_debug.py:62
 msgid "User interrupted process."
-msgstr ""
+msgstr "მომხმარებელმა შეწყვიტა პროცესი."
 
 #: src/subscription_manager/scripts/package_profile_upload.py:56
 #, python-format
