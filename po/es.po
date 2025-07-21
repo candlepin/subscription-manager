@@ -1,6 +1,6 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
-# John Sefler <jsefler@redhat.com>, 2019. #zanata, 2021.
+# John Sefler <jsefler@redhat.com>, 2019. #zanata, 2021, 2025.
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # Emilio Herrera <ehespinosa57@gmail.com>, 2021.
 # Pino Toscano <ptoscano@redhat.com>, 2023.
@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2025-04-21 19:53+0000\n"
+"PO-Revision-Date: 2025-05-31 18:49+0000\n"
 "Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/es/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -357,7 +357,7 @@ msgstr "No se pudo leer identidad del consumidor"
 
 #: src/plugins/dnf/subscription_manager.py:170
 msgid "subscription-manager is operating in container mode."
-msgstr "Subscription Manager está operando en modo de contenedor."
+msgstr "subscription-manager está operando en modo de contenedor."
 
 #: src/plugins/dnf/upload_profile.py:37
 msgid ""
@@ -1446,7 +1446,7 @@ msgstr ""
 #: src/subscription_manager/branding/__init__.py:87
 #: src/subscription_manager/branding/redhat_branding.py:29
 msgid "Red Hat Subscription Management"
-msgstr "Administración de la suscripción a Red Hat"
+msgstr "Administración de Suscripción de Red Hat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:7
@@ -1454,8 +1454,8 @@ msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"Registrar este sistema en el portal del cliente u otro servicio de "
-"administración de suscripciones"
+"Registre este sistema en el Portal del Cliente u otro servicio de "
+"administración de suscripción"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:10
@@ -1463,8 +1463,8 @@ msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"Anular el registro de este sistema del portal del cliente u otro servicio de "
-"administración de suscripciones"
+"Anular el registro de este sistema del Portal del Cliente u otro servicio de "
+"administración de suscripción"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:12
@@ -1696,9 +1696,9 @@ msgid ""
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
 msgstr ""
-"Advertencia: Esta organización no tiene ninguna suscripción que proporciones "
+"Advertencia: Esta organización no tiene ninguna suscripción que proporcione "
 "un propósito al sistema \"{attr}\".  Este ajuste no influirá en la "
-"suscripciones auto-attaching."
+"suscripciones auto-adjuntar."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:278
 #, python-brace-format
@@ -2061,7 +2061,7 @@ msgstr "Incapaz de lograr el servidor en {host}:{port}{handler}"
 #: src/subscription_manager/cli_command/cli.py:399
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr ""
-"Error: No se ha instalado el certificado CA para el servicio de suscripción."
+"Error: No se ha instalado el certificado AC para el servicio de suscripción."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/cli.py:421
@@ -3539,8 +3539,8 @@ msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
 msgstr ""
-"Error: '{repoid}' no coincide con un ID de repositorio válido. Use la opción "
-"\"subscription-manager repos --list\" para ver los repositorios válidos."
+"Error: '{repoid}' no coincide con un ID de repositorio válido. Emplee la "
+"opción “subscription-manager repos --list” para ver los repositorios válidos."
 
 #: src/subscription_manager/cli_command/repos.py:265
 #, python-brace-format
@@ -4032,9 +4032,9 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"Los plugins yum/dnf: %s se habilitaron automáticamente en beneficio de Red "
-"Hat Subscription Management. Si no lo desea, use \"subscription-manager "
-"config --rhsm.auto_enable_yum_plugins=0\" para bloquear este comportamiento."
+"Los plugins yum/dnf: %s fueron auto-habilitados en beneficio de Red Hat "
+"Subscription Management. Si no lo desea, use “subscription-manager config "
+"--rhsm.auto_enable_yum_plugins=0” para bloquear este comportamiento."
 
 #: src/subscription_manager/repolib.py:678
 msgid "Repo updates"
