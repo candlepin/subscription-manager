@@ -83,7 +83,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.8
+Version: 1.30.9
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -677,6 +677,10 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Wed Jul 23 2025 Jiri Hnidek <jhnidek@redhat.com> 1.30.9-1
+- feat: Call random.seed() at begining of auto-register (jhnidek@redhat.com)
+- feat: Better control over auto-reg waiting game (jhnidek@redhat.com)
+
 * Mon Jul 14 2025 Jiri Hnidek <jhnidek@redhat.com> 1.30.8-1
 - fix: Enable content during auto-registration v2 (jhnidek@redhat.com)
 - CCT-1490: blackified repolib.py (jstavel@redhat.com)
