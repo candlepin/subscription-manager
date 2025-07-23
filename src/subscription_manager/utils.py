@@ -59,7 +59,7 @@ if TYPE_CHECKING:
 
     from rhsmlib.services import config as rhsmlib_config
 
-    from subscription_manager.cache import CurrentOwnerCache, SupportedResourcesCache
+    from subscription_manager.cache import CurrentOwnerCache, SupportedResourcesCache, CapabilitiesCache
     from subscription_manager.identity import Identity
     from subscription_manager.cp_provider import CPProvider
 
@@ -214,6 +214,15 @@ def get_current_owner(uep: Optional["UEPConnection"] = None, identity: "Identity
 
     cache: CurrentOwnerCache = inj.require(inj.CURRENT_OWNER_CACHE)
     return cache.read_data(uep, identity)
+
+
+def has_capability(capability: str) -> bool:
+    """
+    Check if candlepin server has given capability using cache
+    """
+    cache: CapabilitiesCache = inj.require(inj.CAPABILITIES_CACHE)
+    capabilities = cache.read_data()
+    return capability in capabilities
 
 
 def get_supported_resources(
