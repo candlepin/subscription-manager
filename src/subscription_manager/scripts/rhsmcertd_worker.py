@@ -38,6 +38,7 @@ from subscription_manager.i18n import ugettext as _
 from subscription_manager.i18n_argparse import ArgumentParser, USAGE
 from subscription_manager.identity import Identity, ConsumerIdentity
 from subscription_manager.injectioninit import init_dep_injection
+from rhsmlib.facts.host_collector import HostCollector
 
 
 if TYPE_CHECKING:
@@ -274,6 +275,24 @@ def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
         )
         return ExitStatus.NO_CLOUD_PROVIDER
 
+    # Try to initialize state of random generator using system facts or current time. It seems
+    # is necessary to do shortly after start, because random generator does not have enough
+    # random data in the input yet, and many VMs tend to generate similar random values.
+    # If the random.seed() was skipped, then it could cause the burst of requests to the
+    # hosted candlepin server or IMDS server.
+    facts = HostCollector().get_all()
+    if "dmi.system.uuid" in facts:
+        log.debug("Initialize state of random generator using system facts...")
+        system_uuid = facts["dmi.system.uuid"]
+        random.seed(system_uuid, version=2)
+    else:
+        log.debug("Initialize state of random generator using current time...")
+        random.seed(time.time(), version=2)
+
+
+    # Wait random time interval before contacting IMDS server and getting token from candlepin server
+    _auto_register_wait()
+
     # When some cloud provider(s) were detected, then try to collect metadata and signature
     cloud_info = _collect_cloud_info(cloud_list)
     if len(cloud_info) == 0:
@@ -282,16 +301,6 @@ def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
 
     # Get connection not using any authentication
     uep: UEPConnection = cp_provider.get_no_auth_cp()
-
-    # Try to initialize state of random generator using cloud metadata. This is necessary
-    # to do shortly after start, because random generator does not have enough random data
-    # in the input and many VMs tend to generate similar random values. This could cause
-    # burst of requests on candlepin server.
-    log.debug("Initialize state of random generator using cloud provider metadata...")
-    random.seed(cloud_info["metadata"])
-
-    # Wait random time interval before getting token from candlepin server
-    _auto_register_wait()
 
     # Try to obtain automatic registration token. It can be gathered from cache, but
     # when cache does not exist (very likely), then try to get it from candlepin server
