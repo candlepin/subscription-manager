@@ -180,6 +180,7 @@ def _auto_register_identity_wait() -> None:
     if cfg.get("rhsmcertd", "splay") == "0":
         log.debug("Trying to obtain the identity immediately, splay is disabled.")
     else:
+        rnd_gen = random.SystemRandom()
         splay_interval: int = DEFAULT_AUTOREGISTER_IDENTITY_INTERVAL  # value in [seconds]
         autoreg_interval = cfg.get("rhsmcertd", "auto_registration_identity_interval")
 
@@ -199,10 +200,10 @@ def _auto_register_identity_wait() -> None:
                     f"Autoregistration identity interval: {autoreg_interval} "
                     f"parsed as time delta: {registration_interval_seconds} [seconds]"
                 )
-                splay_interval = random.randint(0, registration_interval_seconds)
+                splay_interval = rnd_gen.randint(0, registration_interval_seconds)
         else:
             log.debug(f"Autoregistration identity interval: {autoreg_interval} parsed as minutes")
-            splay_interval = random.randint(0, registration_interval_minutes * 60)
+            splay_interval = rnd_gen.randint(0, registration_interval_minutes * 60)
 
         log.debug(
             f"Waiting a period of {splay_interval} seconds "
@@ -223,6 +224,7 @@ def _auto_register_wait() -> None:
     if cfg.get("rhsmcertd", "splay") == "0":
         log.debug("Trying to obtain the identity immediately, splay is disabled.")
     else:
+        rnd_gen = random.SystemRandom()
         splay_interval: int = DEFAULT_AUTOREGISTER_INTERVAL  # value is [seconds]
         autoreg_interval = cfg.get("rhsmcertd", "auto_registration_interval")
 
@@ -242,10 +244,10 @@ def _auto_register_wait() -> None:
                     f"Autoregistration interval: {autoreg_interval} "
                     f"parsed as time delta: {registration_interval_seconds} [seconds]"
                 )
-                splay_interval = random.randint(0, registration_interval_seconds)
+                splay_interval = rnd_gen.randint(0, registration_interval_seconds)
         else:
             log.debug(f"Autoregistration interval: {autoreg_interval} parsed as minutes")
-            splay_interval = random.randint(0, registration_interval_minutes * 60)
+            splay_interval = rnd_gen.randint(0, registration_interval_minutes * 60)
 
         log.debug(
             f"Waiting a period of {splay_interval} seconds "
@@ -274,6 +276,10 @@ def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
         )
         return ExitStatus.NO_CLOUD_PROVIDER
 
+    # Wait a random time interval before contacting IMDS server and getting token from the candlepin server,
+    # because we do not want to DDoS IMDS servers nor the candlepin server
+    _auto_register_wait()
+
     # When some cloud provider(s) were detected, then try to collect metadata and signature
     cloud_info = _collect_cloud_info(cloud_list)
     if len(cloud_info) == 0:
@@ -282,16 +288,6 @@ def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
 
     # Get connection not using any authentication
     uep: UEPConnection = cp_provider.get_no_auth_cp()
-
-    # Try to initialize state of random generator using cloud metadata. This is necessary
-    # to do shortly after start, because random generator does not have enough random data
-    # in the input and many VMs tend to generate similar random values. This could cause
-    # burst of requests on candlepin server.
-    log.debug("Initialize state of random generator using cloud provider metadata...")
-    random.seed(cloud_info["metadata"])
-
-    # Wait random time interval before getting token from candlepin server
-    _auto_register_wait()
 
     # Try to obtain automatic registration token. It can be gathered from cache, but
     # when cache does not exist (very likely), then try to get it from candlepin server
