@@ -35,6 +35,9 @@ candlepin.org = "donaldduck"
 candlepin.activation_keys = ["default_key","awesome_os_pool"]
 candlepin.environment.names = ["env-name-01","env-name-02"]
 candlepin.environment.ids =   ["env-id-01","env-id-02"]
+candlepin.multi_org.username = "huey"
+candlepin.multi_org.password = "password"
+candlepin.multi_org.orgs = ["admin", "snowwhite", "donaldduck"]
 EOF
 
 # run local candlepin for testing purpose
