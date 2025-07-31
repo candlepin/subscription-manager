@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.46
+Version: 1.29.47
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -735,6 +735,17 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Jul 31 2025 Jiri Hnidek <jhnidek@redhat.com> 1.29.47-1
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Spanish) (fserrador@gmail.com)
+- Translated using Weblate (Spanish) (jsefler@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- fix: [1.29] Wait random time before reaching IMDS server (jhnidek@redhat.com)
+- feat: [1.29] Call random.seed() at begining of auto-register
+  (jhnidek@redhat.com)
+- feat: [1.29] Better control over auto-reg waiting game (jhnidek@redhat.com)
+- fix: [1.29] Enable content during auto-registration v2 (jhnidek@redhat.com)
+
 * Thu May 15 2025 Jiri Hnidek <jhnidek@redhat.com> 1.29.46-1
 - Translated using Weblate (Italian) (info@salvatorecocuzza.it)
 - Translated using Weblate (Italian) (noreply-mt-weblate-translation-
