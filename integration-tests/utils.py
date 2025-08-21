@@ -1,6 +1,9 @@
 import time
 from funcy import identity
 import json
+import re
+import os
+from typing import Generator
 from pathlib import Path
 
 
@@ -45,3 +48,57 @@ def json_from_file(fpath: Path):
     """
     with open(fpath, "rt") as infile:
         return json.load(infile)
+
+
+def installed_products(subman) -> list[dict[str, str]]:
+    """
+    The function returns a list of products that subscription-manager provides
+    """
+    subman_response = subman.run("list", "--installed", check=False)
+    #
+    # [root@ad5327bd-5cc5-4a6c-b162-f1cf6d9bd61f integration-tests]# subscription-manager list --installed
+    # +-------------------------------------------+
+    # Installed Product Status
+    # +-------------------------------------------+
+    # Product Name: Red Hat Enterprise Linux for x86_64 Beta
+    # Product ID:   486
+    # Version:      10.1 Beta
+    # Arch:         x86_64
+    #
+    # Product Name: Red Hat Enterprise Linux Builder for x86_64 Beta
+    # Product ID:   495
+    # Version:      10.1 Beta
+    # Arch:         x86_64
+    #
+
+    def read_products(lines: list[str]) -> Generator[dict[str, str], None, None]:
+        """
+        parse an output from the command to find product's properties
+        """
+        product = {}
+        for line in lines:
+            if not line.strip():  # an empty line between two products
+                if len(product.items()) > 0:
+                    yield product
+                    product = {}
+                else:
+                    continue
+            result = re.search(r"^([^:]+):(.*)", line.strip())
+            if result:
+                pair = [g.strip() for g in result.groups()]
+                product[pair[0]] = pair[1]
+
+        if len(product.items()) > 0:
+            yield product
+
+    return list(read_products(subman_response.stdout.splitlines()))
+
+
+def product_ids_in_dir(dirpath: Path) -> list[int]:
+    """
+    returns a list of IDs of products installed in the given directory
+    """
+    fnames = os.listdir(dirpath)
+    matches = [re.search(r"^([0-9]+)\.pem", fname) for fname in fnames]
+    product_ids = [int(m.group(1)) for m in matches if m is not None]
+    return product_ids
