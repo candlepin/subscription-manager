@@ -2,11 +2,11 @@ import pytest
 from conftest import RHSMPrivateBus
 from constants import RHSM, RHSM_REGISTER_SERVER, RHSM_REGISTER
 from dasbus.error import DBusError
-from funcy import partial, take
+from funcy import partial, take, first
 from dasbus.typing import get_variant, Str
-
 import json
 import logging
+from utils import subman_identity
 
 logger = logging.getLogger(__name__)
 locale = "en_US.UTF-8"
@@ -55,16 +55,49 @@ def test_register_with_activation_keys_and_enable_content(
                 locale,
             )
         )
-        assert (
-            "activationKeys" in response
-        ), "DBus method should return activation keys that were used to register a system"
-        logger.debug(response["activationKeys"])
+        assert "activationKeys" in response
         assert sorted([ii["activationKeyName"] for ii in response["activationKeys"]]) == sorted(act_keynames)
+        assert subman.is_registered
 
-    assert subman.is_registered
+
+def test_register_with_activation_keys_and_environments(external_candlepin, subman, test_config):
+    """
+    https://www.candlepinproject.org/docs/subscription-manager/dbus_objects.html#methods-6
+    """
+    candlepin_config = partial(test_config.get, "candlepin")
+
+    assert not subman.is_registered
+    proxy = RHSM.get_proxy(RHSM_REGISTER_SERVER)
+    act_keynames = candlepin_config("activation_keys")
+    environment_id = first(candlepin_config("environment", "ids"))
+    with RHSMPrivateBus(proxy) as private_bus:
+        private_proxy = private_bus.get_proxy(RHSM.service_name, RHSM_REGISTER.object_path)
+        response = private_proxy.RegisterWithActivationKeys(
+            candlepin_config("org"),
+            act_keynames,
+            {"environments": get_variant(Str, environment_id)},
+            {},
+            locale,
+        )
+        response_data = json.loads(response)
+        assert "activationKeys" in response_data
+        assert frozenset(ii["activationKeyName"] for ii in response_data["activationKeys"]) == frozenset(
+            act_keynames
+        )
+
+        # applied environment appears in the response
+        environment_name = first(candlepin_config("environment", "names"))
+        assert response_data["environment"]["name"] == environment_name
+        assert first(response_data["environments"])["name"] == environment_name
+        assert first(response_data["environments"])["id"] == environment_id
+
+        # applied environment appears in response of 'subscription-manager identity"
+        pairs = subman_identity(subman)
+        assert pairs["environment name"] == environment_name
+        assert subman.is_registered
 
 
-@pytest.mark.skip
+@pytest.mark.xfail(reason="openned bug for this case: CCT-1559")
 def test_register_with_activation_keys_with_empty_list(external_candlepin, subman, test_config):
     """
     https://www.candlepinproject.org/docs/subscription-manager/dbus_objects.html#methods-6
@@ -73,7 +106,6 @@ def test_register_with_activation_keys_with_empty_list(external_candlepin, subma
 
     candlepin_config = partial(test_config.get, "candlepin")
     act_keys = []
-
     proxy = RHSM.get_proxy(
         object_path=RHSM_REGISTER_SERVER.object_path, interface_name=RHSM_REGISTER_SERVER.interface_name
     )
@@ -83,11 +115,10 @@ def test_register_with_activation_keys_with_empty_list(external_candlepin, subma
             object_path=RHSM_REGISTER.object_path,
             interface_name=RHSM_REGISTER.interface_name,
         )
-        response = json.loads(
-            private_proxy.RegisterWithActivationKeys(candlepin_config("org"), act_keys, {}, {}, locale)
-        )
-        assert "No activation key specified" in response["message"]
-        assert response["activationKeys"] == []
+        response = private_proxy.RegisterWithActivationKeys(candlepin_config("org"), act_keys, {}, {}, locale)
+        response_data = json.loads(response)
+        assert "No activation key specified" in response_data["message"]
+        assert response_data["activationKeys"] == []
 
     assert subman.is_registered
 
@@ -114,13 +145,12 @@ def test_register_with_activation_keys_with_wrong_key_among_good_ones(any_candle
             object_path=RHSM_REGISTER.object_path,
             interface_name=RHSM_REGISTER.interface_name,
         )
-        response = json.loads(private_proxy.RegisterWithActivationKeys(org_to_use, act_keys, {}, {}, locale))
-        assert (
-            "activationKeys" in response
-        ), "DBus method returns which activation keys were used to register a system"
-        assert sorted([ii["activationKeyName"] for ii in response["activationKeys"]]) == sorted(
+        response = private_proxy.RegisterWithActivationKeys(org_to_use, act_keys, {}, {}, locale)
+        response_data = json.loads(response)
+        assert "activationKeys" in response_data
+        assert sorted([ii["activationKeyName"] for ii in response_data["activationKeys"]]) == sorted(
             valid_act_keys
-        ), "Just valid activation keys should appear in response of the call"
+        ), "A list of activation keys in the response is not the same as a list of valid activation keys"
 
     assert subman.is_registered
 
