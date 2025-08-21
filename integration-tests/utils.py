@@ -2,6 +2,7 @@ import time
 from funcy import identity
 import json
 from pathlib import Path
+import configparser
 
 
 def loop_until(predicate, poll_sec=5, timeout_sec=120):
@@ -15,10 +16,12 @@ def loop_until(predicate, poll_sec=5, timeout_sec=120):
 
     The loop function will retry to run predicate every 5secs
     until the total time exceeds timeout_sec.
+
+    It stops looping when the predicate gets True
     """
     start = time.time()
     ok = False
-    while (not ok) and (time.time() - start < timeout_sec):
+    while (not ok) and ((time.time() - start) < timeout_sec):
         time.sleep(poll_sec)
         ok = predicate()
     return ok
@@ -45,3 +48,12 @@ def json_from_file(fpath: Path):
     """
     with open(fpath, "rt") as infile:
         return json.load(infile)
+
+
+def read_ini_file(path):
+    config = configparser.ConfigParser()
+    config.read(path)
+    for section in config.sections():
+        config_section = config[section]
+        for key in config_section:
+            yield (f"{section}.{key}", config_section[key])
