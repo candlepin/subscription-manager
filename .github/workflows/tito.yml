@@ -38,7 +38,7 @@ jobs:
           dnf config-manager --enable crb
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # This step is required so Tito can properly read git history
       # See https://github.com/actions/checkout/issues/766
