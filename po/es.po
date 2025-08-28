@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2025-05-31 18:09+0000\n"
-"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
+"PO-Revision-Date: 2025-07-16 19:53+0000\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/es/>\n"
 "Language: es\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -204,6 +204,7 @@ msgid "The $0 package is not available from any repository."
 msgstr "El paquete $0 no está disponible desde ningún repositorio."
 
 #: cockpit/src/insights.jsx:100
+#, fuzzy
 msgid ""
 "The system could not be connected to Insights because installing the $0 "
 "package requires the unexpected removal of other packages."
@@ -212,10 +213,12 @@ msgstr ""
 "instalación del paquete $0 requiere el borrado inesperado de otros paquetes."
 
 #: cockpit/src/insights.jsx:113
+#, fuzzy
 msgid "Connecting to Insights"
 msgstr "Conectando a Conocimientos"
 
 #: cockpit/src/insights.jsx:151
+#, fuzzy
 msgid ""
 "Proactively identify and remediate threats to security, performance, "
 "availability, and stability with Red Hat Insights — with predictive "
@@ -277,6 +280,7 @@ msgid "Installing $0"
 msgstr "Instalando $0"
 
 #: cockpit/src/insights.jsx:254
+#, fuzzy
 msgid "Connect to Red Hat Insights"
 msgstr "Conectar a Conocimientos de Red Hat"
 
@@ -293,22 +297,27 @@ msgid "unknown"
 msgstr "desconocido"
 
 #: cockpit/src/insights.jsx:408
+#, fuzzy
 msgid "The last Insights data upload has failed."
 msgstr "Ha fallado la última subida de datos a Conocimientos."
 
 #: cockpit/src/insights.jsx:413
+#, fuzzy
 msgid "Connected to Red Hat Insights"
 msgstr "Conectado a Conocimientos de Red Hat"
 
 #: cockpit/src/insights.jsx:419
+#, fuzzy
 msgid "Next Insights data upload"
 msgstr "Siguiente subida de datos a Conocimientos"
 
 #: cockpit/src/insights.jsx:424
+#, fuzzy
 msgid "Last Insights data upload"
 msgstr "Últimos datos subidos a Conocimientos"
 
 #: cockpit/src/insights.jsx:441 cockpit/src/insights.jsx:445
+#, fuzzy
 msgid "Disconnect from Insights"
 msgstr "Desconectar desde Conocimientos"
 
@@ -373,10 +382,12 @@ msgstr[0] "$0 golpe"
 msgstr[1] "$0 golpes"
 
 #: cockpit/src/insights.jsx:567
+#, fuzzy
 msgid "View your Insights results"
 msgstr "Visualizar sus resultados de Conocimientos"
 
 #: cockpit/src/insights.jsx:573
+#, fuzzy
 msgid "Connected to Insights"
 msgstr "Conectando a Conocimientos"
 
@@ -385,6 +396,7 @@ msgid "Not connected"
 msgstr "No conectado"
 
 #: cockpit/src/insights.jsx:590 cockpit/src/subscriptions-register.jsx:85
+#, fuzzy
 msgid "Insights"
 msgstr "Conocimientos"
 
