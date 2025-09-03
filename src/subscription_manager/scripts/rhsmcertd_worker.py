@@ -45,6 +45,7 @@ if TYPE_CHECKING:
     from rhsm.config import RhsmConfigParser
     from rhsm.connection import UEPConnection
     from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.cache import CapabilitiesCache
 
 
 # Value in seconds
@@ -452,10 +453,17 @@ def _main(args: "argparse.Namespace"):
 
     print(_("Updating entitlement certificates & repositories."))
 
+    log.debug("Force reloading capabilities from candlepin server.")
+    capabilities_cache: CapabilitiesCache = inj.require(inj.CAPABILITIES_CACHE)
+    capabilities_cache.delete_cache()
+    capabilities_cache.read_data()
+
+    log.debug("Force reloading supported resources from candlepin server.")
     uep: UEPConnection = cp_provider.get_consumer_auth_cp()
     # preload supported resources; serves as a way of failing before locking the repos
     uep.supports_resource(None)
 
+    log.debug("Checking validity of consumer cert & key, updating entitlement certificates & repositories")
     try:
         action_client = ActionClient()
         action_client.update()
