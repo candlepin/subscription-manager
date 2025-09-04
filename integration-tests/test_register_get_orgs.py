@@ -107,17 +107,17 @@ def test_get_orgs_for_multi_org_account(any_candlepin, subman, test_config):
 def test_get_orgs_wrong_credentials(any_candlepin, subman, test_config, credentials):
     # skip empty username - see CCT-1501
     if credentials[0] == "":
-        pytest.skip("openned ticket for wrong behavior in case a username is empty string - see CCT-1501")
+        pytest.skip("opened ticket for wrong behavior in case a username is empty string - see CCT-1501")
     proxy = RHSM.get_proxy(RHSM_REGISTER_SERVER)
     candlepin_config = partial(test_config.get, "candlepin")
     with RHSMPrivateBus(proxy) as private_bus:
         private_proxy = private_bus.get_proxy(RHSM.service_name, RHSM_REGISTER.object_path)
-        with pytest.raises(DBusError) as excinfo:
+        with pytest.raises(DBusError) as exc_info:
             private_proxy.GetOrgs(
                 (credentials[0] is None and candlepin_config("username")) or credentials[0],
                 (credentials[1] is None and candlepin_config("password")) or credentials[1],
                 {},
                 locale,
             )
-        data = json.loads(str(excinfo.value))
+        data = json.loads(str(exc_info.value))
         assert "Invalid Credentials" in data["message"]
