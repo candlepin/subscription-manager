@@ -28,9 +28,9 @@ Integration test for DBus RHSM Register Object.
 See https://www.candlepinproject.org/docs/subscription-manager/dbus_objects.html#register
 for more details.
 
-Main usecases are presented in this file.
+Main use cases are presented in this file.
 
-Special usecases for registering (with proxy, activation keys, ...) are presented
+Special use cases for registering (with proxy, activation keys, ...) are presented
 in its own files.
 
 It is important to run tests as root. Since RegisterServer is a system dbus service.
@@ -142,7 +142,7 @@ def test_register_with_wrong_values(external_candlepin, subman, test_config, cre
         assert not subman.is_registered
 
 
-def test_GetEnvironments(external_candlepin, subman, test_config):
+def test_get_environments(external_candlepin, subman, test_config):
     """
     GetEnvironments(username: string,
                     password: string,
@@ -184,16 +184,21 @@ def test_GetEnvironments(external_candlepin, subman, test_config):
         password = candlepin_config("password")
         organization = candlepin_config("org")
         response = private_proxy.GetEnvironments(username, password, organization, {}, locale)
-        """
-        [{  "id": "env-id-01",
-          "name": "env-name-01",
-          "type": "",
-           "description": "Testing environment num. 1"},
-         {"id": "env-id-02", "name":
-          "env-name-02", "type":
-          "content-template", "description":
-          "Testing environment num. 2"}]
-        """
+        # Expected result could look like this:
+        # [
+        #   {
+        #     "id": "env-id-01",
+        #     "name": "env-name-01",
+        #     "type": "",
+        #     "description": "Testing environment num. 1"
+        #   },
+        #   {
+        #     "id": "env-id-02",
+        #     "name": "env-name-02",
+        #     "type": "content-template",
+        #     "description": "Testing environment num. 2"
+        #   }
+        # ]
         data = json.loads(response)
         environments_in_response = frozenset(f"({ii.get('id')},{ii.get('name')})" for ii in data)
         environments_in_config = frozenset(
