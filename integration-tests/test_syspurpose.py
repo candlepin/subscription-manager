@@ -27,7 +27,7 @@ Integration test for DBus RHSM Syspurpose Object.
 See https://www.candlepinproject.org/docs/subscription-manager/dbus_objects.html#syspurpose
 for more details.
 
-Main usecases are presented in this file.
+Main use cases are presented in this file.
 
 There is a traditional way to play with syspurpose in a Red Hat ecosystem:
    subscription-manager syspurpose role --unset=foo --noproxy=subscription.rhsm.redhat.com
@@ -75,7 +75,7 @@ def test_set_syspurpose(any_candlepin, field, subman):
     syspurpose_after_call = json_from_file(RHSM_SYSPURPOSE_FILE_PATH)
     assert syspurpose_after_call == {field: new_value}
 
-    # subsription-manager should return the same data as DBus API call
+    # subscription-manager should return the same data as DBus API call
     syspurpose_from_subman = json.loads(subman.run("syspurpose", "--show").stdout)
     assert syspurpose_from_subman == {field: new_value}
 
