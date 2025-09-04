@@ -2,7 +2,7 @@
 #
 # A local candlepin is used for most of integration tests.
 # It is fast to run the tests and the candlepin comes with testing data.
-# So the environment is mostly prepared in the candlepin after we run a contianer.
+# So the environment is mostly prepared in the candlepin after we run a container.
 #
 # For most information see https://github.com/ptoscano/candlepin-container-unofficial
 #

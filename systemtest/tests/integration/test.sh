@@ -13,7 +13,7 @@ dnf --setopt install_weak_deps=False install -y \
     cairo-gobject-devel gobject-introspection-devel \
     python3-gobject python3-devel
 
-yum -y groupinstall 'Development Tools'
+dnf -y groupinstall 'Development Tools'
 
 python3 -m venv venv
 # shellcheck disable=SC1091
