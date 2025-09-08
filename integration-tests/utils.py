@@ -5,6 +5,7 @@ import re
 import os
 from typing import Generator
 from pathlib import Path
+import configparser
 
 
 def loop_until(predicate, poll_sec=5, timeout_sec=120):
@@ -18,10 +19,12 @@ def loop_until(predicate, poll_sec=5, timeout_sec=120):
 
     The loop function will retry to run predicate every 5secs
     until the total time exceeds timeout_sec.
+
+    It stops looping when the predicate gets True
     """
     start = time.time()
     ok = False
-    while (not ok) and (time.time() - start < timeout_sec):
+    while (not ok) and ((time.time() - start) < timeout_sec):
         time.sleep(poll_sec)
         ok = predicate()
     return ok
@@ -102,3 +105,12 @@ def product_ids_in_dir(dirpath: Path) -> list[int]:
     matches = [re.search(r"^([0-9]+)\.pem", fname) for fname in fnames]
     product_ids = [int(m.group(1)) for m in matches if m is not None]
     return product_ids
+
+
+def read_ini_file(path):
+    config = configparser.ConfigParser()
+    config.read(path)
+    for section in config.sections():
+        config_section = config[section]
+        for key in config_section:
+            yield (f"{section}.{key}", config_section[key])
