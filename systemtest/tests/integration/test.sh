@@ -42,6 +42,7 @@ candlepin.multi_org.orgs = ["admin", "snowwhite", "donaldduck"]
 EOF
 
 # run local candlepin for testing purpose
+./integration-tests/scripts/post-activation-keys.sh
 ./integration-tests/scripts/run-local-candlepin.sh
 
 sleep 10
