@@ -24,7 +24,7 @@ Integration test for DBus RHSM Consumer Object.
 See https://www.candlepinproject.org/docs/subscription-manager/dbus_objects.html#consumer
 for more details.
 
-Main usecases are presented in this file.
+Main use cases are presented in this file.
 """
 
 # each call uses standard english locale
