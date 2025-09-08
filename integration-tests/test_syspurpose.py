@@ -31,7 +31,6 @@ Main use cases are presented in this file.
 
 There is a traditional way to play with syspurpose in a Red Hat ecosystem:
    subscription-manager syspurpose role --unset=foo --noproxy=subscription.rhsm.redhat.com
-
 """
 
 # each call uses standard english locale

@@ -22,12 +22,12 @@ Environments for *donaldduck* organization
 
 ```
 curl --stderr /dev/null --insecure --user admin:admin --request POST \
---data '{"id": "env-id-1", "name": "env-name-1", "description": "Testing environment num. 1"}' \
+--data '{"id": "env-id-01", "name": "env-name-01", "description": "Testing environment num. 01"}' \
 --header 'accept: application/json' --header 'content-type: application/json' \
 https://localhost:8443/candlepin/owners/donaldduck/environments
 
 curl --stderr /dev/null --insecure --user admin:admin --request POST \
---data '{"id": "env-id-2", "name": "env-name-2", "description": "Testing environment num. 2"}' \
+--data '{"id": "env-id-02", "name": "env-name-02", "description": "Testing environment num. 02"}' \
 --header 'accept: application/json' --header 'content-type: application/json' \
 https://localhost:8443/candlepin/owners/donaldduck/environments
 ```
@@ -67,6 +67,10 @@ candlepin.org = "donaldduck"
 candlepin.activation_keys = ["default_key","awesome_os_pool"]
 candlepin.environment.names = ["env-name-01","env-name-02"]
 candlepin.environment.ids =   ["env-id-01","env-id-02"]
+candlepin.valid_fields_file = "integration-tests/files/valid_fields.json"
+candlepin.multi_org.username = "huey"
+candlepin.multi_org.password = "password"
+candlepin.multi_org.orgs = ["admin", "snowwhite", "donaldduck"]
 ```
 
 Configuration for pytest 
