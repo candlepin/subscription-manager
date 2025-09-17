@@ -33,7 +33,7 @@ def loop_until(predicate, poll_sec=5, timeout_sec=120):
 def dicts_are_the_same(dict01, dict02, transform=identity):
     """the function is used in assertations
 
-    In case value is a list of values you can use transform method this way:
+    In case a value is a list of values you can use transform method this way:
 
     >>> dicts_are_the_same(dict01, dict02, frozenset)
     """
@@ -47,7 +47,7 @@ def dicts_are_the_same(dict01, dict02, transform=identity):
 
 def json_from_file(fpath: Path):
     """
-    It is a simple function to hide context manager for open file.
+    It is a simple function to hide context manager to open a file.
     """
     with open(fpath, "rt") as infile:
         return json.load(infile)
@@ -108,9 +108,42 @@ def product_ids_in_dir(dirpath: Path) -> list[int]:
 
 
 def read_ini_file(path):
+    """
+    This method reads a config file at given path
+
+    It returns a list of (key, value)
+    ... key - abs path to the value (ie. including section name)
+        for example:
+            ("logging.default_level","INFO")
+    """
     config = configparser.ConfigParser()
     config.read(path)
     for section in config.sections():
         config_section = config[section]
         for key in config_section:
             yield (f"{section}.{key}", config_section[key])
+
+
+def subman_identity(subman) -> dict[str, str]:
+    """
+    The method returns a dict of properties that
+    a command 'subscription-manager identity' provides
+    """
+    subman_response = subman.run("identity")
+    # (env) [root@kvm-08-guest21 integration-tests]# subscription-manager identity
+    #
+    # system identity: 5c00d2c6-5bea-4b6d-8662-8680e38f0dab
+    # name: kvm-08-guest21.lab.eng.rdu2.dc.redhat.com
+    # org name: Donald Duck
+    # org ID: donaldduck
+    # environment name: env-name-01
+
+    def read_pair(line):
+        result = re.search(r"^([^:]+):(.*)", line.strip())
+        if result:
+            pair = [g.strip() for g in result.groups()]
+            return pair
+        return []
+
+    pairs = dict([read_pair(line) for line in subman_response.stdout.splitlines()])
+    return pairs
