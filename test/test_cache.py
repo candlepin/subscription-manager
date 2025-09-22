@@ -12,7 +12,6 @@
 import base64
 import unittest
 
-import datetime
 import os
 import logging
 import shutil
@@ -45,7 +44,6 @@ from subscription_manager.cache import (
     SupportedResourcesCache,
     AvailableEntitlementsCache,
     CurrentOwnerCache,
-    SyspurposeComplianceStatusCache,
     CapabilitiesCache,
 )
 
@@ -55,7 +53,6 @@ from rhsm.connection import (
     UEPConnection,
     RestlibException,
     RateLimitExceededException,
-    ProxyException,
 )
 
 from subscription_manager import injection as inj
@@ -1304,22 +1301,6 @@ class TestAvailableEntitlementsCache(SubManFixture):
         uep.conn.smoothed_rt = 20.0
         timeout = self.cache.timeout()
         self.assertEqual(timeout, self.cache.UBOUND)
-
-
-class TestSyspurposeComplianceStatusCache(SubManFixture):
-    def setUp(self):
-        super(TestSyspurposeComplianceStatusCache, self).setUp()
-        self.syspurpose_cache = SyspurposeComplianceStatusCache()
-
-    def test_status_on_failed_load(self):
-        uep = StubUEP()
-        uep.has_capability = Mock(side_effect=ProxyException("bad-proxy", 1234))
-        uuid = "FAKEUUID"
-        on_date = datetime.datetime.now()
-        self.syspurpose_cache.load_status(uep, uuid, on_date)
-        self.assertEqual(self.syspurpose_cache.get_overall_status(), "Unknown")
-        self.assertEqual(self.syspurpose_cache.get_overall_status_code(), "unknown")
-        self.assertIsNone(self.syspurpose_cache.get_status_reasons())
 
 
 class TestCloudTokenCache(SubManFixture):
