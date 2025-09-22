@@ -1827,15 +1827,6 @@ class UEPConnection(BaseConnection):
         method = "/consumers/%s" % self.sanitize(uuid)
         return self.conn.request_get(method, description=_("Fetching consumer keys"))
 
-    def getSyspurposeCompliance(self, uuid: str, on_date: datetime.datetime = None) -> dict:
-        """
-        Returns a system purpose compliance object with compliance status information
-        """
-        method = "/consumers/%s/purpose_compliance" % self.sanitize(uuid)
-        if on_date:
-            method = "%s?on_date=%s" % (method, self.sanitize(on_date.isoformat(), plus=True))
-        return self.conn.request_get(method, description=_("Checking system purpose compliance status"))
-
     def getOwnerSyspurposeValidFields(self, owner_key: str) -> dict:
         """
         Retrieves the system purpose settings available to an owner

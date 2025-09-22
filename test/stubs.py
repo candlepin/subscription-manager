@@ -611,9 +611,6 @@ class StubUEP:
     def getCertificateSerials(self, consumer):
         return []
 
-    def getSyspurposeCompliance(self, uuid, on_date=None):
-        return self.syspurpose_compliance_status
-
     def setSyspurposeCompliance(self, status):
         self.syspurpose_compliance_status = status
 
