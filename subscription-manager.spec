@@ -124,6 +124,7 @@ Requires:  python3-decorator
 Requires:  virt-what
 Requires:  python3-subscription-manager-rhsm = %{version}-%{release}
 Requires: subscription-manager-rhsm-certificates
+Requires(post): findutils
 %ifarch %{dmidecode_arches}
 Requires: dmidecode
 %endif
@@ -178,6 +179,7 @@ BuildRequires: gcc
 BuildRequires: python3-setuptools
 BuildRequires: gettext
 BuildRequires: glib2-devel
+BuildRequires: findutils
 
 %if 0%{?suse_version}
 BuildRequires: distribution-release
