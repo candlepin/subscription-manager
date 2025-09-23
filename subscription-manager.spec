@@ -136,6 +136,7 @@ Requires:  %{py_package_prefix}-decorator
 Requires:  virt-what
 Requires:  %{rhsm_package_name} = %{version}
 Requires: subscription-manager-rhsm-certificates
+Requires(post): findutils
 %ifarch %{dmidecode_arches}
 Requires: dmidecode
 %endif
@@ -187,6 +188,7 @@ BuildRequires: gcc
 BuildRequires: %{py_package_prefix}-setuptools
 BuildRequires: gettext
 BuildRequires: glib2-devel
+BuildRequires: findutils
 
 %if 0%{?suse_version}
 BuildRequires: distribution-release
