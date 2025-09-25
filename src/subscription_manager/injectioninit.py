@@ -25,7 +25,6 @@ from subscription_manager.cache import (
     ReleaseStatusCache,
     ContentAccessCache,
     PoolStatusCache,
-    SyspurposeComplianceStatusCache,
     SupportedResourcesCache,
     AvailableEntitlementsCache,
     CurrentOwnerCache,
@@ -64,7 +63,6 @@ def init_dep_injection():
     #        attributes of inj (can happen if yum has old inj module,
     #        but runs a new version of injectioninit...)
     inj.provide(inj.ENTITLEMENT_STATUS_CACHE, EntitlementStatusCache, singleton=True)
-    inj.provide(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, SyspurposeComplianceStatusCache, singleton=True)
     inj.provide(inj.CURRENT_OWNER_CACHE, CurrentOwnerCache, singleton=True)
     inj.provide(inj.CAPABILITIES_CACHE, CapabilitiesCache, singleton=True)
     inj.provide(inj.SYSPURPOSE_VALID_FIELDS_CACHE, SyspurposeValidFieldsCache)

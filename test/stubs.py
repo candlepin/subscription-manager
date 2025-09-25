@@ -32,7 +32,6 @@ from subscription_manager.cache import (
     AvailableEntitlementsCache,
     SyspurposeValidFieldsCache,
     CurrentOwnerCache,
-    SyspurposeComplianceStatusCache,
     CapabilitiesCache,
 )
 from subscription_manager.facts import Facts
@@ -612,9 +611,6 @@ class StubUEP:
     def getCertificateSerials(self, consumer):
         return []
 
-    def getSyspurposeCompliance(self, uuid, on_date=None):
-        return self.syspurpose_compliance_status
-
     def setSyspurposeCompliance(self, status):
         self.syspurpose_compliance_status = status
 
@@ -889,14 +885,6 @@ class StubProfileManager(ProfileManager):
     # stub that as well
     def _get_profile(self, profile_type):
         return self._get_current_profile()
-
-
-class StubSyspurposeComplianceStatusCache(SyspurposeComplianceStatusCache):
-    def write_cache(self):
-        pass
-
-    def delete_cache(self):
-        self.server_status = None
 
 
 # could be a Mock
