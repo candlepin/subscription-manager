@@ -154,8 +154,9 @@ def _collect_cloud_info(cloud_list: List[str]) -> dict:
         # When it is not possible to get signature for given cloud provider,
         # then silently set signature to empty string, because some cloud
         # providers does not provide signatures
-        if signature is None:
-            signature = ""
+        if cloud_provider.is_signature_required() and signature is None:
+            log.error(f"No signature gathered for cloud provider: {cloud_provider_id}")
+            continue
 
         log.info(f"Metadata and signature gathered for cloud provider: {cloud_provider_id}")
 
