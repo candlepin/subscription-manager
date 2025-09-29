@@ -85,6 +85,10 @@ class GCPCloudProvider(BaseCloudProvider):
     # Nothing to cache for this cloud provider
     SIGNATURE_CACHE_FILE = None
 
+    # GCP does not have a special file for signature of metadata.
+    # Metadata and signature are provided in one JWT file
+    SIGNATURE_REQUIRED = False
+
     def __init__(self, hw_info, audience_url=None):
         """
         Initialize instance of GCPCloudDetector
