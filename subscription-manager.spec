@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.47
+Version: 1.29.47.1
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -737,6 +737,9 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Oct 01 2025 Jiri Hnidek <jhnidek@redhat.com> 1.29.47.1-1
+- fix: [1.29.47] Require findutils in .spec file (jhnidek@redhat.com)
+
 * Thu Jul 31 2025 Jiri Hnidek <jhnidek@redhat.com> 1.29.47-1
 - Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
 - Translated using Weblate (Spanish) (fserrador@gmail.com)
