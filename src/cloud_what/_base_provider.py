@@ -83,6 +83,9 @@ class BaseCloudProvider:
     # (e.g. /var/lib/cloud-what/cache/cool_cloud_signature.json)
     SIGNATURE_CACHE_FILE = None
 
+    # Is a signature of metadata for the given cloud provider required?
+    SIGNATURE_REQUIRED = True
+
     # Custom HTTP headers like user-agent
     HTTP_HEADERS = {}
 
@@ -483,6 +486,12 @@ class BaseCloudProvider:
             return signature
 
         return self._get_signature_from_server()
+
+    def is_signature_required(self):
+        """
+        Return True, when signature of metadata is required for given cloud provider
+        """
+        return self.SIGNATURE_REQUIRED
 
     def get_metadata(self) -> Union[str, None]:
         """
