@@ -335,19 +335,19 @@ class AWSCloudProvider(BaseCloudProvider):
 
         https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/verify-signature.html
 
-        AWS provides several versions signatures (PKCS7, base64-encoded and RSA-2048). We will use
-        the base64-encoded one, because it is easier to send it as part of JSON document. It is
-        possible to get signature using IMDSv1 and IMDSv2. We use same approach of obtaining
-        signature as we use, when we try to obtain metadata. We try use IMDSv1 first, when not
-        possible then we try to use IMDSv2.
+        AWS provides several versions of signatures (PKCS7, base64-encoded and RSA-2048). We will use
+        the base64-encoded variant because it is easier to send it as part of a JSON document. It is
+        possible to get a signature using IMDSv1 and IMDSv2. We use the same approach of getting
+        signature as we use when we try to get metadata. We try to use IMDSv2 first, when not
+        possible, then we try to use IMDSv1.
         :return: String with signature or None
         """
         signature = None
         if self._token_exists() is False:
-            signature = self._get_signature_from_server_imds_v1()
+            signature = self._get_signature_from_server_imds_v2()
 
         if signature is None:
-            signature = self._get_signature_from_server_imds_v2()
+            signature = self._get_signature_from_server_imds_v1()
 
         if signature is not None:
             signature = f"-----BEGIN PKCS7-----\n{signature}\n-----END PKCS7-----"
