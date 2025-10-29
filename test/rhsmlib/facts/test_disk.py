@@ -156,6 +156,18 @@ class TestDiskCollector(unittest.TestCase):
             from rhsmlib.facts.collection import FactsCollection
             self.assertIsInstance(result, FactsCollection)
 
+    def test_collect_empty(self):
+        """Test collect method returns FactsCollection for empty input"""
+        with patch.object(self.collector, 'get_all') as mock_get_all:
+            mock_get_all.return_value = {}
+
+            result = self.collector.collect()
+
+            from rhsmlib.facts.collection import FactsCollection
+            self.assertIsInstance(result, FactsCollection)
+            # Optionally, check that the FactsCollection is empty
+            self.assertEqual(len(result), 0)
+
 
 if __name__ == '__main__':
     unittest.main()
