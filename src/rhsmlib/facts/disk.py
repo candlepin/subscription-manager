@@ -37,7 +37,7 @@ class DiskCollector(collector.FactsCollector):
     def _get_block_devices(self) -> List[str]:
         """Get list of block devices from /sys/block/"""
         block_devices: List[str] = []
-        sys_block_path: str = self.prefix + "/sys/block"
+        sys_block_path: str = f"{self.prefix}/sys/block"
 
         try:
             if os.path.exists(sys_block_path):
