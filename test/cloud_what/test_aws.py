@@ -318,6 +318,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         aws_collector._write_token_to_cache_file = Mock()
 
         test_signature = aws_collector.get_signature()
+
         signature = "-----BEGIN PKCS7-----\n" + AWS_SIGNATURE + "\n-----END PKCS7-----"
         self.assertEqual(signature, test_signature)
 
