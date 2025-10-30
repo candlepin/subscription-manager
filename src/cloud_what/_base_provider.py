@@ -414,12 +414,15 @@ class BaseCloudProvider:
         try:
             response = self._session.send(prepared_http_req, timeout=self.TIMEOUT)
         except requests.RequestException as err:
-            log.debug(f"Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {err}")
+            log.warning(f"Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {err}")
         else:
             if response.status_code == 200:
                 return response.text
             else:
-                log.debug(f"Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {response.status_code}")
+                log.warning(
+                    f"Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {response.status_code}, "
+                    f"response body: '{response.text}'"
+                )
 
     def _get_metadata_from_server(self, headers: dict = None) -> Union[str, None]:
         """
