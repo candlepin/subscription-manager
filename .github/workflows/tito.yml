@@ -63,7 +63,7 @@ jobs:
           tito build --output=tito/ --test --rpm
 
       - name: Upload RPMs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: RPMs from tito (${{ matrix.name }})
           path: tito/
