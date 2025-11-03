@@ -10,8 +10,7 @@ cd ../../../
 
 dnf --setopt install_weak_deps=False install -y \
     podman git-core python3-pip python3-pytest logrotate \
-    cairo-gobject-devel gobject-introspection-devel \
-    python3-gobject python3-devel
+    python3-devel
 
 dnf -y groupinstall 'Development Tools'
 

@@ -14,7 +14,7 @@ X-Python3-Version: >= 3.2
 
 Package: python-subscription-manager
 Architecture: amd64
-Depends: ${python:Depends}, ${misc:Depends}, python-dbus, python-rpm, virt-what, python-debian, python-gobject, python-decorator, apt-transport-katello (>= ${source:Version})
+Depends: ${python:Depends}, ${misc:Depends}, python-dbus, python-rpm, virt-what, python-debian, python-decorator, apt-transport-katello (>= ${source:Version})
 Description: RHSM subscription-manager (Python 2)
  .
  RHSM is client side software that allows hosts to register with Red Hat

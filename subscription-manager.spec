@@ -134,13 +134,11 @@ Requires: python3-python-dateutil
 Requires: python3-dbus-python
 Requires: logrotate
 Requires: cron
-Requires: python3-gobject2
 Requires: libzypp
 Requires: python3-zypp-plugin
 %else
 Requires: python3-dateutil
 Requires: python3-dbus
-Requires: python3-gobject-base
 %endif
 
 %if %{use_dnf}
@@ -261,7 +259,6 @@ product-id plugins.
 %package -n subscription-manager-plugin-ostree
 Summary: A plugin for handling OSTree content.
 
-Requires: python3-gobject-base
 # plugin needs a slightly newer version of python-iniparse for 'tidy'
 Requires:  python3-iniparse >= 0.4
 Requires: %{name}%{?_isa} = %{version}-%{release}
