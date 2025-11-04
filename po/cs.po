@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2025-11-04 14:54+0000\n"
-"Last-Translator: Jiri Hnidek <jhnidek@redhat.com>\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/cs/>\n"
 "Language: cs\n"
@@ -1994,8 +1994,8 @@ msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
 msgstr ""
-"název přebití, které odebrat (je možné uvést více než jednou) – použijte s "
-"volbou --repo."
+"název přebití, které odebrat (je možné uvést vícekrát) – použijte s volbou "
+"--repo."
 
 #: src/subscription_manager/cli_command/override.py:56
 msgid ""
@@ -2147,7 +2147,7 @@ msgstr "Nebylo možné provést znovunačtení kvůli následující výjimce: {
 
 #: src/subscription_manager/cli_command/refresh.py:49
 msgid "All local data refreshed"
-msgstr "Veškerá lokální data občerstvena"
+msgstr "Veškerá lokální data znovu načtena"
 
 #: src/subscription_manager/cli_command/register.py:64
 msgid "base URL for content in form of https://hostname:port/prefix"
@@ -2499,7 +2499,7 @@ msgstr "Pohodlný modul pro správu veškerých nastavení účelu systému"
 
 #: src/subscription_manager/cli_command/syspurpose.py:57
 msgid "show current system purpose"
-msgstr "zobrazit účel stávajícího systému"
+msgstr "zobrazit stávající účel systému"
 
 #: src/subscription_manager/cli_command/syspurpose.py:74
 #, python-brace-format
@@ -2628,7 +2628,7 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:37
 #, python-brace-format
 msgid "Unknown server reply (HTTP error code {code}: {title})"
-msgstr "Neznámá odpověď serveru (HTTP chybový kód{code}: {title})"
+msgstr "Neznámá odpověď serveru (kód HTTP chyby {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:39
 #, python-brace-format
@@ -2703,7 +2703,7 @@ msgstr "Port URL adresy serveru by měl být číselný"
 
 #: src/subscription_manager/exceptions.py:57
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "URL server nemá platné schéma. Podporovány jsou http:// a https://"
+msgstr "URL serveru nemá platné schéma. Podporovány jsou http:// a https://"
 
 #: src/subscription_manager/exceptions.py:58
 msgid "The server rate limit has been exceeded, please try again later."
@@ -2880,7 +2880,7 @@ msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
 msgstr ""
-"Varování: zadaná hodnota „{val}“ není obsažena v seznamu platných hodnot pro "
+"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
 "atribut {attr}:"
 
 #: src/syspurpose/files.py:472
