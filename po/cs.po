@@ -2,19 +2,23 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the rhsm package.
 # Pavel Borecki <pavel.borecki@gmail.com>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-10-06 22:54+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
+"Language-Team: Czech <https://translate.fedoraproject.org/projects/"
+"subscription-manager/subscription-manager-main/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -23,7 +27,7 @@ msgstr ""
 
 #: /usr/lib64/python3.12/argparse.py:299
 msgid "usage: "
-msgstr ""
+msgstr "použití: "
 
 #: /usr/lib64/python3.12/argparse.py:722
 #, python-format
@@ -37,7 +41,7 @@ msgstr ""
 
 #: /usr/lib64/python3.12/argparse.py:890
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() nedefinováno"
 
 #: /usr/lib64/python3.12/argparse.py:1161
 msgid "show program's version number and exit"
@@ -57,11 +61,12 @@ msgstr ""
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr ""
+"neznámá komponenta pro zpracovávání %(parser_name)r (volby: %(choices)s)"
 
 #: /usr/lib64/python3.12/argparse.py:1323
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "argument „-“ s režimem %r"
 
 #: /usr/lib64/python3.12/argparse.py:1332
 #, python-format
@@ -71,11 +76,11 @@ msgstr ""
 #: /usr/lib64/python3.12/argparse.py:1541
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "není možné sloučit akce – dvě skupiny jsou nazvané %r"
 
 #: /usr/lib64/python3.12/argparse.py:1583
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "„required“ není platný argument pro poziční parametry"
 
 #: /usr/lib64/python3.12/argparse.py:1604
 #, python-format
@@ -83,16 +88,18 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"neplatný řetězec volby %(option)r: je třeba, aby začínalo znakem "
+"%(prefix_chars)r"
 
 #: /usr/lib64/python3.12/argparse.py:1622
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "pro volby jako %r je vyžadováno dest="
 
 #: /usr/lib64/python3.12/argparse.py:1639
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "Neplatná hodnota conflict_resolution: %r"
 
 #: /usr/lib64/python3.12/argparse.py:1657
 #, python-format
@@ -104,70 +111,71 @@ msgstr[1] ""
 #: /usr/lib64/python3.12/argparse.py:1731
 msgid "mutually exclusive arguments must be optional"
 msgstr ""
+"je třeba, aby argumenty, které není možné použít společně, byly volitelné"
 
 #: /usr/lib64/python3.12/argparse.py:1807
 msgid "positional arguments"
-msgstr ""
+msgstr "poziční argumenty"
 
 #: /usr/lib64/python3.12/argparse.py:1808
 msgid "options"
-msgstr ""
+msgstr "volby"
 
 #: /usr/lib64/python3.12/argparse.py:1823
 msgid "show this help message and exit"
-msgstr ""
+msgstr "zobrazit tuto nápovědu a skončit"
 
 #: /usr/lib64/python3.12/argparse.py:1854
 msgid "cannot have multiple subparser arguments"
-msgstr ""
+msgstr "není možné mít vícero argumentů dílčích komponent pro zpracovávání"
 
 #: /usr/lib64/python3.12/argparse.py:1860
 msgid "subcommands"
-msgstr ""
+msgstr "Podpříkazy:"
 
 #: /usr/lib64/python3.12/argparse.py:1906
 #: /usr/lib64/python3.12/argparse.py:2459
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "nerozpoznané argumenty: %s"
 
 #: /usr/lib64/python3.12/argparse.py:2011
 #, python-format
 msgid "not allowed with argument %s"
-msgstr ""
+msgstr "nedovoleno v případě argumentu %s"
 
 #: /usr/lib64/python3.12/argparse.py:2030
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "nejednoznačná volba: %(option)snebylo možné najít shodu %(matches)s"
 
 #: /usr/lib64/python3.12/argparse.py:2062
 #: /usr/lib64/python3.12/argparse.py:2094
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "ignorován výslovný argument %r"
 
 #: /usr/lib64/python3.12/argparse.py:2230
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "jsou zapotřebí následující argumenty: %s"
 
 #: /usr/lib64/python3.12/argparse.py:2245
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr ""
+msgstr "je zapotřebí jeden z argumentů %s"
 
 #: /usr/lib64/python3.12/argparse.py:2289
 msgid "expected one argument"
-msgstr ""
+msgstr "očekáván právě jeden argument"
 
 #: /usr/lib64/python3.12/argparse.py:2290
 msgid "expected at most one argument"
-msgstr ""
+msgstr "očekáván nanejvýš jeden argument"
 
 #: /usr/lib64/python3.12/argparse.py:2291
 msgid "expected at least one argument"
-msgstr ""
+msgstr "očekáván přinejmenším jeden argument"
 
 #: /usr/lib64/python3.12/argparse.py:2295
 #, python-format
@@ -179,27 +187,27 @@ msgstr[1] ""
 #: /usr/lib64/python3.12/argparse.py:2405
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "neočekávaný řetězec volby: %s"
 
 #: /usr/lib64/python3.12/argparse.py:2541
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r není možné zavolat"
 
 #: /usr/lib64/python3.12/argparse.py:2557
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr ""
+msgstr "neplatná hodnota %(type)s: %(value)r"
 
 #: /usr/lib64/python3.12/argparse.py:2572
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr ""
+msgstr "Neplatná volba: %(value)r (zvolte z %(choices)s"
 
 #: /usr/lib64/python3.12/argparse.py:2650
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: chyba: %(message)s\n"
 
 #: src/daemons/rhsmcertd.c:100
 msgid "interval to run cert check (in minutes)"
@@ -244,7 +252,7 @@ msgstr ""
 #: src/daemons/rhsmcertd.c:763
 #, c-format
 msgid "Invalid option: %s\n"
-msgstr ""
+msgstr "Neplatná volba %s: %s\n"
 
 #: src/daemons/rhsmcertd.c:777
 #, c-format
@@ -439,7 +447,7 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:200
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: src/rct/manifest_commands.py:201
 msgid "Server Version"
@@ -455,16 +463,16 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:204
 msgid "General:"
-msgstr ""
+msgstr "Obecné"
 
 #: src/rct/manifest_commands.py:211 src/rct/manifest_commands.py:242
 #: src/rct/printing.py:40 src/rct/printing.py:66 src/rct/printing.py:98
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 #: src/rct/manifest_commands.py:212
 msgid "UUID"
-msgstr ""
+msgstr "nikde se neopakující identifikátor"
 
 #: src/rct/manifest_commands.py:217
 msgid "Content Access Mode"
@@ -472,7 +480,7 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:218 src/rct/printing.py:97
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: src/rct/manifest_commands.py:219
 msgid "API URL"
@@ -488,7 +496,7 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:235
 msgid "Subscriptions:"
-msgstr ""
+msgstr "Předplatná"
 
 #: src/rct/manifest_commands.py:243 src/rct/printing.py:79
 msgid "Quantity"
@@ -496,43 +504,43 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:244
 msgid "Created"
-msgstr ""
+msgstr "Vytvořeno"
 
 #: src/rct/manifest_commands.py:245 src/rct/printing.py:121
 msgid "Start Date"
-msgstr ""
+msgstr "Počáteční datum"
 
 #: src/rct/manifest_commands.py:246 src/rct/printing.py:122
 msgid "End Date"
-msgstr ""
+msgstr "Datum ukončení"
 
 #: src/rct/manifest_commands.py:247 src/rct/printing.py:73
 msgid "Service Level"
-msgstr ""
+msgstr "Úroveň služeb"
 
 #: src/rct/manifest_commands.py:248 src/rct/printing.py:71
 msgid "Service Type"
-msgstr ""
+msgstr "Typ služby"
 
 #: src/rct/manifest_commands.py:249
 msgid "Architectures"
-msgstr ""
+msgstr "Architektury"
 
 #: src/rct/manifest_commands.py:250 src/rct/printing.py:68
 msgid "SKU"
-msgstr ""
+msgstr "SKU"
 
 #: src/rct/manifest_commands.py:251 src/rct/printing.py:69
 msgid "Contract"
-msgstr ""
+msgstr "Smlouva"
 
 #: src/rct/manifest_commands.py:252 src/rct/printing.py:65
 msgid "Order"
-msgstr ""
+msgstr "Pořadí"
 
 #: src/rct/manifest_commands.py:253 src/rct/printing.py:70
 msgid "Account"
-msgstr ""
+msgstr "Účet"
 
 #: src/rct/manifest_commands.py:255
 msgid "Virt Limit"
@@ -577,7 +585,7 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:308
 msgid "\tManifest"
-msgstr ""
+msgstr "\tManifest"
 
 #: src/rct/manifest_commands.py:322
 msgid "Dump the contents of a manifest"
@@ -611,15 +619,15 @@ msgstr ""
 
 #: src/rct/printing.py:38
 msgid "Product"
-msgstr ""
+msgstr "Produkt"
 
 #: src/rct/printing.py:39
 msgid "ID"
-msgstr ""
+msgstr "Identif."
 
 #: src/rct/printing.py:41 src/rct/printing.py:119
 msgid "Version"
-msgstr ""
+msgstr "Verze"
 
 #: src/rct/printing.py:42
 msgid "Arch"
@@ -627,7 +635,7 @@ msgstr ""
 
 #: src/rct/printing.py:43
 msgid "Tags"
-msgstr ""
+msgstr "Šítky"
 
 #: src/rct/printing.py:48
 msgid "Brand Type"
@@ -639,11 +647,11 @@ msgstr ""
 
 #: src/rct/printing.py:67
 msgid "Number"
-msgstr ""
+msgstr "číslo"
 
 #: src/rct/printing.py:72
 msgid "Roles"
-msgstr ""
+msgstr "Role"
 
 #: src/rct/printing.py:74
 msgid "Usage"
@@ -655,7 +663,7 @@ msgstr ""
 
 #: src/rct/printing.py:78 src/subscription_manager/managerlib.py:431
 msgid "Unlimited"
-msgstr ""
+msgstr "neomezené"
 
 #: src/rct/printing.py:80
 msgid "Quantity Used"
@@ -691,15 +699,15 @@ msgstr ""
 
 #: src/rct/printing.py:95
 msgid "Content"
-msgstr ""
+msgstr "Obsah"
 
 #: src/rct/printing.py:99
 msgid "Label"
-msgstr ""
+msgstr "Štítek"
 
 #: src/rct/printing.py:100
 msgid "Vendor"
-msgstr ""
+msgstr "Dodavatel"
 
 #: src/rct/printing.py:101
 msgid "URL"
@@ -711,7 +719,7 @@ msgstr ""
 
 #: src/rct/printing.py:103
 msgid "Enabled"
-msgstr ""
+msgstr "Zapnuto"
 
 #: src/rct/printing.py:104
 msgid "Expires"
@@ -731,15 +739,15 @@ msgstr ""
 
 #: src/rct/printing.py:118
 msgid "Path"
-msgstr ""
+msgstr "Popis umístění"
 
 #: src/rct/printing.py:120
 msgid "Serial"
-msgstr ""
+msgstr "Sériové"
 
 #: src/rct/printing.py:133
 msgid "Subject:"
-msgstr ""
+msgstr "Předmět"
 
 #: src/rct/printing.py:140
 msgid "Issuer:"
@@ -751,7 +759,7 @@ msgstr ""
 
 #: src/rct/printing.py:217 src/rhsmlib/services/entitlement.py:298
 msgid "Not Available"
-msgstr ""
+msgstr "Není k dispozici"
 
 #: src/rct/printing.py:220
 msgid "Pool ID"
@@ -855,7 +863,7 @@ msgstr ""
 
 #: src/rhsm/connection.py:1859
 msgid "Unregistering system"
-msgstr ""
+msgstr "Ruší se registrace systému…"
 
 #: src/rhsm/connection.py:1883
 msgid "Fetching certificates"
@@ -1026,7 +1034,7 @@ msgstr ""
 #: src/subscription_manager/utils.py:291 src/subscription_manager/utils.py:311
 #: src/subscription_manager/utils.py:313 src/subscription_manager/utils.py:334
 msgid "Unknown"
-msgstr ""
+msgstr "Neznámé"
 
 #: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:69
 #, python-format
@@ -1035,15 +1043,15 @@ msgstr ""
 
 #: src/rhsmlib/services/entitlement.py:289
 msgid "Virtual"
-msgstr ""
+msgstr "Virtuální"
 
 #: src/rhsmlib/services/entitlement.py:291
 msgid "Physical"
-msgstr ""
+msgstr "Fyzické"
 
 #: src/rhsmlib/services/entitlement.py:294
 msgid "Yes"
-msgstr ""
+msgstr "Ano"
 
 #: src/rhsmlib/services/entitlement.py:296
 msgid "No"
@@ -1174,12 +1182,12 @@ msgstr ""
 
 #: src/rhsmlib/services/syspurpose.py:105
 msgid "Not Specified"
-msgstr ""
+msgstr "Neuvedeno"
 
 #: src/rhsmlib/services/syspurpose.py:106
 #: src/subscription_manager/cert_sorter.py:295
 msgid "Disabled"
-msgstr ""
+msgstr "Vypnuto"
 
 #: src/subscription_manager/branding/__init__.py:76
 msgid "Register the system to the server"
@@ -1197,7 +1205,7 @@ msgstr ""
 #: src/subscription_manager/branding/redhat_branding.py:14
 #: src/subscription_manager/managercli.py:78
 msgid "WARNING"
-msgstr ""
+msgstr "VAROVÁNÍ"
 
 #: src/subscription_manager/branding/__init__.py:80
 msgid "You have already registered with spacewalk."
@@ -1293,7 +1301,7 @@ msgstr ""
 
 #: src/subscription_manager/cert_sorter.py:292
 msgid "Current"
-msgstr ""
+msgstr "Stávající"
 
 #: src/subscription_manager/cert_sorter.py:293
 msgid "Insufficient"
@@ -1301,7 +1309,7 @@ msgstr ""
 
 #: src/subscription_manager/cert_sorter.py:294
 msgid "Invalid"
-msgstr ""
+msgstr "Neplatné"
 
 #: src/subscription_manager/cli.py:83
 #, python-format, python-brace-format
@@ -1328,11 +1336,14 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Varování: tomuto systému byla nedávno pověřeným správcem serveru nastavena "
+"hodnota {attr} „{download_value}“ .\n"
+"{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr ""
+msgstr "Pokud chcete změny na straně serveru přebít, spusťte: {command}"
 
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:41
@@ -1415,18 +1426,18 @@ msgstr ""
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:266
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr ""
+msgstr "{attr} nastaven na „{val}“."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:284
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} odnastaven."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:301
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:326
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} zaktualizován."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:357
 #, python-brace-format
@@ -1612,11 +1623,11 @@ msgstr ""
 #: src/subscription_manager/cli_command/environments.py:42
 #: src/subscription_manager/cli_command/owners.py:31
 msgid "Name:"
-msgstr ""
+msgstr "Název:"
 
 #: src/subscription_manager/cli_command/environments.py:43
 msgid "Description:"
-msgstr ""
+msgstr "Popis:"
 
 #: src/subscription_manager/cli_command/environments.py:49
 msgid "Display the environments available for a user"
@@ -1759,7 +1770,7 @@ msgstr ""
 #: src/subscription_manager/printing_utils.py:165
 #: src/subscription_manager/printing_utils.py:184
 msgid "None"
-msgstr ""
+msgstr "Žádné"
 
 #: src/subscription_manager/cli_command/identity.py:108
 #, python-brace-format
@@ -1778,19 +1789,19 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:29
 msgid "Product Name:"
-msgstr ""
+msgstr "Název produktu"
 
 #: src/subscription_manager/cli_command/list.py:30
 msgid "Product ID:"
-msgstr ""
+msgstr "Identif. produktu"
 
 #: src/subscription_manager/cli_command/list.py:31
 msgid "Version:"
-msgstr ""
+msgstr "Verze:"
 
 #: src/subscription_manager/cli_command/list.py:32
 msgid "Arch:"
-msgstr ""
+msgstr "Arch."
 
 #: src/subscription_manager/cli_command/list.py:41
 msgid "List subscription and product information for this system"
@@ -1831,7 +1842,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/org.py:48
 #: src/subscription_manager/cli_command/register.py:454
 msgid "Organization: "
-msgstr ""
+msgstr "Organizace "
 
 #: src/subscription_manager/cli_command/org.py:62
 #, python-brace-format
@@ -1933,7 +1944,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/owners.py:32
 msgid "Key:"
-msgstr ""
+msgstr "_Klíč:"
 
 #: src/subscription_manager/cli_command/owners.py:38
 msgid "Display the organizations against which a user can register a system"
@@ -1977,11 +1988,11 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/plugins.py:53
 msgid "disabled"
-msgstr ""
+msgstr "zakázáno"
 
 #: src/subscription_manager/cli_command/plugins.py:55
 msgid "enabled"
-msgstr ""
+msgstr "povoleno"
 
 #: src/subscription_manager/cli_command/refresh.py:32
 msgid "Pull the latest subscription data from the server"
@@ -2106,7 +2117,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/register.py:371
 msgid "Environment: "
-msgstr ""
+msgstr "Prostředí "
 
 #: src/subscription_manager/cli_command/register.py:412
 #, python-brace-format
@@ -2184,11 +2195,11 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/repos.py:36
 msgid "Repo URL:"
-msgstr ""
+msgstr "URL adresa repozitáře"
 
 #: src/subscription_manager/cli_command/repos.py:37
 msgid "Enabled:"
-msgstr ""
+msgstr "Zapnuto"
 
 #: src/subscription_manager/cli_command/repos.py:66
 msgid "List the repositories which this system is entitled to use"
@@ -2375,11 +2386,11 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/user_pass.py:68
 msgid "Username: "
-msgstr ""
+msgstr "Uživatelské jméno: "
 
 #: src/subscription_manager/cli_command/user_pass.py:71
 msgid "Password: "
-msgstr ""
+msgstr "Heslo: "
 
 #: src/subscription_manager/cli_command/version.py:27
 msgid "Print version information"
@@ -2580,23 +2591,23 @@ msgstr ""
 #: src/subscription_manager/plugin/container/__init__.py:228
 #: src/subscription_manager/plugin/ostree/action_invoker.py:142
 msgid "Added:"
-msgstr ""
+msgstr "Přidáno"
 
 #: src/subscription_manager/plugin/container/__init__.py:230
 msgid "Removed:"
-msgstr ""
+msgstr "Odebráno"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:140
 msgid "Updates:"
-msgstr ""
+msgstr "Aktualizace"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:144
 msgid "Deleted:"
-msgstr ""
+msgstr "Smazáno"
 
 #: src/subscription_manager/reasons.py:102
 msgid "Product "
-msgstr ""
+msgstr "Produkt "
 
 #: src/subscription_manager/reasons.py:104
 msgid "Subscription "
@@ -2632,11 +2643,11 @@ msgstr ""
 
 #: src/subscription_manager/repolib.py:680
 msgid "Updated"
-msgstr ""
+msgstr "Aktualizováno"
 
 #: src/subscription_manager/repolib.py:684
 msgid "Deleted"
-msgstr ""
+msgstr "Smazáno"
 
 #: src/subscription_manager/scripts/package_profile_upload.py:29
 msgid "Upload a package profile"
@@ -2646,7 +2657,7 @@ msgstr ""
 #: src/subscription_manager/scripts/rct.py:45
 #: src/subscription_manager/scripts/rhsm_debug.py:62
 msgid "User interrupted process."
-msgstr ""
+msgstr "Uživatel přerušil proces"
 
 #: src/subscription_manager/scripts/package_profile_upload.py:56
 #, python-format
@@ -2681,9 +2692,11 @@ msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
 msgstr ""
+"Varování: zadaná hodnota „{val}“ není obsažena v seznamu platných hodnot pro "
+"atribut {attr}:"
 
 #: src/syspurpose/files.py:472
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
-msgstr ""
+msgstr "Varování: zadaný klíč „{key}“ se nenachází na seznamu platných klíčů:"
