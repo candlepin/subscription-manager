@@ -83,7 +83,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.10
+Version: 1.30.11
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -679,6 +679,44 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Wed Nov 05 2025 Jiri Hnidek <jhnidek@redhat.com> 1.30.11-1
+- fix: Do not send JSON document with empty signature (jhnidek@redhat.com)
+- Translated using Weblate (Czech) (pavel.borecki@gmail.com)
+- Translated using Weblate (Czech) (jhnidek@redhat.com)
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- Translated using Weblate (Czech) (pavel.borecki@gmail.com)
+- Translated using Weblate (Czech) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Added translation using Weblate (Czech) (pavel.borecki@gmail.com)
+- chore: Make new black happy again (jhnidek@redhat.com)
+- chore: Increased log level of messages (jhnidek@redhat.com)
+- fix: Use IMDSv2 for signature first (jhnidek@redhat.com)
+- ci: bump actions/upload-artifact from 4 to 5
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- chore: Removed getSyspurposeCompliance (jhnidek@redhat.com)
+- chore: Do not call candlepin from GetSyspurposeStatus (jhnidek@redhat.com)
+- chore: Removed SyspurposeComplianceStatusCache (jhnidek@redhat.com)
+- fix: Require findutils in .spec file (jhnidek@redhat.com)
+- feat: Try to cache candlepin server capabilities (jhnidek@redhat.com)
+- solved a conflict in utils.py (jstavel@redhat.com)
+- CCT-744: integration tests for DBus Config object (jstavel@redhat.com)
+- CCT-1029: tests for Register with environment option (jstavel@redhat.com)
+- chore: Small changes in integration-tests/test_syspurpose.py
+  (jhnidek@redhat.com)
+- chore: Small fixes in test_register_get_orgs.py (jhnidek@redhat.com)
+- chore: Small fixes of integration-tests/test_register.py (jhnidek@redhat.com)
+- chore: Small tweaks of bash script of integration tests (jhnidek@redhat.com)
+- chore(doc): Improved README.md for integration tests (jhnidek@redhat.com)
+- CCT-743: rebased (jstavel@redhat.com)
+- CCT-1600: fix applied, unified settings.toml to use the same name of
+  valid_fields.json (jstavel@redhat.com)
+- ci: bump actions/checkout from 4 to 5
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- CCT-742: integration tests for DBus Syspurpose object (jstavel@redhat.com)
+- CCT-1029: test for dbus method GetEnvironments (jstavel@redhat.com)
+- CCT-1097: added enable_content for registration tests (jstavel@redhat.com)
+- CCT-745: multi org credentials added (jstavel@redhat.com)
+
 * Wed Jul 30 2025 Jiri Hnidek <jhnidek@redhat.com> 1.30.10-1
 - Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
 - Translated using Weblate (Spanish) (fserrador@gmail.com)
