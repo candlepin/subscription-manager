@@ -398,6 +398,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %dir %{_sysconfdir}/pki
 %dir %{_prefix}/share/polkit-1
 %dir %{_prefix}/share/polkit-1/actions
+%dir %{_sysconfdir}/rhsm
 %dir %{_sysconfdir}/dbus-1
 %dir %{_sysconfdir}/dbus-1/system.d
 %attr(755,root,root) %dir %{_sysconfdir}/rhsm/zypper.repos.d
