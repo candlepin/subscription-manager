@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.47
+Version: 1.29.48
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -737,6 +737,15 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Nov 05 2025 Jiri Hnidek <jhnidek@redhat.com> 1.29.48-1
+- Translated using Weblate (Korean) (simmon@nplob.com)
+- ci: bump actions/upload-artifact from 4 to 5
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- feat: [1.29] Added dnf4 warning about skewed clock (jhnidek@redhat.com)
+- fix: [1.29] Require findutils in .spec file (jhnidek@redhat.com)
+- ci: bump actions/checkout from 4 to 5
+  (49699333+dependabot[bot]@users.noreply.github.com)
+
 * Thu Jul 31 2025 Jiri Hnidek <jhnidek@redhat.com> 1.29.47-1
 - Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
 - Translated using Weblate (Spanish) (fserrador@gmail.com)
