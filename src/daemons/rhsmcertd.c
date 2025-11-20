@@ -67,7 +67,6 @@ typedef enum {
 #define N_(x) x
 #define CONFIG_KEY_NOT_FOUND (0)
 
-#define MAX_AUTO_REGISTER_ATTEMPTS 3
 
 #if !GLIB_CHECK_VERSION(2, 58, 0)
 #define G_SOURCE_FUNC(f) ((GSourceFunc) (void (*)(void)) (f))
@@ -97,7 +96,6 @@ static gint arg_reg_interval_minutes = -1;
 static gboolean arg_no_splay = FALSE;
 static gboolean arg_auto_registration = FALSE;
 static int fd_lock = -1;
-static int auto_register_attempt = 0;
 
 struct CertCheckData {
     int interval_seconds;
@@ -423,14 +421,8 @@ auto_register(gpointer data)
         exit (EXIT_FAILURE);
     }
     if (pid == 0) {
-        if (auto_register_attempt < MAX_AUTO_REGISTER_ATTEMPTS) {
-            debug ("(Auto-registration) executing: %s --auto-register", WORKER);
-            execl (WORKER, WORKER_NAME, "--auto-register", NULL);
-        } else {
-            warn ("(Auto-registration) the number of attempts reached the max limit: %d", MAX_AUTO_REGISTER_ATTEMPTS);
-            // Return False to not repeat this again
-            return false;
-        }
+        debug ("(Auto-registration) executing: %s --auto-register", WORKER);
+        execl (WORKER, WORKER_NAME, "--auto-register", NULL);
     }
 
     waitpid (pid, &status, 0);
@@ -438,19 +430,10 @@ auto_register(gpointer data)
 
     if (status == 0) {
         info ("(Auto-registration) performed successfully.");
-        // No need to repeat this action again
         return false;
     } else {
-        auto_register_attempt++;
-        if (auto_register_attempt < MAX_AUTO_REGISTER_ATTEMPTS) {
-            warn ("(Auto-registration) failed (%d), retry will occur on next run.", status);
-        } else {
-            warn ("(Auto-registration) failed (%d), the number of attempts reached the max limit: %d",
-                  status, MAX_AUTO_REGISTER_ATTEMPTS);
-            // Return False to not repeat this again
-            return false;
-        }
-        return true;
+        warn ("(Auto-registration) failed (%d)", status);
+        return false;
     }
 }
 
@@ -490,30 +473,6 @@ cert_check (gboolean heal)
     }
     // Returning FALSE will unregister the timer, always return TRUE
     return TRUE;
-}
-
-
-static gboolean
-initial_auto_register (gpointer data)
-{
-    struct CertCheckData *cert_data = data;
-    gboolean repeat_attempts;
-
-    repeat_attempts = auto_register(cert_data);
-
-    // When first attempt was not successful, then try to do other
-    // auto-registration attempts
-    if (repeat_attempts == true) {
-        // Add the timeout to begin waiting on interval but offset by the initial
-        // delay.
-        g_timeout_add(cert_data->interval_seconds * 1000,
-                      (GSourceFunc) auto_register, cert_data);
-        // Update timestamp
-        log_update(cert_data->interval_seconds, cert_data->next_update_file);
-    }
-    // Return false so that the timer does
-    // not run this again.
-    return false;
 }
 
 static gboolean
@@ -919,13 +878,11 @@ main (int argc, char *argv[])
     // NOTE: We put the initial checks on a timer so that in the case of systemd,
     // we can ensure that the network interfaces are all up before the initial
     // checks are done.
-    int auto_reg_initial_delay = 0;
     int auto_attach_initial_delay = 0;
     int cert_check_initial_delay = 0;
     if (run_now) {
         info ("Initial checks will be run now!");
     } else {
-        int auto_reg_offset = 0;
         int auto_attach_offset = 0;
         int cert_check_offset = 0;
         if (splay_enabled == true) {
@@ -964,16 +921,10 @@ main (int argc, char *argv[])
             }
 #endif
             srand((unsigned int) seed);
-            auto_reg_offset = gen_random(auto_reg_interval_seconds);
             auto_attach_offset = gen_random(heal_interval_seconds);
             cert_check_offset = gen_random(cert_interval_seconds);
         }
 
-        if (auto_reg_enabled) {
-            auto_reg_initial_delay = INITIAL_DELAY_SECONDS + auto_reg_offset;
-            info ("Waiting %.1f minutes plus %d splay seconds [%d seconds total] before performing first auto-register",
-                  INITIAL_DELAY_SECONDS / 60.0, auto_reg_offset, auto_reg_initial_delay);
-        }
         auto_attach_initial_delay = INITIAL_DELAY_SECONDS + auto_attach_offset;
         info ("Waiting %.1f minutes plus %d splay seconds [%d seconds total] before performing first auto-attach.",
                 INITIAL_DELAY_SECONDS / 60.0, auto_attach_offset, auto_attach_initial_delay);
@@ -998,8 +949,7 @@ main (int argc, char *argv[])
     auto_attach_data.next_update_file = NEXT_AUTO_ATTACH_UPDATE_FILE;
 
     if (auto_reg_enabled) {
-        g_timeout_add(auto_reg_initial_delay * 1000,
-                      (GSourceFunc) initial_auto_register, (gpointer) &auto_register_data);
+        auto_register((gpointer) &auto_register_data);
     }
     g_timeout_add (cert_check_initial_delay * 1000,
                (GSourceFunc) initial_cert_check, (gpointer) &cert_check_data);
@@ -1010,7 +960,7 @@ main (int argc, char *argv[])
     // time. This works for most users, since the cert_interval aligns with
     // runs of heal_interval (i.e., heal_interval % cert_interval = 0)
     if (auto_reg_enabled) {
-        log_update (auto_reg_initial_delay, NEXT_AUTO_REGISTER_UPDATE_FILE);
+        log_update (0, NEXT_AUTO_REGISTER_UPDATE_FILE);
     }
     log_update (cert_check_initial_delay, NEXT_CERT_UPDATE_FILE);
     log_update (auto_attach_initial_delay, NEXT_AUTO_ATTACH_UPDATE_FILE);

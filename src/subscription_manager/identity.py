@@ -19,6 +19,8 @@ import logging
 import os
 import errno
 import threading
+from typing import Dict, Optional
+
 import six
 
 from rhsm.certificate import create_from_pem
@@ -94,6 +96,15 @@ class ConsumerIdentity(object):
     def getSerialNumber(self):
         return self.x509.serial
 
+    def getConsumerOwner(self) -> Optional[str]:
+        """Get the name of the organization of the consumer.
+
+        The value is stored in the 'Subject Name' > 'O (Organization)' field
+        of the consumer certificate.
+        """
+        subject: Dict = self.x509.subject
+        return subject.get("O")
+
     # TODO: we're using a Certificate which has it's own write/delete, no idea
     # why this landed in a parallel disjoint class wrapping the actual cert.
     def write(self):
@@ -132,6 +143,7 @@ class Identity(object):
         self._lock = threading.Lock()
         self._name = None
         self._uuid = None
+        self._owner = None
         self._cert_dir_path = conf['rhsm']['consumerCertDir']
         self.reload()
 
@@ -159,6 +171,7 @@ class Identity(object):
             if self.consumer is not None:
                 self._name = self.consumer.getConsumerName()
                 self._uuid = self.consumer.getConsumerId()
+                self._owner = self.consumer.getConsumerOwner()
                 # since Identity gets dep injected, lets look up
                 # the cert dir on the active id instead of the global config
                 self._cert_dir_path = self.consumer.PATH
@@ -186,6 +199,11 @@ class Identity(object):
         with self._lock:
             _uuid = self._uuid
         return _uuid
+
+    @property
+    def owner(self) -> Optional[str]:
+        with self._lock:
+            return self._owner
 
     @property
     def cert_dir_path(self):
