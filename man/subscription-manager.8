@@ -1109,9 +1109,7 @@ environment variables (environment-level settings)
 .PP
 Although
 .B subscription-manager
-respects environment variables for proxy configuration, this should be avoided in favor of the configuration file, because the daemons (ex.
-.B rhsmcertd
-) do not provide ways to modify their environments.
+respects environment variables for proxy configuration, this should still be avoided in favor of the configuration file (/etc/rhsm/rhsm.conf) for consistency and ease of maintenance across all tools and daemons.
 
 Each option of the proxy configuration (hostname, port, host/domain pattern blocklist, username, password) is read independently, with precedence being command-line over configuration over environment, and then the resulting set of options is used to configure the proxy configuration.
 
