@@ -25,7 +25,7 @@ Other versions or distributions may require some adaptation.
 
    ```bash
    sudo dnf install git gcc python3-devel openssl-devel glib2-devel \
-       python3-rpm python3-librepo libdnf-devel cmake
+       python3-rpm python3-librepo libdnf-devel cmake gettext
    ```
 
    <!-- libdnf-devel, cmake are required to build product-id plugin -->
