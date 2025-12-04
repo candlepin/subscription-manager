@@ -100,8 +100,16 @@ class EnvironmentsCommand(OrgCommand):
             self.identity = require(IDENTITY)
             if self.options.set:
                 self._set_environments()
-            else:
+            elif self.options.list:
                 self._list_environments()
+            else:
+                system_exit(
+                    os.EX_DATAERR,
+                    _(
+                        "Error: At least one environment must be set;"
+                        " use --list to get list of environments."
+                    ),
+                )
         except connection.RestlibException as re:
             log.exception(re)
             log.error("Error: Unable to retrieve environment list from server: {re}".format(re=re))
