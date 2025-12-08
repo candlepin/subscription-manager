@@ -280,7 +280,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         Test the case, when metadata are obtained from server using IMDSv2
         """
         mock_session = Mock()
-        mock_session.send = send_only_imds_v2_is_supported
+        mock_session.send = Mock(side_effect=send_only_imds_v2_is_supported)
         mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
         mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
@@ -295,7 +295,9 @@ class TestAWSCloudProvider(unittest.TestCase):
         # Mock getting metadata using IMDSv1 is disabled by user
         aws_provider._get_metadata_from_server_imds_v1 = Mock(return_value=None)
 
+        # Try to get metadata from the mock server
         metadata = aws_provider.get_metadata()
+
         self.assertEqual(metadata, AWS_METADATA)
 
     @patch("cloud_what._base_provider.requests.Session")
@@ -304,7 +306,7 @@ class TestAWSCloudProvider(unittest.TestCase):
         Test the case, when signature is obtained from server using IMDSv2
         """
         mock_session = Mock()
-        mock_session.send = send_only_imds_v2_is_supported
+        mock_session.send = Mock(side_effect=send_only_imds_v2_is_supported)
         mock_session.prepare_request = Mock(side_effect=mock_prepare_request)
         mock_session.hooks = {"response": []}
         mock_session_class.return_value = mock_session
@@ -316,8 +318,12 @@ class TestAWSCloudProvider(unittest.TestCase):
         aws_collector._get_token_from_cache_file = Mock(return_value=None)
         # Mock writing token to cache file
         aws_collector._write_token_to_cache_file = Mock()
+        # Mock getting metadata using IMDSv1 is disabled by user
+        aws_collector._get_signature_from_server_imds_v1 = Mock(return_value=None)
 
+        # Try to get a signature from the mock server
         test_signature = aws_collector.get_signature()
+
         signature = "-----BEGIN PKCS7-----\n" + AWS_SIGNATURE + "\n-----END PKCS7-----"
         self.assertEqual(signature, test_signature)
 
