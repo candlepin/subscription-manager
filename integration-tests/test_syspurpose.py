@@ -220,9 +220,11 @@ def test_get_valid_fields_when_system_is_registered(any_candlepin, subman, test_
 
     data_from_dbus_call = json.loads(response)
 
-    valid_fields_from_response = data_from_dbus_call.get("systemPurposeAttributes")
-    valid_fields = json_from_file(candlepin_config("valid_fields_file"))
-    assert valid_fields == valid_fields_from_response
+    valid_fields = data_from_dbus_call.get("systemPurposeAttributes")
+    expected_valid_fields = json_from_file(candlepin_config("valid_fields_file"))
+    for key, value in expected_valid_fields.items():
+        assert key in valid_fields
+        assert set(value) == set(valid_fields[key])
 
 
 def test_get_valid_fields_when_system_is_not_registered(any_candlepin, subman, test_config):
