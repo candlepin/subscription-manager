@@ -280,7 +280,8 @@ class SubscriptionManager(dnf.Plugin):
             try:
                 profile_mgr = inj.require(inj.PROFILE_MANAGER)
                 identity = inj.require(inj.IDENTITY)
-                profile_mgr.update_check(self.cp, identity.uuid)
+                cp_provider = inj.require(inj.CP_PROVIDER)
+                profile_mgr.update_check(cp_provider.get_consumer_auth_cp(), identity.uuid)
             except RemoteServerException as err:
                 # When it is not possible to upload profile ATM, then print only error about this
                 # to rhsm.log. The rhsmcertd will try to upload it next time.
