@@ -100,18 +100,20 @@ class EnvironmentsCommand(OrgCommand):
                 self.cp_provider.set_user_pass(self.username, self.password)
                 self.cp = self.cp_provider.get_basic_auth_cp()
             self.identity = require(IDENTITY)
-            if self.options.set:
-                self._set_environments()
-            elif self.options.list:
-                self._list_environments()
+            if self.options.set is not None:
+                if self.options.set != "":
+                    self._set_environments()
+                else:
+                    system_exit(
+                        os.EX_DATAERR,
+                        _(
+                            "Error: At least one environment must be set;"
+                            " use --list to get list of environments."
+                        ),
+                    )
             else:
-                system_exit(
-                    os.EX_DATAERR,
-                    _(
-                        "Error: At least one environment must be set;"
-                        " use --list to get list of environments."
-                    ),
-                )
+                self._list_environments()
+
         except connection.RestlibException as re:
             log.exception(re)
             log.error("Error: Unable to retrieve environment list from server: {re}".format(re=re))
