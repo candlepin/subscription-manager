@@ -23,6 +23,8 @@ import logging
 import json
 import os
 import time
+import traceback
+import sys
 
 from typing import Union
 
@@ -373,6 +375,10 @@ class BaseCloudProvider:
             print(colorize("Request body:", COLOR.GREEN))
             print(colorize(f"{request.body}", COLOR.YELLOW))
 
+        if os.environ.get("SUBMAN_DEBUG_PRINT_TRACEBACKS", ""):
+            print(colorize("Current call stack:", COLOR.GREEN))
+            traceback.print_stack(file=sys.stdout)
+
         print()
 
     @staticmethod
@@ -486,6 +492,7 @@ class BaseCloudProvider:
 
         signature = self._get_signature_from_cache_file()
         if signature is not None:
+            log.debug("Using signature from cache file")
             return signature
 
         return self._get_signature_from_server()
@@ -508,6 +515,7 @@ class BaseCloudProvider:
 
         metadata = self._get_metadata_from_cache()
         if metadata is not None:
+            log.debug("Using metadata from cache file")
             return metadata
 
         return self._get_metadata_from_server()
