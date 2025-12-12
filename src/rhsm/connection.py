@@ -738,6 +738,38 @@ class BaseRestLib:
         else:
             log.warning("Unable to load any CA certificate from: %s" % self.ca_dir)
 
+    def _get_tls_handshake_info(self) -> str | None:
+        """
+        Gets TLS handshake information for debugging and Post Quantum Cryptography testing.
+        Extracts information about the negotiated TLS connection: protocol version,
+        cipher suite, and if available (Python 3.15+), the key exchange group.
+        """
+        try:
+            handshake_info = []
+            # Get cipher suite information
+            # cipher() returns a 3-tuple: (cipher_name, tls_version, secret_bits)
+            cipher_info = self.__conn.sock.cipher()
+            if cipher_info:
+                cipher_name, tls_version, _ = cipher_info
+                handshake_info.append(f"tls_version={tls_version}")
+                handshake_info.append(f"cipher={cipher_name}")
+
+            # Try to get negotiated group (key exchange group)
+            # This is available in Python 3.15+ through the group method
+            group_method = getattr(self.__conn.sock, "group", None)
+            if callable(group_method):
+                group = group_method()
+                handshake_info.append(f"group={group}")
+
+            if handshake_info:
+                return " ".join(handshake_info)
+            else:
+                log.debug("TLS handshake: Unable to extract TLS handshake details")
+
+        except Exception as e:
+            # Don't fail the connection if we can't log handshake info
+            log.debug(f"Error logging TLS handshake information: {e}")
+
     def _create_connection(self, cert_file: str = None, key_file: str = None) -> httplib.HTTPSConnection:
         """
         This method tries to return existing connection, when connection exists and limit of connection
@@ -860,6 +892,8 @@ class BaseRestLib:
         ):
             print(utils.colorize("TCP socket:", utils.COLOR.GREEN))
             print(utils.colorize(f"{self.__conn.sock}", utils.COLOR.BLUE))
+            print(utils.colorize("TLS handshake:", utils.COLOR.GREEN))
+            print(utils.colorize(f"{self._get_tls_handshake_info()}", utils.COLOR.BLUE))
 
         # When proxy server is used, then print some additional information about proxy connection
         if self.proxy_hostname and self.proxy_port:
@@ -1050,7 +1084,7 @@ class BaseRestLib:
             for cert_file, key_file in cert_key_pairs:
                 try:
                     conn = self._create_connection(cert_file=cert_file, key_file=key_file)
-
+                    log.debug("TLS handshake: %s", self._get_tls_handshake_info())
                     self._print_debug_info_about_request(request_type, handler, final_headers, body)
 
                     ts_start = time.time()
