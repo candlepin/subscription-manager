@@ -761,6 +761,12 @@ class BaseRestLib:
                 group = group_method()
                 handshake_info.append(f"group={group}")
 
+            # This is available in Python 3.15+ through the client_sigalg method
+            signature_method = getattr(self.__conn.sock, "client_sigalg", None)
+            if callable(signature_method):
+                signature = signature_method()
+                handshake_info.append(f"signature_type={signature}")
+
             if handshake_info:
                 return " ".join(handshake_info)
             else:
