@@ -19,6 +19,9 @@ class TestStatusCommand(SubManFixture):
         """
         Test status, when the system is registered
         """
+        inj.provide(inj.IDENTITY, StubIdentity())
+        self.cc.identity = inj.require(inj.IDENTITY)
+        self.cc.identity.is_present = Mock(return_value=True)
         self.cc.options = Mock()
         with Capture() as cap:
             self.cc._do_command()
@@ -29,6 +32,8 @@ class TestStatusCommand(SubManFixture):
         Test status, when the system is not registered
         """
         inj.provide(inj.IDENTITY, StubIdentity())
+        self.cc.identity = inj.require(inj.IDENTITY)
+        self.cc.identity.is_present = Mock(return_value=False)
         self.cc.options = Mock()
         with Capture() as cap:
             self.cc._do_command()
