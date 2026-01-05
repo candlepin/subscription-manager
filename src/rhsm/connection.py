@@ -738,7 +738,7 @@ class BaseRestLib:
         else:
             log.warning("Unable to load any CA certificate from: %s" % self.ca_dir)
 
-    def _get_tls_handshake_info(self) -> str | None:
+    def _get_tls_handshake_info(self) -> Optional[str]:
         """
         Gets TLS handshake information for debugging and Post Quantum Cryptography testing.
         Extracts information about the negotiated TLS connection: protocol version,
