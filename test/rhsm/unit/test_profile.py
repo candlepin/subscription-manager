@@ -246,8 +246,9 @@ class TestParseRpmString(unittest.TestCase):
         result = parse_rpm_string(rpm_string)
         self.assertIsNotNone(result)
         self.assertEqual(result["name"], "NetworkManager-cloud-setup")
-        self.assertEqual(result["ver"], "1:1.54.0")
-        self.assertEqual(result["rel"], "2.fc43")
+        self.assertEqual(result["version"], "1.54.0")
+        self.assertEqual(result["epoch"], 1)
+        self.assertEqual(result["release"], "2.fc43")
         self.assertEqual(result["arch"], "x86_64")
 
     def test_parse_valid_rpm_string_without_epoch(self):
@@ -258,8 +259,9 @@ class TestParseRpmString(unittest.TestCase):
         result = parse_rpm_string(rpm_string)
         self.assertIsNotNone(result)
         self.assertEqual(result["name"], "bash-completion")
-        self.assertEqual(result["ver"], "2.16")
-        self.assertEqual(result["rel"], "2.fc43")
+        self.assertEqual(result["version"], "2.16")
+        self.assertEqual(result["epoch"], 0)
+        self.assertEqual(result["release"], "2.fc43")
         self.assertEqual(result["arch"], "noarch")
 
     def test_parse_rpm_string_with_hyphens_in_name(self):
@@ -270,8 +272,9 @@ class TestParseRpmString(unittest.TestCase):
         result = parse_rpm_string(rpm_string)
         self.assertIsNotNone(result)
         self.assertEqual(result["name"], "amd-ucode-firmware")
-        self.assertEqual(result["ver"], "20241210")
-        self.assertEqual(result["rel"], "164.fc42")
+        self.assertEqual(result["version"], "20241210")
+        self.assertEqual(result["epoch"], 0)
+        self.assertEqual(result["release"], "164.fc42")
         self.assertEqual(result["arch"], "noarch")
 
     def test_parse_rpm_string_with_leading_whitespace(self):
@@ -282,8 +285,9 @@ class TestParseRpmString(unittest.TestCase):
         result = parse_rpm_string(rpm_string)
         self.assertIsNotNone(result)
         self.assertEqual(result["name"], "bash")
-        self.assertEqual(result["ver"], "5.2.32")
-        self.assertEqual(result["rel"], "1.fc42")
+        self.assertEqual(result["version"], "5.2.32")
+        self.assertEqual(result["epoch"], 0)
+        self.assertEqual(result["release"], "1.fc42")
         self.assertEqual(result["arch"], "x86_64")
 
     def test_parse_invalid_rpm_string(self):
@@ -382,9 +386,10 @@ NetworkManager-1:1.54.0-2.fc43.x86_64"""
         result = _get_immutable_packages()
 
         self.assertIsInstance(result, set)
-        self.assertIn("bash", result)
-        self.assertIn("systemd", result)
-        self.assertIn("NetworkManager", result)
+        # Check that result contains tuples with (name, version, epoch, release)
+        self.assertIn(("bash", "5.2.32", 0, "1.fc42"), result)
+        self.assertIn(("systemd", "257.3", 0, "1.fc42"), result)
+        self.assertIn(("NetworkManager", "1.54.0", 1, "2.fc43"), result)
         self.assertEqual(len(result), 3)
 
     @patch("subprocess.run")
