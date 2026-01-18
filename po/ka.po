@@ -9,8 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2026-01-18 06:58+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ka/>\n"
 "Language: ka\n"
@@ -167,11 +166,11 @@ msgstr "მოველოდი ერთ არგუმენტს"
 
 #: /usr/lib64/python3.12/argparse.py:2290
 msgid "expected at most one argument"
-msgstr ""
+msgstr "მოველოდი მაქს. ერთ არგუმენტს"
 
 #: /usr/lib64/python3.12/argparse.py:2291
 msgid "expected at least one argument"
-msgstr ""
+msgstr "მოველოდი ერთ არგუმენტს მაინც"
 
 #: /usr/lib64/python3.12/argparse.py:2295
 #, python-format
@@ -351,7 +350,7 @@ msgstr ""
 #: src/rct/cert_commands.py:33
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS] CERT_FILE"
-msgstr ""
+msgstr "%(prog)s {name} [პარამეტრები] სერტიფიკაცის_ფაილი"
 
 #: src/rct/cert_commands.py:41
 #, python-brace-format
@@ -427,7 +426,7 @@ msgstr ""
 #: src/rct/manifest_commands.py:138
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
-msgstr ""
+msgstr "%(prog)s {name} [პარამეტრები] მანიფესტის_ფაილი"
 
 #: src/rct/manifest_commands.py:143
 msgid "You must specify a manifest file."
@@ -911,7 +910,7 @@ msgstr "სერტიფიკატების განახლება"
 
 #: src/rhsm/connection.py:2069
 msgid "Checking server status"
-msgstr ""
+msgstr "სერვერის სტატუსის შემოწმება"
 
 #: src/rhsm/connection.py:2077
 msgid "Fetching content overrides"
@@ -1106,7 +1105,7 @@ msgstr ""
 
 #: src/rhsmlib/services/entitlement.py:519
 msgid "Error: this system is not registered"
-msgstr ""
+msgstr "შეცდომა: ეს სისტემა რეგისტრირებული არაა"
 
 #: src/rhsmlib/services/register.py:73
 msgid "Environment IDs and environment names are mutually exclusive"
@@ -1972,12 +1971,12 @@ msgstr "{SM}-ის დამატებების სია"
 #: src/subscription_manager/cli_command/plugins.py:34
 #, python-brace-format
 msgid "list {SM} plugin slots"
-msgstr "{SM}-ის დამატებების სია"
+msgstr "{SM}-ის დამატების სლოტების სია"
 
 #: src/subscription_manager/cli_command/plugins.py:37
 #, python-brace-format
 msgid "list {SM} plugin hooks"
-msgstr ""
+msgstr "{SM} დამატების კაუჭების სია"
 
 #: src/subscription_manager/cli_command/plugins.py:40
 msgid "show verbose plugin info"
@@ -2172,7 +2171,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/release.py:113
 #, python-brace-format
 msgid "Release set to: {release}"
-msgstr ""
+msgstr "გამოცემა დაყენებულია: {release}"
 
 #: src/subscription_manager/cli_command/release.py:122
 msgid "No release versions available, please check subscriptions."
@@ -2328,7 +2327,7 @@ msgstr "საერთო სტატუსი: რეგისტრაცი
 
 #: src/subscription_manager/cli_command/status.py:52
 msgid "Overall Status: Registered\n"
-msgstr ""
+msgstr "საერთო სტატუსი: რეგისტრირებულია\n"
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
@@ -2350,7 +2349,7 @@ msgstr "Syspurpose-ის ქვემოდულები"
 #: src/subscription_manager/cli_command/syspurpose.py:90
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr ""
+msgstr "%(prog)s {name} [ქვემოდული] [პარამეტრები]"
 
 #: src/subscription_manager/cli_command/unregister.py:38
 #: src/subscription_manager/utils.py:290
@@ -2512,7 +2511,7 @@ msgstr ""
 
 #: src/subscription_manager/exceptions.py:53
 msgid "Server URL can not be empty"
-msgstr ""
+msgstr "სერვერის URL ცარიელი არ შეიძლება, იყოს"
 
 #: src/subscription_manager/exceptions.py:54
 msgid ""
@@ -2636,7 +2635,7 @@ msgstr "რეპოზიტორიის განახლებები"
 #: src/subscription_manager/repolib.py:679
 #, python-format
 msgid "Total repo updates: %d"
-msgstr ""
+msgstr "ჯამური რეპოს განახლებები: %d"
 
 #: src/subscription_manager/repolib.py:680
 msgid "Updated"
@@ -2677,7 +2676,7 @@ msgstr "საკუთრების სერტიფიკატები�
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:419
 msgid "Unable to update entitlement certificates and repositories"
-msgstr ""
+msgstr "საკუთრების სერტიფიკატებისა და რეპოზიტორიების განახლება შეუძლებელია"
 
 #: src/subscription_manager/utils.py:392
 msgid "and"
