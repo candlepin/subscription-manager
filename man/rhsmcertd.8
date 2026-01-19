@@ -24,7 +24,7 @@ process runs periodically to check for changes in the subscriptions available to
 At a defined interval, the process checks with the subscription management service to see if any new subscriptions are available to the system. If there are, it pulls in the associated subscription certificates. If any subscriptions have expired and new subscriptions are available, then the \fBrhsmcertd\fP process will automatically request those subscriptions. By default, the initial auto-attach is delayed by a random amount of seconds from zero to the \fBautoAttachInterval\fP. The initial cert check is delayed by a random amount of seconds from zero to \fBcertCheckInterval\fP.
 
 .PP
-This \fbrhsmcertd\fP process can also perform automatic registration, when VM is running in the public cloud. Three public cloud providers are supported: AWS, Azure and GCP. When it is desired to perform automatic registration by rhsmcertd, then it is also necessary to configure mapping of "Cloud ID" to "RHSM organization ID" on https://cloud.redhat.com.
+This \fbrhsmcertd\fP process can also perform automatic registration, when VM is running in the public cloud. Three public cloud providers are supported: AWS, Azure and Google Cloud. When it is desired to perform automatic registration by rhsmcertd, then it is also necessary to configure mapping of "Cloud ID" to "RHSM organization ID" on https://cloud.redhat.com.
 
 .PP
 This \fBrhsmcertd\fP process invokes the
