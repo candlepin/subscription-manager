@@ -172,30 +172,30 @@ class CloudFactsCollector(collector.FactsCollector):
                     if "instance_id" in values["google"]["compute_engine"]:
                         facts["gcp_instance_id"] = values["google"]["compute_engine"]["instance_id"]
                     else:
-                        log.debug("GCP instance_id not found in JWT token")
+                        log.debug("Google Cloud instance_id not found in JWT token")
                     # IDs of licenses
                     if "license_id" in values["google"]["compute_engine"]:
                         gcp_license_codes = values["google"]["compute_engine"]["license_id"]
                         facts["gcp_license_codes"] = " ".join(gcp_license_codes)
                     else:
-                        log.debug("GCP license codes not found in JWT token")
+                        log.debug("Google Cloud license codes not found in JWT token")
                     # ID of project
                     if "project_id" in values["google"]["compute_engine"]:
                         facts["gcp_project_id"] = values["google"]["compute_engine"]["project_id"]
                     else:
-                        log.debug("GCP project_id not found in JWT token")
+                        log.debug("Google Cloud project_id not found in JWT token")
                     # number of project
                     if "project_number" in values["google"]["compute_engine"]:
                         facts["gcp_project_number"] = values["google"]["compute_engine"]["project_number"]
                     else:
-                        log.debug("GCP project_number not found in JWT token")
+                        log.debug("Google Cloud project_number not found in JWT token")
                     # zone where the machine is located
                     if "zone" in values["google"]["compute_engine"]:
                         facts["gcp_zone"] = values["google"]["compute_engine"]["zone"]
                     else:
-                        log.debug("GCP zone not found in JWT token")
+                        log.debug("Google Cloud zone not found in JWT token")
                 else:
-                    log.debug("GCP google.compute_engine on found in JWT token")
+                    log.debug("Google Cloud google.compute_engine on found in JWT token")
         return facts
 
     @staticmethod
