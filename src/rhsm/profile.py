@@ -39,16 +39,6 @@ try:
 except ImportError:
     yum = None
 
-try:
-    import gi
-
-    gi.require_version("OSTree", "1.0")
-    from gi.repository import OSTree
-
-    ostree_available = True
-except (ImportError, ValueError):
-    ostree_available = False
-
 use_zypper: bool = importlib.util.find_spec("zypp_plugin") is not None
 
 if use_zypper:
@@ -420,12 +410,11 @@ def _is_ostree_system() -> bool:
     """
     Check if the current system is running on ostree (bootc/silverblue/coreos).
     """
-    if not ostree_available:
-        return False
     try:
-        sysroot = OSTree.Sysroot.new_default()
-        sysroot.load(None)
-        return sysroot.get_booted_deployment() is not None
+        if os.path.exists("/run/ostree-booted"):
+            return True
+        else:
+            return False
     except Exception as e:
         log.debug(f"Failed to detect ostree system: {e}")
         return False
