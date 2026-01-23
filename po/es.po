@@ -1,6 +1,6 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
-# John Sefler <jsefler@redhat.com>, 2019. #zanata
+# John Sefler <jsefler@redhat.com>, 2019. #zanata, 2025.
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # Emilio Herrera <ehespinosa57@gmail.com>, 2021.
 # Pino Toscano <ptoscano@redhat.com>, 2023.
@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2025-04-21 19:53+0000\n"
+"PO-Revision-Date: 2025-07-17 00:53+0000\n"
 "Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/es/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11\n"
+"X-Generator: Weblate 5.12.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -208,12 +208,12 @@ msgid ""
 "The system could not be connected to Insights because installing the $0 "
 "package requires the unexpected removal of other packages."
 msgstr ""
-"El sistema podría no estar conectado a Conocimientos puesto que la "
-"instalación del paquete $0 requiere el borrado inesperado de otros paquetes."
+"El sistema podría no estar conectado a Insights puesto que la instalación "
+"del paquete $0 requiere el borrado inesperado de otros paquetes."
 
 #: cockpit/src/insights.jsx:113
 msgid "Connecting to Insights"
-msgstr "Conectando a Conocimientos"
+msgstr "Conectando a Insights"
 
 #: cockpit/src/insights.jsx:151
 msgid ""
@@ -222,8 +222,8 @@ msgid ""
 "analytics, avoid problems and unplanned downtime in your Red Hat environment."
 msgstr ""
 "Identifique y repare de forma proactiva las amenazas a la seguridad, el "
-"rendimiento, la disponibilidad y la estabilidad con Conocimientos Red Hat — "
-"con los análisis predictivos, evite problemas y tiempos de inactividad no "
+"rendimiento, la disponibilidad y la estabilidad con Insights Red Hat — con "
+"los análisis predictivos, evite problemas y tiempos de inactividad no "
 "planeados en su entorno Red Hat."
 
 #: cockpit/src/insights.jsx:169 cockpit/src/subscriptions-register.jsx:94
@@ -278,7 +278,7 @@ msgstr "Instalando $0"
 
 #: cockpit/src/insights.jsx:254
 msgid "Connect to Red Hat Insights"
-msgstr "Conectar a Conocimientos de Red Hat"
+msgstr "Conectar a Insights de Red Hat"
 
 #: cockpit/src/insights.jsx:257
 msgid "This system is not connected to $0."
@@ -294,23 +294,23 @@ msgstr "desconocido"
 
 #: cockpit/src/insights.jsx:408
 msgid "The last Insights data upload has failed."
-msgstr "Ha fallado la última subida de datos a Conocimientos."
+msgstr "Ha fallado la última subida de datos a Insights."
 
 #: cockpit/src/insights.jsx:413
 msgid "Connected to Red Hat Insights"
-msgstr "Conectado a Conocimientos de Red Hat"
+msgstr "Conectado a Insights de Red Hat"
 
 #: cockpit/src/insights.jsx:419
 msgid "Next Insights data upload"
-msgstr "Siguiente subida de datos a Conocimientos"
+msgstr "Siguiente subida de datos a Insights"
 
 #: cockpit/src/insights.jsx:424
 msgid "Last Insights data upload"
-msgstr "Últimos datos subidos a Conocimientos"
+msgstr "Últimos datos subidos a Insights"
 
 #: cockpit/src/insights.jsx:441 cockpit/src/insights.jsx:445
 msgid "Disconnect from Insights"
-msgstr "Desconectar desde Conocimientos"
+msgstr "Desconectar desde Insights"
 
 #: cockpit/src/insights.jsx:443
 msgid ""
@@ -363,8 +363,8 @@ msgstr[1] "$0 golpes, incluyendo moderado"
 #: cockpit/src/insights.jsx:554
 msgid "$0 low severity hit"
 msgid_plural "$0 low severity hits"
-msgstr[0] "$0 golpe de baja gravedad"
-msgstr[1] "$0 golpes de baja gravedad"
+msgstr[0] "$0 golpe de gravedad baja"
+msgstr[1] "$0 golpes de gravedad baja"
 
 #: cockpit/src/insights.jsx:560
 msgid "$0 hit"
@@ -374,11 +374,11 @@ msgstr[1] "$0 golpes"
 
 #: cockpit/src/insights.jsx:567
 msgid "View your Insights results"
-msgstr "Visualizar sus resultados de Conocimientos"
+msgstr "Visualizar sus resultados de Insights"
 
 #: cockpit/src/insights.jsx:573
 msgid "Connected to Insights"
-msgstr "Conectando a Conocimientos"
+msgstr "Conectando a Insights"
 
 #: cockpit/src/insights.jsx:585
 msgid "Not connected"
@@ -386,7 +386,7 @@ msgstr "No conectado"
 
 #: cockpit/src/insights.jsx:590 cockpit/src/subscriptions-register.jsx:85
 msgid "Insights"
-msgstr "Conocimientos"
+msgstr "Insights"
 
 #: cockpit/src/subscriptions-client.js:317
 msgid "Starting registration service ..."
@@ -886,7 +886,7 @@ msgstr "No se pudo leer identidad del consumidor"
 
 #: src/dnf-plugins/subscription-manager.py:136
 msgid "subscription-manager is operating in container mode."
-msgstr "Subscription Manager está operando en modo de contenedor."
+msgstr "subscription-manager está operando en modo de contenedor."
 
 #: src/dnf-plugins/upload-profile.py:36
 msgid ""
@@ -1769,7 +1769,7 @@ msgstr ""
 #: src/subscription_manager/branding/__init__.py:94
 #: src/subscription_manager/branding/redhat_branding.py:20
 msgid "Red Hat Subscription Management"
-msgstr "Administración de la suscripción a Red Hat"
+msgstr "Administración de Suscripción de Red Hat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:8
@@ -1777,8 +1777,8 @@ msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"Registrar este sistema en el portal del cliente u otro servicio de "
-"administración de suscripciones"
+"Registre este sistema en el Portal del Cliente u otro servicio de "
+"administración de suscripción"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:9
@@ -1786,8 +1786,8 @@ msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"Anular el registro de este sistema del portal del cliente u otro servicio de "
-"administración de suscripciones"
+"Anular el registro de este sistema del Portal del Cliente u otro servicio de "
+"administración de suscripción"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:11
@@ -4727,7 +4727,7 @@ msgstr "Error al leer baseurl:"
 #: src/subscription_manager/managercli.py:535
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr ""
-"Error: No se ha instalado el certificado CA para el servicio de suscripción."
+"Error: No se ha instalado el certificado AC para el servicio de suscripción."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:557
@@ -4828,9 +4828,9 @@ msgid ""
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
 msgstr ""
-"Advertencia: Esta organización no tiene ninguna suscripción que proporciones "
+"Advertencia: Esta organización no tiene ninguna suscripción que proporcione "
 "un propósito al sistema \"{attr}\".  Este ajuste no influirá en la "
-"suscripciones auto-attaching."
+"suscripciones auto-adjuntar."
 
 #: src/subscription_manager/managercli.py:798
 #, python-brace-format
@@ -6483,9 +6483,9 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"Los plugins yum/dnf: %s se habilitaron automáticamente en beneficio de Red "
-"Hat Subscription Management. Si no lo desea, use \"subscription-manager "
-"config --rhsm.auto_enable_yum_plugins=0\" para bloquear este comportamiento."
+"Los plugins yum/dnf: %s fueron auto-habilitados en beneficio de Red Hat "
+"Subscription Management. Si no lo desea, use “subscription-manager config "
+"--rhsm.auto_enable_yum_plugins=0” para bloquear este comportamiento."
 
 #: src/subscription_manager/repolib.py:663
 msgid "Repo updates"
