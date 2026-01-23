@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2025-07-16 19:53+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2025-07-17 00:53+0000\n"
+"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/es/>\n"
 "Language: es\n"
@@ -204,29 +204,26 @@ msgid "The $0 package is not available from any repository."
 msgstr "El paquete $0 no está disponible desde ningún repositorio."
 
 #: cockpit/src/insights.jsx:100
-#, fuzzy
 msgid ""
 "The system could not be connected to Insights because installing the $0 "
 "package requires the unexpected removal of other packages."
 msgstr ""
-"El sistema podría no estar conectado a Conocimientos puesto que la "
-"instalación del paquete $0 requiere el borrado inesperado de otros paquetes."
+"El sistema podría no estar conectado a Insights puesto que la instalación "
+"del paquete $0 requiere el borrado inesperado de otros paquetes."
 
 #: cockpit/src/insights.jsx:113
-#, fuzzy
 msgid "Connecting to Insights"
-msgstr "Conectando a Conocimientos"
+msgstr "Conectando a Insights"
 
 #: cockpit/src/insights.jsx:151
-#, fuzzy
 msgid ""
 "Proactively identify and remediate threats to security, performance, "
 "availability, and stability with Red Hat Insights — with predictive "
 "analytics, avoid problems and unplanned downtime in your Red Hat environment."
 msgstr ""
 "Identifique y repare de forma proactiva las amenazas a la seguridad, el "
-"rendimiento, la disponibilidad y la estabilidad con Conocimientos Red Hat — "
-"con los análisis predictivos, evite problemas y tiempos de inactividad no "
+"rendimiento, la disponibilidad y la estabilidad con Insights Red Hat — con "
+"los análisis predictivos, evite problemas y tiempos de inactividad no "
 "planeados en su entorno Red Hat."
 
 #: cockpit/src/insights.jsx:169 cockpit/src/subscriptions-register.jsx:94
@@ -280,9 +277,8 @@ msgid "Installing $0"
 msgstr "Instalando $0"
 
 #: cockpit/src/insights.jsx:254
-#, fuzzy
 msgid "Connect to Red Hat Insights"
-msgstr "Conectar a Conocimientos de Red Hat"
+msgstr "Conectar a Insights de Red Hat"
 
 #: cockpit/src/insights.jsx:257
 msgid "This system is not connected to $0."
@@ -297,29 +293,24 @@ msgid "unknown"
 msgstr "desconocido"
 
 #: cockpit/src/insights.jsx:408
-#, fuzzy
 msgid "The last Insights data upload has failed."
-msgstr "Ha fallado la última subida de datos a Conocimientos."
+msgstr "Ha fallado la última subida de datos a Insights."
 
 #: cockpit/src/insights.jsx:413
-#, fuzzy
 msgid "Connected to Red Hat Insights"
-msgstr "Conectado a Conocimientos de Red Hat"
+msgstr "Conectado a Insights de Red Hat"
 
 #: cockpit/src/insights.jsx:419
-#, fuzzy
 msgid "Next Insights data upload"
-msgstr "Siguiente subida de datos a Conocimientos"
+msgstr "Siguiente subida de datos a Insights"
 
 #: cockpit/src/insights.jsx:424
-#, fuzzy
 msgid "Last Insights data upload"
-msgstr "Últimos datos subidos a Conocimientos"
+msgstr "Últimos datos subidos a Insights"
 
 #: cockpit/src/insights.jsx:441 cockpit/src/insights.jsx:445
-#, fuzzy
 msgid "Disconnect from Insights"
-msgstr "Desconectar desde Conocimientos"
+msgstr "Desconectar desde Insights"
 
 #: cockpit/src/insights.jsx:443
 msgid ""
@@ -372,8 +363,8 @@ msgstr[1] "$0 golpes, incluyendo moderado"
 #: cockpit/src/insights.jsx:554
 msgid "$0 low severity hit"
 msgid_plural "$0 low severity hits"
-msgstr[0] "$0 golpe de baja gravedad"
-msgstr[1] "$0 golpes de baja gravedad"
+msgstr[0] "$0 golpe de gravedad baja"
+msgstr[1] "$0 golpes de gravedad baja"
 
 #: cockpit/src/insights.jsx:560
 msgid "$0 hit"
@@ -382,23 +373,20 @@ msgstr[0] "$0 golpe"
 msgstr[1] "$0 golpes"
 
 #: cockpit/src/insights.jsx:567
-#, fuzzy
 msgid "View your Insights results"
-msgstr "Visualizar sus resultados de Conocimientos"
+msgstr "Visualizar sus resultados de Insights"
 
 #: cockpit/src/insights.jsx:573
-#, fuzzy
 msgid "Connected to Insights"
-msgstr "Conectando a Conocimientos"
+msgstr "Conectando a Insights"
 
 #: cockpit/src/insights.jsx:585
 msgid "Not connected"
 msgstr "No conectado"
 
 #: cockpit/src/insights.jsx:590 cockpit/src/subscriptions-register.jsx:85
-#, fuzzy
 msgid "Insights"
-msgstr "Conocimientos"
+msgstr "Insights"
 
 #: cockpit/src/subscriptions-client.js:317
 msgid "Starting registration service ..."
