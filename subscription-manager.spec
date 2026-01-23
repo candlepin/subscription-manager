@@ -83,7 +83,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.11
+Version: 1.30.12
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -680,6 +680,40 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Fri Jan 23 2026 Jiri Hnidek <jhnidek@redhat.com> 1.30.12-1
+- feat: Added more debug prints to cloud-what (jhnidek@redhat.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Georgian) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Added translation using Weblate (Finnish) (noreply-addon-
+  languages@weblate.org)
+- Translated using Weblate (Czech) (jsefler@redhat.com)
+- fix(test): Fix unit tests of "sub-man status" (jhnidek@redhat.com)
+- RHEL-126153: Update GCP to Google Cloud in log messages (crag@redhat.com)
+- fix: Update user-facing GCP refrences to Google Cloud (crag@redhat.com)
+- ci: bump actions/upload-artifact from 5 to 6
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- Fix profile upload because of missing self.cp (suttner@atix.de)
+- feat: added signature type log in TLS handshake (macano@redhat.com)
+- feat: added internal method to get tls handshake info
+  (manuelcanorojo@gmail.com)
+- fix: Print list of environments without --set/--list (jhnidek@redhat.com)
+- fix: Fix getting AWS IMDSv2 signature (jhnidek@redhat.com)
+- fix(test): Fix unit test of aws (jhnidek@redhat.com)
+- fix(ci): Fixed integration tests of syspurpose (jhnidek@redhat.com)
+- chore: Removed deprecated information from setup.py (jhnidek@redhat.com)
+- chore(ci): Specify permissions for Actions (mhorky@redhat.com)
+- feat: check if --set arg is empty when the environments module is called
+  (manuelcanorojo@gmail.com)
+- docs: added missing gettext building dependency (manuelcanorojo@gmail.com)
+- docs: improved man content related to subscription-manager environment
+  variables for proxy configuration (manuelcanorojo@gmail.com)
+- ci: bump actions/checkout from 5 to 6
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- Fix gobject python package name of sles (suttner@atix.de)
+- Fix SLES build on OBS (suttner@atix.de)
+
 * Wed Nov 05 2025 Jiri Hnidek <jhnidek@redhat.com> 1.30.11-1
 - fix: Do not send JSON document with empty signature (jhnidek@redhat.com)
 - Translated using Weblate (Czech) (pavel.borecki@gmail.com)
