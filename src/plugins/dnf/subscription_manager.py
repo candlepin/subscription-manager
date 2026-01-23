@@ -177,6 +177,19 @@ class SubscriptionManager(dnf.Plugin):
         if config.in_container():
             logger.info(_("subscription-manager is operating in container mode."))
 
+            # Check if the entitlement certificates directory contains any file
+            try:
+                if len(os.listdir(config.HOST_ENT_CERT_DIR)) == 0:
+                    logger.warning(
+                        _(
+                            "The entitlement certificate directory '%s' is empty. "
+                            "Register the host. Otherwise you will not have access to content."
+                        )
+                        % config.HOST_ENT_CERT_DIR
+                    )
+            except OSError as e:
+                logger.error(_("Unable to read directory '%s': %s") % (config.HOST_ENT_CERT_DIR, str(e)))
+
         if cache_only is True:
             log.debug("DNF subscription-manager operates in cache-only mode")
 
