@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.48
+Version: 1.29.49
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -737,6 +737,34 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Tue Jan 27 2026 Jiri Hnidek <jhnidek@redhat.com> 1.29.49-1
+- RHEL-126157: Update GCP to Google Cloud in log messages (crag@redhat.com)
+- fix: Update user-facing GCP refrences to Google Cloud (crag@redhat.com)
+- feat: check if --set arg is empty when the environments module is called
+  (manuelcanorojo@gmail.com)
+- feat: Added more debug prints to cloud-what (jhnidek@redhat.com)
+- fix(test): Fix unit test of aws (jhnidek@redhat.com)
+- fix: Fix getting AWS IMDSv2 signature (jhnidek@redhat.com)
+- chore: Make new black happy again (jhnidek@redhat.com)
+- chore: Increased log level of messages (jhnidek@redhat.com)
+- fix: Use IMDSv2 for signature first (jhnidek@redhat.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Georgian) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Added translation using Weblate (Finnish) (noreply-addon-
+  languages@weblate.org)
+- fix: TypeError in _get_tls_handshake_info type hinting (macano@redhat.com)
+- feat: added signature type log in TLS handshake (macano@redhat.com)
+- feat: added internal method to get tls handshake info
+  (manuelcanorojo@gmail.com)
+- ci: bump actions/upload-artifact from 5 to 6
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- Fix profile upload because of missing self.cp (suttner@atix.de)
+- Fix upload profile if rhsmcertd is not running at all (suttner@atix.de)
+- ci: bump actions/checkout from 5 to 6
+  (49699333+dependabot[bot]@users.noreply.github.com)
+
 * Wed Nov 05 2025 Jiri Hnidek <jhnidek@redhat.com> 1.29.48-1
 - Translated using Weblate (Korean) (simmon@nplob.com)
 - ci: bump actions/upload-artifact from 4 to 5
