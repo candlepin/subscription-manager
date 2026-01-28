@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.49
+Version: 1.29.50
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -737,6 +737,9 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Jan 28 2026 Jiri Hnidek <jhnidek@redhat.com> 1.29.50-1
+- fix: Print list of environments without --set/--list (jhnidek@redhat.com)
+
 * Tue Jan 27 2026 Jiri Hnidek <jhnidek@redhat.com> 1.29.49-1
 - RHEL-126157: Update GCP to Google Cloud in log messages (crag@redhat.com)
 - fix: Update user-facing GCP refrences to Google Cloud (crag@redhat.com)
