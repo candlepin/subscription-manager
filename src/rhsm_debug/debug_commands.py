@@ -165,6 +165,9 @@ class SystemCommand(CliCommand):
                 self._copy_directory("/var/log/rhsm", content_path)
                 self._copy_directory("/var/lib/rhsm", content_path)
 
+            # sosreport does not collect /var/cache/cloud-what/*. It is our duty to collect it
+            self._copy_directory("/var/cache/cloud-what", content_path)
+
             if not sos:
                 self._copy_cert_directory(DEFAULT_PRODUCT_CERT_DIR, content_path)
 
