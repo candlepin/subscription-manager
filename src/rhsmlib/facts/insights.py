@@ -19,7 +19,7 @@ from rhsmlib.facts import collector
 
 try:
     from insights_client import constants as insights_constants
-except ImportError:
+except Exception:
     insights_constants = None
 
 log = logging.getLogger(__name__)
