@@ -17,12 +17,16 @@ from typing import Callable, Dict, List
 
 from rhsmlib.facts import collector
 
+log = logging.getLogger(__name__)
+
 try:
     from insights_client import constants as insights_constants
 except ImportError:
     insights_constants = None
-
-log = logging.getLogger(__name__)
+    log.debug("Unable to import insights_client Python module (facts collection may be skipped)")
+except Exception as e:
+    insights_constants = None
+    log.warning(f"Failed to load insights-client module (facts collection may be skipped): {e}")
 
 
 class InsightsCollector(collector.FactsCollector):
