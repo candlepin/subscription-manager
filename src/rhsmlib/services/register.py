@@ -16,6 +16,7 @@ import socket
 from typing import Callable, Optional
 
 from rhsm.connection import UEPConnection
+from rhsm.config import get_config_parser
 
 from rhsmlib.services import exceptions
 from rhsmlib.services.unregister import UnregisterService
@@ -24,6 +25,7 @@ from subscription_manager import injection as inj
 from subscription_manager import managerlib
 from subscription_manager import syspurposelib
 from subscription_manager.i18n import ugettext as _
+from subscription_manager.pqc import get_public_key_algorithms
 
 import typing
 
@@ -114,6 +116,19 @@ class RegisterService:
         environments = options["environments"]
         facts_dict = self.facts.get_facts()
 
+        config = get_config_parser()
+        crypto_algorithms = None
+        certificate_signatures = config.get("rhsm", "certificate_signatures")
+        if certificate_signatures == "current":
+            crypto_algorithms = get_public_key_algorithms()
+            log.debug(f"The list of public key algorithms: {crypto_algorithms}")
+        elif certificate_signatures == "legacy":
+            log.debug("Using legacy cryptography algorithms for consumer and entitlement certificate")
+        else:
+            log.warning(
+                f"Unknown value for 'rhsm.certificate_signatures' in rhsm.conf: {certificate_signatures}"
+            )
+
         # Default to the hostname if no name is given
         consumer_name = options["name"] or socket.gethostname()
 
@@ -141,6 +156,7 @@ class RegisterService:
                 service_level=service_level,
                 usage=usage,
                 jwt_token=jwt_token,
+                crypto_algorithms=crypto_algorithms,
             )
             # When new consumer is created, then close all existing connections
             # to be able to recreate new one
