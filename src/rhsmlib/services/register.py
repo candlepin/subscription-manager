@@ -25,7 +25,7 @@ from subscription_manager import injection as inj
 from subscription_manager import managerlib
 from subscription_manager import syspurposelib
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.pqc import get_public_key_algorithms
+from subscription_manager.pqc import get_pub_key_and_sign_algorithms
 
 import typing
 
@@ -120,7 +120,7 @@ class RegisterService:
         crypto_algorithms = None
         certificate_signatures = config.get("rhsm", "certificate_signatures")
         if certificate_signatures == "current":
-            crypto_algorithms = get_public_key_algorithms()
+            crypto_algorithms = get_pub_key_and_sign_algorithms()
             log.debug(f"The list of public key algorithms: {crypto_algorithms}")
         elif certificate_signatures == "legacy":
             log.debug("Using legacy cryptography algorithms for consumer and entitlement certificate")
