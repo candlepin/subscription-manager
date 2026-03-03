@@ -78,6 +78,7 @@ RHSM_DEFAULTS = {
     "package_profile_on_trans": "0",
     "inotify": "1",
     "progress_messages": "1",
+    "certificate_algorithms": "legacy",
 }
 
 RHSMCERTD_DEFAULTS = {
