@@ -18,6 +18,7 @@ from unittest.mock import Mock, NonCallableMock, patch, MagicMock
 
 from .stubs import StubUEP
 
+from subscription_manager.cli_command import register
 from subscription_manager.cli_command.register import RegisterCommand
 from subscription_manager import injection as inj
 from subscription_manager import cache
@@ -321,6 +322,44 @@ class CliRegistrationTests(SubManFixture):
             with Capture(silent=True):
                 with self.assertRaises(SystemExit):
                     rc._process_environments(mock_uep, "owner")
+
+    def test_registration_with_package_profile_disabled(self):
+        rhsm_conf_original_value = register.conf["rhsm"].get_int
+
+        def get_package_profile_disabled(key):
+            return 0 if key == "report_package_profile" else rhsm_conf_original_value(key)
+
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
+            self.stub_cp_provider.basic_auth_cp = mock_uep
+            cmd = RegisterCommand()
+            cmd._upload_profile = Mock()
+
+            with patch.object(register.conf["rhsm"], "get_int", side_effect=get_package_profile_disabled):
+                with Capture() as cap:
+                    cmd.main(["--force", "--username", "admin", "--password", "admin", "--org", "admin"])
+                    output = cap.out
+                    self.assertTrue("The system has been registered with ID" in output)
+                    self.assertTrue("The registered system name is:" in output)
+                    cmd._upload_profile.assert_not_called()
+
+    def test_registration_with_package_profile_enabled(self):
+        rhsm_conf_original_value = register.conf["rhsm"].get_int("report_package_profile")
+
+        def get_package_profile_enabled(key):
+            return 1 if key == "report_package_profile" else rhsm_conf_original_value(key)
+
+        with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:
+            self.stub_cp_provider.basic_auth_cp = mock_uep
+            cmd = RegisterCommand()
+            cmd._upload_profile = Mock()
+
+            with patch.object(register.conf["rhsm"], "get_int", side_effect=get_package_profile_enabled):
+                with Capture() as cap:
+                    cmd.main(["--force", "--username", "admin", "--password", "admin", "--org", "admin"])
+                    output = cap.out
+                    self.assertTrue("The system has been registered with ID" in output)
+                    self.assertTrue("The registered system name is:" in output)
+                    cmd._upload_profile.assert_called_once()
 
     def test_registration_with_failed_profile_upload(self):
         with patch("rhsm.connection.UEPConnection", new_callable=StubUEP) as mock_uep:

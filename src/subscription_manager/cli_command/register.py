@@ -188,8 +188,7 @@ class RegisterCommand(UserPassCommand):
                 # of DNF profile by rhsmcertd. We try to "outsource" this activity to rhsmcertd
                 # server to not block registration process.
                 # Note: rhsmcertd tries to upload profile using Python script and this script
-                # is always triggered with --force-upload CLI option. We ignore report_package_config
-                # configure option here due to BZ: 767265
+                # is always triggered with --force-upload CLI option.
                 log.debug("Sending SIGUSR1 signal to rhsmcertd process")
                 try:
                     os.kill(rhsmcertd_pid, signal.SIGUSR1)
@@ -346,7 +345,10 @@ class RegisterCommand(UserPassCommand):
             # FIXME: aside from the overhead, should this be cert_action_client.update?
             self.entcertlib.update()
 
-        self._upload_profile(consumer)
+        if conf["rhsm"].get_int("report_package_profile") == 1:
+            self._upload_profile(consumer)
+        else:
+            log.info("Skipping package profile upload due to report_package_profile config setting.")
 
         self._request_validity_check()
 
