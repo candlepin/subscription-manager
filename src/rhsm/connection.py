@@ -1602,6 +1602,8 @@ class UEPConnection(BaseConnection):
         service_level: str = None,
         usage: str = None,
         jwt_token: str = None,
+        key_algorithms: List[str] = None,
+        signature_algorithms: List[str] = None,
     ) -> dict:
         """
         Creates a consumer on candlepin server
@@ -1646,6 +1648,12 @@ class UEPConnection(BaseConnection):
         headers = {}
         if jwt_token:
             headers["Authorization"] = "Bearer {jwt_token}".format(jwt_token=jwt_token)
+
+        if key_algorithms and signature_algorithms:
+            params["cryptographicCapabilities"] = {
+                "keyAlgorithms": key_algorithms,
+                "signatureAlgorithms": signature_algorithms
+            }
 
         url = "/consumers"
         if environments and not self.has_capability(MULTI_ENV):
