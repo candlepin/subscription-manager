@@ -45,7 +45,7 @@ from subscription_manager.isodate import parse_date
 from subscription_manager.utils import get_supported_resources
 from syspurpose.files import post_process_received_data
 
-from rhsmlib.services import config, syspurpose
+from rhsmlib.services import config
 
 from subscription_manager.i18n import ugettext as _
 
@@ -371,45 +371,7 @@ class EntitlementStatusCache(StatusCache):
     def _sync_with_server(
         self, uep: connection.UEPConnection, consumer_uuid: str, on_date: Optional[datetime.datetime] = None
     ) -> None:
-        self.server_status = uep.getCompliance(consumer_uuid, on_date)
-
-
-class SyspurposeComplianceStatusCache(StatusCache):
-    """
-    Manages the system cache of system purpose compliance status from the server.
-    Unlike other cache managers, this one gets info from the server rather
-    than sending it.
-    """
-
-    CACHE_FILE = "/var/lib/rhsm/cache/syspurpose_compliance_status.json"
-
-    def _sync_with_server(
-        self, uep: connection.UEPConnection, consumer_uuid: str, on_date: Optional[datetime.datetime] = None
-    ) -> None:
-        self.syspurpose_service = syspurpose.Syspurpose(uep)
-        self.server_status: Dict = self.syspurpose_service.get_syspurpose_status(on_date)
-
-    def write_cache(self):
-        if self.server_status is not None and self.server_status["status"] != "unknown":
-            super(SyspurposeComplianceStatusCache, self).write_cache()
-
-    def get_overall_status(self) -> str:
-        if self.server_status is not None:
-            return syspurpose.Syspurpose.get_overall_status(self.server_status["status"])
-        else:
-            return syspurpose.Syspurpose.get_overall_status("unknown")
-
-    def get_overall_status_code(self) -> str:
-        if self.server_status is not None:
-            return self.server_status.get("status", "unknown")
-        else:
-            return "unknown"
-
-    def get_status_reasons(self) -> Optional[str]:
-        if self.server_status is not None:
-            return self.server_status.get("reasons", None)
-        else:
-            return None
+        self.server_status = {"status": "disabled", "compliant": True}
 
 
 class ProductStatusCache(StatusCache):
@@ -965,6 +927,29 @@ class ConsumerCache(CacheManager):
                 self.write_cache(debug=True)
 
         return current_data
+
+
+class CapabilitiesCache(ConsumerCache):
+    """
+    This cache tries to cache capabilities of candlepin server
+    """
+
+    CACHE_FILE = "/var/lib/rhsm/cache/capabilities.json"
+
+    DEFAULT_VALUE = []
+
+    # When cache is not refreshed by rhsmcertd (by default every four hours),
+    # then set default timeout to one day (the timeout value is in seconds)
+    TIMEOUT = 60 * 60 * 24
+
+    def __init__(self, data: Any = None):
+        super().__init__(data)
+
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> Optional[list]:
+        status = uep.getStatus()
+        return status.get("managerCapabilities", [])
 
 
 class SyspurposeValidFieldsCache(ConsumerCache):

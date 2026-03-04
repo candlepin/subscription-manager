@@ -16,6 +16,7 @@ import os
 import logging
 import shutil
 import signal
+import datetime
 
 from subscription_manager import injection as inj
 from subscription_manager.repolib import RepoActionInvoker
@@ -26,7 +27,7 @@ from subscription_manager.i18n import ungettext, ugettext as _
 from rhsm import logutil
 from rhsm import config
 from rhsm.utils import LiveStatusMessage
-from rhsm.connection import RemoteServerException
+from rhsm.connection import RemoteServerException, BaseRestLib
 
 from dnfpluginscore import logger
 import dnf
@@ -78,6 +79,13 @@ This system has release set to {release_version} and it receives updates only fo
 """
 )
 
+skew_clock_warning = _(
+    """
+The system clock is skewed. There is a time difference of {time_drift} seconds with the entitlement server. \
+Please check your clock settings to ensure access to all entitled content.
+"""
+)
+
 log = logging.getLogger("rhsm-app." + __name__)
 
 
@@ -110,6 +118,7 @@ class SubscriptionManager(dnf.Plugin):
             else:
                 logger.info(_("Not root, Subscription Management repositories not updated"))
             self._warn_expired()
+            self._warn_skew_clock()
         except Exception as e:
             log.error(str(e))
 
@@ -181,6 +190,20 @@ class SubscriptionManager(dnf.Plugin):
         log.debug("Generating redhat.repo")
         repo_action_invoker = RepoActionInvoker(cache_only=cache_only)
         repo_action_invoker.update()
+
+    @staticmethod
+    def _warn_skew_clock():
+        """
+        Display warning, when the time drift between host and candlepin server
+        is too big, and it could cause issue with accessing content on CDN or Pulp.
+        """
+        time_drift: datetime.timedelta = BaseRestLib.get_time_drift()
+        if time_drift is None:
+            return
+        elif time_drift > datetime.timedelta(seconds=2):
+            time_drift_seconds = time_drift.total_seconds()
+            msg = skew_clock_warning.format(time_drift=time_drift_seconds)
+            logger.info(msg)
 
     @staticmethod
     def _warn_expired():
@@ -257,7 +280,8 @@ class SubscriptionManager(dnf.Plugin):
             try:
                 profile_mgr = inj.require(inj.PROFILE_MANAGER)
                 identity = inj.require(inj.IDENTITY)
-                profile_mgr.update_check(self.cp, identity.uuid)
+                cp_provider = inj.require(inj.CP_PROVIDER)
+                profile_mgr.update_check(cp_provider.get_consumer_auth_cp(), identity.uuid)
             except RemoteServerException as err:
                 # When it is not possible to upload profile ATM, then print only error about this
                 # to rhsm.log. The rhsmcertd will try to upload it next time.
@@ -275,6 +299,7 @@ class SubscriptionManager(dnf.Plugin):
                 rhsmcertd_pid = int(lock_file.readline())
         except (IOError, ValueError) as err:
             log.info(f"Unable to read rhsmcertd lock file: {err}")
+            self._upload_profile_blocking()
         else:
             if is_process_running("rhsmcertd", rhsmcertd_pid) is True:
                 # This will only send SIGUSR1 signal, which triggers gathering and uploading

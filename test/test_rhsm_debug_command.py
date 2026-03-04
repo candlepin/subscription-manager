@@ -72,13 +72,13 @@ class TestCompileCommand(TestCliCommand):
 
         self.expected_paths = [
             "consumer.json",
-            "compliance.json",
             "entitlements.json",
             "pools.json",
             "version.json",
             "/etc/rhsm",
             "/var/log/rhsm",
             "/var/lib/rhsm",
+            "/var/cache/cloud-what",
             # we use a test specific config, with default values
             "/etc/pki/product",
             "/etc/pki/entitlement",
@@ -252,6 +252,7 @@ class TestCompileCommand(TestCliCommand):
             "/etc/rhsm/facts",
             "/var/log/rhsm",
             "/var/lib/rhsm",
+            "/var/cache/cloud-what",
             "/etc/pki/product",
             "/etc/pki/entitlement",
             "/etc/pki/consumer",

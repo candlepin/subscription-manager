@@ -23,6 +23,8 @@ import logging
 import json
 import os
 import time
+import traceback
+import sys
 
 from typing import Union
 
@@ -82,6 +84,9 @@ class BaseCloudProvider:
     # Default value of path to holding signature of metadata
     # (e.g. /var/lib/cloud-what/cache/cool_cloud_signature.json)
     SIGNATURE_CACHE_FILE = None
+
+    # Is a signature of metadata for the given cloud provider required?
+    SIGNATURE_REQUIRED = True
 
     # Custom HTTP headers like user-agent
     HTTP_HEADERS = {}
@@ -370,6 +375,10 @@ class BaseCloudProvider:
             print(colorize("Request body:", COLOR.GREEN))
             print(colorize(f"{request.body}", COLOR.YELLOW))
 
+        if os.environ.get("SUBMAN_DEBUG_PRINT_TRACEBACKS", ""):
+            print(colorize("Current call stack:", COLOR.GREEN))
+            traceback.print_stack(file=sys.stdout)
+
         print()
 
     @staticmethod
@@ -414,12 +423,15 @@ class BaseCloudProvider:
         try:
             response = self._session.send(prepared_http_req, timeout=self.TIMEOUT)
         except requests.RequestException as err:
-            log.debug(f"Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {err}")
+            log.warning(f"Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {err}")
         else:
             if response.status_code == 200:
                 return response.text
             else:
-                log.debug(f"Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {response.status_code}")
+                log.warning(
+                    f"Unable to get {self.CLOUD_PROVIDER_ID} {data_type}: {response.status_code}, "
+                    f"response body: '{response.text}'"
+                )
 
     def _get_metadata_from_server(self, headers: dict = None) -> Union[str, None]:
         """
@@ -480,9 +492,16 @@ class BaseCloudProvider:
 
         signature = self._get_signature_from_cache_file()
         if signature is not None:
+            log.debug("Using signature from cache file")
             return signature
 
         return self._get_signature_from_server()
+
+    def is_signature_required(self):
+        """
+        Return True, when signature of metadata is required for given cloud provider
+        """
+        return self.SIGNATURE_REQUIRED
 
     def get_metadata(self) -> Union[str, None]:
         """
@@ -496,6 +515,7 @@ class BaseCloudProvider:
 
         metadata = self._get_metadata_from_cache()
         if metadata is not None:
+            log.debug("Using metadata from cache file")
             return metadata
 
         return self._get_metadata_from_server()

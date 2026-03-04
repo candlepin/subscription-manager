@@ -23,10 +23,11 @@ logger = logging.getLogger(__name__)
 
 locale = "en_US.UTF-8"
 
-# Tests describe a case when an application unregisters a system.
-#
-# The API should handle even wrong cases friendly
-# - e.g. when a system is not registered the API should provide useful feedback
+"""
+Integrations tests for use cases when the application unregisters a system.
+The API should handle even wrong cases friendly
+- e.g. when a system is not registered the API should provide useful feedback
+"""
 
 
 def test_unregister(any_candlepin, subman, test_config):

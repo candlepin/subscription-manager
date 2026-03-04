@@ -22,35 +22,27 @@ from rhsmlib import file_monitor
 
 import subscription_manager.injection as inj
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.isodate import parse_date
 from subscription_manager.reasons import Reasons
 from subscription_manager import utils
 
 if TYPE_CHECKING:
     from rhsm.certificate2 import EntitlementCertificate
-    from subscription_manager.cache import EntitlementStatusCache, InstalledProductsManager
+    from subscription_manager.cache import InstalledProductsManager
     from subscription_manager.certdirectory import ProductDirectory, EntitlementDirectory
     from subscription_manager.cp_provider import CPProvider
     from subscription_manager.identity import Identity
 
 log = logging.getLogger(__name__)
 
-# Strings used for status of products
-FUTURE_SUBSCRIBED = "future_subscribed"
-SUBSCRIBED = "subscribed"
-NOT_SUBSCRIBED = "not_subscribed"
-EXPIRED = "expired"
-PARTIALLY_SUBSCRIBED = "partially_subscribed"
 
 # Strings used fot status of system
 # Warning: Do not change following strings, because these strings
 # are in D-Bus API. The API is used by other applications (Anaconda,
 # Cockpit, GNOME, ...)
-VALID = "valid"
-INVALID = "invalid"
-PARTIAL = "partial"
 DISABLED = "disabled"
+"""Registered system"""
 UNKNOWN = "unknown"
+"""Not registered system"""
 
 
 SOCKET_FACT = "cpu.cpu_socket(s)"
@@ -83,6 +75,7 @@ class ComplianceManager:
         self.system_status: Optional[str] = None
         self.valid_entitlement_certs: Optional[List[EntitlementCertificate]] = None
         self.status: Optional[str] = None
+        self.compliant_until: Optional[datetime] = None
         self.load()
 
     def load(self) -> None:
@@ -124,100 +117,14 @@ class ComplianceManager:
         # Reasons that products aren't fully compliant
         self.reasons = Reasons([], self)
         self.supports_reasons = False
-
         self.system_status = UNKNOWN
-
         self.valid_entitlement_certs = []
+        self.compliant_until = None
 
-        self._parse_server_status()
-
-    def get_compliance_status(self) -> Optional[Dict]:
-        """
-        Try to get compliance status from server to get fresh information about compliance status.
-        :return: Compliance status, when server of cache is available. Otherwise None is returned.
-        """
-        status_cache: EntitlementStatusCache = inj.require(inj.ENTITLEMENT_STATUS_CACHE)
-        self.status = status_cache.load_status(
-            self.cp_provider.get_consumer_auth_cp(), self.identity.uuid, self.on_date
-        )
-        return self.status
-
-    def _parse_server_status(self) -> None:
-        """Fetch entitlement status info from server and parse."""
-
-        if not self.is_registered():
-            log.debug("Unregistered, skipping server compliance check.")
-            return
-
-        # Override get_status
-        status: Optional[Dict] = self.get_compliance_status()
-        if status is None:
-            return
-
-        is_sca = utils.is_simple_content_access(self.cp_provider.get_consumer_auth_cp(), self.identity)
-
-        # TODO: we're now mapping product IDs to entitlement cert JSON,
-        # previously we mapped to actual entitlement cert objects. However,
-        # nothing seems to actually use these, so it may not matter for now.
-        self.valid_products = status["compliantProducts"]
-
-        self.partially_valid_products = status["partiallyCompliantProducts"]
-
-        self.partial_stacks = status["partialStacks"]
-
-        if "reasons" in status:
-            self.supports_reasons = True
-            self.reasons = Reasons(status["reasons"], self)
-
-        if "status" in status and len(status["status"]):
-            self.system_status = status["status"]
-        # Some old candlepin versions do not return 'status' with information
-        elif status["nonCompliantProducts"]:
-            self.system_status = INVALID
-        elif self.partially_valid_products or self.partial_stacks or self.reasons.reasons:
-            self.system_status = PARTIAL
-        else:
-            self.system_status = UNKNOWN
-
-        # For backward compatability with old find first invalid date,
-        # we drop one second from the compliant until from server (as
-        # it is returning the first second we are invalid), then add a full
-        # 24 hours giving us the first date where we know we're completely
-        # invalid from midnight to midnight.
-        self.compliant_until: Optional[datetime] = None
-
-        if status["compliantUntil"] is not None:
-            self.compliant_until = parse_date(status["compliantUntil"])
-
-        # Lookup product certs for each unentitled product returned by
-        # the server:
-        unentitled_pids: List[str] = status["nonCompliantProducts"]
-        # When using SCA, the compliance status does not include the installed
-        # products.
-        if not is_sca:
-            # Add in any installed products not in the server response. This
-            # could happen if something changes before the certd runs. Log
-            # a warning if it does, and treat it like an unentitled product.
-            for pid in list(self.installed_products.keys()):
-                if (
-                    pid not in self.valid_products
-                    and pid not in self.partially_valid_products
-                    and pid not in unentitled_pids
-                ):
-                    log.warning("Installed product %s not present in response from " "server." % pid)
-                    unentitled_pids.append(pid)
-
-        for unentitled_pid in unentitled_pids:
-            prod_cert = self.product_dir.find_by_product(unentitled_pid)
-            # Ignore anything server thinks we have but we don't.
-            if prod_cert is None:
-                log.warning("Server reported installed product not on system: %s" % unentitled_pid)
-                continue
-            self.unentitled_products[unentitled_pid] = prod_cert
-
-        self._scan_entitlement_certs()
-
-        self.log_products()
+        if self.is_registered():
+            self._scan_entitlement_certs()
+            self.log_products()
+            self.system_status = DISABLED
 
     def log_products(self) -> None:
         fj: Callable = utils.friendly_join
@@ -289,9 +196,6 @@ class ComplianceManager:
         # when function is called (not during start of application) due to
         # rhsm.service which can run for very long time
         status_map = {
-            VALID: _("Current"),
-            PARTIAL: _("Insufficient"),
-            INVALID: _("Invalid"),
             DISABLED: _("Disabled"),
             UNKNOWN: _("Unknown"),
         }
@@ -311,7 +215,7 @@ class ComplianceManager:
         Return true if the results of this cert sort indicate our
         entitlements are completely valid.
         """
-        return self.system_status == VALID or self.system_status == DISABLED
+        return self.system_status == DISABLED
 
     def is_registered(self) -> bool:
         return inj.require(inj.IDENTITY).is_valid()
@@ -320,36 +224,13 @@ class ComplianceManager:
         """Return the status of a given product"""
         if not self.is_registered():
             return UNKNOWN
-        if product_id in self.partially_valid_products:
-            return PARTIALLY_SUBSCRIBED
-        if product_id in self.valid_products:
-            return SUBSCRIBED
-        if product_id in self.future_products:
-            return FUTURE_SUBSCRIBED
-        if product_id in self.expired_products:
-            return EXPIRED
-        if product_id in self.unentitled_products:
-            return NOT_SUBSCRIBED
-        else:
-            # Can only really happen if server doesn't support compliance
-            # API call:
-            return UNKNOWN
+        return DISABLED
 
     def in_warning_period(self) -> bool:
         for entitlement in self.valid_entitlement_certs:
             if entitlement.is_expiring():
                 return True
         return False
-
-    # Assumes classic and identity validity have been tested
-    def get_status_for_icon(self) -> int:
-        if self.system_status == "invalid":
-            return RHSM_EXPIRED
-        if self.system_status == "partial":
-            return RHSM_PARTIALLY_VALID
-        if self.in_warning_period():
-            return RHSM_WARNING
-        return RHSM_VALID  # Correct when unknown
 
 
 class CertSorter(ComplianceManager):

@@ -200,6 +200,7 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.ENTITLEMENT_STATUS_CACHE, stubs.StubEntitlementStatusCache())
         inj.provide(inj.POOL_STATUS_CACHE, stubs.StubPoolStatusCache())
         inj.provide(inj.PROD_STATUS_CACHE, stubs.StubProductStatusCache())
+        inj.provide(inj.CAPABILITIES_CACHE, stubs.StubCapabilitiesCache())
         inj.provide(inj.SUPPORTED_RESOURCES_CACHE, stubs.StubSupportedResourcesCache())
         inj.provide(inj.SYSPURPOSE_VALID_FIELDS_CACHE, stubs.StubSyspurposeValidFieldsCache())
         inj.provide(inj.CURRENT_OWNER_CACHE, stubs.StubCurrentOwnerCache)
@@ -207,7 +208,6 @@ class SubManFixture(unittest.TestCase):
         inj.provide(inj.RELEASE_STATUS_CACHE, stubs.StubReleaseStatusCache())
         inj.provide(inj.AVAILABLE_ENTITLEMENT_CACHE, stubs.StubAvailableEntitlementsCache())
         inj.provide(inj.PROFILE_MANAGER, stubs.StubProfileManager())
-        inj.provide(inj.SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE, stubs.StubSyspurposeComplianceStatusCache())
         # By default set up an empty stub entitlement and product dir.
         # Tests need to modify or create their own but nothing should hit
         # the system.

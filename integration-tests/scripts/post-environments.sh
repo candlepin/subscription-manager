@@ -1,8 +1,8 @@
 #!/bin/bash
 
-USERNAME=admin
-PASSWORD=admin
-ORG=donaldduck
+USERNAME="admin"
+PASSWORD="admin"
+ORG="donaldduck"
 
 
 # The script will create two environments for an organization.

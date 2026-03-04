@@ -29,7 +29,7 @@ setup(
     long_description="""cloud-what enables to detect cloud provider using information provided
     SM BIOS. The package tries to use dmidecode and virt-what for this purpose. This package
     also allows to gather metadata and signature from IMDS servers provided by public cloud
-    providers. Three cloud providers are supported at this moment: AWS, Azure and GCP.""",
+    providers. Three cloud providers are supported at this moment: AWS, Azure and Google Cloud.""",
     packages=["cloud-what"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",

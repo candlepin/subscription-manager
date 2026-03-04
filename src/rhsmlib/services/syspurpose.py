@@ -16,7 +16,6 @@ This module provides service for system purpose
 """
 
 import logging
-from typing import Dict
 
 from rhsm.connection import UEPConnection
 
@@ -38,19 +37,8 @@ class Syspurpose:
     def __init__(self, cp: UEPConnection) -> None:
         self.cp = cp
         self.identity = inj.require(inj.IDENTITY)
-        self.purpose_status = {"status": "unknown"}
         self.owner = None
         self.valid_fields = None
-
-    def get_syspurpose_status(self, on_date: str = None) -> Dict:
-        """
-        Get syspurpose status from candlepin server
-        :param on_date: Date of the status
-        :return: string code with status
-        """
-        if self.identity.is_valid() and self.cp.has_capability("syspurpose"):
-            self.purpose_status = self.cp.getSyspurposeCompliance(self.identity.uuid, on_date)
-        return self.purpose_status
 
     def get_owner_syspurpose_valid_fields(self) -> dict:
         """
@@ -97,12 +85,6 @@ class Syspurpose:
         # when function is called (not during start of application) due to
         # rhsm.service which can run for very long time
         status_map = {
-            "valid": _("Matched"),
-            "invalid": _("Mismatched"),
-            "partial": _("Partial"),
-            "matched": _("Matched"),
-            "mismatched": _("Mismatched"),
-            "not specified": _("Not Specified"),
             "disabled": _("Disabled"),
             "unknown": _("Unknown"),
         }

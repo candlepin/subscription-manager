@@ -93,13 +93,13 @@ class SyspurposeDBusImplementation(base_object.BaseImplementation):
         return contents
 
     def get_system_purpose_status(self) -> str:
-        uep: "UEPConnection" = self.build_uep({})
-        system_purpose = syspurpose.Syspurpose(uep)
-
-        raw_status: str = system_purpose.get_syspurpose_status()["status"]
-        status: str = system_purpose.get_overall_status(raw_status)
-
-        return status
+        """
+        Return translated string representation syspurpose status
+        """
+        if self.is_registered():
+            return syspurpose.Syspurpose.get_overall_status("disabled")
+        else:
+            return syspurpose.Syspurpose.get_overall_status("unknown")
 
     def get_valid_fields(self) -> dict:
         uep: "UEPConnection" = self.build_uep({})

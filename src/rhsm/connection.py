@@ -595,6 +595,10 @@ class BaseRestLib:
 
     __conn = None
 
+    # The latest time drift (time difference between host and candlepin
+    # server) of the latest connection(s) to candlepin server.
+    __latest_time_drift = None
+
     ALPHA: float = 0.9
 
     # Default value of timeout. This value is set according observed timeout
@@ -734,6 +738,44 @@ class BaseRestLib:
         else:
             log.warning("Unable to load any CA certificate from: %s" % self.ca_dir)
 
+    def _get_tls_handshake_info(self) -> str | None:
+        """
+        Gets TLS handshake information for debugging and Post Quantum Cryptography testing.
+        Extracts information about the negotiated TLS connection: protocol version,
+        cipher suite, and if available (Python 3.15+), the key exchange group.
+        """
+        try:
+            handshake_info = []
+            # Get cipher suite information
+            # cipher() returns a 3-tuple: (cipher_name, tls_version, secret_bits)
+            cipher_info = self.__conn.sock.cipher()
+            if cipher_info:
+                cipher_name, tls_version, _ = cipher_info
+                handshake_info.append(f"tls_version={tls_version}")
+                handshake_info.append(f"cipher={cipher_name}")
+
+            # Try to get negotiated group (key exchange group)
+            # This is available in Python 3.15+ through the group method
+            group_method = getattr(self.__conn.sock, "group", None)
+            if callable(group_method):
+                group = group_method()
+                handshake_info.append(f"group={group}")
+
+            # This is available in Python 3.15+ through the client_sigalg method
+            signature_method = getattr(self.__conn.sock, "client_sigalg", None)
+            if callable(signature_method):
+                signature = signature_method()
+                handshake_info.append(f"signature_type={signature}")
+
+            if handshake_info:
+                return " ".join(handshake_info)
+            else:
+                log.debug("TLS handshake: Unable to extract TLS handshake details")
+
+        except Exception as e:
+            # Don't fail the connection if we can't log handshake info
+            log.debug(f"Error logging TLS handshake information: {e}")
+
     def _create_connection(self, cert_file: str = None, key_file: str = None) -> httplib.HTTPSConnection:
         """
         This method tries to return existing connection, when connection exists and limit of connection
@@ -856,6 +898,8 @@ class BaseRestLib:
         ):
             print(utils.colorize("TCP socket:", utils.COLOR.GREEN))
             print(utils.colorize(f"{self.__conn.sock}", utils.COLOR.BLUE))
+            print(utils.colorize("TLS handshake:", utils.COLOR.GREEN))
+            print(utils.colorize(f"{self._get_tls_handshake_info()}", utils.COLOR.BLUE))
 
         # When proxy server is used, then print some additional information about proxy connection
         if self.proxy_hostname and self.proxy_port:
@@ -1046,7 +1090,7 @@ class BaseRestLib:
             for cert_file, key_file in cert_key_pairs:
                 try:
                     conn = self._create_connection(cert_file=cert_file, key_file=key_file)
-
+                    log.debug("TLS handshake: %s", self._get_tls_handshake_info())
                     self._print_debug_info_about_request(request_type, handler, final_headers, body)
 
                     ts_start = time.time()
@@ -1210,9 +1254,10 @@ class BaseRestLib:
                 message: str = (
                     f"Local system clock seems to be off by {drift}, please check your system time."
                 )
-                if drift > datetime.timedelta(hours=1):
+                self.set_time_drift(drift)
+                if drift > datetime.timedelta(minutes=15):
                     log.warning(message)
-                elif drift > datetime.timedelta(minutes=15):
+                elif drift > datetime.timedelta(seconds=2):
                     log.debug(message)
             except Exception:
                 log.exception(
@@ -1225,6 +1270,20 @@ class BaseRestLib:
         self.validateResult(result, request_type, handler)
 
         return result
+
+    @classmethod
+    def get_time_drift(cls) -> datetime.timedelta:
+        """
+        Get the drift of the latest connection.
+        """
+        return cls.__latest_time_drift
+
+    @classmethod
+    def set_time_drift(cls, drift: datetime.timedelta) -> None:
+        """
+        Set the drift of the current connection.
+        """
+        cls.__latest_time_drift = drift
 
     def _update_smoothed_response_time(self, response_time: float):
         """
@@ -1807,24 +1866,6 @@ class UEPConnection(BaseConnection):
         """
         method = "/consumers/%s" % self.sanitize(uuid)
         return self.conn.request_get(method, description=_("Fetching consumer keys"))
-
-    def getCompliance(self, uuid: str, on_date: datetime.datetime = None) -> dict:
-        """
-        Returns a compliance object with compliance status information
-        """
-        method = "/consumers/%s/compliance" % self.sanitize(uuid)
-        if on_date:
-            method = "%s?on_date=%s" % (method, self.sanitize(on_date.isoformat(), plus=True))
-        return self.conn.request_get(method, description=_("Checking compliance status"))
-
-    def getSyspurposeCompliance(self, uuid: str, on_date: datetime.datetime = None) -> dict:
-        """
-        Returns a system purpose compliance object with compliance status information
-        """
-        method = "/consumers/%s/purpose_compliance" % self.sanitize(uuid)
-        if on_date:
-            method = "%s?on_date=%s" % (method, self.sanitize(on_date.isoformat(), plus=True))
-        return self.conn.request_get(method, description=_("Checking system purpose compliance status"))
 
     def getOwnerSyspurposeValidFields(self, owner_key: str) -> dict:
         """

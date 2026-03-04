@@ -4,6 +4,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   libdnf:
     name: "libdnf"
@@ -25,7 +28,7 @@ jobs:
 
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: "Enable CRB repository"
         if: ${{ matrix.name == 'CentOS Stream 10' }}

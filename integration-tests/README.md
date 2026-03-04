@@ -12,9 +12,9 @@ The tests use pytest ecosystem.
 
 1) Run local candlepin
 
-```shell
-podman run -d --name canlepin -p 8080:8080 -p 8443:8443 --hostname candlepin.local ghcr.io/ptoscano/candlepin-unofficial:latest
-```
+   ```console
+   $ podman run -d --name canlepin -p 8080:8080 -p 8443:8443 --hostname candlepin.local ghcr.io/ptoscano/candlepin-unofficial:latest
+   ```
 
 2) Create additional testing data in candlepin
 
@@ -22,12 +22,12 @@ Environments for *donaldduck* organization
 
 ```
 curl --stderr /dev/null --insecure --user admin:admin --request POST \
---data '{"id": "env-id-1", "name": "env-name-1", "description": "Testing environment num. 1"}' \
+--data '{"id": "env-id-01", "name": "env-name-01", "description": "Testing environment num. 01"}' \
 --header 'accept: application/json' --header 'content-type: application/json' \
 https://localhost:8443/candlepin/owners/donaldduck/environments
 
 curl --stderr /dev/null --insecure --user admin:admin --request POST \
---data '{"id": "env-id-2", "name": "env-name-2", "description": "Testing environment num. 2"}' \
+--data '{"id": "env-id-02", "name": "env-name-02", "description": "Testing environment num. 02"}' \
 --header 'accept: application/json' --header 'content-type: application/json' \
 https://localhost:8443/candlepin/owners/donaldduck/environments
 ```
@@ -44,7 +44,7 @@ Activation keys for *donaldduck* organization
 > The tests use already installed test activation keys
 > They are:
 >  - *default_key*
->  - *awesome_os_pool"
+>  - *awesome_os_pool*
 
 ## Configuration
 
@@ -55,7 +55,7 @@ They are stored in a file in this directory *settings.toml*
 
 Config values for _testing_ environment
 
-```yaml
+```toml
 [testing]
 candlepin.host = "localhost"
 candlepin.port = 8443
@@ -67,25 +67,16 @@ candlepin.org = "donaldduck"
 candlepin.activation_keys = ["default_key","awesome_os_pool"]
 candlepin.environment.names = ["env-name-01","env-name-02"]
 candlepin.environment.ids =   ["env-id-01","env-id-02"]
-
-insights.legacy_upload = false
-console.host = "cert.console.redhat.com"
-
-auth_proxy.host = 
-auth_proxy.port = 3127
-auth_proxy.username = "redhat"
-auth_proxy.password = "redhat"
-
-noauth_proxy.host = 
-noauth_proxy.port = 3129
-
-insights.hbi_host = "cert.console.redhat.com"
+candlepin.valid_fields_file = "integration-tests/files/valid_fields.json"
+candlepin.multi_org.username = "huey"
+candlepin.multi_org.password = "password"
+candlepin.multi_org.orgs = ["admin", "snowwhite", "donaldduck"]
 ```
 
 Configuration for pytest 
 
 > There is a file *pytest.ini* in the main directory of this repo.
-> It has nothing to do with integration-tests. It is a confiuration
+> It has nothing to do with integration-tests. It is a configuration
 > for unittests.
 
 *integration-tests/pytest.ini*
@@ -105,13 +96,13 @@ tests. All required packages for pytest are stored in
 *requirements.txt*.
 
 > There is a file *requirements.txt* in the main directory of the
-> repo. It is used by unittests. I has nothing to do with
+> repo. It is used by unittests. It has nothing to do with
 > integration-tests at all.
 
 ```shell
 cd integration-tests
 python3 -mvenv venv
-source venv
+source venv/bin/activate
 pip install -r requirements.txt
 deactivate
 ```
@@ -120,8 +111,9 @@ deactivate
 
 ```shell
 cd integration-tests
-source venv
-pytest
+source venv/bin/activate
+export ENV_FOR_DYNACONF=testing
+pytest -s -vvv --log-level=DEBUG
 deativate
 ```
 
@@ -129,12 +121,12 @@ deativate
 > full of interesting hits to run just a few tests, to increase output
 > of a test run ...
 
-### Runnning integration tests using tmt
+### Running integration tests using tmt
 
 You can use [Testing Farm](https://docs.testing-farm.io/Testing%20Farm/0.1/index.html) 
 to run the tests.
 
-It suposes that the package *subscription-manager* is installed at a local box.
+It supposes that the package *subscription-manager* is installed at a local box.
 
 ```shell
 cd subscription-manager

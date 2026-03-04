@@ -85,6 +85,10 @@ class GCPCloudProvider(BaseCloudProvider):
     # Nothing to cache for this cloud provider
     SIGNATURE_CACHE_FILE = None
 
+    # GCP does not have a special file for signature of metadata.
+    # Metadata and signature are provided in one JWT file
+    SIGNATURE_REQUIRED = False
+
     def __init__(self, hw_info, audience_url=None):
         """
         Initialize instance of GCPCloudDetector
@@ -184,7 +188,7 @@ class GCPCloudProvider(BaseCloudProvider):
             ttl = exp_time - ctime - self.THRESHOLD
         else:
             log.debug(
-                "GCP JWT token does not contain exp time, "
+                "Google Cloud JWT token does not contain exp time, "
                 f"using default TTL: {self.CLOUD_PROVIDER_TOKEN_TTL}"
             )
 
@@ -196,11 +200,11 @@ class GCPCloudProvider(BaseCloudProvider):
             # wrong or missing NTP server, too big delay on connection, etc.
             iat_time = metadata["iat"]
             if abs(ctime - iat_time) > self.THRESHOLD:
-                log.warning(f"Too big diff between ctime: {ctime} and GCP JWT token iat: {iat_time}")
+                log.warning(f"Too big diff between ctime: {ctime} and Google Cloud JWT token iat: {iat_time}")
         else:
-            log.debug("GCP JWT token does not contain iat time")
+            log.debug("Google Cloud JWT token does not contain iat time")
 
-        log.debug(f"GCP JWT token, exp: {exp_time}, iat: {iat_time}, TTL: {ttl}")
+        log.debug(f"Google Cloud JWT token, exp: {exp_time}, iat: {iat_time}, TTL: {ttl}")
 
         return ttl
 
@@ -223,7 +227,7 @@ class GCPCloudProvider(BaseCloudProvider):
                 try:
                     metadata = json.loads(metadata)
                 except json.JSONDecodeError as err:
-                    log.error(f"Unable to decode metadata from GCP JWT token: {err}")
+                    log.error(f"Unable to decode metadata from Google Cloud JWT token: {err}")
                 else:
                     ttl = self._get_ttl_from_metadata(metadata, ctime)
 

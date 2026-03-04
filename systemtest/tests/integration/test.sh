@@ -13,7 +13,7 @@ dnf --setopt install_weak_deps=False install -y \
     cairo-gobject-devel gobject-introspection-devel \
     python3-gobject python3-devel
 
-yum -y groupinstall 'Development Tools'
+dnf -y groupinstall 'Development Tools'
 
 python3 -m venv venv
 # shellcheck disable=SC1091
@@ -35,10 +35,17 @@ candlepin.org = "donaldduck"
 candlepin.activation_keys = ["default_key","awesome_os_pool"]
 candlepin.environment.names = ["env-name-01","env-name-02"]
 candlepin.environment.ids =   ["env-id-01","env-id-02"]
+candlepin.valid_fields_file = "integration-tests/files/valid_fields.json"
+candlepin.multi_org.username = "huey"
+candlepin.multi_org.password = "password"
+candlepin.multi_org.orgs = ["admin", "snowwhite", "donaldduck"]
 EOF
 
 # run local candlepin for testing purpose
+./integration-tests/scripts/post-activation-keys.sh
 ./integration-tests/scripts/run-local-candlepin.sh
+
+sleep 10
 
 # create testing data in local candlepin
 ./integration-tests/scripts/post-environments.sh

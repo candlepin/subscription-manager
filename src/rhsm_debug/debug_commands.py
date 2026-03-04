@@ -146,7 +146,6 @@ class SystemCommand(CliCommand):
             owner = self.cp.getOwner(consumer.uuid)
 
             self._write_flat_file(content_path, "consumer.json", self.cp.getConsumer(consumer.uuid))
-            self._write_flat_file(content_path, "compliance.json", self.cp.getCompliance(consumer.uuid))
             self._write_flat_file(
                 content_path, "entitlements.json", self.cp.getEntitlementList(consumer.uuid)
             )
@@ -165,6 +164,10 @@ class SystemCommand(CliCommand):
                 self._copy_cert_directory("/etc/rhsm", content_path)
                 self._copy_directory("/var/log/rhsm", content_path)
                 self._copy_directory("/var/lib/rhsm", content_path)
+
+            # sosreport does not collect /var/cache/cloud-what/*. It is our duty to collect it
+            if os.path.isdir("/var/cache/cloud-what"):
+                self._copy_directory("/var/cache/cloud-what", content_path)
 
             if not sos:
                 self._copy_cert_directory(DEFAULT_PRODUCT_CERT_DIR, content_path)

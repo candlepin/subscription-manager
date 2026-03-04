@@ -34,7 +34,6 @@ from subscription_manager.injection import (
     CERT_SORTER,
     IDENTITY,
     ENTITLEMENT_STATUS_CACHE,
-    SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE,
     PROD_STATUS_CACHE,
     ENT_DIR,
     PROD_DIR,
@@ -803,8 +802,12 @@ def check_identity_cert_perms() -> None:
             continue
         statinfo: os.stat_result = os.stat(cert)
         if statinfo[stat.ST_UID] != 0 or statinfo[stat.ST_GID] != cert_guid:
-            os.chown(cert, 0, cert_guid)
-            log.warning("Corrected incorrect ownership of %s." % cert)
+            try:
+                os.chown(cert, 0, cert_guid)
+            except OSError as err:
+                log.error(f"Unable to chown permission of {cert}: {err}")
+            else:
+                log.warning("Corrected incorrect ownership of %s." % cert)
 
         mode: int = stat.S_IMODE(statinfo[stat.ST_MODE])
         if mode != ID_CERT_PERMS:
@@ -863,7 +866,6 @@ def clean_all_data(backup: bool = True) -> None:
     # and delete_cache is an instance method, so we need to call
     # the delete_cache on the instances created in injectioninit.
     require(ENTITLEMENT_STATUS_CACHE).delete_cache()
-    require(SYSTEMPURPOSE_COMPLIANCE_STATUS_CACHE).delete_cache()
     require(PROD_STATUS_CACHE).delete_cache()
     require(POOL_STATUS_CACHE).delete_cache()
     require(OVERRIDE_STATUS_CACHE).delete_cache()

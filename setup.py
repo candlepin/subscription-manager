@@ -263,7 +263,7 @@ cmdclass = {
 
 setup(
     name="subscription-manager",
-    version="1.30.7",
+    version="1.30.12",
     url="http://www.candlepinproject.org",
     description="Manage subscriptions for Red Hat products.",
     license="GPLv2",
@@ -297,9 +297,7 @@ setup(
         },
     },
     classifiers=[
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GPL License",
         "Operating System :: Linux",
     ],
     include_package_data=True,

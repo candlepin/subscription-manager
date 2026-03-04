@@ -17,6 +17,7 @@ import random
 import signal
 import sys
 import time
+import datetime
 from argparse import SUPPRESS
 from typing import Dict, List, Union, TYPE_CHECKING
 
@@ -31,6 +32,7 @@ import subscription_manager.injection as inj
 from subscription_manager import cache
 from subscription_manager import entcertlib
 from subscription_manager import managerlib
+from subscription_manager import repolib
 from subscription_manager.action_client import ActionClient
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.i18n_argparse import ArgumentParser, USAGE
@@ -43,6 +45,13 @@ if TYPE_CHECKING:
     from rhsm.config import RhsmConfigParser
     from rhsm.connection import UEPConnection
     from subscription_manager.cp_provider import CPProvider
+    from subscription_manager.cache import CapabilitiesCache
+
+
+# Value in seconds
+DEFAULT_AUTOREGISTER_INTERVAL = 60
+# Value in seconds
+DEFAULT_AUTOREGISTER_IDENTITY_INTERVAL = 60 * 10
 
 
 class ExitStatus(enum.IntEnum):
@@ -145,8 +154,9 @@ def _collect_cloud_info(cloud_list: List[str]) -> dict:
         # When it is not possible to get signature for given cloud provider,
         # then silently set signature to empty string, because some cloud
         # providers does not provide signatures
-        if signature is None:
-            signature = ""
+        if cloud_provider.is_signature_required() and signature is None:
+            log.error(f"No signature gathered for cloud provider: {cloud_provider_id}")
+            continue
 
         log.info(f"Metadata and signature gathered for cloud provider: {cloud_provider_id}")
 
@@ -160,8 +170,54 @@ def _collect_cloud_info(cloud_list: List[str]) -> dict:
     return result
 
 
+def _auto_register_identity_wait() -> None:
+    """
+    Delay during the automatic registration between obtaining anonymous entitlement
+    and getting proper consumer identity certificate.
+
+    We use different configuration option for this splay, because getting proper
+    identity certificate is not so urgent.
+    """
+    cfg = config.get_config_parser()
+    if cfg.get("rhsmcertd", "splay") == "0":
+        log.debug("Trying to obtain the identity immediately, splay is disabled.")
+    else:
+        rnd_gen = random.SystemRandom()
+        splay_interval: int = DEFAULT_AUTOREGISTER_IDENTITY_INTERVAL  # value in [seconds]
+        autoreg_interval = cfg.get("rhsmcertd", "auto_registration_identity_interval")
+
+        try:
+            # First try to parse interval as an integer representing minutes (backward compatibility)
+            registration_interval_minutes: int = int(autoreg_interval)
+        except ValueError:
+            try:
+                # Second try to parse it as a time: hours:minutes:seconds
+                t = time.strptime(autoreg_interval, "%H:%M:%S")
+            except ValueError:
+                log.error(f"Invalid autoregistration identity interval: {autoreg_interval}")
+            else:
+                delta = datetime.timedelta(hours=t.tm_hour, minutes=t.tm_min, seconds=t.tm_sec)
+                registration_interval_seconds = int(delta.total_seconds())
+                log.debug(
+                    f"Autoregistration identity interval: {autoreg_interval} "
+                    f"parsed as time delta: {registration_interval_seconds} [seconds]"
+                )
+                splay_interval = rnd_gen.randint(0, registration_interval_seconds)
+        else:
+            log.debug(f"Autoregistration identity interval: {autoreg_interval} parsed as minutes")
+            splay_interval = rnd_gen.randint(0, registration_interval_minutes * 60)
+
+        log.debug(
+            f"Waiting a period of {splay_interval} seconds "
+            f"(about {splay_interval // 60} minutes) before attempting to obtain the "
+            "non-anonymous identity."
+        )
+        time.sleep(splay_interval)
+
+
 def _auto_register_wait() -> None:
-    """Delay during the automatic registration.
+    """
+    Delay during the automatic registration.
 
     Wait for an amount of time during automatic registration, looking at the
     configured splay and autoregistration interval.
@@ -170,8 +226,31 @@ def _auto_register_wait() -> None:
     if cfg.get("rhsmcertd", "splay") == "0":
         log.debug("Trying to obtain the identity immediately, splay is disabled.")
     else:
-        registration_interval = int(cfg.get("rhsmcertd", "auto_registration_interval"))
-        splay_interval: int = random.randint(60, registration_interval * 60)
+        rnd_gen = random.SystemRandom()
+        splay_interval: int = DEFAULT_AUTOREGISTER_INTERVAL  # value is [seconds]
+        autoreg_interval = cfg.get("rhsmcertd", "auto_registration_interval")
+
+        try:
+            # First try to parse interval as an integer representing minutes (backward compatibility)
+            registration_interval_minutes: int = int(autoreg_interval)
+        except ValueError:
+            try:
+                # Second try to parse it as a time: hours:minutes:seconds
+                t = time.strptime(autoreg_interval, "%H:%M:%S")
+            except ValueError:
+                log.error(f"Invalid autoregistration interval: {autoreg_interval}")
+            else:
+                delta = datetime.timedelta(hours=t.tm_hour, minutes=t.tm_min, seconds=t.tm_sec)
+                registration_interval_seconds = int(delta.total_seconds())
+                log.debug(
+                    f"Autoregistration interval: {autoreg_interval} "
+                    f"parsed as time delta: {registration_interval_seconds} [seconds]"
+                )
+                splay_interval = rnd_gen.randint(0, registration_interval_seconds)
+        else:
+            log.debug(f"Autoregistration interval: {autoreg_interval} parsed as minutes")
+            splay_interval = rnd_gen.randint(0, registration_interval_minutes * 60)
+
         log.debug(
             f"Waiting a period of {splay_interval} seconds "
             f"(about {splay_interval // 60} minutes) before attempting to obtain the identity."
@@ -199,6 +278,10 @@ def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
         )
         return ExitStatus.NO_CLOUD_PROVIDER
 
+    # Wait a random time interval before contacting IMDS server and getting token from the candlepin server,
+    # because we do not want to DDoS IMDS servers nor the candlepin server
+    _auto_register_wait()
+
     # When some cloud provider(s) were detected, then try to collect metadata and signature
     cloud_info = _collect_cloud_info(cloud_list)
     if len(cloud_info) == 0:
@@ -208,7 +291,8 @@ def _auto_register(cp_provider: "CPProvider") -> ExitStatus:
     # Get connection not using any authentication
     uep: UEPConnection = cp_provider.get_no_auth_cp()
 
-    # Obtain automatic registration token
+    # Try to obtain automatic registration token. It can be gathered from cache, but
+    # when cache does not exist (very likely), then try to get it from candlepin server
     try:
         token: Dict[str, str] = cache.CloudTokenCache.get(
             uep=uep,
@@ -254,10 +338,21 @@ def _auto_register_standard(uep: "UEPConnection", token: Dict[str, str]) -> None
     """
     log.debug("Registering the system through standard automatic registration.")
 
-    _auto_register_wait()
-
     service = RegisterService(cp=uep)
     service.register(org=None, jwt_token=token["token"])
+
+    # When the system is configured to manage repositories, then install entitlement
+    # certificates and generate the redhat.repo file
+    manage_repos = repolib.manage_repos_enabled()
+    log.debug(f"Manage repositories: {manage_repos}")
+    if manage_repos is True:
+        log.debug("Installing SCA entitlement certificate and generating redhat.repo file...")
+        try:
+            report = entcertlib.EntCertUpdateAction().perform()
+        except Exception:
+            log.exception("Failed to install SCA entitlement certificate.")
+        else:
+            log.debug(report)
 
 
 def _auto_register_anonymous(uep: "UEPConnection", token: Dict[str, str]) -> None:
@@ -280,8 +375,11 @@ def _auto_register_anonymous(uep: "UEPConnection", token: Dict[str, str]) -> Non
     manager = entcertlib.AnonymousCertificateManager(uep=uep)
     manager.install_temporary_certificates(uuid=token["anonymousConsumerUuid"], jwt=token["token"])
 
-    # Step 2: Wait
-    _auto_register_wait()
+    # Step 2: Wait random time again. The interval is random again (not the same as
+    # interval for waiting before obtaining "anonymous token"). We typically wait here
+    # 10 minutes. Getting consumer certificate is not so urgent, because customer
+    # has access to content using temporary entitlement certificate ATM
+    _auto_register_identity_wait()
 
     # Step 3: Obtain the identity certificate
     log.debug("Obtaining system identity")
@@ -356,10 +454,17 @@ def _main(args: "argparse.Namespace"):
 
     print(_("Updating entitlement certificates & repositories."))
 
+    log.debug("Force reloading capabilities from candlepin server.")
+    capabilities_cache: CapabilitiesCache = inj.require(inj.CAPABILITIES_CACHE)
+    capabilities_cache.delete_cache()
+    capabilities_cache.read_data()
+
+    log.debug("Force reloading supported resources from candlepin server.")
     uep: UEPConnection = cp_provider.get_consumer_auth_cp()
     # preload supported resources; serves as a way of failing before locking the repos
     uep.supports_resource(None)
 
+    log.debug("Checking validity of consumer cert & key, updating entitlement certificates & repositories")
     try:
         action_client = ActionClient()
         action_client.update()
