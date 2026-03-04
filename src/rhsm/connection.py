@@ -247,19 +247,19 @@ class BaseConnection:
         else:
             info = utils.get_env_proxy_info()
 
-            if proxy_hostname is not None:
+            if proxy_hostname:
                 self.proxy_hostname = proxy_hostname
             else:
                 self.proxy_hostname = config.get("server", "proxy_hostname") or info["proxy_hostname"]
-            if proxy_port is not None:
+            if proxy_port:
                 self.proxy_port = proxy_port
             else:
                 self.proxy_port = config.get("server", "proxy_port") or info["proxy_port"]
-            if proxy_user is not None:
+            if proxy_user:
                 self.proxy_user = proxy_user
             else:
                 self.proxy_user = config.get("server", "proxy_user") or info["proxy_username"]
-            if proxy_password is not None:
+            if proxy_password:
                 self.proxy_password = proxy_password
             else:
                 self.proxy_password = config.get("server", "proxy_password") or info["proxy_password"]
