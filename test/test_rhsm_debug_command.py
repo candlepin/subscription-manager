@@ -17,6 +17,7 @@ import shutil
 import tarfile
 import tempfile
 from datetime import datetime
+from unittest.mock import patch
 
 from . import fixture
 from .test_managercli import TestCliCommand
@@ -69,6 +70,19 @@ class TestCompileCommand(TestCliCommand):
 
         # monkeypatch cli commands assemble path
         self.cc.assemble_path = self.assemble_path
+
+        # Production code checks os.path.isdir() for some paths (e.g. /var/cache/cloud-what)
+        # which may not exist on the host. Patch isdir to check under the test's assemble
+        # dir first, then fall back to the real filesystem.
+        orig_isdir = os.path.isdir
+
+        def fake_isdir(path):
+            test_path = path_join(self.assemble_path, path)
+            return orig_isdir(test_path)
+
+        self._isdir_patcher = patch("rhsm_debug.debug_commands.os.path.isdir", side_effect=fake_isdir)
+        self._isdir_patcher.start()
+        self.addCleanup(self._isdir_patcher.stop)
 
         self.expected_paths = [
             "consumer.json",
