@@ -51,6 +51,7 @@ typedef enum {
 #define NEXT_AUTO_REGISTER_UPDATE_FILE "/run/rhsm/next_auto_register_update"
 #define WORKER LIBEXECDIR"/rhsmcertd-worker"
 #define WORKER_NAME WORKER
+#define WORKER_ALREADY_REGISTERED 31
 #define PACKAGE_PROFILE_UPLOADER LIBEXECDIR"/rhsm-package-profile-uploader"
 #define INITIAL_DELAY_SECONDS 120
 #define DEFAULT_AUTO_REG_INTERVAL_SECONDS 3600 /* 1 hour */
@@ -432,10 +433,13 @@ auto_register(gpointer data)
     if (status == 0) {
         info ("(Auto-registration) performed successfully.");
         return false;
-    } else {
-        warn ("(Auto-registration) failed (%d)", status);
+    }
+    if (status == WORKER_ALREADY_REGISTERED) {
+        debug ("(Auto-registration) system already registered, no action taken.");
         return false;
     }
+    warn ("(Auto-registration) failed (%d)", status);
+    return false;
 }
 
 static gboolean
