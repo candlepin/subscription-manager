@@ -82,6 +82,8 @@ class ExitStatus(enum.IntEnum):
 
     REGISTRATION_FAILED = 30
     """The system registration was not successful."""
+    ALREADY_REGISTERED = 31
+    """System was already registered; no registration action was performed."""
 
     UNKNOWN_ERROR = -1
     """An unknown error occurred."""
@@ -435,11 +437,13 @@ def _main(args: "argparse.Namespace"):
     signal.signal(signal.SIGTERM, exit_on_signal)
 
     cp_provider: CPProvider = _create_cp_provider()
+    already_registered: bool = False
 
     if args.auto_register is True:
         if _is_registered():
             print(_("This system is already registered, ignoring request to automatically register."))
             log.debug("This system is already registered, skipping automatic registration.")
+            already_registered = True
         else:
             print(_("Registering the system"))
             status: ExitStatus = _auto_register(cp_provider)
@@ -493,6 +497,9 @@ def _main(args: "argparse.Namespace"):
 
         raise ge
 
+    if already_registered:
+        sys.exit(ExitStatus.ALREADY_REGISTERED)
+
 
 def main():
     logutil.init_logger()
@@ -518,6 +525,10 @@ def main():
         # stack trace. We need to check the code, since we want to signal
         # exit with failure to the caller. Otherwise, we will exit with 0
         if se.code:
+            if se.code == ExitStatus.ALREADY_REGISTERED:
+                # In this case, raise the exception to rhsmcertd to indicate 
+                # that the system is already registered
+                raise
             sys.exit(ExitStatus.UNKNOWN_ERROR)
     except Exception:
         log.exception("Error while updating certificates using daemon")
