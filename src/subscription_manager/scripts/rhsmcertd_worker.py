@@ -82,6 +82,8 @@ class ExitStatus(enum.IntEnum):
 
     REGISTRATION_FAILED = 30
     """The system registration was not successful."""
+    ALREADY_REGISTERED = 31
+    """System was already registered; no registration action was performed."""
 
     UNKNOWN_ERROR = -1
     """An unknown error occurred."""
@@ -435,11 +437,13 @@ def _main(args: "argparse.Namespace"):
     signal.signal(signal.SIGTERM, exit_on_signal)
 
     cp_provider: CPProvider = _create_cp_provider()
+    already_registered: bool = False
 
     if args.auto_register is True:
         if _is_registered():
             print(_("This system is already registered, ignoring request to automatically register."))
             log.debug("This system is already registered, skipping automatic registration.")
+            already_registered = True
         else:
             print(_("Registering the system"))
             status: ExitStatus = _auto_register(cp_provider)
@@ -492,6 +496,9 @@ def _main(args: "argparse.Namespace"):
             managerlib.clean_all_data()
 
         raise ge
+
+    if already_registered:
+        sys.exit(ExitStatus.ALREADY_REGISTERED)
 
 
 def main():
