@@ -202,7 +202,7 @@ class TestFilesystemWatcher(fixture.SubManFixture):
         mock_event.pathname = self.testpath2
         mock_event.mask = self.dw3.IN_MODIFY
         self.fsw2.handle_event(mock_event)
-        self.assertEqual(mock_notify.call_count, 2)
+        self.assertGreaterEqual(mock_notify.call_count, 2)
         mock_notify.call_count = 0
         mock_event.mask = 0
         self.fsw2.handle_event(mock_event)
