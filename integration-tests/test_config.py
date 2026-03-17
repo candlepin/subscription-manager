@@ -57,7 +57,7 @@ def test_config_get(any_candlepin, item):
 
     The method should provide value for each key in the config file /etc/rhsm/rhsm.conf
     """
-    (key, value_in_the_config_file) = item
+    key, value_in_the_config_file = item
     proxy = RHSM.get_proxy(RHSM_CONFIG, interface_name=RHSM_CONFIG)
     value_in_response = proxy.Get(key, locale)
     assert value_in_response.get_string() == value_in_the_config_file
