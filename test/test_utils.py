@@ -52,28 +52,28 @@ class TestParseServerInfo(SubManFixture):
 
     def test_fully_specified(self):
         local_url = "myhost.example.com:900/myapp"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("myhost.example.com", hostname)
         self.assertEqual("900", port)
         self.assertEqual("/myapp", prefix)
 
     def test_hostname_only(self):
         local_url = "myhost.example.com"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("myhost.example.com", hostname)
         self.assertEqual("443", port)
         self.assertEqual(DEFAULT_PREFIX, prefix)
 
     def test_hostname_port(self):
         local_url = "myhost.example.com:500"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("myhost.example.com", hostname)
         self.assertEqual("500", port)
         self.assertEqual(DEFAULT_PREFIX, prefix)
 
     def test_hostname_prefix(self):
         local_url = "myhost.example.com/myapp"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("myhost.example.com", hostname)
         self.assertEqual("443", port)
         self.assertEqual("/myapp", prefix)
@@ -83,7 +83,7 @@ class TestParseServerInfo(SubManFixture):
         self.stubConfig.set("server", "prefix", "/test-prefix")
 
         local_url = "myhost.example.com"
-        (hostname, port, prefix) = parse_server_info(local_url, config.Config(self.stubConfig))
+        hostname, port, prefix = parse_server_info(local_url, config.Config(self.stubConfig))
         self.assertEqual("myhost.example.com", hostname)
         self.assertEqual("344", port)
         self.assertEqual("/test-prefix", prefix)
@@ -92,7 +92,7 @@ class TestParseServerInfo(SubManFixture):
         self.stubConfig.set("server", "port", "600")
 
         local_url = "myhost.example.com/myapp"
-        (hostname, port, prefix) = parse_server_info(local_url, config.Config(self.stubConfig))
+        hostname, port, prefix = parse_server_info(local_url, config.Config(self.stubConfig))
         self.assertEqual("myhost.example.com", hostname)
         self.assertEqual("600", port)
         self.assertEqual("/myapp", prefix)
@@ -101,28 +101,28 @@ class TestParseServerInfo(SubManFixture):
         self.stubConfig.set("server", "prefix", "/test-prefix")
 
         local_url = "myhost.example.com:500"
-        (hostname, port, prefix) = parse_server_info(local_url, config.Config(self.stubConfig))
+        hostname, port, prefix = parse_server_info(local_url, config.Config(self.stubConfig))
         self.assertEqual("myhost.example.com", hostname)
         self.assertEqual("500", port)
         self.assertEqual("/test-prefix", prefix)
 
     def test_hostname_slash_no_prefix(self):
         local_url = "http://myhost.example.com/"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("myhost.example.com", hostname)
         self.assertEqual("443", port)
         self.assertEqual("/", prefix)
 
     def test_hostname_just_slash(self):
         local_url = "/"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual(DEFAULT_HOSTNAME, hostname)
         self.assertEqual(DEFAULT_PORT, port)
         self.assertEqual("/", prefix)
 
     def test_hostname_nested_prefix(self):
         local_url = "myhost.example.com/myapp/subapp"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("myhost.example.com", hostname)
         self.assertEqual("443", port)
         self.assertEqual("/myapp/subapp", prefix)
@@ -138,28 +138,28 @@ class TestParseServerInfo(SubManFixture):
     def test_hostname_with_scheme(self):
         # this is the default, so test it here
         local_url = "https://subscription.rhsm.redhat.com/subscription"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("subscription.rhsm.redhat.com", hostname)
         self.assertEqual(DEFAULT_PORT, port)
         self.assertEqual("/subscription", prefix)
 
     def test_hostname_with_scheme_no_prefix(self):
         local_url = "https://myhost.example.com"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("myhost.example.com", hostname)
         self.assertEqual(DEFAULT_PORT, port)
         self.assertEqual("/subscription", prefix)
 
     def test_hostname_no_scheme_port_no_prefix(self):
         local_url = "myhost.example.com:8443"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("myhost.example.com", hostname)
         self.assertEqual("8443", port)
         self.assertEqual("/subscription", prefix)
 
     def test_just_prefix(self):
         local_url = "/myapp"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual(DEFAULT_HOSTNAME, hostname)
         self.assertEqual(DEFAULT_PORT, port)
         self.assertEqual("/myapp", prefix)
@@ -169,7 +169,7 @@ class TestParseServerInfo(SubManFixture):
         # use default port and path. You could also argue it should
         # throw an error, especially if it's not a valid hostname
         local_url = "a"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("a", hostname)
         self.assertEqual(DEFAULT_PORT, port)
         self.assertEqual(DEFAULT_PREFIX, prefix)
@@ -235,7 +235,7 @@ class TestParseServerInfo(SubManFixture):
 
     def test_host_named_http(self):
         local_url = "http://http/prefix"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("http", hostname)
         self.assertEqual(DEFAULT_PORT, port)
         self.assertEqual("/prefix", prefix)
@@ -246,7 +246,7 @@ class TestParseServerInfo(SubManFixture):
 
     def test_host_named_http_port_prefix(self):
         local_url = "https://https:8000/prefix"
-        (hostname, port, prefix) = parse_server_info(local_url)
+        hostname, port, prefix = parse_server_info(local_url)
         self.assertEqual("https", hostname)
         self.assertEqual("8000", port)
         self.assertEqual("/prefix", prefix)
@@ -261,31 +261,31 @@ class TestParseBaseUrlInfo(fixture.SubManFixture):
     def test_hostname_with_scheme(self):
         # this is the default, so test it here
         local_url = "https://cdn.redhat.com"
-        (hostname, port, prefix) = parse_baseurl_info(local_url)
+        hostname, port, prefix = parse_baseurl_info(local_url)
         self.assertEqual(DEFAULT_CDN_HOSTNAME, hostname)
         self.assertEqual(DEFAULT_CDN_PORT, port)
         self.assertEqual("/", prefix)
 
     def test_format_base_url(self):
         local_url = "https://cdn.redhat.com"
-        (hostname, port, prefix) = parse_baseurl_info(local_url)
+        hostname, port, prefix = parse_baseurl_info(local_url)
         self.assertEqual(local_url, format_baseurl(hostname, port, prefix))
 
     def test_format_base_url_with_port(self):
         local_url = "https://cdn.redhat.com:443"
-        (hostname, port, prefix) = parse_baseurl_info(local_url)
+        hostname, port, prefix = parse_baseurl_info(local_url)
         self.assertEqual(prefix, DEFAULT_CDN_PREFIX)
         self.assertEqual("https://cdn.redhat.com", format_baseurl(hostname, port, prefix))
 
     def test_format_thumbslug_url_with_port(self):
         local_url = "https://someserver.example.com:8088"
-        (hostname, port, prefix) = parse_baseurl_info(local_url)
+        hostname, port, prefix = parse_baseurl_info(local_url)
         self.assertEqual(prefix, DEFAULT_CDN_PREFIX)
         self.assertEqual("https://someserver.example.com:8088", format_baseurl(hostname, port, prefix))
 
     def test_format_not_fqdn_with_port(self):
         local_url = "https://foo-bar:8088"
-        (hostname, port, prefix) = parse_baseurl_info(local_url)
+        hostname, port, prefix = parse_baseurl_info(local_url)
         self.assertEqual(prefix, DEFAULT_CDN_PREFIX)
         self.assertEqual("https://foo-bar:8088", format_baseurl(hostname, port, prefix))
 

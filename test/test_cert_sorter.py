@@ -172,8 +172,7 @@ class CertSorterSCATests(SubManFixture):
         self.assertEqual({}, self.sorter.unentitled_products)
 
 
-SAMPLE_COMPLIANCE_JSON = json.loads(
-    """
+SAMPLE_COMPLIANCE_JSON = json.loads("""
 {
   "date" : "2013-04-26T13:43:12.436+0000",
   "compliantUntil" : "2013-04-26T13:43:12.436+0000",
@@ -675,11 +674,9 @@ SAMPLE_COMPLIANCE_JSON = json.loads(
   "status" : "invalid",
   "compliant" : false
 }
-"""
-)
+""")
 
-SAMPLE_COMPLIANCE_SCA_JSON = json.loads(
-    """
+SAMPLE_COMPLIANCE_SCA_JSON = json.loads("""
 {
   "status": "disabled",
   "compliant": true,
@@ -692,5 +689,4 @@ SAMPLE_COMPLIANCE_SCA_JSON = json.loads(
   "reasons": [],
   "productComplianceDateRanges": {}
 }
-"""
-)
+""")

@@ -15,6 +15,7 @@
 """
 Helper methods for mocking up JSON model objects, certificates, etc.
 """
+
 from datetime import timedelta, datetime
 
 from rhsm.certificate import GMT

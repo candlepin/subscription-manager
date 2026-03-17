@@ -22,7 +22,6 @@ from subscription_manager import base_plugin
 
 from test import subman_marker_functional
 
-
 # SubManPlugin
 # plugin_key
 

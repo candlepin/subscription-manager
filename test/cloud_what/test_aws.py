@@ -375,19 +375,11 @@ class TestAWSCloudProvider(unittest.TestCase):
         c_time = str(time.time())
         ttl = str(aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL)
         token = "ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=="
-        valid_token = (
-            '{\
-  "ctime": "'
-            + c_time
-            + '",\
-  "ttl": "'
-            + ttl
-            + '",\
-  "token": "'
-            + token
-            + '"\
+        valid_token = '{\
+  "ctime": "' + c_time + '",\
+  "ttl": "' + ttl + '",\
+  "token": "' + token + '"\
 }'
-        )
         aws_collector = aws.AWSCloudProvider({})
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
@@ -407,19 +399,11 @@ class TestAWSCloudProvider(unittest.TestCase):
         c_time = str(time.time())
         ttl = str(aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL)
         token = "ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=="
-        valid_token = (
-            '{[\
-  "ctime": "'
-            + c_time
-            + '",\
-  "ttl": "'
-            + ttl
-            + '",\
-  "token": "'
-            + token
-            + '"\
+        valid_token = '{[\
+  "ctime": "' + c_time + '",\
+  "ttl": "' + ttl + '",\
+  "token": "' + token + '"\
 }]'
-        )
         aws_collector = aws.AWSCloudProvider({})
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
@@ -439,17 +423,11 @@ class TestAWSCloudProvider(unittest.TestCase):
         ttl = str(aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL)
         token = "ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=="
         # ctime has to be float (unix epoch)
-        valid_token = (
-            '{[\
+        valid_token = '{[\
   "ctime": "Wed Dec 16 16:31:36 CET 2020",\
-  "ttl": "'
-            + ttl
-            + '",\
-  "token": "'
-            + token
-            + '"\
+  "ttl": "' + ttl + '",\
+  "token": "' + token + '"\
 }]'
-        )
         aws_collector = aws.AWSCloudProvider({})
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:
@@ -487,17 +465,11 @@ class TestAWSCloudProvider(unittest.TestCase):
         """
         c_time = str(time.time() - aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL - 10)
         ttl = str(aws.AWSCloudProvider.CLOUD_PROVIDER_TOKEN_TTL)
-        valid_token = (
-            '{\
-  "ctime": "'
-            + c_time
-            + '",\
-  "ttl": "'
-            + ttl
-            + '",\
+        valid_token = '{\
+  "ctime": "' + c_time + '",\
+  "ttl": "' + ttl + '",\
   "token": "ABCDEFGHy0hY_y8D7e95IIx7aP2bmnzddz0tIV56yZY9oK00F8GUPQ=="\
 }'
-        )
         aws_collector = aws.AWSCloudProvider({})
         # Create mock of cached toke file
         with tempfile.NamedTemporaryFile() as tmp_token_file:

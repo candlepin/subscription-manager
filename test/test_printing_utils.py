@@ -13,7 +13,6 @@ from subscription_manager.printing_utils import (
 
 from unittest.mock import patch
 
-
 TEST_COLUMNS = [
     "Subscription Name:",
     "Provides:",

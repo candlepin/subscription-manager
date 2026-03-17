@@ -17,7 +17,6 @@ import contextlib
 import os
 import unittest
 
-
 FAKE_PART_NUMBER = "AAAAAAAAAAAAA-ZZ"
 FAKE_PRODUCT_NAME = "PPPPPPPPPP"
 FAKE_SERIAL_NUMBER = "SSSSSSSS"
