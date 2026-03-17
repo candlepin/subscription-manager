@@ -84,6 +84,8 @@ class ExitStatus(enum.IntEnum):
     """The system registration was not successful."""
     ALREADY_REGISTERED = 31
     """System was already registered; no registration action was performed."""
+    EXIT_SIGNAL_RECEIVED = 32
+    """The worker process was terminated by a signal before completing its task."""
 
     UNKNOWN_ERROR = -1
     """An unknown error occurred."""
@@ -95,7 +97,7 @@ log = logging.getLogger(f"rhsm-app.{__name__}")
 
 
 def exit_on_signal(_signumber, _stackframe):
-    sys.exit(ExitStatus.OK)
+    sys.exit(ExitStatus.EXIT_SIGNAL_RECEIVED)
 
 
 def _is_enabled() -> bool:
@@ -525,9 +527,10 @@ def main():
         # stack trace. We need to check the code, since we want to signal
         # exit with failure to the caller. Otherwise, we will exit with 0
         if se.code:
-            if se.code == ExitStatus.ALREADY_REGISTERED:
-                # In this case, raise the exception to rhsmcertd to indicate 
-                # that the system is already registered
+            if se.code in (ExitStatus.ALREADY_REGISTERED, ExitStatus.EXIT_SIGNAL_RECEIVED):
+                # In this case, raise the exception to rhsmcertd to indicate
+                # that the system is already registered or the worker was
+                # terminated early by a signal.
                 raise
             sys.exit(ExitStatus.UNKNOWN_ERROR)
     except Exception:

@@ -52,6 +52,7 @@ typedef enum {
 #define WORKER LIBEXECDIR"/rhsmcertd-worker"
 #define WORKER_NAME WORKER
 #define WORKER_ALREADY_REGISTERED 31
+#define WORKER_EXIT_SIGNAL_RECEIVED 32
 #define PACKAGE_PROFILE_UPLOADER LIBEXECDIR"/rhsm-package-profile-uploader"
 #define INITIAL_DELAY_SECONDS 120
 #define DEFAULT_AUTO_REG_INTERVAL_SECONDS 3600 /* 1 hour */
@@ -436,6 +437,10 @@ auto_register(gpointer data)
     }
     if (status == WORKER_ALREADY_REGISTERED) {
         debug ("(Auto-registration) system already registered, no action taken.");
+        return false;
+    }
+    if (status == WORKER_EXIT_SIGNAL_RECEIVED) {
+        debug ("(Auto-registration) not completed, worker was terminated by signal.");
         return false;
     }
     warn ("(Auto-registration) failed (%d)", status);
