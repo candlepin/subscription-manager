@@ -176,12 +176,12 @@ class HardwareCollector(collector.FactsCollector):
             m: re.Match = _lsb_release_version.match(firstline)
 
             if m is not None:
-                (distname, version, tmp_modifier, dist_id) = tuple(m.groups())
+                distname, version, tmp_modifier, dist_id = tuple(m.groups())
                 if tmp_modifier:
                     version_modifier = tmp_modifier.lower()
 
         elif hasattr(platform, "linux_distribution"):
-            (distname, version, dist_id) = platform.linux_distribution()
+            distname, version, dist_id = platform.linux_distribution()
             version_modifier = "Unknown"
 
         # FIXME Return collections.namedtuple instead?

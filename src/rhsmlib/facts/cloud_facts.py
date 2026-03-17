@@ -21,7 +21,6 @@ from cloud_what._base_provider import BaseCloudProvider
 from cloud_what.provider import get_cloud_provider, DetectionMethod
 from rhsmlib.facts import collector
 
-
 log = logging.getLogger(__name__)
 
 

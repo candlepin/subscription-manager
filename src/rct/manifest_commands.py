@@ -88,7 +88,7 @@ class ZipExtractAll(ZipFile):
         results = []
         in_zip = self._get_inner_zip()
         for filename in in_zip.namelist():
-            (read_path, read_file) = os.path.split(filename)
+            read_path, read_file = os.path.split(filename)
             if (read_path == os.path.join("export", "entitlements")) and (len(read_file) > 0):
                 results.append(filename)
         return results
@@ -116,7 +116,7 @@ class ZipExtractAll(ZipFile):
     def extractall(self, location, overwrite=False):
         self._is_secure(location, location)
         for path_name in self.namelist():
-            (directory, filename) = os.path.split(path_name)
+            directory, filename = os.path.split(path_name)
             directory = os.path.join(location, directory)
             self._is_secure(location, directory)
             if not os.path.exists(directory):

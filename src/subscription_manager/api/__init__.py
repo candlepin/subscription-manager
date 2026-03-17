@@ -15,11 +15,11 @@ external applications.
 
 All reasonable efforts will be made to maintain compatibility.
 """
+
 from functools import wraps
 from rhsm import logutil
 
 from subscription_manager.version import pkg_version as version
-
 
 injected = False
 

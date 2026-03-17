@@ -25,7 +25,6 @@ import urllib.parse
 import rhsm.config
 from rhsm.config import DEFAULT_PROXY_PORT
 
-
 PROGRESS_MESSAGES: bool = True
 """Enable or disable progress messages.
 

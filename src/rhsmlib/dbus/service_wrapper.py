@@ -43,7 +43,7 @@ def parse_argv(argv, default_dbus_name):
     )
     parser.add_argument("-n", "--bus-name", default=default_dbus_name)
     parser.add_argument("-v", "--verbose", action="store_true")
-    (opts, args) = parser.parse_known_args(argv[1:])
+    opts, args = parser.parse_known_args(argv[1:])
 
     try:
         if hasattr(opts, "bus") and opts.bus:

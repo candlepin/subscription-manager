@@ -15,7 +15,6 @@
 This module provides service for consumer identity.
 """
 
-
 from subscription_manager import injection as inj
 
 

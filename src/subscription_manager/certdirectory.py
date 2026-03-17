@@ -24,7 +24,6 @@ from subscription_manager.injection import require, ENT_DIR
 from rhsmlib.services import config
 from rhsm.certificate2 import CONTENT_ACCESS_CERT_TYPE
 
-
 if TYPE_CHECKING:
     from rhsm.certificate2 import EntitlementCertificate
 

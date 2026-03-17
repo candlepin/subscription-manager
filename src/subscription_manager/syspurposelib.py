@@ -16,6 +16,7 @@
 This module is an interface to syspurpose's SyncedStore class from subscription-manager.
 It contains methods for accessing/manipulating the local syspurpose.json metadata file through SyncedStore.
 """
+
 from typing import Optional, Tuple, Union, TYPE_CHECKING
 
 from rhsm.connection import ConnectionException, GoneException

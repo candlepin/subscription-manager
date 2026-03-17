@@ -16,6 +16,7 @@ This module contains implementation of D-Bus object representing system purpose.
 It uses interface: com.redhat.RHSM1.Syspurpose and path:
 /com/redhat/RHSM1/Syspurpose
 """
+
 from typing import TYPE_CHECKING
 
 import dbus

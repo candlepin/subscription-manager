@@ -17,7 +17,6 @@ This file contains code of dnf subcommand called "upload" used for uploading of 
 packages, enabled repositories, modules).
 """
 
-
 from dnfpluginscore import logger
 import dnf.cli
 

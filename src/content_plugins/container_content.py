@@ -16,6 +16,7 @@
 A subscription-manager plugin to watch for docker content in
 entitlement certificates, and correctly configure to use them.
 """
+
 from subscription_manager import base_plugin
 
 from subscription_manager.plugin.container import ContainerContentUpdateActionCommand

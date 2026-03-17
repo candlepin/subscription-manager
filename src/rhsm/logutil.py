@@ -18,7 +18,6 @@ import os
 import sys
 import rhsm.config
 
-
 LOGFILE_DIR = "/var/log/rhsm/"
 LOGFILE_PATH = os.path.join(LOGFILE_DIR, "rhsm.log")
 USER_LOGFILE_DIR = os.path.join(

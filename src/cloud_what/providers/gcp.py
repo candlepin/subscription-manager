@@ -26,7 +26,6 @@ from typing import Union
 
 from cloud_what._base_provider import BaseCloudProvider
 
-
 log = logging.getLogger(__name__)
 
 

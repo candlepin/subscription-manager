@@ -12,6 +12,7 @@
 # in this software or its documentation.
 #
 """Load and collect DMI data."""
+
 import contextlib
 import logging
 from typing import Dict, List, Union

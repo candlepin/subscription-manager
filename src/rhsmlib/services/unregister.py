@@ -25,7 +25,6 @@ from subscription_manager import injection as inj
 from subscription_manager import managerlib
 from rhsm import connection
 
-
 log = logging.getLogger(__name__)
 
 

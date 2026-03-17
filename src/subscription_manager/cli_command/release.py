@@ -76,7 +76,7 @@ class ReleaseCommand(CliCommand):
     def _do_command(self):
         cdn_url = conf["rhsm"]["baseurl"]
         # note: parse_baseurl_info will populate with defaults if not found
-        (cdn_hostname, cdn_port, _cdn_prefix) = parse_baseurl_info(cdn_url)
+        cdn_hostname, cdn_port, _cdn_prefix = parse_baseurl_info(cdn_url)
 
         # Base CliCommand has already setup proxy info etc
         self.cp_provider.set_content_connection_info(cdn_hostname=cdn_hostname, cdn_port=cdn_port)

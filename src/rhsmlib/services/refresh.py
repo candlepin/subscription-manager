@@ -15,7 +15,6 @@
 This module provides service for refreshing entitlement certificates
 """
 
-
 import logging
 
 from rhsm.connection import UEPConnection

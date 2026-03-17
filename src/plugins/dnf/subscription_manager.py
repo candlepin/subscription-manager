@@ -42,49 +42,37 @@ if TYPE_CHECKING:
     from subscription_manager.cache import ReleaseStatusCache
 
 
-expired_warning = _(
-    """
+expired_warning = _("""
 *** WARNING ***
 The subscription for following product(s) has expired:
 %s
 You no longer have access to the repositories that provide these products.  \
 It is important that you apply an active subscription in order to resume access \
 to security and other critical updates. If you don't have other active \
-subscriptions, you can renew the expired subscription.  """
-)
+subscriptions, you can renew the expired subscription.  """)
 
-not_registered_warning = _(
-    """
+not_registered_warning = _("""
 This system is not registered with an entitlement server. You can use subscription-manager to register.
-"""
-)
+""")
 
-not_registered_warning_rhc = _(
-    """
+not_registered_warning_rhc = _("""
 This system is not registered with an entitlement server. \
 You can use "rhc" or "subscription-manager" to register.
-"""
-)
+""")
 
-no_subs_warning = _(
-    """
+no_subs_warning = _("""
 This system is registered with an entitlement server, but is not receiving updates. You can use \
 subscription-manager to assign subscriptions.
-"""
-)
+""")
 
-release_lock_warning = _(
-    """
+release_lock_warning = _("""
 This system has release set to {release_version} and it receives updates only for this release.
-"""
-)
+""")
 
-skew_clock_warning = _(
-    """
+skew_clock_warning = _("""
 The system clock is skewed. There is a time difference of {time_drift} seconds with the entitlement server. \
 Please check your clock settings to ensure access to all entitled content.
-"""
-)
+""")
 
 log = logging.getLogger("rhsm-app." + __name__)
 

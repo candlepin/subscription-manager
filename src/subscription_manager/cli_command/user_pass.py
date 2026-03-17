@@ -77,7 +77,7 @@ class UserPassCommand(CliCommand):
     @property
     def username(self):
         if not self._username:
-            (self._username, self._password) = self._get_username_and_password(
+            self._username, self._password = self._get_username_and_password(
                 self.options.username, self.options.password
             )
         return self._username
@@ -85,7 +85,7 @@ class UserPassCommand(CliCommand):
     @property
     def password(self):
         if not self._password:
-            (self._username, self._password) = self._get_username_and_password(
+            self._username, self._password = self._get_username_and_password(
                 self.options.username, self.options.password
             )
         return self._password
