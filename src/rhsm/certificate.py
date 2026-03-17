@@ -23,6 +23,7 @@ automatically create the correct object for any given certificate.
 Eventually the deprecated classes below will be removed, and the new classes
 will be relocated into this module.
 """
+
 from typing import List, Any, Callable, Optional, Union, Tuple, Dict
 
 import dateutil

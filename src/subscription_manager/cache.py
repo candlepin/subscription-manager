@@ -17,6 +17,7 @@ Classes here track various information last sent to the server, compare
 this with the current state, and perform an update on the server if
 necessary.
 """
+
 import base64
 import datetime
 import logging

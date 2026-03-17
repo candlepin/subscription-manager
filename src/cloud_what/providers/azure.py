@@ -24,7 +24,6 @@ from shutil import which
 
 from cloud_what._base_provider import BaseCloudProvider
 
-
 log = logging.getLogger(__name__)
 
 

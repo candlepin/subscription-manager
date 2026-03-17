@@ -1538,18 +1538,12 @@ class UEPConnection(BaseConnection):
         status = self.getStatus()
         capabilities = status.get("managerCapabilities")
         if capabilities is None:
-            log.debug(
-                "The status retrieved did not \
-                      include key 'managerCapabilities'.\nStatus:'%s'"
-                % status
-            )
+            log.debug("The status retrieved did not \
+                      include key 'managerCapabilities'.\nStatus:'%s'" % status)
             capabilities = []
         elif isinstance(capabilities, list) and not capabilities:
-            log.debug(
-                "The managerCapabilities list \
-                      was empty\nStatus:'%s'"
-                % status
-            )
+            log.debug("The managerCapabilities list \
+                      was empty\nStatus:'%s'" % status)
         else:
             log.debug("Server has the following capabilities: %s", capabilities)
         return capabilities

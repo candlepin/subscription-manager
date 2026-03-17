@@ -255,7 +255,7 @@ class CliCommand(AbstractCLICommand):
         if args is None:
             args = sys.argv[2:]
 
-        (self.options, unknown_args) = self.parser.parse_known_args(args)
+        self.options, unknown_args = self.parser.parse_known_args(args)
 
         # check for unparsed arguments
         if unknown_args:
@@ -274,7 +274,7 @@ class CliCommand(AbstractCLICommand):
 
         if hasattr(self.options, "server_url") and self.options.server_url:
             try:
-                (self.server_hostname, self.server_port, self.server_prefix) = parse_server_info(
+                self.server_hostname, self.server_port, self.server_prefix = parse_server_info(
                     self.options.server_url, conf
                 )
             except ServerUrlParseError as e:
@@ -290,7 +290,7 @@ class CliCommand(AbstractCLICommand):
 
         if hasattr(self.options, "base_url") and self.options.base_url:
             try:
-                (baseurl_server_hostname, baseurl_server_port, baseurl_server_prefix) = parse_baseurl_info(
+                baseurl_server_hostname, baseurl_server_port, baseurl_server_prefix = parse_baseurl_info(
                     self.options.base_url
                 )
             except ServerUrlParseError as e:

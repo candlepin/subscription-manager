@@ -26,7 +26,6 @@ from typing import Union, Any
 
 from cloud_what._base_provider import BaseCloudProvider
 
-
 log = logging.getLogger(__name__)
 
 # Instance from one region will be redirected to another region's CDS for content

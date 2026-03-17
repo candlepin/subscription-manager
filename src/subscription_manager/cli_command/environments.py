@@ -33,7 +33,6 @@ from subscription_manager.utils import get_supported_resources
 
 from subscription_manager.injection import require, IDENTITY
 
-
 log = logging.getLogger(__name__)
 
 MULTI_ENV = "multi_environment"

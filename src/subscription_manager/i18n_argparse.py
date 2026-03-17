@@ -22,12 +22,12 @@ Just use this instead of argparse, the interface should be the same.
 For some background, see:
 http://bugs.python.org/issue4319
 """
+
 import argparse
 from argparse import ArgumentParser as _ArgumentParser
 import sys
 
 from subscription_manager.i18n import ugettext as _
-
 
 argparse._ = _
 

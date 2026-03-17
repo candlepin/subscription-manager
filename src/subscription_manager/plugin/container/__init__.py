@@ -13,6 +13,7 @@
 #
 
 """Core code for the container content plugin."""
+
 import logging
 import os
 import re

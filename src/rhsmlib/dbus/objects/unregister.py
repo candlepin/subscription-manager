@@ -16,6 +16,7 @@
 This module containst class of D-Bus object used for unregistering
 system from Candlepin server.
 """
+
 from typing import TYPE_CHECKING
 
 import dbus

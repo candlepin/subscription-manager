@@ -36,7 +36,6 @@ from cloud_what.providers.aws import AWSCloudProvider
 from cloud_what.providers.azure import AzureCloudProvider
 from cloud_what.providers.gcp import GCPCloudProvider
 
-
 # List of classes with supported cloud providers
 CLOUD_PROVIDERS = [
     AWSCloudProvider,

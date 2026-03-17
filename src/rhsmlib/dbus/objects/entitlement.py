@@ -23,7 +23,6 @@ from rhsmlib.services.entitlement import EntitlementService
 from subscription_manager.injectioninit import init_dep_injection
 from subscription_manager.i18n import Locale
 
-
 init_dep_injection()
 
 log = logging.getLogger(__name__)
