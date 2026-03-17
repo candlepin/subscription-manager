@@ -35,7 +35,6 @@ build_ext_home = os.path.abspath(os.path.join(os.path.dirname(__file__), "./buil
 sys.path.append(build_ext_home)
 from build_ext import i18n, lint, template, utils  # noqa: E402
 
-
 # Read packages we should exclude from the environment
 # This is used to deal with the fact that we have multiple packages which
 # might be built optionally all tracked / installed via one setup.
