@@ -39,7 +39,6 @@ from subscription_manager.i18n_argparse import ArgumentParser, USAGE
 from subscription_manager.identity import Identity, ConsumerIdentity
 from subscription_manager.injectioninit import init_dep_injection
 
-
 if TYPE_CHECKING:
     import argparse
     from rhsm.config import RhsmConfigParser
@@ -518,7 +517,7 @@ def main():
 
     options: argparse.Namespace
     args: List[str]
-    (options, args) = parser.parse_known_args()
+    options, args = parser.parse_known_args()
     try:
         _main(options)
     except SystemExit as se:
