@@ -17,7 +17,6 @@ from rhsmlib.dbus.objects.products import ProductsDBusImplementation
 
 from test.rhsmlib.base import SubManDBusFixture
 
-
 START_DATE = datetime.datetime.now() - datetime.timedelta(days=100)
 NOW_DATE = datetime.datetime.now()
 END_DATE = datetime.datetime.now() + datetime.timedelta(days=265)

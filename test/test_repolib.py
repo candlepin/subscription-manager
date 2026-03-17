@@ -59,7 +59,6 @@ from rhsmlib.services import config
 from subscription_manager import repolib
 from subscription_manager.entcertlib import CONTENT_ACCESS_CERT_TYPE
 
-
 # always pretend to run tests with yum in order to have 'ui_repoid_vars' available
 repofile.HAS_YUM = True
 

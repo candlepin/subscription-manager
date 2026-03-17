@@ -446,8 +446,7 @@ class HardwareProbeTest(test.fixture.SubManFixture):
     @patch("os.path.exists")
     @patch(
         OPEN_FUNCTION,
-        mock_open(
-            read_data="""
+        mock_open(read_data="""
 NAME=Awesome OS
 VERSION="42 (Go4It)"
 ID=awesome
@@ -465,8 +464,7 @@ BUG_REPORT_URL="https://bugzilla.awesomeproject.org/"
 PRIVACY_POLICY_URL="https://awesomeproject.org/wiki/Legal:PrivacyPolicy"
 VARIANT="Go4It"
 VARIANT_ID=server
-    """
-        ),
+    """),
     )
     def test_distro_with_os_release(self, mock_exists):
         """

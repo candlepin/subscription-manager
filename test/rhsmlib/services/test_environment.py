@@ -18,7 +18,6 @@ from rhsm import connection
 
 from rhsmlib.services import environment
 
-
 ENVIRONMENTS_JSON = [
     {
         "created": "2024-10-03T18:12:56+0000",

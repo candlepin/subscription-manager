@@ -25,7 +25,6 @@ from rhsm import connection
 
 from rhsmlib.services import products
 
-
 START_DATE = datetime.datetime.now() - datetime.timedelta(days=100)
 NOW_DATE = datetime.datetime.now()
 END_DATE = datetime.datetime.now() + datetime.timedelta(days=265)

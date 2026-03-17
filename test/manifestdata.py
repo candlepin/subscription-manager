@@ -38,9 +38,7 @@ Subscription:
 \tProvided Products:
 \tContent Sets:
 
-""" % (
-    {"space": " "}
-)
+""" % ({"space": " "})
 
 consumer_json = """
 {

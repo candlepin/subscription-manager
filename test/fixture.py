@@ -5,7 +5,6 @@ import tempfile
 
 import unittest
 
-
 # just log py.warnings (and pygtk warnings in particular)
 import logging
 

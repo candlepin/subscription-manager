@@ -33,7 +33,6 @@ from rhsm.connection import GoneException
 
 from .fixture import SubManFixture, set_up_mock_sp_store
 
-
 CONSUMER_DATA = {
     "releaseVer": {"id": 1, "releaseVer": "123123"},
     "serviceLevel": "Pro Turbo HD Plus Ultra",

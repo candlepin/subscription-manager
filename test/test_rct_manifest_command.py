@@ -69,7 +69,7 @@ class RCTManifestCommandTests(SubManFixture):
         catman = CatManifestCommand()
         parser = ArgumentParser()
         parser.add_argument("--no-content")
-        (options, args) = parser.parse_known_args([])
+        options, args = parser.parse_known_args([])
         catman.options = options
         catman.args = [_build_valid_manifest()]
 
