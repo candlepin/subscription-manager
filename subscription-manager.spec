@@ -83,7 +83,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.12
+Version: 1.30.13
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -680,6 +680,36 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Wed Mar 18 2026 Jason Jerome <jajerome@redhat.com> 1.30.13-1
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- chore: Make black-26.* happy again (./) (jhnidek@redhat.com)
+- chore: Update black to 26.3.1 in GitHub action yml file (jhnidek@redhat.com)
+- chore: Make black-26.* happy again (./integration-tests) (jhnidek@redhat.com)
+- chore: Make black-26.* happy again (./test) (jhnidek@redhat.com)
+- test: Fixed one unit test related to inotify (jhnidek@redhat.com)
+- chore: Make black-26.* happy again (./src) (jhnidek@redhat.com)
+- chore: style formatting fixes in rhsmcertd worker (jajerome@redhat.com)
+- fix: updated rhsmcertd to detect when auto-registration is terminated early
+  (jajerome@redhat.com)
+- fix: updated rhsmcertd to detect when system is already registered
+  (jajerome@redhat.com)
+- chore(deps): bump black from 24.3.0 to 26.3.1
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- chore(deps): bump black from 24.3.0 to 26.3.1 in /integration-tests
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- fix: allow system to be registered with broken insights-client
+  (jlocash@redhat.com)
+- fix: skip package profile upload when disabled in config
+  (jajerome@redhat.com)
+- fix(unit-tests): mock isdir so rhsm_debug tests are env agnostic
+  (csnyder@redhat.com)
+- ci: bump actions/upload-artifact from 6 to 7
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- fix: Handle non-existence of /var/cache/cloud-what gracefully
+  (jhnidek@redhat.com)
+- fix(unit-tests): Fixed unit tests for rhsm-debug (jhnidek@redhat.com)
+- feat: Add /var/cache/cloud-what/ to sos-report (jhnidek@redhat.com)
+
 * Fri Jan 23 2026 Jiri Hnidek <jhnidek@redhat.com> 1.30.12-1
 - feat: Added more debug prints to cloud-what (jhnidek@redhat.com)
 - Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
