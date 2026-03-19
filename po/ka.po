@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2026-01-23 11:58+0000\n"
+"PO-Revision-Date: 2026-03-19 07:58+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/ka/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -40,7 +40,7 @@ msgstr "არგუმენტი \"-\" რეჟიმით %r"
 #: /usr/lib64/python3.9/argparse.py:1273
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr ""
+msgstr "'%(filename)s' ვერ გავხსენი: %(error)s"
 
 #: /usr/lib64/python3.9/argparse.py:1482
 #, python-format
@@ -49,7 +49,7 @@ msgstr "ქმედებების შერწმის შეცდომ�
 
 #: /usr/lib64/python3.9/argparse.py:1520
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' არასწორი არგუმენტია პოზიცირებისთვის"
 
 #: /usr/lib64/python3.9/argparse.py:1542
 #, python-format
@@ -57,27 +57,29 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"არასწორი პარამეტრების სტრიქონი %(option)r: უნდა იწყებოდეს სიმბოლოთი %"
+"(prefix_chars)r"
 
 #: /usr/lib64/python3.9/argparse.py:1560
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= აუცილებელია %r -ის მსგავსი პარამეტრებისთვის"
 
 #: /usr/lib64/python3.9/argparse.py:1577
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "conflict_resolution-ის არასწორი მნიშვნელობა: %r"
 
 #: /usr/lib64/python3.9/argparse.py:1595
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "კონფლიქტური პარამეტრის სტრიქონი: %s"
-msgstr[1] "კონფლიქტური პარამეტრების სტრიქონი: %s"
+msgstr[0] "შეუთავსებელი პარამეტრების სტრიქონი: %s"
+msgstr[1] "შეუთავსებელი პარამეტრების სტრიქონები: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1661
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "ურთიერთგამომრიცხავი არგუმენტები არასავალდებულო უნდა იყოს"
 
 #: /usr/lib64/python3.9/argparse.py:1728
 msgid "positional arguments"
@@ -93,32 +95,32 @@ msgstr "ამ დახმარების ჩვენება და გ�
 
 #: /usr/lib64/python3.9/argparse.py:1775
 msgid "cannot have multiple subparser arguments"
-msgstr ""
+msgstr "ერთზე მეტი ქვედამმუშავებლის პარამეტრი ვერ გექნებათ"
 
 #: /usr/lib64/python3.9/argparse.py:1827 /usr/lib64/python3.9/argparse.py:2338
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr "უცნობი არგუმენტები: %s"
+msgstr "გამოუცნობი არგუმენტები: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1928
 #, python-format
 msgid "not allowed with argument %s"
-msgstr ""
+msgstr "დაუშვებელია არგუმენტით %s"
 
 #: /usr/lib64/python3.9/argparse.py:1974 /usr/lib64/python3.9/argparse.py:1988
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "გამოტოვებულია მკაფიო არგუმენტი %r"
 
 #: /usr/lib64/python3.9/argparse.py:2095
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "აუცილებელია შემდეგი არგუმენტები: %s"
 
 #: /usr/lib64/python3.9/argparse.py:2110
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr ""
+msgstr "აუცილებელია ერთ-ერთი არგუმენტი: %s"
 
 #: /usr/lib64/python3.9/argparse.py:2153
 msgid "expected one argument"
@@ -142,27 +144,27 @@ msgstr[1] "მოველოდი %s არგუმენტს"
 #: /usr/lib64/python3.9/argparse.py:2217
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "გაურკვეველი პარამეტრი: %(option)s შეიძლება იყოს %(matches)s"
 
 #: /usr/lib64/python3.9/argparse.py:2281
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "მოულოდნელი პარამეტრების სტრიქონი: %s"
 
 #: /usr/lib64/python3.9/argparse.py:2478
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r გამოძახებადი არაა"
 
 #: /usr/lib64/python3.9/argparse.py:2495
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr ""
+msgstr "არასწორი %(type)s-ის მნიშვნელობა: %(value)r"
 
 #: /usr/lib64/python3.9/argparse.py:2506
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr ""
+msgstr "არასწორი არჩევანი: %(value)r (აირჩიეთ სიიდან %(choices)s)"
 
 #: /usr/lib64/python3.9/argparse.py:2582
 #, python-format
@@ -514,7 +516,7 @@ msgstr "კონტრაქტი"
 
 #: src/rct/manifest_commands.py:252 src/rct/printing.py:65
 msgid "Order"
-msgstr "თანამიმდევრობა"
+msgstr "დალაგება"
 
 #: src/rct/manifest_commands.py:253 src/rct/printing.py:70
 msgid "Account"
@@ -657,7 +659,7 @@ msgstr "მეხსიერების ლიმიტი"
 
 #: src/rct/printing.py:83
 msgid "Core Limit"
-msgstr "ბირთვის ლიმიტი"
+msgstr "ბირთვების ლიმიტი"
 
 #: src/rct/printing.py:84
 msgid "Virt Only"
@@ -793,7 +795,7 @@ msgstr "ღრუბლის ტოკენის გამოთხოვა"
 
 #: src/rhsm/connection.py:1607
 msgid "Registering system"
-msgstr "სისტემის რეგისტრაცია"
+msgstr "მიმდინარეობს სისტემის რეგისტრაცია"
 
 #: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
@@ -1046,7 +1048,7 @@ msgstr "ფიზიკური"
 #: src/rhsmlib/services/entitlement.py:294
 #: src/subscription_manager/cli_command/list.py:449
 msgid "Yes"
-msgstr "დიახ"
+msgstr "კი"
 
 #: src/rhsmlib/services/entitlement.py:296
 #: src/subscription_manager/cli_command/list.py:451
@@ -1474,7 +1476,7 @@ msgstr ""
 #: src/subscription_manager/i18n_argparse.py:35
 #, python-format
 msgid "%(prog)s [OPTIONS]"
-msgstr "%(prog)s [მორგება]"
+msgstr "%(prog)s [პარამეტრები]"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:492
 #, python-brace-format
@@ -1921,7 +1923,7 @@ msgstr "ორგან-ციის ID: {ownerid}"
 #: src/subscription_manager/printing_utils.py:165
 #: src/subscription_manager/printing_utils.py:184
 msgid "None"
-msgstr "არა"
+msgstr "არცერთი"
 
 #: src/subscription_manager/cli_command/identity.py:110
 #, python-brace-format
@@ -2993,10 +2995,12 @@ msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr ""
+"შემცველობასთან წვდომის რეჟიმი დაყენებულია მარტივ შემცველობასთან წვდომაზე. ამ "
+"ჰოსტს აქვს წვდომა შემცველობასთან გამოწერის სტატუსის მიუხედავად.\n"
 
 #: src/subscription_manager/cli_command/status.py:123
 msgid "Registered"
-msgstr "რეგისტრირებული"
+msgstr "რეგისტრირებულია"
 
 #: src/subscription_manager/cli_command/status.py:125
 #, python-brace-format
@@ -3209,7 +3213,7 @@ msgstr ""
 
 #: src/subscription_manager/exceptions.py:55
 msgid "Server URL can not be None"
-msgstr ""
+msgstr "სერვერის URL ცარიელი არ შეიძლება, იყოს"
 
 #: src/subscription_manager/exceptions.py:56
 msgid "Server URL port should be numeric"
@@ -3336,7 +3340,7 @@ msgstr "წაშლილია"
 
 #: src/subscription_manager/scripts/package_profile_upload.py:29
 msgid "Upload a package profile"
-msgstr ""
+msgstr "პაკეტის პროფილის ატვირთვა"
 
 #: src/subscription_manager/scripts/package_profile_upload.py:53
 #: src/subscription_manager/scripts/rct.py:45
