@@ -382,6 +382,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
+            crypto_algorithms=None,
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -420,6 +421,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
+            crypto_algorithms=None,
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -458,6 +460,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
+            crypto_algorithms=None,
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -501,6 +504,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
+            crypto_algorithms=None,
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -660,6 +664,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
+            crypto_algorithms=None,
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -701,6 +706,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
+            crypto_algorithms=None,
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -788,6 +794,7 @@ class RegisterServiceTest(InjectionMockingTest):
             service_level="test_sla",
             consumer_type="system",
             usage="test_usage",
+            crypto_algorithms=None,
         )
         mock_write_cache.assert_called_once()
 
