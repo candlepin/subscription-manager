@@ -9,8 +9,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2026-03-11 10:58+0000\n"
-"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"PO-Revision-Date: 2026-03-18 12:58+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ka/>\n"
 "Language: ka\n"
@@ -99,7 +100,7 @@ msgstr ""
 #: /usr/lib64/python3.6/argparse.py:1736
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "უცნობი არგუმენტები: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1833
 #, python-format
@@ -123,7 +124,7 @@ msgstr ""
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
-msgstr ""
+msgstr "მოველოდი ერთ არგუმენტს"
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
@@ -168,34 +169,36 @@ msgstr ""
 #: /usr/lib64/python3.6/argparse.py:2393
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: შეცდომა: %(message)s\n"
 
 #: cockpit/src/index.js:64 cockpit/src/subscriptions-view.jsx:408
 #: src/subscription_manager/gui/data/glade/installed.glade:86
 #: src/subscription_manager/gui/data/ui/installed.ui:93
 #: src/subscription_manager/gui/registergui.py:249
 msgid "Register"
-msgstr ""
+msgstr "რეგისტრაცია"
 
 #: cockpit/src/index.js:100
 #: src/subscription_manager/gui/data/glade/installed.glade:93
 #: src/subscription_manager/gui/data/ui/installed.ui:99
 msgid "Register System"
-msgstr ""
+msgstr "სისტემის რეგისტრაცია"
 
 #: cockpit/src/insights.jsx:97 cockpit/src/insights.jsx:323
 msgid "The $0 package is not available from any repository."
-msgstr ""
+msgstr "$0 პაკეტი ხელმიუწვდომელია ყველა რეპოზიტორიიდან."
 
 #: cockpit/src/insights.jsx:100
 msgid ""
 "The system could not be connected to Insights because installing the $0 "
 "package requires the unexpected removal of other packages."
 msgstr ""
+"სისტემა Insight-ს ვერ დაუკავშირდა, რადგან პაკეტის $0 დაყენებას მოულოდნელად "
+"სხვა პაკეტების წაშლა სჭირდება."
 
 #: cockpit/src/insights.jsx:113
 msgid "Connecting to Insights"
-msgstr ""
+msgstr "Insights-თან მიერთება"
 
 #: cockpit/src/insights.jsx:151
 msgid ""
@@ -203,10 +206,14 @@ msgid ""
 "availability, and stability with Red Hat Insights — with predictive "
 "analytics, avoid problems and unplanned downtime in your Red Hat environment."
 msgstr ""
+"აღმოაჩინეთ პროაქტიულად და გადაწყვიტეთ უსაფრთხოების, წარმადობის, "
+"ხელმისაწვდომობის და სტაბილურობის საშიშროებები Red Hat Insights-თან ერთად - "
+"პროაქტიული ანალიტიკით აიცილეთ პრობლემები და დაუგეგმავი გათიშვები თქვენი Red "
+"Hat-ის გარემოში."
 
 #: cockpit/src/insights.jsx:169 cockpit/src/subscriptions-register.jsx:94
 msgid "The $0 package will be installed."
-msgstr ""
+msgstr "საჭიროა დაყენებული იყოს პაკეტი $0."
 
 #: cockpit/src/insights.jsx:171
 msgid "The $0 package and $1 other package will be installed."
@@ -222,11 +229,11 @@ msgstr[1] ""
 
 #: cockpit/src/insights.jsx:193
 msgid "Additional packages:"
-msgstr ""
+msgstr "დამატებითი პაკეტები:"
 
 #: cockpit/src/insights.jsx:201
 msgid "Removals:"
-msgstr ""
+msgstr "წაიშლება:"
 
 #: cockpit/src/insights.jsx:207 cockpit/src/insights.jsx:433
 #: cockpit/src/insights.jsx:438
@@ -236,15 +243,15 @@ msgstr "დეტალები"
 #: cockpit/src/insights.jsx:218 cockpit/src/insights.jsx:229
 #: cockpit/src/insights.jsx:313
 msgid "Waiting for other software management operations to finish"
-msgstr ""
+msgstr "პროგრამების მართვის სხვა ოპერაციების დასრულების მოლოდინი"
 
 #: cockpit/src/insights.jsx:220 cockpit/src/insights.jsx:315
 msgid "Checking installed software"
-msgstr ""
+msgstr "დაყენებული პროგრამების შემოწმება"
 
 #: cockpit/src/insights.jsx:233
 msgid "Downloading $0"
-msgstr ""
+msgstr "$0-ის გადმოწერა"
 
 #: cockpit/src/insights.jsx:235
 msgid "Removing $0"
@@ -256,45 +263,47 @@ msgstr "$0-ის დაყენება"
 
 #: cockpit/src/insights.jsx:254
 msgid "Connect to Red Hat Insights"
-msgstr ""
+msgstr "Red Hat Insights-თან მიერთება"
 
 #: cockpit/src/insights.jsx:257
 msgid "This system is not connected to $0."
-msgstr ""
+msgstr "ეს სისტემა $0-ისთან დაკავშირებული არაა."
 
 #: cockpit/src/insights.jsx:267
 msgid "Connect"
-msgstr ""
+msgstr "დაკავშირება"
 
 #: cockpit/src/insights.jsx:357
 msgid "unknown"
-msgstr ""
+msgstr "უცნობი"
 
 #: cockpit/src/insights.jsx:408
 msgid "The last Insights data upload has failed."
-msgstr ""
+msgstr "Insight-ის მონაცემების ბოლო ატვირთვა ჩავარდა."
 
 #: cockpit/src/insights.jsx:413
 msgid "Connected to Red Hat Insights"
-msgstr ""
+msgstr "მიერთებულია Red Hat Insights-თან"
 
 #: cockpit/src/insights.jsx:419
 msgid "Next Insights data upload"
-msgstr ""
+msgstr "შემდეგი Insight-ის მონაცემების ატვირთვა"
 
 #: cockpit/src/insights.jsx:424
 msgid "Last Insights data upload"
-msgstr ""
+msgstr "Insight-ის მონაცემების ბოლო ატვირთვა"
 
 #: cockpit/src/insights.jsx:441 cockpit/src/insights.jsx:445
 msgid "Disconnect from Insights"
-msgstr ""
+msgstr "გათიშვა Insights-დან"
 
 #: cockpit/src/insights.jsx:443
 msgid ""
 "If you disconnect this system from Insights, it will no longer report it's "
 "Insights status in Red Hat Cloud or Satellite."
 msgstr ""
+"თუ ამ სისტემას Insight-ისგან გათიშავთ, ის ვეღარ მიაწვდის მის Insight-ის "
+"სტატუსს Red Hat Cloud-ს, ან Satellite-ს."
 
 #: cockpit/src/insights.jsx:453 cockpit/src/insights.jsx:472
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:262
@@ -304,7 +313,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/ui/registration_info.ui:356
 #: src/subscription_manager/gui/data/ui/repositories.ui:75
 msgid "Close"
-msgstr ""
+msgstr "დაკეტვა"
 
 #: cockpit/src/insights.jsx:461
 #: src/subscription_manager/gui/data/glade/redeem.glade:29
@@ -314,7 +323,7 @@ msgstr ""
 
 #: cockpit/src/insights.jsx:531
 msgid "No rule hits"
-msgstr ""
+msgstr "არ მოხვდა წესებში"
 
 #: cockpit/src/insights.jsx:539
 msgid "$0 critical hit"
@@ -348,7 +357,7 @@ msgstr[1] ""
 
 #: cockpit/src/insights.jsx:567
 msgid "View your Insights results"
-msgstr ""
+msgstr "იხილეთ თქვენი Insights-ის შედეგები"
 
 #: cockpit/src/insights.jsx:573
 msgid "Connected to Insights"
@@ -356,49 +365,49 @@ msgstr "მიერთებულია Insights-თან"
 
 #: cockpit/src/insights.jsx:585
 msgid "Not connected"
-msgstr ""
+msgstr "არაა დაკავშირებული"
 
 #: cockpit/src/insights.jsx:590 cockpit/src/subscriptions-register.jsx:85
 msgid "Insights"
-msgstr ""
+msgstr "Insights"
 
 #: cockpit/src/subscriptions-client.js:317
 msgid "Starting registration service ..."
-msgstr ""
+msgstr "ეშვება რეგისტრაციის სერვისი..."
 
 #: cockpit/src/subscriptions-client.js:336
 msgid "Registering using activation key ..."
-msgstr ""
+msgstr "რეგისტრაცია აქტივაციის გასაღებით..."
 
 #: cockpit/src/subscriptions-client.js:358
 msgid "Registering using username and password ..."
-msgstr ""
+msgstr "რეგისტრაცია მომხმარებლის სახელითა და პაროლით..."
 
 #: cockpit/src/subscriptions-client.js:387
 msgid "Stopping registration service ..."
-msgstr ""
+msgstr "რეგისტრაციის სერვისის გაჩერება..."
 
 #: cockpit/src/subscriptions-client.js:411
 msgid "Saving configuration ..."
-msgstr ""
+msgstr "კონფიგურაციის შენახვა..."
 
 #: cockpit/src/subscriptions-client.js:431
 msgid "Updating status ..."
-msgstr ""
+msgstr "სტატუსის განახლება..."
 
 #: cockpit/src/subscriptions-client.js:449
 #: cockpit/src/subscriptions-view.jsx:415
 #: src/subscription_manager/gui/registergui.py:1075
 msgid "Unregistering"
-msgstr ""
+msgstr "რეგისტრაციის მოხსნა"
 
 #: cockpit/src/subscriptions-client.js:488
 msgid "not-found"
-msgstr ""
+msgstr "არაა-ნაპოვნი"
 
 #: cockpit/src/subscriptions-client.js:525
 msgid "Corrupted JSON with status"
-msgstr ""
+msgstr "დაზიანებული JSON სტატუსით"
 
 #: cockpit/src/subscriptions-client.js:541
 #: cockpit/src/subscriptions-view.jsx:133
@@ -421,15 +430,15 @@ msgstr ""
 #: src/subscription_manager/utils.py:320 src/subscription_manager/utils.py:321
 #: src/subscription_manager/utils.py:340
 msgid "Unknown"
-msgstr ""
+msgstr "უცნობი"
 
 #: cockpit/src/subscriptions-register.jsx:55
 msgid "Proxy Location"
-msgstr ""
+msgstr "პროქსის მდებარეობა"
 
 #: cockpit/src/subscriptions-register.jsx:61
 msgid "Proxy Username"
-msgstr ""
+msgstr "პროქსის მომხმარებელი"
 
 #: cockpit/src/subscriptions-register.jsx:67
 msgid "Proxy Password"
@@ -437,66 +446,66 @@ msgstr "პროქსის პაროლი"
 
 #: cockpit/src/subscriptions-register.jsx:87
 msgid "Connect this system to $0."
-msgstr ""
+msgstr "ამ სისტემის $0-სთან მიერთება."
 
 #: cockpit/src/subscriptions-register.jsx:107
 msgid "Username"
-msgstr ""
+msgstr "მოხმარებელი"
 
 #: cockpit/src/subscriptions-register.jsx:112
 msgid "Password"
-msgstr ""
+msgstr "პაროლი"
 
 #: cockpit/src/subscriptions-register.jsx:117
 #: cockpit/src/subscriptions-view.jsx:462
 #: src/subscription_manager/gui/registergui.py:1449
 msgid "Organization"
-msgstr ""
+msgstr "ორგანიზაცია"
 
 #: cockpit/src/subscriptions-register.jsx:127
 msgid "Activation Key"
-msgstr ""
+msgstr "აქტივაციის გასაღები"
 
 #: cockpit/src/subscriptions-register.jsx:132
 msgid "Organization ID"
-msgstr ""
+msgstr "ორგანიზაციის ID"
 
 #: cockpit/src/subscriptions-register.jsx:142
 msgid "Default"
-msgstr ""
+msgstr "ნაგულისხმევი"
 
 #: cockpit/src/subscriptions-register.jsx:143
 msgid "Custom URL"
-msgstr ""
+msgstr "ხელით მითითებული URL"
 
 #: cockpit/src/subscriptions-register.jsx:147 src/rct/printing.py:113
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: cockpit/src/subscriptions-register.jsx:155
 msgid "Use proxy server"
-msgstr ""
+msgstr "პროქსი სერვერის გამოყენება"
 
 #: cockpit/src/subscriptions-register.jsx:159
 msgid "Method"
-msgstr ""
+msgstr "მეთოდი"
 
 #: cockpit/src/subscriptions-register.jsx:163 src/rct/manifest_commands.py:250
 #: src/rct/printing.py:81
 msgid "Account"
-msgstr ""
+msgstr "ანგარიში"
 
 #: cockpit/src/subscriptions-register.jsx:168
 msgid "Activation key"
-msgstr ""
+msgstr "აქტივაციის გასაღები"
 
 #: cockpit/src/subscriptions-register.jsx:174
 msgid "Subscriptions"
-msgstr ""
+msgstr "გამოწერები"
 
 #: cockpit/src/subscriptions-register.jsx:176
 msgid "Attach automatically"
-msgstr ""
+msgstr "ავტომატურად მიბმა"
 
 #: cockpit/src/subscriptions-view.jsx:42 cockpit/src/subscriptions-view.jsx:61
 #: cockpit/src/subscriptions-view.jsx:67
@@ -505,106 +514,108 @@ msgstr ""
 #: src/subscription_manager/gui/data/ui/installed.ui:111
 #: src/subscription_manager/gui/data/ui/installed.ui:117
 msgid "Auto-attach"
-msgstr ""
+msgstr "ავტომატური მიბმა"
 
 #: cockpit/src/subscriptions-view.jsx:55
 msgid "Auto-attaching ..."
-msgstr ""
+msgstr "ავტომატურად მიბმა..."
 
 #: cockpit/src/subscriptions-view.jsx:74 cockpit/src/subscriptions-view.jsx:175
 msgid "Product name"
-msgstr ""
+msgstr "პროდუქტის სახელი"
 
 #: cockpit/src/subscriptions-view.jsx:111
 #: src/subscription_manager/gui/installedtab.py:222
 #: src/subscription_manager/managercli.py:91
 msgid "Subscribed"
-msgstr ""
+msgstr "გამოწერილია"
 
 #: cockpit/src/subscriptions-view.jsx:115
 msgid "Partially subscribed"
-msgstr ""
+msgstr "გამოწერილია ნაწილობრივ"
 
 #: cockpit/src/subscriptions-view.jsx:117
 msgid "Partially subscribed ($0)"
-msgstr ""
+msgstr "ნაწილობრივ გამოწერილია ($0)"
 
 #: cockpit/src/subscriptions-view.jsx:121
 msgid "Not subscribed"
-msgstr ""
+msgstr "არაა გამოწერილი"
 
 #: cockpit/src/subscriptions-view.jsx:123
 msgid "Not subscribed ($0)"
-msgstr ""
+msgstr "გამოწერილი არაა ($0)"
 
 #: cockpit/src/subscriptions-view.jsx:128
 msgid "Unknown status"
-msgstr ""
+msgstr "უცნობი სტატუსი"
 
 #: cockpit/src/subscriptions-view.jsx:179
 msgid "Product ID"
-msgstr ""
+msgstr "პროდუქტის ID"
 
 #: cockpit/src/subscriptions-view.jsx:183 src/rct/printing.py:50
 #: src/rct/printing.py:132 src/subscription_manager/gui/installedtab.py:91
 msgid "Version"
-msgstr ""
+msgstr "ვერსია"
 
 #: cockpit/src/subscriptions-view.jsx:187 src/rct/printing.py:51
 msgid "Arch"
-msgstr ""
+msgstr "არქიტექტურა"
 
 #: cockpit/src/subscriptions-view.jsx:195
 #: cockpit/src/subscriptions-view.jsx:339
 #: cockpit/src/subscriptions-view.jsx:374
 #: src/subscription_manager/gui/installedtab.py:94
 msgid "Status"
-msgstr ""
+msgstr "სტატუსი"
 
 #: cockpit/src/subscriptions-view.jsx:199
 msgid "Starts"
-msgstr ""
+msgstr "საწყისი"
 
 #: cockpit/src/subscriptions-view.jsx:203
 msgid "Ends"
-msgstr ""
+msgstr "საბოლოო"
 
 #: cockpit/src/subscriptions-view.jsx:226
 #: cockpit/src/subscriptions-view.jsx:230
 msgid "Installed products"
-msgstr ""
+msgstr "დაყენებული პროდუქტები"
 
 #: cockpit/src/subscriptions-view.jsx:233
 msgid "No installed products detected"
-msgstr ""
+msgstr "დაყენებული პროდუქტები აღმოჩენილი არაა"
 
 #: cockpit/src/subscriptions-view.jsx:307
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of system purpose status."
 msgstr ""
+"შემცველობასთან წვდომის რეჟიმი დაყენებულია მარტივ შემცველობასთან წვდომაზე. ამ "
+"ჰოსტს აქვს წვდომა შემცველობასთან სისტემის დანიშნულების სტატუსის მიუხედავად."
 
 #: cockpit/src/subscriptions-view.jsx:313
 #: cockpit/src/subscriptions-view.jsx:428
 msgid "Popover with explanation of SCA mode"
-msgstr ""
+msgstr "მხტუნარა SCA-ის რეჟიმის ახსნით"
 
 #: cockpit/src/subscriptions-view.jsx:320
 #: cockpit/src/subscriptions-view.jsx:435
 msgid "Subscriptions information"
-msgstr ""
+msgstr "ინფორმაცია გამოწერების შესახებ"
 
 #: cockpit/src/subscriptions-view.jsx:345
 msgid "Service level"
-msgstr ""
+msgstr "სერვისის დონე"
 
 #: cockpit/src/subscriptions-view.jsx:351 src/rct/printing.py:85
 msgid "Usage"
-msgstr ""
+msgstr "გამოყენება"
 
 #: cockpit/src/subscriptions-view.jsx:357
 msgid "Role"
-msgstr ""
+msgstr "როლი"
 
 #: cockpit/src/subscriptions-view.jsx:363 src/rct/printing.py:86
 msgid "Add-ons"
@@ -612,41 +623,43 @@ msgstr "დამატებები"
 
 #: cockpit/src/subscriptions-view.jsx:381
 msgid "No system purpose attributes set"
-msgstr ""
+msgstr "სისტემის დანიშნულების ატრიბუტები დაყენებული არაა"
 
 #: cockpit/src/subscriptions-view.jsx:392
 msgid "System purpose"
-msgstr ""
+msgstr "სისტემის დანიშნულება"
 
 #: cockpit/src/subscriptions-view.jsx:406
 msgid "Not registered"
-msgstr ""
+msgstr "არაა რეგისტრირებული"
 
 #: cockpit/src/subscriptions-view.jsx:415
 msgid "Unregister"
-msgstr ""
+msgstr "რეგისტრაციის მოხსნა"
 
 #: cockpit/src/subscriptions-view.jsx:422
 msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status."
 msgstr ""
+"შემცველობასთან წვდომის რეჟიმი დაყენებულია მარტივ შემცველობასთან წვდომაზე. ამ "
+"ჰოსტს აქვს წვდომა შემცველობასთან გამოწერის სტატუსის მიუხედავად."
 
 #: cockpit/src/subscriptions-view.jsx:449
 msgid "Overview"
-msgstr ""
+msgstr "გადახედვა"
 
 #: cockpit/src/subscriptions-view.jsx:455
 msgid "Subscription status"
-msgstr ""
+msgstr "გამოწერის სტატუსი"
 
 #: cockpit/src/subscriptions-view.jsx:491
 msgid "Updating"
-msgstr ""
+msgstr "განახლება"
 
 #: cockpit/src/subscriptions-view.jsx:492
 msgid "Retrieving subscription status..."
-msgstr ""
+msgstr "გამოწერის სტატუსის მიღება..."
 
 #: cockpit/src/subscriptions-view.jsx:504
 msgid ""
@@ -654,28 +667,33 @@ msgid ""
 "and try reloading the page. Additionally, make sure that you have checked "
 "the 'Reuse my password for privileged tasks' checkbox on the login page."
 msgstr ""
+"სერვისი rhsm ხელმისაწვდომი არაა. დარწმუნდით, რომ პაკეტი subscription-manager "
+"დაყენებულია და სცადეთ, ეს გვერდი განაახლოთ. დამატებით დარწმუნდით, რომ ჩართეთ "
+"'ჩემი პაროლის გამოყენება პრივილეგიის მქონე ამოცანებისთვის' შესვლის გვერდზე."
 
 #: cockpit/src/subscriptions-view.jsx:507
 msgid "Unable to the reach the rhsm service."
-msgstr ""
+msgstr "სერვისთან rhsm დაკავშირება შეუძლებელია."
 
 #: cockpit/src/subscriptions-view.jsx:509
 msgid "Access denied"
-msgstr ""
+msgstr "წვდომა აკრძალულია"
 
 #: cockpit/src/subscriptions-view.jsx:510
 msgid "The current user isn't allowed to access system subscription status."
-msgstr ""
+msgstr "მიმდინარე მომხმარებელს სისტემის გამოწერის სტატუსთან წვდომა არ აქვს."
 
 #: cockpit/src/subscriptions-view.jsx:512
 msgid "Unable to connect"
-msgstr ""
+msgstr "კავშირის შეცდომა"
 
 #: cockpit/src/subscriptions-view.jsx:514
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed. Reported status: $0 ($1)"
 msgstr ""
+"გამოწერის სტატუსის მიღება შეუძლებელია. დარწმუნდით, რომ subscription-manager "
+"დაყენებულია. დაბრუნებული სტატუსი: $0 ($1)"
 
 #: src/daemons/rhsmcertd.c:111
 msgid "deprecated, see --cert-check-interval"
@@ -703,7 +721,7 @@ msgstr ""
 
 #: src/daemons/rhsmcertd.c:130
 msgid "show debug messages"
-msgstr ""
+msgstr "გამართვის შეტყობინებების ჩვენება"
 
 #: src/daemons/rhsmcertd.c:132
 msgid "do not add an offset to the initial checks."
@@ -724,7 +742,7 @@ msgstr ""
 
 #: src/daemons/rhsmcertd.c:809
 msgid "Invalid argument specified.\n"
-msgstr ""
+msgstr "მითითებულია არასწორი არგუმენტი.\n"
 
 #: src/daemons/rhsmcertd.c:815
 #, c-format
@@ -734,7 +752,7 @@ msgstr ""
 #: src/daemons/rhsmcertd.c:830
 #, c-format
 msgid "Invalid option: %s\n"
-msgstr ""
+msgstr "არასწორი პარამეტრი: %s\n"
 
 #: src/daemons/rhsmcertd.c:844
 #, c-format
@@ -743,7 +761,7 @@ msgstr ""
 
 #: src/dnf-plugins/product-id.py:79
 msgid "Installed products updated."
-msgstr ""
+msgstr "დაყენებული პროდუქტები განახლდა."
 
 #: src/dnf-plugins/subscription-manager.py:41
 #, python-format
@@ -820,7 +838,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/mainwindow.glade:154
 #: src/subscription_manager/gui/data/ui/mainwindow.ui:59
 msgid "Subscription Manager"
-msgstr ""
+msgstr "გამოწერების მმართველი"
 
 #: src/initial-setup/com_redhat_subscription_manager/gui/spokes/rhsm_gui.ui:90
 #: src/subscription_manager/gui/data/glade/mainwindow.glade:16
@@ -829,7 +847,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/ui/register_dialog.ui:76
 #: src/subscription_manager/gui/registergui.py:899
 msgid "_Register"
-msgstr ""
+msgstr "_რეგისტრაცია"
 
 #: src/rct/cert_commands.py:38
 #, python-format, python-brace-format
@@ -851,7 +869,7 @@ msgstr ""
 
 #: src/rct/cert_commands.py:62
 msgid "Print certificate information"
-msgstr ""
+msgstr "სერტიფიკატის ინფორმაციის გამოტანა"
 
 #: src/rct/cert_commands.py:66
 msgid "do not show the cert's product information"
@@ -873,7 +891,7 @@ msgstr ""
 #: src/rct/cert_commands.py:90
 #, python-format
 msgid "Version: %s"
-msgstr ""
+msgstr "ვერსია: %s"
 
 #: src/rct/cert_commands.py:91
 #, python-format
@@ -888,7 +906,7 @@ msgstr ""
 #: src/rct/cert_commands.py:101
 #, python-format
 msgid "Content sets: %s"
-msgstr ""
+msgstr "შემცველობის ნაკრებები:"
 
 #: src/rct/manifest_commands.py:65
 msgid "Manifest zip is invalid."
@@ -922,7 +940,7 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:173
 msgid "Print manifest information"
-msgstr ""
+msgstr "მანიფესტის ინფორმაციის გამოტანა"
 
 #: src/rct/manifest_commands.py:177
 msgid "skip printing Content Sets"
@@ -930,11 +948,11 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:197
 msgid "Server"
-msgstr ""
+msgstr "სერვერი"
 
 #: src/rct/manifest_commands.py:198
 msgid "Server Version"
-msgstr ""
+msgstr "სერვერის ვერსია"
 
 #: src/rct/manifest_commands.py:199
 msgid "Date Created"
@@ -942,21 +960,21 @@ msgstr "შექმნის თარიღი"
 
 #: src/rct/manifest_commands.py:200
 msgid "Creator"
-msgstr ""
+msgstr "შემქმნელი"
 
 #: src/rct/manifest_commands.py:201
 msgid "General:"
-msgstr ""
+msgstr "საერთო:"
 
 #: src/rct/manifest_commands.py:208 src/rct/manifest_commands.py:239
 #: src/rct/printing.py:49 src/rct/printing.py:77 src/rct/printing.py:110
 #: src/subscription_manager/gui/widgets.py:377
 msgid "Name"
-msgstr ""
+msgstr "სახელი"
 
 #: src/rct/manifest_commands.py:209
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #: src/rct/manifest_commands.py:214
 msgid "Content Access Mode"
@@ -965,11 +983,11 @@ msgstr "შემცველობასთან წვდომის რე�
 #: src/rct/manifest_commands.py:215 src/rct/printing.py:109
 #: src/subscription_manager/gui/widgets.py:866
 msgid "Type"
-msgstr ""
+msgstr "ტიპი"
 
 #: src/rct/manifest_commands.py:216
 msgid "API URL"
-msgstr ""
+msgstr "API URL"
 
 #: src/rct/manifest_commands.py:217
 msgid "Web URL"
