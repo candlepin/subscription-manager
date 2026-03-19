@@ -8,9 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-02 12:40+0100\n"
-"PO-Revision-Date: 2025-10-06 21:53+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2025-11-04 17:54+0000\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/cs/>\n"
 "Language: cs\n"
@@ -18,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.14\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -26,31 +25,32 @@ msgstr "použití: "
 
 #: /usr/lib64/python3.6/argparse.py:830
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() nedefinováno"
 
 #: /usr/lib64/python3.6/argparse.py:1127
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr ""
+"neznámá komponenta pro zpracovávání %(parser_name)r (volby: %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:1181
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "argument „-“ s režimem %r"
 
 #: /usr/lib64/python3.6/argparse.py:1189
 #, python-format
 msgid "can't open '%s': %s"
-msgstr "Nelze otevřít '%s'"
+msgstr "nelze otevřít „%s“:%s"
 
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "není možné sloučit akce – dvě skupiny jsou nazvané %r"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "„required“ není platný argument pro poziční parametry"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
@@ -58,117 +58,122 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"neplatný řetězec volby %(option)r: je třeba, aby začínalo znakem "
+"%(prefix_chars)r"
 
 #: /usr/lib64/python3.6/argparse.py:1473
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "pro volby jako %r je vyžadováno dest="
 
 #: /usr/lib64/python3.6/argparse.py:1490
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "neplatná hodnota conflict_resolution: %r"
 
 #: /usr/lib64/python3.6/argparse.py:1508
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "kolidující řetězec volby: %s"
+msgstr[1] "kolidující řetězce volby: %s"
+msgstr[2] "kolidující řetězce volby: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1574
 msgid "mutually exclusive arguments must be optional"
 msgstr ""
+"je třeba, aby argumenty, které není možné použít společně, byly volitelné"
 
 #: /usr/lib64/python3.6/argparse.py:1637
 msgid "positional arguments"
-msgstr "Poziční argumenty"
+msgstr "poziční argumenty"
 
 #: /usr/lib64/python3.6/argparse.py:1638
 msgid "optional arguments"
-msgstr ""
+msgstr "volitelné argumenty"
 
 #: /usr/lib64/python3.6/argparse.py:1653
 msgid "show this help message and exit"
-msgstr "ukázat tuto nápovědu a skončit"
+msgstr "zobrazit tuto nápovědu a skončit"
 
 #: /usr/lib64/python3.6/argparse.py:1684
 msgid "cannot have multiple subparser arguments"
-msgstr ""
+msgstr "není možné mít vícero argumentů dílčích komponent pro zpracovávání"
 
 #: /usr/lib64/python3.6/argparse.py:1736
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "nerozpoznané argumenty: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1833
 #, python-format
 msgid "not allowed with argument %s"
-msgstr ""
+msgstr "nedovoleno v případě argumentu %s"
 
 #: /usr/lib64/python3.6/argparse.py:1879 /usr/lib64/python3.6/argparse.py:1893
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "ignorován výslovný argument %r"
 
 #: /usr/lib64/python3.6/argparse.py:2000
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "jsou zapotřebí následující argumenty: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2015
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr ""
+msgstr "je zapotřebí jeden z argumentů %s"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
-msgstr ""
+msgstr "očekáván právě jeden argument"
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
-msgstr ""
+msgstr "očekáván nanejvýš jeden argument"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
-msgstr ""
+msgstr "očekáván přinejmenším jeden argument"
 
 #: /usr/lib64/python3.6/argparse.py:2062
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "očekáván %s argument"
+msgstr[1] "očekávány %s argumenty"
+msgstr[2] "očekáváno %s argumentů"
 
 #: /usr/lib64/python3.6/argparse.py:2122
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "nejednoznačná volba: %(option)snebylo možné najít shodu %(matches)s"
 
 #: /usr/lib64/python3.6/argparse.py:2185
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "neočekávaný řetězec volby: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2289
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r není možné zavolat"
 
 #: /usr/lib64/python3.6/argparse.py:2306
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr ""
+msgstr "neplatná hodnota %(type)s: %(value)r"
 
 #: /usr/lib64/python3.6/argparse.py:2317
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr ""
+msgstr "Neplatná volba: %(value)r (zvolte z %(choices)s"
 
 #: /usr/lib64/python3.6/argparse.py:2393
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: chyba: %(message)s\n"
 
 #: src/syspurpose/cli.py:29
 #, python-brace-format
@@ -177,50 +182,53 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Varování: tomuto systému byla nedávno správcem serveru pro správu nároků "
+"nastavena hodnota {attr} „{download_value}“ .\n"
+"{advice}"
 
 #: src/syspurpose/cli.py:31
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr ""
+msgstr "Pokud chcete změny na straně serveru přebít, spusťte: {command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
 msgid "Added \"{value}\" to {prop_name}."
-msgstr ""
+msgstr "Přidána „{value}“ do {prop_name}."
 
 #: src/syspurpose/cli.py:50
 #, python-brace-format
 msgid "Not adding value \"{value}\" to {prop_name}; it already exists."
-msgstr ""
+msgstr "Nepřidána hodnota „{value}“ do {prop_name} – už existuje."
 
 #: src/syspurpose/cli.py:56 src/syspurpose/cli.py:85
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} zaktualizován."
 
 #: src/syspurpose/cli.py:79
 #, python-brace-format
 msgid "Removed \"{val}\" from {name}."
-msgstr ""
+msgstr "Odebrána „{val}“ z {name}."
 
 #: src/syspurpose/cli.py:81
 #, python-brace-format
 msgid "Not removing value \"{val}\" from {name}; it was not there."
-msgstr ""
+msgstr "Neodebrána hodnota „{val}“ z {name} – nenacházela se tam."
 
 #: src/syspurpose/cli.py:108
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr ""
+msgstr "{attr} nastaven na „{val}“."
 
 #: src/syspurpose/cli.py:129
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} odnastaven."
 
 #: src/syspurpose/cli.py:157
 msgid "System Syspurpose Management Tool"
-msgstr ""
+msgstr "Nástroj pro správu Syspurpose systému"
 
 #: src/syspurpose/cli.py:158 src/syspurpose/cli.py:353
 msgid ""
@@ -228,104 +236,113 @@ msgid ""
 "release. Please use the 'subscription-manager syspurpose' command going "
 "forward."
 msgstr ""
+"Příkaz „syspurpose“ je zastaralý a bude v budoucím hlavním vydání odebrán. "
+"Do budoucna už používejte příkaz „subscription-manager syspurpose“."
 
 #: src/syspurpose/cli.py:165 src/syspurpose/cli.py:230
 msgid "The value(s) to add"
-msgstr ""
+msgstr "Hodnoty, které přidat"
 
 #: src/syspurpose/cli.py:169 src/syspurpose/cli.py:252
 msgid "The value(s) to remove"
-msgstr ""
+msgstr "Hodnoty, které odebrat"
 
 #: src/syspurpose/cli.py:173 src/syspurpose/cli.py:195
 msgid "The value to set"
-msgstr ""
+msgstr "Hodnota, kterou nastavit"
 
 #: src/syspurpose/cli.py:183
 msgid "Sets the value for the given property"
-msgstr ""
+msgstr "Nastaví hodnotu pro danou vlastnost"
 
 #: src/syspurpose/cli.py:189 src/syspurpose/cli.py:211
 msgid "The name of the property to set/update"
-msgstr ""
+msgstr "Název vlastnosti, kterou nastavit/zaktualizovat"
 
 #: src/syspurpose/cli.py:204
 msgid "Unsets (clears) the value for the given property"
-msgstr ""
+msgstr "Odnastaví (vyčistí) hodnotu u dané vlastnosti"
 
 #: src/syspurpose/cli.py:218
 msgid "Adds the value(s) to the given property"
-msgstr ""
+msgstr "Přidá hodnoty do dané vlastnosti"
 
 #: src/syspurpose/cli.py:224 src/syspurpose/cli.py:246
 msgid "The name of the property to update"
-msgstr ""
+msgstr "Název vlastnosti, kterou zaktualizovat"
 
 #: src/syspurpose/cli.py:240
 msgid "Removes the value(s) from the given property"
-msgstr ""
+msgstr "Odebere hodnoty z dané vlastnosti"
 
 #: src/syspurpose/cli.py:262
 msgid "Set the system role to the system syspurpose"
-msgstr ""
+msgstr "Nastaví roli systému do syspurpose"
 
 #: src/syspurpose/cli.py:270
 msgid "Clear set role"
-msgstr ""
+msgstr "Vyčistit nastavenou roli"
 
 #: src/syspurpose/cli.py:278
 msgid "Add addons to the system syspurpose"
-msgstr ""
+msgstr "Přidat doplňky do syspurpose systému"
 
 #: src/syspurpose/cli.py:286
 msgid "Remove addons from the system syspurpose"
-msgstr ""
+msgstr "Odebrat doplňky z syspurpose systému"
 
 #: src/syspurpose/cli.py:293
 msgid "Clear set addons"
-msgstr ""
+msgstr "Vyčistit nastavené doplňky"
 
 #: src/syspurpose/cli.py:301
 msgid "Set the system sla"
-msgstr ""
+msgstr "Nastavit sla systému"
 
 #: src/syspurpose/cli.py:308
 msgid "Clear set sla"
-msgstr ""
+msgstr "Vyčistit nastavení sla"
 
 #: src/syspurpose/cli.py:316
 msgid "Set the system usage"
-msgstr ""
+msgstr "Nastavit využití systému"
 
 #: src/syspurpose/cli.py:324
 msgid "Clear set usage"
-msgstr ""
+msgstr "Vyčistit nastavení využití"
 
 #: src/syspurpose/cli.py:332
 msgid "Show the current system syspurpose"
-msgstr ""
+msgstr "Zobrazit stávající syspurpose systému"
 
 #: src/syspurpose/cli.py:350
 msgid ""
 "WARNING: Setting syspurpose in containers has no effect.\n"
 "Please run syspurpose on the host.\n"
 msgstr ""
+"Varování: nastavení syspurpose v kontejnerech nemá žádný efekt.\n"
+"Spusťte syspurpose na hostiteli.\n"
 
 #: src/syspurpose/cli.py:364
 msgid ""
 "Warning: Unable to sync system purpose with subscription management server: "
 "subscription_manager module is not available."
 msgstr ""
+"Varování: nebylo možné synchronizovat syspurpose systému se serverem správy "
+"předplatných: modul subscription_manager není k dispozici."
 
 #: src/syspurpose/files.py:106
 msgid "Error: Malformed data in file {}; please review and correct."
 msgstr ""
+"Chyba: nesprávně formátovaná data v souboru {} – zkontrolujte a opravte."
 
 #: src/syspurpose/files.py:112
 msgid ""
 "Cannot read syspurpose file {}\n"
 "Are you root?"
 msgstr ""
+"Nebylo možné číst soubor syspurpose {}\n"
+"Jste správce (root)?"
 
 #: src/syspurpose/files.py:466
 #, python-brace-format
@@ -333,25 +350,31 @@ msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
 msgstr ""
+"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
+"atribut {attr}:"
 
 #: src/syspurpose/files.py:473
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
-msgstr ""
+msgstr "Varování: zadaný klíč „{key}“ se nenachází na seznamu platných klíčů:"
 
 #: src/syspurpose/main.py:32
 msgid "User interrupted process"
-msgstr ""
+msgstr "Uživatel přerušil proces"
 
 #: src/syspurpose/utils.py:59
 msgid ""
 "Cannot create directory {}\n"
 "Are you root?"
 msgstr ""
+"Nebylo možné vytvořit složku {}\n"
+"Jste správce (root)?"
 
 #: src/syspurpose/utils.py:80
 msgid ""
 "Cannot create file {}\n"
 "Are you root?"
 msgstr ""
+"Nebylo možné vytvořit soubor {}\n"
+"Jste správce (root)?"
