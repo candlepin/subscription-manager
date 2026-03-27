@@ -347,6 +347,11 @@ make -f Makefile install VERSION=%{version}-%{release} \
     %{?subpackages} \
     %{?exclude_packages}
 
+%if 0%{?rhel}
+mkdir -p %{buildroot}%{_sysconfdir}/dnf/protected.d
+install -m 644 %{_builddir}/%{buildsubdir}/etc-conf/protected.d/subscription-manager.conf %{buildroot}%{_sysconfdir}/dnf/protected.d/subscription-manager.conf
+%endif
+
 %if %{use_dnf}
 pushd src/plugins/libdnf
 mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
@@ -443,6 +448,10 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %attr(644,root,root) %{_sysconfdir}/rhsm/syspurpose/valid_fields.json
 
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
+
+%if 0%{?rhel}
+%config(noreplace) %attr(644,root,root) %{_sysconfdir}/dnf/protected.d/subscription-manager.conf
+%endif
 
 %if %{use_dnf}
     %ghost %{_sysconfdir}/yum.repos.d/redhat.repo
