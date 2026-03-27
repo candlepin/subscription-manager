@@ -83,7 +83,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.13
+Version: 1.30.14
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -680,6 +680,16 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Fri Mar 27 2026 Jason Jerome <jajerome@redhat.com> 1.30.14-1
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Georgian) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Georgian) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Automatic commit of package [subscription-manager] release [1.30.13-1].
+  (jhnidek@redhat.com)
+
 * Thu Mar 19 2026 Jiri Hnidek <jhnidek@redhat.com> 1.30.13-1
 - Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
 - chore: Make black-26.* happy again (./) (jhnidek@redhat.com)
