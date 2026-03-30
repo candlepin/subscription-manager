@@ -14,9 +14,11 @@
 import os
 import unittest
 
+import hashlib
 import io
 import re
 from importlib import reload
+from urllib.parse import quote, unquote
 from . import fixture
 
 from iniparse import RawConfigParser, SafeConfigParser
@@ -1116,6 +1118,197 @@ class AptRepoFileTest(unittest.TestCase):
         for key in exp_params:
             self.assertIn(key, act_content)
             self.assertEqual(act_content[key], exp_params[key])
+
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_fix_content_short_katello_uri_with_repo_metadata(self, mock_file):
+        assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
+        mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
+
+        ar = self._helper_stub_repofile()
+        location = "example.site.org/pulp/deb/long/path/repository/"
+        entitlement = "12345"
+        repo_id = "Example_Saltstack-for-Debian-and-Ubuntu"
+        repo_mock = self._helper_stub_repo(
+            repo_id,
+            existing_values=[
+                ("baseurl", "https://{}".format(location)),
+                ("sslclientcert", "/etc/pki/entitlement/{}.pem".format(entitlement)),
+            ],
+        )
+
+        expected_hash = hashlib.sha256(location.encode("utf-8")).hexdigest()[: ar.URI_HASH_LEN]
+        expected_uri = "katello://{};{}={}@{}/{}/{}".format(
+            entitlement,
+            ar.REPOPATH_FIELD,
+            quote(location, safe=""),
+            "example.site.org",
+            expected_hash,
+            repo_id.replace("_", "-"),
+        )
+
+        act_content = ar.fix_content(repo_mock)
+        self.assertEqual(act_content["URIs"], expected_uri)
+
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_fix_content_rel_comp_query_uses_queryless_repopath(self, mock_file):
+        assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
+        mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
+
+        ar = self._helper_stub_repofile()
+        location_no_query = "example.site.org/pulp/deb/long/path/repository/"
+        entitlement = "12345"
+        repo_id = "example_repo"
+        baseurl = (
+            "https://{location}?rel=bookworm,bullseye&comp=main,contrib&foo=bar".format(
+                location=location_no_query
+            )
+        )
+        repo_mock = self._helper_stub_repo(
+            repo_id,
+            existing_values=[
+                ("baseurl", baseurl),
+                ("sslclientcert", "/etc/pki/entitlement/{}.pem".format(entitlement)),
+            ],
+        )
+
+        act_content = ar.fix_content(repo_mock)
+
+        self.assertEqual(act_content["Suites"], "bookworm bullseye")
+        self.assertEqual(act_content["Components"], "main contrib")
+        expected_hash = hashlib.sha256(location_no_query.encode("utf-8")).hexdigest()[: ar.URI_HASH_LEN]
+        self.assertIn("@example.site.org/{}/example-repo".format(expected_hash), act_content["URIs"])
+
+        userinfo = act_content["URIs"].split("://", 1)[1].split("@", 1)[0]
+        repopath_field = [field for field in userinfo.split(";") if field.startswith(ar.REPOPATH_FIELD + "=")][0]
+        encoded_repopath = repopath_field.split("=", 1)[1]
+        self.assertEqual(unquote(encoded_repopath), location_no_query)
+
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_fix_content_short_katello_uri_hash_segment_is_16_lower_hex(self, mock_file):
+        assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
+        mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
+
+        ar = self._helper_stub_repofile()
+        repo_mock = self._helper_stub_repo(
+            "example_repo",
+            existing_values=[
+                ("baseurl", "https://example.site.org/pulp/deb/long/path/repository/"),
+                ("sslclientcert", "/etc/pki/entitlement/12345.pem"),
+            ],
+        )
+
+        act_content = ar.fix_content(repo_mock)
+        alias = act_content["URIs"].split("@", 1)[1]
+        alias_parts = alias.split("/", 2)
+        self.assertEqual(len(alias_parts), 3)
+        hash_segment = alias_parts[1]
+        self.assertTrue(re.fullmatch(r"[0-9a-f]{16}", hash_segment))
+
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_fix_content_short_katello_uri_with_host_port(self, mock_file):
+        assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
+        mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
+
+        ar = self._helper_stub_repofile()
+        repo_mock = self._helper_stub_repo(
+            "example_repo",
+            existing_values=[
+                ("baseurl", "https://example.site.org:8443/pulp/deb/long/path/repository/"),
+                ("sslclientcert", "/etc/pki/entitlement/12345.pem"),
+            ],
+        )
+
+        act_content = ar.fix_content(repo_mock)
+        self.assertIn("@example.site.org:8443/", act_content["URIs"])
+
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_fix_content_non_entitlement_cert_keeps_plain_url(self, mock_file):
+        assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
+        mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
+
+        ar = self._helper_stub_repofile()
+        repo_mock = self._helper_stub_repo(
+            "example_repo",
+            existing_values=[
+                ("baseurl", "https://example.site.org/pulp/deb/long/path/repository/"),
+                ("sslclientcert", "/tmp/not-an-entitlement.pem"),
+            ],
+        )
+
+        act_content = ar.fix_content(repo_mock)
+        self.assertEqual(act_content["URIs"], "https://example.site.org/pulp/deb/long/path/repository/")
+
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_fix_content_non_http_scheme_is_not_rewritten(self, mock_file):
+        assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
+        mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
+
+        ar = self._helper_stub_repofile()
+        repo_mock = self._helper_stub_repo(
+            "example_repo",
+            existing_values=[
+                ("baseurl", "file:///var/lib/repos/local/"),
+                ("sslclientcert", "/etc/pki/entitlement/12345.pem"),
+            ],
+        )
+
+        act_content = ar.fix_content(repo_mock)
+        self.assertEqual(act_content["URIs"], "file:///var/lib/repos/local/")
+
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_fix_content_short_katello_uri_repo_id_falls_back_to_repo(self, mock_file):
+        assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
+        mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
+
+        ar = self._helper_stub_repofile()
+        repo_mock = self._helper_stub_repo(
+            "___!!!",
+            existing_values=[
+                ("baseurl", "https://example.site.org/pulp/deb/long/path/repository/"),
+                ("sslclientcert", "/etc/pki/entitlement/12345.pem"),
+            ],
+        )
+
+        act_content = ar.fix_content(repo_mock)
+        alias = act_content["URIs"].split("@", 1)[1]
+        alias_parts = alias.split("/", 2)
+        self.assertEqual(len(alias_parts), 3)
+        self.assertEqual(alias_parts[2], "repo")
+
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_fix_content_short_katello_uri_repo_id_is_truncated(self, mock_file):
+        assert open("/etc/apt/sources.list.d/rhsm.sources").read() == "data"
+        mock_file.assert_called_with("/etc/apt/sources.list.d/rhsm.sources")
+
+        ar = self._helper_stub_repofile()
+        raw_repo_id = "Very_Long_Repo_ID_" + ("X" * 200)
+        repo_mock = self._helper_stub_repo(
+            raw_repo_id,
+            existing_values=[
+                ("baseurl", "https://example.site.org/pulp/deb/long/path/repository/"),
+                ("sslclientcert", "/etc/pki/entitlement/12345.pem"),
+            ],
+        )
+
+        act_content = ar.fix_content(repo_mock)
+        alias = act_content["URIs"].split("@", 1)[1]
+        alias_parts = alias.split("/", 2)
+        self.assertEqual(len(alias_parts), 3)
+        self.assertEqual(len(alias_parts[2]), ar.REPO_ID_MAX_LEN)
+        self.assertEqual(alias_parts[2], ar._sanitize_repo_id_for_uri(raw_repo_id))
+
+    def test_sanitize_repo_id_for_uri(self):
+        cases = [
+            ("Alpha-123", "Alpha-123"),
+            ("foo_bar", "foo-bar"),
+            ("foo__bar::baz/boom", "foo-bar-baz-boom"),
+            ("---foo---", "foo"),
+            ("___", "repo"),
+            ("repo äöü label", "repo-label"),
+            ("A" * 120, "A" * AptRepoFile.REPO_ID_MAX_LEN),
+        ]
+        for raw, expected in cases:
+            self.assertEqual(AptRepoFile._sanitize_repo_id_for_uri(raw), expected)
 
 
 class YumRepoFileTest(unittest.TestCase):

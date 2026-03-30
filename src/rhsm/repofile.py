@@ -18,6 +18,7 @@
 from typing import Dict, List, Literal, Optional, TextIO, Tuple, TYPE_CHECKING
 
 from iniparse import RawConfigParser as ConfigParser
+import hashlib
 import logging
 import os
 import re
@@ -59,7 +60,7 @@ else:
 from subscription_manager import utils
 from subscription_manager.certdirectory import Path
 import configparser
-from urllib.parse import parse_qs, urlparse, urlunparse, urlencode, unquote
+from urllib.parse import parse_qs, quote, urlparse, urlunparse, urlencode, unquote
 
 from rhsm.config import get_config_parser
 
@@ -428,6 +429,9 @@ if HAS_DEB822:
         PATH: str = "etc/apt/sources.list.d"
         NAME: str = "rhsm.sources"
         CONTENT_TYPES: List[str] = ["deb"]
+        URI_HASH_LEN: int = 16
+        REPO_ID_MAX_LEN: int = 96
+        REPOPATH_FIELD: str = "repopath"
         REPOFILE_HEADER: str = """#
 # Certificate-Based Repositories
 # Managed by (rhsm) subscription-manager
@@ -489,6 +493,30 @@ if HAS_DEB822:
         def sections(self):
             return [repo822["id"] for repo822 in self.repos822]
 
+        @classmethod
+        def _sanitize_repo_id_for_uri(cls, repo_id):
+            # Keep repo id readable and apt-friendly: allow only [A-Za-z0-9-].
+            repo_id = re.sub(r"[^A-Za-z0-9]+", "-", repo_id).strip("-")
+            repo_id = repo_id[: cls.REPO_ID_MAX_LEN].strip("-")
+            return repo_id or "repo"
+
+        @classmethod
+        def _short_katello_uri(cls, entitlement, location, fqdn, repo_id):
+            # Canonical short URI format consumed by apt-transport-go-katello:
+            # katello://<entitlement>;repopath=<urlencoded "<fqdn>/<path>">@<fqdn>/<sha256-hex-16>/<readable-repo-id>
+            # The visible alias after '@' keeps apt list/cache file names short.
+            digest = hashlib.sha256(location.encode("utf-8")).hexdigest()[: cls.URI_HASH_LEN]
+            encoded_location = quote(location, safe="")
+            readable_repo_id = cls._sanitize_repo_id_for_uri(repo_id)
+            return "katello://{};{}={}@{}/{}/{}".format(
+                entitlement,
+                cls.REPOPATH_FIELD,
+                encoded_location,
+                fqdn,
+                digest,
+                readable_repo_id,
+            )
+
         def fix_content(self, content):
             # Luckily apt ignores all Fields it does not recognize
             parsed_url = urlparse(unquote(content["baseurl"]))
@@ -498,7 +526,7 @@ if HAS_DEB822:
             if url_res and ent_res:
                 location = url_res.group("location")
                 entitlement = ent_res.group("entitlement")
-                baseurl = "katello://{}@{}".format(entitlement, location)
+                baseurl = self._short_katello_uri(entitlement, location, parsed_url.netloc, content.id)
 
             query = parse_qs(parsed_url.query)
             if "rel" in query and "comp" in query:
