@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the rhsm package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2026.
+# Pavel Borecki <pavel.borecki@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
 "PO-Revision-Date: 2026-03-26 16:58+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/cs/>\n"
 "Language: cs\n"
@@ -1056,7 +1056,7 @@ msgstr ""
 
 #: src/rhsmlib/services/entitlement.py:319
 msgid "Subscription is expired"
-msgstr ""
+msgstr "Platnost předplatného skončila"
 
 #: src/rhsmlib/services/entitlement.py:321
 msgid "Subscription has not begun"
@@ -1372,7 +1372,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:142
 msgid "--unset cannot be used with --set, --add, or --remove"
-msgstr ""
+msgstr "--unset není možné použít ve spojení s --set, --add nebo --remove"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:144
 msgid "--add cannot be used with --remove"
@@ -1702,7 +1702,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/cli.py:389
 #, python-brace-format
 msgid "Unable to reach the server at {host}:{port}{handler}"
-msgstr ""
+msgstr "Nebylo možné dosáhnout server na {host}:{port}{handler}"
 
 #: src/subscription_manager/cli_command/cli.py:399
 msgid "Error: CA certificate for subscription service has not been installed."
@@ -3366,7 +3366,7 @@ msgstr ""
 
 #: src/subscription_manager/utils.py:391
 msgid "and"
-msgstr ""
+msgstr "a"
 
 #: src/syspurpose/files.py:463
 #, python-brace-format
