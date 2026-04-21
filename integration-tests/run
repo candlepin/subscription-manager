@@ -29,7 +29,7 @@ check: prepare
 	# make sure CWD is the cockpit source dir;
 	# set the reference branch to empty (i.e. none), otherwise run-tests
 	# will try to use the currently tested sub-man branch in sub-man-cockpit
-	cd $(SUB_MAN_COCKPIT) && test/common/run-tests --base ''
+	cd $(SUB_MAN_COCKPIT) && test/common/run-tests --nondestructive-memory-mb 2048 --base ''
 
 reset:
 	rm -f $(SUBMAN_TAR) $(SMBEXT_TAR)
