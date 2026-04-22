@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.50
+Version: 1.29.51
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -737,6 +737,20 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Apr 22 2026 Jason Jerome <jajerome@redhat.com> 1.29.51-1
+- integration-tests: Run the subman-cockpit tests with 2 GB RAM
+  (marius.vollmer@gmail.com)
+- fix(backport): skip package profile upload when disabled in config
+  (jajerome@redhat.com)
+- fix: allow system to be registered with broken insights-client
+  (jlocash@redhat.com)
+- ci: bump actions/upload-artifact from 6 to 7
+  (49699333+dependabot[bot]@users.noreply.github.com)
+- fix: Handle non-existence of /var/cache/cloud-what gracefully
+  (jhnidek@redhat.com)
+- fix(unit-tests): Fixed unit tests for rhsm-debug (jhnidek@redhat.com)
+- feat: Add /var/cache/cloud-what/ to sos-report (jhnidek@redhat.com)
+
 * Wed Jan 28 2026 Jiri Hnidek <jhnidek@redhat.com> 1.29.50-1
 - fix: Print list of environments without --set/--list (jhnidek@redhat.com)
 
