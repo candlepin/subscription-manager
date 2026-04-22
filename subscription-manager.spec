@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.51
+Version: 1.29.52
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -737,6 +737,17 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Apr 22 2026 Jason Jerome <jajerome@redhat.com> 1.29.52-1
+- Translated using Weblate (Italian) (ali.ciloqlu@murena.io)
+- Translated using Weblate (Czech) (pavel.borecki@gmail.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Czech) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Georgian) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+
 * Wed Apr 22 2026 Jason Jerome <jajerome@redhat.com> 1.29.51-1
 - integration-tests: Run the subman-cockpit tests with 2 GB RAM
   (marius.vollmer@gmail.com)
