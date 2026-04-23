@@ -38,6 +38,13 @@
  * some parsing yourself (if necessary), but this argument does not work the
  * same across all versions either.
  *
+ * This Python module also contains two methods for listing cryptographic algorithms,
+ * because there is no Python module that provides this functionality. It could be
+ * possible to get such information by parsing output of two commands:
+ * "openssl list -signature-algorithms" and "openssl list -public-key-algorithms"
+ * These commands provide human readable output and parsing them is not reliable,
+ * because the output format may change across OpenSSL versions.
+ *
  * Thus, we write our own binding!
  */
 
@@ -50,6 +57,7 @@
 #include <openssl/pem.h>
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
+#include <openssl/provider.h>
 
 #include "structmember.h"
 
@@ -370,6 +378,234 @@ load_private_key (PyObject *self, PyObject *args, PyObject *keywords)
 	return (PyObject *) py_key;
 }
 
+static OSSL_LIB_CTX *app_libctx = NULL;
+
+OSSL_LIB_CTX *app_get0_libctx(void)
+{
+	return app_libctx;
+}
+
+int name_cmp(const char *const *a, const char *const *b)
+{
+	return OPENSSL_strcasecmp(*a, *b);
+}
+
+typedef struct name_collect_context_st {
+	STACK_OF(OPENSSL_CSTRING) *names;
+	int error;
+} NAME_COLLECT_CONTEXT;
+
+void collect_names(const char *name, void *vdata)
+{
+	NAME_COLLECT_CONTEXT *ctx = vdata;
+
+	if (!sk_OPENSSL_CSTRING_push(ctx->names, name)) {
+		ctx->error = 1;
+	}
+}
+
+const char *get_algorithm_oid(STACK_OF(OPENSSL_CSTRING) *names)
+{
+	const int num_names = sk_OPENSSL_CSTRING_num(names);
+
+	sk_OPENSSL_CSTRING_sort(names);
+
+	// When the `names` variable contains more than one element, then the first contains OID for some reason
+	if (num_names > 1) {
+		const char *name = sk_OPENSSL_CSTRING_value(names, 0);
+		return name;
+	}
+	return NULL;
+}
+
+DEFINE_STACK_OF(EVP_KEYMGMT)
+static int key_manager_cmp(const EVP_KEYMGMT *const *a,
+	const EVP_KEYMGMT *const *b)
+{
+	return strcmp(OSSL_PROVIDER_get0_name(EVP_KEYMGMT_get0_provider(*a)),
+		OSSL_PROVIDER_get0_name(EVP_KEYMGMT_get0_provider(*b)));
+}
+
+static void collect_key_managers(EVP_KEYMGMT *km, void *stack)
+{
+	STACK_OF(EVP_KEYMGMT) *km_stack = stack;
+
+	if (EVP_KEYMGMT_up_ref(km) && sk_EVP_KEYMGMT_push(km_stack, km) <= 0) {
+		EVP_KEYMGMT_free(km); /* up-ref successful but push to stack failed */
+	}
+}
+
+
+static PyObject *
+get_public_key_algorithms (PyObject *self, PyObject *args, PyObject *keywords)
+{
+	PyObject *list = PyList_New(0);
+	if (list == NULL) {
+		return NULL;
+	}
+
+	STACK_OF(EVP_KEYMGMT) *km_stack = sk_EVP_KEYMGMT_new(key_manager_cmp);
+	if (km_stack == NULL) {
+		Py_DECREF(list);
+		PyErr_SetString(PyExc_RuntimeError, "Failed to allocate memory for key manager");
+		return NULL;
+	}
+
+	EVP_KEYMGMT_do_all_provided(app_get0_libctx(), collect_key_managers, km_stack);
+	sk_EVP_KEYMGMT_sort(km_stack);
+
+	for (int i = 0; i < sk_EVP_KEYMGMT_num(km_stack); i++) {
+		const EVP_KEYMGMT *k = sk_EVP_KEYMGMT_value(km_stack, i);
+		STACK_OF(OPENSSL_CSTRING) *names = NULL;
+
+		names = sk_OPENSSL_CSTRING_new(name_cmp);
+		if (names == NULL) {
+			sk_EVP_KEYMGMT_pop_free(km_stack, EVP_KEYMGMT_free);
+			Py_DECREF(list);
+			PyErr_SetString(PyExc_RuntimeError, "Failed to allocate memory for key manager names");
+			return NULL;
+		}
+
+		NAME_COLLECT_CONTEXT ctx;
+		ctx.names = names;
+		ctx.error = 0;
+		const int ret = EVP_KEYMGMT_names_do_all(k, collect_names, &ctx);
+		if (ret != 1 || ctx.error != 0) {
+			sk_EVP_KEYMGMT_pop_free(km_stack, EVP_KEYMGMT_free);
+			sk_OPENSSL_CSTRING_free(names);
+			Py_DECREF(list);
+			PyErr_SetString(PyExc_RuntimeError, "Failed to collect key manager names");
+			return NULL;
+		}
+
+		const char *oid = get_algorithm_oid(names);
+
+		if (oid != NULL) {
+			PyObject *oid_str = PyString_FromString(oid);
+			// When it is not possible to create object, then free everything
+			// and return NULL to propagate exception
+			if (oid_str == NULL) {
+				sk_OPENSSL_CSTRING_free(names);
+				sk_EVP_KEYMGMT_pop_free(km_stack, EVP_KEYMGMT_free);
+				Py_DECREF(list);
+				PyErr_SetString(PyExc_RuntimeError, "Failed to create OID string object");
+				return NULL;
+			}
+			const int appended = PyList_Append(list, oid_str);
+			// When it is not possible to add OID to the list, then free everything
+			// and return NULL to propagate exception
+			if (appended < 0) {
+				Py_DECREF(oid_str);
+				sk_OPENSSL_CSTRING_free(names);
+				sk_EVP_KEYMGMT_pop_free(km_stack, EVP_KEYMGMT_free);
+				Py_DECREF(list);
+				// Appropriate exception should be set in the PyList_Append(), when it returns -1
+				// See: https://docs.python.org/3/c-api/list.html#c.PyList_Append
+				return NULL;
+			}
+			Py_DECREF(oid_str);
+		}
+
+		sk_OPENSSL_CSTRING_free(names);
+	}
+	sk_EVP_KEYMGMT_pop_free(km_stack, EVP_KEYMGMT_free);
+
+	return list;
+}
+
+DEFINE_STACK_OF(EVP_SIGNATURE)
+static int signature_cmp(const EVP_SIGNATURE *const *a,
+	const EVP_SIGNATURE *const *b)
+{
+	return strcmp(OSSL_PROVIDER_get0_name(EVP_SIGNATURE_get0_provider(*a)),
+		OSSL_PROVIDER_get0_name(EVP_SIGNATURE_get0_provider(*b)));
+}
+
+static void collect_signatures(EVP_SIGNATURE *sig, void *stack)
+{
+	STACK_OF(EVP_SIGNATURE) *sig_stack = stack;
+
+	if (EVP_SIGNATURE_up_ref(sig) && sk_EVP_SIGNATURE_push(sig_stack, sig) <= 0) {
+		EVP_SIGNATURE_free(sig);
+	}
+}
+
+static PyObject *
+get_signature_algorithms (PyObject *self, PyObject *args, PyObject *keywords)
+{
+	PyObject *list = PyList_New(0);
+	if (list == NULL) {
+		return NULL;
+	}
+
+	STACK_OF(EVP_SIGNATURE) *sig_stack = sk_EVP_SIGNATURE_new(signature_cmp);
+	if (sig_stack == NULL) {
+		Py_DECREF(list);
+		PyErr_SetString(PyExc_RuntimeError, "Failed to create signature stack");
+		return NULL;
+	}
+
+	EVP_SIGNATURE_do_all_provided(app_get0_libctx(), collect_signatures, sig_stack);
+	sk_EVP_SIGNATURE_sort(sig_stack);
+
+	for (int i = 0; i < sk_EVP_SIGNATURE_num(sig_stack); i++) {
+		const EVP_SIGNATURE *k = sk_EVP_SIGNATURE_value(sig_stack, i);
+
+		STACK_OF(OPENSSL_CSTRING) *names = NULL;
+
+		names = sk_OPENSSL_CSTRING_new(name_cmp);
+		if (names == NULL) {
+			sk_EVP_SIGNATURE_pop_free(sig_stack, EVP_SIGNATURE_free);
+			Py_DECREF(list);
+			PyErr_SetString(PyExc_RuntimeError, "Failed to create signature names stack");
+			return NULL;
+		}
+
+		NAME_COLLECT_CONTEXT ctx;
+		ctx.names = names;
+		ctx.error = 0;
+		const int ret = EVP_SIGNATURE_names_do_all(k, collect_names, &ctx);
+		if (ret != 1 || ctx.error != 0) {
+			sk_EVP_SIGNATURE_pop_free(sig_stack, EVP_SIGNATURE_free);
+			sk_OPENSSL_CSTRING_free(names);
+			Py_DECREF(list);
+			PyErr_SetString(PyExc_RuntimeError, "Failed to collect signature manager names");
+			return NULL;
+		}
+
+		const char *oid = get_algorithm_oid(names);
+		if (oid != NULL) {
+			PyObject *oid_str = PyString_FromString(oid);
+			// When it is not possible to create object, then free everything
+			// and return NULL to propagate exception
+			if (oid_str == NULL) {
+				sk_OPENSSL_CSTRING_free(names);
+				sk_EVP_SIGNATURE_pop_free(sig_stack, EVP_SIGNATURE_free);
+				Py_DECREF(list);
+				PyErr_SetString(PyExc_RuntimeError, "Failed to create OID string object");
+				return NULL;
+			}
+			const int appended = PyList_Append(list, oid_str);
+			// When it is not possible to add OID to the list, then free everything
+			// and return NULL to propagate exception
+			if (appended < 0) {
+				Py_DECREF(oid_str);
+				sk_OPENSSL_CSTRING_free(names);
+				sk_EVP_SIGNATURE_pop_free(sig_stack, EVP_SIGNATURE_free);
+				Py_DECREF(list);
+				// PyList_Append() should set correct exception, when it returns -1
+				return NULL;
+			}
+			Py_DECREF(oid_str);
+		}
+
+		sk_OPENSSL_CSTRING_free(names);
+	}
+	sk_EVP_SIGNATURE_pop_free(sig_stack, EVP_SIGNATURE_free);
+
+	return list;
+}
+
 static PyObject *
 get_extension (certificate_x509 *self, PyObject *args, PyObject *keywords)
 {
@@ -600,6 +836,10 @@ static PyMethodDef cert_methods[] = {
 	 "load a certificate from a file"},
 	{"load_private_key", (PyCFunction) load_private_key, METH_VARARGS | METH_KEYWORDS,
 	 "load a private key from a file"},
+	{"get_public_key_algorithms", (PyCFunction) get_public_key_algorithms,
+		METH_VARARGS | METH_KEYWORDS, "return a list of public key algorithms"},
+	{"get_signature_algorithms", (PyCFunction) get_signature_algorithms,
+		METH_VARARGS | METH_KEYWORDS, "return a list of signature algorithms"},
 	{NULL}
 };
 
@@ -662,6 +902,12 @@ init_certificate (void)
 							     NULL, NULL);
 	PyModule_AddObject (module, "OpenSSLCertificateLoadingError",
 			    OpenSSLCertificateLoadingError);
+
+	app_libctx = OSSL_LIB_CTX_get0_global_default();
+	if (app_libctx == NULL) {
+		PyErr_SetString(PyExc_RuntimeError, "Failed to load default library context");
+		return NULL;
+	}
 
 	#if PY_MAJOR_VERSION >= 3
 	return module;
