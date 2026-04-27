@@ -11,8 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
 "PO-Revision-Date: 2026-04-27 18:59+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/cs/>\n"
 "Language: cs\n"
@@ -1491,14 +1490,11 @@ msgid ""
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
 msgstr[0] ""
-"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
-"atribut {attr}:"
+"Varování: Zadaná hodnota {vals} není zahrnuta v seznamu platných hodnot."
 msgstr[1] ""
-"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
-"atribut {attr}:"
+"Varování: Zadané hodnoty {vals} nejsou zahrnuty v seznamu platných hodnot."
 msgstr[2] ""
-"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
-"atribut {attr}:"
+"Varování: Zadané hodnoty {vals} nejsou zahrnuty v seznamu platných hodnot."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:264
 #, python-brace-format
@@ -2201,7 +2197,7 @@ msgstr "ID fondu:"
 #: src/subscription_manager/cli_command/list.py:133
 #: src/subscription_manager/cli_command/list.py:153
 msgid "Provides Management:"
-msgstr ""
+msgstr "Zajišťuje správu:"
 
 #: src/subscription_manager/cli_command/list.py:82
 msgid "Available:"
@@ -2227,7 +2223,7 @@ msgstr "Role:"
 #: src/subscription_manager/cli_command/list.py:137
 #: src/subscription_manager/cli_command/list.py:158
 msgid "Service Level:"
-msgstr ""
+msgstr "Servisní úroveň:"
 
 #: src/subscription_manager/cli_command/list.py:87
 #: src/subscription_manager/cli_command/list.py:159
@@ -2237,13 +2233,13 @@ msgstr "Použití:"
 #: src/subscription_manager/cli_command/list.py:88
 #: src/subscription_manager/cli_command/list.py:160
 msgid "Add-ons:"
-msgstr "Doplňky"
+msgstr "Doplňky:"
 
 #: src/subscription_manager/cli_command/list.py:89
 #: src/subscription_manager/cli_command/list.py:139
 #: src/subscription_manager/cli_command/list.py:162
 msgid "Subscription Type:"
-msgstr "Předplatné"
+msgstr "Typ předplatného:"
 
 #: src/subscription_manager/cli_command/list.py:92
 #: src/subscription_manager/cli_command/list.py:165
@@ -2287,7 +2283,7 @@ msgstr "Účet:"
 #: src/subscription_manager/cli_command/list.py:131
 #: src/subscription_manager/cli_command/list.py:151
 msgid "Serial:"
-msgstr "Sériové číslo"
+msgstr "Sériové číslo:"
 
 #: src/subscription_manager/cli_command/list.py:134
 #: src/subscription_manager/cli_command/list.py:154
