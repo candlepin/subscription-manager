@@ -2,16 +2,17 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the rhsm package.
 # Pavel Borecki <pavel.borecki@gmail.com>, 2025.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025, 2026.
 # Jiri Hnidek <jhnidek@redhat.com>, 2025.
 # John Sefler <jsefler@redhat.com>, 2025.
+# Jan Kalabza <jan.kalabza@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2025-11-18 19:58+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2026-04-27 18:59+0000\n"
+"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/cs/>\n"
 "Language: cs\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.17\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -67,7 +68,7 @@ msgstr ""
 #: /usr/lib64/python3.12/argparse.py:1323
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr "argument „-“ s režimem %r"
+msgstr "argument “-“ s režimem %r"
 
 #: /usr/lib64/python3.12/argparse.py:1332
 #, python-format
@@ -106,9 +107,9 @@ msgstr "neplatná hodnota conflict_resolution: %r"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "kolidující řetězec volby: %s"
-msgstr[1] "kolidující řetězce volby: %s"
-msgstr[2] "kolidující řetězce volby: %s"
+msgstr[0] "Kolidující volba: %s"
+msgstr[1] "Kolidující volby: %s"
+msgstr[2] "Kolidující volby: %s"
 
 #: /usr/lib64/python3.12/argparse.py:1731
 msgid "mutually exclusive arguments must be optional"
@@ -658,7 +659,7 @@ msgstr "Produkt"
 
 #: src/rct/printing.py:39
 msgid "ID"
-msgstr "Identif."
+msgstr "ID"
 
 #: src/rct/printing.py:41 src/rct/printing.py:119
 msgid "Version"
@@ -855,7 +856,7 @@ msgstr "Získávání cloudového tokenu"
 
 #: src/rhsm/connection.py:1607
 msgid "Registering system"
-msgstr "Systém se registruje"
+msgstr "Zaregistrovat systém"
 
 #: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
@@ -903,7 +904,7 @@ msgstr "Získávají se organizace"
 
 #: src/rhsm/connection.py:1859
 msgid "Unregistering system"
-msgstr "Ruší se registrace systému"
+msgstr "Odregistrace systému"
 
 #: src/rhsm/connection.py:1883
 msgid "Fetching certificates"
@@ -1132,8 +1133,8 @@ msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
 msgstr ""
-"Chyba: zadán neplatný typ výpisu.  Povoleny jsou pouze „installed“, "
-"„consumed“ nebo „available“"
+"Chyba: zadán neplatný typ výpisu.  Povoleny jsou pouze „installed“, „consumed"
+"“ nebo „available“"
 
 #: src/rhsmlib/services/entitlement.py:497
 msgid "Error: --all is only applicable with --available"
@@ -1506,11 +1507,12 @@ msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
-msgstr[0] "Varování: Zadaná hodnota {vals} není obsažena v seznamu platných hodnot"
+msgstr[0] ""
+"Varování: Zadaná hodnota {vals} není zahrnuta v seznamu platných hodnot."
 msgstr[1] ""
-"Varování: Zadané hodnoty {vals} nejsou obsaženy v seznamu platných hodnot"
+"Varování: Zadané hodnoty {vals} nejsou zahrnuty v seznamu platných hodnot."
 msgstr[2] ""
-"Varování: Zadané hodnoty {vals} nejsou obsaženy v seznamu platných hodnot"
+"Varování: Zadané hodnoty {vals} nejsou zahrnuty v seznamu platných hodnot."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:252
 #, python-brace-format
@@ -1919,7 +1921,7 @@ msgstr "Název produktu:"
 
 #: src/subscription_manager/cli_command/list.py:30
 msgid "Product ID:"
-msgstr "Identif. produktu:"
+msgstr "ID produktu:"
 
 #: src/subscription_manager/cli_command/list.py:31
 msgid "Version:"
@@ -1955,7 +1957,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:87
 msgid "No installed products to list"
-msgstr "Žádné nainstalované produkty k vypsání"
+msgstr "Nejsou nainstalované žádné produkty"
 
 #: src/subscription_manager/cli_command/org.py:35
 msgid "specify an organization"
@@ -2083,7 +2085,7 @@ msgstr "Repozitář: {repo}"
 
 #: src/subscription_manager/cli_command/owners.py:32
 msgid "Key:"
-msgstr "Klíč:"
+msgstr "_Klíč:"
 
 #: src/subscription_manager/cli_command/owners.py:38
 msgid "Display the organizations against which a user can register a system"
@@ -2344,11 +2346,11 @@ msgstr "Název repozitáře:"
 
 #: src/subscription_manager/cli_command/repos.py:36
 msgid "Repo URL:"
-msgstr "URL adresa repozitáře:"
+msgstr "URL repozitáře:"
 
 #: src/subscription_manager/cli_command/repos.py:37
 msgid "Enabled:"
-msgstr "Zapnuto:"
+msgstr "Povoleno:"
 
 #: src/subscription_manager/cli_command/repos.py:66
 msgid "List the repositories which this system is entitled to use"
@@ -2604,8 +2606,8 @@ msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
 msgstr ""
-"Chyba sítě – nebylo možné se připojit k serveru. Podrobnosti viz /var/log/"
-"rhsm/rhsm.log"
+"Chyba sítě, nebylo možné se připojit k serveru. Podívejte se do /var/log/"
+"rhsm/rhsm.log pro více informací."
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
@@ -2667,7 +2669,7 @@ msgid ""
 "rhsm/rhsm.log for more information."
 msgstr ""
 "Chyba vzdáleného serveru. Zkontrolujte podrobnosti připojení nebo se "
-"podívejte ohledně dalších informací do /var/log/rhsm/rhsm.log"
+"podívejte do /var/log/rhsm/rhsm.log pro další informace."
 
 #: src/subscription_manager/exceptions.py:50
 #, python-brace-format
@@ -2756,14 +2758,14 @@ msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
 msgstr[0] ""
-"Překročen limit počtu pokusů za časový úsek pro server – zkuste to později ("
-"nejdříve za {time} sekundu)"
+"Limit serveru byl překročen, zkuste to prosím znovu později. (Platnost "
+"vyprší za {time} sekund)"
 msgstr[1] ""
-"Překročen limit počtu pokusů za časový úsek pro server – zkuste to později ("
-"nejdříve za {time} sekundy)"
+"Limity serveru byly překročeny, zkuste to prosím znovu později. (Platnost "
+"vyprší za {time} sekund)"
 msgstr[2] ""
-"Překročen limit počtu pokusů za časový úsek pro server – zkuste to později ("
-"nejdříve za {time} sekund)"
+"Limity serveru byly překročeny, zkuste to prosím znovu později. (Platnost "
+"vyprší za {time} sekund)"
 
 #: src/subscription_manager/i18n_argparse.py:50
 #, python-brace-format
@@ -2861,7 +2863,7 @@ msgstr ""
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 msgid "Registering the system"
-msgstr "Registrace systému"
+msgstr "Zaregistrovat systém"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 msgid "Updating entitlement certificates & repositories."
