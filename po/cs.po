@@ -12,8 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2026-04-26 19:59+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/cs/>\n"
 "Language: cs\n"
@@ -69,7 +68,7 @@ msgstr ""
 #: /usr/lib64/python3.12/argparse.py:1323
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr "argument „-“ s režimem %r"
+msgstr "argument “-“ s režimem %r"
 
 #: /usr/lib64/python3.12/argparse.py:1332
 #, python-format
@@ -108,9 +107,9 @@ msgstr "neplatná hodnota conflict_resolution: %r"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "Kolidující volby %s"
-msgstr[1] "Kolidující volby %s"
-msgstr[2] "Kolidující volby %s"
+msgstr[0] "Kolidující volba: %s"
+msgstr[1] "Kolidující volby: %s"
+msgstr[2] "Kolidující volby: %s"
 
 #: /usr/lib64/python3.12/argparse.py:1731
 msgid "mutually exclusive arguments must be optional"
@@ -905,7 +904,7 @@ msgstr "Získávají se organizace"
 
 #: src/rhsm/connection.py:1859
 msgid "Unregistering system"
-msgstr "Ruší se registrace systému"
+msgstr "Odregistrace systému"
 
 #: src/rhsm/connection.py:1883
 msgid "Fetching certificates"
@@ -1917,11 +1916,11 @@ msgstr "Chyba: Nebylo možné vytvořit novou identitu pro systém"
 
 #: src/subscription_manager/cli_command/list.py:29
 msgid "Product Name:"
-msgstr "Název produktu"
+msgstr "Název produktu:"
 
 #: src/subscription_manager/cli_command/list.py:30
 msgid "Product ID:"
-msgstr "Identif. produktu:"
+msgstr "ID produktu:"
 
 #: src/subscription_manager/cli_command/list.py:31
 msgid "Version:"
@@ -1957,7 +1956,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:87
 msgid "No installed products to list"
-msgstr "Na tomto systému nejsou nainstalované žádné produkty."
+msgstr "Nejsou nainstalované žádné produkty"
 
 #: src/subscription_manager/cli_command/org.py:35
 msgid "specify an organization"
@@ -2346,11 +2345,11 @@ msgstr "Název repozitáře:"
 
 #: src/subscription_manager/cli_command/repos.py:36
 msgid "Repo URL:"
-msgstr "URL repozitáře"
+msgstr "URL repozitáře:"
 
 #: src/subscription_manager/cli_command/repos.py:37
 msgid "Enabled:"
-msgstr "Povoleno"
+msgstr "Povoleno:"
 
 #: src/subscription_manager/cli_command/repos.py:66
 msgid "List the repositories which this system is entitled to use"
@@ -2669,7 +2668,7 @@ msgid ""
 "rhsm/rhsm.log for more information."
 msgstr ""
 "Chyba vzdáleného serveru. Zkontrolujte podrobnosti připojení nebo se "
-"podívejte do /var/log/rhsm/rhsm.log ohledně dalších informací."
+"podívejte do /var/log/rhsm/rhsm.log pro další informace."
 
 #: src/subscription_manager/exceptions.py:50
 #, python-brace-format
@@ -2758,11 +2757,14 @@ msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
 msgstr[0] ""
-"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
+"Limit serveru byl překročen, zkuste to prosím znovu později. (Platnost "
+"vyprší za {time} sekund)"
 msgstr[1] ""
-"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
+"Limity serveru byly překročeny, zkuste to prosím znovu později. (Platnost "
+"vyprší za {time} sekund)"
 msgstr[2] ""
-"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
+"Limity serveru byly překročeny, zkuste to prosím znovu později. (Platnost "
+"vyprší za {time} sekund)"
 
 #: src/subscription_manager/i18n_argparse.py:50
 #, python-brace-format
