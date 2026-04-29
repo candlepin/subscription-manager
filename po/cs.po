@@ -11,8 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
 "PO-Revision-Date: 2026-04-26 19:59+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/cs/>\n"
 "Language: cs\n"
@@ -39,7 +38,7 @@ msgstr ""
 #: /usr/lib64/python3.9/argparse.py:1264
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr "argument „-“ s režimem %r"
+msgstr "argument “-“ s režimem %r"
 
 #: /usr/lib64/python3.9/argparse.py:1273
 #, python-format
@@ -78,9 +77,9 @@ msgstr "neplatná hodnota conflict_resolution: %r"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "Kolidující volby %s"
-msgstr[1] "Kolidující volby %s"
-msgstr[2] "Kolidující volby %s"
+msgstr[0] "Kolidující volba: %s"
+msgstr[1] "Kolidující volby: %s"
+msgstr[2] "Kolidující volby: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1661
 msgid "mutually exclusive arguments must be optional"
@@ -874,7 +873,7 @@ msgstr ""
 
 #: src/rhsm/connection.py:1862
 msgid "Unregistering system"
-msgstr ""
+msgstr "Odregistrace systému"
 
 #: src/rhsm/connection.py:1886
 msgid "Fetching certificates"
@@ -2114,12 +2113,12 @@ msgstr "Částečně pokryto předplatným"
 #: src/subscription_manager/cli_command/list.py:69
 #: src/subscription_manager/cli_command/list.py:111
 msgid "Product Name:"
-msgstr "Název produktu"
+msgstr "Název produktu:"
 
 #: src/subscription_manager/cli_command/list.py:59
 #: src/subscription_manager/cli_command/list.py:70
 msgid "Product ID:"
-msgstr "Identif. produktu:"
+msgstr "ID produktu:"
 
 #: src/subscription_manager/cli_command/list.py:60
 #: src/subscription_manager/cli_command/list.py:71
@@ -2154,21 +2153,21 @@ msgstr "Začátek:"
 #: src/subscription_manager/cli_command/list.py:141
 #: src/subscription_manager/cli_command/list.py:164
 msgid "Ends:"
-msgstr "Končí"
+msgstr "Končí:"
 
 #: src/subscription_manager/cli_command/list.py:76
 #: src/subscription_manager/cli_command/list.py:96
 #: src/subscription_manager/cli_command/list.py:126
 #: src/subscription_manager/cli_command/list.py:146
 msgid "Subscription Name:"
-msgstr "Předplatné"
+msgstr "Jméno předplatného:"
 
 #: src/subscription_manager/cli_command/list.py:77
 #: src/subscription_manager/cli_command/list.py:97
 #: src/subscription_manager/cli_command/list.py:127
 #: src/subscription_manager/cli_command/list.py:147
 msgid "Provides:"
-msgstr "Poskytovatel"
+msgstr "Poskytovatel:"
 
 #: src/subscription_manager/cli_command/list.py:78
 #: src/subscription_manager/cli_command/list.py:98
@@ -2182,13 +2181,13 @@ msgstr ""
 #: src/subscription_manager/cli_command/list.py:129
 #: src/subscription_manager/cli_command/list.py:149
 msgid "Contract:"
-msgstr "Smlouva"
+msgstr "Smlouva:"
 
 #: src/subscription_manager/cli_command/list.py:80
 #: src/subscription_manager/cli_command/list.py:132
 #: src/subscription_manager/cli_command/list.py:152
 msgid "Pool ID:"
-msgstr "Identif. fondu"
+msgstr "ID fondu:"
 
 #: src/subscription_manager/cli_command/list.py:81
 #: src/subscription_manager/cli_command/list.py:133
@@ -2198,7 +2197,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:82
 msgid "Available:"
-msgstr "Dostupný"
+msgstr "Dostupnost:"
 
 #: src/subscription_manager/cli_command/list.py:83
 msgid "Suggested:"
@@ -2213,7 +2212,7 @@ msgstr "Typ služby:"
 #: src/subscription_manager/cli_command/list.py:85
 #: src/subscription_manager/cli_command/list.py:157
 msgid "Roles:"
-msgstr "Role"
+msgstr "Role:"
 
 #: src/subscription_manager/cli_command/list.py:86
 #: src/subscription_manager/cli_command/list.py:100
@@ -2253,11 +2252,11 @@ msgstr "Název repozitáře:"
 
 #: src/subscription_manager/cli_command/list.py:106
 msgid "Repo URL:"
-msgstr "URL repozitáře"
+msgstr "URL repozitáře:"
 
 #: src/subscription_manager/cli_command/list.py:107
 msgid "Enabled:"
-msgstr "Povoleno"
+msgstr "Povoleno:"
 
 #: src/subscription_manager/cli_command/list.py:116
 #: src/subscription_manager/cli_command/list.py:121
@@ -2275,7 +2274,7 @@ msgstr "_Klíč:"
 #: src/subscription_manager/cli_command/list.py:130
 #: src/subscription_manager/cli_command/list.py:150
 msgid "Account:"
-msgstr "Účty"
+msgstr "Účet:"
 
 #: src/subscription_manager/cli_command/list.py:131
 #: src/subscription_manager/cli_command/list.py:151
@@ -2290,7 +2289,7 @@ msgstr "Aktivní:"
 #: src/subscription_manager/cli_command/list.py:135
 #: src/subscription_manager/cli_command/list.py:155
 msgid "Quantity Used:"
-msgstr ""
+msgstr "Použité množství:"
 
 #: src/subscription_manager/cli_command/list.py:142
 msgid "System Type:"
@@ -2399,6 +2398,8 @@ msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{dateexample})"
 msgstr ""
+"Zadané datum je neplatné. Datum by mělo být ve formátu RRRR-MM-DD (příklad: "
+"{dateexample})"
 
 #: src/subscription_manager/cli_command/list.py:371
 msgid "    Installed Product Status"
@@ -2412,7 +2413,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:412
 msgid "No installed products to list"
-msgstr "Na tomto systému nejsou nainstalované žádné produkty."
+msgstr "Nejsou nainstalované žádné produkty"
 
 #: src/subscription_manager/cli_command/list.py:439
 msgid "Available Subscriptions"
@@ -2805,7 +2806,7 @@ msgstr "Registrace k: {hostname}:{port}{prefix}"
 #: src/subscription_manager/cli_command/register.py:369
 #, python-brace-format
 msgid "Error during registration: {e}"
-msgstr ""
+msgstr "Chyba při registraci: {e}"
 
 #: src/subscription_manager/cli_command/register.py:372
 #, python-brace-format
@@ -3143,7 +3144,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/status.py:123
 msgid "Registered"
-msgstr "Zaregistrováno."
+msgstr "Zaregistrováno"
 
 #: src/subscription_manager/cli_command/status.py:125
 #, python-brace-format
@@ -3337,7 +3338,7 @@ msgid ""
 "rhsm/rhsm.log for more information."
 msgstr ""
 "Chyba vzdáleného serveru. Zkontrolujte podrobnosti připojení nebo se "
-"podívejte do /var/log/rhsm/rhsm.log ohledně dalších informací."
+"podívejte do /var/log/rhsm/rhsm.log pro další informace."
 
 #: src/subscription_manager/exceptions.py:50
 #, python-brace-format
@@ -3426,11 +3427,14 @@ msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
 msgstr[0] ""
-"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
+"Limit serveru byl překročen, zkuste to prosím znovu později. (Platnost "
+"vyprší za {time} sekund)"
 msgstr[1] ""
-"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
+"Limity serveru byly překročeny, zkuste to prosím znovu později. (Platnost "
+"vyprší za {time} sekund)"
 msgstr[2] ""
-"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
+"Limity serveru byly překročeny, zkuste to prosím znovu později. (Platnost "
+"vyprší za {time} sekund)"
 
 #: src/subscription_manager/i18n_argparse.py:50
 #, python-brace-format
