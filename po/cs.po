@@ -10,8 +10,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2026-04-27 17:59+0000\n"
-"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
+"PO-Revision-Date: 2026-04-29 20:59+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/cs/>\n"
 "Language: cs\n"
@@ -5203,16 +5204,18 @@ msgid ""
 "Error: '%s' does not match a valid repository ID. Use \"subscription-manager "
 "repos --list\" to see valid repositories."
 msgstr ""
+"Chyba: „{repoid}“ neodpovídá platnému identifikátoru repozitáře. Platné "
+"repozitáře si zobrazíte příkazem „subscription-manager repos --list“."
 
 #: src/subscription_manager/managercli.py:3140
 #, python-format
 msgid "Repository '%s' is enabled for this system."
-msgstr ""
+msgstr "Repozitář „{repoid}“ je pro tento systém zapnutý."
 
 #: src/subscription_manager/managercli.py:3142
 #, python-format
 msgid "Repository '%s' is disabled for this system."
-msgstr ""
+msgstr "Repozitář „{repoid}“ je pro tento systém vypnutý."
 
 #: src/subscription_manager/managercli.py:3149
 msgid "List, set, or remove the configuration parameters in use by this system"
@@ -5251,7 +5254,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:3210
 #, python-format
 msgid "Error: Section %s and name %s does not exist."
-msgstr ""
+msgstr "Chyba: Sekce {section} a název {name} neexistuje."
 
 #: src/subscription_manager/managercli.py:3228
 msgid "[] - Default value in use"
@@ -5261,17 +5264,17 @@ msgstr "[] - Je používána výchozí hodnota"
 #: src/subscription_manager/managercli.py:3240
 #, python-format
 msgid "You have removed the value for section %s and name %s."
-msgstr ""
+msgstr "Odebrali jste hodnotu pro výběr {section} a název {name}."
 
 #: src/subscription_manager/managercli.py:3241
 #, python-format
 msgid "The default value for %s will now be used."
-msgstr ""
+msgstr "Výchozí hodnota pro {name} nebude použita."
 
 #: src/subscription_manager/managercli.py:3243
 #, python-format
 msgid "Section %s and name %s cannot be removed."
-msgstr ""
+msgstr "Sekci {section} a název {name} není možné odebrat."
 
 #: src/subscription_manager/managercli.py:3262
 msgid "List subscription and product information for this system"
@@ -5363,6 +5366,7 @@ msgstr "    Stav nainstalovaného produktu"
 #, python-format
 msgid "No installed products were found matching the expression \"%s\"."
 msgstr ""
+"Nebyly nalezeny žádné nainstalované produkty, odpovídající výrazu „{filter}“."
 
 #: src/subscription_manager/managercli.py:3387
 msgid "No installed products to list"
@@ -5503,7 +5507,7 @@ msgstr "Na tento systém není uplatňováno žádné přebití obsahu."
 #, python-format
 msgid ""
 "Repository '%s' does not currently exist, but the override has been added."
-msgstr ""
+msgstr "Repozitář „{repo}“ v tuto chvíli neexistuje, ale bylo přidáno přebití."
 
 #: src/subscription_manager/managercli.py:3639
 #, python-format
@@ -5513,7 +5517,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:3644
 #, python-format
 msgid "Repository: %s"
-msgstr ""
+msgstr "Repozitář"
 
 #: src/subscription_manager/managercli.py:3654
 msgid "Show or modify the system purpose role setting"
@@ -5526,12 +5530,12 @@ msgstr "Vypsat informace o verzi"
 #: src/subscription_manager/managercli.py:3675
 #, python-format
 msgid "subscription management server: %s"
-msgstr ""
+msgstr "server správy předplatného: {version}"
 
 #: src/subscription_manager/managercli.py:3676
 #, python-format
 msgid "subscription management rules: %s"
-msgstr ""
+msgstr "pravidla správy předplatného: {version}"
 
 #: src/subscription_manager/managercli.py:3683
 msgid "Show status information for this system's subscriptions and products"
@@ -5657,7 +5661,7 @@ msgstr "Chyba při nahrávání profilu balíčiků: %s\n"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:204
 msgid "Updating entitlement certificates & repositories"
-msgstr ""
+msgstr "Aktualizují se certifikáty a repozitáře nároku."
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:282
 msgid "Unable to update entitlement certificates and repositories"
