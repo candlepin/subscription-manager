@@ -436,7 +436,7 @@ static void collect_key_managers(EVP_KEYMGMT *km, void *stack)
 }
 
 
-static PyObject *
+PyObject *
 get_public_key_algorithms (PyObject *self, PyObject *args, PyObject *keywords)
 {
 	PyObject *list = PyList_New(0);
@@ -530,7 +530,7 @@ static void collect_signatures(EVP_SIGNATURE *sig, void *stack)
 	}
 }
 
-static PyObject *
+PyObject *
 get_signature_algorithms (PyObject *self, PyObject *args, PyObject *keywords)
 {
 	PyObject *list = PyList_New(0);
