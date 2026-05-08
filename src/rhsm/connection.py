@@ -1652,7 +1652,7 @@ class UEPConnection(BaseConnection):
         if key_algorithms and signature_algorithms:
             params["cryptographicCapabilities"] = {
                 "keyAlgorithms": key_algorithms,
-                "signatureAlgorithms": signature_algorithms
+                "signatureAlgorithms": signature_algorithms,
             }
 
         url = "/consumers"
