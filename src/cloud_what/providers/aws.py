@@ -42,15 +42,19 @@ class AWSCloudProvider(BaseCloudProvider):
 
     CLOUD_PROVIDER_ID = "aws"
 
-    CLOUD_PROVIDER_METADATA_URL = "http://169.254.169.254/latest/dynamic/instance-identity/document"
+    METADATA_IP_ADDR = "169.254.169.254"
+    # METADATA_IP_ADDR = "[fd00:ec2::254]"
+    # METADATA_IP_ADDR = "127.0.0.1:8081"
+
+    CLOUD_PROVIDER_METADATA_URL = f"http://{METADATA_IP_ADDR}/latest/dynamic/instance-identity/document"
 
     CLOUD_PROVIDER_METADATA_TYPE = "application/json"
 
-    CLOUD_PROVIDER_TOKEN_URL = "http://169.254.169.254/latest/api/token"
+    CLOUD_PROVIDER_TOKEN_URL = f"http://{METADATA_IP_ADDR}/latest/api/token"
 
     CLOUD_PROVIDER_TOKEN_TTL = 3600  # the value is in seconds
 
-    CLOUD_PROVIDER_SIGNATURE_URL = "http://169.254.169.254/latest/dynamic/instance-identity/rsa2048"
+    CLOUD_PROVIDER_SIGNATURE_URL = f"http://{METADATA_IP_ADDR}/latest/dynamic/instance-identity/rsa2048"
 
     CLOUD_PROVIDER_SIGNATURE_TYPE = "text/plain"
 
