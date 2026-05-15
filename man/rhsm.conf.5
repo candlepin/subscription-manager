@@ -231,6 +231,17 @@ Set to
 \fI0\fR
 to disable progress reporting. When subscription-manager waits while fetching certificates or updating user information, it writes temporary informational messages to the standard output. This feature may not be desired in some situations, changing this option prevents those messages from being displayed.
 .RE
+.PP
+certificate_algorithms
+.RS 4
+Controls which cryptographic algorithms are requested for consumer and entitlement certificates during registration\&. When set to
+\fIcurrent\fR,
+\fBsubscription\-manager\fR
+queries the system's OpenSSL library for available public key and signature algorithms and sends them to the server, allowing the server to issue certificates using post\-quantum cryptography (PQC) or other modern algorithms supported by both the client and the server\&. When set to
+\fIlegacy\fR,
+no algorithm preferences are sent and the server issues traditional RSA\-signed certificates\&. The default is
+\fIlegacy\fR\&.
+.RE
 .SH "[RHSMCERTD] OPTIONS"
 .PP
 certCheckInterval
