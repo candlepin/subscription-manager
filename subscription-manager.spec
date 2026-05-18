@@ -133,7 +133,6 @@ Requires: dmidecode
 Requires: python3-python-dateutil
 Requires: python3-dbus-python
 Requires: logrotate
-Requires: cron
 Requires: python3-gobject
 Requires: libzypp
 Requires: python3-zypp-plugin
