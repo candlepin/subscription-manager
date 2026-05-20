@@ -124,7 +124,8 @@ class RegisterService:
             log.debug("Using legacy cryptography algorithms for consumer and entitlement certificate")
         else:
             log.warning(
-                f"Unknown value for 'rhsm.certificate_algorithms' in rhsm.conf: {certificate_algorithms}"
+                f"Unknown value for 'rhsm.certificate_algorithms' in rhsm.conf: {certificate_algorithms}."
+                " Falling back to legacy cryptographic algorithms."
             )
 
         # Default to the hostname if no name is given
