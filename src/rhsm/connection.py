@@ -1635,8 +1635,7 @@ class UEPConnection(BaseConnection):
         service_level: str = None,
         usage: str = None,
         jwt_token: str = None,
-        key_algorithms: List[str] = None,
-        signature_algorithms: List[str] = None,
+        cryptographic_capabilities: CryptographicCapabilities = None,
     ) -> dict:
         """
         Creates a consumer on candlepin server
@@ -1682,11 +1681,8 @@ class UEPConnection(BaseConnection):
         if jwt_token:
             headers["Authorization"] = "Bearer {jwt_token}".format(jwt_token=jwt_token)
 
-        if key_algorithms and signature_algorithms:
-            params["cryptographicCapabilities"] = {
-                "keyAlgorithms": key_algorithms,
-                "signatureAlgorithms": signature_algorithms,
-            }
+        if cryptographic_capabilities is not None:
+            params["cryptographicCapabilities"] = cryptographic_capabilities.to_dict()
 
         url = "/consumers"
         if environments and not self.has_capability(MULTI_ENV):
@@ -1788,6 +1784,7 @@ class UEPConnection(BaseConnection):
         addons: Union[str, List[str]] = None,
         usage: str = None,
         environments: str = None,
+        cryptographic_capabilities: CryptographicCapabilities = None,
     ) -> dict:
         """
         Update a consumer on the server.
@@ -1836,6 +1833,9 @@ class UEPConnection(BaseConnection):
         # here:
         if service_level is not None:
             params["serviceLevel"] = service_level
+
+        if cryptographic_capabilities is not None:
+            params["cryptographicCapabilities"] = cryptographic_capabilities.to_dict()
 
         method = "/consumers/%s" % self.sanitize(uuid)
         ret = self.conn.request_put(method, params, description=_("Updating consumer information"))

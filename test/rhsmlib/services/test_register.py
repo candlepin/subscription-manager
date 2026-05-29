@@ -382,8 +382,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities=connection.CryptographicCapabilities(),
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -422,8 +421,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities=connection.CryptographicCapabilities(),
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -462,8 +460,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities=connection.CryptographicCapabilities(),
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -507,8 +504,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities=connection.CryptographicCapabilities(),
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -668,8 +664,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities=connection.CryptographicCapabilities(),
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -711,8 +706,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities=connection.CryptographicCapabilities(),
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -800,8 +794,7 @@ class RegisterServiceTest(InjectionMockingTest):
             service_level="test_sla",
             consumer_type="system",
             usage="test_usage",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities=connection.CryptographicCapabilities(),
         )
         mock_write_cache.assert_called_once()
 
