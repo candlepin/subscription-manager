@@ -62,6 +62,39 @@ MULTI_ENV = "multi_environment"
 REUSE_CONNECTION = True
 
 
+class CryptographicCapabilities:
+    """
+    Encapsulates cryptographic capabilities for consumer and entitlement certificates.
+
+    This class handles three states:
+    - Upgrade: Set both key_algorithms and signature_algorithms to lists
+    - Downgrade: Set both to None (clears PQC capabilities on server)
+    - No change: Don't pass a CryptographicCapabilities instance at all
+    """
+
+    def __init__(
+        self, key_algorithms: Optional[List[str]] = None, signature_algorithms: Optional[List[str]] = None
+    ):
+        self.key_algorithms = key_algorithms
+        self.signature_algorithms = signature_algorithms
+
+    def __eq__(self, other):
+        if not isinstance(other, CryptographicCapabilities):
+            return NotImplemented
+        return (
+            self.key_algorithms == other.key_algorithms
+            and self.signature_algorithms == other.signature_algorithms
+        )
+
+    def to_dict(self) -> Dict[str, Optional[List[str]]]:
+        """
+        Convert to the dictionary format expected by the server.
+
+        Returns a dict matching Candlepin's CryptographicCapabilitiesDTO object.
+        """
+        return {"keyAlgorithms": self.key_algorithms, "signatureAlgorithms": self.signature_algorithms}
+
+
 def safe_int(value: Any, safe_value: Any = None) -> Union[int, None, Any]:
     try:
         return int(value)

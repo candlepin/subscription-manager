@@ -1101,6 +1101,67 @@ class AvailableEntitlementsCache(CacheManager):
             pass
 
 
+class CryptographicCapabilitiesCache(CacheManager):
+    """
+    Cache for tracking the last cryptographic capabilities sent to the server.
+
+    This allows us to only update the consumer on the server when the
+    certificate_algorithms configuration changes.
+    """
+
+    CACHE_FILE = "/var/lib/rhsm/cache/cryptographic_capabilities.json"
+
+    def __init__(self, crypto_capabilities: connection.CryptographicCapabilities):
+        self.crypto_capabilities = crypto_capabilities
+
+    def to_dict(self) -> Dict:
+        return self.crypto_capabilities.to_dict()
+
+    def _load_data(self, open_file: TextIO) -> Optional[Dict]:
+        try:
+            data: Dict = json.loads(open_file.read()) or {}
+            return data
+        except IOError as err:
+            log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
+        except ValueError:
+            # Ignore json file parse errors, we are going to generate
+            # a new as if it didn't exist
+            pass
+
+    def has_changed(self) -> bool:
+        """
+        Check if cryptographic capabilities have changed since last update.
+        """
+        if not self._cache_exists():
+            log.debug("Cache file %s does not exist" % self.CACHE_FILE)
+            return True
+
+        cached: Optional[Dict] = self._read_cache()
+        if cached is None:
+            return True
+
+        cached_key_algs = cached.get("keyAlgorithms")
+        cached_sig_algs = cached.get("signatureAlgorithms")
+
+        # Check if algorithms have changed
+        if cached_key_algs != self.crypto_capabilities.key_algorithms:
+            return True
+        if cached_sig_algs != self.crypto_capabilities.signature_algorithms:
+            return True
+
+        return False
+
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> None:
+        """
+        Update cryptographic capabilities on the server.
+        """
+        result = uep.updateConsumer(consumer_uuid, cryptographic_capabilities=self.crypto_capabilities)
+        log.debug("result of updating cryptographicCapabilities: %s" % json.dumps(result, indent=2))
+
+
 class CloudTokenCache:
     """A cache for Candlepin's JWT used during automatic registration.
 
