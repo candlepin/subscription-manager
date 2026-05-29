@@ -1589,3 +1589,15 @@ class TestCryptographicCapabilitiesCache(SubManFixture):
         }
 
         self.assertEqual(expected, self.crypto_cache.format_for_server())
+
+    def test_sync_with_server(self):
+        """Test _sync_with_server calls updateConsumer with correct parameters."""
+        uep = Mock()
+        uep.updateConsumer.return_value = {}
+        consumer_uuid = "test-uuid-1234"
+
+        self.crypto_cache._sync_with_server(uep, consumer_uuid)
+
+        uep.updateConsumer.assert_called_once_with(
+            consumer_uuid, cryptographic_capabilities=self.crypto_cache.format_for_server()
+        )

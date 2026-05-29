@@ -1248,6 +1248,14 @@ class CryptographicCapabilitiesCache(CacheManager):
 
         return False
 
+    def _sync_with_server(
+        self, uep: connection.UEPConnection, consumer_uuid: str, _: Optional[datetime.datetime] = None
+    ) -> None:
+        """
+        Update cryptographic capabilities on the server.
+        """
+        uep.updateConsumer(consumer_uuid, cryptographic_capabilities=self.format_for_server())
+
 
 class CloudTokenCache:
     """A cache for Candlepin's JWT used during automatic registration.
