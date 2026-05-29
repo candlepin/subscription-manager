@@ -37,6 +37,7 @@ from subscription_manager.action_client import ActionClient
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.i18n_argparse import ArgumentParser, USAGE
 from subscription_manager.identity import Identity, ConsumerIdentity
+from subscription_manager.pqc import get_crypto_capabilities
 from subscription_manager.injectioninit import init_dep_injection
 
 if TYPE_CHECKING:
@@ -45,7 +46,6 @@ if TYPE_CHECKING:
     from rhsm.connection import UEPConnection
     from subscription_manager.cp_provider import CPProvider
     from subscription_manager.cache import CapabilitiesCache
-
 
 # Value in seconds
 DEFAULT_AUTOREGISTER_INTERVAL = 60
@@ -468,6 +468,11 @@ def _main(args: "argparse.Namespace"):
     uep: UEPConnection = cp_provider.get_consumer_auth_cp()
     # preload supported resources; serves as a way of failing before locking the repos
     uep.supports_resource(None)
+
+    identity: Identity = inj.require(inj.IDENTITY)
+
+    crypto_cache = cache.CryptographicCapabilitiesCache(get_crypto_capabilities())
+    crypto_cache.update_check(uep, identity.uuid)
 
     log.debug("Checking validity of consumer cert & key, updating entitlement certificates & repositories")
     try:
