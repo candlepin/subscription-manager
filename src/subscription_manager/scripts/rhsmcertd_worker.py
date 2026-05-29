@@ -37,6 +37,7 @@ from subscription_manager.action_client import ActionClient
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.i18n_argparse import ArgumentParser, USAGE
 from subscription_manager.identity import Identity, ConsumerIdentity
+from subscription_manager.pqc import get_crypto_capabilities
 from subscription_manager.injectioninit import init_dep_injection
 
 if TYPE_CHECKING:
@@ -45,7 +46,6 @@ if TYPE_CHECKING:
     from rhsm.connection import UEPConnection
     from subscription_manager.cp_provider import CPProvider
     from subscription_manager.cache import CapabilitiesCache
-
 
 # Value in seconds
 DEFAULT_AUTOREGISTER_INTERVAL = 60
@@ -468,6 +468,17 @@ def _main(args: "argparse.Namespace"):
     uep: UEPConnection = cp_provider.get_consumer_auth_cp()
     # preload supported resources; serves as a way of failing before locking the repos
     uep.supports_resource(None)
+
+    # Check if the cryptographicCapabilities have changed since registration/last refresh
+    # These values will change if the value of `rhsm.certificate_algorithms` is changed in the rhsm config
+    identity: Identity = inj.require(inj.IDENTITY)
+    crypto_cache = inj.require(inj.CRYPTO_CAPABILITIES_CACHE)
+    crypto_cache.key_algorithms, crypto_cache.signature_algorithms = get_crypto_capabilities()
+    if crypto_cache.update_check(uep, identity.uuid):
+        log.debug("Cryptographic capabilities changed, regenerating identity certificate")
+        consumer = uep.regenIdCertificate(identity.uuid)
+        managerlib.persist_consumer_cert(consumer)
+        identity.reload()
 
     log.debug("Checking validity of consumer cert & key, updating entitlement certificates & repositories")
     try:
