@@ -30,6 +30,7 @@ from subscription_manager.cache import (
     CurrentOwnerCache,
     SyspurposeValidFieldsCache,
     CapabilitiesCache,
+    CryptographicCapabilitiesCache,
 )
 
 from subscription_manager.cert_sorter import CertSorter
@@ -72,6 +73,7 @@ def init_dep_injection():
     inj.provide(inj.OVERRIDE_STATUS_CACHE, OverrideStatusCache, singleton=True)
     inj.provide(inj.RELEASE_STATUS_CACHE, ReleaseStatusCache, singleton=False)
     inj.provide(inj.CONTENT_ACCESS_CACHE, ContentAccessCache, singleton=True)
+    inj.provide(inj.CRYPTO_CAPABILITIES_CACHE, CryptographicCapabilitiesCache, singleton=True)
 
     inj.provide(inj.PROFILE_MANAGER, ProfileManager, singleton=True)
     inj.provide(inj.INSTALLED_PRODUCTS_MANAGER, InstalledProductsManager, singleton=True)
