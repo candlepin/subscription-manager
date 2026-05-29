@@ -1101,6 +1101,74 @@ class AvailableEntitlementsCache(CacheManager):
             pass
 
 
+class CryptographicCapabilitiesCache(CacheManager):
+    """
+    Cache for tracking the last cryptographic capabilities sent to the server.
+
+    This allows us to only update the consumer on the server when the
+    certificate_algorithms configuration changes.
+    """
+
+    CACHE_FILE = "/var/lib/rhsm/cache/cryptographic_capabilities.json"
+
+    def __init__(
+        self, key_algorithms: Optional[List[str]] = None, signature_algorithms: Optional[List[str]] = None
+    ):
+        if key_algorithms is None:
+            key_algorithms = []
+        if signature_algorithms is None:
+            signature_algorithms = []
+        self.key_algorithms = key_algorithms
+        self.signature_algorithms = signature_algorithms
+
+    def to_dict(self) -> Dict:
+        return self.format_for_server()
+
+    def format_for_server(self) -> Dict[str, List[str]]:
+        """
+        Convert to the dictionary format expected by the server.
+
+        Returns a dict matching Candlepin's CryptographicCapabilitiesDTO object.
+        """
+        return {"keyAlgorithms": self.key_algorithms, "signatureAlgorithms": self.signature_algorithms}
+
+    def _load_data(self, open_file: TextIO) -> Optional[Dict]:
+        """
+        Reads the last data sent to the server. The data is stored in JSON format
+        matching Candlepin's CryptographicCapabilitiesDTO object
+        """
+        try:
+            data: Dict = json.loads(open_file.read()) or {}
+            return data
+        except IOError as err:
+            log.error("Unable to read cache: %s" % self.CACHE_FILE)
+            log.exception(err)
+        except ValueError as e:
+            # Ignore json file parse errors, we are going to generate
+            # a new as if it didn't exist
+            log.debug("Unable to parse %s: %s", self.CACHE_FILE, str(e))
+            pass
+
+    def has_changed(self) -> bool:
+        """
+        Check if cryptographic capabilities have changed since last update.
+        """
+        cached: Optional[Dict] = self.read_cache_only()
+        if cached is None:
+            return True
+
+        cached_key_algs = cached.get("keyAlgorithms")
+        cached_sig_algs = cached.get("signatureAlgorithms")
+
+        # Check if algorithms have changed
+        if set(cached_key_algs) != set(self.key_algorithms):
+            return True
+        if set(cached_sig_algs) != set(self.signature_algorithms):
+            return True
+
+        return False
+
+
 class CloudTokenCache:
     """A cache for Candlepin's JWT used during automatic registration.
 
