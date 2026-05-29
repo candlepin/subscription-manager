@@ -16,7 +16,6 @@ import socket
 from typing import Callable, Optional
 
 from rhsm.connection import UEPConnection
-from rhsm.config import get_config_parser
 
 from rhsmlib.services import exceptions
 from rhsmlib.services.unregister import UnregisterService
@@ -25,7 +24,7 @@ from subscription_manager import injection as inj
 from subscription_manager import managerlib
 from subscription_manager import syspurposelib
 from subscription_manager.i18n import ugettext as _
-from subscription_manager.pqc import get_public_key_algorithms, get_signature_algorithms
+from subscription_manager.pqc import get_crypto_capabilities
 
 log = logging.getLogger(__name__)
 
@@ -36,6 +35,7 @@ class RegisterService:
         self.installed_mgr = inj.require(inj.INSTALLED_PRODUCTS_MANAGER)
         self.facts = inj.require(inj.FACTS)
         self.identity = inj.require(inj.IDENTITY)
+        self.crypto_capabilities = inj.require(inj.CRYPTO_CAPABILITIES_CACHE)
         self.cp = cp
 
     def register(
@@ -111,22 +111,9 @@ class RegisterService:
         environments = options["environments"]
         facts_dict = self.facts.get_facts()
 
-        config = get_config_parser()
-        key_algorithms = None
-        signature_algorithms = None
-        certificate_algorithms = config.get("rhsm", "certificate_algorithms")
-        if certificate_algorithms == "current":
-            key_algorithms = get_public_key_algorithms()
-            log.debug(f"The list of public key algorithms: {key_algorithms}")
-            signature_algorithms = get_signature_algorithms()
-            log.debug(f"The list of signature algorithms: {signature_algorithms}")
-        elif certificate_algorithms == "legacy":
-            log.debug("Using legacy cryptography algorithms for consumer and entitlement certificate")
-        else:
-            log.warning(
-                f"Unknown value for 'rhsm.certificate_algorithms' in rhsm.conf: {certificate_algorithms}."
-                " Falling back to legacy cryptographic algorithms."
-            )
+        key_algs, sig_algs = get_crypto_capabilities()
+        self.crypto_capabilities.key_algorithms = key_algs
+        self.crypto_capabilities.signature_algorithms = sig_algs
 
         # Default to the hostname if no name is given
         consumer_name = options["name"] or socket.gethostname()
@@ -155,8 +142,7 @@ class RegisterService:
                 service_level=service_level,
                 usage=usage,
                 jwt_token=jwt_token,
-                key_algorithms=key_algorithms,
-                signature_algorithms=signature_algorithms,
+                cryptographic_capabilities=self.crypto_capabilities.format_for_server(),
             )
             # When new consumer is created, then close all existing connections
             # to be able to recreate new one

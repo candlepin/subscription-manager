@@ -16,7 +16,11 @@ import json
 
 import subscription_manager.injection as inj
 
-from subscription_manager.cache import InstalledProductsManager, ContentAccessModeCache
+from subscription_manager.cache import (
+    CryptographicCapabilitiesCache,
+    InstalledProductsManager,
+    ContentAccessModeCache,
+)
 from subscription_manager.cp_provider import CPProvider
 from subscription_manager.facts import Facts
 from subscription_manager.identity import Identity
@@ -346,6 +350,11 @@ class RegisterServiceTest(InjectionMockingTest):
         self.addCleanup(syspurpose_patch.stop)
 
         self.mock_syspurpose = mock.Mock()
+        self.mock_crypto_cache = mock.Mock(spec=CryptographicCapabilitiesCache)
+        self.mock_crypto_cache.format_for_server.return_value = {
+            "keyAlgorithms": [],
+            "signatureAlgorithms": [],
+        }
 
     def injection_definitions(self, *args, **kwargs):
         if args[0] == inj.IDENTITY:
@@ -360,12 +369,16 @@ class RegisterServiceTest(InjectionMockingTest):
             return self.mock_cp_provider
         elif args[0] == inj.CONTENT_ACCESS_MODE_CACHE:
             return self.mock_content_access_mode_cache
+        elif args[0] == inj.CRYPTO_CAPABILITIES_CACHE:
+            return self.mock_crypto_cache
         else:
             return None
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_normally(self, mock_persist_consumer, mock_write_cache):
+    @mock.patch("rhsmlib.services.register.get_crypto_capabilities")
+    def test_register_normally(self, mock_get_crypto, mock_persist_consumer, mock_write_cache):
+        mock_get_crypto.return_value = ([], [])
         self.mock_identity.is_valid.return_value = False
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
@@ -390,8 +403,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities={"keyAlgorithms": [], "signatureAlgorithms": []},
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -405,7 +417,11 @@ class RegisterServiceTest(InjectionMockingTest):
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_multiple_environment_ids(self, mock_persist_consumer, mock_write_cache):
+    @mock.patch("rhsmlib.services.register.get_crypto_capabilities")
+    def test_register_multiple_environment_ids(
+        self, mock_get_crypto, mock_persist_consumer, mock_write_cache
+    ):
+        mock_get_crypto.return_value = ([], [])
         self.mock_identity.is_valid.return_value = False
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
@@ -430,8 +446,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities={"keyAlgorithms": [], "signatureAlgorithms": []},
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -445,7 +460,11 @@ class RegisterServiceTest(InjectionMockingTest):
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_multiple_environment_names(self, mock_persist_consumer, mock_write_cache):
+    @mock.patch("rhsmlib.services.register.get_crypto_capabilities")
+    def test_register_multiple_environment_names(
+        self, mock_get_crypto, mock_persist_consumer, mock_write_cache
+    ):
+        mock_get_crypto.return_value = ([], [])
         self.mock_identity.is_valid.return_value = False
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
@@ -470,8 +489,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities={"keyAlgorithms": [], "signatureAlgorithms": []},
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -485,7 +503,9 @@ class RegisterServiceTest(InjectionMockingTest):
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_environment_name_type(self, mock_persist_consumer, mock_write_cache):
+    @mock.patch("rhsmlib.services.register.get_crypto_capabilities")
+    def test_register_environment_name_type(self, mock_get_crypto, mock_persist_consumer, mock_write_cache):
+        mock_get_crypto.return_value = ([], [])
         self.mock_identity.is_valid.return_value = False
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
@@ -515,8 +535,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities={"keyAlgorithms": [], "signatureAlgorithms": []},
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -598,8 +617,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities={"keyAlgorithms": [], "signatureAlgorithms": []},
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -645,8 +663,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities={"keyAlgorithms": [], "signatureAlgorithms": []},
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -661,11 +678,15 @@ class RegisterServiceTest(InjectionMockingTest):
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_normally_with_no_org_specified(self, mock_persist_consumer, mock_write_cache):
+    @mock.patch("rhsmlib.services.register.get_crypto_capabilities")
+    def test_register_normally_with_no_org_specified(
+        self, mock_get_crypto, mock_persist_consumer, mock_write_cache
+    ):
         """
         This test is intended for the case, when no organization is specified, but user is member
         only of one organization and thus it can be automatically selected
         """
+        mock_get_crypto.return_value = ([], [])
         self.mock_cp.getOwnerList = mock.Mock()
         self.mock_cp.getOwnerList.return_value = [
             {
@@ -724,8 +745,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities={"keyAlgorithms": [], "signatureAlgorithms": []},
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -739,7 +759,9 @@ class RegisterServiceTest(InjectionMockingTest):
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_register_with_activation_keys(self, mock_persist_consumer, mock_write_cache):
+    @mock.patch("rhsmlib.services.register.get_crypto_capabilities")
+    def test_register_with_activation_keys(self, mock_get_crypto, mock_persist_consumer, mock_write_cache):
+        mock_get_crypto.return_value = ([], [])
         self.mock_cp.username = None
         self.mock_cp.password = None
         self.mock_identity.is_valid.return_value = False
@@ -767,8 +789,7 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities={"keyAlgorithms": [], "signatureAlgorithms": []},
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -826,7 +847,9 @@ class RegisterServiceTest(InjectionMockingTest):
 
     @mock.patch("rhsmlib.services.register.syspurposelib.write_syspurpose_cache", return_value=True)
     @mock.patch("rhsmlib.services.register.managerlib.persist_consumer_cert")
-    def test_reads_syspurpose(self, mock_persist_consumer, mock_write_cache):
+    @mock.patch("rhsmlib.services.register.get_crypto_capabilities")
+    def test_reads_syspurpose(self, mock_get_crypto, mock_persist_consumer, mock_write_cache):
+        mock_get_crypto.return_value = ([], [])
         self.mock_installed_products.format_for_server.return_value = []
         self.mock_installed_products.tags = []
         self.mock_identity.is_valid.return_value = False
@@ -856,8 +879,7 @@ class RegisterServiceTest(InjectionMockingTest):
             service_level="test_sla",
             consumer_type="system",
             usage="test_usage",
-            key_algorithms=None,
-            signature_algorithms=None,
+            cryptographic_capabilities={"keyAlgorithms": [], "signatureAlgorithms": []},
         )
         mock_write_cache.assert_called_once()
 
