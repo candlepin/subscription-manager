@@ -276,8 +276,8 @@ class RhsmConfigParser(SafeConfigParser):
                 )
                 print(
                     _(
-                        "Please use:  subscription-manager config --rhsm.certificate_algorithms=<Preference> to "
-                        "set the certificate_algorithms to a valid value."
+                        "Please use:  subscription-manager config --rhsm.certificate_algorithms=<Preference>"
+                        " to set the certificate_algorithms to a valid value."
                     ),
                     file=sys.stderr,
                 )
