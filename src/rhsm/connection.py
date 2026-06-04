@@ -538,6 +538,10 @@ def _encode_auth(username, password):
     return "Basic %s" % encoded
 
 
+# Give server one second to close the connection
+CLOSE_CONNECTION_TIMEOUT = 1
+
+
 # FIXME: this is terrible, we need to refactor
 # Restlib to be Restlib based on a https client class
 class ContentConnection(BaseConnection):
@@ -680,6 +684,8 @@ class BaseRestLib:
             if self.__conn.sock is not None:
                 log.debug(f"Closing HTTPS connection {self.__conn.sock}")
                 try:
+                    # Wait for 1 second to allow graceful shutdown of TLS connection
+                    self.__conn.sock.settimeout(CLOSE_CONNECTION_TIMEOUT)
                     self.__conn.sock.unwrap()
                 except Exception as err:
                     log.debug(f"Unable to close TLS connection: {err}")
@@ -687,9 +693,12 @@ class BaseRestLib:
                     log.debug("TLS connection closed")
             # Then it is possible to close TCP connection
             try:
+                log.debug("Closing TCP connection")
                 self.__conn.close()
             except Exception as err:
                 log.info(f"Unable to close TCP connection: {err}")
+            else:
+                log.debug("TCP connection closed")
         self.__conn = None
 
     def _get_cert_key_list(self) -> List[Tuple[str, str]]:
