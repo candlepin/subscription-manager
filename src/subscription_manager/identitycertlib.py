@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from rhsm.connection import UEPConnection
     from subscription_manager.cp_provider import CPProvider
     from subscription_manager.identity import Identity
+    from subscription_manager.cache import CurrentOwnerCache
 
 log = logging.getLogger(__name__)
 
@@ -82,6 +83,9 @@ class IdentityUpdateAction:
             diff: List[str] = [f"{local_serial} => {actual_serial}"]
             if local_owner != actual_owner:
                 diff += [f"{local_owner} => {actual_owner}"]
+                # We know the owner has changed delete CurrentOwnerCache to ensure accuracy.
+                current_owner_cache: CurrentOwnerCache = inj.require(inj.CURRENT_OWNER_CACHE)
+                current_owner_cache.delete_cache()
 
             log.info(
                 f"Serial number of the identity certificate changed ({', '.join(diff)}), "
