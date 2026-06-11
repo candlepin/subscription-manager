@@ -18,6 +18,7 @@ import logging
 import os
 
 import rhsm.connection as connection
+from subscription_manager.pqc import get_crypto_capabilities
 import subscription_manager.injection as inj
 
 from rhsmlib.facts.hwprobe import ClassicCheck
@@ -120,6 +121,12 @@ class IdentityCommand(UserPassCommand):
                     else:
                         self.cp_provider.set_user_pass(self.username, self.password)
                         self.cp = self.cp_provider.get_basic_auth_cp()
+
+                # Check if cryptographic capabilities have changed since registration/last refresh
+                crypto_cache = inj.require(inj.CRYPTO_CAPABILITIES_CACHE)
+                crypto_cache.key_algorithms, crypto_cache.signature_algorithms = get_crypto_capabilities()
+                crypto_cache.update_check(self.cp, consumerid, force=self.options.force)
+
                 consumer = self.cp.regenIdCertificate(consumerid)
                 managerlib.persist_consumer_cert(consumer)
 
