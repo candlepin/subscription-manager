@@ -21,6 +21,7 @@ from rhsm.connection import UEPConnection
 
 import subscription_manager.injection as inj
 from subscription_manager.entcertlib import EntCertActionInvoker
+from subscription_manager.pqc import get_crypto_capabilities
 
 log = logging.getLogger(__name__)
 
@@ -57,9 +58,15 @@ class Refresh:
         # on the server; it will be fetched when needed again
         inj.require(inj.RELEASE_STATUS_CACHE).delete_cache()
 
+        # Get current consumer identity
+        consumer_identity = inj.require(inj.IDENTITY)
+
+        # Check if cryptographic capabilities have changed since registration/last refresh
+        crypto_cache = inj.require(inj.CRYPTO_CAPABILITIES_CACHE)
+        crypto_cache.key_algorithms, crypto_cache.signature_algorithms = get_crypto_capabilities()
+        crypto_cache.update_check(self.cp, consumer_identity.uuid, force=force)
+
         if force is True:
-            # Get current consumer identity
-            consumer_identity = inj.require(inj.IDENTITY)
             # Force a regeneration of the entitlement certs for this consumer
             if not self.cp.regenEntitlementCertificates(consumer_identity.uuid, True):
                 log.debug("Warning: Unable to refresh entitlement certificates; service likely unavailable")
