@@ -598,6 +598,8 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
+            key_algorithms=None,
+            signature_algorithms=None,
         )
         self.mock_installed_products.write_cache.assert_called()
 
@@ -643,6 +645,8 @@ class RegisterServiceTest(InjectionMockingTest):
             addons=[],
             service_level="",
             usage="",
+            key_algorithms=None,
+            signature_algorithms=None,
         )
         self.mock_installed_products.write_cache.assert_called()
 
