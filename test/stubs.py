@@ -550,6 +550,7 @@ class StubUEP:
         role=None,
         usage=None,
         environments=None,
+        cryptographic_capabilities=None,
     ):
         return consumer
 
