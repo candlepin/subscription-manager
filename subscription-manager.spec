@@ -83,7 +83,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.14
+Version: 1.30.15
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -679,6 +679,41 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Mon Jun 22 2026 Jiri Hnidek <jhnidek@redhat.com> 1.30.15-1
+- chore: better definition of IP address of AWS IMDS (jhnidek@redhat.com)
+- Fix package upload during initial register (suttner@atix.de)
+- feat(pqc): update crypto capabilities from 'refresh' command
+  (jlocash@redhat.com)
+- feat(pqc): update crypto capabilities from 'identity --regenerate' command
+  (jlocash@redhat.com)
+- style: fix flake8 lint error (jlocash@redhat.com)
+- feat(pqc): update crypto capabilities in candlepin from rhsmcertd-worker
+  (jlocash@redhat.com)
+- feat(pqc): implement cache for crypto capabilities (jlocash@redhat.com)
+- fix: Invalidate and update CurrentOwnerCache when owner change is detected
+  (csnyder@redhat.com)
+- chore: Added more debug prints about closing connections (jhnidek@redhat.com)
+- fix: Set timeout before trying to close TLS connection (jhnidek@redhat.com)
+- fix(pqc): update warning to indicate fallback (jlocash@redhat.com)
+- fix(pqc): raise RuntimeError when get_signature_algorithms or
+  get_public_key_algorithms throw (jlocash@redhat.com)
+- feat(pqc): print warning when setting invalid `certificate_algorithms` value
+  (jlocash@redhat.com)
+- docs: Document `rhsm.certificate_algorithms` config option in rhsm.conf man
+  pages (jlocash@redhat.com)
+- fix: drop __smoke_test__ and __main__ from pqc.py (jlocash@redhat.com)
+- style: fix linting error in connection.py (jlocash@redhat.com)
+- test: fix broken tests for registerConsumer (jlocash@redhat.com)
+- feat(pqc): Use C bindings to retrieve public-key and signature algorithms in
+  pqc.py (jlocash@redhat.com)
+- feat: POC: Add support for PQC (jhnidek@redhat.com)
+- Remove cron RPM requirement on suse systems (suttner@atix.de)
+- test: Added C unit tests of _certificate.so (jhnidek@redhat.com)
+- feat: Added .pyi file for certificate.c (jhnidek@redhat.com)
+- chore: Not all .py* files should be ignored (jhnidek@redhat.com)
+- test: Created unit tests for certificate.c (jhnidek@redhat.com)
+- feat: Added 2 methods for listing crypto algorithms (jhnidek@redhat.com)
+
 * Fri Mar 27 2026 Jason Jerome <jajerome@redhat.com> 1.30.14-1
 - Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
 - Translated using Weblate (Georgian) (noreply-mt-weblate-translation-
