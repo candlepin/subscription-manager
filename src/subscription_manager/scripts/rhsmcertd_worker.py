@@ -37,8 +37,8 @@ from subscription_manager.action_client import HealingActionClient, ActionClient
 from subscription_manager.i18n import ugettext as _
 from subscription_manager.i18n_argparse import ArgumentParser, USAGE
 from subscription_manager.identity import Identity, ConsumerIdentity
+from subscription_manager.pqc import get_crypto_capabilities
 from subscription_manager.injectioninit import init_dep_injection
-
 
 if TYPE_CHECKING:
     import argparse
@@ -81,6 +81,10 @@ class ExitStatus(enum.IntEnum):
 
     REGISTRATION_FAILED = 30
     """The system registration was not successful."""
+    ALREADY_REGISTERED = 31
+    """System was already registered; no registration action was performed."""
+    EXIT_SIGNAL_RECEIVED = 32
+    """The worker process was terminated by a signal before completing its task."""
 
     UNKNOWN_ERROR = -1
     """An unknown error occurred."""
@@ -92,7 +96,7 @@ log = logging.getLogger(f"rhsm-app.{__name__}")
 
 
 def exit_on_signal(_signumber, _stackframe):
-    sys.exit(ExitStatus.OK)
+    sys.exit(ExitStatus.EXIT_SIGNAL_RECEIVED)
 
 
 def _is_enabled() -> bool:
@@ -153,8 +157,9 @@ def _collect_cloud_info(cloud_list: List[str]) -> dict:
         # When it is not possible to get signature for given cloud provider,
         # then silently set signature to empty string, because some cloud
         # providers does not provide signatures
-        if signature is None:
-            signature = ""
+        if cloud_provider.is_signature_required() and signature is None:
+            log.error(f"No signature gathered for cloud provider: {cloud_provider_id}")
+            continue
 
         log.info(f"Metadata and signature gathered for cloud provider: {cloud_provider_id}")
 
@@ -433,11 +438,13 @@ def _main(args: "argparse.Namespace"):
     signal.signal(signal.SIGTERM, exit_on_signal)
 
     cp_provider: CPProvider = _create_cp_provider()
+    already_registered: bool = False
 
     if args.auto_register is True:
         if _is_registered():
             print(_("This system is already registered, ignoring request to automatically register."))
             log.debug("This system is already registered, skipping automatic registration.")
+            already_registered = True
         else:
             print(_("Registering the system"))
             status: ExitStatus = _auto_register(cp_provider)
@@ -456,12 +463,23 @@ def _main(args: "argparse.Namespace"):
     # preload supported resources; serves as a way of failing before locking the repos
     uep.supports_resource(None)
 
+    # Check if the cryptographicCapabilities have changed since registration/last refresh
+    # These values will change if the value of `rhsm.certificate_algorithms` is changed in the rhsm config
+    identity: Identity = inj.require(inj.IDENTITY)
+    crypto_cache = inj.require(inj.CRYPTO_CAPABILITIES_CACHE)
+    crypto_cache.key_algorithms, crypto_cache.signature_algorithms = get_crypto_capabilities()
+    if crypto_cache.update_check(uep, identity.uuid):
+        log.debug("Cryptographic capabilities changed, regenerating identity certificate")
+        consumer = uep.regenIdCertificate(identity.uuid)
+        managerlib.persist_consumer_cert(consumer)
+        identity.reload()
+
+    log.debug("Checking validity of consumer cert & key, updating entitlement certificates & repositories")
     try:
         if args.autoheal:
             action_client = HealingActionClient()
         else:
             action_client = ActionClient()
-
         action_client.update()
 
         for update_report in action_client.update_reports:
@@ -488,6 +506,9 @@ def _main(args: "argparse.Namespace"):
 
         raise ge
 
+    if already_registered:
+        sys.exit(ExitStatus.ALREADY_REGISTERED)
+
 
 def main():
     logutil.init_logger()
@@ -511,7 +532,7 @@ def main():
 
     options: argparse.Namespace
     args: List[str]
-    (options, args) = parser.parse_known_args()
+    options, args = parser.parse_known_args()
     try:
         _main(options)
     except SystemExit as se:
@@ -520,6 +541,11 @@ def main():
         # stack trace. We need to check the code, since we want to signal
         # exit with failure to the caller. Otherwise, we will exit with 0
         if se.code:
+            if se.code in (ExitStatus.ALREADY_REGISTERED, ExitStatus.EXIT_SIGNAL_RECEIVED):
+                # In this case, raise the exception to rhsmcertd to indicate
+                # that the system is already registered or the worker was
+                # terminated early by a signal.
+                raise
             sys.exit(ExitStatus.UNKNOWN_ERROR)
     except Exception:
         log.exception("Error while updating certificates using daemon")

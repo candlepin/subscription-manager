@@ -49,6 +49,7 @@ from subscription_manager.cache import (
     CurrentOwnerCache,
     ContentAccessModeCache,
     SyspurposeComplianceStatusCache,
+    CryptographicCapabilitiesCache,
 )
 
 from rhsm.profile import Package, RPMProfile, EnabledReposProfile, ModulesProfile
@@ -1502,3 +1503,101 @@ class TestCloudTokenCache(SubManFixture):
 
         cache.CloudTokenCache.delete_cache()
         self.assertFalse(os.path.isfile(cache.CloudTokenCache.CACHE_FILE))
+
+
+class TestCryptographicCapabilitiesCache(SubManFixture):
+    def setUp(self):
+        super(TestCryptographicCapabilitiesCache, self).setUp()
+        self.key_algs = ["1.2.840.113549.1.1.1", "1.2.840.10045.2.1"]
+        self.sig_algs = ["1.2.840.113549.1.1.11", "1.2.840.10045.4.3.2"]
+        self.crypto_cache = CryptographicCapabilitiesCache(
+            key_algorithms=self.key_algs, signature_algorithms=self.sig_algs
+        )
+
+    def test_has_changed_no_cache(self):
+        """Test has_changed returns True when cache file doesn't exist."""
+        self.crypto_cache._cache_exists = Mock(return_value=False)
+        self.assertTrue(self.crypto_cache.has_changed())
+
+    def test_has_changed_with_same_values(self):
+        """Test has_changed returns False when values are the same."""
+        cached_data = {
+            "keyAlgorithms": self.key_algs,
+            "signatureAlgorithms": self.sig_algs,
+        }
+
+        self.crypto_cache._cache_exists = Mock(return_value=True)
+        self.crypto_cache._read_cache = Mock(return_value=cached_data)
+
+        self.assertFalse(self.crypto_cache.has_changed())
+
+    def test_has_changed_with_different_key_algorithms(self):
+        """Test has_changed returns True when key algorithms differ."""
+        cached_data = {
+            "keyAlgorithms": ["1.2.840.10045.2.1"],
+            "signatureAlgorithms": self.sig_algs,
+        }
+
+        self.crypto_cache._cache_exists = Mock(return_value=True)
+        self.crypto_cache._read_cache = Mock(return_value=cached_data)
+
+        self.assertTrue(self.crypto_cache.has_changed())
+
+    def test_has_changed_with_different_signature_algorithms(self):
+        """Test has_changed returns True when signature algorithms differ."""
+        cached_data = {
+            "keyAlgorithms": self.key_algs,
+            "signatureAlgorithms": ["1.2.840.10045.4.3.2"],
+        }
+
+        self.crypto_cache._cache_exists = Mock(return_value=True)
+        self.crypto_cache._read_cache = Mock(return_value=cached_data)
+
+        self.assertTrue(self.crypto_cache.has_changed())
+
+    def test_has_changed_legacy_to_current(self):
+        """Test has_changed returns True when switching from legacy to current."""
+        cached_data = {
+            "keyAlgorithms": [],
+            "signatureAlgorithms": [],
+        }
+
+        self.crypto_cache._cache_exists = Mock(return_value=True)
+        self.crypto_cache._read_cache = Mock(return_value=cached_data)
+
+        self.assertTrue(self.crypto_cache.has_changed())
+
+    def test_has_changed_current_to_legacy(self):
+        """Test has_changed returns True when switching from current to legacy."""
+        legacy_cache = CryptographicCapabilitiesCache(key_algorithms=[], signature_algorithms=[])
+
+        cached_data = {
+            "keyAlgorithms": self.key_algs,
+            "signatureAlgorithms": self.sig_algs,
+        }
+
+        legacy_cache._cache_exists = Mock(return_value=True)
+        legacy_cache._read_cache = Mock(return_value=cached_data)
+
+        self.assertTrue(legacy_cache.has_changed())
+
+    def test_format_for_server(self):
+        """Test to_dict returns correct dictionary."""
+        expected = {
+            "keyAlgorithms": self.key_algs,
+            "signatureAlgorithms": self.sig_algs,
+        }
+
+        self.assertEqual(expected, self.crypto_cache.format_for_server())
+
+    def test_sync_with_server(self):
+        """Test _sync_with_server calls updateConsumer with correct parameters."""
+        uep = Mock()
+        uep.updateConsumer.return_value = {}
+        consumer_uuid = "test-uuid-1234"
+
+        self.crypto_cache._sync_with_server(uep, consumer_uuid)
+
+        uep.updateConsumer.assert_called_once_with(
+            consumer_uuid, cryptographic_capabilities=self.crypto_cache.format_for_server()
+        )

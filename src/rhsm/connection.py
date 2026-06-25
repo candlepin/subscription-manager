@@ -538,6 +538,10 @@ def _encode_auth(username, password):
     return "Basic %s" % encoded
 
 
+# Give server one second to close the connection
+CLOSE_CONNECTION_TIMEOUT = 1
+
+
 # FIXME: this is terrible, we need to refactor
 # Restlib to be Restlib based on a https client class
 class ContentConnection(BaseConnection):
@@ -680,6 +684,8 @@ class BaseRestLib:
             if self.__conn.sock is not None:
                 log.debug(f"Closing HTTPS connection {self.__conn.sock}")
                 try:
+                    # Wait for 1 second to allow graceful shutdown of TLS connection
+                    self.__conn.sock.settimeout(CLOSE_CONNECTION_TIMEOUT)
                     self.__conn.sock.unwrap()
                 except Exception as err:
                     log.debug(f"Unable to close TLS connection: {err}")
@@ -687,9 +693,12 @@ class BaseRestLib:
                     log.debug("TLS connection closed")
             # Then it is possible to close TCP connection
             try:
+                log.debug("Closing TCP connection")
                 self.__conn.close()
             except Exception as err:
                 log.info(f"Unable to close TCP connection: {err}")
+            else:
+                log.debug("TCP connection closed")
         self.__conn = None
 
     def _get_cert_key_list(self) -> List[Tuple[str, str]]:
@@ -1608,6 +1617,7 @@ class UEPConnection(BaseConnection):
         service_level: str = None,
         usage: str = None,
         jwt_token: str = None,
+        cryptographic_capabilities: Optional[dict] = None,
     ) -> dict:
         """
         Creates a consumer on candlepin server
@@ -1652,6 +1662,9 @@ class UEPConnection(BaseConnection):
         headers = {}
         if jwt_token:
             headers["Authorization"] = "Bearer {jwt_token}".format(jwt_token=jwt_token)
+
+        if cryptographic_capabilities is not None:
+            params["cryptographicCapabilities"] = cryptographic_capabilities
 
         url = "/consumers"
         if environments and not self.has_capability(MULTI_ENV):
@@ -1754,6 +1767,7 @@ class UEPConnection(BaseConnection):
         addons: Union[str, List[str]] = None,
         usage: str = None,
         environments: str = None,
+        cryptographic_capabilities: Optional[dict] = None,
     ) -> dict:
         """
         Update a consumer on the server.
@@ -1804,6 +1818,9 @@ class UEPConnection(BaseConnection):
         # here:
         if service_level is not None:
             params["serviceLevel"] = service_level
+
+        if cryptographic_capabilities is not None:
+            params["cryptographicCapabilities"] = cryptographic_capabilities
 
         method = "/consumers/%s" % self.sanitize(uuid)
         ret = self.conn.request_put(method, params, description=_("Updating consumer information"))

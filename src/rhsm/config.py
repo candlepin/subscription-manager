@@ -78,6 +78,7 @@ RHSM_DEFAULTS = {
     "package_profile_on_trans": "0",
     "inotify": "1",
     "progress_messages": "1",
+    "certificate_algorithms": "legacy",
 }
 
 RHSMCERTD_DEFAULTS = {
@@ -230,6 +231,8 @@ class RhsmConfigParser(SafeConfigParser):
             super(RhsmConfigParser, self).set(section, name, value)
         if section == "logging" and name == "default_log_level":
             self.is_log_level_valid(value)
+        if section == "rhsm" and name == "certificate_algorithms":
+            self.is_certificate_algorithms_valid(value)
 
     def is_log_level_valid(self, value: str, print_warning: bool = True) -> bool:
         """
@@ -249,6 +252,33 @@ class RhsmConfigParser(SafeConfigParser):
                     _(
                         "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to "
                         "set the default_log_level to a valid value."
+                    ),
+                    file=sys.stderr,
+                )
+                valid_str = ", ".join(valid)
+                print(_("Valid Values: {valid_str}").format(valid_str=valid_str), file=sys.stderr)
+            return False
+        return True
+
+    def is_certificate_algorithms_valid(self, value: str, print_warning: bool = True) -> bool:
+        """
+        Check if provided certificate_algorithms value is valid or not
+        :param value: value of certificate_algorithms
+        :param print_warning: print warning when provided value is not one of "legacy", "current"
+        :return: True, when value is valid. Otherwise, return False
+        """
+
+        valid: List[str] = ["legacy", "current"]
+        if value not in valid:
+            if print_warning is True:
+                print(
+                    _("Invalid value: {val}").format(val=value),
+                    file=sys.stderr,
+                )
+                print(
+                    _(
+                        "Please use:  subscription-manager config --rhsm.certificate_algorithms=<Preference>"
+                        " to set the certificate_algorithms to a valid value."
                     ),
                     file=sys.stderr,
                 )

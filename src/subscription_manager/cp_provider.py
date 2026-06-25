@@ -166,15 +166,19 @@ class CPProvider:
         if self.consumer_auth_cp is not None:
             log.debug("Closing auth/consumer connection...")
             self.consumer_auth_cp.conn.close_connection()
+            log.debug("Auth/consumer connection closed")
         if self.no_auth_cp is not None:
             log.debug("Closing no auth connection...")
             self.no_auth_cp.conn.close_connection()
+            log.debug("No auth connection closed")
         if self.basic_auth_cp is not None:
             log.debug("Closing auth/basic connection...")
             self.basic_auth_cp.conn.close_connection()
+            log.debug("Auth/basic connection closed")
         if self.keycloak_auth_cp is not None:
             log.debug("Closing auth/keycloak connection...")
             self.keycloak_auth_cp.conn.close_connection()
+            log.debug("Auth/keycloak connection closed")
 
     def get_consumer_auth_cp(self) -> connection.UEPConnection:
         if not self.consumer_auth_cp:
