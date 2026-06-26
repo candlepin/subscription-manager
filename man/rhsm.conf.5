@@ -241,6 +241,9 @@ queries the system's OpenSSL library for available public key and signature algo
 \fIlegacy\fR,
 no algorithm preferences are sent and the server issues traditional RSA\-signed certificates\&. The default is
 \fIlegacy\fR\&.
+
+\fBCaution:\fR
+Before setting this configuration to \fIcurrent\fR, it is important to verify that the system's crypto policy supports post-quantum cryptography. The \fBupdate-crypto-policies\fR utility can be used to show and set a new policy. If the crypto policy applied to your system does not support post-quantum cryptography, then do not configure certificate_algorithms to \fIcurrent\fR.
 .RE
 .SH "[RHSMCERTD] OPTIONS"
 .PP
