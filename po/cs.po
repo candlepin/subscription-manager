@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the rhsm package.
 # Pavel Borecki <pavel.borecki@gmail.com>, 2025.
-# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025, 2026.
 # Jiri Hnidek <jhnidek@redhat.com>, 2025.
 # John Sefler <jsefler@redhat.com>, 2025.
 # Jan Kalabza <jan.kalabza@gmail.com>, 2026.
@@ -12,7 +12,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2026-04-26 19:59+0000\n"
-"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/cs/>\n"
 "Language: cs\n"
@@ -82,7 +83,7 @@ msgstr "není možné sloučit akce – dvě skupiny jsou nazvané %r"
 
 #: /usr/lib64/python3.12/argparse.py:1583
 msgid "'required' is an invalid argument for positionals"
-msgstr "'required' není platný argument pro poziční parametry"
+msgstr "„required“ není platný argument pro poziční parametry"
 
 #: /usr/lib64/python3.12/argparse.py:1604
 #, python-format
@@ -107,9 +108,9 @@ msgstr "neplatná hodnota conflict_resolution: %r"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "kolidující řetězec volby: %s"
-msgstr[1] "kolidující řetězce volby: %s"
-msgstr[2] "kolidující řetězce volby: %s"
+msgstr[0] "Kolidující volby %s"
+msgstr[1] "Kolidující volby %s"
+msgstr[2] "Kolidující volby %s"
 
 #: /usr/lib64/python3.12/argparse.py:1731
 msgid "mutually exclusive arguments must be optional"
@@ -530,7 +531,7 @@ msgstr "Spotřebitel:"
 
 #: src/rct/manifest_commands.py:235
 msgid "Subscriptions:"
-msgstr "Předplatné:"
+msgstr "Předplatná:"
 
 #: src/rct/manifest_commands.py:243 src/rct/printing.py:79
 msgid "Quantity"
@@ -586,7 +587,7 @@ msgstr "Vyžaduje nástroj virt-who"
 
 #: src/rct/manifest_commands.py:262
 msgid "Entitlement File"
-msgstr "Soubor oprávnění"
+msgstr "Soubor s nárokem"
 
 #: src/rct/manifest_commands.py:267
 msgid "Certificate File"
@@ -659,7 +660,7 @@ msgstr "Produkt"
 
 #: src/rct/printing.py:39
 msgid "ID"
-msgstr "Identif."
+msgstr "ID"
 
 #: src/rct/printing.py:41 src/rct/printing.py:119
 msgid "Version"
@@ -711,7 +712,7 @@ msgstr "Limit počtu patic"
 
 #: src/rct/printing.py:82
 msgid "RAM Limit"
-msgstr "RAM Limit"
+msgstr "Limit množství operační paměti"
 
 #: src/rct/printing.py:83
 msgid "Core Limit"
@@ -856,7 +857,7 @@ msgstr "Získávání cloudového tokenu"
 
 #: src/rhsm/connection.py:1607
 msgid "Registering system"
-msgstr "Systém se registruje"
+msgstr "Zaregistrovat systém"
 
 #: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
@@ -960,7 +961,7 @@ msgstr "Získávání přebití obsahu"
 
 #: src/rhsm/connection.py:2088
 msgid "Updating content overrides"
-msgstr "Aktualizace přepsání obsahu"
+msgstr "Aktualizují se přebití obsahu"
 
 #: src/rhsm/connection.py:2101
 msgid "Removing content overrides"
@@ -1196,7 +1197,8 @@ msgstr ""
 #: src/rhsmlib/services/register.py:243
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
-"Tento systém je již zaregistrován. Přidejte k možnostem vynucení přepsání."
+"Tento systém už je zaregistrován. Pokud chcete přebít, přidejte k volbám "
+"force (vynutit)."
 
 #: src/rhsmlib/services/register.py:246
 #: src/subscription_manager/cli_command/register.py:121
@@ -1433,7 +1435,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr "Pokud chcete přepsat změnu na straně serveru, spusťte prosím: {command}"
+msgstr "Pokud chcete změny na straně serveru přebít, spusťte: {command}"
 
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:41
@@ -1915,7 +1917,7 @@ msgstr "Chyba: Nebylo možné vytvořit novou identitu pro systém"
 
 #: src/subscription_manager/cli_command/list.py:29
 msgid "Product Name:"
-msgstr "Název produktu:"
+msgstr "Název produktu"
 
 #: src/subscription_manager/cli_command/list.py:30
 msgid "Product ID:"
@@ -1955,7 +1957,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:87
 msgid "No installed products to list"
-msgstr "Žádné nainstalované produkty k vypsání"
+msgstr "Na tomto systému nejsou nainstalované žádné produkty."
 
 #: src/subscription_manager/cli_command/org.py:35
 msgid "specify an organization"
@@ -2049,7 +2051,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/override.py:107
 msgid "Error: You must specify an override name with --remove."
-msgstr "Chyba: Musíte zadat název přepsání pomocí --remove."
+msgstr "Chyba: je třeba zadat název přebití pomocí --remove."
 
 #: src/subscription_manager/cli_command/override.py:126
 msgid "Error: The 'repo-override' command is not supported by the server."
@@ -2069,8 +2071,7 @@ msgstr "Na tento systém není uplatňováno žádné přebití obsahu."
 msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
-msgstr ""
-"Repozitář '{repo}' momentálně neexistuje, ale jeho přepsání bylo přidáno."
+msgstr "Repozitář „{repo}“ v tuto chvíli neexistuje, ale bylo přidáno přebití."
 
 #: src/subscription_manager/cli_command/override.py:198
 #, python-brace-format
@@ -2084,7 +2085,7 @@ msgstr "Repozitář: {repo}"
 
 #: src/subscription_manager/cli_command/owners.py:32
 msgid "Key:"
-msgstr "Klíč:"
+msgstr "_Klíč:"
 
 #: src/subscription_manager/cli_command/owners.py:38
 msgid "Display the organizations against which a user can register a system"
@@ -2345,11 +2346,11 @@ msgstr "Název repozitáře:"
 
 #: src/subscription_manager/cli_command/repos.py:36
 msgid "Repo URL:"
-msgstr "URL adresa repozitáře:"
+msgstr "URL repozitáře"
 
 #: src/subscription_manager/cli_command/repos.py:37
 msgid "Enabled:"
-msgstr "Zapnuto:"
+msgstr "Povoleno"
 
 #: src/subscription_manager/cli_command/repos.py:66
 msgid "List the repositories which this system is entitled to use"
@@ -2697,7 +2698,7 @@ msgstr ""
 
 #: src/subscription_manager/exceptions.py:55
 msgid "Server URL can not be None"
-msgstr "URL serveru nemůže být nic"
+msgstr "URL serveru nemůže být Žádné"
 
 #: src/subscription_manager/exceptions.py:56
 msgid "Server URL port should be numeric"
@@ -2757,14 +2758,11 @@ msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
 msgstr[0] ""
-"Překročen limit počtu pokusů za časový úsek pro server – zkuste to později ("
-"nejdříve za {time} sekundu)"
+"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
 msgstr[1] ""
-"Překročen limit počtu pokusů za časový úsek pro server – zkuste to později ("
-"nejdříve za {time} sekundy)"
+"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
 msgstr[2] ""
-"Překročen limit počtu pokusů za časový úsek pro server – zkuste to později ("
-"nejdříve za {time} sekund)"
+"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
 
 #: src/subscription_manager/i18n_argparse.py:50
 #, python-brace-format
@@ -2862,7 +2860,7 @@ msgstr ""
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 msgid "Registering the system"
-msgstr "Registrace systému"
+msgstr "Zaregistrovat systém"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 msgid "Updating entitlement certificates & repositories."
