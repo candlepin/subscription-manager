@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Pavel Borecki <pavel.borecki@gmail.com>, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
+# Jan Kalabza <jan.kalabza@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-02 12:40+0100\n"
-"PO-Revision-Date: 2025-11-04 17:54+0000\n"
-"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
+"PO-Revision-Date: 2026-04-26 19:59+0000\n"
+"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/cs/>\n"
 "Language: cs\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.14\n"
+"X-Generator: Weblate 5.17\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -50,7 +51,7 @@ msgstr "není možné sloučit akce – dvě skupiny jsou nazvané %r"
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr "„required“ není platný argument pro poziční parametry"
+msgstr "'required' není platný argument pro poziční parametry"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
@@ -189,7 +190,7 @@ msgstr ""
 #: src/syspurpose/cli.py:31
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr "Pokud chcete změny na straně serveru přebít, spusťte: {command}"
+msgstr "Pokud chcete přepsat změnu na straně serveru, spusťte prosím: {command}"
 
 #: src/syspurpose/cli.py:47
 #, python-brace-format
