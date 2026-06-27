@@ -2,19 +2,22 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Languages add-on <noreply-addon-languages@weblate.org>, 2026.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-01-23 11:58+0000\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
+"subscription-manager/subscription-manager-1-28/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -123,11 +126,11 @@ msgstr ""
 
 #: /usr/lib64/python3.6/argparse.py:2059
 msgid "expected at most one argument"
-msgstr ""
+msgstr "მოველოდი მაქს. ერთ არგუმენტს"
 
 #: /usr/lib64/python3.6/argparse.py:2060
 msgid "expected at least one argument"
-msgstr ""
+msgstr "მოველოდი ერთ არგუმენტს მაინც"
 
 #: /usr/lib64/python3.6/argparse.py:2062
 #, python-format
@@ -227,7 +230,7 @@ msgstr ""
 #: cockpit/src/insights.jsx:207 cockpit/src/insights.jsx:433
 #: cockpit/src/insights.jsx:438
 msgid "Details"
-msgstr ""
+msgstr "დეტალები"
 
 #: cockpit/src/insights.jsx:218 cockpit/src/insights.jsx:229
 #: cockpit/src/insights.jsx:313
@@ -244,11 +247,11 @@ msgstr ""
 
 #: cockpit/src/insights.jsx:235
 msgid "Removing $0"
-msgstr ""
+msgstr "$0-ის წაშლა"
 
 #: cockpit/src/insights.jsx:237
 msgid "Installing $0"
-msgstr ""
+msgstr "$0-ის დაყენება"
 
 #: cockpit/src/insights.jsx:254
 msgid "Connect to Red Hat Insights"
@@ -348,7 +351,7 @@ msgstr ""
 
 #: cockpit/src/insights.jsx:573
 msgid "Connected to Insights"
-msgstr ""
+msgstr "მიერთებულია Insights-თან"
 
 #: cockpit/src/insights.jsx:585
 msgid "Not connected"
@@ -429,7 +432,7 @@ msgstr ""
 
 #: cockpit/src/subscriptions-register.jsx:67
 msgid "Proxy Password"
-msgstr ""
+msgstr "პროქსის პაროლი"
 
 #: cockpit/src/subscriptions-register.jsx:87
 msgid "Connect this system to $0."
@@ -830,7 +833,7 @@ msgstr ""
 #: src/rct/cert_commands.py:38
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS] CERT_FILE"
-msgstr ""
+msgstr "%(prog)s {name} [პარამეტრები] სერტიფიკაცის_ფაილი"
 
 #: src/rct/cert_commands.py:46 src/rct/manifest_commands.py:270
 #, python-format
@@ -906,7 +909,7 @@ msgstr ""
 #: src/rct/manifest_commands.py:141
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
-msgstr ""
+msgstr "%(prog)s {name} [პარამეტრები] მანიფესტის_ფაილი"
 
 #: src/rct/manifest_commands.py:146
 msgid "You must specify a manifest file."
@@ -934,7 +937,7 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:199
 msgid "Date Created"
-msgstr ""
+msgstr "შექმნის თარიღი"
 
 #: src/rct/manifest_commands.py:200
 msgid "Creator"
@@ -956,7 +959,7 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:214
 msgid "Content Access Mode"
-msgstr ""
+msgstr "შემცველობასთან წვდომის რეჟიმი"
 
 #: src/rct/manifest_commands.py:215 src/rct/printing.py:109
 #: src/subscription_manager/gui/widgets.py:866
@@ -977,7 +980,7 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:232
 msgid "Subscriptions:"
-msgstr ""
+msgstr "გამოწერები:"
 
 #: src/rct/manifest_commands.py:240 src/rct/printing.py:90
 #: src/subscription_manager/gui/allsubs.py:94
@@ -1039,7 +1042,7 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:259
 msgid "Entitlement File"
-msgstr ""
+msgstr "უფლებამოსილების ფაილი"
 
 #: src/rct/manifest_commands.py:264
 msgid "Certificate File"
@@ -1144,7 +1147,7 @@ msgstr ""
 
 #: src/rct/printing.py:93
 msgid "RAM Limit"
-msgstr ""
+msgstr "მეხსიერების ლიმიტი"
 
 #: src/rct/printing.py:94
 msgid "Core Limit"
@@ -1164,7 +1167,7 @@ msgstr ""
 
 #: src/rct/printing.py:98
 msgid "Provides Management"
-msgstr ""
+msgstr "უზრუნველჰყოფს მართვას"
 
 #: src/rct/printing.py:107
 msgid "Content"
@@ -1424,7 +1427,7 @@ msgstr ""
 
 #: src/rhsmlib/services/entitlement.py:478
 msgid "Error: this system is not registered"
-msgstr ""
+msgstr "შეცდომა: ეს სისტემა რეგისტრირებული არაა"
 
 #: src/rhsmlib/services/register.py:162
 msgid "This system is already registered. Add force to options to override."
@@ -1481,12 +1484,12 @@ msgstr ""
 
 #: src/rhsmlib/services/syspurpose.py:103
 msgid "Not Specified"
-msgstr ""
+msgstr "მითითებული არაა"
 
 #: src/rhsmlib/services/syspurpose.py:104
 #: src/subscription_manager/cert_sorter.py:288
 msgid "Disabled"
-msgstr ""
+msgstr "გამორთულია"
 
 #: src/subscription_manager/branding/__init__.py:81
 msgid "Register the system to the server"
@@ -1600,7 +1603,7 @@ msgstr ""
 
 #: src/subscription_manager/cert_sorter.py:285
 msgid "Current"
-msgstr ""
+msgstr "მიმდინარე"
 
 #: src/subscription_manager/cert_sorter.py:286
 msgid "Insufficient"
@@ -1738,7 +1741,7 @@ msgstr ""
 
 #: src/subscription_manager/exceptions.py:49
 msgid "Server URL can not be empty"
-msgstr ""
+msgstr "სერვერის URL ცარიელი არ შეიძლება, იყოს"
 
 #: src/subscription_manager/exceptions.py:50
 msgid ""
@@ -3262,7 +3265,7 @@ msgstr[1] ""
 #: src/subscription_manager/gui/installedtab.py:232
 #: src/subscription_manager/managercli.py:92
 msgid "Not Subscribed"
-msgstr ""
+msgstr "გამოწერის გარეშე"
 
 #: src/subscription_manager/gui/installedtab.py:291
 msgid "My Installed Products"
@@ -3451,7 +3454,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:2207
 #: src/subscription_manager/utils.py:299
 msgid "This system is currently not registered."
-msgstr ""
+msgstr "თქვენი სისტემა ამჟამად დაურეგისტრირებელია."
 
 #: src/subscription_manager/gui/registergui.py:379
 msgid "Error during registration."
@@ -3799,7 +3802,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:169
 #: src/subscription_manager/managercli.py:189
 msgid "SKU:"
-msgstr ""
+msgstr "SKU:"
 
 #: src/subscription_manager/managercli.py:120
 #: src/subscription_manager/managercli.py:140
@@ -3844,7 +3847,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:178
 #: src/subscription_manager/managercli.py:199
 msgid "Service Level:"
-msgstr ""
+msgstr "სერვისის დონე:"
 
 #: src/subscription_manager/managercli.py:128
 #: src/subscription_manager/managercli.py:200
@@ -3886,7 +3889,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:157
 #: src/subscription_manager/managercli.py:162
 msgid "Name:"
-msgstr ""
+msgstr "სახელი:"
 
 #: src/subscription_manager/managercli.py:158
 msgid "Description:"
@@ -3899,7 +3902,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:171
 #: src/subscription_manager/managercli.py:191
 msgid "Account:"
-msgstr ""
+msgstr "ანგარიში:"
 
 #: src/subscription_manager/managercli.py:172
 #: src/subscription_manager/managercli.py:192
@@ -4108,7 +4111,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:815
 #, python-brace-format
 msgid "{attr} unset."
-msgstr ""
+msgstr "{attr} მოხსნილია."
 
 #: src/subscription_manager/managercli.py:832
 #: src/subscription_manager/managercli.py:855
@@ -4183,7 +4186,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:1039
 msgid "Password: "
-msgstr ""
+msgstr "პაროლი: "
 
 #: src/subscription_manager/managercli.py:1071
 msgid "specify an organization"
@@ -4229,7 +4232,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:1180
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr ""
+msgstr "%(prog)s {name} [ქვემოდული] [პარამეტრები]"
 
 #: src/subscription_manager/managercli.py:1243
 msgid ""
@@ -4247,7 +4250,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:1266
 msgid "force certificate regeneration"
-msgstr ""
+msgstr "სერტიფიკატის რეგენერაცია ძალით"
 
 #: src/subscription_manager/managercli.py:1278
 #, python-brace-format
@@ -4387,7 +4390,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:1489
 msgid "Environments updated."
-msgstr ""
+msgstr "გარემო განახლებულია."
 
 #: src/subscription_manager/managercli.py:1491
 msgid "Error: Server does not support environment updates."
@@ -5369,7 +5372,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:3706
 msgid "System Status Details"
-msgstr ""
+msgstr "სისტემის სტატუსის დეტალები"
 
 #: src/subscription_manager/managercli.py:3760
 msgid ""
@@ -5408,15 +5411,15 @@ msgstr ""
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:145
 msgid "Updates:"
-msgstr ""
+msgstr "განახლებები:"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:149
 msgid "Deleted:"
-msgstr ""
+msgstr "წაიშალა:"
 
 #: src/subscription_manager/reasons.py:101
 msgid "Product "
-msgstr ""
+msgstr "პროდუქტი "
 
 #: src/subscription_manager/reasons.py:103
 msgid "Subscription "
@@ -5448,7 +5451,7 @@ msgstr ""
 #: src/subscription_manager/repolib.py:664
 #, python-format
 msgid "Total repo updates: %d"
-msgstr ""
+msgstr "ჯამური რეპოს განახლებები: %d"
 
 #: src/subscription_manager/repolib.py:665
 msgid "Updated"
@@ -5479,7 +5482,7 @@ msgstr ""
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:282
 msgid "Unable to update entitlement certificates and repositories"
-msgstr ""
+msgstr "საკუთრების სერტიფიკატებისა და რეპოზიტორიების განახლება შეუძლებელია"
 
 #: src/subscription_manager/scripts/subscription_manager_gui.py:168
 #, python-format
