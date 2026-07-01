@@ -21,8 +21,9 @@
 %global use_inotify 0
 %endif
 
-%global use_dnf (0%{?fedora} || (0%{?rhel}))
-%global create_libdnf_rpm (0%{?fedora} || 0%{?rhel})
+%global use_dnf5 (0%{?fedora} >= 43 || 0%{?rhel} >= 11)
+%global use_dnf (0%{?fedora} || (0%{?rhel} && 0%{?rhel} < 11))
+%global create_libdnf_rpm (0%{?fedora} || (0%{?rhel} > 8 && 0%{?rhel} < 11))
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
@@ -147,19 +148,17 @@ BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
 BuildRequires: libdnf-devel >= 0.22.5
+Requires: (dnf-plugin-subscription-manager = %{version}-%{release} if python3-dnf)
 %if %{create_libdnf_rpm}
-Requires: python3-dnf
-Requires: python3-dnf-plugins-core
-Requires: python3-librepo
 # The libdnf plugin is in a separate RPM, but subscription-manager should be dependent
 # on this RPM, because somebody can install microdnf on host and installing of product
 # certs would not work as expected without libdnf plugin
-Requires: libdnf-plugin-subscription-manager = %{version}-%{release}
-# The dnf plugin is now part of subscription-manager
-Obsoletes: dnf-plugin-subscription-manager < 1.29.0
-%else
-Requires: dnf-plugin-subscription-manager = %{version}-%{release}
+Requires: (libdnf-plugin-subscription-manager = %{version}-%{release} if libdnf)
 %endif
+%endif
+
+%if %{use_dnf5}
+Requires: (libdnf5-plugin-rhsm if libdnf5)
 %endif
 
 %if %use_inotify
@@ -221,27 +220,27 @@ Enables handling of content of type 'containerImage' in any certificates
 from the server. Populates /etc/docker/certs.d appropriately.
 %endif
 
-%if %{use_dnf}
-
 # RPM containing libdnf plugin
 %if %{create_libdnf_rpm}
 %package -n libdnf-plugin-subscription-manager
 Summary: Subscription Manager plugin for libdnf
 
-Obsoletes: dnf-plugin-subscription-manager < 1.29.0
-
 %description -n libdnf-plugin-subscription-manager
 This package provides a plugin to interact with repositories from the Red Hat
 entitlement platform; contains only one product-id binary plugin used by
 e.g. microdnf.
-
-%else
+%endif
 
 # RPM containing DNF plugin
+%if %{use_dnf}
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
 
+%if %{create_libdnf_rpm}
+Requires: libdnf-plugin-subscription-manager = %{version}-%{release}
+%else
 Requires: libdnf%{?_isa} >= 0.22.5
+%endif
 
 Requires: python3-dnf-plugins-core
 Requires: python3-librepo
@@ -356,7 +355,7 @@ popd
 %find_lang rhsm
 
 # fake out the redhat.repo file
-%if %{use_dnf}
+%if %{use_dnf} || %{use_dnf5}
     mkdir %{buildroot}%{_sysconfdir}/yum.repos.d
     touch %{buildroot}%{_sysconfdir}/yum.repos.d/redhat.repo
 %endif
@@ -443,7 +442,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 
 %attr(644,root,root) %config(noreplace) %{_sysconfdir}/rhsm/rhsm.conf
 
-%if %{use_dnf}
+%if %{use_dnf} || %{use_dnf5}
     %ghost %{_sysconfdir}/yum.repos.d/redhat.repo
 %endif
 
@@ -495,11 +494,6 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # subscription-manager plugins
 %dir %{rhsm_plugins_dir}
 %dir %{_sysconfdir}/rhsm/pluginconf.d
-
-# When libdnf rpm is created, then dnf plugin is part of subscription-manager rpm
-%if %{create_libdnf_rpm}
-%{python3_sitelib}/dnf-plugins/*
-%endif
 
 # rhsmlib
 %dir %{python3_sitearch}/rhsmlib
@@ -577,17 +571,19 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 %endif
 
 
-%if %{use_dnf}
 # libdnf RPM
 %if %{create_libdnf_rpm}
 %files -n libdnf-plugin-subscription-manager
 %defattr(-,root,root,-)
 %{_libdir}/libdnf/plugins/product-id.so
-%else
+%endif
+
 # DNF RPM
+%if %{use_dnf}
 %files -n dnf-plugin-subscription-manager
 %defattr(-,root,root,-)
 %{python3_sitelib}/dnf-plugins/*
+%if ! %{create_libdnf_rpm}
 %{_libdir}/libdnf/plugins/product-id.so
 %endif
 %endif
