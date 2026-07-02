@@ -1,8 +1,10 @@
 import logging
+import sys
 from typing import Tuple, List
 
 from rhsm import _certificate
 from rhsm.config import get_config_parser
+from subscription_manager.i18n import ugettext as _
 
 """
 This module helps to negotiate PQC with candlepin server.
@@ -57,6 +59,13 @@ def get_crypto_capabilities() -> Tuple[List[str], List[str]]:
     signature_algorithms = []
 
     certificate_algorithms = cfg.get("rhsm", "certificate_algorithms")
+    if not cfg.is_value_valid("rhsm", "certificate_algorithms", certificate_algorithms):
+        certificate_algorithms = cfg.get_default("rhsm", "certificate_algorithms")
+        print(
+            _("Using default value '{value}' for this run.").format(value=certificate_algorithms),
+            file=sys.stderr,
+        )
+
     if certificate_algorithms == "current":
         key_algorithms = get_public_key_algorithms()
         log.debug(f"The list of public key algorithms: {key_algorithms}")
@@ -64,10 +73,5 @@ def get_crypto_capabilities() -> Tuple[List[str], List[str]]:
         log.debug(f"The list of signature algorithms: {signature_algorithms}")
     elif certificate_algorithms == "legacy":
         log.debug("Using legacy cryptography algorithms for consumer and entitlement certificate")
-    else:
-        log.warning(
-            f"Unknown value for 'rhsm.certificate_algorithms' in rhsm.conf: {certificate_algorithms}."
-            " Falling back to legacy cryptographic algorithms."
-        )
 
     return key_algorithms, signature_algorithms

@@ -1,3 +1,4 @@
+import os
 import sys
 
 from rhsmlib.services import config
@@ -76,3 +77,37 @@ class TestConfigCommand(TestCliCommand):
     def test_remove_config_key_not_dotted(self):
         self.cc._do_command = self._orig_do_command
         self.assertRaises(SystemExit, self.cc.main, ["--remove", "notdotted"])
+
+    def test_set_certificate_algorithms_valid(self):
+        self.cc._do_command = self._orig_do_command
+        self.cc.main(["--rhsm.certificate_algorithms", "legacy"])
+        self.assertEqual(config_command.conf["rhsm"]["certificate_algorithms"], "legacy")
+
+    def test_set_certificate_algorithms_invalid_exits(self):
+        self.cc._do_command = self._orig_do_command
+        with self.assertRaises(SystemExit) as ctx:
+            self.cc.main(["--rhsm.certificate_algorithms", "badvalue"])
+        self.assertEqual(ctx.exception.code, os.EX_USAGE)
+
+    def test_set_log_level_valid(self):
+        self.cc._do_command = self._orig_do_command
+        self.cc.main(["--logging.default_log_level", "DEBUG"])
+        self.assertEqual(config_command.conf["logging"]["default_log_level"], "DEBUG")
+
+    def test_set_log_level_invalid_exits(self):
+        self.cc._do_command = self._orig_do_command
+
+        # Capture the current log level so we can verify it is not changed
+        previous_level = config_command.conf["logging"]["default_log_level"]
+
+        with self.assertRaises(SystemExit) as ctx:
+            self.cc.main(["--logging.default_log_level", "BADLEVEL"])
+
+        # Invalid log level should result in EX_USAGE
+        self.assertEqual(ctx.exception.code, os.EX_USAGE)
+
+        # The configuration should remain unchanged on validation failure
+        self.assertEqual(
+            config_command.conf["logging"]["default_log_level"],
+            previous_level,
+        )
