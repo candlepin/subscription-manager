@@ -84,6 +84,16 @@ class ConfigCommand(CliCommand):
                 # if no options are given, default to --list
                 self.options.list = True
 
+        for s in list(conf.keys()):
+            for name in list(conf[s].keys()):
+                value = getattr(self.options, s + "." + name, None)
+                if value is None:
+                    continue
+                try:
+                    conf._parser.is_value_valid(s, name, value, print_warning=True, raise_on_invalid=True)
+                except ValueError:
+                    system_exit(os.EX_USAGE)
+
         if self.options.remove:
             for r in self.options.remove:
                 if "." not in r:
