@@ -18,6 +18,8 @@ import os
 import sys
 import rhsm.config
 
+from subscription_manager.i18n import ugettext as _
+
 LOGFILE_DIR = "/var/log/rhsm/"
 LOGFILE_PATH = os.path.join(LOGFILE_DIR, "rhsm.log")
 USER_LOGFILE_DIR = os.path.join(
@@ -206,14 +208,20 @@ def init_logger(config: Optional[rhsm.config.RhsmConfigParser] = None) -> None:
                 # When invalid value is provided, then set default_log_level to None
                 # Warning message will be printed later, when not valid value will be
                 # saved to config file
-                if config.is_log_level_valid(default_log_level, print_warning=False) is False:
+                if not config.is_value_valid(
+                    "logging", "default_log_level", default_log_level, print_warning=False
+                ):
                     default_log_level = None
 
     if default_log_level is None:
         default_log_level = config.get("logging", "default_log_level")
-        if not config.is_log_level_valid(default_log_level):
+        if not config.is_value_valid("logging", "default_log_level", default_log_level):
             # This is not a valid logging level, set to INFO
-            default_log_level = "INFO"
+            default_log_level = config.get_default("logging", "default_log_level")
+            print(
+                _("Using default value '{level}' for this run.").format(level=default_log_level),
+                file=sys.stderr,
+            )
 
     pending_error_messages: List[Exception] = []
 

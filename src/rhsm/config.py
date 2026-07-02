@@ -141,6 +141,18 @@ def in_container() -> bool:
 class RhsmConfigParser(SafeConfigParser):
     """Config file parser for rhsm configuration."""
 
+    # Maps (section, name) to a dict of accepted values for that config key.
+    # "values" is a list of valid values and must be defined for every entry.
+    # "no_hint" is an optional key that holds values that are accepted but excluded from warnings/hints
+    # Add an entry here to enforce validation for any config key.
+    VALID_VALUES: Dict[Tuple[str, str], Dict[str, List[str]]] = {
+        ("logging", "default_log_level"): {
+            "values": ["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"],
+            "no_hint": ["NOTSET"],
+        },
+        ("rhsm", "certificate_algorithms"): {"values": ["legacy", "current"]},
+    }
+
     # defaults unused but kept to preserve compatibility
     def __init__(self, config_file: Optional[str] = None, defaults=None):
         self.config_file: str = config_file
@@ -228,63 +240,65 @@ class RhsmConfigParser(SafeConfigParser):
             if not self.has_section(section):
                 self.add_section(section)
             super(RhsmConfigParser, self).set(section, name, value)
-        if section == "logging" and name == "default_log_level":
-            self.is_log_level_valid(value)
-        if section == "rhsm" and name == "certificate_algorithms":
-            self.is_certificate_algorithms_valid(value)
+        self.is_value_valid(section, name, value)
 
-    def is_log_level_valid(self, value: str, print_warning: bool = True) -> bool:
-        """
-        Check if provided default_log_level value is valid or not
-        :param value: value of default_log_level
-        :param print_warning: print warning, when provided value is not valid
-        :return: True, when value is valid. Otherwise return False
-        """
-        valid: List[str] = ["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]
-        if value not in valid + ["NOTSET"]:
-            if print_warning is True:
-                print(
-                    _("Invalid Log Level: {lvl}, setting to INFO for this run.").format(lvl=value),
-                    file=sys.stderr,
-                )
-                print(
-                    _(
-                        "Please use:  subscription-manager config --logging.default_log_level=<Log Level> to "
-                        "set the default_log_level to a valid value."
-                    ),
-                    file=sys.stderr,
-                )
-                valid_str = ", ".join(valid)
-                print(_("Valid Values: {valid_str}").format(valid_str=valid_str), file=sys.stderr)
-            return False
-        return True
+    def is_value_valid(
+        self,
+        section: str,
+        name: str,
+        value: Optional[str],
+        print_warning: bool = True,
+        raise_on_invalid: bool = False,
+    ) -> bool:
+        """Check whether a value is valid for the given config key.
+        The config key is a tuple of (section, name)
 
-    def is_certificate_algorithms_valid(self, value: str, print_warning: bool = True) -> bool:
-        """
-        Check if provided certificate_algorithms value is valid or not
-        :param value: value of certificate_algorithms
-        :param print_warning: print warning when provided value is not one of "legacy", "current"
-        :return: True, when value is valid. Otherwise, return False
-        """
+        If the key is not in VALID_VALUES this is a no-op and returns True.
+        If the value is invalid and print_warning is True, a warning is printed to stderr.
+        If the value is invalid and raise_on_invalid is True, a ValueError is raised.
 
-        valid: List[str] = ["legacy", "current"]
-        if value not in valid:
-            if print_warning is True:
-                print(
-                    _("Invalid value: {val}").format(val=value),
-                    file=sys.stderr,
+        :param section: config section
+        :param name: config key
+        :param value: the value to check
+        :param print_warning: print a warning to stderr when the value is invalid
+        :param raise_on_invalid: raise ValueError instead of returning False when invalid
+        :return: True when the value is valid or the key is unconstrained, otherwise False
+        :raises ValueError: when raise_on_invalid is True and the value is invalid
+        """
+        if (section, name) not in self.VALID_VALUES:
+            return True
+
+        values = self.VALID_VALUES[(section, name)]["values"]
+
+        # no_hint is optional, so we must .get() it
+        no_hint = self.VALID_VALUES[(section, name)].get("no_hint", [])
+
+        if value in values or value in no_hint:
+            return True
+
+        valid_str = ", ".join(values)
+        if print_warning:
+            print(
+                _("Invalid value '{val}' for {section}.{name}.").format(
+                    val=value, section=section, name=name
+                ),
+                file=sys.stderr,
+            )
+            print(
+                _(
+                    "Please use:  subscription-manager config --{section}.{name}=<value>"
+                    " to set {name} to a valid value."
+                ).format(section=section, name=name),
+                file=sys.stderr,
+            )
+            print(_("Valid Values: {valid_str}").format(valid_str=valid_str), file=sys.stderr)
+        if raise_on_invalid:
+            raise ValueError(
+                _("Invalid value '{val}' for {section}.{name}. Valid values are: {valid}.").format(
+                    val=value, section=section, name=name, valid=valid_str
                 )
-                print(
-                    _(
-                        "Please use:  subscription-manager config --rhsm.certificate_algorithms=<Preference>"
-                        " to set the certificate_algorithms to a valid value."
-                    ),
-                    file=sys.stderr,
-                )
-                valid_str = ", ".join(valid)
-                print(_("Valid Values: {valid_str}").format(valid_str=valid_str), file=sys.stderr)
-            return False
-        return True
+            )
+        return False
 
     def get_int(self, section: str, prop: str) -> Optional[int]:
         """Get an int value from the config.

@@ -17,6 +17,8 @@ from iniparse.compat import (
     InterpolationDepthError,
     NoSectionError,
 )
+import contextlib
+import io
 from tempfile import NamedTemporaryFile
 import unittest
 
@@ -519,3 +521,57 @@ class InContainerTests(unittest.TestCase):
 
         result: bool = in_container()
         self.assertFalse(result)
+
+
+class IsValueValidTests(unittest.TestCase):
+    def setUp(self):
+        self.fid = write_temp_file(TEST_CONFIG)
+        self.parser = RhsmConfigParser(self.fid.name)
+
+    def test_unconstrained_key_returns_true(self):
+        self.assertTrue(self.parser.is_value_valid("server", "hostname", "anything"))
+
+    def test_certificate_algorithms_valid(self):
+        for val in ("legacy", "current"):
+            self.assertTrue(self.parser.is_value_valid("rhsm", "certificate_algorithms", val))
+
+    def test_certificate_algorithms_invalid_returns_false(self):
+        self.assertFalse(
+            self.parser.is_value_valid("rhsm", "certificate_algorithms", "bad", print_warning=False)
+        )
+
+    def test_certificate_algorithms_invalid_raises(self):
+        with self.assertRaises(ValueError):
+            self.parser.is_value_valid(
+                "rhsm", "certificate_algorithms", "bad", print_warning=False, raise_on_invalid=True
+            )
+
+    def test_log_level_valid(self):
+        for val in ("CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"):
+            self.assertTrue(self.parser.is_value_valid("logging", "default_log_level", val))
+
+    def test_log_level_notset_accepted(self):
+        # NOTSET is unadvertised but still accepted for backward compatibility
+        self.assertTrue(
+            self.parser.is_value_valid("logging", "default_log_level", "NOTSET", print_warning=False)
+        )
+
+    def test_log_level_notset_no_warning_with_print_warning_true(self):
+        # NOTSET is in the nohint list; it should not emit a warning even when print_warning=True
+        stderr_buffer = io.StringIO()
+        with contextlib.redirect_stderr(stderr_buffer):
+            self.assertTrue(
+                self.parser.is_value_valid("logging", "default_log_level", "NOTSET", print_warning=True)
+            )
+        self.assertEqual("", stderr_buffer.getvalue())
+
+    def test_log_level_invalid_returns_false(self):
+        self.assertFalse(
+            self.parser.is_value_valid("logging", "default_log_level", "VERBOSE", print_warning=False)
+        )
+
+    def test_log_level_invalid_raises(self):
+        with self.assertRaises(ValueError):
+            self.parser.is_value_valid(
+                "logging", "default_log_level", "VERBOSE", print_warning=False, raise_on_invalid=True
+            )
