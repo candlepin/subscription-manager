@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.52
+Version: 1.29.53
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -737,6 +737,50 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Thu Jul 02 2026 Jiri Hnidek <jhnidek@redhat.com> 1.29.53-1
+- docs: add caution for certificate_algorithms configuration (CCT-2704)
+  (jsefler@redhat.com)
+- chore: Added more debug prints about closing connections (jhnidek@redhat.com)
+- fix: Set timeout before trying to close TLS connection (jhnidek@redhat.com)
+- fix(test): Update StubUEP updateConsumer() (jhnidek@redhat.com)
+- feat(pqc): update crypto capabilities from 'refresh' command
+  (jlocash@redhat.com)
+- feat(pqc): update crypto capabilities from 'identity --regenerate' command
+  (jlocash@redhat.com)
+- style: fix flake8 lint error (jlocash@redhat.com)
+- test: Fixed one unit test related to inotify (jhnidek@redhat.com)
+- feat(pqc): update crypto capabilities in candlepin from rhsmcertd-worker
+  (jlocash@redhat.com)
+- fix: Do not send JSON document with empty signature (jhnidek@redhat.com)
+- chore: style formatting fixes in rhsmcertd worker (jajerome@redhat.com)
+- fix: updated rhsmcertd to detect when auto-registration is terminated early
+  (jajerome@redhat.com)
+- fix: updated rhsmcertd to detect when system is already registered
+  (jajerome@redhat.com)
+- feat(pqc): implement cache for crypto capabilities (jlocash@redhat.com)
+- fix(unit-tests): mock isdir so rhsm_debug tests are env agnostic
+  (csnyder@redhat.com)
+- fix(test): Fixed unit tests to be compatible with 1.29 branch
+  (jhnidek@redhat.com)
+- fix(pqc): update warning to indicate fallback (jlocash@redhat.com)
+- fix(pqc): raise RuntimeError when get_signature_algorithms or
+  get_public_key_algorithms throw (jlocash@redhat.com)
+- feat(pqc): print warning when setting invalid `certificate_algorithms` value
+  (jlocash@redhat.com)
+- docs: Document `rhsm.certificate_algorithms` config option in rhsm.conf man
+  pages (jlocash@redhat.com)
+- fix: drop __smoke_test__ and __main__ from pqc.py (jlocash@redhat.com)
+- style: fix linting error in connection.py (jlocash@redhat.com)
+- test: fix broken tests for registerConsumer (jlocash@redhat.com)
+- feat(pqc): Use C bindings to retrieve public-key and signature algorithms in
+  pqc.py (jlocash@redhat.com)
+- feat: POC: Add support for PQC (jhnidek@redhat.com)
+- test: Added C unit tests of _certificate.so (jhnidek@redhat.com)
+- feat: Added .pyi file for certificate.c (jhnidek@redhat.com)
+- chore: Not all .py* files should be ignored (jhnidek@redhat.com)
+- test: Created unit tests for certificate.c (jhnidek@redhat.com)
+- feat: Added 2 methods for listing crypto algorithms (jhnidek@redhat.com)
+
 * Wed Apr 22 2026 Jason Jerome <jajerome@redhat.com> 1.29.52-1
 - Translated using Weblate (Italian) (ali.ciloqlu@murena.io)
 - Translated using Weblate (Czech) (pavel.borecki@gmail.com)
