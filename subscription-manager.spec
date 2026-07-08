@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.53
+Version: 1.29.54
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -737,6 +737,12 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Wed Jul 08 2026 Christopher Snyder <csnyder@redhat.com> 1.29.54-1
+- fix: Invalidate and update CurrentOwnerCache when owner change is detected
+  (csnyder@redhat.com)
+- ci: bump actions/checkout from 6 to 7
+  (49699333+dependabot[bot]@users.noreply.github.com)
+
 * Thu Jul 02 2026 Jiri Hnidek <jhnidek@redhat.com> 1.29.53-1
 - docs: add caution for certificate_algorithms configuration (CCT-2704)
   (jsefler@redhat.com)
