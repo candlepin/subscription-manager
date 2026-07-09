@@ -17,6 +17,7 @@ import logging.config
 import os
 import sys
 import rhsm.config
+from rhsm.config import InvalidConfigValueError
 
 from subscription_manager.i18n import ugettext as _
 
@@ -205,19 +206,22 @@ def init_logger(config: Optional[rhsm.config.RhsmConfigParser] = None) -> None:
 
             if len(option_value) == 2:
                 default_log_level = option_value[1]
-                # When invalid value is provided, then set default_log_level to None
-                # Warning message will be printed later, when not valid value will be
-                # saved to config file
-                if not config.is_value_valid(
-                    "logging", "default_log_level", default_log_level, print_warning=False
-                ):
+                # When invalid value is provided via CLI, silently ignore it;
+                # the config command will reject it with an error before it is saved.
+                try:
+                    config.is_value_valid("logging", "default_log_level", default_log_level)
+                except InvalidConfigValueError:
                     default_log_level = None
 
     if default_log_level is None:
         default_log_level = config.get("logging", "default_log_level")
-        if not config.is_value_valid("logging", "default_log_level", default_log_level):
-            # This is not a valid logging level, set to INFO
+        try:
+            config.is_value_valid("logging", "default_log_level", default_log_level)
+        except InvalidConfigValueError as e:
+            # This is not a valid logging level, fall back to the default
             default_log_level = config.get_default("logging", "default_log_level")
+            for msg in e.messages():
+                print(msg, file=sys.stderr)
             print(
                 _("Using default value '{level}' for this run.").format(level=default_log_level),
                 file=sys.stderr,
