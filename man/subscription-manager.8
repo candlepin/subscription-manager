@@ -1,208 +1,67 @@
 .TH subscription-manager 8 "" "" "Subscription Management"
 .SH NAME
-subscription-manager \- Registers systems to a subscription management service and then attaches and manages subscriptions for software products.
+subscription-manager \- Registers systems to a subscription management service, reports system facts, and manages various configurations to the entitled content repositories granted by the subscription management services.
 
 .SH SYNOPSIS
-subscription-manager
-.I command [options]
+.B subscription-manager
+.I COMMAND
+[
+.I SUBCOMMAND
+] [
+.I OPTIONS
+]
 
 .SH DESCRIPTION
+The
 .B subscription-manager
-is a client program that registers a system with a subscription management service such as the Customer Portal Subscription Management service or on-premise Subscription Asset Manager.
-
+program (also known as Red Hat Subscription Manager) is a client tool that can be used to register a system with a subscription management service such as the Red Hat Customer Portal, or an on-premise solution such as Red Hat Satellite.
 .PP
 Red Hat provides content updates and support by issuing
 .I subscriptions
-for its products. These subscriptions are applied to systems; once a subscription for a product is attached to a system, that system is allowed to install, update, and receive support for that software product. IT administrators need to track these subscriptions and how they are attached. This subscription management is a feature available for Red Hat platforms version 5.7 (and later) and version 6.1 (and later).
+for its products. When a system is registered, factual data about the system's hardware are uploaded to the subscription management services. The services use the factual data to generate entitlements from the organization's available product subscriptions and appropriately grant them to the system. Once applied, the registering system can install, update, and receive support for the subscribed software products.
 
+
+.SH COMMANDS, SUBCOMMANDS, AND OPTIONS
+This section details all available commands, subcommands, and their optional parameters. Common options shared across multiple commands are documented at the end of this section, along with information on interactive prompting for required authentication parameters.
 .PP
-For RHEL systems, content is delivered through the Red Hat Customer Portal. Subscriptions and systems are managed globally through the Red Hat subscription management service, which is integrated with the Customer Portal. Subscriptions are managed for the local system by using the Red Hat Subscription Manager tool. Subscription Manager is a local client which connects a system with the subscription management service.
-
-.PP
-.B subscription-manager
-is the command-line based client for the Red Hat Subscription Manager tool.
-
-.PP
-Subscription Manager performs several key operations:
-.IP
-* It registers systems to the Red Hat subscription management service and adds the system to the inventory. Once a system is registered, it can receive updates based on its subscriptions to any kind of software products.
-.PP
-The
-.B subscription-manager
-command can even be invoked as part of a kickstart process.
-
-.PP
-Available subscriptions are based on the specific information about the system's architecture. A subscription is only considered
-.I available
-if the platform and hardware can support that specific product.
-
-.PP
-Subscription Manager also collects and
-summarizes system facts related to its hardware, operating system, and other characteristics. These facts can be edited in the Subscription Manager configuration and displayed through Subscription Manager.
-
-.PP
-There is also a Subscription Manager GUI, which can be invoked simply by running
-.B subscription-manager-gui
-from the command line.
-
-.PP
-Subscription management is only available for RHEL 5.7/6.1 and later systems. Older systems should register to Red Hat Network Classic using the
-.B rhn_register
-command.
-
-.SH COMMANDS AND OPTIONS
-.B subscription-manager
-has specific options available for each command, depending on what operation is being performed. Subscription Manager commands are related to the different subscription operations:
-
-.PP
-.B Note:
-Please note that using commands that require providing a username using 
-.B --username
-, a password using 
-.B --password 
-, an organization using 
-.B --org 
-, or environments using 
-.B --environments 
-must be passed as system arguments in a non-interactive session.
-
-.IP
-1. register
-
-.IP
-2. unregister
-
-.IP
-3. release
-
-.IP
-4. list
-
-.IP
-5. refresh
-
-.IP
-6. environments
-
-.IP
-7. repos
-
-.IP
-8. orgs
-
-.IP
-9. plugins
-
-.IP
-10. identity
-
-.IP
-11. facts
-
-.IP
-12. clean
-
-.IP
-13. config
-
-.IP
-14. version
-
-.IP
-15. status
-
-.IP
-16. syspurpose
-
-.IP
-17. repo-override
-
-.RE
-
-.SS COMMON OPTIONS
-.TP
-.B -h, --help
-Prints the specific help information for the given command.
-
-.TP
-.B --proxy=PROXY
-Uses an HTTP proxy. The
-.I PROXY
-name has the format
-.I hostname:port.
-
-
-.TP
-.B --proxyuser=PROXYUSERNAME
-Gives the username to use to authenticate to the HTTP proxy.
-
-.TP
-.B --proxypass=PROXYPASSWORD
-Gives the password to use to authenticate to the HTTP proxy.
-
-.TP
-.B --noproxy=NOPROXY
-Specifies a list of domain suffixes which should bypass the HTTP proxy.
-
-.TP
-.B --no-progress-messages
-Disables progress messages that are being displayed when waiting for server response.
-
 .SS REGISTER OPTIONS
 The
 .B register
 command registers a new system to the subscription management service.
-.PP
-.B Note:
-Please note that using commands that require providing a username using 
-.B --username
-, a password using 
-.B --password 
-, an organization using 
-.B --org 
-, or environments using 
-.B --environments 
-must be passed as system arguments in a non-interactive session.
 
 .TP
 .B --username=USERNAME
-Gives the username for the account which is registering the system; this user account is usually tied to the user account for the content delivery system which supplies the content. Optional, for user-based authentication.
+Gives the username for the account which is registering the system; this user account is usually tied to an organization with ownership access to a content delivery system which supplies subscription content. This option is required for user-based authentication, but not key-based authentication.
 
 .TP
 .B --password=PASSWORD
 Gives the user account password.
 
 .TP
-.B --serverurl=SERVER_HOSTNAME
-Passes the name of the subscription service with which to register the system. The default value, if this is not given, is the Customer Portal Subscription Management service,
-.B subscription.rhsm.redhat.com.
-If there is an on-premise subscription service such as Subscription Asset Manager, this parameter can be used to submit the hostname of the subscription service. For Subscription Asset Manager, if the Subscription Manager tool is configured with the Subscription Asset Manager RPM, then the default value for the
-.B --serverurl
-parameter is for the on-premise Subscription Asset Manager server.
-
+.B --serverurl=SERVER_HOSTNAME:PORT/PREFIX
+Specifies the URL of the subscription management service used to register the system. By default, this points to the Red Hat Customer Portal Subscription Management service (https://\:subscription.rhsm.redhat.com:443/\:subscription).
+.RS
+.PP
+You can use this parameter to point to a custom or local subscription service. However, using this parameter alone is discouraged, as additional configuration settings are usually required for proper operation.
+.PP
+.B Note:
+If you are registering to an on-premise service such as Red Hat Satellite, install the katello-ca-consumer RPM instead. Installing this RPM is more reliable because it automatically sets all required configuration parameters and installs the necessary CA certificates to ensure a secure SSL connection.
+.RE
 
 .TP
 .B --baseurl=https://CONTENT_SERVICE:PORT/PREFIX
-Passes the name of the content delivery service to configure the yum service to use to pull down packages. If there is an on-premise subscription service such as Subscription Asset Manager or CloudForms System Engine, this parameter can be used to submit the URL of the content repository, in the form
-.I https://server_name:port/prefix.
-.B PREFIX
-in particular depends on the service type.
-For example,
-.B https://sam.example.com:8088/sam
-is the
-.B baseurl
-for a SAM service.
-.B https://sat6.example.com/pulp/repos
-is the
-.B baseurl
-for a Satellite 6 service with the hostname
-.B sat6.example.com
-\&.
-.B https://cdn.redhat.com
-is the
-.B baseurl
-for the Red Hat CDN.
+Specifies the URL of the content delivery service used by dnf to download packages. By default, this points to the Red Hat CDN (https://\:cdn.redhat.com).
+.RS
+.PP
+You can use this parameter to specify a different content delivery network when registering to a custom subscription service. However, using this parameter alone is discouraged, as other configuration settings must also be updated to ensure the system is properly configured.
+.PP
+.B Note:
+If you are registering to an on-premise service such as Red Hat Satellite, install the katello-ca-consumer RPM instead. Installing this RPM is more reliable because it automatically sets all required configuration parameters and installs the necessary CA certificates to ensure a secure SSL connection.
+.RE
 
+.TP
+.B --insecure
+Do not check the server SSL certificate against available certificate authorities.
 
 .TP
 .B --name=SYSTEM_NAME
@@ -215,40 +74,49 @@ References an existing system inventory ID to resume using a previous registrati
 
 .TP
 .B --activationkey=KEYS
-Gives a comma-separated list of product keys to apply specific subscriptions to the system. This is used for preconfigured systems which may already have products installed. Activation keys are issued by an on-premise subscription management service, such as Subscription Asset Manager.
+Gives a comma-separated list of product keys to apply specific subscriptions to the system. This is used for preconfigured systems which may already have products installed. Activation keys are issued by an on-premise subscription management service, such as Satellite.
 .IP
 When the
 .B --activationkey
-option is used, it is not possible to use the
+option is used in conjunction with the
+.B --org
+option, then
 .B --username
 and
 .B --password
-options, because the authentication information is implicit in the activation key.
+are not needed because the authentication information is implicit in the activation key.
 .IP
 For example:
 .RS
 .nf
-subscription-manager register --org="IT Dept" --activationkey=1234abcd
+subscription-manager register --org="IT Dept" --activationkey=it_key
 .fi
 .RE
 
 .TP
 .B --force
-When the system is already registered, a new attempt to register will fail with a message reminding the user that the system is already registered. However, passing the
+When the system is already registered, a new attempt to register will fail with a message reminding the user that the system is already registered. For that reason, passing the
 .B --force,
-option will implicitly attempt to unregister the system first.  Beware that the
+option is a convenient way to implicitly unregister the system first.
+.PP
+.RS
+.B Note:
+Specifying the
 .B --force
 option does not guarantee a successful registration.  For example, if the registration with
 .B --force
 includes a different
 .B --serverurl
-than was used for the original registration, the implicit call to unregister from the original entitlement server will fail with invalid credentials and the registration with force will be aborted.  In this case, the user should explicitly unregister from the original entitlement server.  If unregistering is not possible, then running subscription-manager clean will effectively abandon the original registration identity and entitlements.  Once cleaned, registering a new system identity should succeed with or without force.
+than was used for the original registration, the implicit call to unregister from the original entitlement server will fail with invalid credentials and the registration with force will be aborted.  In this case, the user should explicitly unregister from the original entitlement server. If unregistering is not possible, then running subscription-manager clean will effectively abandon the original registration identity and entitlements.  Once cleaned, registering a new system identity should succeed with or without force.
+.RE
 
 .TP
 .B --org=ORG
 Assigns the system to an organization. Infrastructures which are managed on-site may be
 .I multi-tenant,
-meaning that there are multiple organizations within one customer unit. A system may be assigned manually to one of these organizations. When a system is registered with the Customer Portal, this is not required. When a system is registered with an on-premise application such as Subscription Asset Manager, this argument \fIis\fP required, unless there is only a single organization configured.
+meaning that there are multiple organizations within one customer unit. A system may be assigned manually to one of these organizations. When a system is registered with the Customer Portal, this is not required. When a system is registered with an on-premise subscription service such as Red Hat Satellite, this argument
+.I is
+required, unless there is only a single organization configured.
 
 .TP
 .B --environments=ENV
@@ -256,32 +124,16 @@ Registers the system to one or more environments within an organization. This is
 
 .TP
 .B --release=VERSION
-Shortcut for "release --set=VERSION"
+This register option is a shortcut for the command option
+.B release --set=VERSION
+
 
 .SS UNREGISTER OPTIONS
 The
 .B unregister
-command does two important things. Firstly, it will implicitly remove all of the currently attached subscriptions thereby returning the consumed quantity of entitlements back to their subscription pools making them available for other consumers. Secondly, it will remove the system's consumer identity thereby removing its contact with the currently configured subscription management service.
-
+command does two important things. Firstly, it will remove all of the entitlement certificates granted to the system thereby returning all consumed quantities of entitlements back to their subscription pools making them available for other registered systems within the organization. Secondly, it will remove the system's consumer identity thereby removing its connection with the subscription management service. Once unregistered, the system will no longer be entitled to system content updates from the configured subscription management service.
 .PP
-This command has no options.
-
-.SS RELEASE OPTIONS
-The
-.B release
-command sets a sticky OS version to use when installing or updating packages. This sets a preference for the minor version of the OS, such as 6.2 or 6.3. This can prevent unplanned or unsupported operating system version upgrades when an IT environment must maintain a certified configuration.
-
-.TP
-.B --list
-Lists the available OS versions. If a release preference is not set, then there is a message saying it is not set.
-
-.TP
-.B --set=RELEASE
-Sets the minor (Y-stream) release version to use, such as 6.3.
-
-.TP
-.B --unset
-Removes any previously set release version preference.
+This command has no unique options.
 
 
 .SS SYSPURPOSE OPTIONS
@@ -291,34 +143,31 @@ command displays the current configured syspurpose
 .I preferences
 for the system.
 
-.PP
-The
-.B syspurpose
-command has subcommands for all the various syspurpose preferences and attributes:
-
-.IP
-2. role
-
-.IP
-3. service-level
-
-.IP
-4. usage
-
-
 .TP
 .B --show
 Shows the system's current set of syspurpose preference formatted as JSON. Single-valued entries for which there is no value will be included in the output with a value of "". List entries which have no value will be included in the output with a value of "[]" (less the quotes).
 
-
 .PP
+The
+.B syspurpose
+command also has subcommands for all the various syspurpose preferences and attributes:
 
-.SS role options
+.IP \(bu 2
+.B role
+
+.IP \(bu 2
+.B service-level
+
+.IP \(bu 2
+.B usage
+
+
+.SS SYSPURPOSE ROLE OPTIONS
 The
 .B role
 subcommand displays the current configured role
 .I preference
-for products installed on the system. For example, if the role preference is "Red Hat Enterprise Linux Server", then a subscription with a "Red Hat Enterprise Linux Server" role is selected when attaching subscriptions to the system.
+for products installed on the system. For example, if the role preference is "Red Hat Enterprise Linux Server", then a subscription with a "Red Hat Enterprise Linux Server" is counted by subscription utilization reporting services.
 
 .TP
 .B --show
@@ -326,7 +175,7 @@ Shows the system's current role preference. If a role is not set, then there is 
 
 .TP
 .B --list
-Lists the available role system purpose values.
+Lists the available system purpose role preferences.
 
 .TP
 .B --username=USERNAME
@@ -349,12 +198,12 @@ Role to apply to this system
 Removes any previously set role preference.
 
 
-.SS service-level options
+.SS SYSPURPOSE SERVICE-LEVEL OPTIONS
 The
 .B service-level
 subcommand displays the current configured service level
 .I preference
-for products installed on the system. For example, if the service-level preference is standard, then a subscription with a standard service level is selected when attaching subscriptions to the system.
+for products installed on the system. For example, if the service-level preference is standard, then a subscription with a standard service level is counted by subscription utilization reporting services.
 
 .TP
 .B --serverurl=SERVER_URL
@@ -362,7 +211,7 @@ Server URL in the form of https://hostname:port/prefix [Usable on unregistered s
 
 .TP
 .B --insecure
-Do not check the server SSL certificate against available certificate authorities
+Do not check the server SSL certificate against available certificate authorities.
 
 .TP
 .B --show
@@ -370,7 +219,7 @@ Shows the system's current service-level preference. If a service level is not s
 
 .TP
 .B --list
-Lists the available service levels.
+Lists the available system purpose service level preferences.
 
 .TP
 .B --username=USERNAME
@@ -389,12 +238,12 @@ Service level to apply to this system
 Removes any previously set service-level preference.
 
 
-.SS usage options
+.SS SYSPURPOSE USAGE OPTIONS
 The
 .B usage
 subcommand displays the current configured usage
 .I preference
-for products installed on the system. For example, if the usage preference is "Production", then a subscription with a "Production" usage is selected when attaching subscriptions to the system.
+for products installed on the system. For example, if the usage preference is "Production", then a subscription with a "Production" usage is counted by subscription utilization reporting services.
 
 .TP
 .B --show
@@ -402,7 +251,7 @@ Shows the system's current usage preference. If a usage is not set, then there i
 
 .TP
 .B --list
-Lists the available usage system purpose values.
+Lists the available system purpose usage preferences.
 
 .TP
 .B --username=USERNAME
@@ -424,74 +273,29 @@ Usage to apply to this system
 .B --unset
 Removes any previously set usage preference.
 
-.SS LIST OPTIONS
+
+.SS RELEASE OPTIONS
 The
-.B list
-command lists all of the installed products on the system. The options allow the list to be filtered.
-
-.TP
-.B --installed
-Lists products which are currently installed on the system. (default)
-
-.TP
-.B --matches=SEARCH
-Limits the output of installed products which contain SEARCH in product information.
-.br
-SEARCH may contain the wildcards ? or * to match a single character or zero or more characters, respectively. The wildcard characters may be escaped with a backslash to represent a literal
-question mark or asterisk. Likewise, to represent a backslash, it must be escaped with another backslash.
-
-.SS REFRESH OPTIONS
-The
-.B refresh
-command pulls the latest subscription data from the server. Normally, the system polls the subscription management service at a set interval (4 hours by default) to check for any changes in the available subscriptions. The
-.B refresh
-command checks with the subscription management service right then, outside the normal interval. Use of the
-.B refresh
-command will clear caches related to the content access mode of the system and allow the system to retrieve fresh data as necessary.
-
-.TP
-.B --force
-Force regeneration of entitlement certificates on the server before these certificates are pulled from the server.
-
-
-.SS ENVIRONMENTS OPTIONS
-The
-.B environments
-command lists all of the environments that have been configured for an organization. This command is only used for organizations which have a locally-hosted subscription or content service of some kind, like Subscription Asset Manager. The concept of environments -- and therefore this command -- have no meaning for environments which use the Customer Portal Subscription Management services.
-
-.TP
-.B --username=USERNAME
-Gives the username for the account to use to connect to the organization account.
-
-.TP
-.B --password=PASSWORD
-Gives the user account password.
-
-.TP
-.B --org=ORG
-Identifies the organization for which to list the configured environments.
+.B release
+command sets a sticky OS version to use when installing or updating packages. This sets a preference for the minor version of the OS, such as 10.2 or 10.3. This can prevent unplanned or unsupported operating system version upgrades when an IT environment must maintain a certified configuration.
 
 .TP
 .B --list
-Lists all of the environments that have been configured for an organization.
+Lists the available OS versions. If a release preference is not set, then there is a message saying it is not set.
 
 .TP
-.B --list-enabled
-Lists the environments in the order that they have been enabled for this consumer.
+.B --set=RELEASE
+Sets the minor (Y-stream) release version to use, such as 10.3.
 
 .TP
-.B --list-disabled
-Lists all of the environments that have been configured for an organization but not enabled for this consumer.
-
-.TP
-.B --set=SET
-Sets an ordered list of one or more comma-separated environments for this consumer.
+.B --unset
+Removes any previously set release version preference.
 
 
 .SS REPOS OPTIONS
 The
 .B repos
-command lists all of the repositories that are available to a system. This command is only used for organizations which have a locally-hosted content service of some kind, like Subscription Asset Manager. With Red Hat's hosted content service, there is only one central repository.
+command lists all of the content repositories that are available to a system. This command is only used for organizations which have a locally-hosted content service of some kind, like Satellite. With Red Hat's hosted content service, there is only one central repository.
 
 .TP
 .B --list
@@ -517,49 +321,6 @@ Disables the specified repository, which is made available by the content source
 .B --enable
 are processed in the same order they are specified.
 
-
-.SS ORGS OPTIONS
-The
-.B orgs
-command lists all of the organizations which are available to the specified user account. A multi-tenant infrastructure may have multiple organizations within a single customer, and users may be restricted to access only a subset of the total number of organizations.
-
-.TP
-.B --username=USERNAME
-Gives the username for the account to use to connect to the organization account.
-
-.TP
-.B --password=PASSWORD
-Gives the user account password.
-
-.TP
-.B --serverurl=SERVER_HOSTNAME
-Passes the name of the subscription service to use to list all available organizations. The \fBorgs\fP command will list all organizations for the specified service for which the user account is granted access. The default value, if this is not given, is the Customer Portal Subscription Management service,
-.B https://subscription.rhsm.redhat.com:443.
-If there is an on-premise subscription service such as Subscription Asset Manager, this parameter can be used to submit the hostname of the subscription service, in the form \fI[protocol://]servername[:port][/prefix]\fP. For Subscription Asset Manager, if the Subscription Manager tool is configured with the Subscription Asset Manager RPM, then the default value for the
-.B --serverurl
-parameter is for the on-premise Subscription Asset Manager server.
-
-
-.SS PLUGIN OPTIONS
-The
-.B plugins
-command lists the available subscription-manager plugins.
-
-.TP
-.B --list
-List the available subscription-manager plugins.
-
-.TP
-.B --listslots
-List the available plugin slots
-
-.TP
-.B --listhooks
-List the available plugin slots and the hooks that handle them.
-
-.TP
-.B --verbose
-Show additional info about the plugins, such as the plugin configuration values.
 
 .SS REPO-OVERRIDE OPTIONS
 The
@@ -595,6 +356,140 @@ Lists all overrides from repositories specified with the
 option. Source of the listed overrides is a union of the override specified at the system itself and all the overrides set in the environment(s) the system belongs in.
 
 
+.SS LIST OPTIONS
+The
+.B list
+command lists all of the installed products on the system. The options allow the list to be filtered.
+
+.TP
+.B --installed
+Lists products which are currently installed on the system. This option is applied by default.
+
+.TP
+.B --matches=SEARCH
+Limits the output of installed products which contain the SEARCH string within the product naming information. The
+.br
+SEARCH value may contain wildcards ? or * to match a single character or zero or more characters, respectively. The wildcard characters may be escaped with a backslash to represent a literal
+question mark or asterisk. Likewise, to represent a backslash, it must be escaped with another backslash.
+
+
+.SS STATUS OPTIONS
+The
+.B status
+command shows the current status of the system.
+
+.RS
+.nf
+[root@server ~]# subscription-manager status
++-------------------------------------------+
+     System Status Details
++-------------------------------------------+
+Overall Status: Registered
+.fi
+.RE
+.PP
+This command has no unique options.
+
+
+.SS ORGS OPTIONS
+The
+.B orgs
+command lists all of the organizations which are available to the specified user account. A multi-tenant infrastructure may have multiple organizations within a single customer, and users may be restricted to access only a subset of the total number of organizations.
+
+.TP
+.B --username=USERNAME
+Gives the username for the account to use to connect to the organization account.
+
+.TP
+.B --password=PASSWORD
+Gives the user account password.
+
+.TP
+.B --serverurl=SERVER_HOSTNAME:PORT/PREFIX
+Passes the URL of the subscription service to use. The \fBorgs\fP command will list all organizations for which the user account is granted access. The default value is the Red Hat Customer Portal Subscription Management service. If there is an on-premise subscription service such as Satellite, this parameter can be used to submit the hostname of the subscription service, in the form \fI[protocol://]servername[:port][/prefix]\fP. If the katello-ca-consumer RPM for the Satellite is installed, then the default value configuration has been automatically updated making this parameter option unnecessary.
+
+
+.SS ENVIRONMENTS OPTIONS
+The
+.B environments
+command lists all of the environments that have been configured for an organization. This command is only used for organizations which have a locally-hosted subscription or content service of some kind, like Satellite. The concept of environments -- and therefore this command -- have no meaning for environments which use the Customer Portal Subscription Management services.
+
+.TP
+.B --username=USERNAME
+Gives the username for the account to use to connect to the organization account.
+
+.TP
+.B --password=PASSWORD
+Gives the user account password.
+
+.TP
+.B --org=ORG
+Identifies the organization for which to list the configured environments.
+
+.TP
+.B --list
+Lists all of the environments that have been configured for an organization.
+
+.TP
+.B --list-enabled
+Lists the environments in the order that they have been enabled for this consumer.
+
+.TP
+.B --list-disabled
+Lists all of the environments that have been configured for an organization but not enabled for this consumer.
+
+.TP
+.B --set=SET
+Sets an ordered list of one or more comma-separated environments for this consumer.
+
+
+.SS FACTS OPTIONS
+The
+.B facts
+command lists the system information, like the release version, number of CPUs, and other architecture information.
+
+.TP
+.B --list
+Lists all of the factual system data collected. These are simple
+.I name : value
+pairs that reflect much of the information in the
+.B /etc/sysconfig
+directory.  For example:
+.PP
+.RS
+.nf
+cpu.architecture: x86_64
+cpu.core(s)_per_socket: 1
+cpu.cpu(s): 2
+cpu.cpu_family: 6
+cpu.cpu_mhz: 1861.776
+cpu.cpu_op-mode(s): 64-bit
+cpu.cpu_socket(s): 2
+cpu.hypervisor_vendor: KVM
+cpu.model: 2
+cpu.numa_node(s): 1
+cpu.numa_node0_cpu(s): 0,1
+cpu.stepping: 3
+cpu.thread(s)_per_core: 1
+cpu.vendor_id: GenuineIntel
+cpu.virtualization_type: full
+.fi
+.RE
+
+.TP
+.B --update
+Updates the system information. This is particularly important whenever there is a hardware change (such as adding a CPU) because these changes can affect the subscriptions that are compatible with the system.
+
+.PP
+.B Note:
+Troublesome facts can be overridden as well as custom facts added by creating valid JSON files (named with a
+.B .facts
+extension) in the
+.B /etc/rhsm/facts/
+directory. The contents of these files must have a simple JSON format. Once created, the
+.B facts --update
+command should be executed.
+
 .SS IDENTITY OPTIONS
 The
 .B identity
@@ -625,103 +520,105 @@ alone will use an existing identity certificate to authenticate to the subscript
 option requires the username or password to be given either as an argument or in response to a prompt.
 
 
-.SS FACTS OPTIONS
+.SS REFRESH OPTIONS
 The
-.B facts
-command lists the system information, like the release version, number of CPUs, and other architecture information.
+.B refresh
+command pulls the latest subscription data from the server. Normally, the system polls the subscription management service at a set interval (4 hours by default) to check for any changes in the available subscriptions. The
+.B refresh
+command checks with the subscription management service right then, outside the normal interval. Use of the
+.B refresh
+command will clear caches related to the content access mode of the system and allow the system to retrieve fresh data as necessary.
 
 .TP
-.B --list
-Lists the system information. These are simple
-.I attribute: value
-pairs that reflect much of the information in the
-.B /etc/sysconfig
-directory
-.nf
-cpu.architecture: x86_64
-cpu.core(s)_per_socket: 1
-cpu.cpu(s): 2
-cpu.cpu_family: 6
-cpu.cpu_mhz: 1861.776
-cpu.cpu_op-mode(s): 64-bit
-cpu.cpu_socket(s): 2
-cpu.hypervisor_vendor: KVM
-cpu.model: 2
-cpu.numa_node(s): 1
-cpu.numa_node0_cpu(s): 0,1
-cpu.stepping: 3
-cpu.thread(s)_per_core: 1
-cpu.vendor_id: GenuineIntel
-cpu.virtualization_type: full
-distribution.id: Santiago
-distribution.name: Red Hat Enterprise Linux Workstation
-distribution.version: 6.1
-----
+.B --force
+Force regeneration of entitlement certificates on the server before these certificates are pulled from the server.
 
-.fi
-
-.TP
-.B --update
-Updates the system information. This is particularly important whenever there is a hardware change (such as adding a CPU) or a system upgrade because these changes can affect the subscriptions that are compatible with the system.
 
 .SS CLEAN OPTIONS
 The
 .B clean
-command removes all of the subscription and identity data from the local system
-.I without affecting the system information in the subscription management service.
-This means that any of the subscriptions applied to the system are not available for other systems to use. The
+command forcibly removes the system's consumer identity and all local subscription entitlement data without contacting the subscription management service. Consequently, subscription entitlements assigned to this system are effectively abandoned. They will remain allocated to this system and unavailable for re-use until managed on the Customer Portal or Satellite server.
+
+.I This command should rarely be used.
+Instead, the
+.B unregister
+command should be your first choice when trying to reset the system registration.
+.PP
+The
 .B clean
-command is useful in cases where the local subscription information is corrupted or lost somehow, and the system will be re-registered using the
+command is useful in cases where the local subscription information is corrupted, lost or expired. If the consumer id is still known to the subscription management service, the system can recover it's prior registered state by re-registering using the
 .B register --consumerid=EXISTING_ID
 command.
-
 .PP
-This command has no options.
+The most appropriate use cases for the
+.B clean
+command are:
+.IP \(bu 2
+When "Your identity certificate has expired".
+.IP \(bu 2
+When your system is "Unable to verify server's identity" or "Unable to make a connection using SSL client certificate." and you don't know how to recover. This can happen when incomplete attempts are made to switch your system configuration between different subscription management services.
+.PP
+This command has no unique options.
+
+
+.SS PLUGIN OPTIONS
+The
+.B plugins
+command lists the available subscription-manager plugins.
+
+.TP
+.B --list
+List the available subscription-manager plugins.
+
+.TP
+.B --listslots
+List the available plugin slots
+
+.TP
+.B --listhooks
+List the available plugin slots and the hooks that handle them.
+
+.TP
+.B --verbose
+Show additional info about the plugins, such as the plugin configuration values.
+
 
 .SS CONFIG OPTIONS
 The
 .B config
-command changes the
+command is used to make changes to the
+.B /etc/rhsm/rhsm.conf
+configuration file used by Subscription Manager. Almost all of the connection information used by Subscription Manager to access the subscription management service, content server, and any proxies is set in the configuration file. It also contains general configuration parameters like the frequency that Subscription Manager checks for subscriptions updates. The
 .B rhsm.conf
-configuration file used by Subscription Manager. Almost all of the connection information used by Subscription Manager to access the subscription management service, content server, and any proxies is set in the configuration file, as well as general configuration parameters like the frequency Subscription Manager checks for subscriptions updates. There are major divisions in the
-.B rhsm.conf
-file, such as
+file is organized into sections. For example, the
 .B [server]
-which is used to configure the subscription management service. When changing the Subscription Manager configuration, the settings are identified with the format
-.I section.name
-and then the new value. For example:
+section is used to configure the subscription management service.
+.PP
+When changing a configuration, the settings are identified with the format
+.I <section>.<parameter>
+followed by a configuration value.
 
+.TP
+.B --list
+Prints the current configurations for Subscription Manager.
+
+.TP
+.B --<section>.<parameter>=VALUE
+Sets a new configuration value for the section parameter. For example:
+.PP
 .RS
 .nf
-server.hostname=newsubscription.example.com
+--logging.default_log_level=DEBUG
 .fi
 .RE
 
 .TP
-.B --list
-Prints the current configuration for Subscription Manager.
+.B --remove=<section>.<parameter>
+Deletes the current configuration value for the section parameter without specifying a new value. Once deleted, Subscription Manager will use the default value for that parameter. If there are no defaults, then the configuration is ignored.
 
-.TP
-.B --remove=section.name
-Deletes the current value for the parameter without supplying a new parameter. A blank value tells Subscription Manager to use service default values for that parameter. If there are no defaults, then the feature is ignored.
+.PP
+Review the man page for rhsm.conf (man rhsm.conf) for more detailed information on all of the configuration parameters.
 
-.TP
-.B --section.name=VALUE
-Sets a parameter to a new, specified value. This is commonly used for connection settings:
-.IP
-* server.hostname (subscription management service)
-.IP
-* server.proxy
-.IP
-* server.proxy_port
-.IP
-* server.proxy_user
-.IP
-* server.proxy_password
-.IP
-* rhsm.baseurl (content server)
-.IP
-* rhsm.certFrequency
 
 .SS VERSION OPTIONS
 The
@@ -730,52 +627,68 @@ command displays information about the current Subscription Manager package, the
 
 .RS
 .nf
-[root@server ~]# subscription-manager version
+[root@rhel-10 ~]# subscription-manager version
 server type: Red Hat Subscription Management
-subscription management server: 0.9.18-1
-subscription management rules: 5.9
-subscription-manager: 1.12.1-1.git.28.5cd97a5.fc20
-python-rhsm: 1.11.4-1.git.1.2f38ded.fc20
+subscription management server: 4.7.5-1
+subscription management rules: 5.44
+subscription-manager: 1.30.3-1.el10
 .fi
 .RE
-
 .PP
-This command has no options.
+This command has no unique options.
 
 
-.SS STATUS OPTIONS
-The
-.B status
-command shows the current status of the system.
+.SS COMMON OPTIONS
+The following options are common to most of the commands and subcommands described above.
+.TP
+.B -h, --help
+Prints the specific help information for the given command.
 
-.RS
-.nf
-[root@server ~]# subscription-manager status
-+-------------------------------------------+
-     System Status Details
-+-------------------------------------------+
-Overall Status: Registered
-.fi
-.RE
+.TP
+.B --proxy=PROXY
+Uses an HTTP proxy. The
+.I PROXY
+name has the format
+.I hostname:port.
+
+.TP
+.B --proxyuser=PROXYUSERNAME
+Gives the username to use to authenticate to the HTTP proxy.
+
+.TP
+.B --proxypassword=PROXYPASSWORD
+Gives the password to use to authenticate to the HTTP proxy.
+
+.TP
+.B --noproxy=NOPROXY
+Specifies a list of domain suffixes which should bypass the HTTP proxy.
+
+.TP
+.B --no-progress-messages
+Disables progress messages that are being displayed when waiting for a server response.
+
+.SS REQUIRED OPTIONS
+Some of the commands described above require standard authentication and environment options, such as \fB--username\fP, \fB--password\fP, \fB--org\fP, or \fB--environments\fP. In non-interactive sessions, these parameters must be passed directly as command-line arguments.
+.PP
+.B Note:
+If required options are missing,
+.B subscription-manager
+will prompt for input. In a non-interactive shell or automated script, this prompt will cause execution to hang indefinitely. Always provide all necessary arguments when scripting subscription-manager to prevent blocking your automated scripts.
 
 
-.SS DEPRECATED COMMANDS
-No commands are currently deprecated.
+.SH DEPRECATED COMMANDS
+Currently there are no deprecated commands.
+
 
 .SH USAGE
+The
 .B subscription-manager
-has two major tasks:
+client tool has two major tasks:
 
-.IP
-1. Handling the registration for a given system to a subscription management service
-
-.IP
-2. Handling the product subscriptions for installed products on a system
-
-.PP
-.B subscription-manager
-makes it easier for network administrators to maintain parity between software subscriptions and updates and their installed products by tracking and managing what subscriptions are attached to a system and when those subscriptions expire or are exceeded.
-
+.IP "1." 3
+Handling the registration for a given system to a subscription management service
+.IP "2." 3
+Managing the entitlements granted by the subscription management service
 
 .SS REGISTERING AND UNREGISTERING MACHINES
 A system is either
@@ -783,7 +696,7 @@ A system is either
 to a subscription management service -- which makes all of the subscriptions available to the system -- or it is not registered. Unregistered systems necessarily lack valid software subscriptions because there is no way to record that the subscriptions have been used nor any way to renew them.
 
 .PP
-The default subscription management service in the Subscription Manager configuration is the Customer Portal Subscription Management service. The configuration file can be edited before the system is registered to point to an on-premise subscription management service like Subscription Asset Manager.
+The default subscription management service in the Subscription Manager configuration is the Customer Portal Subscription Management service. The configuration file can be edited before the system is registered to point to an on-premise subscription management service like Satellite.
 
 .PP
 Systems are usually registered to a subscription management service as part of their initial configuration, such as the kickstart process. However, systems can be registered manually after they are configured, can be removed from a content service, or re-registered.
@@ -798,7 +711,7 @@ file. This command requires, at a minimum, the username and password for an acco
 prompts for the username and password interactively.
 
 .PP
-When there is a single organization or when using the Customer Portal Subscription Management service, all that is required is the username/password set. For example:
+When there is a single organization or when using the Customer Portal Subscription Management service, only the username/password are required to register. For example:
 
 .RS
 .nf
@@ -807,18 +720,17 @@ subscription-manager register --username=admin --password=secret
 .RE
 
 .PP
-With on-premise subscription services, such as Subscription Asset Manager, the infrastructure is more complex. The local administrator can define independent groups called
+With on-premise subscription services, such as Satellite, the infrastructure is more complex. The local administrator can define independent groups called
 .I organizations
-which represent physical or organizational divisions (\fB--org\fP). Those organizations can be subdivided into \fIenvironments\fP (\fB--environment\fP).
-Optionally, the information about what subscription service (\fB--serverurl\fP) and content delivery network (\fB--baseurl\fP) to use for the system registration can also be passed (which overrides the Red Hat Subscription Manager settings). The server and content URLs are usually configured in the Subscription Manager configuration before registering a system.
+which represent physical or organizational divisions (\fB--org\fP). Those organizations can be subdivided into \fIenvironments\fP (\fB--environments\fP).
+Optionally, the information about what subscription service (\fB--serverurl\fP) and content delivery network (\fB--baseurl\fP) to use for the system registration can also be passed (which overrides the Red Hat Subscription Manager configurations). The server and content URLs are usually configured in the Subscription Manager configuration by installing the katello-ca-consumer RPM before registering a system.
 
 .RS
 .nf
 subscription-manager register --username=admin --password=secret
---org="IT Dept" --environment="local dev" --serverurl=local-cloudforms.example.com --baseurl=https://local-cloudforms.example.com:8088/cfFe
+--org="IT Org" --environment="Library/IT" --serverurl=local-satellite.example.com --baseurl=https://local-satellite.example.com/pulp/content
 .fi
 .RE
-
 
 .PP
 If a system is in a multi-tenant environment and the organization is
@@ -826,7 +738,6 @@ If a system is in a multi-tenant environment and the organization is
 provided with the registration request, registration fails with a remote server error. In the
 .B rhsm.log,
 there will be errors about being unable to load the owners interface.
-
 
 .PP
 If a system is registered and then somehow its subscription information is lost -- a drive crashes or the certificates are deleted or corrupted -- the system can be re-registered, with all of its subscriptions restored, by registering with the existing ID.
@@ -850,22 +761,23 @@ subscription-manager identity --regenerate
 .RE
 
 .PP
-Using the
+Appending the
 .B --force
-option will prompt for the username and password for the account, if one isn't given, and then return the new inventory ID and the hostname of the registered system.
+option will prompt for a username and password since these options are required when force is specified.
 
+.RS
 .nf
-subscription-manager identity --force
+subscription-manager identity --regenerate --force
 Username: jsmith
 Password:
-eff9a4c9-3579-49e5-a52f-83f2db29ab52 server.example.com
+Identity certificate has been regenerated.
 .fi
-
+.RE
 
 .PP
-A system is unregistered and removed from the subscription management service simply by running the
+When a system is ready to be shut down for an extended time or transferred to another organization, running the
 .B unregister
-command. Unregistering a system and removing its attached subscriptions can free up subscriptions when a system is taken offline or moved to a different department.
+command removes the system from the subscription management service and returns its subscriptions back to the organization for reassignment to another system.
 
 .RS
 .nf
@@ -873,124 +785,47 @@ subscription-manager unregister
 .fi
 .RE
 
-.SS LISTING SUBSCRIPTIONS FOR PRODUCTS
-A
-.I subscription
-is essentially the right to install, use, and receive updates for a Red Hat product. (Sometimes multiple individual software products are bundled together into a single subscription.) When a system is registered, the subscription management service is aware of the system and has a list of all of the possible product subscriptions that the system can install and use. A subscription is applied to a system when the system is
-attached to the subscription pool that makes that product available. 
-
-.PP The
-.B list
-command shows you what subscriptions are available specifically to the system (meaning subscriptions which are active, have available quantities, and match the hardware and architecture) or all subscriptions for the organization. Using the
-.B --ondate
-option shows subscriptions that are or will be active at a specific time (otherwise, it shows subscriptions which are active today).
-
-.RS
-.nf
-subscription-manager list --available --ondate=2012-01-31
-+-------------------------------------------+
-    Available Subscriptions
-+-------------------------------------------+
-Subscription Name:	Red Hat Enterprise Linux
-SKU:			SYS0395
-Pool Id:		8a85f981302cbaf201302d899adf05a9
-Quantity:		249237
-Service Level:		None
-Service Type:		None
-Multi-Entitlement:	No
-Starts:			01/01/2021
-Ends:			01/01/2022
-Machine Type:		physical
-.fi
-.RE
-
-.PP
+.SS LISTING PRODUCTS
 The
 .B list
-command can also be used to show what products you currently have installed, as a way of tracking what products you have versus what subscriptions you have on the system.
-
+command can be used to show what products are currently installed on the system. Appending
+.B --matches=SEARCH
+allows you to filter the list by name.
+.PP
 .RS
 .nf
-subscription-manager list --installed
+subscription-manager list --installed --matches="*Beta"
 
 +-------------------------------------------+
     Installed Product Status
 +-------------------------------------------+
 
-ProductName:	Red Hat Enterprise Linux Server
-Product ID:	69
-Version: 	6.3
+Product Name:	Red Hat Enterprise Linux for x86_64 Beta
+Product ID:	486
+Version: 		10.0 Beta
 Arch:		x86_64
-Status:		Subscribed
-Started:	07/26/2012
-Ends:		08/31/2015
 .fi
 .RE
 
-.PP
-The
-.B list
-can be filtered to only include products or subscriptions that match the query string provided to
-.B --matches
-option.
-
-.RS
-.nf
-subscription-manager list --installed --matches="*Server*"
-
-+-------------------------------------------+
-    Installed Product Status
-+-------------------------------------------+
-
-ProductName:	Red Hat Enterprise Linux Server
-Product ID:	69
-Version: 	6.3
-Arch:		x86_64
-Status:		Subscribed
-Started:	07/26/2012
-Ends:		08/31/2015
-.fi
-.RE
-
-
-.SS VIEWING LOCAL SUBSCRIPTION & CONTENT PROVIDER INFORMATION
-Red Hat has a hosted environment, through the Customer Portal, that provides centralized access to subscription management and content repositories. However, organizations can use other tools -- like Subscription Manager -- for content hosting and subscription management. With a local content provider, the organization, environments, repositories, and other structural configuration is performed in the content provider. Red Hat Subscription Manager can be used to display this information, using the
-.B environments, orgs,
-and
-.B repos
-commands.
-
-.RS
-.nf
-subscription-manager repos --list
-
-subscription-manager environments --username=jsmith
---password=secret --org=prod
-
-subscription-manager orgs --username=jsmith
---password=secret
-.fi
-.RE
-
-.SS CHANGING SUBSCRIPTION MANAGER CONFIGURATION
-The Subscription Manager CLI and GUI both use the
+.SS CHANGING SUBSCRIPTION MANAGER CONFIGURATIONS
+Subscription Manager uses the
 .B /etc/rhsm/rhsm.conf
 file for configuration, including what content and subscription management services to use. This configuration file can be edited directly, or it can be edited using the
 .B config
 command. Parameters and values are passed as arguments with the
 .B config
 command in the format
-.I --section.parameter=value
+.I --<section>.<parameter>=value
 , where
-.I section
+.I <section>
 is the configuration section in the file: server, rhsm, rhsmcertd or logging.
 
 .PP
-For example, to change the hostname of the subscription management service host:
+For example, to turn off the reporting of the system's package profile to the subscription management service:
 
 .RS
 .nf
-subscription-manager config --server.hostname=myserver.example.com
+subscription-manager config --rhsm.report_package_profile=0
 .fi
 .RE
 
@@ -1042,69 +877,52 @@ subscription-manager facts --update
 .fi
 .RE
 
-The collected facts can also be overridden by creating a JSON file in the
+The collected facts can also be overridden by creating JSON files (named with a
+.B .facts
+extension) in the
 .B /etc/rhsm/facts/
-directory. These have simple formats that define a fact and value:
+directory. The contents of these facts files must have a simple JSON format defined by a fact and value:
 
 .RS
 .nf
-{"fact1": "value1","fact2": "value2"}
+{"fact1":"value1", "fact2":"value2"}
 .fi
 .RE
 
 .PP
-Any fact override file must have a
-.B .facts
-extension.
+After these fact files are created, running the
+.B facts --update
+command will upload a new copy of the system facts including the newly added or overridden facts to the subscription management service.
 
-.PP
-When these fact files are added, running the
-.B facts
-command will update the collected facts with the new, manual facts or values.
-
-.SS SUBSCRIPTIONS AND KICKSTART
+.SS KICKSTARTS
 The
 .B subscription-manager
-tool can be run as a post-install script as part of the kickstart installation process. This allows subscription management (registering and applying subscriptions) to be automated along with installation. For example:
+tool can be run as a post-install script during the kickstart installation process. This allows subscription management registration to be automated with system installs. For example:
 
 .RS
 .nf
 %post --log=/root/ks-post.log
-/usr/sbin/subscription-manager register --username admin --password secret --org 'east colo' --force
+/usr/sbin/subscription-manager register --org="IT Dept" --activationkey=it_key --force
 .fi
 .RE
-
-.SH NETWORK INFORMATION
-The
-.B subscription-manager
-tool uses outgoing HTTPS requests. In the default configuration it will use HTTPS on port 443 to the subscription servers
-.B subscription.rhsm.redhat.com
-and to the content delivery service
-.B cdn.redhat.com.
-
-For information about the network addresses that
-.B subscription-manager
-and the
-.B subscription-manager yum plugin
-use see https://access.redhat.com/site/solutions/59586
 
 .SH PROXY CONFIGURATION
 .B subscription-manager
 can be configured to use a proxy in several ways:
-.IP
-* via standard
+.IP \(bu 2
+via standard
 .B HTTP_PROXY
 ,
 .B HTTPS_PROXY
 ,
 .B NO_PROXY
 environment variables (environment-level settings)
-.IP
-* via options in
+.IP \(bu 2
+via options in
 .B /etc/rhsm/rhsm.conf
 (application-level settings)
-.IP
-* via command-line arguments (command-level overrides)
+.IP \(bu 2
+via command-line arguments (command-level overrides)
 
 .PP
 Although
@@ -1132,7 +950,7 @@ environment variable is set and the
 configuration file option is set, then the value from the configuration file is the effective value.
 
 .SH LOG FILES
-Default log location of the
+The default log location for
 .B subscription-manager
 is 
 .B /var/log/rhsm/rhsm.log.
@@ -1141,20 +959,41 @@ When the program is run under non-root user (e.g. as dnf plugin) the logs are wr
 
 If the directory isn't writable, the logs are printed to stderr.
 
-.SH FILES
-.IP
-* /etc/pki/consumer/*.pem
-.IP
-* /etc/pki/entitlement/<serial>.pem
-.IP
-* /etc/pki/product/*.pem
-.IP
-* /etc/rhsm/rhsm.conf
-.IP
-* /etc/rhsm/facts/*.facts
-.IP
-* /var/log/rhsm/rhsm.log
+.SH IMPORTANT FILES
+.IP \(bu 2
+/etc/pki/consumer/*.pem
+.IP \(bu 2
+/etc/pki/entitlement/<serial>.pem
+.IP \(bu 2
+/etc/pki/product/*.pem
+.IP \(bu 2
+/etc/rhsm/rhsm.conf
+.IP \(bu 2
+/etc/rhsm/facts/*.facts
+.IP \(bu 2
+/var/log/rhsm/rhsm.log
 
-.SH AUTHORS
+.SH HISTORICAL NOTES
+The
+.B subscription-manager
+client tool is available on Red Hat Enterprise Linux platform version 5.7 (and newer) and version 6.1 (and newer). Older versions of RHEL should register to Red Hat Network Classic using the
+.B rhn_register
+client tool.
+.PP
+Starting in RHEL version 10, the
+.B subscription-manager
+client tool has been greatly simplified by eliminating the need to explicitly attach subscriptions to systems. Now obsolete, the former
+.B attach
+command was a primary module used in to individually assign subscription entitlements to individually registered systems. This system level procedure was required prior to an organizational election to adopt Simple Content Access. By default, Red Hat subscription services now configure all organizations to grant entitlements in a Simple Content Access mode. Monitoring the quantity of subscription consumption for procurement purposes can now be handled at an organization level by subscription utilization reporting services. Learn more about this significant simplification in Subscription Management at https://\:access.redhat.com/\:articles/\:simple-content-access
+
+.SH EARLY AUTHORS
 Deon Lackey, <dlackey@redhat.com>, and Pradeep Kilambi, <pkilambi@redhat.com>
 
+.SH CURRENT AUTHORS
+CSI Client Tools Team, <csi-client-tools-bugs@redhat.com>
+
+.SH SEE ALSO
+\fBrhsm.conf\fR(5), \fBrhsm\-debug\fR(8), \fBrhsmcertd\fR(8) \fBrct\fR(8)
+
+.SH BUGS
+This tool is part of Red Hat Subscription Manager. To report bugs against this command-line tool, login and create an issue at https://\:redhat.atlassian.net/\:jira/\:software/\:c/\:projects/\:RHEL/\:issues?jql=component%3Dsubscription%2Dmanager
