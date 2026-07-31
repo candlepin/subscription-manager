@@ -11,7 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
 "PO-Revision-Date: 2026-04-26 19:59+0000\n"
-"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/cs/>\n"
 "Language: cs\n"
@@ -23,21 +24,22 @@ msgstr ""
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
-msgstr ""
+msgstr "použití: "
 
 #: /usr/lib64/python3.9/argparse.py:861
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() nedefinováno"
 
 #: /usr/lib64/python3.9/argparse.py:1204
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
 msgstr ""
+"neznámá komponenta pro zpracovávání %(parser_name)r (volby: %(choices)s)"
 
 #: /usr/lib64/python3.9/argparse.py:1264
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "argument „-“ s režimem %r"
 
 #: /usr/lib64/python3.9/argparse.py:1273
 #, python-format
@@ -47,11 +49,11 @@ msgstr ""
 #: /usr/lib64/python3.9/argparse.py:1482
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "není možné sloučit akce – dvě skupiny jsou nazvané %r"
 
 #: /usr/lib64/python3.9/argparse.py:1520
 msgid "'required' is an invalid argument for positionals"
-msgstr "'required' není platný argument pro poziční parametry"
+msgstr "„required“ není platný argument pro poziční parametry"
 
 #: /usr/lib64/python3.9/argparse.py:1542
 #, python-format
@@ -59,11 +61,13 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"neplatný řetězec volby %(option)r: je třeba, aby začínalo znakem %"
+"(prefix_chars)r"
 
 #: /usr/lib64/python3.9/argparse.py:1560
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "pro volby jako %r je vyžadováno dest="
 
 #: /usr/lib64/python3.9/argparse.py:1577
 #, python-format
@@ -74,65 +78,67 @@ msgstr "neplatná hodnota conflict_resolution: %r"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kolidující volby %s"
+msgstr[1] "Kolidující volby %s"
+msgstr[2] "Kolidující volby %s"
 
 #: /usr/lib64/python3.9/argparse.py:1661
 msgid "mutually exclusive arguments must be optional"
 msgstr ""
+"je třeba, aby argumenty, které není možné použít společně, byly volitelné"
 
 #: /usr/lib64/python3.9/argparse.py:1728
 msgid "positional arguments"
-msgstr ""
+msgstr "poziční argumenty"
 
 #: /usr/lib64/python3.9/argparse.py:1729
 msgid "optional arguments"
-msgstr ""
+msgstr "volitelné argumenty"
 
 #: /usr/lib64/python3.9/argparse.py:1744
 msgid "show this help message and exit"
-msgstr ""
+msgstr "zobrazit tuto nápovědu a skončit"
 
 #: /usr/lib64/python3.9/argparse.py:1775
 msgid "cannot have multiple subparser arguments"
-msgstr ""
+msgstr "není možné mít vícero argumentů dílčích komponent pro zpracovávání"
 
 #: /usr/lib64/python3.9/argparse.py:1827 /usr/lib64/python3.9/argparse.py:2338
 #, python-format
 msgid "unrecognized arguments: %s"
-msgstr ""
+msgstr "nerozpoznané argumenty: %s"
 
 #: /usr/lib64/python3.9/argparse.py:1928
 #, python-format
 msgid "not allowed with argument %s"
-msgstr ""
+msgstr "nedovoleno v případě argumentu %s"
 
 #: /usr/lib64/python3.9/argparse.py:1974 /usr/lib64/python3.9/argparse.py:1988
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "ignorován výslovný argument %r"
 
 #: /usr/lib64/python3.9/argparse.py:2095
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "jsou zapotřebí následující argumenty: %s"
 
 #: /usr/lib64/python3.9/argparse.py:2110
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr ""
+msgstr "je zapotřebí jeden z argumentů %s"
 
 #: /usr/lib64/python3.9/argparse.py:2153
 msgid "expected one argument"
-msgstr ""
+msgstr "očekáván právě jeden argument"
 
 #: /usr/lib64/python3.9/argparse.py:2154
 msgid "expected at most one argument"
-msgstr ""
+msgstr "očekáván nanejvýš jeden argument"
 
 #: /usr/lib64/python3.9/argparse.py:2155
 msgid "expected at least one argument"
-msgstr ""
+msgstr "očekáván přinejmenším jeden argument"
 
 #: /usr/lib64/python3.9/argparse.py:2159
 #, python-format
@@ -144,32 +150,32 @@ msgstr[1] ""
 #: /usr/lib64/python3.9/argparse.py:2217
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "nejednoznačná volba: %(option)snebylo možné najít shodu %(matches)s"
 
 #: /usr/lib64/python3.9/argparse.py:2281
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "neočekávaný řetězec volby: %s"
 
 #: /usr/lib64/python3.9/argparse.py:2478
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r není možné zavolat"
 
 #: /usr/lib64/python3.9/argparse.py:2495
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr ""
+msgstr "neplatná hodnota %(type)s: %(value)r"
 
 #: /usr/lib64/python3.9/argparse.py:2506
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr ""
+msgstr "Neplatná volba: %(value)r (zvolte z %(choices)s"
 
 #: /usr/lib64/python3.9/argparse.py:2582
 #, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr ""
+msgstr "%(prog)s: chyba: %(message)s\n"
 
 #: src/daemons/rhsmcertd.c:104
 msgid "deprecated, see --cert-check-interval"
@@ -177,7 +183,7 @@ msgstr ""
 
 #: src/daemons/rhsmcertd.c:107
 msgid "interval to run cert check (in minutes)"
-msgstr ""
+msgstr "interval spouštění kontroly certifikátu (v minutách)"
 
 #: src/daemons/rhsmcertd.c:111
 msgid "deprecated, see --auto-attach-interval"
@@ -185,32 +191,32 @@ msgstr ""
 
 #: src/daemons/rhsmcertd.c:114
 msgid "interval to run auto-attach (in minutes)"
-msgstr ""
+msgstr "interval pro spouštění auto-registration (v minutách)"
 
 #: src/daemons/rhsmcertd.c:117
 msgid "interval to run auto-registration (in minutes)"
-msgstr ""
+msgstr "interval pro spouštění auto-registration (v minutách)"
 
 #: src/daemons/rhsmcertd.c:120
 msgid "run the initial checks immediately, with no delay"
-msgstr ""
+msgstr "spustit úvodní kontroly okamžitě, bez prodlevy"
 
 #: src/daemons/rhsmcertd.c:123
 msgid "show debug messages"
-msgstr ""
+msgstr "zobrazit ladící zprávy"
 
 #: src/daemons/rhsmcertd.c:125
 msgid "do not add an offset to the initial checks."
-msgstr ""
+msgstr "nepřidávat úvodním kontrolám posun."
 
 #: src/daemons/rhsmcertd.c:128
 msgid "try to perform auto-registration."
-msgstr ""
+msgstr "pokusit se provést auto-registration."
 
 #: src/daemons/rhsmcertd.c:570
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
-msgstr ""
+msgstr "Další informace obdržíte spuštěním: rhsmcertd --help\n"
 
 #: src/daemons/rhsmcertd.c:687
 msgid "Wrong number of arguments specified.\n"
@@ -218,26 +224,26 @@ msgstr "Zadán nesprávný počet argumentů.\n"
 
 #: src/daemons/rhsmcertd.c:763
 msgid "Invalid argument specified.\n"
-msgstr ""
+msgstr "Zadán neplatný argument.\n"
 
 #: src/daemons/rhsmcertd.c:769
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
-msgstr ""
+msgstr "VAROVÁNÍ: jsou používány zastaralé argumenty příkazového řádku.\n"
 
 #: src/daemons/rhsmcertd.c:784
 #, c-format
 msgid "Invalid option: %s\n"
-msgstr ""
+msgstr "Neplatná volba: %s\n"
 
 #: src/daemons/rhsmcertd.c:798
 #, c-format
 msgid "Invalid argument specified: %s\n"
-msgstr ""
+msgstr "Zadán neplatný argument: %s\n"
 
 #: src/plugins/dnf/product_id.py:75
 msgid "Installed products updated."
-msgstr ""
+msgstr "Nainstalované produkty zaktualizovány."
 
 #: src/plugins/dnf/subscription_manager.py:46
 #, python-format
@@ -251,6 +257,14 @@ msgid ""
 "access to security and other critical updates. If you don't have other "
 "active subscriptions, you can renew the expired subscription.  "
 msgstr ""
+"\n"
+"*** VAROVÁNÍ ***\n"
+"Platnost předplatných pro následující produkty skončila:\n"
+"%s\n"
+"Nemáte už přístup k repozitářům, které tyto produkty poskytují.  Je důležité "
+"použít aktivní předplatné, aby byl obnoven přístup k aktualizacím "
+"zabezpečení a ostatním kritickým aktualizacím. Pokud nemáte žádná další "
+"aktivní předplatná, je možné ta skončená obnovit.  "
 
 #: src/plugins/dnf/subscription_manager.py:57
 msgid ""
@@ -258,6 +272,9 @@ msgid ""
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
+"\n"
+"Tento systém není zaregistrován u serveru pro správu nároků. K registraci je "
+"možné použít subscription-manager.\n"
 
 #: src/plugins/dnf/subscription_manager.py:63
 msgid ""
@@ -265,6 +282,9 @@ msgid ""
 "This system is not registered with an entitlement server. You can use \"rhc"
 "\" or \"subscription-manager\" to register.\n"
 msgstr ""
+"\n"
+"Tento systém není zaregistrován u serveru pro správu nároků. K registraci je "
+"možné použít „rhc“ nebo „subscription-manager“.\n"
 
 #: src/plugins/dnf/subscription_manager.py:70
 msgid ""
@@ -283,10 +303,14 @@ msgid ""
 "This system has release set to {release_version} and it receives updates "
 "only for this release.\n"
 msgstr ""
+"\n"
+"Tento systém má vydání nastaveno na {release_version} a dostává aktualizace "
+"pouze pro toto vydání.\n"
 
 #: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
+"Neprováděno pod účtem root – repozitáře správy předplatného nezaktualizovány"
 
 #: src/plugins/dnf/subscription_manager.py:140
 #, python-format
@@ -301,36 +325,38 @@ msgstr[1] ""
 
 #: src/plugins/dnf/subscription_manager.py:158
 msgid "Updating Subscription Management repositories."
-msgstr ""
+msgstr "Aktualizují se repozitáře správy předplatného."
 
 #: src/plugins/dnf/subscription_manager.py:167
 msgid "Unable to read consumer identity"
-msgstr ""
+msgstr "Nebylo možné načíst identitu spotřebitele"
 
 #: src/plugins/dnf/subscription_manager.py:170
 msgid "subscription-manager is operating in container mode."
-msgstr ""
+msgstr "subscription-manager funguje v kontejnerovém režimu."
 
 #: src/plugins/dnf/upload_profile.py:37
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
 msgstr ""
+"Nahrát kombinovaný profil na Satellite server (seznam nainstalovaných RPM "
+"balíčků, zapnuté repozitáře a moduly)"
 
 #: src/plugins/dnf/upload_profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
 msgid "Force package profile upload"
-msgstr ""
+msgstr "Vynutit nahrání profilu balíčků"
 
 #: src/plugins/dnf/upload_profile.py:66
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
-msgstr ""
+msgstr "Neprovedeny žádné aktualizace. Více viz /var/log/rhsm/rhsm.log."
 
 #: src/rct/cert_commands.py:33
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS] CERT_FILE"
-msgstr ""
+msgstr "%(prog)s {name} [VOLBY] SOUBOR_S_CERTIFIKÁTEM"
 
 #: src/rct/cert_commands.py:41
 #, python-brace-format
@@ -339,15 +365,15 @@ msgstr ""
 
 #: src/rct/cert_commands.py:49
 msgid "You must specify a certificate file."
-msgstr ""
+msgstr "Je třeba zadat soubor s certifikátem."
 
 #: src/rct/cert_commands.py:52
 msgid "The specified certificate file does not exist."
-msgstr ""
+msgstr "Zadaný soubor s certifikátem neexistuje."
 
 #: src/rct/cert_commands.py:61
 msgid "Print certificate information"
-msgstr ""
+msgstr "Vypsat informace o certifikátu"
 
 #: src/rct/cert_commands.py:69
 msgid "do not show the cert's product information"
@@ -355,11 +381,11 @@ msgstr "nezobrazovat informace o produktu certifikátu"
 
 #: src/rct/cert_commands.py:75
 msgid "do not show the cert's content info"
-msgstr ""
+msgstr "nezobrazovat informace o obsahu certifikátu"
 
 #: src/rct/cert_commands.py:92
 msgid "Print certificate statistics and sizes"
-msgstr ""
+msgstr "Vypsat statistiky a velikosti certifikátů"
 
 #: src/rct/cert_commands.py:99
 #, python-brace-format
@@ -379,16 +405,16 @@ msgstr ""
 #: src/rct/cert_commands.py:106
 #, python-brace-format
 msgid "Subject Key ID size: {len_subject_key_id}b"
-msgstr ""
+msgstr "Velikost klíče subjektu: {len_subject_key_id}b"
 
 #: src/rct/cert_commands.py:113
 #, python-brace-format
 msgid "Content sets: {content_length}"
-msgstr ""
+msgstr "Sady obsahu: {content_length}"
 
 #: src/rct/manifest_commands.py:62
 msgid "Manifest zip is invalid."
-msgstr ""
+msgstr "Zip archiv s manifestem není platný."
 
 #: src/rct/manifest_commands.py:83
 #, python-brace-format
@@ -397,28 +423,28 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:108
 msgid "Manifest zip attempted to extract outside of the base directory."
-msgstr ""
+msgstr "Zjištěn pokus o rozbalení zip archivu manifestu mimo základní složku."
 
 #: src/rct/manifest_commands.py:114
 msgid "Unable to trace symbolic link.  Possibly circular linkage."
-msgstr ""
+msgstr "Nebylo možné následovat symbolický odkaz.  Možné kruhové odkazování se."
 
 #: src/rct/manifest_commands.py:138
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
-msgstr ""
+msgstr "%(prog)s {name} [VOLBY] SOUBOR_S_MANIFESTEM"
 
 #: src/rct/manifest_commands.py:143
 msgid "You must specify a manifest file."
-msgstr ""
+msgstr "Je třeba zadat soubor s manifestem."
 
 #: src/rct/manifest_commands.py:146
 msgid "The specified manifest file does not exist."
-msgstr ""
+msgstr "Zadaný soubor s manifestem neexistuje."
 
 #: src/rct/manifest_commands.py:172
 msgid "Print manifest information"
-msgstr ""
+msgstr "Vypsat informace o manifestu"
 
 #: src/rct/manifest_commands.py:179
 msgid "skip printing Content Sets"
@@ -426,11 +452,11 @@ msgstr "přeskočit vypsání sad obsahu"
 
 #: src/rct/manifest_commands.py:200
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: src/rct/manifest_commands.py:201
 msgid "Server Version"
-msgstr ""
+msgstr "Verze serveru"
 
 #: src/rct/manifest_commands.py:202
 msgid "Date Created"
@@ -438,20 +464,20 @@ msgstr "Datum vytvoření"
 
 #: src/rct/manifest_commands.py:203
 msgid "Creator"
-msgstr ""
+msgstr "Vytvořil"
 
 #: src/rct/manifest_commands.py:204
 msgid "General:"
-msgstr ""
+msgstr "Obecné:"
 
 #: src/rct/manifest_commands.py:211 src/rct/manifest_commands.py:242
 #: src/rct/printing.py:40 src/rct/printing.py:66 src/rct/printing.py:98
 msgid "Name"
-msgstr ""
+msgstr "Název"
 
 #: src/rct/manifest_commands.py:212
 msgid "UUID"
-msgstr ""
+msgstr "nikde se neopakující identifikátor"
 
 #: src/rct/manifest_commands.py:217
 msgid "Content Access Mode"
@@ -459,83 +485,83 @@ msgstr "Přístupový režim obsahu"
 
 #: src/rct/manifest_commands.py:218 src/rct/printing.py:97
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: src/rct/manifest_commands.py:219
 msgid "API URL"
-msgstr ""
+msgstr "URL API rozhraní"
 
 #: src/rct/manifest_commands.py:220
 msgid "Web URL"
-msgstr ""
+msgstr "URL webu"
 
 #: src/rct/manifest_commands.py:221
 msgid "Consumer:"
-msgstr ""
+msgstr "Spotřebitel:"
 
 #: src/rct/manifest_commands.py:235
 msgid "Subscriptions:"
-msgstr "Předplatné:"
+msgstr "Předplatná:"
 
 #: src/rct/manifest_commands.py:243 src/rct/printing.py:79
 msgid "Quantity"
-msgstr ""
+msgstr "Množství"
 
 #: src/rct/manifest_commands.py:244
 msgid "Created"
-msgstr ""
+msgstr "Vytvořeno"
 
 #: src/rct/manifest_commands.py:245 src/rct/printing.py:121
 msgid "Start Date"
-msgstr ""
+msgstr "Počáteční datum"
 
 #: src/rct/manifest_commands.py:246 src/rct/printing.py:122
 msgid "End Date"
-msgstr ""
+msgstr "Datum ukončení"
 
 #: src/rct/manifest_commands.py:247 src/rct/printing.py:73
 msgid "Service Level"
-msgstr ""
+msgstr "Úroveň služeb"
 
 #: src/rct/manifest_commands.py:248 src/rct/printing.py:71
 msgid "Service Type"
-msgstr ""
+msgstr "Typ služby"
 
 #: src/rct/manifest_commands.py:249
 msgid "Architectures"
-msgstr ""
+msgstr "Architektury"
 
 #: src/rct/manifest_commands.py:250 src/rct/printing.py:68
 msgid "SKU"
-msgstr ""
+msgstr "Skladové číslo (SKU)"
 
 #: src/rct/manifest_commands.py:251 src/rct/printing.py:69
 msgid "Contract"
-msgstr ""
+msgstr "Smlouva"
 
 #: src/rct/manifest_commands.py:252 src/rct/printing.py:65
 msgid "Order"
-msgstr ""
+msgstr "Pořadí"
 
 #: src/rct/manifest_commands.py:253 src/rct/printing.py:70
 msgid "Account"
-msgstr ""
+msgstr "Účet"
 
 #: src/rct/manifest_commands.py:255
 msgid "Virt Limit"
-msgstr ""
+msgstr "Virt limit"
 
 #: src/rct/manifest_commands.py:259
 msgid "Requires Virt-who"
-msgstr ""
+msgstr "Vyžaduje nástroj virt-who"
 
 #: src/rct/manifest_commands.py:262
 msgid "Entitlement File"
-msgstr "Soubor oprávnění"
+msgstr "Soubor s nárokem"
 
 #: src/rct/manifest_commands.py:267
 msgid "Certificate File"
-msgstr ""
+msgstr "Soubor s certifikátem"
 
 #: src/rct/manifest_commands.py:273
 #, python-brace-format
@@ -544,7 +570,7 @@ msgstr ""
 
 #: src/rct/manifest_commands.py:277
 msgid "Certificate Version"
-msgstr ""
+msgstr "Verze certifikátu"
 
 #: src/rct/manifest_commands.py:279
 msgid "Subscription:"
@@ -552,15 +578,15 @@ msgstr "Předplatné:"
 
 #: src/rct/manifest_commands.py:284
 msgid "Provided Products:"
-msgstr ""
+msgstr "Poskytované produkty:"
 
 #: src/rct/manifest_commands.py:292
 msgid "Derived Products:"
-msgstr ""
+msgstr "Odvozené produkty:"
 
 #: src/rct/manifest_commands.py:297
 msgid "Content Sets:"
-msgstr ""
+msgstr "Sady obsahu:"
 
 #: src/rct/manifest_commands.py:308
 msgid "\tManifest"
@@ -568,73 +594,74 @@ msgstr "\tManifest"
 
 #: src/rct/manifest_commands.py:322
 msgid "Dump the contents of a manifest"
-msgstr ""
+msgstr "Vypsat obsah manifestu"
 
 #: src/rct/manifest_commands.py:329
 msgid "directory to extract the manifest to"
-msgstr ""
+msgstr "složka do které manifest rozbalit"
 
 #: src/rct/manifest_commands.py:337
 msgid "overwrite files which may exist"
-msgstr ""
+msgstr "přepsat případné už existující soubory"
 
 #: src/rct/manifest_commands.py:348
 #, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
 msgstr ""
+"Soubor „{filename}“ existuje. Pokud ho chcete přepsat vynuťte to použitím -f."
 
 #: src/rct/manifest_commands.py:354
 msgid "Manifest could not be written:"
-msgstr ""
+msgstr "Manifest nebylo možné zapsat:"
 
 #: src/rct/manifest_commands.py:368
 #, python-brace-format
 msgid "The manifest has been dumped to the {destination} directory"
-msgstr ""
+msgstr "Manifest byl vypsán do složky {destination}"
 
 #: src/rct/manifest_commands.py:374
 msgid "The manifest has been dumped to the current directory"
-msgstr ""
+msgstr "Manifest byl rozbalen do stávající složky"
 
 #: src/rct/printing.py:38
 msgid "Product"
-msgstr ""
+msgstr "Produkt"
 
 #: src/rct/printing.py:39
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: src/rct/printing.py:41 src/rct/printing.py:119
 msgid "Version"
-msgstr ""
+msgstr "Verze"
 
 #: src/rct/printing.py:42
 msgid "Arch"
-msgstr ""
+msgstr "Arch."
 
 #: src/rct/printing.py:43
 msgid "Tags"
-msgstr ""
+msgstr "Štítky"
 
 #: src/rct/printing.py:48
 msgid "Brand Type"
-msgstr ""
+msgstr "Typ značky"
 
 #: src/rct/printing.py:54
 msgid "Brand Name"
-msgstr ""
+msgstr "Název značky"
 
 #: src/rct/printing.py:67
 msgid "Number"
-msgstr ""
+msgstr "Číslo"
 
 #: src/rct/printing.py:72
 msgid "Roles"
-msgstr ""
+msgstr "Role"
 
 #: src/rct/printing.py:74
 msgid "Usage"
-msgstr ""
+msgstr "Použití"
 
 #: src/rct/printing.py:75
 msgid "Add-ons"
@@ -642,7 +669,7 @@ msgstr "Doplňky"
 
 #: src/rct/printing.py:78 src/subscription_manager/managerlib.py:431
 msgid "Unlimited"
-msgstr ""
+msgstr "Neomezené"
 
 #: src/rct/printing.py:80
 msgid "Quantity Used"
@@ -650,27 +677,27 @@ msgstr "Využité množství"
 
 #: src/rct/printing.py:81
 msgid "Socket Limit"
-msgstr ""
+msgstr "Limit počtu patic"
 
 #: src/rct/printing.py:82
 msgid "RAM Limit"
-msgstr "RAM Limit"
+msgstr "Limit množství operační paměti"
 
 #: src/rct/printing.py:83
 msgid "Core Limit"
-msgstr ""
+msgstr "Limit počtu jader"
 
 #: src/rct/printing.py:84
 msgid "Virt Only"
-msgstr ""
+msgstr "Pouze pro virtuální stroje"
 
 #: src/rct/printing.py:85
 msgid "Stacking ID"
-msgstr ""
+msgstr "Identif. vrstvení"
 
 #: src/rct/printing.py:86
 msgid "Warning Period"
-msgstr ""
+msgstr "Období varování"
 
 #: src/rct/printing.py:87
 msgid "Provides Management"
@@ -682,15 +709,15 @@ msgstr "Obsah"
 
 #: src/rct/printing.py:99
 msgid "Label"
-msgstr ""
+msgstr "Štítek"
 
 #: src/rct/printing.py:100
 msgid "Vendor"
-msgstr ""
+msgstr "Výrobce"
 
 #: src/rct/printing.py:101
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: src/rct/printing.py:102
 msgid "GPG"
@@ -698,43 +725,43 @@ msgstr ""
 
 #: src/rct/printing.py:103
 msgid "Enabled"
-msgstr ""
+msgstr "Zapnuto"
 
 #: src/rct/printing.py:104
 msgid "Expires"
-msgstr ""
+msgstr "Platnost končí"
 
 #: src/rct/printing.py:105
 msgid "Required Tags"
-msgstr ""
+msgstr "Vyžadované štítky"
 
 #: src/rct/printing.py:106
 msgid "Arches"
-msgstr ""
+msgstr "Architektury"
 
 #: src/rct/printing.py:117
 msgid "Certificate:"
-msgstr ""
+msgstr "Certifikát:"
 
 #: src/rct/printing.py:118
 msgid "Path"
-msgstr ""
+msgstr "Popis umístění"
 
 #: src/rct/printing.py:120
 msgid "Serial"
-msgstr ""
+msgstr "Sériové číslo"
 
 #: src/rct/printing.py:133
 msgid "Subject:"
-msgstr ""
+msgstr "Předmět:"
 
 #: src/rct/printing.py:140
 msgid "Issuer:"
-msgstr ""
+msgstr "Vydavatel:"
 
 #: src/rct/printing.py:162
 msgid "Alt Name"
-msgstr ""
+msgstr "Alternativní název"
 
 #: src/rct/printing.py:217 src/rhsmlib/services/entitlement.py:298
 msgid "Not Available"
@@ -742,38 +769,43 @@ msgstr "Není k dispozici"
 
 #: src/rct/printing.py:220
 msgid "Pool ID"
-msgstr ""
+msgstr "Identif. fondu"
 
 #: src/rct/printing.py:224
 msgid "Authorized Content URLs:"
-msgstr ""
+msgstr "URL adresy pověřeného obsahu:"
 
 #: src/rct/printing.py:244
 msgid "Entitlement Certificate"
-msgstr ""
+msgstr "Certifikát nároku"
 
 #: src/rct/printing.py:246
 msgid "Product Certificate"
-msgstr ""
+msgstr "Certifikát produktu"
 
 #: src/rct/printing.py:248
 msgid "Identity Certificate"
-msgstr ""
+msgstr "Certifikát identity"
 
 #: src/rct/printing.py:250
 msgid "Unknown Certificate Type"
-msgstr ""
+msgstr "Neznámý typ certifikátu"
 
 #: src/rhsm/config.py:244
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
 msgstr ""
+"Neplatný stupeň podrobnosti záznamu událostí: {lvl} – náhradně pro toto "
+"spuštění nastaveno na INFO."
 
 #: src/rhsm/config.py:249
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
+"Nastavte pomocí:  subscription-manager config --"
+"logging.default_log_level=<Stupeň podrobnosti> default_log_level na platnou "
+"hodnotu."
 
 #: src/rhsm/config.py:255
 #, python-brace-format
@@ -782,7 +814,7 @@ msgstr ""
 
 #: src/rhsm/connection.py:1444
 msgid "Fetching supported resources"
-msgstr ""
+msgstr "Získávání nepodporovaných prostředků"
 
 #: src/rhsm/connection.py:1504
 msgid "Checking connection status"
@@ -790,15 +822,15 @@ msgstr ""
 
 #: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
-msgstr ""
+msgstr "Získávání cloudového tokenu"
 
 #: src/rhsm/connection.py:1607
 msgid "Registering system"
-msgstr ""
+msgstr "Zaregistrovat systém"
 
 #: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
-msgstr ""
+msgstr "Aktualizují zjištěné virtuální stroje běžící na daném hostiteli"
 
 #: src/rhsm/connection.py:1672
 msgid "Updating hypervisor information"
@@ -822,7 +854,7 @@ msgstr "Aktualizují se profilové informace"
 
 #: src/rhsm/connection.py:1809
 msgid "Fetching consumer keys"
-msgstr ""
+msgstr "Získávání klíčů spotřebitele"
 
 #: src/rhsm/connection.py:1818
 msgid "Checking compliance status"
@@ -850,7 +882,7 @@ msgstr "Získávání certifikátů"
 
 #: src/rhsm/connection.py:1895
 msgid "Fetching certificate serial numbers"
-msgstr ""
+msgstr "Získávání sériových čísel certifikátů"
 
 #: src/rhsm/connection.py:1911
 msgid "Fetching content for a certificate"
@@ -867,7 +899,7 @@ msgstr ""
 
 #: src/rhsm/connection.py:2018
 msgid "Fetching pools"
-msgstr ""
+msgstr "Získávání fondů"
 
 #: src/rhsm/connection.py:2029
 msgid "Fetching release information"
@@ -879,7 +911,7 @@ msgstr ""
 
 #: src/rhsm/connection.py:2058
 msgid "Fetching entitlements"
-msgstr ""
+msgstr "Získávání nároků"
 
 #: src/rhsm/connection.py:2067
 msgid "Fetching service levels"
@@ -903,23 +935,23 @@ msgstr ""
 
 #: src/rhsm/connection.py:2134
 msgid "Fetching content overrides"
-msgstr ""
+msgstr "Získávání přebití obsahu"
 
 #: src/rhsm/connection.py:2145
 msgid "Updating content overrides"
-msgstr "Aktualizace přepsání obsahu"
+msgstr "Aktualizují se přebití obsahu"
 
 #: src/rhsm/connection.py:2158
 msgid "Removing content overrides"
-msgstr ""
+msgstr "Odebírají se přebití obsahu"
 
 #: src/rhsm/connection.py:2174
 msgid "Activating"
-msgstr ""
+msgstr "Deaktivuje se"
 
 #: src/rhsm/connection.py:2183
 msgid "Fetching job"
-msgstr ""
+msgstr "Získávání úlohy"
 
 #: src/rhsm_debug/debug_commands.py:39
 #: src/subscription_manager/cli_command/cli.py:51
@@ -927,6 +959,8 @@ msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
 msgstr ""
+"Tento systém ještě není zaregistrován. Více viz „subscription-manager "
+"register --help“."
 
 #: src/rhsm_debug/debug_commands.py:53
 msgid "Assemble system information as a tar file or directory"
@@ -934,11 +968,11 @@ msgstr "Složit informace o systému jako tar soubor nebo složku"
 
 #: src/rhsm_debug/debug_commands.py:62
 msgid "the destination location of the result; default is /tmp"
-msgstr ""
+msgstr "cílové umístění výsledku (výchozí je /tmp)"
 
 #: src/rhsm_debug/debug_commands.py:71
 msgid "data will be in an uncompressed directory"
-msgstr ""
+msgstr "data budou v nekomprimované složce"
 
 #: src/rhsm_debug/debug_commands.py:78
 msgid "only data not already included in sos report will be collected"
@@ -947,11 +981,11 @@ msgstr "budou shromážděna pouze ta data, která už jsou obsažena v hlášen
 #: src/rhsm_debug/debug_commands.py:106
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS] "
-msgstr ""
+msgstr "%(prog)s {name} [VOLBY] "
 
 #: src/rhsm_debug/debug_commands.py:110
 msgid "The directory specified by '--destination' must already exist."
-msgstr ""
+msgstr "Je třeba, aby složka zadaná „--destination“ už existovala."
 
 #: src/rhsm_debug/debug_commands.py:115
 #, python-brace-format
@@ -959,11 +993,14 @@ msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
 msgstr ""
+"Pokud chcete použít volbu no-archive je třeba, aby cílová složka „"
+"{destination}“ existovala na stejném souborovém systému jako složka pro "
+"skládání dat „{assembly}“."
 
 #: src/rhsm_debug/debug_commands.py:212
 #, python-brace-format
 msgid "Wrote: {final_path}"
-msgstr ""
+msgstr "Zapsáno: {final_path}"
 
 #: src/rhsm_debug/debug_commands.py:226
 #, python-brace-format
@@ -980,11 +1017,12 @@ msgstr ""
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
+"Uživatel %s je členem vícero organizací, ale nebyla vybrána žádná z nich"
 
 #: src/rhsmlib/dbus/objects/register.py:164
 #, python-format
 msgid "User %s is not member of any organization"
-msgstr ""
+msgstr "Uživatel %s není členem žádné organizace"
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:73
 #, python-brace-format
@@ -1000,7 +1038,7 @@ msgstr[1] ""
 #: src/rhsmlib/dbus/service_wrapper.py:54
 #, python-brace-format
 msgid "Error: Unable to load bus '{name}'"
-msgstr ""
+msgstr "Chyba: nebylo možné načíst sběrnici „{name}“"
 
 #: src/rhsmlib/services/entitlement.py:52
 #, python-brace-format
@@ -1008,6 +1046,7 @@ msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{date})"
 msgstr ""
+"Zadané datum není platné. Mělo by být ve formátu RRRR-MM-DD (příklad: {date})"
 
 #: src/rhsmlib/services/entitlement.py:57
 msgid "Past dates are not allowed"
@@ -1027,27 +1066,27 @@ msgstr "Datumy v minulosti nejsou povoleny"
 #: src/subscription_manager/utils.py:292 src/subscription_manager/utils.py:312
 #: src/subscription_manager/utils.py:314 src/subscription_manager/utils.py:333
 msgid "Unknown"
-msgstr ""
+msgstr "Neznámé"
 
 #: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:64
 #, python-format
 msgid "Unknown arguments: %s"
-msgstr ""
+msgstr "Neznámý argument: %s"
 
 #: src/rhsmlib/services/entitlement.py:289
 #: src/subscription_manager/cli_command/list.py:444
 msgid "Virtual"
-msgstr ""
+msgstr "Virtuální"
 
 #: src/rhsmlib/services/entitlement.py:291
 #: src/subscription_manager/cli_command/list.py:446
 msgid "Physical"
-msgstr ""
+msgstr "Fyzický"
 
 #: src/rhsmlib/services/entitlement.py:294
 #: src/subscription_manager/cli_command/list.py:449
 msgid "Yes"
-msgstr ""
+msgstr "Ano"
 
 #: src/rhsmlib/services/entitlement.py:296
 #: src/subscription_manager/cli_command/list.py:451
@@ -1056,7 +1095,7 @@ msgstr ""
 
 #: src/rhsmlib/services/entitlement.py:316
 msgid "Subscription is current"
-msgstr ""
+msgstr "Předplatné je aktuální"
 
 #: src/rhsmlib/services/entitlement.py:319
 msgid "Subscription is expired"
@@ -1064,11 +1103,11 @@ msgstr "Platnost předplatného skončila"
 
 #: src/rhsmlib/services/entitlement.py:321
 msgid "Subscription has not begun"
-msgstr ""
+msgstr "Předplatné ještě nezačalo"
 
 #: src/rhsmlib/services/entitlement.py:323
 msgid "Subscription management service doesn't support Status Details."
-msgstr ""
+msgstr "Služba správy předplatného nepodporuje podrobnosti o stavu."
 
 #: src/rhsmlib/services/entitlement.py:492
 msgid ""
@@ -1081,37 +1120,41 @@ msgstr ""
 #: src/rhsmlib/services/entitlement.py:497
 #: src/subscription_manager/cli_command/list.py:308
 msgid "Error: --all is only applicable with --available"
-msgstr ""
+msgstr "Chyba: --all je možné použít pouze ve spojení s --available"
 
 #: src/rhsmlib/services/entitlement.py:499
 #: src/subscription_manager/cli_command/list.py:310
 msgid "Error: --ondate is only applicable with --available"
-msgstr ""
+msgstr "Chyba: --ondate je možné použít pouze ve spojení s --available"
 
 #: src/rhsmlib/services/entitlement.py:504
 #: src/subscription_manager/cli_command/list.py:313
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr ""
+"Chyba: --servicelevel je možné použít pouze ve spojení s --available nebo --"
+"consumed"
 
 #: src/rhsmlib/services/entitlement.py:508
 #: src/subscription_manager/cli_command/list.py:318
 msgid "Error: --match-installed is only applicable with --available"
-msgstr ""
+msgstr "Chyba: --match-installed je možné použít pouze ve spojení s --available"
 
 #: src/rhsmlib/services/entitlement.py:511
 #: src/subscription_manager/cli_command/list.py:320
 msgid "Error: --no-overlap is only applicable with --available"
-msgstr ""
+msgstr "Chyba: --no-overlapje možné použít pouze ve spojení s --available"
 
 #: src/rhsmlib/services/entitlement.py:516
 #: src/subscription_manager/cli_command/list.py:323
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr ""
+"Chyba: --pool-only je možné použít pouze ve spojení s --available a/nebo --"
+"consumed"
 
 #: src/rhsmlib/services/entitlement.py:519
 msgid "Error: this system is not registered"
-msgstr ""
+msgstr "Chyba: tento systém není zaregistrován"
 
 #: src/rhsmlib/services/register.py:68
 msgid "Environment IDs and environment names are mutually exclusive"
@@ -1121,23 +1164,24 @@ msgstr "Identifikátory prostředí nelze použít souběžně s názvy prostře
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
-msgstr ""
+msgstr "Prostředí: „{env_names}“ nemá potřebný typ „{environment_type}“"
 
 #: src/rhsmlib/services/register.py:175
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
-msgstr ""
+msgstr "Prostředí: „{env_names}“ nemá potřebný typ „{environment_type}“"
 
 #: src/rhsmlib/services/register.py:238
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
-"Tento systém je již zaregistrován. Přidejte k možnostem vynucení přepsání."
+"Tento systém už je zaregistrován. Pokud chcete přebít, přidejte k volbám "
+"force (vynutit)."
 
 #: src/rhsmlib/services/register.py:241
 #: src/subscription_manager/cli_command/register.py:146
 msgid "Error: system name can not be empty."
-msgstr ""
+msgstr "Chyba: název systému nemůže zůstat nevyplněný."
 
 #: src/rhsmlib/services/register.py:245
 #: src/subscription_manager/cli_command/register.py:168
@@ -1146,30 +1190,36 @@ msgid ""
 "with consumerid. Please use --force without --consumerid to re-register or "
 "use the clean command and try again without --force."
 msgstr ""
+"Chyba: Nebylo možné vynutit registraci při pokusu o zotavení registrace "
+"pomocí identifikátoru spotřebitele (consumerid). Pro opětovnou registraci "
+"použijte --force bez --consumerid, nebo použijte příkaz clean (vyčistit) a "
+"zkuste to znovu bez --force."
 
 #: src/rhsmlib/services/register.py:255
 #: src/subscription_manager/cli_command/register.py:159
 msgid "Error: Must specify an activation key"
-msgstr ""
+msgstr "Chyba: je třeba zadat aktivační klíč"
 
 #: src/rhsmlib/services/register.py:257
 #: src/subscription_manager/cli_command/register.py:148
 msgid "Error: Activation keys do not require user credentials."
-msgstr ""
+msgstr "Chyba: Aktivační klíče nepotřebují přihlašovací údaje uživatele."
 
 #: src/rhsmlib/services/register.py:260
 #: src/subscription_manager/cli_command/register.py:151
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr ""
+"Chyba: Aktivační klíče není možné použít s dříve zaregistrovanými "
+"identifikátory."
 
 #: src/rhsmlib/services/register.py:267
 msgid "Error: Missing username or password."
-msgstr ""
+msgstr "Chyba: chybí uživatelské jméno nebo heslo."
 
 #: src/rhsmlib/services/syspurpose.py:100
 #: src/rhsmlib/services/syspurpose.py:103
 msgid "Matched"
-msgstr ""
+msgstr "Nalezena shoda"
 
 #: src/rhsmlib/services/syspurpose.py:101
 #: src/rhsmlib/services/syspurpose.py:104
@@ -1178,7 +1228,7 @@ msgstr "Nenalezena shoda"
 
 #: src/rhsmlib/services/syspurpose.py:102
 msgid "Partial"
-msgstr ""
+msgstr "Částečné"
 
 #: src/rhsmlib/services/syspurpose.py:105
 msgid "Not Specified"
@@ -1191,72 +1241,83 @@ msgstr "Vypnuto"
 
 #: src/subscription_manager/branding/__init__.py:76
 msgid "Register the system to the server"
-msgstr ""
+msgstr "Zaregistrovat systém k serveru"
 
 #: src/subscription_manager/branding/__init__.py:77
 msgid "Unregister the system from the server"
-msgstr ""
+msgstr "Zrušit registraci systému ze serveru"
 
 #: src/subscription_manager/branding/__init__.py:78
 msgid "This system is registered to spacewalk"
-msgstr ""
+msgstr "Tento systém je zaregistrován u spacewalk"
 
 #: src/subscription_manager/branding/__init__.py:80
 #: src/subscription_manager/branding/redhat_branding.py:14
 #: src/subscription_manager/managercli.py:96
 msgid "WARNING"
-msgstr ""
+msgstr "VAROVÁNÍ"
 
 #: src/subscription_manager/branding/__init__.py:80
 msgid "You have already registered with spacewalk."
-msgstr ""
+msgstr "Už jste zaregistrovali u spacewalk."
 
 #: src/subscription_manager/branding/__init__.py:83
 msgid "Please enter your account information:"
-msgstr ""
+msgstr "Zadejte informace o svém účtu:"
 
 #: src/subscription_manager/branding/__init__.py:85
 msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
 msgstr ""
+"Pokud jste zapomněli své přihlašovací jméno nebo heslo, obraťte se na svého "
+"správce systémů"
 
 #: src/subscription_manager/branding/__init__.py:87
 #: src/subscription_manager/branding/redhat_branding.py:29
 msgid "Red Hat Subscription Management"
-msgstr ""
+msgstr "Správa Red Hat předplatného"
 
 #: src/subscription_manager/branding/redhat_branding.py:7
 msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
 msgstr ""
+"Zaregistrovat tento systému na Zákaznickém portálu nebo jiné službě správy "
+"předplatného"
 
 #: src/subscription_manager/branding/redhat_branding.py:10
 msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
 msgstr ""
+"Zrušit registraci tohoto systému na Zákaznickém portálu nebo jiné služby "
+"správy předplatného"
 
 #: src/subscription_manager/branding/redhat_branding.py:12
 msgid "This system is registered to RHN Classic."
-msgstr ""
+msgstr "Tento systém je zaregistrován u RHN Classic."
 
 #: src/subscription_manager/branding/redhat_branding.py:16
 msgid "This system has already been registered with Red Hat using RHN Classic."
-msgstr ""
+msgstr "Tento systému už je zaregistrován u Red Hat pomocí RHN Classic."
 
 #: src/subscription_manager/branding/redhat_branding.py:19
 msgid ""
 "Your system is being registered again using Red Hat Subscription Management. "
 "Red Hat recommends that customers only register once."
 msgstr ""
+"Váš systém je registrován znovu pomocí Správy Red Hat předplatného. Red Hat "
+"doporučuje, aby zákazníci registrovali pouze jednou."
 
 #: src/subscription_manager/branding/redhat_branding.py:24
 msgid ""
 "To learn how to unregister from either service please consult this Knowledge "
 "Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
+"Pokud se chcete dozvědět, jak zrušit registraci z jedné či druhé služby, "
+"podívejte se do tohoto článku ve znalostní databázi: https://"
+"access.redhat.com/kb/docs/DOC-45563"
 
 #: src/subscription_manager/branding/redhat_branding.py:28
 msgid "RHN Classic"
@@ -1264,33 +1325,40 @@ msgstr "RHN Classic"
 
 #: src/subscription_manager/branding/redhat_branding.py:30
 msgid "Please enter your Red Hat account information:"
-msgstr ""
+msgstr "Zadejte informace o svém Red Hat účtu:"
 
 #: src/subscription_manager/branding/redhat_branding.py:32
 msgid ""
 "This system is registered using both RHN Classic and Red Hat Subscription "
 "Management."
 msgstr ""
+"Tento systém je registrován pomocí jak RHN Classic, tak Správy Red Hat "
+"předplatného."
 
 #: src/subscription_manager/branding/redhat_branding.py:34
 msgid "Red Hat recommends that customers only register with one service."
-msgstr ""
+msgstr "Red Hat doporučuje, aby zákazníci registrovali pouze u jedné služby."
 
 #: src/subscription_manager/branding/redhat_branding.py:37
 msgid ""
 "To learn more about RHN registration and technologies please consult this "
 "Knowledge Base Article: https://access.redhat.com/kb/docs/DOC-45563"
 msgstr ""
+"Pokud se chcete dozvědět více o registraci a technologiích, používaných v "
+"rámci RHN, podívejte se do tohoto článku ve znalostní databázi: https://"
+"access.redhat.com/kb/docs/DOC-45563"
 
 #: src/subscription_manager/branding/redhat_branding.py:41
 msgid "RHN Classic and Red Hat Subscription Management"
-msgstr ""
+msgstr "Správa RHN Classic a Red Hat předplatného"
 
 #: src/subscription_manager/branding/redhat_branding.py:43
 msgid ""
 "Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password"
 msgstr ""
+"Tip: Zapomněli jste své přihlašovací jméno nebo heslo? Podívejte se do "
+"https://redhat.com/forgot_password"
 
 #: src/subscription_manager/cache.py:178
 #, python-brace-format
@@ -1298,6 +1366,8 @@ msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
 msgstr ""
+"consumer_uuid={consumer_uuid} není platné consumer_uuid. Nebude se pokoušeno "
+"o synchronizaci mezipaměti {class_name} se serverem."
 
 #: src/subscription_manager/cert_sorter.py:292
 msgid "Current"
@@ -1305,7 +1375,7 @@ msgstr "Stávající"
 
 #: src/subscription_manager/cert_sorter.py:293
 msgid "Insufficient"
-msgstr ""
+msgstr "Nedostatečné"
 
 #: src/subscription_manager/cert_sorter.py:294
 msgid "Invalid"
@@ -1314,20 +1384,20 @@ msgstr "Neplatné"
 #: src/subscription_manager/cli.py:83
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [OPTIONS]"
-msgstr ""
+msgstr "%(prog)s {name} [VOLBY]"
 
 #: src/subscription_manager/cli.py:123
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr ""
+msgstr "Použití: %s NÁZEV-MODULU [PŘEDVOLBY-PRO-MODUL] [--help]"
 
 #: src/subscription_manager/cli.py:138
 msgid "Primary Modules:"
-msgstr ""
+msgstr "Hlavní moduly:"
 
 #: src/subscription_manager/cli.py:140
 msgid "Other Modules:"
-msgstr ""
+msgstr "Ostatní moduly:"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:35
 #, python-brace-format
@@ -1336,21 +1406,24 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Varování: tomuto systému byla nedávno správcem serveru pro správu nároků "
+"nastavena hodnota {attr} „{download_value}“ .\n"
+"{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
-msgstr "Pokud chcete přepsat změnu na straně serveru, spusťte prosím: {command}"
+msgstr "Pokud chcete změny na straně serveru přebít, spusťte: {command}"
 
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:41
 msgid "Deprecated, see 'syspurpose'"
-msgstr ""
+msgstr "Zastaralé, viz „syspurpose“"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:75
 #, python-brace-format
 msgid "set {attr} of system purpose"
-msgstr ""
+msgstr "nastavit {attr} účelu systému"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:82
 #, python-brace-format
@@ -1360,22 +1433,22 @@ msgstr "zrušit nastavení {attr} účelu systému"
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:90
 #, python-brace-format
 msgid "add an item to the list ({attr})."
-msgstr ""
+msgstr "přidat položku na seznam ({attr})."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:98
 #, python-brace-format
 msgid "remove an item from the list ({attr})."
-msgstr ""
+msgstr "odebrat položku ze seznamu ({attr})."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:105
 #, python-brace-format
 msgid "show this system's current {attr}"
-msgstr ""
+msgstr "zobrazit stávající {attr} tohoto systému"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:112
 #, python-brace-format
 msgid "list all {attr} available"
-msgstr ""
+msgstr "vypsat veškeré dostupné {attr}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:142
 msgid "--unset cannot be used with --set, --add, or --remove"
@@ -1383,7 +1456,7 @@ msgstr "--unset není možné použít ve spojení s --set, --add nebo --remove"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:144
 msgid "--add cannot be used with --remove"
-msgstr ""
+msgstr "--add nemůže být použito ve spojení s --remove"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:151
 msgid "Error: you can specify --username or --token not both"
@@ -1394,18 +1467,22 @@ msgstr ""
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
 msgstr ""
+"Chyba: je třeba zaregistrovat nebo zadat --username a --password do seznamu "
+"{attr}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:173
 msgid ""
 "Error: --username, --password, --token and --org can be used only on "
 "unregistered systems"
 msgstr ""
+"Chyba: --username, --password a --org je možné použít pouze na "
+"nezaregistrovaných systémech"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:251
 #, python-brace-format
 msgid "\"{value}\""
-msgstr ""
+msgstr "„{value}“"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:255
 #, python-brace-format
@@ -1423,6 +1500,9 @@ msgid ""
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
 msgstr ""
+"Varování: Tato organizace nemá žádná předplatná, která poskytují účel "
+"systému „{attr}“.  Toto nastavení neovlivní automaticky připojovaná "
+"předplatná."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:278
 #, python-brace-format
@@ -1438,22 +1518,22 @@ msgstr "{attr} odnastaven."
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:338
 #, python-brace-format
 msgid "{attr} updated."
-msgstr ""
+msgstr "{attr} zaktualizován."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:369
 #, python-brace-format
 msgid "Current {name}: {val}"
-msgstr ""
+msgstr "Stávající {name}: {val}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:371
 #, python-brace-format
 msgid "{name} not set."
-msgstr ""
+msgstr "{name} nenastaveno."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:389
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
-msgstr ""
+msgstr "K dispozici {syspurpose_attr}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:401
 #: src/subscription_manager/cli_command/service_level.py:213
@@ -1462,6 +1542,8 @@ msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
+"Nejsou zde k dispozici žádné dostupné hodnoty pro účel systému „"
+"{syspurpose_attr}“ z předplatných, která má tato organizace k dispozici."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:409
 #, python-brace-format
@@ -1479,7 +1561,7 @@ msgstr ""
 #: src/subscription_manager/i18n_argparse.py:35
 #, python-format
 msgid "%(prog)s [OPTIONS]"
-msgstr ""
+msgstr "%(prog)s [VOLBY]"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:492
 #, python-brace-format
@@ -1487,6 +1569,8 @@ msgid ""
 "Note: The currently configured entitlement server does not support System "
 "Purpose {attr}."
 msgstr ""
+"Pozn.: Stávající nastavený server pro správu nároků nepodporuje účel systému "
+"{attr}."
 
 #: src/subscription_manager/cli_command/addons.py:25
 msgid ""
@@ -1640,11 +1724,13 @@ msgstr ""
 msgid ""
 "Remove all local system and subscription data without affecting the server"
 msgstr ""
+"Odebrat veškerá lokální systémová data a data předplatného, aniž by to "
+"server postihlo"
 
 #: src/subscription_manager/cli_command/clean.py:31
 #: src/subscription_manager/cli_command/register.py:316
 msgid "All local data removed"
-msgstr ""
+msgstr "Veškerá lokální data odebrána"
 
 #: src/subscription_manager/cli_command/cli.py:131
 #, python-brace-format
@@ -1655,57 +1741,63 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/cli.py:152
 msgid "server URL in the form of https://hostname:port/prefix"
-msgstr ""
+msgstr "URL serveru ve formě https://nazev_hostitel:port/predpona"
 
 #: src/subscription_manager/cli_command/cli.py:159
 msgid ""
 "do not check the entitlement server SSL certificate against available "
 "certificate authorities"
 msgstr ""
+"nekontrolovat SSL certifikát serveru, který spravuje nároky, vůči dostupným "
+"certifikačním autoritám"
 
 #: src/subscription_manager/cli_command/cli.py:170
 msgid "proxy URL in the form of hostname:port"
-msgstr ""
+msgstr "URL proxy ve formě nazev_hostitele:port"
 
 #: src/subscription_manager/cli_command/cli.py:176
 msgid "user for HTTP proxy with basic authentication"
-msgstr ""
+msgstr "uživatel pro HTTP proxy využívající basic authentication"
 
 #: src/subscription_manager/cli_command/cli.py:182
 msgid "password for HTTP proxy with basic authentication"
-msgstr ""
+msgstr "heslo pro HTTP proxy s basic authentication"
 
 #: src/subscription_manager/cli_command/cli.py:188
 msgid "host suffixes that should bypass HTTP proxy"
-msgstr ""
+msgstr "přípony hostitelů které by měly obcházet HTTP proxy"
 
 #: src/subscription_manager/cli_command/cli.py:197
 msgid "Do not display progress messages"
-msgstr ""
+msgstr "Nezobrazovat zprávy o průběhu"
 
 #: src/subscription_manager/cli_command/cli.py:209
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
+"Identita spotřebitele buď neexistuje, nebo je poškozená. Zkuste příkaz "
+"register --help"
 
 #: src/subscription_manager/cli_command/cli.py:267
 msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
 msgstr ""
+"subscription-manager funguje v kontejnerovém režimu. Pro správu předplatných "
+"použijte hostitelský systém.\n"
 
 #: src/subscription_manager/cli_command/cli.py:282
 #, python-brace-format
 msgid "{prog}: error: no such option: {args}"
-msgstr ""
+msgstr "{prog}: chyba: žádná taková volba: {args}"
 
 #: src/subscription_manager/cli_command/cli.py:301
 msgid "Error parsing serverurl:"
-msgstr ""
+msgstr "Chyba při zpracovávání serverurl:"
 
 #: src/subscription_manager/cli_command/cli.py:317
 msgid "Error parsing baseurl:"
-msgstr ""
+msgstr "Chyba při zpracovávání baseurl:"
 
 #: src/subscription_manager/cli_command/cli.py:389
 #, python-brace-format
@@ -1715,10 +1807,11 @@ msgstr "Nebylo možné dosáhnout server na {host}:{port}{handler}"
 #: src/subscription_manager/cli_command/cli.py:399
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr ""
+"Chyba: certifikát cert. autority pro službu předplatného nebyl nainstalován."
 
 #: src/subscription_manager/cli_command/cli.py:421
 msgid "System certificates corrupted. Please reregister."
-msgstr ""
+msgstr "Systémové certifikáty poškozeny. Proveďte opětovnou registraci."
 
 #: src/subscription_manager/cli_command/cli.py:432
 #, python-brace-format
@@ -1726,14 +1819,17 @@ msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr ""
+"Profil spotřebitele „{uuid}“ byl ze serveru vymazán. Lokální profil je možné "
+"odebrat pomocí příkazu clean nebo unregister."
 
 #: src/subscription_manager/cli_command/config.py:28
 msgid "List, set, or remove the configuration parameters in use by this system"
 msgstr ""
+"Vypsat, nastavit nebo odebrat parametry nastavení, používané tímto systémem"
 
 #: src/subscription_manager/cli_command/config.py:32
 msgid "list the configuration for this system"
-msgstr ""
+msgstr "vypsat nastavení pro tento systém"
 
 #: src/subscription_manager/cli_command/config.py:35
 msgid "remove configuration entry by section.name"
@@ -1749,12 +1845,16 @@ msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
 msgstr ""
+"Chyba: --list by nemělo být používáno s jakýmikoli jinými volbami pro "
+"nastavování nebo odebírání nastavení."
 
 #: src/subscription_manager/cli_command/config.py:93
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
 msgstr ""
+"Chyba: je třeba, aby určení položky nastavení, kterou odebrat, bylo ve "
+"formátu [nazev.sekce]"
 
 #: src/subscription_manager/cli_command/config.py:108
 #, python-brace-format
@@ -1763,7 +1863,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/config.py:133
 msgid "[] - Default value in use"
-msgstr ""
+msgstr "[] - Je používána výchozí hodnota"
 
 #: src/subscription_manager/cli_command/config.py:143
 #: src/subscription_manager/cli_command/config.py:150
@@ -1774,7 +1874,7 @@ msgstr "Odebrali jste hodnotu pro výběr {section} a název {name}."
 #: src/subscription_manager/cli_command/config.py:154
 #, python-brace-format
 msgid "The default value for {name} will now be used."
-msgstr ""
+msgstr "Výchozí hodnota pro {name} nebude použita."
 
 #: src/subscription_manager/cli_command/config.py:157
 #, python-brace-format
@@ -1783,7 +1883,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/environments.py:44
 msgid "Display the environments available for a user"
-msgstr ""
+msgstr "Zobrazit prostředí, která jsou uživateli k dispozici"
 
 #: src/subscription_manager/cli_command/environments.py:45
 msgid "specify organization for environment list, using organization key"
@@ -1792,31 +1892,32 @@ msgstr "pro seznam prostředí zadejte organizaci, pomocí jejího klíče"
 #: src/subscription_manager/cli_command/environments.py:52
 msgid "set an ordered comma-separated list of environments for this consumer"
 msgstr ""
+"nastavit pořadí čárkou oddělovaného seznamu prostředí pro tohoto spotřebitele"
 
 #: src/subscription_manager/cli_command/environments.py:58
 msgid "list all environments for the organization"
-msgstr ""
+msgstr "vypsat veškerá prostředí pro organizaci"
 
 #: src/subscription_manager/cli_command/environments.py:65
 msgid "list the environments enabled for this consumer in order"
-msgstr ""
+msgstr "seznam prostředí povolených pro tohoto spotřebitele v pořadí"
 
 #: src/subscription_manager/cli_command/environments.py:72
 msgid "list the environments not enabled for this consumer"
-msgstr ""
+msgstr "vypsat prostředí nezapnutá pro tohoto spotřebitele"
 
 #: src/subscription_manager/cli_command/environments.py:81
 msgid "You may not specify an --org for environments when registered."
-msgstr ""
+msgstr "Pokud zaregistrováno, není třeba uvádět pro prostředí --org."
 
 #: src/subscription_manager/cli_command/environments.py:90
 #: src/subscription_manager/cli_command/register.py:464
 msgid "Error: Server does not support environments."
-msgstr ""
+msgstr "Chyba: Server nepodporuje prostředí."
 
 #: src/subscription_manager/cli_command/environments.py:97
 msgid "This operation requires user credentials"
-msgstr ""
+msgstr "Tato operace vyžaduje přihlašovací údaje uživatele"
 
 #: src/subscription_manager/cli_command/environments.py:111
 msgid "Error: Unable to retrieve environment list from server"
@@ -1828,23 +1929,23 @@ msgstr "Prostředí zaktualizována."
 
 #: src/subscription_manager/cli_command/environments.py:128
 msgid "Error: Server does not support environment updates."
-msgstr ""
+msgstr "Chyba: Server nepodporuje aktualizace prostředí."
 
 #: src/subscription_manager/cli_command/environments.py:136
 msgid "Error: Server does not support multi-environment operations."
-msgstr ""
+msgstr "Chyba: Server nepodporuje operace s vícero prostředími."
 
 #: src/subscription_manager/cli_command/environments.py:154
 msgid "Environments"
-msgstr ""
+msgstr "Prostředí"
 
 #: src/subscription_manager/cli_command/environments.py:167
 msgid "This list operation does not have any environments to report."
-msgstr ""
+msgstr "Tato operace se seznamem nemá žádná prostředí k hlášení."
 
 #: src/subscription_manager/cli_command/environments.py:203
 msgid "Error: The same environment may not be listed more than once. "
-msgstr ""
+msgstr "Chyba: To stejné prostředí nemůže být uvedeno více než jednou. "
 
 #: src/subscription_manager/cli_command/environments.py:209
 #, python-brace-format
@@ -1855,11 +1956,11 @@ msgstr[1] ""
 
 #: src/subscription_manager/cli_command/facts.py:32
 msgid "View or update the detected system information"
-msgstr ""
+msgstr "Zobrazit nebo zaktualizovat zjištěné informace o systému"
 
 #: src/subscription_manager/cli_command/facts.py:38
 msgid "list known facts for this system"
-msgstr ""
+msgstr "vypsat fakta známá o tomto systému"
 
 #: src/subscription_manager/cli_command/facts.py:43
 msgid "update the system facts"
@@ -1867,21 +1968,23 @@ msgstr "zaktualizovat fakta o systému"
 
 #: src/subscription_manager/cli_command/facts.py:80
 msgid "Successfully updated the system facts."
-msgstr ""
+msgstr "Fakta o systému úspěšně zaktualizována."
 
 #: src/subscription_manager/cli_command/identity.py:40
 msgid "Display the identity certificate for this system or request a new one"
-msgstr ""
+msgstr "Zobrazit certifikát identity tohoto systému nebo si vyžádat nový"
 
 #: src/subscription_manager/cli_command/identity.py:47
 msgid "request a new certificate be generated"
-msgstr ""
+msgstr "vyžádat si vytvoření nového certifikátu"
 
 #: src/subscription_manager/cli_command/identity.py:53
 msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
 msgstr ""
+"vynutit znovuvytvoření certifikátu (vyžaduje uživatelské jméno a heslo) – "
+"použijte pouze ve spojení s --regenerate"
 
 #: src/subscription_manager/cli_command/identity.py:61
 msgid "--force can only be used with --regenerate"
@@ -1889,7 +1992,7 @@ msgstr "--force je možné použít pouze ve spojení s --regenerate"
 
 #: src/subscription_manager/cli_command/identity.py:63
 msgid "--username and --password can only be used with --force"
-msgstr ""
+msgstr "--username a --password je možné použít pouze ve spojení s --force"
 
 #: src/subscription_manager/cli_command/identity.py:65
 msgid "--token can only be used with --force"
@@ -1905,7 +2008,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/identity.py:89
 #, python-brace-format
 msgid "system identity: {consumerid}"
-msgstr ""
+msgstr "identita systému: {consumerid}"
 
 #: src/subscription_manager/cli_command/identity.py:90
 #, python-brace-format
@@ -1920,13 +2023,13 @@ msgstr ""
 #: src/subscription_manager/cli_command/identity.py:92
 #, python-brace-format
 msgid "org ID: {ownerid}"
-msgstr ""
+msgstr "identif. organizace: {ownerid}"
 
 #: src/subscription_manager/cli_command/identity.py:107
 #: src/subscription_manager/printing_utils.py:165
 #: src/subscription_manager/printing_utils.py:184
 msgid "None"
-msgstr ""
+msgstr "Žádné"
 
 #: src/subscription_manager/cli_command/identity.py:110
 #, python-brace-format
@@ -1937,11 +2040,11 @@ msgstr[1] ""
 
 #: src/subscription_manager/cli_command/identity.py:130
 msgid "Identity certificate has been regenerated."
-msgstr ""
+msgstr "Certifikát identity byl znovuvytvořen."
 
 #: src/subscription_manager/cli_command/identity.py:143
 msgid "Error: Unable to generate a new identity for the system"
-msgstr ""
+msgstr "Chyba: Nebylo možné vytvořit novou identitu pro systém"
 
 #: src/subscription_manager/cli_command/import_cert.py:31
 msgid ""
@@ -1993,45 +2096,45 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:50
 msgid "Subscribed"
-msgstr ""
+msgstr "Připojeno k předplatnému"
 
 #: src/subscription_manager/cli_command/list.py:51
 msgid "Not Subscribed"
-msgstr ""
+msgstr "Nepokryto předplatným"
 
 #: src/subscription_manager/cli_command/list.py:52
 msgid "Expired"
-msgstr ""
+msgstr "Platnost končí"
 
 #: src/subscription_manager/cli_command/list.py:53
 msgid "Partially Subscribed"
-msgstr ""
+msgstr "Částečně pokryto předplatným"
 
 #: src/subscription_manager/cli_command/list.py:58
 #: src/subscription_manager/cli_command/list.py:69
 #: src/subscription_manager/cli_command/list.py:111
 msgid "Product Name:"
-msgstr ""
+msgstr "Název produktu"
 
 #: src/subscription_manager/cli_command/list.py:59
 #: src/subscription_manager/cli_command/list.py:70
 msgid "Product ID:"
-msgstr ""
+msgstr "Identif. produktu:"
 
 #: src/subscription_manager/cli_command/list.py:60
 #: src/subscription_manager/cli_command/list.py:71
 msgid "Version:"
-msgstr ""
+msgstr "Verze:"
 
 #: src/subscription_manager/cli_command/list.py:61
 #: src/subscription_manager/cli_command/list.py:72
 msgid "Arch:"
-msgstr ""
+msgstr "Arch.:"
 
 #: src/subscription_manager/cli_command/list.py:62
 #: src/subscription_manager/cli_command/list.py:112
 msgid "Status:"
-msgstr ""
+msgstr "Stav:"
 
 #: src/subscription_manager/cli_command/list.py:63
 #: src/subscription_manager/cli_command/list.py:138
@@ -2044,28 +2147,28 @@ msgstr ""
 #: src/subscription_manager/cli_command/list.py:140
 #: src/subscription_manager/cli_command/list.py:163
 msgid "Starts:"
-msgstr ""
+msgstr "Začátek:"
 
 #: src/subscription_manager/cli_command/list.py:65
 #: src/subscription_manager/cli_command/list.py:91
 #: src/subscription_manager/cli_command/list.py:141
 #: src/subscription_manager/cli_command/list.py:164
 msgid "Ends:"
-msgstr ""
+msgstr "Končí"
 
 #: src/subscription_manager/cli_command/list.py:76
 #: src/subscription_manager/cli_command/list.py:96
 #: src/subscription_manager/cli_command/list.py:126
 #: src/subscription_manager/cli_command/list.py:146
 msgid "Subscription Name:"
-msgstr ""
+msgstr "Předplatné"
 
 #: src/subscription_manager/cli_command/list.py:77
 #: src/subscription_manager/cli_command/list.py:97
 #: src/subscription_manager/cli_command/list.py:127
 #: src/subscription_manager/cli_command/list.py:147
 msgid "Provides:"
-msgstr ""
+msgstr "Poskytovatel"
 
 #: src/subscription_manager/cli_command/list.py:78
 #: src/subscription_manager/cli_command/list.py:98
@@ -2079,13 +2182,13 @@ msgstr ""
 #: src/subscription_manager/cli_command/list.py:129
 #: src/subscription_manager/cli_command/list.py:149
 msgid "Contract:"
-msgstr ""
+msgstr "Smlouva"
 
 #: src/subscription_manager/cli_command/list.py:80
 #: src/subscription_manager/cli_command/list.py:132
 #: src/subscription_manager/cli_command/list.py:152
 msgid "Pool ID:"
-msgstr ""
+msgstr "Identif. fondu"
 
 #: src/subscription_manager/cli_command/list.py:81
 #: src/subscription_manager/cli_command/list.py:133
@@ -2095,7 +2198,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:82
 msgid "Available:"
-msgstr ""
+msgstr "Dostupný"
 
 #: src/subscription_manager/cli_command/list.py:83
 msgid "Suggested:"
@@ -2105,12 +2208,12 @@ msgstr ""
 #: src/subscription_manager/cli_command/list.py:136
 #: src/subscription_manager/cli_command/list.py:156
 msgid "Service Type:"
-msgstr ""
+msgstr "Typ služby:"
 
 #: src/subscription_manager/cli_command/list.py:85
 #: src/subscription_manager/cli_command/list.py:157
 msgid "Roles:"
-msgstr ""
+msgstr "Role"
 
 #: src/subscription_manager/cli_command/list.py:86
 #: src/subscription_manager/cli_command/list.py:100
@@ -2122,7 +2225,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/list.py:87
 #: src/subscription_manager/cli_command/list.py:159
 msgid "Usage:"
-msgstr ""
+msgstr "Použití:"
 
 #: src/subscription_manager/cli_command/list.py:88
 #: src/subscription_manager/cli_command/list.py:160
@@ -2142,19 +2245,19 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:104
 msgid "Repo ID:"
-msgstr ""
+msgstr "Identif. repozitáře:"
 
 #: src/subscription_manager/cli_command/list.py:105
 msgid "Repo Name:"
-msgstr ""
+msgstr "Název repozitáře:"
 
 #: src/subscription_manager/cli_command/list.py:106
 msgid "Repo URL:"
-msgstr ""
+msgstr "URL repozitáře"
 
 #: src/subscription_manager/cli_command/list.py:107
 msgid "Enabled:"
-msgstr ""
+msgstr "Povoleno"
 
 #: src/subscription_manager/cli_command/list.py:116
 #: src/subscription_manager/cli_command/list.py:121
@@ -2167,22 +2270,22 @@ msgstr "Popis:"
 
 #: src/subscription_manager/cli_command/list.py:122
 msgid "Key:"
-msgstr "Klíč:"
+msgstr "_Klíč:"
 
 #: src/subscription_manager/cli_command/list.py:130
 #: src/subscription_manager/cli_command/list.py:150
 msgid "Account:"
-msgstr ""
+msgstr "Účty"
 
 #: src/subscription_manager/cli_command/list.py:131
 #: src/subscription_manager/cli_command/list.py:151
 msgid "Serial:"
-msgstr ""
+msgstr "Sério_vý:"
 
 #: src/subscription_manager/cli_command/list.py:134
 #: src/subscription_manager/cli_command/list.py:154
 msgid "Active:"
-msgstr ""
+msgstr "Aktivní:"
 
 #: src/subscription_manager/cli_command/list.py:135
 #: src/subscription_manager/cli_command/list.py:155
@@ -2207,11 +2310,11 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:208
 msgid "List subscription and product information for this system"
-msgstr ""
+msgstr "Vypsat informace o předplatném a produktu pro tento systému"
 
 #: src/subscription_manager/cli_command/list.py:215
 msgid "list shows those products which are installed (default)"
-msgstr ""
+msgstr "seznam zobrazuje ty produkty, které jsou nainstalované (výchozí)"
 
 #: src/subscription_manager/cli_command/list.py:221
 msgid ""
@@ -2284,7 +2387,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:326
 msgid "Error: --afterdate is only applicable with --available"
-msgstr ""
+msgstr "Chyba: --ondate je možné použít pouze ve spojení s --available"
 
 #: src/subscription_manager/cli_command/list.py:328
 msgid "Error: --afterdate cannot be used with --ondate"
@@ -2299,16 +2402,17 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:371
 msgid "    Installed Product Status"
-msgstr ""
+msgstr "    Stav nainstalovaného produktu"
 
 #: src/subscription_manager/cli_command/list.py:407
 #, python-brace-format
 msgid "No installed products were found matching the expression \"{filter}\"."
 msgstr ""
+"Nebyly nalezeny žádné nainstalované produkty, odpovídající výrazu „{filter}“."
 
 #: src/subscription_manager/cli_command/list.py:412
 msgid "No installed products to list"
-msgstr ""
+msgstr "Na tomto systému nejsou nainstalované žádné produkty."
 
 #: src/subscription_manager/cli_command/list.py:439
 msgid "Available Subscriptions"
@@ -2327,6 +2431,7 @@ msgid ""
 "No available subscription pools were found matching the expression "
 "\"{filter}\"."
 msgstr ""
+"Nebyly nalezeny žádné nainstalované produkty, odpovídající výrazu „{filter}“."
 
 #: src/subscription_manager/cli_command/list.py:500
 #, python-brace-format
@@ -2356,6 +2461,7 @@ msgid ""
 "No consumed subscription pools were found matching the expression "
 "\"{filter}\"."
 msgstr ""
+"Nebyly nalezeny žádné nainstalované produkty, odpovídající výrazu „{filter}“."
 
 #: src/subscription_manager/cli_command/list.py:564
 #, python-brace-format
@@ -2370,17 +2476,17 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/org.py:35
 msgid "specify an organization"
-msgstr ""
+msgstr "zadejte organizaci"
 
 #: src/subscription_manager/cli_command/org.py:46
 #: src/subscription_manager/cli_command/register.py:526
 msgid "Error: --org is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "Chyba: v neinteraktivním režimu je --org vyžadovaný parametr."
 
 #: src/subscription_manager/cli_command/org.py:48
 #: src/subscription_manager/cli_command/register.py:531
 msgid "Organization: "
-msgstr ""
+msgstr "Organizace: "
 
 #: src/subscription_manager/cli_command/org.py:62
 #, python-brace-format
@@ -2391,90 +2497,101 @@ msgstr "Chyba: Uživatel {username} není členem žádné organizace."
 #: src/subscription_manager/cli_command/register.py:517
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
-msgstr ""
+msgstr "Rada: Uživatel „{name}“ je členem následujících organizací: {orgs}"
 
 #: src/subscription_manager/cli_command/override.py:32
 msgid "Manage custom content repository settings"
-msgstr ""
+msgstr "Spravovat uživatelsky určená nastavení repozitáře obsahu"
 
 #: src/subscription_manager/cli_command/override.py:39
 msgid "repository to modify (can be specified more than once)"
-msgstr ""
+msgstr "repozitář který změnit (je možné uvést vícekrát)"
 
 #: src/subscription_manager/cli_command/override.py:47
 msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
 msgstr ""
+"název přebití, které odebrat (je možné uvést vícekrát) – použijte s volbou --"
+"repo."
 
 #: src/subscription_manager/cli_command/override.py:56
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
 msgstr ""
+"název a hodnota volby kterou přebít, oddělená dvojtečkou (je možné uvést "
+"vícekrát) – použijte s volbou --repo."
 
 #: src/subscription_manager/cli_command/override.py:63
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
 msgstr ""
+"odebrat veškerá přebití – může být specifické k repozitáři a to zadáním --"
+"repo"
 
 #: src/subscription_manager/cli_command/override.py:68
 msgid "list all overrides; can be specific to a repository by providing --repo"
 msgstr ""
+"vypsat veškerá přebití – může být specifické ke konkrétnímu repozitáři "
+"zadáním --repo"
 
 #: src/subscription_manager/cli_command/override.py:76
 msgid "You must specify an override in the form of \"name:value\" with --add."
-msgstr ""
+msgstr "Je třeba zadat přebití ve formě „název:hodnota“ s --add."
 
 #: src/subscription_manager/cli_command/override.py:81
 msgid "--add arguments should be in the form of \"name:value\""
-msgstr ""
+msgstr "argumenty pro --add by měly mít podobu „nazev:hodnota“"
 
 #: src/subscription_manager/cli_command/override.py:91
 msgid "Error: You must specify a repository to modify"
-msgstr ""
+msgstr "Chyba: Je třeba zadat který repozitář změnit"
 
 #: src/subscription_manager/cli_command/override.py:94
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
+"Chyba: Neměli byste používat --add nebo --remove ve spojení s --remove-all "
+"a --list"
 
 #: src/subscription_manager/cli_command/override.py:97
 msgid "Error: You may not use --list with --remove-all"
-msgstr ""
+msgstr "Chyba: Není možné použít --list a zároveň --remove-all"
 
 #: src/subscription_manager/cli_command/override.py:102
 msgid "Error: The --repo option must be used with --list or --add or --remove."
 msgstr ""
+"Chyba: Je třeba, aby volba --repo byla použita s --list nebo --add nebo --"
+"remove."
 
 #: src/subscription_manager/cli_command/override.py:107
 msgid "Error: You must specify an override name with --remove."
-msgstr "Chyba: Musíte zadat název přepsání pomocí --remove."
+msgstr "Chyba: je třeba zadat název přebití pomocí --remove."
 
 #: src/subscription_manager/cli_command/override.py:126
 msgid "Error: The 'repo-override' command is not supported by the server."
-msgstr ""
+msgstr "Chyba: Příkaz „repo-override“ není serverem podporován."
 
 #: src/subscription_manager/cli_command/override.py:138
 #: src/subscription_manager/cli_command/repos.py:124
 msgid "Repositories disabled by configuration."
-msgstr ""
+msgstr "Repozitáře vypnuty dle nastavení."
 
 #: src/subscription_manager/cli_command/override.py:145
 msgid "This system does not have any content overrides applied to it."
-msgstr ""
+msgstr "Na tento systém není uplatňováno žádné přebití obsahu."
 
 #: src/subscription_manager/cli_command/override.py:170
 #, python-brace-format
 msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
-msgstr ""
-"Repozitář '{repo}' momentálně neexistuje, ale jeho přepsání bylo přidáno."
+msgstr "Repozitář „{repo}“ v tuto chvíli neexistuje, ale bylo přidáno přebití."
 
 #: src/subscription_manager/cli_command/override.py:198
 #, python-brace-format
 msgid "Nothing is known about '{r}'"
-msgstr ""
+msgstr "O „{r}“ není nic známo"
 
 #: src/subscription_manager/cli_command/override.py:203
 #, python-brace-format
@@ -2483,51 +2600,51 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/owners.py:34
 msgid "Display the organizations against which a user can register a system"
-msgstr ""
+msgstr "Zobrazit organizace vůči kterým uživatel může systém zaregistrovat"
 
 #: src/subscription_manager/cli_command/owners.py:52
 msgid "Organizations"
-msgstr ""
+msgstr "Organizace"
 
 #: src/subscription_manager/cli_command/owners.py:61
 #, python-brace-format
 msgid "{username} cannot register with any organizations."
-msgstr ""
+msgstr "{username} nemůže registrovat u žádné organizace."
 
 #: src/subscription_manager/cli_command/owners.py:69
 msgid "Error: Unable to retrieve org list from server"
-msgstr ""
+msgstr "Chyba: Nebylo možné získat seznam organizací ze serveru"
 
 #: src/subscription_manager/cli_command/plugins.py:25
 msgid "View and configure with 'subscription-manager plugins'"
-msgstr ""
+msgstr "Zobrazte si a nastavte pomocí „subscription-manager plugins“"
 
 #: src/subscription_manager/cli_command/plugins.py:31
 #, python-brace-format
 msgid "list {SM} plugins"
-msgstr ""
+msgstr "vypsat {SM} zásuvné moduly"
 
 #: src/subscription_manager/cli_command/plugins.py:34
 #, python-brace-format
 msgid "list {SM} plugin slots"
-msgstr ""
+msgstr "seznam slotů {SM} zásuvného modulu"
 
 #: src/subscription_manager/cli_command/plugins.py:37
 #, python-brace-format
 msgid "list {SM} plugin hooks"
-msgstr ""
+msgstr "seznam háčků zásuvného modulu {SM}"
 
 #: src/subscription_manager/cli_command/plugins.py:40
 msgid "show verbose plugin info"
-msgstr ""
+msgstr "zobrazit nejpodrobnější informace o zásuvném modulu"
 
 #: src/subscription_manager/cli_command/plugins.py:53
 msgid "disabled"
-msgstr ""
+msgstr "zakázáno"
 
 #: src/subscription_manager/cli_command/plugins.py:55
 msgid "enabled"
-msgstr ""
+msgstr "povoleno"
 
 #: src/subscription_manager/cli_command/redeem.py:30
 msgid ""
@@ -2557,7 +2674,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/refresh.py:32
 msgid "Pull the latest subscription data from the server"
-msgstr ""
+msgstr "Vytáhnout ze serveru nejnovější data o předplatném"
 
 #: src/subscription_manager/cli_command/refresh.py:34
 msgid "force certificate regeneration"
@@ -2566,19 +2683,19 @@ msgstr "vynutit znovuvytvoření certifikátu"
 #: src/subscription_manager/cli_command/refresh.py:46
 #, python-brace-format
 msgid "Unable to perform refresh due to the following exception: {e}"
-msgstr ""
+msgstr "Nebylo možné provést znovunačtení kvůli následující výjimce: {e}"
 
 #: src/subscription_manager/cli_command/refresh.py:49
 msgid "All local data refreshed"
-msgstr ""
+msgstr "Veškerá lokální data znovu načtena"
 
 #: src/subscription_manager/cli_command/register.py:68
 msgid "base URL for content in form of https://hostname:port/prefix"
-msgstr ""
+msgstr "základ URL pro obsah ve formě https://nazev_hostitel:port/predpona"
 
 #: src/subscription_manager/cli_command/register.py:81
 msgid "name of the system to register, defaults to the hostname"
-msgstr ""
+msgstr "název systému, které zaregistrovat – výchozí je název hostitele"
 
 #: src/subscription_manager/cli_command/register.py:87
 msgid "the existing system data is pulled from the server"
@@ -2589,6 +2706,8 @@ msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
 msgstr ""
+"zaregistrovat u jedné z vícero organizací pro uživatele, pomocí klíče "
+"organizace"
 
 #: src/subscription_manager/cli_command/register.py:99
 msgid ""
@@ -2596,10 +2715,13 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
+"zaregistrovat s konkrétním prostředím (jedna hodnota) nebo vícero "
+"prostředími (čárkou oddělovaný seznam) v cílové organizaci. Schopnost použít "
+"vícero prostředí je řízena serverem, spravujícím nároky"
 
 #: src/subscription_manager/cli_command/register.py:107
 msgid "set a release version"
-msgstr ""
+msgstr "nastavit verzi vydání"
 
 #: src/subscription_manager/cli_command/register.py:112
 msgid "Deprecated, see --auto-attach"
@@ -2617,11 +2739,13 @@ msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
 msgstr ""
+"zahrnout výslovný pokus o zrušení registraci před registrací nové identity "
+"systému"
 
 #: src/subscription_manager/cli_command/register.py:133
 msgid ""
 "activation key to use for registration (can be specified more than once)"
-msgstr ""
+msgstr "aktivační klíč který použít pro registraci (je možné uvést vícekrát)"
 
 #: src/subscription_manager/cli_command/register.py:138
 msgid ""
@@ -2630,11 +2754,11 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/register.py:144
 msgid "This system is already registered. Use --force to override"
-msgstr ""
+msgstr "Tento systém už je zaregistrován. Pokud chcete přebít, použijte --force"
 
 #: src/subscription_manager/cli_command/register.py:154
 msgid "Error: Activation keys do not allow environments to be specified."
-msgstr ""
+msgstr "Chyba: Aktivační klíče neumožňují zadávání prostředí."
 
 #: src/subscription_manager/cli_command/register.py:156
 msgid "Error: Activation keys cannot be used with --auto-attach."
@@ -2646,31 +2770,32 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/register.py:163
 msgid "Error: Must provide --org with activation keys."
-msgstr ""
+msgstr "Chyba: Je třeba zadat --org s aktivačními klíči."
 
 #: src/subscription_manager/cli_command/register.py:177
 msgid "Error: The --type option has been deprecated and may not be used."
 msgstr ""
+"Chyba: Volba --type byla označená za zastaralou a neměla by být používána."
 
 #: src/subscription_manager/cli_command/register.py:180
 #: src/subscription_manager/cli_command/register.py:495
 msgid "The entitlement server does not allow multiple environments"
-msgstr ""
+msgstr "Server pro správu nároků neumožňuje vícero prostředí"
 
 #: src/subscription_manager/cli_command/register.py:224
 msgid "Uploading DNF profile"
-msgstr ""
+msgstr "Nahrávání DNF profilu"
 
 #: src/subscription_manager/cli_command/register.py:294
 #: src/subscription_manager/cli_command/unregister.py:41
 #, python-brace-format
 msgid "Unregistering from: {hostname}:{port}{prefix}"
-msgstr ""
+msgstr "Odregistrovávání od: {hostname}:{port}{prefix}"
 
 #: src/subscription_manager/cli_command/register.py:305
 #, python-brace-format
 msgid "The system with UUID {old_uuid} has been unregistered"
-msgstr ""
+msgstr "Registrace systému s UUID {old_uuid} byla zrušena"
 
 #: src/subscription_manager/cli_command/register.py:329
 #, python-brace-format
@@ -2699,49 +2824,49 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/register.py:442
 msgid "Error: --environments is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "Chyba: v neinteraktivním režimu je --environments vyžadovaný parametr."
 
 #: src/subscription_manager/cli_command/register.py:446
 msgid "Environments: "
-msgstr ""
+msgstr "Prostředí: "
 
 #: src/subscription_manager/cli_command/register.py:448
 msgid "Environment: "
-msgstr ""
+msgstr "Prostředí: "
 
 #: src/subscription_manager/cli_command/register.py:489
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
-msgstr ""
+msgstr "Rada: Organizace „{key}“ obsahuje následující prostředí: {list}"
 
 #: src/subscription_manager/cli_command/register.py:505
 #, python-brace-format
 msgid "{name} cannot register with any organizations."
-msgstr ""
+msgstr "{name} nemůže registrovat u žádné organizace."
 
 #: src/subscription_manager/cli_command/release.py:33
 msgid "Configure which operating system release to use"
-msgstr ""
+msgstr "Nastavte které vydání operačního systému použít"
 
 #: src/subscription_manager/cli_command/release.py:40
 msgid "shows current release setting; default command"
-msgstr ""
+msgstr "zobrazit stávající nastavení vydání; výchozí příkaz"
 
 #: src/subscription_manager/cli_command/release.py:46
 msgid "list available releases"
-msgstr ""
+msgstr "vypsat vydání k dispozici"
 
 #: src/subscription_manager/cli_command/release.py:53
 msgid "set the release for this system"
-msgstr ""
+msgstr "nastavit vydání pro tento systém"
 
 #: src/subscription_manager/cli_command/release.py:59
 msgid "unset the release for this system"
-msgstr ""
+msgstr "zrušit nastavení vydání pro tento systém"
 
 #: src/subscription_manager/cli_command/release.py:63
 msgid "Error: The 'release' command is not supported by the server."
-msgstr ""
+msgstr "Chyba: Příkaz „release“ není serverem podporován."
 
 #: src/subscription_manager/cli_command/release.py:72
 #, python-brace-format
@@ -2750,17 +2875,19 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/release.py:74
 msgid "Release not set"
-msgstr ""
+msgstr "Vydání nenastaveno"
 
 #: src/subscription_manager/cli_command/release.py:93
 msgid "Release preference has been unset"
-msgstr ""
+msgstr "Nastavení preference vydání bylo zrušeno"
 
 #: src/subscription_manager/cli_command/release.py:108
 #, python-brace-format
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
 msgstr ""
+"„{release}“ neodpovídá žádnému vydání.  Ohledně úplného výpisu se podívejte "
+"na výstup z „release --list“."
 
 #: src/subscription_manager/cli_command/release.py:113
 #, python-brace-format
@@ -2769,11 +2896,11 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/release.py:122
 msgid "No release versions available, please check subscriptions."
-msgstr ""
+msgstr "Nejsou k dispozici žádné verze vydání – zkontrolujte předplatná."
 
 #: src/subscription_manager/cli_command/release.py:125
 msgid "Available Releases"
-msgstr ""
+msgstr "Vydání k dispozici"
 
 #: src/subscription_manager/cli_command/remove.py:41
 msgid "certificate serial number to remove (can be specified more than once)"
@@ -2850,7 +2977,7 @@ msgstr[1] ""
 #: src/subscription_manager/cli_command/remove.py:214
 #, python-brace-format
 msgid "Unable to perform remove due to the following exception: {e}"
-msgstr ""
+msgstr "Nebylo možné provést znovunačtení kvůli následující výjimce: {e}"
 
 #: src/subscription_manager/cli_command/remove.py:190
 #, python-brace-format
@@ -2866,31 +2993,35 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/repos.py:60
 msgid "List the repositories which this system is entitled to use"
-msgstr ""
+msgstr "Vypsat repozitáře, které má tento systém nárok využívat"
 
 #: src/subscription_manager/cli_command/repos.py:67
 msgid "list all known repositories for this system"
-msgstr ""
+msgstr "vypsat všechny repozitáře, známé tomuto systému"
 
 #: src/subscription_manager/cli_command/repos.py:73
 msgid "list known, enabled repositories for this system"
-msgstr ""
+msgstr "vypsat tomuto systému známé, povolené repozitáře"
 
 #: src/subscription_manager/cli_command/repos.py:79
 msgid "list known, disabled repositories for this system"
-msgstr ""
+msgstr "vypsat tomuto systému známé, vypnuté repozitáře"
 
 #: src/subscription_manager/cli_command/repos.py:87
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
+"repozitář, který zapnout (je možné uvést vícekrát). Zástupné znaky (* a ?) "
+"jsou podporovány."
 
 #: src/subscription_manager/cli_command/repos.py:96
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
+"repozitář, který vypnout (je možné uvést vícekrát). Zástupné znaky (* a ?) "
+"jsou podporovány."
 
 #: src/subscription_manager/cli_command/repos.py:165
 #, python-brace-format
@@ -2905,6 +3036,8 @@ msgstr "Nejsou k dispozici žádné repozitáře, odpovídající zadaným krit�
 #: src/subscription_manager/cli_command/repos.py:201
 msgid "This system has no repositories available through subscriptions."
 msgstr ""
+"Tento systém nemá k dispozici žádné repozitáře, dostupné prostřednictvím "
+"předplatných."
 
 #: src/subscription_manager/cli_command/repos.py:210
 #, python-brace-format
@@ -2912,6 +3045,8 @@ msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
 msgstr ""
+"Chyba: „{repoid}“ neodpovídá platnému identifikátoru repozitáře. Platné "
+"repozitáře si zobrazíte příkazem „subscription-manager repos --list“."
 
 #: src/subscription_manager/cli_command/repos.py:265
 #, python-brace-format
@@ -2925,11 +3060,11 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/role.py:24
 msgid "Show or modify the system purpose role setting"
-msgstr ""
+msgstr "Zobrazit nebo změnit nastavení role účelu systému"
 
 #: src/subscription_manager/cli_command/service_level.py:42
 msgid "Show or modify the system purpose service-level setting"
-msgstr ""
+msgstr "Zobrazit nebo změnit nastavení úrovně služby účelu systému"
 
 #: src/subscription_manager/cli_command/service_level.py:70
 msgid "Error: --org is only supported with the --list or --set option"
@@ -2940,25 +3075,29 @@ msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
 msgstr ""
+"Chyba: je třeba zaregistrovat nebo vypsat seznam úrovní služby zadáním --"
+"username a --password"
 
 #: src/subscription_manager/cli_command/service_level.py:99
 msgid ""
 "Error: --username, --password, --token, --org and --serverurl can be used "
 "only on unregistered systems"
 msgstr ""
+"Chyba: --username, --password, --org a--serverurl je možné použít pouze na "
+"nezaregistrovaných systémech"
 
 #: src/subscription_manager/cli_command/service_level.py:126
 msgid "Error: Unable to retrieve service levels."
-msgstr ""
+msgstr "Chyba: Nebylo možné získat úrovně služeb."
 
 #: src/subscription_manager/cli_command/service_level.py:157
 #, python-brace-format
 msgid "Service level set to: \"{val}\"."
-msgstr ""
+msgstr "Úroveň služby nastavena na: „{val}“."
 
 #: src/subscription_manager/cli_command/service_level.py:165
 msgid "Service level preference has been unset"
-msgstr ""
+msgstr "Nastavení preference úrovně služeb bylo zrušeno"
 
 #: src/subscription_manager/cli_command/service_level.py:172
 #: src/subscription_manager/cli_command/service_level.py:188
@@ -2978,7 +3117,7 @@ msgstr "Preference úrovně služeb nenastavena"
 
 #: src/subscription_manager/cli_command/service_level.py:206
 msgid "Available Service Levels"
-msgstr ""
+msgstr "Úrovně služby k dispozici"
 
 #: src/subscription_manager/cli_command/status.py:40
 msgid "Show status information for this system's subscriptions and products"
@@ -2999,10 +3138,12 @@ msgid ""
 "Content Access Mode is set to Simple Content Access. This host has access to "
 "content, regardless of subscription status.\n"
 msgstr ""
+"Přístupový režim k obsahu je nastavený na jednoduchý přístup k obsahu. Tento "
+"hostitel má přístup k obsahu, nezávisle na stavu předplatného.\n"
 
 #: src/subscription_manager/cli_command/status.py:123
 msgid "Registered"
-msgstr ""
+msgstr "Zaregistrováno."
 
 #: src/subscription_manager/cli_command/status.py:125
 #, python-brace-format
@@ -3018,11 +3159,11 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/status.py:178
 msgid "Overall Status: Not registered\n"
-msgstr ""
+msgstr "Celkový stav: nezaregistrováno\n"
 
 #: src/subscription_manager/cli_command/syspurpose.py:53
 msgid "Convenient module for managing all system purpose settings"
-msgstr ""
+msgstr "Pohodlný modul pro správu veškerých nastavení účelu systému"
 
 #: src/subscription_manager/cli_command/syspurpose.py:59
 msgid "show current system purpose"
@@ -3031,16 +3172,16 @@ msgstr "zobrazit stávající účel systému"
 #: src/subscription_manager/cli_command/syspurpose.py:76
 #, python-brace-format
 msgid "{prog} {name}"
-msgstr ""
+msgstr "{prog} {name}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:78
 msgid "Syspurpose submodules"
-msgstr ""
+msgstr "Dílčí moduly Syspurpose"
 
 #: src/subscription_manager/cli_command/syspurpose.py:92
 #, python-format, python-brace-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr ""
+msgstr "%(prog)s {name} [DÍLČÍ_MODUL] [VOLBY]"
 
 #: src/subscription_manager/cli_command/unregister.py:38
 #: src/subscription_manager/utils.py:291
@@ -3049,35 +3190,35 @@ msgstr "Tento systém v tuto chvíli není zaregistrován."
 
 #: src/subscription_manager/cli_command/unregister.py:71
 msgid "System has been unregistered."
-msgstr ""
+msgstr "Systém byl odregistrován."
 
 #: src/subscription_manager/cli_command/usage.py:24
 msgid "Show or modify the system purpose usage setting"
-msgstr ""
+msgstr "Zobrazit nebo změnit nastavení použití účelu systému"
 
 #: src/subscription_manager/cli_command/user_pass.py:40
 msgid "username to use when authorizing against the server"
-msgstr ""
+msgstr "uživatelské jméno které použít při ověřování se vůči serveru"
 
 #: src/subscription_manager/cli_command/user_pass.py:45
 msgid "password to use when authorizing against the server"
-msgstr ""
+msgstr "heslo které použít při ověřování se vůči serveru"
 
 #: src/subscription_manager/cli_command/user_pass.py:50
 msgid "token to use when authorizing against the server"
-msgstr ""
+msgstr "uživatelské jméno které použít při ověřování se vůči serveru"
 
 #: src/subscription_manager/cli_command/user_pass.py:64
 msgid "Error: --username is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "Chyba: v neinteraktivním režimu je --username vyžadovaný parametr."
 
 #: src/subscription_manager/cli_command/user_pass.py:69
 msgid "Error: --password is a required parameter in non-interactive mode."
-msgstr ""
+msgstr "Chyba: v neinteraktivním režimu je --password vyžadovaný parametr."
 
 #: src/subscription_manager/cli_command/user_pass.py:73
 msgid "Username: "
-msgstr ""
+msgstr "Uživatelské jméno: "
 
 #: src/subscription_manager/cli_command/user_pass.py:76
 msgid "Password: "
@@ -3085,7 +3226,7 @@ msgstr "Heslo: "
 
 #: src/subscription_manager/cli_command/version.py:27
 msgid "Print version information"
-msgstr ""
+msgstr "Vypsat informace o verzi"
 
 #: src/subscription_manager/cli_command/version.py:35
 #, python-brace-format
@@ -3107,17 +3248,17 @@ msgstr[1] ""
 #: src/subscription_manager/entcertlib.py:453
 #, python-format
 msgid "Total updates: %d"
-msgstr ""
+msgstr "Celkem aktualizací: %d"
 
 #: src/subscription_manager/entcertlib.py:454
 #, python-format
 msgid "Found (local) serial# %s"
-msgstr ""
+msgstr "Nalezené (lokální) sériové číslo %s"
 
 #: src/subscription_manager/entcertlib.py:455
 #, python-format
 msgid "Expected (UEP) serial# %s"
-msgstr ""
+msgstr "Očekávané (UEP) sériové číslo %s"
 
 #: src/subscription_manager/entcertlib.py:456
 #: src/subscription_manager/repolib.py:682
@@ -3126,7 +3267,7 @@ msgstr "Přidáno (nové)"
 
 #: src/subscription_manager/entcertlib.py:457
 msgid "Deleted (rogue):"
-msgstr ""
+msgstr "Smazáno (nepoctivé):"
 
 #: src/subscription_manager/exceptions.py:32
 msgid ""
@@ -3139,12 +3280,12 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
 msgid "Network error: {message} (error code {code})"
-msgstr ""
+msgstr "Chyba sítě: {message} (kód chyby {code})"
 
 #: src/subscription_manager/exceptions.py:35
 #, python-brace-format
 msgid "Connection error: {message} (error code {code})"
-msgstr ""
+msgstr "Chyba spojení: {message} (kód chyby {code})"
 
 #: src/subscription_manager/exceptions.py:36
 #, python-brace-format
@@ -3152,22 +3293,26 @@ msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
 msgstr ""
+"Neznámá odpověď serveru (kód HTTP chyby {code}: {title}):\n"
+"{content}"
 
 #: src/subscription_manager/exceptions.py:37
 #, python-brace-format
 msgid "Unknown server reply (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "Neznámá odpověď serveru (kód HTTP chyby {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:39
 #, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
 msgstr ""
+"Chyba proxy: nebylo možné se připojit k {hostname}:{message} (kód chyby "
+"{code})"
 
 #: src/subscription_manager/exceptions.py:41
 #, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}: {message}"
-msgstr ""
+msgstr "Chyba proxy: nebylo možné se připojit k {hostname}: {message}"
 
 #: src/subscription_manager/exceptions.py:42
 #, python-brace-format
@@ -3176,15 +3321,15 @@ msgstr "Chyba proxy: nebylo možné se připojit k {hostname}"
 
 #: src/subscription_manager/exceptions.py:43
 msgid "Unauthorized: Invalid credentials for request."
-msgstr ""
+msgstr "Nepověřeno: neplatné přihlašovací údaje pro požadavek."
 
 #: src/subscription_manager/exceptions.py:44
 msgid "Token authentication not supported by the entitlement server"
-msgstr ""
+msgstr "Ověřování se tokeny není serverem pro správu nároků podporováno"
 
 #: src/subscription_manager/exceptions.py:45
 msgid "Forbidden: Invalid credentials for request."
-msgstr ""
+msgstr "Odepřeno: neplatné přihlašovací údaje pro požadavek."
 
 #: src/subscription_manager/exceptions.py:47
 msgid ""
@@ -3197,51 +3342,54 @@ msgstr ""
 #: src/subscription_manager/exceptions.py:50
 #, python-brace-format
 msgid "Bad CA certificate: {file}: {reason}"
-msgstr ""
+msgstr "Nesprávný certifikát cert. autority: {file}: {reason}"
 
 #: src/subscription_manager/exceptions.py:51
 msgid "Your identity certificate has expired"
-msgstr ""
+msgstr "Platnost vašeho certifikátu identity skončila"
 
 #: src/subscription_manager/exceptions.py:52
 #, python-format
 msgid "Unable to verify server's identity: %s"
-msgstr ""
+msgstr "Nebylo možné ověřit identitu serveru: %s"
 
 #: src/subscription_manager/exceptions.py:53
 msgid "Server URL can not be empty"
-msgstr ""
+msgstr "Je třeba vyplnit URL serveru"
 
 #: src/subscription_manager/exceptions.py:54
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
 msgstr ""
+"Do URL serveru bylo zadáno pouze schéma. Mělo by obsahovat ještě název "
+"stroje a/nebo port a popis umístění"
 
 #: src/subscription_manager/exceptions.py:55
 msgid "Server URL can not be None"
-msgstr "URL serveru nemůže být nic"
+msgstr "URL serveru nemůže být Žádné"
 
 #: src/subscription_manager/exceptions.py:56
 msgid "Server URL port should be numeric"
-msgstr ""
+msgstr "Port URL adresy serveru by měl být číselný"
 
 #: src/subscription_manager/exceptions.py:57
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr ""
+msgstr "URL serveru nemá platné schéma. Podporovány jsou http:// a https://"
 
 #: src/subscription_manager/exceptions.py:58
 msgid "The server rate limit has been exceeded, please try again later."
 msgstr ""
+"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
 
 #: src/subscription_manager/exceptions.py:59
 #, python-brace-format
 msgid "Bad product certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "Nesprávný certifikát produktu: {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:60
 #, python-brace-format
 msgid "Bad certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "Nesprávný certifikát: {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:61
 #, python-brace-format
@@ -3249,6 +3397,8 @@ msgid ""
 "Bad certificate: [{library}] {message}\n"
 "{data}"
 msgstr ""
+"Nesprávný certifikát: [{library}] {message}\n"
+"{data}"
 
 #: src/subscription_manager/exceptions.py:62
 #, python-brace-format
@@ -3258,14 +3408,14 @@ msgstr "Nesprávný certifikát: [{library}] {message}"
 #: src/subscription_manager/exceptions.py:63
 #, python-brace-format
 msgid "Unable to reach the server at {host}: {message}"
-msgstr ""
+msgstr "Nebylo možné dosáhnout server na {host}: {message}"
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
 #: src/subscription_manager/exceptions.py:67
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "{message} (kód HTTP chyby {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:168
 #, python-brace-format
@@ -3276,21 +3426,25 @@ msgid_plural ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} seconds)"
 msgstr[0] ""
+"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
 msgstr[1] ""
+"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
+msgstr[2] ""
+"Překročen limit počtu pokusů za časový úsek pro server. Zkuste to později."
 
 #: src/subscription_manager/i18n_argparse.py:50
 #, python-brace-format
 msgid "{prog}: error: {msg}"
-msgstr ""
+msgstr "{prog}: chyba: {msg}"
 
 #: src/subscription_manager/plugin/container/__init__.py:228
 #: src/subscription_manager/plugin/ostree/action_invoker.py:142
 msgid "Added:"
-msgstr ""
+msgstr "Přidáno:"
 
 #: src/subscription_manager/plugin/container/__init__.py:230
 msgid "Removed:"
-msgstr ""
+msgstr "Odebráno:"
 
 #: src/subscription_manager/plugin/ostree/action_invoker.py:140
 msgid "Updates:"
@@ -3306,11 +3460,11 @@ msgstr "Produkt "
 
 #: src/subscription_manager/reasons.py:104
 msgid "Subscription "
-msgstr ""
+msgstr "Předplatné "
 
 #: src/subscription_manager/reasons.py:106
 msgid "Stack "
-msgstr ""
+msgstr "Zásobník "
 
 #: src/subscription_manager/release.py:60
 #, python-format
@@ -3318,6 +3472,8 @@ msgid ""
 "Error: More than one release product certificate installed. Certificate "
 "paths: %s"
 msgstr ""
+"Chyba: Nainstalován více než jeden certifikát produktu vydání. Popisy "
+"umístění certifikátů: %s"
 
 #: src/subscription_manager/repolib.py:94
 #, python-format
@@ -3326,10 +3482,13 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
+"Zásuvné moduly yum/dnf: %s bylo automaticky povoleno kvůli Správě Red Hat "
+"předplatných. Pokud toto není chtěno, zablokujte toto chování pomocí „"
+"subscription-manager config --rhsm.auto_enable_yum_plugins=0\"."
 
 #: src/subscription_manager/repolib.py:678
 msgid "Repo updates"
-msgstr ""
+msgstr "Aktualizace repozitářů"
 
 #: src/subscription_manager/repolib.py:679
 #, python-format
@@ -3338,36 +3497,38 @@ msgstr "Celkem aktualizací repozitáře: %d"
 
 #: src/subscription_manager/repolib.py:680
 msgid "Updated"
-msgstr ""
+msgstr "Aktualizováno"
 
 #: src/subscription_manager/repolib.py:684
 msgid "Deleted"
-msgstr ""
+msgstr "Smazáno"
 
 #: src/subscription_manager/scripts/package_profile_upload.py:29
 msgid "Upload a package profile"
-msgstr ""
+msgstr "Nahrát profil balíčků"
 
 #: src/subscription_manager/scripts/package_profile_upload.py:53
 #: src/subscription_manager/scripts/rct.py:45
 #: src/subscription_manager/scripts/rhsm_debug.py:62
 msgid "User interrupted process."
-msgstr ""
+msgstr "Uživatel přerušil proces."
 
 #: src/subscription_manager/scripts/package_profile_upload.py:56
 #, python-format
 msgid "Error uploading package profile: %s\n"
-msgstr ""
+msgstr "Chyba při nahrávání profilu balíčiků: %s\n"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:343
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
 msgstr ""
+"Tento systém už je zaregistrován – požadavky na automatickou registraci jsou "
+"ignorovány."
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:346
 msgid "Registering the system"
-msgstr ""
+msgstr "Zaregistrovat systém"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:357
 msgid "Updating entitlement certificates & repositories."
@@ -3375,7 +3536,7 @@ msgstr "Aktualizují se certifikáty a repozitáře nároku."
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:430
 msgid "Unable to update entitlement certificates and repositories"
-msgstr ""
+msgstr "Nebylo možné zaktualizovat certifikáty a repozitáře nároku"
 
 #: src/subscription_manager/utils.py:391
 msgid "and"
@@ -3394,4 +3555,4 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
-msgstr ""
+msgstr "Varování: zadaný klíč „{key}“ se nenachází na seznamu platných klíčů:"
