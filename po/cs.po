@@ -11,8 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
 "PO-Revision-Date: 2026-04-27 17:59+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/cs/>\n"
 "Language: cs\n"
@@ -938,7 +937,7 @@ msgstr "Zip archiv s manifestem není platný."
 #: src/rct/manifest_commands.py:85
 #, python-format
 msgid "Unable to find file \"%s\" in manifest."
-msgstr ""
+msgstr "V manifestu se nepodařilo najít soubor „%s“."
 
 #: src/rct/manifest_commands.py:109
 msgid "Manifest zip attempted to extract outside of the base directory."
@@ -1335,9 +1334,8 @@ msgid ""
 "To use the no-archive option, the destination directory '%s' must exist on "
 "the same file system as the data assembly directory '%s'."
 msgstr ""
-"Pokud chcete použít volbu no-archive je třeba, aby cílová složka „"
-"{destination}“ existovala na stejném souborovém systému jako složka pro "
-"skládání dat „{assembly}“."
+"Pokud chcete použít volbu no-archive je třeba, aby cílová složka %s "
+"existovala na stejném souborovém systému jako složka pro skládání dat %s."
 
 #: src/rhsm_debug/debug_commands.py:191 src/rhsm_debug/debug_commands.py:205
 #, python-format
@@ -1347,7 +1345,7 @@ msgstr "Zapsáno: %s"
 #: src/rhsm_debug/debug_commands.py:208
 #, python-format
 msgid "Unable to create zip file of system information: %s"
-msgstr "Nebylo možné vytvořit zip soubor s informacemi o systému: {error}"
+msgstr "Nebylo možné vytvořit zip soubor s informacemi o systému: %s"
 
 #: src/rhsmlib/dbus/objects/register.py:119
 #, python-format
@@ -1367,6 +1365,8 @@ msgid ""
 "Warning: A {conflict_msg} was recently set for this system by the "
 "entitlement server administrator."
 msgstr ""
+"Varování: Správce serveru oprávnění nedávno pro tento systém nastavil chybu "
+"{conflict_msg}."
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:76
 #, python-brace-format
@@ -1374,6 +1374,8 @@ msgid ""
 "Warning: A {conflict_msg} were recently set for this system by the "
 "entitlement server administrator."
 msgstr ""
+"Varování: Správce serveru oprávnění nedávno pro tento systém nastavil chybu "
+"{conflict_msg}."
 
 #: src/rhsmlib/dbus/service_wrapper.py:45
 #, python-brace-format
@@ -1682,8 +1684,8 @@ msgid ""
 "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
 "cache with server."
 msgstr ""
-"consumer_uuid={consumer_uuid} není platné consumer_uuid. Nebude se pokoušeno "
-"o synchronizaci mezipaměti {class_name} se serverem."
+"consumer_uuid=%s není platné consumer_uuid. Nebude se pokoušeno o "
+"synchronizaci mezipaměti %s se serverem."
 
 #: src/subscription_manager/cert_sorter.py:285
 msgid "Current"
@@ -1865,6 +1867,8 @@ msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "%s seconds)"
 msgstr ""
+"Limit rychlosti serveru byl překročen, zkuste to prosím znovu později. "
+"(Platnost vyprší za %s sekund)"
 
 #: src/subscription_manager/exceptions.py:56
 #, python-brace-format
@@ -1930,7 +1934,7 @@ msgstr ""
 #: src/subscription_manager/gui/about.py:78
 #, python-format
 msgid "<b>subscription management service version:</b> %s"
-msgstr ""
+msgstr "<b>verze služby správy předplatného:</b> %s"
 
 #: src/subscription_manager/gui/about.py:105
 #, python-format
@@ -1998,7 +2002,7 @@ msgstr ""
 
 #: src/subscription_manager/gui/allsubs.py:398
 msgid "Quantity must be a positive number."
-msgstr ""
+msgstr "Množství musí být kladné číslo."
 
 #: src/subscription_manager/gui/allsubs.py:405
 msgid "Attaching"
@@ -2466,7 +2470,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/installed.glade:246
 #: src/subscription_manager/gui/data/ui/installed.ui:252
 msgid "<b>Subscriptions:</b>"
-msgstr ""
+msgstr "<b>Předplatné:</b>"
 
 #: src/subscription_manager/gui/data/glade/installed.glade:269
 #: src/subscription_manager/gui/data/ui/installed.ui:274
@@ -3921,7 +3925,7 @@ msgstr "ID fondu:"
 #: src/subscription_manager/managercli.py:174
 #: src/subscription_manager/managercli.py:194
 msgid "Provides Management:"
-msgstr ""
+msgstr "Zajišťuje správu:"
 
 #: src/subscription_manager/managercli.py:123
 msgid "Available:"
@@ -3947,7 +3951,7 @@ msgstr "Role:"
 #: src/subscription_manager/managercli.py:178
 #: src/subscription_manager/managercli.py:199
 msgid "Service Level:"
-msgstr ""
+msgstr "Servisní úroveň:"
 
 #: src/subscription_manager/managercli.py:128
 #: src/subscription_manager/managercli.py:200
@@ -3957,13 +3961,13 @@ msgstr "Použití:"
 #: src/subscription_manager/managercli.py:129
 #: src/subscription_manager/managercli.py:201
 msgid "Add-ons:"
-msgstr "Doplňky"
+msgstr "Doplňky:"
 
 #: src/subscription_manager/managercli.py:130
 #: src/subscription_manager/managercli.py:180
 #: src/subscription_manager/managercli.py:203
 msgid "Subscription Type:"
-msgstr "Předplatné"
+msgstr "Typ předplatného:"
 
 #: src/subscription_manager/managercli.py:133
 #: src/subscription_manager/managercli.py:206
@@ -4007,7 +4011,7 @@ msgstr "Účet:"
 #: src/subscription_manager/managercli.py:172
 #: src/subscription_manager/managercli.py:192
 msgid "Serial:"
-msgstr "Sériové číslo"
+msgstr "Sériové číslo:"
 
 #: src/subscription_manager/managercli.py:175
 #: src/subscription_manager/managercli.py:195
@@ -4134,7 +4138,7 @@ msgid ""
 "Consumer profile \"%s\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr ""
-"Profil spotřebitele „{uuid}“ byl ze serveru vymazán. Lokální profil je možné "
+"Profil spotřebitele “%s“ byl ze serveru vymazán. Lokální profil je možné "
 "odebrat pomocí příkazu clean nebo unregister."
 
 #: src/subscription_manager/managercli.py:594
@@ -4209,14 +4213,11 @@ msgid ""
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
 msgstr[0] ""
-"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
-"atribut {attr}:"
+"Varování: Zadaná hodnota {vals} není zahrnuta v seznamu platných hodnot."
 msgstr[1] ""
-"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
-"atribut {attr}:"
+"Varování: Zadané hodnoty {vals} nejsou zahrnuty v seznamu platných hodnot."
 msgstr[2] ""
-"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
-"atribut {attr}:"
+"Varování: Zadané hodnoty {vals} nejsou zahrnuty v seznamu platných hodnot."
 
 #: src/subscription_manager/managercli.py:784
 #, python-brace-format
@@ -4476,7 +4477,7 @@ msgstr "Organizace"
 #: src/subscription_manager/managercli.py:2170
 #, python-format
 msgid "%s cannot register with any organizations."
-msgstr "{name} nemůže registrovat u žádné organizace."
+msgstr "%s nemůže registrovat u žádné organizace."
 
 #: src/subscription_manager/managercli.py:1415
 msgid "Error: Unable to retrieve org list from server"
@@ -4622,7 +4623,7 @@ msgstr "Chyba: Příkaz service-level není serverem podporován."
 #: src/subscription_manager/managercli.py:1746
 #, python-format
 msgid "Current service level: %s"
-msgstr "Stávající úroveň služeb: {level}"
+msgstr "Stávající úroveň služeb: %s"
 
 #: src/subscription_manager/managercli.py:1748
 msgid "Service level preference not set"
@@ -4734,7 +4735,7 @@ msgstr ""
 #: src/subscription_manager/managercli.py:1985
 #, python-format
 msgid "The system with UUID %s has been unregistered"
-msgstr ""
+msgstr "Systém s UUID %s byl odregistrován"
 
 #: src/subscription_manager/managercli.py:2008
 #, python-format
@@ -4744,23 +4745,23 @@ msgstr ""
 #: src/subscription_manager/managercli.py:2045
 #, python-format
 msgid "Error during registration: %s"
-msgstr "Chyba při registraci: {e}"
+msgstr "Chyba při registraci: %s"
 
 #: src/subscription_manager/managercli.py:2048
 #, python-format
 msgid "The system has been registered with ID: %s"
-msgstr "Systém byl zaregistrován s identifikátorem: {id}"
+msgstr "Systém byl zaregistrován s ID: %s"
 
 #: src/subscription_manager/managercli.py:2049
 #, python-format
 msgid "The registered system name is: %s"
-msgstr "Zaregistrovaný název systému je: {name}"
+msgstr "Zaregistrovaný název systému je: %s"
 
 #: src/subscription_manager/managercli.py:2051
 #: src/subscription_manager/managercli.py:2584
 #, python-format
 msgid "Service level set to: %s"
-msgstr "Úroveň služby nastavena na: „{val}“."
+msgstr "Úroveň služby nastavena na: %s"
 
 #: src/subscription_manager/managercli.py:2114
 msgid "Error: --environments is a required parameter in non-interactive mode."
@@ -4777,12 +4778,12 @@ msgstr "Prostředí: "
 #: src/subscription_manager/managercli.py:2156
 #, python-format
 msgid "Hint: Organization \"%s\" contains following environments: %s"
-msgstr "Rada: Organizace „{key}“ obsahuje následující prostředí: {list}"
+msgstr "Nápověda: Organizace ”%s” obsahuje následující prostředí: %s"
 
 #: src/subscription_manager/managercli.py:2181
 #, python-format
 msgid "Hint: User \"%s\" is member of following organizations: %s"
-msgstr "Rada: Uživatel „{name}“ je členem následujících organizací: {orgs}"
+msgstr "Nápověda: Uživatel ”%s” je členem následujících organizací: %s"
 
 #: src/subscription_manager/managercli.py:2235
 msgid "System has been unregistered."
@@ -4838,7 +4839,7 @@ msgstr "Chyba: Příkaz „release“ není serverem podporován."
 #: src/subscription_manager/managercli.py:2333
 #, python-format
 msgid "Release: %s"
-msgstr "Vydání"
+msgstr "Vydání: %s"
 
 #: src/subscription_manager/managercli.py:2335
 msgid "Release not set"
@@ -4852,8 +4853,8 @@ msgstr "Nastavení preference vydání bylo zrušeno"
 #, python-format
 msgid "No releases match '%s'.  Consult 'release --list' for a full listing."
 msgstr ""
-"„{release}“ neodpovídá žádnému vydání.  Ohledně úplného výpisu se podívejte "
-"na výstup z „release --list“."
+"Žádné verze neodpovídají '%s'.  Úplný seznam naleznete v příkazu 'release --"
+"list'."
 
 #: src/subscription_manager/managercli.py:2377
 #, python-format
@@ -5044,7 +5045,7 @@ msgstr[1] ""
 #: src/subscription_manager/managercli.py:2767
 #, python-format
 msgid "Unable to perform remove due to the following exception: %s"
-msgstr "Nebylo možné provést znovunačtení kvůli následující výjimce: {e}"
+msgstr "Nelze provést odstranění z důvodu následující výjimky: %s"
 
 #: src/subscription_manager/managercli.py:2752
 #, python-format
@@ -5124,12 +5125,12 @@ msgstr "Zobrazte si a nastavte pomocí „subscription-manager plugins“"
 #: src/subscription_manager/managercli.py:2906
 #, python-format
 msgid "list %s plugins"
-msgstr ""
+msgstr "seznam pluginů %s"
 
 #: src/subscription_manager/managercli.py:2908
 #, python-format
 msgid "list %s plugin slots"
-msgstr ""
+msgstr "seznam slotů pluginů %s"
 
 #: src/subscription_manager/managercli.py:2910
 #, python-format
