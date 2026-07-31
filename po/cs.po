@@ -10,8 +10,9 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2026-04-26 19:59+0000\n"
-"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
+"PO-Revision-Date: 2026-04-27 18:59+0000\n"
+"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
+"memory@weblate.org>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/cs/>\n"
 "Language: cs\n"
@@ -1490,7 +1491,14 @@ msgid ""
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
 msgstr[0] ""
+"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
+"atribut {attr}:"
 msgstr[1] ""
+"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
+"atribut {attr}:"
+msgstr[2] ""
+"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
+"atribut {attr}:"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:264
 #, python-brace-format
@@ -2229,13 +2237,13 @@ msgstr "Použití:"
 #: src/subscription_manager/cli_command/list.py:88
 #: src/subscription_manager/cli_command/list.py:160
 msgid "Add-ons:"
-msgstr ""
+msgstr "Doplňky"
 
 #: src/subscription_manager/cli_command/list.py:89
 #: src/subscription_manager/cli_command/list.py:139
 #: src/subscription_manager/cli_command/list.py:162
 msgid "Subscription Type:"
-msgstr ""
+msgstr "Předplatné"
 
 #: src/subscription_manager/cli_command/list.py:92
 #: src/subscription_manager/cli_command/list.py:165
@@ -2279,7 +2287,7 @@ msgstr "Účet:"
 #: src/subscription_manager/cli_command/list.py:131
 #: src/subscription_manager/cli_command/list.py:151
 msgid "Serial:"
-msgstr "Sério_vý:"
+msgstr "Sériové číslo"
 
 #: src/subscription_manager/cli_command/list.py:134
 #: src/subscription_manager/cli_command/list.py:154
