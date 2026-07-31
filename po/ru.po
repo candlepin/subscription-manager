@@ -4,13 +4,14 @@
 # John Sefler <jsefler@redhat.com>, 2019. #zanata, 2021.
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # Aleksey Fedorov <aleksejfedorov963@gmail.com>, 2024.
+# Andrei Stepanov <adem4ik@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2024-03-21 20:35+0000\n"
-"Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
+"PO-Revision-Date: 2026-07-31 00:19+0000\n"
+"Last-Translator: Andrei Stepanov <adem4ik@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ru/>\n"
 "Language: ru\n"
@@ -19,32 +20,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 2026.7.1\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
 msgid "%(heading)s:"
-msgstr ""
+msgstr "%(heading)s:"
 
 #: /usr/lib64/python3.12/argparse.py:299
-#, fuzzy
-#| msgid "Usage:  "
 msgid "usage: "
-msgstr "Использование:  "
+msgstr "Использование: "
 
 #: /usr/lib64/python3.12/argparse.py:722
 #, python-format
 msgid " (default: %(default)s)"
-msgstr ""
+msgstr " (по умолчанию: %(default)s)"
 
 #: /usr/lib64/python3.12/argparse.py:784
 #, python-format
 msgid "argument %(argument_name)s: %(message)s"
-msgstr ""
+msgstr "аргумент %(argument_name)s: %(message)s"
 
 #: /usr/lib64/python3.12/argparse.py:890
 msgid ".__call__() not defined"
-msgstr ""
+msgstr ".__call__() не определён"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1161
@@ -52,39 +51,38 @@ msgid "show program's version number and exit"
 msgstr "показать версию программы и выйти"
 
 #: /usr/lib64/python3.12/argparse.py:1223
-#, fuzzy, python-format
-#| msgid "Error validating server: %s"
+#, python-format
 msgid "conflicting subparser: %s"
-msgstr "Ошибка проверки сервера: %s"
+msgstr "конфликтующий подпарсер: %s"
 
 #: /usr/lib64/python3.12/argparse.py:1227
 #, python-format
 msgid "conflicting subparser alias: %s"
-msgstr ""
+msgstr "конфликтующий псевдоним подпарсера: %s"
 
 #: /usr/lib64/python3.12/argparse.py:1262
 #, python-format
 msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
-msgstr ""
+msgstr "неизвестный парсер %(parser_name)r (варианты: %(choices)s)"
 
 #: /usr/lib64/python3.12/argparse.py:1323
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr ""
+msgstr "аргумент \"-\" с режимом %r"
 
 #: /usr/lib64/python3.12/argparse.py:1332
 #, python-format
 msgid "can't open '%(filename)s': %(error)s"
-msgstr ""
+msgstr "не удаётся открыть '%(filename)s': %(error)s"
 
 #: /usr/lib64/python3.12/argparse.py:1541
 #, python-format
 msgid "cannot merge actions - two groups are named %r"
-msgstr ""
+msgstr "невозможно объединить действия — две группы имеют имя %r"
 
 #: /usr/lib64/python3.12/argparse.py:1583
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' является недопустимым аргументом для позиционных параметров"
 
 #: /usr/lib64/python3.12/argparse.py:1604
 #, python-format
@@ -92,40 +90,38 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"недопустимая строка параметра %(option)r: должна начинаться с символа %"
+"(prefix_chars)r"
 
 #: /usr/lib64/python3.12/argparse.py:1622
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= требуется для параметров типа %r"
 
 #: /usr/lib64/python3.12/argparse.py:1639
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "недопустимое значение conflict_resolution: %r"
 
 #: /usr/lib64/python3.12/argparse.py:1657
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "конфликтующая строка параметра: %s"
+msgstr[1] "конфликтующих строки параметра: %s"
+msgstr[2] "конфликтующих строк параметра: %s"
 
 #: /usr/lib64/python3.12/argparse.py:1731
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "взаимоисключающие аргументы должны быть необязательными"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1807
-#, fuzzy
-#| msgid "%s option requires an argument"
 msgid "positional arguments"
-msgstr "Параметр %s требует указания аргумента"
+msgstr "позиционные аргументы"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1808
-#, fuzzy
-#| msgid "Options"
 msgid "options"
 msgstr "Параметры"
 
@@ -136,103 +132,94 @@ msgstr "показать это сообщение и выйти"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:1854
-#, fuzzy
-#| msgid "cannot parse argument: %s"
 msgid "cannot have multiple subparser arguments"
-msgstr "ошибка разбора аргумента: %s"
+msgstr "нельзя использовать несколько подпарсеров"
 
 #: /usr/lib64/python3.12/argparse.py:1860
 msgid "subcommands"
-msgstr ""
+msgstr "Подкоманды"
 
 #: /usr/lib64/python3.12/argparse.py:1906
 #: /usr/lib64/python3.12/argparse.py:2459
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "unrecognized arguments: %s"
-msgstr "Неизвестные аргументы: %s"
+msgstr "неизвестные аргументы: %s"
 
 #: /usr/lib64/python3.12/argparse.py:2011
-#, fuzzy, python-format
-#| msgid "Unknown arguments: %s"
+#, python-format
 msgid "not allowed with argument %s"
-msgstr "Неизвестные аргументы: %s"
+msgstr "не разрешено с аргументом %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:2030
-#, fuzzy, python-format
-#| msgid "ambiguous option: %s (%s?)"
+#, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr "неоднозначный параметр: %s (%s?)"
+msgstr "неоднозначный параметр: %(option)s может соответствовать %(matches)s"
 
 #: /usr/lib64/python3.12/argparse.py:2062
 #: /usr/lib64/python3.12/argparse.py:2094
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "явный аргумент %r проигнорирован"
 
 #: /usr/lib64/python3.12/argparse.py:2230
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "требуются следующие аргументы: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:2245
-#, fuzzy, python-format
-#| msgid "Wrong number of arguments specified.\n"
+#, python-format
 msgid "one of the arguments %s is required"
-msgstr "Неверное число аргументов.\n"
+msgstr "требуется один из аргументов %s"
 
 #: /usr/lib64/python3.12/argparse.py:2289
 msgid "expected one argument"
-msgstr ""
+msgstr "требуется один аргумент"
 
 #: /usr/lib64/python3.12/argparse.py:2290
 msgid "expected at most one argument"
-msgstr ""
+msgstr "требуется не более одного аргумента"
 
 #: /usr/lib64/python3.12/argparse.py:2291
 msgid "expected at least one argument"
-msgstr ""
+msgstr "требуется как минимум один аргумент"
 
 #: /usr/lib64/python3.12/argparse.py:2295
 #, python-format
 msgid "expected %s argument"
 msgid_plural "expected %s arguments"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "требуется %s аргумент"
+msgstr[1] "требуется %s аргумента"
+msgstr[2] "требуется %s аргументов"
 
 #: /usr/lib64/python3.12/argparse.py:2405
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "неожиданная строка параметра: %s"
 
 #: /usr/lib64/python3.12/argparse.py:2541
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r не является вызываемым"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:2557
-#, fuzzy, python-format
-#| msgid "option %s: invalid %s value: %r"
+#, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr "параметр %s, недопустимое значение %s: %r"
+msgstr "недопустимое значение %(type)s: %(value)r"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:2572
-#, fuzzy, python-format
-#| msgid "option %s: invalid choice: %r (choose from %s)"
+#, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr "параметр %s, недопустимый выбор %r (выберите из %s)"
+msgstr "недопустимый выбор: %(value)r (выберите из %(choices)s)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: /usr/lib64/python3.12/argparse.py:2650
-#, fuzzy, python-format
-#| msgid "%s: error: %s"
+#, python-format
 msgid "%(prog)s: error: %(message)s\n"
-msgstr "%s: ошибка: %s"
+msgstr "%(prog)s: ошибка: %(message)s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:100
@@ -241,7 +228,7 @@ msgstr "Интервал проверки серт. (мин.)"
 
 #: src/daemons/rhsmcertd.c:103
 msgid "interval to run auto-registration (in minutes)"
-msgstr ""
+msgstr "интервал автоматической регистрации (в минутах)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:106
@@ -259,7 +246,7 @@ msgstr "не добавляйте смещение в первоначальны
 
 #: src/daemons/rhsmcertd.c:114
 msgid "try to perform auto-registration."
-msgstr ""
+msgstr "попытаться выполнить автоматическую регистрацию."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:567
@@ -319,45 +306,34 @@ msgstr ""
 "можете продлить просроченную.  "
 
 #: src/plugins/dnf/subscription_manager.py:57
-#, fuzzy
-#| msgid ""
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register."
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
 msgstr ""
-"Система не зарегистрирована в службе управления подписками Red Hat. "
-"Используйте subscription-manager для регистрации."
+"\n"
+"Эта система не зарегистрирована на сервере прав. Вы можете использовать "
+"subscription-manager для регистрации.\n"
 
 #: src/plugins/dnf/subscription_manager.py:63
-#, fuzzy
-#| msgid ""
-#| "This system is not registered to Red Hat Subscription Management. You can "
-#| "use subscription-manager to register."
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "\"rhc\" or \"subscription-manager\" to register.\n"
 msgstr ""
-"Система не зарегистрирована в службе управления подписками Red Hat. "
-"Используйте subscription-manager для регистрации."
+"\n"
+"Эта система не зарегистрирована на сервере прав. Вы можете использовать "
+"\"rhc\" или \"subscription-manager\" для регистрации.\n"
 
 #: src/plugins/dnf/subscription_manager.py:70
-#, fuzzy
-#| msgid ""
-#| "This system is registered to Red Hat Subscription Management, but is not "
-#| "receiving updates. You can use subscription-manager to assign "
-#| "subscriptions."
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
 msgstr ""
-"Система зарегистрирована в службе управления подписками Red Hat, но не "
-"получает обновления. Используйте subscription-manager для назначения "
-"подписок."
+"\n"
+"Эта система зарегистрирована на сервере прав, но не получает обновления. Вы "
+"можете использовать subscription-manager для назначения подписок.\n"
 
 #: src/plugins/dnf/subscription_manager.py:77
 #, python-brace-format
@@ -366,6 +342,9 @@ msgid ""
 "This system has release set to {release_version} and it receives updates "
 "only for this release.\n"
 msgstr ""
+"\n"
+"Для этой системы установлен выпуск {release_version}, и она получает "
+"обновления только для этого выпуска.\n"
 
 #: src/plugins/dnf/subscription_manager.py:112
 msgid "Not root, Subscription Management repositories not updated"
@@ -381,8 +360,14 @@ msgid_plural ""
 "subscription-manager plugin disabled %d system repositories with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgstr[0] ""
+"плагин subscription-manager отключил %d системный репозиторий в соответствии "
+"с конфигурацией в /etc/dnf/plugins/subscription-manager.conf"
 msgstr[1] ""
+"плагин subscription-manager отключил %d системных репозитория в соответствии "
+"с конфигурацией в /etc/dnf/plugins/subscription-manager.conf"
 msgstr[2] ""
+"плагин subscription-manager отключил %d системных репозиториев в "
+"соответствии с конфигурацией в /etc/dnf/plugins/subscription-manager.conf"
 
 #: src/plugins/dnf/subscription_manager.py:158
 msgid "Updating Subscription Management repositories."
@@ -393,40 +378,40 @@ msgid "Unable to read consumer identity"
 msgstr "Невозможно прочитать идентификатор клиента"
 
 #: src/plugins/dnf/subscription_manager.py:170
-#, fuzzy
-#| msgid "Subscription Manager is operating in container mode."
 msgid "subscription-manager is operating in container mode."
-msgstr "Менеджер подписок работает в режиме контейнера."
+msgstr "subscription-manager работает в режиме контейнера."
 
 #: src/plugins/dnf/upload_profile.py:37
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
 msgstr ""
+"Отправить объединённый профиль на сервер Satellite (список установленных "
+"RPM, включённых репозиториев и модулей)"
 
 #: src/plugins/dnf/upload_profile.py:49
 #: src/subscription_manager/scripts/package_profile_upload.py:30
 msgid "Force package profile upload"
-msgstr ""
+msgstr "Принудительная отправка профиля пакетов"
 
 #: src/plugins/dnf/upload_profile.py:66
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
+"Обновления не выполнялись. См. /var/log/rhsm/rhsm.log для получения "
+"дополнительной информации."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:33
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] CERT_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] CERT_FILE"
-msgstr "%%prog %s [ПАРАМЕТРЫ] СЕРТИФИКАТ"
+msgstr "%(prog)s {name} [ПАРАМЕТРЫ] СЕРТИФИКАТ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:41
-#, fuzzy, python-brace-format
-#| msgid "Unable to read certificate file '%s': %s"
+#, python-brace-format
 msgid "Unable to read certificate file '{certificate}': {exception}"
-msgstr "Ошибка чтения файла сертификата «%s»: %s"
+msgstr "Не удалось прочитать файл сертификата '{certificate}': {exception}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:49
@@ -461,35 +446,31 @@ msgstr "Вывод статистики сертификата"
 #: src/rct/cert_commands.py:99
 #, python-brace-format
 msgid "Type: {certificate_type}"
-msgstr ""
+msgstr "Тип: {certificate_type}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:100
-#, fuzzy, python-brace-format
-#| msgid "Certificate Version"
+#, python-brace-format
 msgid "Version: {certificate_version}"
-msgstr "Версия сертификата"
+msgstr "Версия: {certificate_version}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:101
-#, fuzzy, python-brace-format
-#| msgid "DER size: %db"
+#, python-brace-format
 msgid "DER size: {size}b"
-msgstr "Размер DER: %db"
+msgstr "Размер DER: {size} б"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:106
-#, fuzzy, python-brace-format
-#| msgid "Subject Key ID size: %db"
+#, python-brace-format
 msgid "Subject Key ID size: {len_subject_key_id}b"
-msgstr "Размер ID ключа: %db"
+msgstr "Размер ID ключа субъекта: {len_subject_key_id} б"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/cert_commands.py:113
-#, fuzzy, python-brace-format
-#| msgid "Content sets: %s"
+#, python-brace-format
 msgid "Content sets: {content_length}"
-msgstr "Наборы данных: %s"
+msgstr "Наборы содержимого: {content_length}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:62
@@ -498,10 +479,9 @@ msgstr "Неверный zip манифеста."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:83
-#, fuzzy, python-brace-format
-#| msgid "Unable to find file \"%s\" in manifest."
+#, python-brace-format
 msgid "Unable to find file \"{file_path}\" in manifest."
-msgstr "Манифест не содержит «%s»."
+msgstr "Не удалось найти файл \"{file_path}\" в манифесте."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:108
@@ -516,10 +496,9 @@ msgstr "Ошибка разбора символьной ссылки (возм�
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:138
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] MANIFEST_FILE"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] MANIFEST_FILE"
-msgstr "%%prog %s [ПАРАМЕТРЫ] МАНИФЕСТ"
+msgstr "%(prog)s {name} [ПАРАМЕТРЫ] МАНИФЕСТ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:143
@@ -656,7 +635,7 @@ msgstr "Порядок"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:253 src/rct/printing.py:70
 msgid "Account"
-msgstr "Учетная запись"
+msgstr "Учётная запись"
 
 #: src/rct/manifest_commands.py:255
 msgid "Virt Limit"
@@ -678,10 +657,9 @@ msgstr "Файл сертификата"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:273
-#, fuzzy, python-brace-format
-#| msgid "Unable to read certificate file '%s': %s"
+#, python-brace-format
 msgid "Unable to read certificate file '{certificate_file}': {exception}"
-msgstr "Ошибка чтения файла сертификата «%s»: %s"
+msgstr "Не удалось прочитать файл сертификата '{certificate_file}': {exception}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:277
@@ -729,10 +707,10 @@ msgstr "перезаписать существующие файлы"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:348
-#, fuzzy, python-brace-format
-#| msgid "File \"%s\" exists. Use -f to force overwriting the file."
+#, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
-msgstr "«%s» уже существует. Чтобы перезаписать, добавьте «-f»."
+msgstr ""
+"Файл \"{filename}\" существует. Используйте -f для принудительной перезаписи."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:354
@@ -741,10 +719,9 @@ msgstr "Не удалось записать манифест:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:368
-#, fuzzy, python-brace-format
-#| msgid "The manifest has been dumped to the %s directory"
+#, python-brace-format
 msgid "The manifest has been dumped to the {destination} directory"
-msgstr "Манифест сохранен в %s"
+msgstr "Манифест сохранён в каталог {destination}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/manifest_commands.py:374
@@ -793,7 +770,7 @@ msgstr "Число"
 
 #: src/rct/printing.py:72
 msgid "Roles"
-msgstr ""
+msgstr "Роли"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:74
@@ -936,7 +913,7 @@ msgstr "ID пула"
 
 #: src/rct/printing.py:224
 msgid "Authorized Content URLs:"
-msgstr ""
+msgstr "URL-адреса авторизованного содержимого:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rct/printing.py:244
@@ -962,202 +939,167 @@ msgstr "Неизвестный тип сертификата"
 #, python-brace-format
 msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
 msgstr ""
+"Недопустимый уровень журналирования: {lvl}, для этого запуска установлен "
+"INFO."
 
 #: src/rhsm/config.py:248
 msgid ""
 "Please use:  subscription-manager config --logging.default_log_level=<Log "
 "Level> to set the default_log_level to a valid value."
 msgstr ""
+"Используйте: subscription-manager config --"
+"logging.default_log_level=<уровень журнала> для установки default_log_level "
+"в допустимое значение."
 
 #: src/rhsm/config.py:254
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
-msgstr ""
+msgstr "Допустимые значения: {valid_str}"
 
 #: src/rhsm/connection.py:1444
 msgid "Fetching supported resources"
-msgstr ""
+msgstr "Получение поддерживаемых ресурсов"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1504
-#, fuzzy
-#| msgid "connectionStatusLabel"
 msgid "Checking connection status"
-msgstr "connectionStatusLabel"
+msgstr "Проверка состояния подключения"
 
 #: src/rhsm/connection.py:1528
 msgid "Fetching cloud token"
-msgstr ""
+msgstr "Получение облачного токена"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1607
-#, fuzzy
-#| msgid "Register System"
 msgid "Registering system"
-msgstr "Регистрация"
+msgstr "Регистрация системы"
 
 #: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
 msgid "Updating detected virtual machines running on given host"
-msgstr ""
+msgstr "Обновление обнаруженных виртуальных машин, работающих на данном хосте"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1672
-#, fuzzy
-#| msgid "Print version information"
 msgid "Updating hypervisor information"
-msgstr "Вывод версии"
+msgstr "Обновление информации о гипервизоре"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1744
-#, fuzzy
-#| msgid "Subscription Registration"
 msgid "Updating consumer information"
-msgstr "Регистрация подписки"
+msgstr "Обновление информации о потребителе"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1749 src/rhsm/connection.py:1753
-#, fuzzy
-#| msgid "Print manifest information"
 msgid "Fetching guest information"
-msgstr "Печать информации о манифесте"
+msgstr "Получение информации о госте"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1757
-#, fuzzy
-#| msgid "Removing"
 msgid "Removing guests"
-msgstr "Удаление"
+msgstr "Удаление гостей"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1787 src/rhsm/connection.py:1798
-#, fuzzy
-#| msgid "Print certificate information"
 msgid "Updating profile information"
-msgstr "Вывод информации о сертификате"
+msgstr "Обновление информации профиля"
 
 #: src/rhsm/connection.py:1806
 msgid "Fetching consumer keys"
-msgstr ""
+msgstr "Получение ключей потребителя"
 
 #: src/rhsm/connection.py:1815
 msgid "Checking compliance status"
-msgstr ""
+msgstr "Проверка статуса соответствия"
 
 #: src/rhsm/connection.py:1824
 msgid "Checking system purpose compliance status"
-msgstr ""
+msgstr "Проверка статуса соответствия назначения системы"
 
 #: src/rhsm/connection.py:1831
 msgid "Fetching available system purpose settings"
-msgstr ""
+msgstr "Получение доступных настроек назначения системы"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1838 src/rhsm/connection.py:1846
-#, fuzzy
-#| msgid "specify organization"
 msgid "Fetching organizations"
-msgstr "выберите организацию"
+msgstr "Получение организаций"
 
 #: src/rhsm/connection.py:1859
-#, fuzzy
-#| msgid "Unregistering"
 msgid "Unregistering system"
-msgstr "Отмена регистрации"
+msgstr "Отмена регистрации системы"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1883
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Fetching certificates"
-msgstr "Сертификат удостоверения"
+msgstr "Получение сертификатов"
 
 #: src/rhsm/connection.py:1892
 msgid "Fetching certificate serial numbers"
-msgstr ""
+msgstr "Получение серийных номеров сертификатов"
 
 #: src/rhsm/connection.py:1908
 msgid "Fetching content for a certificate"
-msgstr ""
+msgstr "Получение содержимого для сертификата"
 
 #: src/rhsm/connection.py:1958
 msgid "Fetching pools"
-msgstr ""
+msgstr "Получение пулов"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1969
-#, fuzzy
-#| msgid "Print version information"
 msgid "Fetching release information"
-msgstr "Вывод версии"
+msgstr "Получение информации о выпуске"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1983
-#, fuzzy
-#| msgid "list available releases"
 msgid "Fetching available releases"
-msgstr "список выпусков"
+msgstr "Получение доступных выпусков"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:1998
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
-msgstr "Получение списка окружений"
+msgstr "Получение прав"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2007
-#, fuzzy
-#| msgid "Using service level:"
 msgid "Fetching service levels"
-msgstr "Текущий уровень обслуживания:"
+msgstr "Получение уровней обслуживания"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2021
-#, fuzzy
-#| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
-msgstr "Получение списка окружений"
+msgstr "Получение сред"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2031
-#, fuzzy
-#| msgid "Identity Certificate"
 msgid "Updating certificate"
-msgstr "Сертификат удостоверения"
+msgstr "Обновление сертификата"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2050
-#, fuzzy
-#| msgid "Import Certificates"
 msgid "Updating certificates"
-msgstr "Импорт сертификатов"
+msgstr "Обновление сертификатов"
 
 #: src/rhsm/connection.py:2069
 msgid "Checking server status"
-msgstr ""
+msgstr "Проверка состояния сервера"
 
 #: src/rhsm/connection.py:2077
 msgid "Fetching content overrides"
-msgstr ""
+msgstr "Получение переопределений содержимого"
 
 #: src/rhsm/connection.py:2088
-#, fuzzy
-#| msgid "Updating Repository Overrides"
 msgid "Updating content overrides"
-msgstr "Обновление переопределений репозитория"
+msgstr "Обновление переопределений содержимого"
 
 #: src/rhsm/connection.py:2101
-#, fuzzy
-#| msgid "Removing Repository Overrides"
 msgid "Removing content overrides"
-msgstr "Удаление переопределений репозитория"
+msgstr "Удаление переопределений содержимого"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm/connection.py:2110
-#, fuzzy
-#| msgid "Cancel"
 msgid "Fetching job"
-msgstr "Отмена"
+msgstr "Получение задания"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:39
@@ -1166,8 +1108,8 @@ msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
 msgstr ""
-"Система не зарегистрирована. Для получения информации выполните "
-"«subscription-manager register --help»"
+"Система не зарегистрирована. Для подробностей выполните «subscription-"
+"manager register --help»."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:53
@@ -1191,54 +1133,52 @@ msgstr "будут собраны только данные, которые не
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:106
-#, fuzzy, python-format, python-brace-format
-#| msgid "%%prog %s [OPTIONS] "
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS] "
-msgstr "%%prog %s [ПАРАМЕТРЫ] "
+msgstr "%(prog)s {name} [ПАРАМЕТРЫ] "
 
 #: src/rhsm_debug/debug_commands.py:110
 msgid "The directory specified by '--destination' must already exist."
 msgstr "Каталог, указанный '-destination', уже должен существовать."
 
 #: src/rhsm_debug/debug_commands.py:115
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "To use the no-archive option, the destination directory '%s' must exist "
-#| "on the same file system as the data assembly directory '%s'."
+#, python-brace-format
 msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
 msgstr ""
-"Если вы не собираетесь архивировать данные, заранее создайте каталог «%s» в "
-"той же файловой системе что и «%s»"
+"Чтобы использовать опцию без архивации, целевой каталог '{destination}' "
+"должен существовать в той же файловой системе, что и каталог сборки данных '"
+"{assembly}'."
 
 #: src/rhsm_debug/debug_commands.py:212
 #, python-brace-format
 msgid "Wrote: {final_path}"
-msgstr ""
+msgstr "Записано: {final_path}"
 
 #: src/rhsm_debug/debug_commands.py:226
 #, python-brace-format
 msgid "Wrote: {destination_dir_name}"
-msgstr ""
+msgstr "Записано: {destination_dir_name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:229
-#, fuzzy, python-brace-format
-#| msgid "Unable to create zip file of system information: %s"
+#, python-brace-format
 msgid "Unable to create zip file of system information: {error}"
-msgstr "Не удалось создать zip: %s"
+msgstr "Не удалось создать zip-файл с информацией о системе: {error}"
 
 #: src/rhsmlib/dbus/objects/register.py:158
 #, python-format
 msgid ""
 "User %s is member of more organizations, but no organization was selected"
 msgstr ""
+"Пользователь %s является членом нескольких организаций, но организация не "
+"выбрана"
 
 #: src/rhsmlib/dbus/objects/register.py:174
 #, python-format
 msgid "User %s is not member of any organization"
-msgstr ""
+msgstr "Пользователь %s не является членом ни одной организации"
 
 #: src/rhsmlib/dbus/objects/syspurpose.py:73
 #, python-brace-format
@@ -1249,23 +1189,28 @@ msgid_plural ""
 "Warning: The following fields were recently set for this system by the "
 "entitlement server administrator: {conflict_msg}"
 msgstr[0] ""
+"Предупреждение: Следующее поле было недавно установлено для этой системы "
+"администратором сервера прав: {conflict_msg}"
 msgstr[1] ""
+"Предупреждение: Следующие поля были недавно установлены для этой системы "
+"администратором сервера прав: {conflict_msg}"
 msgstr[2] ""
+"Предупреждение: Следующие поля были недавно установлены для этой системы "
+"администратором сервера прав: {conflict_msg}"
 
 #: src/rhsmlib/dbus/service_wrapper.py:54
 #, python-brace-format
 msgid "Error: Unable to load bus '{name}'"
-msgstr ""
+msgstr "Ошибка: Не удалось загрузить шину '{name}'"
 
 #: src/rhsmlib/services/entitlement.py:52
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
-#| "{dateexample})"
+#, python-brace-format
 msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{date})"
-msgstr "Неверная дата. Допустимый формат: ГГГГ-ММ-ДД. Пример: {dateexample}"
+msgstr ""
+"Введённая дата недействительна. Дата должна быть в формате ГГГГ-ММ-ДД "
+"(пример: {date})"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:57
@@ -1315,15 +1260,15 @@ msgstr "Нет"
 
 #: src/rhsmlib/services/entitlement.py:316
 msgid "Subscription is current"
-msgstr "Действительная подписка."
+msgstr "Действительная подписка"
 
 #: src/rhsmlib/services/entitlement.py:319
 msgid "Subscription is expired"
-msgstr "Срок действия подписки истек."
+msgstr "Срок действия подписки истёк"
 
 #: src/rhsmlib/services/entitlement.py:321
 msgid "Subscription has not begun"
-msgstr "Подписка не вступила в действие."
+msgstr "Подписка не вступила в действие"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:323
@@ -1377,25 +1322,27 @@ msgstr "Ошибка: Эта система не зарегистрирован�
 
 #: src/rhsmlib/services/register.py:73
 msgid "Environment IDs and environment names are mutually exclusive"
-msgstr ""
+msgstr "Идентификаторы сред и имена сред являются взаимоисключающими"
 
 #: src/rhsmlib/services/register.py:174
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
-msgstr ""
+msgstr "Среда: '{env_names}' не имеет требуемого типа '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:182
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
-msgstr ""
+msgstr "Среды: '{env_names}' не имеют требуемого типа '{environment_type}'"
 
 #: src/rhsmlib/services/register.py:202
 msgid ""
 "Registration is only possible when the organization is in Simple Content "
 "Access (SCA) mode."
 msgstr ""
+"Регистрация возможна только когда организация находится в режиме простого "
+"доступа к содержимому (SCA)."
 
 #: src/rhsmlib/services/register.py:243
 msgid "This system is already registered. Add force to options to override."
@@ -1425,7 +1372,7 @@ msgstr ""
 #: src/rhsmlib/services/register.py:260
 #: src/subscription_manager/cli_command/register.py:132
 msgid "Error: Must specify an activation key"
-msgstr "Ошибка. Необходимо указать ключ активации."
+msgstr "Ошибка. Необходимо указать ключ активации"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:262
@@ -1448,25 +1395,25 @@ msgstr "Ошибка: Отсутствует имя пользователя и�
 #: src/rhsmlib/services/syspurpose.py:100
 #: src/rhsmlib/services/syspurpose.py:103
 msgid "Matched"
-msgstr ""
+msgstr "Соответствует"
 
 #: src/rhsmlib/services/syspurpose.py:101
 #: src/rhsmlib/services/syspurpose.py:104
 msgid "Mismatched"
-msgstr ""
+msgstr "Не соответствует"
 
 #: src/rhsmlib/services/syspurpose.py:102
 msgid "Partial"
-msgstr ""
+msgstr "Частичное"
 
 #: src/rhsmlib/services/syspurpose.py:105
 msgid "Not Specified"
-msgstr ""
+msgstr "Не указано"
 
 #: src/rhsmlib/services/syspurpose.py:106
 #: src/subscription_manager/cert_sorter.py:295
 msgid "Disabled"
-msgstr ""
+msgstr "Отключено"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/__init__.py:76
@@ -1481,7 +1428,7 @@ msgstr "Отмена регистрации"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/__init__.py:78
 msgid "This system is registered to spacewalk"
-msgstr "Система зарегистрирована в spacewalk."
+msgstr "Система зарегистрирована в spacewalk"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/__init__.py:80
@@ -1498,14 +1445,16 @@ msgstr "Вы уже зарегистрировались с помощью space
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/__init__.py:83
 msgid "Please enter your account information:"
-msgstr "Заполните данные учетной записи:"
+msgstr "Заполните данные учётной записи:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/__init__.py:85
 msgid ""
 "Contact your system administrator if you have forgotten your login or "
 "password"
-msgstr "Забыли имя или пароль? Обратитесь к системному администратору."
+msgstr ""
+"Если вы забыли свой логин или пароль, обратитесь к своему системному "
+"администратору"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/__init__.py:87
@@ -1564,7 +1513,7 @@ msgstr "RHN Classic"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:30
 msgid "Please enter your Red Hat account information:"
-msgstr "Учетная запись Red Hat:"
+msgstr "Учётная запись Red Hat:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:32
@@ -1602,16 +1551,13 @@ msgstr ""
 "Совет: Забыли имя или пароль? Перейдите на https://redhat.com/forgot_password"
 
 #: src/subscription_manager/cache.py:178
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "consumer_uuid=%s is not a valid consumer_uuid. Not attempting to sync %s "
-#| "cache with server."
+#, python-brace-format
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
 msgstr ""
-"Неверное значение: consumer_uuid=%s. Кэш %s не будет синхронизироваться с "
-"сервером."
+"consumer_uuid={consumer_uuid} не является допустимым consumer_uuid. Не "
+"выполняется попытка синхронизации кэша {class_name} с сервером."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cert_sorter.py:292
@@ -1630,10 +1576,9 @@ msgstr "Недействительные"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli.py:83
-#, fuzzy, python-format, python-brace-format
-#| msgid "%prog [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [OPTIONS]"
-msgstr "%prog [ПАРАМЕТРЫ]"
+msgstr "%(prog)s {name} [ПАРАМЕТРЫ]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli.py:123
@@ -1658,6 +1603,9 @@ msgid ""
 "by the entitlement server administrator.\n"
 "{advice}"
 msgstr ""
+"Предупреждение: Значение {attr} = \"{download_value}\" было недавно "
+"установлено для этой системы администратором сервера прав.\n"
+"{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
 #, python-brace-format
@@ -1669,40 +1617,38 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #. TRANSLATORS: this refers to a deprecated command
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:41
-#, fuzzy
-#| msgid "Deprecated, see remove"
 msgid "Deprecated, see 'syspurpose'"
-msgstr "Устарел (см. remove)"
+msgstr "Устарело, см. 'syspurpose'"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:75
 #, python-brace-format
 msgid "set {attr} of system purpose"
-msgstr ""
+msgstr "установить {attr} назначения системы"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:82
 #, python-brace-format
 msgid "unset {attr} of system purpose"
-msgstr ""
+msgstr "сбросить {attr} назначения системы"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:90
 #, python-brace-format
 msgid "add an item to the list ({attr})."
-msgstr ""
+msgstr "добавить элемент в список ({attr})."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:98
 #, python-brace-format
 msgid "remove an item from the list ({attr})."
-msgstr ""
+msgstr "удалить элемент из списка ({attr})."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:105
 #, python-brace-format
 msgid "show this system's current {attr}"
-msgstr ""
+msgstr "показать текущий {attr} этой системы"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:112
 #, python-brace-format
 msgid "list all {attr} available"
-msgstr ""
+msgstr "список всех доступных {attr}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:142
 msgid "--unset cannot be used with --set, --add, or --remove"
@@ -1717,18 +1663,22 @@ msgstr "--add нельзя использовать с --remove"
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
 msgstr ""
+"Ошибка: вы должны зарегистрироваться или указать --username и --password для "
+"получения списка {attr}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:167
 msgid ""
 "Error: --username, --password, and --org can be used only on unregistered "
 "systems"
 msgstr ""
+"Ошибка: --username, --password и --org могут использоваться только в "
+"незарегистрированных системах"
 
 #. TRANSLATORS: this is used to quote a string
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:239
 #, python-brace-format
 msgid "\"{value}\""
-msgstr ""
+msgstr "\"{value}\""
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:243
 #, python-brace-format
@@ -1737,23 +1687,31 @@ msgid ""
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
 msgstr[0] ""
+"Предупреждение: Предоставленное значение {vals} не входит в список "
+"допустимых значений"
 msgstr[1] ""
+"Предупреждение: Предоставленные значения {vals} не входят в список "
+"допустимых значений"
 msgstr[2] ""
+"Предупреждение: Предоставленные значения {vals} не входят в список "
+"допустимых значений"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:252
-#, fuzzy, python-brace-format
-#| msgid "This org does not have any subscriptions with service levels."
+#, python-brace-format
 msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
-msgstr "В организации нет подписок с уровнями обслуживания."
+msgstr ""
+"Предупреждение: В этой организации нет подписок, предоставляющих назначение "
+"системы \"{attr}\". Этот параметр не будет влиять на автоматическое "
+"прикрепление подписок."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:266
 #, python-brace-format
 msgid "{attr} set to \"{val}\"."
-msgstr ""
+msgstr "{attr} установлен в \"{val}\"."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:284
 #, python-brace-format
@@ -1779,7 +1737,7 @@ msgstr "{name} не установлен."
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:377
 #, python-brace-format
 msgid "Available {syspurpose_attr}"
-msgstr ""
+msgstr "Доступные {syspurpose_attr}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:389
 #: src/subscription_manager/cli_command/service_level.py:210
@@ -1788,6 +1746,8 @@ msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
+"Нет доступных значений для назначения системы \"{syspurpose_attr}\" из "
+"доступных подписок в этой организации."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:397
 #, python-brace-format
@@ -1795,14 +1755,15 @@ msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
 msgstr ""
+"Не удалось получить список допустимых значений для назначения системы \""
+"{syspurpose_attr}\"."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:461
 #: src/subscription_manager/i18n_argparse.py:35
-#, fuzzy, python-format
-#| msgid "%prog [OPTIONS]"
+#, python-format
 msgid "%(prog)s [OPTIONS]"
-msgstr "%prog [ПАРАМЕТРЫ]"
+msgstr "%(prog)s [ПАРАМЕТРЫ]"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:470
 #, python-brace-format
@@ -1811,7 +1772,7 @@ msgid ""
 "Purpose {attr}."
 msgstr ""
 "Примечание. В настоящее время настроенный сервер прав не поддерживает "
-"системную цель {attr}"
+"системную цель {attr}."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/clean.py:25
@@ -1838,10 +1799,8 @@ msgstr "не проверять SSL-сертификат сервера в до�
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:150
-#, fuzzy
-#| msgid "proxy URL in the form of proxy_hostname:proxy_port"
 msgid "proxy URL in the form of hostname:port"
-msgstr "адрес прокси в формате proxy_hostname:proxy_port"
+msgstr "URL прокси в формате hostname:port"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:156
@@ -1859,33 +1818,28 @@ msgstr "хост суффиксы, которые следует обойти п
 
 #: src/subscription_manager/cli_command/cli.py:177
 msgid "Do not display progress messages"
-msgstr ""
+msgstr "Не отображать сообщения о ходе выполнения"
 
 #: src/subscription_manager/cli_command/cli.py:189
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
 msgstr ""
 "Потребительская идентификация либо не существует, либо повреждена. "
-"Попробуйте  register --help"
+"Попробуйте register --help"
 
 #: src/subscription_manager/cli_command/cli.py:247
-#, fuzzy
-#| msgid ""
-#| "subscription-manager is disabled when running inside a container. Please "
-#| "refer to your host system for subscription management.\n"
 msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
 msgstr ""
-"В контейнере subscription-manager отключается. Используйте инструменты "
-"управления подписками его хост-системы.\n"
+"subscription-manager работает в режиме контейнера. Используйте вашу хост-"
+"систему для управления подписками.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:262
-#, fuzzy, python-brace-format
-#| msgid "%s: error: %s"
+#, python-brace-format
 msgid "{prog}: error: no such option: {args}"
-msgstr "%s: ошибка: %s"
+msgstr "{prog}: ошибка: нет такого параметра: {args}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:281
@@ -1899,10 +1853,9 @@ msgstr "Ошибка разбора базового адреса:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:369
-#, fuzzy, python-brace-format
-#| msgid "Unable to reach the server at %s:%s%s"
+#, python-brace-format
 msgid "Unable to reach the server at {host}:{port}{handler}"
-msgstr "Ошибка соединения с сервером: %s:%s%s"
+msgstr "Не удаётся подключиться к серверу {host}:{port}{handler}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:379
@@ -1917,16 +1870,13 @@ msgid "System certificates corrupted. Please reregister."
 msgstr "Сертификаты повреждены. Повторите регистрацию."
 
 #: src/subscription_manager/cli_command/cli.py:412
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Consumer profile \"%s\" has been deleted from the server. You can use "
-#| "command clean or unregister to remove local profile."
+#, python-brace-format
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
 msgstr ""
-"Профиль клиента «%s» был удален с сервера. Чтобы удалить локальный профиль, "
-"используйте команду «clean» или «unregister»."
+"Профиль потребителя \"{uuid}\" был удалён с сервера. Вы можете использовать "
+"команду clean или unregister для удаления локального профиля."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:28
@@ -1945,10 +1895,9 @@ msgstr "Удалить запись по фильтру [секция.имя]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:45
-#, fuzzy, python-brace-format
-#| msgid "Section: %s, Name: %s"
+#, python-brace-format
 msgid "Section: {s}, Name: {name}"
-msgstr "Секция: %s. Имя: %s"
+msgstr "Раздел: {s}, Имя: {name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:68
@@ -1968,37 +1917,33 @@ msgstr "Ошибка. Допустимый формат записи: [секц�
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:108
-#, fuzzy, python-brace-format
-#| msgid "Error: Section %s and name %s does not exist."
+#, python-brace-format
 msgid "Error: Section {section} and name {name} does not exist."
-msgstr "Ошибка. Секция %s и имя %s не существуют."
+msgstr "Ошибка: Раздел {section} и имя {name} не существуют."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:133
 msgid "[] - Default value in use"
-msgstr "[] - используется значение по умолчанию."
+msgstr "[] — используется значение по умолчанию"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:143
 #: src/subscription_manager/cli_command/config.py:150
-#, fuzzy, python-brace-format
-#| msgid "You have removed the value for section %s and name %s."
+#, python-brace-format
 msgid "You have removed the value for section {section} and name {name}."
-msgstr "Значение удалено (секция - %s, имя - %s)."
+msgstr "Вы удалили значение для раздела {section} и имени {name}."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:154
-#, fuzzy, python-brace-format
-#| msgid "The default value for %s will now be used."
+#, python-brace-format
 msgid "The default value for {name} will now be used."
-msgstr "Для %s будет использоваться значение по умолчанию."
+msgstr "Теперь будет использоваться значение по умолчанию для {name}."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:157
-#, fuzzy, python-brace-format
-#| msgid "Section %s and name %s cannot be removed."
+#, python-brace-format
 msgid "Section {section} and name {name} cannot be removed."
-msgstr "Нельзя удалить секцию %s и имя %s."
+msgstr "Раздел {section} и имя {name} не могут быть удалены."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:42
@@ -2022,32 +1967,27 @@ msgid "specify organization for environment list, using organization key"
 msgstr "выберите организацию по ключу"
 
 #: src/subscription_manager/cli_command/environments.py:57
-#, fuzzy
-#| msgid "comma-separated list of hostnames/domains"
 msgid "set an ordered comma-separated list of environments for this consumer"
-msgstr "список с разделителями запятыми имен хостов/доменов"
+msgstr ""
+"установить упорядоченный список сред для этого потребителя через запятую"
 
 #: src/subscription_manager/cli_command/environments.py:63
 msgid "list all environments for the organization"
-msgstr ""
+msgstr "показать все среды организации"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:70
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments enabled for this consumer in order"
-msgstr "Показать доступные окружения"
+msgstr "показать среды, включённые для этого потребителя, по порядку"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:77
-#, fuzzy
-#| msgid "Display the environments available for a user"
 msgid "list the environments not enabled for this consumer"
-msgstr "Показать доступные окружения"
+msgstr "показать среды, не включённые для этого потребителя"
 
 #: src/subscription_manager/cli_command/environments.py:86
 msgid "You may not specify an --org for environments when registered."
-msgstr ""
+msgstr "Вы не можете указывать --org для сред при регистрации."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:95
@@ -2057,10 +1997,8 @@ msgstr "Ошибка. Сервер не поддерживает использ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:99
-#, fuzzy
-#| msgid "%s option requires %d arguments"
 msgid "This operation requires user credentials"
-msgstr "Параметр %s требует указания аргументов (%d)"
+msgstr "Для этой операции требуются учётные данные пользователя"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:113
@@ -2069,24 +2007,18 @@ msgstr "Ошибка. Не удалось получить список окру
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:128
-#, fuzzy
-#| msgid "Environments"
 msgid "Environments updated."
-msgstr "Окружения"
+msgstr "Среды обновлены."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:130
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support environment updates."
-msgstr "Ошибка. Сервер не поддерживает использование окружений."
+msgstr "Ошибка: Сервер не поддерживает обновление сред."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:138
-#, fuzzy
-#| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support multi-environment operations."
-msgstr "Ошибка. Сервер не поддерживает использование окружений."
+msgstr "Ошибка: Сервер не поддерживает операции с несколькими средами."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:156
@@ -2095,24 +2027,21 @@ msgstr "Окружения"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:169
-#, fuzzy
-#| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
-msgstr "Нет окружений в организации."
+msgstr "В этой операции списка нет сред для отображения."
 
 #: src/subscription_manager/cli_command/environments.py:205
 msgid "Error: The same environment may not be listed more than once. "
-msgstr ""
+msgstr "Ошибка: Одна и та же среда не может быть указана более одного раза. "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:211
-#, fuzzy, python-brace-format
-#| msgid "No such environment: %s"
+#, python-brace-format
 msgid "No such environment: {names}"
 msgid_plural "No such environments: {names}"
-msgstr[0] "Окружение не существует: %s"
-msgstr[1] "Окружение не существует: %s"
-msgstr[2] "Окружение не существует: %s"
+msgstr[0] "Нет такой среды: {names}"
+msgstr[1] "Нет таких сред: {names}"
+msgstr[2] "Нет таких сред: {names}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/facts.py:32
@@ -2166,34 +2095,31 @@ msgstr "«--username» и «--password» используются вместе �
 #: src/subscription_manager/cli_command/identity.py:72
 #: src/subscription_manager/cli_command/identity.py:75
 #: src/subscription_manager/cli_command/version.py:33
-#, fuzzy, python-brace-format
-#| msgid "server type: %s"
+#, python-brace-format
 msgid "server type: {type}"
-msgstr "тип сервера: %s"
+msgstr "тип сервера: {type}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:87
-#, fuzzy, python-brace-format
-#| msgid "system identity: %s"
+#, python-brace-format
 msgid "system identity: {consumerid}"
-msgstr "идентификация системы: %s"
+msgstr "идентификатор системы: {consumerid}"
 
 #: src/subscription_manager/cli_command/identity.py:88
 #, python-brace-format
 msgid "name: {consumer_name}"
-msgstr ""
+msgstr "имя: {consumer_name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:89
-#, fuzzy, python-brace-format
-#| msgid "org name: %s"
+#, python-brace-format
 msgid "org name: {ownername}"
-msgstr "организация: %s"
+msgstr "организация: {ownername}"
 
 #: src/subscription_manager/cli_command/identity.py:90
 #, python-brace-format
 msgid "org ID: {ownerid}"
-msgstr ""
+msgstr "ID организации: {ownerid}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:105
@@ -2204,13 +2130,12 @@ msgstr "Нет"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:108
-#, fuzzy, python-brace-format
-#| msgid "environment name: %s"
+#, python-brace-format
 msgid "environment name: {environment_name}"
 msgid_plural "environment names: {environment_name}"
-msgstr[0] "окружение: %s"
-msgstr[1] "окружение: %s"
-msgstr[2] "окружение: %s"
+msgstr[0] "среда: {environment_name}"
+msgstr[1] "среды: {environment_name}"
+msgstr[2] "сред: {environment_name}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/identity.py:125
@@ -2253,17 +2178,12 @@ msgid "list shows those products which are installed (default)"
 msgstr "список установленных продуктов (по умолчанию)"
 
 #: src/subscription_manager/cli_command/list.py:51
-#, fuzzy
-#| msgid ""
-#| "lists only subscriptions or products containing the specified expression "
-#| "in the subscription or product information, varying with the list "
-#| "requested and the server version (case-insensitive)."
 msgid ""
 "lists only products containing the specified expression in the product "
 "information."
 msgstr ""
-"возвращает подписки и продукты, информация о которых содержит указанное "
-"выражение (без учета регистра)"
+"показывать только продукты, содержащие указанное выражение в информации о "
+"продукте."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:64
@@ -2271,10 +2191,10 @@ msgid "    Installed Product Status"
 msgstr "    Статус установленных продуктов"
 
 #: src/subscription_manager/cli_command/list.py:82
-#, fuzzy, python-brace-format
-#| msgid "No installed products were found matching the expression \"%s\"."
+#, python-brace-format
 msgid "No installed products were found matching the expression \"{filter}\"."
-msgstr "Нет результатов для «%s»"
+msgstr ""
+"Не найдено установленных продуктов, соответствующих выражению \"{filter}\"."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/list.py:87
@@ -2283,15 +2203,14 @@ msgstr "Нет установленных продуктов"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/org.py:35
-#, fuzzy
-#| msgid "specify organization"
 msgid "specify an organization"
-msgstr "выберите организацию"
+msgstr "указать организацию"
 
 #: src/subscription_manager/cli_command/org.py:46
 #: src/subscription_manager/cli_command/register.py:449
 msgid "Error: --org is a required parameter in non-interactive mode."
 msgstr ""
+"Ошибка: --org является обязательным параметром в неинтерактивном режиме."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/org.py:48
@@ -2301,16 +2220,18 @@ msgstr "Организация: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/org.py:62
-#, fuzzy, python-brace-format
-#| msgid "%s cannot register with any organizations."
+#, python-brace-format
 msgid "Error: User {username} is not member of any organization."
-msgstr "%s не может быть зарегистрирована в организациях."
+msgstr ""
+"Ошибка: Пользователь {username} не является членом ни одной организации."
 
 #: src/subscription_manager/cli_command/org.py:74
 #: src/subscription_manager/cli_command/register.py:440
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr ""
+"Подсказка: Пользователь \"{name}\" является членом следующих организаций: "
+"{orgs}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:32
@@ -2329,7 +2250,7 @@ msgid ""
 "--repo option."
 msgstr ""
 "имя удаляемого переопределения (можно указать несколько); используется "
-"вместе с --repo"
+"вместе с параметром --repo ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:56
@@ -2337,8 +2258,8 @@ msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
 msgstr ""
-"параметр и его значение, разделенные двоеточием (можно указать несколько); "
-"используется вместе с --repo"
+"параметр и его значение, разделённые двоеточием (можно указать несколько); "
+"используется вместе с параметром --repo ."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:63
@@ -2366,7 +2287,7 @@ msgstr "аргументы --add должны иметь формат «имя:�
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:91
 msgid "Error: You must specify a repository to modify"
-msgstr "Ошибка. Необходимо выбрать репозиторий."
+msgstr "Ошибка. Необходимо выбрать репозиторий"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:94
@@ -2409,27 +2330,25 @@ msgstr "Нет переопределений для этой системы."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:170
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Repository '%s' does not currently exist, but the override has been added."
+#, python-brace-format
 msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
-msgstr "«%s» не существует, но переопределение было добавлено."
+msgstr ""
+"Репозиторий '{repo}' в настоящее время не существует, но переопределение "
+"добавлено."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:198
-#, fuzzy, python-brace-format
-#| msgid "Nothing is known about '%s'"
+#, python-brace-format
 msgid "Nothing is known about '{r}'"
-msgstr "Нет данных о «%s»"
+msgstr "Ничего неизвестно о '{r}'"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:203
-#, fuzzy, python-brace-format
-#| msgid "Repository: %s"
+#, python-brace-format
 msgid "Repository: {repo}"
-msgstr "Репозиторий: %s"
+msgstr "Репозиторий: {repo}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/owners.py:32
@@ -2448,10 +2367,9 @@ msgstr "Организации"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/owners.py:62
-#, fuzzy, python-brace-format
-#| msgid "%s cannot register with any organizations."
+#, python-brace-format
 msgid "{username} cannot register with any organizations."
-msgstr "%s не может быть зарегистрирована в организациях."
+msgstr "{username} не может зарегистрироваться в организациях."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/owners.py:70
@@ -2466,24 +2384,21 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author ypoyarko
 #: src/subscription_manager/cli_command/plugins.py:31
-#, fuzzy, python-brace-format
-#| msgid "list %s plugins"
+#, python-brace-format
 msgid "list {SM} plugins"
-msgstr "показать модули %s"
+msgstr "список плагинов {SM}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author ypoyarko
 #: src/subscription_manager/cli_command/plugins.py:34
-#, fuzzy, python-brace-format
-#| msgid "list %s plugin slots"
+#, python-brace-format
 msgid "list {SM} plugin slots"
-msgstr "показать слоты модулей %s"
+msgstr "список слотов плагинов {SM}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys, author ypoyarko
 #: src/subscription_manager/cli_command/plugins.py:37
-#, fuzzy, python-brace-format
-#| msgid "list %s plugin hooks"
+#, python-brace-format
 msgid "list {SM} plugin hooks"
-msgstr "показать обработчики модулей %s"
+msgstr "список хуков плагинов {SM}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/plugins.py:40
@@ -2507,14 +2422,13 @@ msgstr "Получить последние данные подписки с с�
 
 #: src/subscription_manager/cli_command/refresh.py:34
 msgid "force certificate regeneration"
-msgstr ""
+msgstr "принудительная регенерация сертификатов"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:46
-#, fuzzy, python-brace-format
-#| msgid "Unable to perform refresh due to the following exception: %s"
+#, python-brace-format
 msgid "Unable to perform refresh due to the following exception: {e}"
-msgstr "Не удалось выполнить обновление. Исключение: %s"
+msgstr "Не удалось выполнить обновление из-за следующего исключения: {e}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/refresh.py:49
@@ -2550,6 +2464,9 @@ msgid ""
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
 msgstr ""
+"зарегистрироваться с определённой средой (одно значение) или несколькими "
+"средами (список через запятую) в организации назначения. Возможность "
+"использования нескольких сред контролируется сервером прав"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:103
@@ -2561,6 +2478,8 @@ msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
 msgstr ""
+"включить неявную попытку отмены регистрации перед регистрацией нового "
+"идентификатора системы"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:114
@@ -2573,7 +2492,7 @@ msgstr "ключ активации (может быть указан повто
 msgid "This system is already registered. Use --force to override"
 msgstr ""
 "Система уже зарегистрирована. Добавьте «--force», чтобы переопределить "
-"настройки."
+"настройки"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:129
@@ -2591,30 +2510,24 @@ msgstr "Ошибка: Параметр --type устарел и может не 
 
 #: src/subscription_manager/cli_command/register.py:151
 #: src/subscription_manager/cli_command/register.py:418
-#, fuzzy
-#| msgid "The entitlement server failed to remove these serial numbers:"
 msgid "The entitlement server does not allow multiple environments"
-msgstr "Серверу полномочий не удалось удалить эти серийные номера:"
+msgstr "Сервер прав не допускает использование нескольких сред"
 
 #: src/subscription_manager/cli_command/register.py:164
-#, fuzzy
-#| msgid "Uploading package profile"
 msgid "Uploading DNF profile"
-msgstr "Отправка профиля пакета"
+msgstr "Отправка профиля DNF"
 
 #: src/subscription_manager/cli_command/register.py:234
 #: src/subscription_manager/cli_command/unregister.py:41
-#, fuzzy, python-brace-format
-#| msgid "Unregistering from: %s:%s%s"
+#, python-brace-format
 msgid "Unregistering from: {hostname}:{port}{prefix}"
-msgstr "Отмена регистрации от: %s:%s%s"
+msgstr "Отмена регистрации от: {hostname}:{port}{prefix}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:245
-#, fuzzy, python-brace-format
-#| msgid "The system with UUID %s has been unregistered"
+#, python-brace-format
 msgid "The system with UUID {old_uuid} has been unregistered"
-msgstr "Регистрация системы с UUID %s отменена."
+msgstr "Система с UUID {old_uuid} была отменена"
 
 #: src/subscription_manager/cli_command/register.py:267
 #, python-brace-format
@@ -2623,33 +2536,30 @@ msgstr "Регистрация на {hostname}:{port}{prefix}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:306
-#, fuzzy, python-brace-format
-#| msgid "Error during registration: %s"
+#, python-brace-format
 msgid "Error during registration: {e}"
-msgstr "Ошибка при регистрации: %s"
+msgstr "Ошибка при регистрации: {e}"
 
 #: src/subscription_manager/cli_command/register.py:309
-#, fuzzy, python-brace-format
-#| msgid "The system has been registered with ID: %s"
+#, python-brace-format
 msgid "The system has been registered with ID: {id}"
-msgstr "Система с ID %s успешно зарегистрирована"
+msgstr "Система зарегистрирована с ID: {id}"
 
 #: src/subscription_manager/cli_command/register.py:310
-#, fuzzy, python-brace-format
-#| msgid "The registered system name is: %s"
+#, python-brace-format
 msgid "The registered system name is: {name}"
-msgstr "Зарегистрированное имя системы: %s"
+msgstr "Зарегистрированное имя системы: {name}"
 
 #: src/subscription_manager/cli_command/register.py:365
 msgid "Error: --environments is a required parameter in non-interactive mode."
 msgstr ""
+"Ошибка: --environments является обязательным параметром в неинтерактивном "
+"режиме."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:369
-#, fuzzy
-#| msgid "Environment: "
 msgid "Environments: "
-msgstr "Окружение: "
+msgstr "Среды: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:371
@@ -2659,14 +2569,13 @@ msgstr "Окружение: "
 #: src/subscription_manager/cli_command/register.py:412
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
-msgstr ""
+msgstr "Подсказка: Организация \"{key}\" содержит следующие среды: {list}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:428
-#, fuzzy, python-brace-format
-#| msgid "%s cannot register with any organizations."
+#, python-brace-format
 msgid "{name} cannot register with any organizations."
-msgstr "%s не может быть зарегистрирована в организациях."
+msgstr "{name} не может зарегистрироваться в организациях."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:33
@@ -2676,7 +2585,7 @@ msgstr "Выбор версии операционной системы"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:40
 msgid "shows current release setting; default command"
-msgstr "показывает текущий выпуск (используется по умолчанию)."
+msgstr "показывает текущий выпуск (используется по умолчанию)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:46
@@ -2700,10 +2609,9 @@ msgstr "Ошибка. Сервер не поддерживает команду 
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:72
-#, fuzzy, python-brace-format
-#| msgid "Release: %s"
+#, python-brace-format
 msgid "Release: {release}"
-msgstr "Выпуск: %s"
+msgstr "Выпуск: {release}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:74
@@ -2713,23 +2621,22 @@ msgstr "Выпуск не определен"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:93
 msgid "Release preference has been unset"
-msgstr "Предпочитаемое значение выпуска удалено."
+msgstr "Предпочитаемое значение выпуска удалено"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:108
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "No releases match '%s'.  Consult 'release --list' for a full listing."
+#, python-brace-format
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
-msgstr "Нет соответствий для «%s» (см. «release --list»)."
+msgstr ""
+"Нет выпусков, соответствующих '{release}'. Обратитесь к 'release --list' для "
+"полного списка."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:113
-#, fuzzy, python-brace-format
-#| msgid "Release set to: %s"
+#, python-brace-format
 msgid "Release set to: {release}"
-msgstr "Выбран выпуск: %s"
+msgstr "Выпуск установлен: {release}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/release.py:122
@@ -2783,21 +2690,20 @@ msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"включить репозитории (допускается повторение, использование шаблонов * и ?)"
+"включить репозитории (допускается повторение, использование шаблонов * и ?)."
 
 #: src/subscription_manager/cli_command/repos.py:102
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"отключить репозитории (допускается повторение, использование шаблонов * и ?)"
+"отключить репозитории (допускается повторение, использование шаблонов * и ?)."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/repos.py:171
-#, fuzzy, python-brace-format
-#| msgid "    Available Repositories in %s"
+#, python-brace-format
 msgid "    Available Repositories in {file}"
-msgstr "    Доступные репозитории в %s"
+msgstr "    Доступные репозитории в {file}"
 
 #: src/subscription_manager/cli_command/repos.py:187
 msgid "There were no available repositories matching the specified criteria."
@@ -2810,41 +2716,36 @@ msgid "This system has no repositories available through subscriptions."
 msgstr "Подписки системы не включают репозитории."
 
 #: src/subscription_manager/cli_command/repos.py:216
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Error: '%s' does not match a valid repository ID. Use \"subscription-"
-#| "manager repos --list\" to see valid repositories."
+#, python-brace-format
 msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
 msgstr ""
-"Ошибка. «%s» не совпадает с допустимым идентификатором репозитория. "
-"Используйте команду «subscription-manager repos --list» для просмотра "
-"допустимых репозиториев."
+"Ошибка: '{repoid}' не соответствует допустимому идентификатору репозитория. "
+"Используйте \"subscription-manager repos --list\" для просмотра допустимых "
+"репозиториев."
 
 #: src/subscription_manager/cli_command/repos.py:271
-#, fuzzy, python-brace-format
-#| msgid "Repository '%s' is enabled for this system."
+#, python-brace-format
 msgid "Repository '{repoid}' is enabled for this system."
-msgstr "«%s» включен."
+msgstr "Репозиторий '{repoid}' включён для этой системы."
 
 #: src/subscription_manager/cli_command/repos.py:273
-#, fuzzy, python-brace-format
-#| msgid "Repository '%s' is disabled for this system."
+#, python-brace-format
 msgid "Repository '{repoid}' is disabled for this system."
-msgstr "«%s» отключен."
+msgstr "Репозиторий '{repoid}' отключён для этой системы."
 
 #: src/subscription_manager/cli_command/role.py:24
 msgid "Show or modify the system purpose role setting"
-msgstr ""
+msgstr "Показать или изменить настройку роли назначения системы"
 
 #: src/subscription_manager/cli_command/service_level.py:42
 msgid "Show or modify the system purpose service-level setting"
-msgstr ""
+msgstr "Показать или изменить настройку уровня обслуживания назначения системы"
 
 #: src/subscription_manager/cli_command/service_level.py:70
 msgid "Error: --org is only supported with the --list or --set option"
-msgstr ""
+msgstr "Ошибка: --org поддерживается только с опциями --list или --set"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:78
@@ -2853,13 +2754,15 @@ msgid ""
 "service levels"
 msgstr ""
 "Ошибка. Для получения списка уровней обслуживания необходимо "
-"зарегистрироваться или указать --username и --password."
+"зарегистрироваться или указать --username и --password"
 
 #: src/subscription_manager/cli_command/service_level.py:98
 msgid ""
 "Error: --username, --password, --org and --serverurl can be used only on "
 "unregistered systems"
 msgstr ""
+"Ошибка: --username, --password, --org и --serverurl могут использоваться "
+"только в незарегистрированных системах"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:123
@@ -2869,11 +2772,11 @@ msgstr "Ошибка. Не удалось получить уровни обсл
 #: src/subscription_manager/cli_command/service_level.py:154
 #, python-brace-format
 msgid "Service level set to: \"{val}\"."
-msgstr ""
+msgstr "Уровень обслуживания установлен: \"{val}\"."
 
 #: src/subscription_manager/cli_command/service_level.py:162
 msgid "Service level preference has been unset"
-msgstr ""
+msgstr "Настройка уровня обслуживания сброшена"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:169
@@ -2885,15 +2788,14 @@ msgstr "Ошибка. «service-level» не поддерживается."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:189
-#, fuzzy, python-brace-format
-#| msgid "Current service level: %s"
+#, python-brace-format
 msgid "Current service level: {level}"
-msgstr "Текущий уровень обслуживания: %s"
+msgstr "Текущий уровень обслуживания: {level}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:191
 msgid "Service level preference not set"
-msgstr "Уровень обслуживания не задан."
+msgstr "Уровень обслуживания не задан"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/service_level.py:203
@@ -2902,10 +2804,8 @@ msgstr "Доступные уровни обслуживания"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:28
-#, fuzzy
-#| msgid "Show status information for this system's subscriptions and products"
 msgid "Show status information for this system"
-msgstr "Показать состояние подписок и продуктов"
+msgstr "Показать информацию о состоянии этой системы"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:36
@@ -2914,43 +2814,37 @@ msgstr "Состояние системы"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:49
-#, fuzzy
-#| msgid "System is not registered."
 msgid "Overall Status: Not registered\n"
-msgstr "Система не зарегистрирована."
+msgstr "Общий статус: Не зарегистрирована\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/status.py:52
-#, fuzzy
-#| msgid "Overall Status"
 msgid "Overall Status: Registered\n"
-msgstr "Общий статус"
+msgstr "Общий статус: Зарегистрирована\n"
 
 #: src/subscription_manager/cli_command/syspurpose.py:51
 msgid "Convenient module for managing all system purpose settings"
-msgstr ""
+msgstr "Удобный модуль для управления всеми настройками назначения системы"
 
 #: src/subscription_manager/cli_command/syspurpose.py:57
 msgid "show current system purpose"
-msgstr ""
+msgstr "показать текущее назначение системы"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:74
-#, fuzzy, python-brace-format
-#| msgid "%s: error: %s"
+#, python-brace-format
 msgid "{prog} {name}"
-msgstr "%s: ошибка: %s"
+msgstr "{prog} {name}"
 
 #: src/subscription_manager/cli_command/syspurpose.py:76
 msgid "Syspurpose submodules"
-msgstr ""
+msgstr "Подмодули Syspurpose"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/syspurpose.py:90
-#, fuzzy, python-format, python-brace-format
-#| msgid "%prog [OPTIONS]"
+#, python-brace-format, python-format
 msgid "%(prog)s {name} [SUBMODULE] [OPTIONS]"
-msgstr "%prog [ПАРАМЕТРЫ]"
+msgstr "%(prog)s {name} [ПОДМОДУЛЬ] [ПАРАМЕТРЫ]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/unregister.py:38
@@ -2965,7 +2859,7 @@ msgstr "Регистрация системы удалена."
 
 #: src/subscription_manager/cli_command/usage.py:24
 msgid "Show or modify the system purpose usage setting"
-msgstr ""
+msgstr "Показать или изменить настройку использования назначения системы"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/user_pass.py:40
@@ -2980,10 +2874,12 @@ msgstr "пароль доступа к серверу"
 #: src/subscription_manager/cli_command/user_pass.py:59
 msgid "Error: --username is a required parameter in non-interactive mode."
 msgstr ""
+"Ошибка: --username является обязательным параметром в неинтерактивном режиме."
 
 #: src/subscription_manager/cli_command/user_pass.py:64
 msgid "Error: --password is a required parameter in non-interactive mode."
 msgstr ""
+"Ошибка: --password является обязательным параметром в неинтерактивном режиме."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/user_pass.py:68
@@ -3002,16 +2898,14 @@ msgstr "Вывод версии"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/version.py:35
-#, fuzzy, python-brace-format
-#| msgid "subscription management server: %s"
+#, python-brace-format
 msgid "subscription management server: {version}"
-msgstr "сервер управления подписками: %s"
+msgstr "сервер управления подписками: {version}"
 
 #: src/subscription_manager/cli_command/version.py:38
-#, fuzzy, python-brace-format
-#| msgid "subscription management rules: %s"
+#, python-brace-format
 msgid "subscription management rules: {version}"
-msgstr "правила управления подписками: %s"
+msgstr "правила управления подписками: {version}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/entcertlib.py:294
@@ -3057,18 +2951,18 @@ msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
 msgstr ""
-"Не удалось подключиться к серверу. За информацией обратитесь к /var/log/rhsm/"
-"rhsm.log"
+"Не удалось подключиться к серверу. За подробностями обратитесь к «/var/log/"
+"rhsm/rhsm.log»."
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
 msgid "Network error: {message} (error code {code})"
-msgstr ""
+msgstr "Сетевая ошибка: {message} (код ошибки {code})"
 
 #: src/subscription_manager/exceptions.py:35
 #, python-brace-format
 msgid "Connection error: {message} (error code {code})"
-msgstr ""
+msgstr "Ошибка соединения: {message} (код ошибки {code})"
 
 #: src/subscription_manager/exceptions.py:36
 #, python-brace-format
@@ -3076,44 +2970,45 @@ msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
 msgstr ""
+"Неизвестный ответ сервера (HTTP код ошибки {code}: {title}):\n"
+"{content}"
 
 #: src/subscription_manager/exceptions.py:37
 #, python-brace-format
 msgid "Unknown server reply (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "Неизвестный ответ сервера (HTTP код ошибки {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:39
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
-msgstr "Ошибка прокси-сервера, не удается подключиться к прокси-серверу."
+msgstr ""
+"Ошибка прокси: не удаётся подключиться к {hostname}: {message} (код ошибки "
+"{code})"
 
 #: src/subscription_manager/exceptions.py:41
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}: {message}"
-msgstr "Ошибка прокси-сервера, не удается подключиться к прокси-серверу."
+msgstr "Ошибка прокси: не удаётся подключиться к {hostname}: {message}"
 
 #: src/subscription_manager/exceptions.py:42
-#, fuzzy, python-brace-format
-#| msgid "Proxy error, unable to connect to proxy server."
+#, python-brace-format
 msgid "Proxy error: unable to connect to {hostname}"
-msgstr "Ошибка прокси-сервера, не удается подключиться к прокси-серверу."
+msgstr "Ошибка прокси: не удаётся подключиться к {hostname}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:43
 msgid "Unauthorized: Invalid credentials for request."
-msgstr "Недостаточно прав. Недействительные учетные данные запроса."
+msgstr "Недостаточно прав. Недействительные учётные данные запроса."
 
 #: src/subscription_manager/exceptions.py:44
 msgid "Token authentication not supported by the entitlement server"
-msgstr ""
+msgstr "Аутентификация по токену не поддерживается сервером прав"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:45
 msgid "Forbidden: Invalid credentials for request."
-msgstr "Запрещено. Недействительные учетные данные запроса."
+msgstr "Запрещено. Недействительные учётные данные запроса."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:47
@@ -3121,19 +3016,18 @@ msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
-"Ошибка сервера. Проверьте настройки подключения и /var/log/rhsm/rhsm.log"
+"Ошибка сервера. Проверьте настройки подключения и «/var/log/rhsm/rhsm.log»."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:50
-#, fuzzy, python-brace-format
-#| msgid "Bad CA certificate: %s"
+#, python-brace-format
 msgid "Bad CA certificate: {file}: {reason}"
-msgstr "Неверный сертификат доверия: %s"
+msgstr "Неверный сертификат CA: {file}: {reason}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:51
 msgid "Your identity certificate has expired"
-msgstr "Срок действия сертификата истек."
+msgstr "Срок действия сертификата истёк"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:52
@@ -3144,7 +3038,7 @@ msgstr "Не удалось подтвердить подлинность сер
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:53
 msgid "Server URL can not be empty"
-msgstr "Адрес сервера не может быть пустым."
+msgstr "Адрес сервера не может быть пустым"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:54
@@ -3155,12 +3049,12 @@ msgstr "Адрес содержит имя сервера и может вклю
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:55
 msgid "Server URL can not be None"
-msgstr "Необходимо определить адрес сервера."
+msgstr "Необходимо определить адрес сервера"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:56
 msgid "Server URL port should be numeric"
-msgstr "Порт сервера должен быть в числовом формате."
+msgstr "Порт сервера должен быть в числовом формате"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:57
@@ -3174,12 +3068,12 @@ msgstr "Превышено ограничение скорости сервер�
 #: src/subscription_manager/exceptions.py:59
 #, python-brace-format
 msgid "Bad product certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "Неверный сертификат продукта: {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:60
 #, python-brace-format
 msgid "Bad certificate: {file}: [{library}] {message}"
-msgstr ""
+msgstr "Неверный сертификат: {file}: [{library}] {message}"
 
 #: src/subscription_manager/exceptions.py:61
 #, python-brace-format
@@ -3187,33 +3081,30 @@ msgid ""
 "Bad certificate: [{library}] {message}\n"
 "{data}"
 msgstr ""
+"Неверный сертификат: [{library}] {message}\n"
+"{data}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:62
-#, fuzzy, python-brace-format
-#| msgid "Bad CA certificate: %s"
+#, python-brace-format
 msgid "Bad certificate: [{library}] {message}"
-msgstr "Неверный сертификат доверия: %s"
+msgstr "Неверный сертификат: [{library}] {message}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:63
-#, fuzzy, python-brace-format
-#| msgid "Unable to reach the server at %s:%s%s"
+#, python-brace-format
 msgid "Unable to reach the server at {host}: {message}"
-msgstr "Ошибка соединения с сервером: %s:%s%s"
+msgstr "Не удаётся подключиться к серверу {host}: {message}"
 
 #. TRANSLATORS: example: "You don't have permission to perform this action (HTTP error code 403: Forbidden)"
 #. (the part before the opening bracket originates on the server)
 #: src/subscription_manager/exceptions.py:67
 #, python-brace-format
 msgid "{message} (HTTP error code {code}: {title})"
-msgstr ""
+msgstr "{message} (HTTP код ошибки {code}: {title})"
 
 #: src/subscription_manager/exceptions.py:168
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The server rate limit has been exceeded, please try again later. (Expires "
-#| "in %s seconds)"
+#, python-brace-format
 msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} second)"
@@ -3222,20 +3113,19 @@ msgid_plural ""
 "{time} seconds)"
 msgstr[0] ""
 "Превышено ограничение скорости сервера. Повторите попытку позже. (Истекает "
-"через %s сек.)"
+"через {time} секунду)"
 msgstr[1] ""
 "Превышено ограничение скорости сервера. Повторите попытку позже. (Истекает "
-"через %s сек.)"
+"через {time} секунды)"
 msgstr[2] ""
 "Превышено ограничение скорости сервера. Повторите попытку позже. (Истекает "
-"через %s сек.)"
+"через {time} секунд)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/i18n_argparse.py:50
-#, fuzzy, python-brace-format
-#| msgid "%s: error: %s"
+#, python-brace-format
 msgid "{prog}: error: {msg}"
-msgstr "%s: ошибка: %s"
+msgstr "{prog}: ошибка: {msg}"
 
 #: src/subscription_manager/plugin/container/__init__.py:228
 #: src/subscription_manager/plugin/ostree/action_invoker.py:142
@@ -3308,7 +3198,7 @@ msgstr "Удалено"
 
 #: src/subscription_manager/scripts/package_profile_upload.py:29
 msgid "Upload a package profile"
-msgstr ""
+msgstr "Отправить профиль пакетов"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/package_profile_upload.py:53
@@ -3320,31 +3210,25 @@ msgstr "Пользователь прервал процесс."
 #: src/subscription_manager/scripts/package_profile_upload.py:56
 #, python-format
 msgid "Error uploading package profile: %s\n"
-msgstr ""
+msgstr "Ошибка отправки профиля пакетов: %s\n"
 
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:343
-#, fuzzy
-#| msgid "This system is already registered. Add force to options to override."
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
 msgstr ""
-"Эта система уже зарегистрированы. Добавьте силу параметры для "
-"переопределения."
+"Эта система уже зарегистрирована. Запрос на автоматическую регистрацию "
+"игнорируется."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:346
-#, fuzzy
-#| msgid "Register System"
 msgid "Registering the system"
-msgstr "Регистрация"
+msgstr "Регистрация системы"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:357
-#, fuzzy
-#| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
-msgstr "Обновление сертификатов и репозиториев..."
+msgstr "Обновление сертификатов прав и репозиториев."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:419
@@ -3362,12 +3246,16 @@ msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
 msgstr ""
+"Предупреждение: Предоставленное значение \"{val}\" не входит в список "
+"допустимых значений для атрибута {attr}:"
 
 #: src/syspurpose/files.py:472
 #, python-brace-format
 msgid ""
 "Warning: Provided key \"{key}\" is not included in the list of valid keys:"
 msgstr ""
+"Предупреждение: Предоставленный ключ \"{key}\" не входит в список допустимых "
+"ключей:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #, fuzzy, python-brace-format
