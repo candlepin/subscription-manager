@@ -10,9 +10,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:41+0100\n"
-"PO-Revision-Date: 2026-04-27 18:59+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2026-04-29 21:59+0000\n"
+"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/cs/>\n"
 "Language: cs\n"
@@ -1010,7 +1009,7 @@ msgstr ""
 #: src/rhsm_debug/debug_commands.py:229
 #, python-brace-format
 msgid "Unable to create zip file of system information: {error}"
-msgstr ""
+msgstr "Nebylo možné vytvořit zip soubor s informacemi o systému: {error}"
 
 #: src/rhsmlib/dbus/objects/register.py:148
 #, python-format
@@ -1490,15 +1489,11 @@ msgid ""
 "Warning: Provided value {vals} is not included in the list of valid values"
 msgid_plural ""
 "Warning: Provided values {vals} are not included in the list of valid values"
-msgstr[0] ""
-"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
-"atribut {attr}:"
+msgstr[0] "Varování: Zadaná hodnota {vals} není zahrnuta v seznamu platných hodnot"
 msgstr[1] ""
-"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
-"atribut {attr}:"
+"Varování: Zadané hodnoty {vals} nejsou zahrnuty v seznamu platných hodnot"
 msgstr[2] ""
-"Varování: zadaná hodnota „{val}“ se nenachází na seznamu platných hodnot pro "
-"atribut {attr}:"
+"Varování: Zadané hodnoty {vals} nejsou zahrnuty v seznamu platných hodnot"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:264
 #, python-brace-format
@@ -1866,7 +1861,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/config.py:108
 #, python-brace-format
 msgid "Error: Section {section} and name {name} does not exist."
-msgstr ""
+msgstr "Chyba: Sekce {section} a název {name} neexistuje."
 
 #: src/subscription_manager/cli_command/config.py:133
 msgid "[] - Default value in use"
@@ -1886,7 +1881,7 @@ msgstr "Výchozí hodnota pro {name} nebude použita."
 #: src/subscription_manager/cli_command/config.py:157
 #, python-brace-format
 msgid "Section {section} and name {name} cannot be removed."
-msgstr ""
+msgstr "Sekci {section} a název {name} není možné odebrat."
 
 #: src/subscription_manager/cli_command/environments.py:44
 msgid "Display the environments available for a user"
@@ -2201,7 +2196,7 @@ msgstr "ID fondu:"
 #: src/subscription_manager/cli_command/list.py:133
 #: src/subscription_manager/cli_command/list.py:153
 msgid "Provides Management:"
-msgstr ""
+msgstr "Zajišťuje správu:"
 
 #: src/subscription_manager/cli_command/list.py:82
 msgid "Available:"
@@ -2227,7 +2222,7 @@ msgstr "Role:"
 #: src/subscription_manager/cli_command/list.py:137
 #: src/subscription_manager/cli_command/list.py:158
 msgid "Service Level:"
-msgstr ""
+msgstr "Servisní úroveň:"
 
 #: src/subscription_manager/cli_command/list.py:87
 #: src/subscription_manager/cli_command/list.py:159
@@ -2237,13 +2232,13 @@ msgstr "Použití:"
 #: src/subscription_manager/cli_command/list.py:88
 #: src/subscription_manager/cli_command/list.py:160
 msgid "Add-ons:"
-msgstr "Doplňky"
+msgstr "Doplňky:"
 
 #: src/subscription_manager/cli_command/list.py:89
 #: src/subscription_manager/cli_command/list.py:139
 #: src/subscription_manager/cli_command/list.py:162
 msgid "Subscription Type:"
-msgstr "Předplatné"
+msgstr "Typ předplatného:"
 
 #: src/subscription_manager/cli_command/list.py:92
 #: src/subscription_manager/cli_command/list.py:165
@@ -2287,7 +2282,7 @@ msgstr "Účet:"
 #: src/subscription_manager/cli_command/list.py:131
 #: src/subscription_manager/cli_command/list.py:151
 msgid "Serial:"
-msgstr "Sériové číslo"
+msgstr "Sériové číslo:"
 
 #: src/subscription_manager/cli_command/list.py:134
 #: src/subscription_manager/cli_command/list.py:154
@@ -2819,12 +2814,12 @@ msgstr "Chyba při registraci: {e}"
 #: src/subscription_manager/cli_command/register.py:372
 #, python-brace-format
 msgid "The system has been registered with ID: {id}"
-msgstr ""
+msgstr "Systém byl zaregistrován s identifikátorem: {id}"
 
 #: src/subscription_manager/cli_command/register.py:373
 #, python-brace-format
 msgid "The registered system name is: {name}"
-msgstr ""
+msgstr "Zaregistrovaný název systému je: {name}"
 
 #: src/subscription_manager/cli_command/register.py:375
 #, python-brace-format
@@ -3060,12 +3055,12 @@ msgstr ""
 #: src/subscription_manager/cli_command/repos.py:265
 #, python-brace-format
 msgid "Repository '{repoid}' is enabled for this system."
-msgstr ""
+msgstr "Repozitář „{repoid}“ je pro tento systém zapnutý."
 
 #: src/subscription_manager/cli_command/repos.py:267
 #, python-brace-format
 msgid "Repository '{repoid}' is disabled for this system."
-msgstr ""
+msgstr "Repozitář „{repoid}“ je pro tento systém vypnutý."
 
 #: src/subscription_manager/cli_command/role.py:24
 msgid "Show or modify the system purpose role setting"
@@ -3118,7 +3113,7 @@ msgstr "Chyba: Příkaz service-level není serverem podporován."
 #: src/subscription_manager/cli_command/service_level.py:192
 #, python-brace-format
 msgid "Current service level: {level}"
-msgstr ""
+msgstr "Stávající úroveň služeb: {level}"
 
 #: src/subscription_manager/cli_command/service_level.py:194
 msgid "Service level preference not set"
@@ -3240,12 +3235,12 @@ msgstr "Vypsat informace o verzi"
 #: src/subscription_manager/cli_command/version.py:35
 #, python-brace-format
 msgid "subscription management server: {version}"
-msgstr ""
+msgstr "server správy předplatného: {version}"
 
 #: src/subscription_manager/cli_command/version.py:38
 #, python-brace-format
 msgid "subscription management rules: {version}"
-msgstr ""
+msgstr "pravidla správy předplatného: {version}"
 
 #: src/subscription_manager/entcertlib.py:296
 #, python-format
