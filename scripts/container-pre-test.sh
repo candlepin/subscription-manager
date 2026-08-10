@@ -20,7 +20,8 @@ dnf --setopt install_weak_deps=False install -y --nobest \
   openssl-devel libdnf-devel \
   python3-rpm python3-librepo python3-gobject \
   python3-dateutil python3-requests python3-iniparse \
-  glibc-langpack-en glibc-langpack-de glibc-langpack-ja
+  glibc-langpack-en glibc-langpack-de glibc-langpack-ja \
+  gettext
 
 # Install test packages
 python3 -m pip install --upgrade pip wheel
