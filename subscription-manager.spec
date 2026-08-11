@@ -95,7 +95,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.29.54
+Version: 1.29.55
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -737,6 +737,12 @@ rmdir %{python_sitearch}/subscription_manager-*-*.egg-info --ignore-fail-on-non-
 rm -f /var/lib/rhsm/cache/rhsm_icon.json
 
 %changelog
+* Tue Aug 11 2026 Christopher Snyder <csnyder@redhat.com> 1.29.55-1
+- fix: Invalidate CurrentOwnerCache when managerlib.persist_consumer_cert used
+  (csnyder@redhat.com)
+- fix: set exit code during subscription-manager config
+  --rhsm.certificate_algorithms (jlocash@redhat.com)
+
 * Wed Jul 08 2026 Christopher Snyder <csnyder@redhat.com> 1.29.54-1
 - fix: Invalidate and update CurrentOwnerCache when owner change is detected
   (csnyder@redhat.com)
