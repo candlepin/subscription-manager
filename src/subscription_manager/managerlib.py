@@ -45,6 +45,7 @@ from subscription_manager.injection import (
     RELEASE_STATUS_CACHE,
     FACTS,
     POOL_STATUS_CACHE,
+    CURRENT_OWNER_CACHE,
 )
 from subscription_manager import isodate
 from subscription_manager.jsonwrapper import PoolWrapper
@@ -100,6 +101,10 @@ def persist_consumer_cert(consumerinfo: dict) -> None:
         os.mkdir(cert_dir)
     consumer = identity.ConsumerIdentity(consumerinfo["idCert"]["key"], consumerinfo["idCert"]["cert"])
     consumer.write()
+    try:
+        require(CURRENT_OWNER_CACHE).delete_cache()
+    except Exception as e:
+        log.debug("Couldn't delete CurrentOwnerCache %s" % e)
     log.info("Consumer created: %s (%s)" % (consumer.getConsumerName(), consumer.getConsumerId()))
     system_log("Registered system with identity: %s" % consumer.getConsumerId())
 
@@ -1012,6 +1017,7 @@ def clean_all_data(backup: bool = True) -> None:
     require(POOL_STATUS_CACHE).delete_cache()
     require(OVERRIDE_STATUS_CACHE).delete_cache()
     require(RELEASE_STATUS_CACHE).delete_cache()
+    require(CURRENT_OWNER_CACHE).delete_cache()
     cache.CloudTokenCache.delete_cache()
     cache.CryptographicCapabilitiesCache.delete_cache()
 
