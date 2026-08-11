@@ -83,7 +83,7 @@
 %global exclude_packages %{exclude_packages}"
 
 Name: subscription-manager
-Version: 1.30.15
+Version: 1.30.16
 Release: 1%{?dist}
 Summary: Tools and libraries for subscription and repository management
 %if 0%{?suse_version}
@@ -679,6 +679,33 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
+* Tue Aug 11 2026 Christopher Snyder <csnyder@redhat.com> 1.30.16-1
+- fix: Invalidate CurrentOwnerCache when managerlib.persist_consumer_cert used
+  (csnyder@redhat.com)
+- Translated using Weblate (Russian) (adem4ik@gmail.com)
+- Translated using Weblate (Czech) (pavel.borecki@gmail.com)
+- Translated using Weblate (Georgian) (temuri.doghonadze@gmail.com)
+- Translated using Weblate (Spanish) (fserrador@gmail.com)
+- Translated using Weblate (Portuguese (Brazil)) (rafaelff@gnome.org)
+- Translated using Weblate (Czech) (jan.kalabza@gmail.com)
+- Translated using Weblate (Georgian) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Translated using Weblate (Czech) (jan.kalabza@gmail.com)
+- Translated using Weblate (Czech) (noreply-mt-weblate-translation-
+  memory@weblate.org)
+- Translated using Weblate (Czech) (jan.kalabza@gmail.com)
+- Translated using Weblate (Italian) (ali.ciloqlu@murena.io)
+- fix: Gettext is still required for building & testing (jhnidek@redhat.com)
+- docs: modernize subscription-manager.8 man page (CCT-719)
+  (jsefler@redhat.com)
+- test(ci): Drop intltool dependency in the container (jvanderwaa@redhat.com)
+- fix: set exit code during subscription-manager config
+  --rhsm.certificate_algorithms (jlocash@redhat.com)
+- docs: add caution for certificate_algorithms configuration (CCT-2686)
+  (jsefler@redhat.com)
+- ci: bump actions/checkout from 6 to 7
+  (49699333+dependabot[bot]@users.noreply.github.com)
+
 * Mon Jun 22 2026 Jiri Hnidek <jhnidek@redhat.com> 1.30.15-1
 - chore: better definition of IP address of AWS IMDS (jhnidek@redhat.com)
 - Fix package upload during initial register (suttner@atix.de)
