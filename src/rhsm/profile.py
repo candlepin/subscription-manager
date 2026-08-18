@@ -15,7 +15,7 @@ import logging
 import importlib.util
 import rpm
 import os.path
-from typing import List, Union
+from typing import List, Optional, Union
 
 from rhsm import ourjson as json
 from rhsm.utils import suppress_output
@@ -377,7 +377,7 @@ class Package:
         return value
 
 
-def parse_rpm_string(rpm_string: str) -> dict | None:
+def parse_rpm_string(rpm_string: str) -> Optional[dict]:
     """
     Parses a standard RPM package string into its NVR components using hawkey.
 
@@ -386,7 +386,7 @@ def parse_rpm_string(rpm_string: str) -> dict | None:
             Example: "NetworkManager-cloud-setup-1:1.54.0-2.fc43.x86_64"
 
         Returns:
-        dict | None: A dictionary with the following keys if the match is successful:
+        Optional[dict]: A dictionary with the following keys if the match is successful:
             - 'name': The package name (including any internal hyphens).
             - 'version': The version string (e.g., '1.54.0').
             - 'epoch': The epoch string (e.g., '1').
