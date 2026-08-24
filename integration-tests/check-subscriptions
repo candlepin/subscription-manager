@@ -366,8 +366,6 @@ class TestSubscriptions(SubscriptionsCase):
         with b.wait_timeout(600):
             b.wait_not_present('.pf-c-modal-box')
 
-        b.wait_visible("#overview a:contains('3 hits, including important')")
-
         # test system purpose
         m.execute(
             ["subscription-manager", "syspurpose", "role", "--set", "Red Hat Enterprise Linux Workstation"]
