@@ -366,7 +366,6 @@ class TestSubscriptions(SubscriptionsCase):
         with b.wait_timeout(600):
             b.wait_not_present('.pf-c-modal-box')
 
-        b.wait_visible("#overview a[href='http://cloud.redhat.com/insights/inventory/123-nice-id']")
         b.wait_visible("#overview a:contains('3 hits, including important')")
 
         # test system purpose

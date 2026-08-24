@@ -32,7 +32,6 @@ import {
     DescriptionListDescription, DescriptionListGroup, DescriptionListTerm,
     ExpandableSection,
     Spinner,
-    Stack, StackItem,
 } from '@patternfly/react-core';
 
 import subscriptionsClient from './subscriptions-client';
@@ -492,9 +491,6 @@ export class InsightsStatus extends React.Component {
         insights_service.addEventListener("changed", this.on_changed);
         last_upload_monitor.addEventListener("changed", this.on_changed);
 
-        this.hosts_details_file = cockpit.file("/var/lib/insights/host-details.json",
-                                               { syntax: JSON, superuser: true });
-        this.hosts_details_file.watch(data => this.setState({ host_details: data }));
         this.insights_details_file = cockpit.file("/var/lib/insights/insights-details.json",
                                                   { syntax: JSON, superuser: true });
         this.insights_details_file.watch(data => this.setState({ insights_details: data }));
@@ -505,7 +501,6 @@ export class InsightsStatus extends React.Component {
         insights_service.removeEventListener("changed", this.on_changed);
         last_upload_monitor.removeEventListener("changed", this.on_changed);
 
-        this.hosts_details_file.close();
         this.insights_details_file.close();
     }
 
@@ -516,13 +511,6 @@ export class InsightsStatus extends React.Component {
             let warn = (insights_service.state == "failed" &&
                         insights_service.unit.ActiveExitTimestamp &&
                         insights_service.unit.ActiveExitTimestamp / 1e6 > last_upload_monitor.timestamp);
-
-            let url;
-            try {
-                url = "http://cloud.redhat.com/insights/inventory/" + this.state.host_details.results[0].id;
-            } catch (err) {
-                url = "http://cloud.redhat.com/insights";
-            }
 
             let text;
             try {
@@ -564,23 +552,28 @@ export class InsightsStatus extends React.Component {
                     }
                 }
             } catch (err) {
-                text = _("View your Insights results");
+                text = null;
             }
 
-            status = (
-                <Stack hasGutter>
-                    <StackItem>
-                        <Button variant="link" isInline icon={warn ? <WarningTriangleIcon color="orange" /> : null} onClick={left(show_status_dialog)}>{_("Connected to Insights")}</Button>
-                    </StackItem>
-                    <StackItem>
-                        <Button variant="link" isInline component="a" href={url}
-                                target="_blank" rel="noopener noreferrer"
-                                icon={<ExternalLinkAltIcon />}>
+            if (text) {
+                status = (
+                    <Stack hasGutter>
+                        <StackItem>
+                            <Button
+                                variant="link"
+                                isInline
+                                icon={warn ? <WarningTriangleIcon color="orange" /> : null}
+                                onClick={left(show_status_dialog)}
+                            >
+                                {_("Connected to Insights")}
+                            </Button>
+                        </StackItem>
+                        <StackItem>
                             { text }
-                        </Button>
-                    </StackItem>
-                </Stack>
-            );
+                        </StackItem>
+                    </Stack>
+                );
+            }
         } else {
             status = <Button variant="link" isInline onClick={left(show_connect_dialog)}>{_("Not connected")}</Button>;
         }
