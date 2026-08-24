@@ -490,18 +490,12 @@ export class InsightsStatus extends React.Component {
         insights_timer.addEventListener("changed", this.on_changed);
         insights_service.addEventListener("changed", this.on_changed);
         last_upload_monitor.addEventListener("changed", this.on_changed);
-
-        this.insights_details_file = cockpit.file("/var/lib/insights/insights-details.json",
-                                                  { syntax: JSON, superuser: true });
-        this.insights_details_file.watch(data => this.setState({ insights_details: data }));
     }
 
     componentWillUnmount() {
         insights_timer.removeEventListener("changed", this.on_changed);
         insights_service.removeEventListener("changed", this.on_changed);
         last_upload_monitor.removeEventListener("changed", this.on_changed);
-
-        this.insights_details_file.close();
     }
 
     render() {
@@ -512,68 +506,16 @@ export class InsightsStatus extends React.Component {
                         insights_service.unit.ActiveExitTimestamp &&
                         insights_service.unit.ActiveExitTimestamp / 1e6 > last_upload_monitor.timestamp);
 
-            let text;
-            try {
-                let n_rule_hits = this.state.insights_details.length;
-                if (n_rule_hits == 0) {
-                    text = _("No rule hits");
-                } else {
-                    try {
-                        let max_risk = Math.max(...this.state.insights_details.map(h => h.rule.total_risk));
-                        // We do this all explicitly and in a long
-                        // winded way so that the translation
-                        // machinery gets to see all the strings.
-                        if (max_risk >= 4) {
-                            text = cockpit.format(cockpit.ngettext("$0 critical hit",
-                                                                   "$0 hits, including critical",
-                                                                   n_rule_hits),
-                                                  n_rule_hits);
-                        } else if (max_risk >= 3) {
-                            text = cockpit.format(cockpit.ngettext("$0 important hit",
-                                                                   "$0 hits, including important",
-                                                                   n_rule_hits),
-                                                  n_rule_hits);
-                        } else if (max_risk >= 2) {
-                            text = cockpit.format(cockpit.ngettext("$0 moderate hit",
-                                                                   "$0 hits, including moderate",
-                                                                   n_rule_hits),
-                                                  n_rule_hits);
-                        } else {
-                            text = cockpit.format(cockpit.ngettext("$0 low severity hit",
-                                                                   "$0 low severity hits",
-                                                                   n_rule_hits),
-                                                  n_rule_hits);
-                        }
-                    } catch (err) {
-                        text = cockpit.format(cockpit.ngettext("$0 hit",
-                                                               "$0 hits",
-                                                               n_rule_hits),
-                                              n_rule_hits);
-                    }
-                }
-            } catch (err) {
-                text = null;
-            }
-
-            if (text) {
-                status = (
-                    <Stack hasGutter>
-                        <StackItem>
-                            <Button
-                                variant="link"
-                                isInline
-                                icon={warn ? <WarningTriangleIcon color="orange" /> : null}
-                                onClick={left(show_status_dialog)}
-                            >
-                                {_("Connected to Insights")}
-                            </Button>
-                        </StackItem>
-                        <StackItem>
-                            { text }
-                        </StackItem>
-                    </Stack>
-                );
-            }
+            status = (
+                <Button
+                    variant="link"
+                    isInline
+                    icon={warn ? <WarningTriangleIcon color="orange" /> : null}
+                    onClick={left(show_status_dialog)}
+                >
+                    {_("Connected to Insights")}
+                </Button>
+            );
         } else {
             status = <Button variant="link" isInline onClick={left(show_connect_dialog)}>{_("Not connected")}</Button>;
         }
