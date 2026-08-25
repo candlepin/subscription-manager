@@ -432,7 +432,7 @@ function show_status_dialog() {
                             <Button variant='link' isInline onClick={left(jump_to_timer)}>{_("Details")}</Button>
                         </Alert>
                         }
-                        { insights_service.state == "failed" && failed_text &&
+                        { (insights_service.state == "failed" || (insights_service.state == "starting" && insights_service.details.Result != "success")) && failed_text &&
                         <Alert variant='warning' title={failed_text}>
                             <Button variant='link' isInline onClick={left(jump_to_service)}>{_("Details")}</Button>
                         </Alert>
@@ -502,7 +502,7 @@ export class InsightsStatus extends React.Component {
         let status;
 
         if (insights_timer.enabled) {
-            let warn = (insights_service.state == "failed" &&
+            let warn = ((insights_service.state == "failed" || (insights_service.state === "starting" && insights_service.details.Result !== "success")) &&
                         insights_service.unit.ActiveExitTimestamp &&
                         insights_service.unit.ActiveExitTimestamp / 1e6 > last_upload_monitor.timestamp);
 
