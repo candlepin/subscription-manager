@@ -431,7 +431,7 @@ class TestSubscriptions(SubscriptionsCase):
 
         # Unbreak it and retry.
         m.execute(["mv", "/etc/insights-client/machine-id.orig", "/etc/insights-client/machine-id"])
-        m.execute("systemctl start insights-client; while systemctl --quiet is-active insights-client; do sleep 1; done",
+        m.execute("systemctl restart insights-client; while systemctl --quiet is-active insights-client; do sleep 1; done",
                   timeout=360)
 
         b.wait_not_present("button .pf-c-button__icon svg[fill='orange']")
