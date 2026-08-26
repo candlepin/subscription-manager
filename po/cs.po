@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-12 10:49+0200\n"
-"PO-Revision-Date: 2026-07-01 12:17+0000\n"
+"PO-Revision-Date: 2026-08-26 22:18+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/cs/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -337,6 +337,10 @@ msgid ""
 "seconds with the entitlement server. Please check your clock settings to "
 "ensure access to all entitled content.\n"
 msgstr ""
+"\n"
+"Systémové hodiny jsou posunuté. Vůči serveru, spravujícímu nároky, je časový "
+"posun {time_drift} sekund. Zkontrolujte nastavení hodin na svém stroji a "
+"zajistěte mu tak přístup ke všemu nárokovanému obsahu.\n"
 
 #: src/plugins/dnf/subscription_manager.py:107
 msgid "Not root, Subscription Management repositories not updated"
@@ -834,20 +838,16 @@ msgstr "Neznámý typ certifikátu"
 #: src/rhsm/config.py:282
 #, python-brace-format
 msgid "Invalid value '{val}' for {section}.{name}."
-msgstr ""
+msgstr "Neplatná hodnota '{val}' pro {section}.{name}."
 
 #: src/rhsm/config.py:289
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Please use:  subscription-manager config --logging.default_log_level=<Log "
-#| "Level> to set the default_log_level to a valid value."
+#, python-brace-format
 msgid ""
 "Please use:  subscription-manager config --{section}.{name}=<value> to set "
 "{name} to a valid value."
 msgstr ""
-"Nastavte pomocí:  subscription-manager config --"
-"logging.default_log_level=<Stupeň podrobnosti> default_log_level na platnou "
-"hodnotu."
+"Nastavte pomocí:  subscription-manager config --{section}.{name}=<hodnota> "
+"pro nastavení {name} na platnou hodnotu."
 
 #: src/rhsm/config.py:294
 #, python-brace-format
@@ -858,6 +858,7 @@ msgstr "Platné hodnoty: {valid_str}"
 #, python-brace-format
 msgid "Invalid value '{val}' for {section}.{name}. Valid values are: {valid}."
 msgstr ""
+"Neplatná hodnota '{val}' pro {section}.{name}. Platné hodnoty jsou: {valid}."
 
 #: src/rhsm/connection.py:1515
 msgid "Fetching supported resources"
@@ -982,7 +983,7 @@ msgstr "Získávání úlohy"
 #: src/rhsm/logutil.py:222
 #, python-brace-format
 msgid "Using default value '{level}' for this run."
-msgstr ""
+msgstr "Pro tento běh bude použita výchozí hodnota '{level}'."
 
 #: src/rhsm_debug/debug_commands.py:39
 #: src/subscription_manager/cli_command/cli.py:50
@@ -1687,6 +1688,8 @@ msgid ""
 "Error: At least one environment must be set; use --list to get list of "
 "environments."
 msgstr ""
+"Chyba: Je třeba, aby bylo nastavené alespoň jedno prostředí – ta si vypíšete "
+"pomocí --list"
 
 #: src/subscription_manager/cli_command/environments.py:122
 msgid "Error: Unable to retrieve environment list from server"
@@ -2694,7 +2697,7 @@ msgstr "Smazáno:"
 #: src/subscription_manager/pqc.py:65
 #, python-brace-format
 msgid "Using default value '{value}' for this run."
-msgstr ""
+msgstr "Pro tento běh bude použita výchozí hodnota '{value}'."
 
 #: src/subscription_manager/reasons.py:102
 msgid "Product "
