@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-21 14:41+0100\n"
+"POT-Creation-Date: 2026-08-14 15:31+0200\n"
 "PO-Revision-Date: 2015-09-25 03:35-0400\n"
 "Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -204,88 +204,88 @@ msgstr "%s: பிழை: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:104
+#: src/daemons/rhsmcertd.c:106
 msgid "deprecated, see --cert-check-interval"
 msgstr "வழக்கழிந்தது, --cert-check-interval ஐப் பார்க்கவும்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:107
+#: src/daemons/rhsmcertd.c:109
 msgid "interval to run cert check (in minutes)"
 msgstr "சான்றிதழ் சோதித்தலை இயக்குவதற்கான இடைவெளி (நிமிடங்களில்)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:111
+#: src/daemons/rhsmcertd.c:113
 msgid "deprecated, see --auto-attach-interval"
 msgstr "வழக்கழிந்தது, --auto-attach-interval ஐக் காணவும்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:114
+#: src/daemons/rhsmcertd.c:116
 msgid "interval to run auto-attach (in minutes)"
 msgstr "தானியக்க இணைப்பை இயக்குவதற்கான இடைவெளி (நிமிடங்காளில்)"
 
-#: src/daemons/rhsmcertd.c:117
+#: src/daemons/rhsmcertd.c:119
 msgid "interval to run auto-registration (in minutes)"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:120
+#: src/daemons/rhsmcertd.c:122
 msgid "run the initial checks immediately, with no delay"
 msgstr "தொடக்க சோதனைகளை உடனடியாக இயக்கு, தாமதிக்க வேண்டாம்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:123
+#: src/daemons/rhsmcertd.c:125
 msgid "show debug messages"
 msgstr "வழுநீக்கல் செய்திகளை காட்டு"
 
-#: src/daemons/rhsmcertd.c:125
+#: src/daemons/rhsmcertd.c:127
 msgid "do not add an offset to the initial checks."
 msgstr ""
 
-#: src/daemons/rhsmcertd.c:128
+#: src/daemons/rhsmcertd.c:130
 msgid "try to perform auto-registration."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:570
+#: src/daemons/rhsmcertd.c:579
 #, c-format
 msgid "For more information run: rhsmcertd --help\n"
 msgstr "மேலும் தகவலுக்கு இந்தக் கட்டளையை இயக்கவும்: rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:687
+#: src/daemons/rhsmcertd.c:696
 msgid "Wrong number of arguments specified.\n"
 msgstr "குறிப்பிடப்பட்ட அளவுருக்களின் எண்ணிக்கை தவறு.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:763
+#: src/daemons/rhsmcertd.c:772
 msgid "Invalid argument specified.\n"
 msgstr "தவறான அளவுரு குறிப்பிடப்பட்டது.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:769
+#: src/daemons/rhsmcertd.c:778
 #, c-format
 msgid "WARN: Deprecated CLI arguments are being used.\n"
 msgstr "எச்சரிக்கை: வழக்கொழிந்த CLI அளவுருக்கள் பயன்படுத்தப்படுகின்றன.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:784
+#: src/daemons/rhsmcertd.c:793
 #, c-format
 msgid "Invalid option: %s\n"
 msgstr "தவறான விருப்பம்: %s\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/daemons/rhsmcertd.c:798
+#: src/daemons/rhsmcertd.c:807
 #, c-format
 msgid "Invalid argument specified: %s\n"
 msgstr "தவறான அளவுரு குறிப்பிடப்பட்டது: %s\n"
@@ -294,7 +294,7 @@ msgstr "தவறான அளவுரு குறிப்பிடப்ப�
 msgid "Installed products updated."
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:46
+#: src/plugins/dnf/subscription_manager.py:47
 #, python-format
 msgid ""
 "\n"
@@ -309,7 +309,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/plugins/dnf/subscription_manager.py:57
+#: src/plugins/dnf/subscription_manager.py:58
 #, fuzzy
 #| msgid ""
 #| "This system is registered using both RHN Classic and Red Hat Subscription "
@@ -324,7 +324,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/plugins/dnf/subscription_manager.py:63
+#: src/plugins/dnf/subscription_manager.py:64
 #, fuzzy
 #| msgid ""
 #| "This system is registered using both RHN Classic and Red Hat Subscription "
@@ -339,7 +339,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/plugins/dnf/subscription_manager.py:70
+#: src/plugins/dnf/subscription_manager.py:71
 #, fuzzy
 #| msgid ""
 #| "This system is registered using both RHN Classic and Red Hat Subscription "
@@ -352,7 +352,7 @@ msgstr ""
 "இந்தக் கணினி RHN Classic மற்றும் Red Hat சந்தா நிர்வாக சேவை ஆகிய இரண்டையும் "
 "பயன்படுத்தி பதிவு செய்யப்பட்டுள்ளது."
 
-#: src/plugins/dnf/subscription_manager.py:77
+#: src/plugins/dnf/subscription_manager.py:78
 #, python-brace-format
 msgid ""
 "\n"
@@ -360,11 +360,20 @@ msgid ""
 "only for this release.\n"
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:112
+#: src/plugins/dnf/subscription_manager.py:84
+#, python-brace-format
+msgid ""
+"\n"
+"The system clock is skewed. There is a time difference of {time_drift} "
+"seconds with the entitlement server. Please check your clock settings to "
+"ensure access to all entitled content.\n"
+msgstr ""
+
+#: src/plugins/dnf/subscription_manager.py:120
 msgid "Not root, Subscription Management repositories not updated"
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:140
+#: src/plugins/dnf/subscription_manager.py:149
 #, python-format
 msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
@@ -375,15 +384,15 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/plugins/dnf/subscription_manager.py:158
+#: src/plugins/dnf/subscription_manager.py:167
 msgid "Updating Subscription Management repositories."
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:167
+#: src/plugins/dnf/subscription_manager.py:176
 msgid "Unable to read consumer identity"
 msgstr ""
 
-#: src/plugins/dnf/subscription_manager.py:170
+#: src/plugins/dnf/subscription_manager.py:179
 msgid "subscription-manager is operating in container mode."
 msgstr ""
 
@@ -859,7 +868,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rct/printing.py:78 src/subscription_manager/managerlib.py:431
+#: src/rct/printing.py:78 src/subscription_manager/managerlib.py:436
 msgid "Unlimited"
 msgstr "வரம்பற்ற"
 
@@ -1041,53 +1050,59 @@ msgstr "அடையாள சான்றிதழ்"
 msgid "Unknown Certificate Type"
 msgstr "தெரியாத சான்றிதழ் வகை"
 
-#: src/rhsm/config.py:244
+#: src/rhsm/config.py:283
 #, python-brace-format
-msgid "Invalid Log Level: {lvl}, setting to INFO for this run."
+msgid "Invalid value '{val}' for {section}.{name}."
 msgstr ""
 
-#: src/rhsm/config.py:249
+#: src/rhsm/config.py:290
+#, python-brace-format
 msgid ""
-"Please use:  subscription-manager config --logging.default_log_level=<Log "
-"Level> to set the default_log_level to a valid value."
+"Please use:  subscription-manager config --{section}.{name}=<value> to set "
+"{name} to a valid value."
 msgstr ""
 
-#: src/rhsm/config.py:255
+#: src/rhsm/config.py:295
 #, python-brace-format
 msgid "Valid Values: {valid_str}"
 msgstr ""
 
-#: src/rhsm/connection.py:1444
+#: src/rhsm/config.py:298
+#, python-brace-format
+msgid "Invalid value '{val}' for {section}.{name}. Valid values are: {valid}."
+msgstr ""
+
+#: src/rhsm/connection.py:1515
 msgid "Fetching supported resources"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1504
+#: src/rhsm/connection.py:1575
 #, fuzzy
 #| msgid "connectionStatusLabel"
 msgid "Checking connection status"
 msgstr "connectionStatusLabel"
 
-#: src/rhsm/connection.py:1528
+#: src/rhsm/connection.py:1599
 msgid "Fetching cloud token"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1607
+#: src/rhsm/connection.py:1682
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering system"
 msgstr "கணினியை பதிவுசெய்யவும்"
 
-#: src/rhsm/connection.py:1637 src/rhsm/connection.py:1649
+#: src/rhsm/connection.py:1712 src/rhsm/connection.py:1724
 msgid "Updating detected virtual machines running on given host"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1672
+#: src/rhsm/connection.py:1747
 #, fuzzy
 #| msgid "Print version information"
 msgid "Updating hypervisor information"
@@ -1095,7 +1110,7 @@ msgstr "அச்சுப் பதிப்புத் தகவல்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1747
+#: src/rhsm/connection.py:1826
 #, fuzzy
 #| msgid "Subscription Registration"
 msgid "Updating consumer information"
@@ -1103,7 +1118,7 @@ msgstr "சந்தா பதிவுபெறுதல்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1752 src/rhsm/connection.py:1756
+#: src/rhsm/connection.py:1831 src/rhsm/connection.py:1835
 #, fuzzy
 #| msgid "Print manifest information"
 msgid "Fetching guest information"
@@ -1111,7 +1126,7 @@ msgstr "மேனிஃபெஸ்ட் தகவலை அச்சிடு"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1760
+#: src/rhsm/connection.py:1839
 #, fuzzy
 #| msgid "Removing"
 msgid "Removing guests"
@@ -1119,31 +1134,31 @@ msgstr "அகற்றுகிறது"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1790 src/rhsm/connection.py:1801
+#: src/rhsm/connection.py:1869 src/rhsm/connection.py:1880
 #, fuzzy
 #| msgid "Print certificate information"
 msgid "Updating profile information"
 msgstr "சான்றிதழ் தகவலை அச்சிடு"
 
-#: src/rhsm/connection.py:1809
+#: src/rhsm/connection.py:1888
 msgid "Fetching consumer keys"
 msgstr ""
 
-#: src/rhsm/connection.py:1818
+#: src/rhsm/connection.py:1897
 msgid "Checking compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1827
+#: src/rhsm/connection.py:1906
 msgid "Checking system purpose compliance status"
 msgstr ""
 
-#: src/rhsm/connection.py:1834
+#: src/rhsm/connection.py:1913
 msgid "Fetching available system purpose settings"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1841 src/rhsm/connection.py:1849
+#: src/rhsm/connection.py:1920 src/rhsm/connection.py:1928
 #, fuzzy
 #| msgid "specify organization"
 msgid "Fetching organizations"
@@ -1151,7 +1166,7 @@ msgstr "நிறுவனத்தைக் குறிப்பிடவு�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1862
+#: src/rhsm/connection.py:1941
 #, fuzzy
 #| msgid "Register System"
 msgid "Unregistering system"
@@ -1159,23 +1174,23 @@ msgstr "கணினியை பதிவுசெய்யவும்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1886
+#: src/rhsm/connection.py:1965
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Fetching certificates"
 msgstr "அடையாள சான்றிதழ்"
 
-#: src/rhsm/connection.py:1895
+#: src/rhsm/connection.py:1974
 msgid "Fetching certificate serial numbers"
 msgstr ""
 
-#: src/rhsm/connection.py:1911
+#: src/rhsm/connection.py:1990
 msgid "Fetching content for a certificate"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1924 src/rhsm/connection.py:1941
+#: src/rhsm/connection.py:2003 src/rhsm/connection.py:2020
 #, fuzzy
 #| msgid "Attaching subscriptions"
 msgid "Updating subscriptions"
@@ -1183,20 +1198,20 @@ msgstr "சந்தாக்களை இணைத்தல்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:1950 src/rhsm/connection.py:1960
-#: src/rhsm/connection.py:1969
+#: src/rhsm/connection.py:2029 src/rhsm/connection.py:2039
+#: src/rhsm/connection.py:2048
 #, fuzzy
 #| msgid "Error subscribing: %s"
 msgid "Unsubscribing"
 msgstr "சந்தா பெறுவதில் பிழை: %s"
 
-#: src/rhsm/connection.py:2018
+#: src/rhsm/connection.py:2097
 msgid "Fetching pools"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2029
+#: src/rhsm/connection.py:2108
 #, fuzzy
 #| msgid "Print version information"
 msgid "Fetching release information"
@@ -1204,7 +1219,7 @@ msgstr "அச்சுப் பதிப்புத் தகவல்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2043
+#: src/rhsm/connection.py:2122
 #, fuzzy
 #| msgid "list available releases"
 msgid "Fetching available releases"
@@ -1212,7 +1227,7 @@ msgstr "இருக்கும் வெளியீடுகளை பட்�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2058
+#: src/rhsm/connection.py:2137
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching entitlements"
@@ -1220,7 +1235,7 @@ msgstr "சாத்தியமுள்ள சூழல்களின் ப�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2067
+#: src/rhsm/connection.py:2146
 #, fuzzy
 #| msgid "Using service level:"
 msgid "Fetching service levels"
@@ -1228,7 +1243,7 @@ msgstr "சேவை நிலையை பயன்படுத்தல்:"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2078
+#: src/rhsm/connection.py:2157
 #, fuzzy
 #| msgid "Fetching list of possible environments"
 msgid "Fetching environments"
@@ -1236,7 +1251,7 @@ msgstr "சாத்தியமுள்ள சூழல்களின் ப�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2088
+#: src/rhsm/connection.py:2167
 #, fuzzy
 #| msgid "Identity Certificate"
 msgid "Updating certificate"
@@ -1244,43 +1259,48 @@ msgstr "அடையாள சான்றிதழ்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2107
+#: src/rhsm/connection.py:2186
 #, fuzzy
 #| msgid "Import Certificates"
 msgid "Updating certificates"
 msgstr "சான்றிதழ்களை இறக்குமதி செய்"
 
-#: src/rhsm/connection.py:2126
+#: src/rhsm/connection.py:2205
 msgid "Checking server status"
 msgstr ""
 
-#: src/rhsm/connection.py:2134
+#: src/rhsm/connection.py:2213
 msgid "Fetching content overrides"
 msgstr ""
 
-#: src/rhsm/connection.py:2145
+#: src/rhsm/connection.py:2224
 msgid "Updating content overrides"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2158
+#: src/rhsm/connection.py:2237
 #, fuzzy
 #| msgid "Remove All Overrides"
 msgid "Removing content overrides"
 msgstr "ஓவர்-ரைடுகள் அனைத்தையும் அகற்று"
 
-#: src/rhsm/connection.py:2174
+#: src/rhsm/connection.py:2253
 msgid "Activating"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm/connection.py:2183
+#: src/rhsm/connection.py:2262
 #, fuzzy
 #| msgid "Cancel"
 msgid "Fetching job"
 msgstr "ரத்து"
+
+#: src/rhsm/logutil.py:211
+#, python-brace-format
+msgid "Using default value '{level}' for this run."
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1336,19 +1356,19 @@ msgid ""
 "exist on the same file system as the data assembly directory '{assembly}'."
 msgstr ""
 
-#: src/rhsm_debug/debug_commands.py:212
+#: src/rhsm_debug/debug_commands.py:216
 #, python-brace-format
 msgid "Wrote: {final_path}"
 msgstr ""
 
-#: src/rhsm_debug/debug_commands.py:226
+#: src/rhsm_debug/debug_commands.py:230
 #, python-brace-format
 msgid "Wrote: {destination_dir_name}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsm_debug/debug_commands.py:229
+#: src/rhsm_debug/debug_commands.py:233
 #, fuzzy, python-brace-format
 #| msgid "Unable to create zip file of system information: %s"
 msgid "Unable to create zip file of system information: {error}"
@@ -1417,7 +1437,7 @@ msgstr "கடந்த தேதிகள் அனுமதிக்கப்�
 msgid "Unknown"
 msgstr "தெரியாத"
 
-#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:64
+#: src/rhsmlib/services/entitlement.py:124 src/rhsmlib/services/register.py:66
 #, python-format
 msgid "Unknown arguments: %s"
 msgstr ""
@@ -1523,34 +1543,34 @@ msgstr ""
 msgid "Error: this system is not registered"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:68
+#: src/rhsmlib/services/register.py:70
 msgid "Environment IDs and environment names are mutually exclusive"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:167
+#: src/rhsmlib/services/register.py:174
 #, python-brace-format
 msgid ""
 "Environment: '{env_names}' does not have required type '{environment_type}'"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:175
+#: src/rhsmlib/services/register.py:182
 #, python-brace-format
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
 msgstr ""
 
-#: src/rhsmlib/services/register.py:238
+#: src/rhsmlib/services/register.py:245
 msgid "This system is already registered. Add force to options to override."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:241
+#: src/rhsmlib/services/register.py:248
 #: src/subscription_manager/cli_command/register.py:146
 msgid "Error: system name can not be empty."
 msgstr "பிழை: கணினி பெயர் காலியாக இருக்க முடியாது."
 
-#: src/rhsmlib/services/register.py:245
+#: src/rhsmlib/services/register.py:252
 #: src/subscription_manager/cli_command/register.py:168
 msgid ""
 "Error: Can not force registration while attempting to recover registration "
@@ -1560,27 +1580,27 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:255
+#: src/rhsmlib/services/register.py:262
 #: src/subscription_manager/cli_command/register.py:159
 msgid "Error: Must specify an activation key"
 msgstr "பிழை: செயல்பாட்டு விசையை குறிப்பிட வேண்டும்."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:257
+#: src/rhsmlib/services/register.py:264
 #: src/subscription_manager/cli_command/register.py:148
 msgid "Error: Activation keys do not require user credentials."
 msgstr "பிழை: செயல்பாட்டு விசைகளுக்கு பயனர் சான்றுகள் தேவைப்படவில்லை."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/rhsmlib/services/register.py:260
+#: src/rhsmlib/services/register.py:267
 #: src/subscription_manager/cli_command/register.py:151
 msgid "Error: Activation keys can not be used with previously registered IDs."
 msgstr ""
 "பிழை: செயல்பாட்டு விசைகளுக்கு முந்தைய பதிவு செய்யப்பட்ட ID களுடன் பயன்படுத்த முடியாது"
 
-#: src/rhsmlib/services/register.py:267
+#: src/rhsmlib/services/register.py:274
 msgid "Error: Missing username or password."
 msgstr ""
 
@@ -2198,7 +2218,7 @@ msgstr "சேவையகத்தைப் பாதிக்காமல், 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/clean.py:31
-#: src/subscription_manager/cli_command/register.py:316
+#: src/subscription_manager/cli_command/register.py:315
 msgid "All local data removed"
 msgstr "அனைத்து உள்ளமை தரவும் நீக்கப்பட்டது"
 
@@ -2351,7 +2371,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/config.py:93
+#: src/subscription_manager/cli_command/config.py:103
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
@@ -2360,7 +2380,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/config.py:108
+#: src/subscription_manager/cli_command/config.py:118
 #, fuzzy, python-brace-format
 #| msgid "Error: Section %s and name %s does not exist."
 msgid "Error: Section {section} and name {name} does not exist."
@@ -2368,14 +2388,14 @@ msgstr "பிழை: பிரிவு %s மற்றும் பெயர�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/config.py:133
+#: src/subscription_manager/cli_command/config.py:143
 msgid "[] - Default value in use"
 msgstr "[] - முன்னிருப்பு மதிப்பு பயனில் உள்ளது"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/config.py:143
-#: src/subscription_manager/cli_command/config.py:150
+#: src/subscription_manager/cli_command/config.py:153
+#: src/subscription_manager/cli_command/config.py:160
 #, fuzzy, python-brace-format
 #| msgid "You have removed the value for section %s and name %s."
 msgid "You have removed the value for section {section} and name {name}."
@@ -2383,7 +2403,7 @@ msgstr "பிரிவு %s மற்றும் பெயர் %s க்க
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/config.py:154
+#: src/subscription_manager/cli_command/config.py:164
 #, fuzzy, python-brace-format
 #| msgid "The default value for %s will now be used."
 msgid "The default value for {name} will now be used."
@@ -2391,7 +2411,7 @@ msgstr "%s க்கான முன்னிருப்பு மதிப்�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/config.py:157
+#: src/subscription_manager/cli_command/config.py:167
 #, fuzzy, python-brace-format
 #| msgid "Section %s and name %s cannot be removed."
 msgid "Section {section} and name {name} cannot be removed."
@@ -2440,7 +2460,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/environments.py:90
-#: src/subscription_manager/cli_command/register.py:464
+#: src/subscription_manager/cli_command/register.py:466
 msgid "Error: Server does not support environments."
 msgstr "பிழை: சேவையகம் சூழல்களை ஆதரிக்காது."
 
@@ -2452,15 +2472,21 @@ msgstr "பிழை: சேவையகம் சூழல்களை ஆத�
 msgid "This operation requires user credentials"
 msgstr "%s விருப்பத்திற்கு %d அளவுருக்கள் தேவை"
 
+#: src/subscription_manager/cli_command/environments.py:108
+msgid ""
+"Error: At least one environment must be set; use --list to get list of "
+"environments."
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:111
+#: src/subscription_manager/cli_command/environments.py:121
 msgid "Error: Unable to retrieve environment list from server"
 msgstr "பிழை: சேவையகத்தில் இருந்து சூழல் பட்டியலை மீட்டெடுக்க முடியவில்லை"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:126
+#: src/subscription_manager/cli_command/environments.py:136
 #, fuzzy
 #| msgid "Environments"
 msgid "Environments updated."
@@ -2468,7 +2494,7 @@ msgstr "சூழல்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:128
+#: src/subscription_manager/cli_command/environments.py:138
 #, fuzzy
 #| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support environment updates."
@@ -2476,7 +2502,7 @@ msgstr "பிழை: சேவையகம் சூழல்களை ஆத�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:136
+#: src/subscription_manager/cli_command/environments.py:146
 #, fuzzy
 #| msgid "Error: Server does not support environments."
 msgid "Error: Server does not support multi-environment operations."
@@ -2484,25 +2510,25 @@ msgstr "பிழை: சேவையகம் சூழல்களை ஆத�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:154
+#: src/subscription_manager/cli_command/environments.py:164
 msgid "Environments"
 msgstr "சூழல்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:167
+#: src/subscription_manager/cli_command/environments.py:177
 #, fuzzy
 #| msgid "This org does not have any environments."
 msgid "This list operation does not have any environments to report."
 msgstr "இந்த org க்கு சூழல்கள் இல்லை."
 
-#: src/subscription_manager/cli_command/environments.py:203
+#: src/subscription_manager/cli_command/environments.py:213
 msgid "Error: The same environment may not be listed more than once. "
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/environments.py:209
+#: src/subscription_manager/cli_command/environments.py:219
 #, fuzzy, python-brace-format
 #| msgid "No such environment: %s"
 msgid "No such environment: {names}"
@@ -2538,18 +2564,18 @@ msgstr "கணினி நிகழ்வுகள் வெற்றிகர�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:40
+#: src/subscription_manager/cli_command/identity.py:41
 msgid "Display the identity certificate for this system or request a new one"
 msgstr ""
 "இந்த கணினிக்கான அடையாள சான்றிதழைக் காட்டவும் அல்லது ஒரு புதிய அடையாளத்தைக் கோரவும்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:47
+#: src/subscription_manager/cli_command/identity.py:48
 msgid "request a new certificate be generated"
 msgstr "ஒரு புதிய சான்றிதழ் உருவாக்கப்படுவதை கோரவும்"
 
-#: src/subscription_manager/cli_command/identity.py:53
+#: src/subscription_manager/cli_command/identity.py:54
 msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
@@ -2559,24 +2585,24 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:61
+#: src/subscription_manager/cli_command/identity.py:62
 msgid "--force can only be used with --regenerate"
 msgstr "--force ஆனது --regenerate-உடன் மட்டுமே பயன்படுத்த முடியும்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:63
+#: src/subscription_manager/cli_command/identity.py:64
 msgid "--username and --password can only be used with --force"
 msgstr "--username மற்றும் --password மட்டுமே --force-உடன் பயன்படுத்த முடியும்"
 
-#: src/subscription_manager/cli_command/identity.py:65
+#: src/subscription_manager/cli_command/identity.py:66
 msgid "--token can only be used with --force"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:74
-#: src/subscription_manager/cli_command/identity.py:77
+#: src/subscription_manager/cli_command/identity.py:75
+#: src/subscription_manager/cli_command/identity.py:78
 #: src/subscription_manager/cli_command/version.py:33
 #, fuzzy, python-brace-format
 #| msgid "server type: %s"
@@ -2585,33 +2611,33 @@ msgstr "சேவையக வகை: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:89
+#: src/subscription_manager/cli_command/identity.py:90
 #, fuzzy, python-brace-format
 #| msgid "system identity: %s"
 msgid "system identity: {consumerid}"
 msgstr "கணினி அடையாளம்: %s"
 
-#: src/subscription_manager/cli_command/identity.py:90
+#: src/subscription_manager/cli_command/identity.py:91
 #, python-brace-format
 msgid "name: {consumer_name}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:91
+#: src/subscription_manager/cli_command/identity.py:92
 #, fuzzy, python-brace-format
 #| msgid "org name: %s"
 msgid "org name: {ownername}"
 msgstr "org பெயர்: %s"
 
-#: src/subscription_manager/cli_command/identity.py:92
+#: src/subscription_manager/cli_command/identity.py:93
 #, python-brace-format
 msgid "org ID: {ownerid}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:107
+#: src/subscription_manager/cli_command/identity.py:108
 #: src/subscription_manager/printing_utils.py:165
 #: src/subscription_manager/printing_utils.py:184
 msgid "None"
@@ -2619,7 +2645,7 @@ msgstr "ஒன்றுமில்லாத"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:110
+#: src/subscription_manager/cli_command/identity.py:111
 #, fuzzy, python-brace-format
 #| msgid "environment name: %s"
 msgid "environment name: {environment_name}"
@@ -2629,13 +2655,13 @@ msgstr[1] "சூழல் பெயர்: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:130
+#: src/subscription_manager/cli_command/identity.py:137
 msgid "Identity certificate has been regenerated."
 msgstr "அடையாள சான்றிதழ் மீண்டும் உருவாக்கப்படும்."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/identity.py:143
+#: src/subscription_manager/cli_command/identity.py:150
 msgid "Error: Unable to generate a new identity for the system"
 msgstr "பிழை: கணினிக்காக ஒரு புதிய அடையாளத்தை துவக்க முடியவில்லை"
 
@@ -3180,8 +3206,8 @@ msgstr "கிடைக்கும் சந்தாக்கள்"
 #| "No available subscription pools were found matching the expression \"%s\" "
 #| "and the service level \"%s\"."
 msgid ""
-"No available subscription pools were found matching the expression "
-"\"{filter}\" and the service level \"{level}\"."
+"No available subscription pools were found matching the expression \"{filter}"
+"\" and the service level \"{level}\"."
 msgstr ""
 "\"%s\" எனும் விளக்கச் சரத்திற்கும் \"%s\" எனும் சேவை நிலைக்கும் பொருந்தும் சந்தாத் "
 "தொகுப்பகங்கள் எதுவும் இல்லை."
@@ -3191,8 +3217,8 @@ msgstr ""
 #| msgid ""
 #| "No available subscription pools were found matching the expression \"%s\"."
 msgid ""
-"No available subscription pools were found matching the expression "
-"\"{filter}\"."
+"No available subscription pools were found matching the expression \"{filter}"
+"\"."
 msgstr "\"%s\" எனும் விளக்கச் சரத்திற்குப் பொருந்தும் சந்தாத் தொகுப்பகங்கள் எதுவும் இல்லை."
 
 #: src/subscription_manager/cli_command/list.py:500
@@ -3223,8 +3249,8 @@ msgstr "பயன்படுத்தப்பட்ட சந்தாக்�
 #| "No consumed subscription pools were found matching the expression \"%s\" "
 #| "and the service level \"%s\"."
 msgid ""
-"No consumed subscription pools were found matching the expression "
-"\"{filter}\" and the service level \"{level}\"."
+"No consumed subscription pools were found matching the expression \"{filter}"
+"\" and the service level \"{level}\"."
 msgstr ""
 "\"%s\" எனும் விளக்கச் சரத்திற்கும் \"%s\" எனும் சேவை நிலைக்கும் பொருந்தும், "
 "பயன்படுத்தப்படும் சந்தாத் தொகுப்பகங்கள் எதுவும் இல்லை."
@@ -3234,8 +3260,8 @@ msgstr ""
 #| msgid ""
 #| "No consumed subscription pools were found matching the expression \"%s\"."
 msgid ""
-"No consumed subscription pools were found matching the expression "
-"\"{filter}\"."
+"No consumed subscription pools were found matching the expression \"{filter}"
+"\"."
 msgstr ""
 "\"%s\" எனும் விளக்கச் சரத்திற்குப் பொருந்தும், பயன்படுத்தப்படும் சந்தாத் தொகுப்பகங்கள் எதுவும் "
 "இல்லை."
@@ -3265,14 +3291,14 @@ msgid "specify an organization"
 msgstr "நிறுவனத்தைக் குறிப்பிடவும்"
 
 #: src/subscription_manager/cli_command/org.py:46
-#: src/subscription_manager/cli_command/register.py:526
+#: src/subscription_manager/cli_command/register.py:528
 msgid "Error: --org is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/org.py:48
-#: src/subscription_manager/cli_command/register.py:531
+#: src/subscription_manager/cli_command/register.py:533
 msgid "Organization: "
 msgstr "நிறுவனம்: "
 
@@ -3285,7 +3311,7 @@ msgid "Error: User {username} is not member of any organization."
 msgstr "எந்த நிறுவனங்களுடனும் %s ஐ பதிவுசெய்ய முடியாது."
 
 #: src/subscription_manager/cli_command/org.py:74
-#: src/subscription_manager/cli_command/register.py:517
+#: src/subscription_manager/cli_command/register.py:519
 #, python-brace-format
 msgid "Hint: User \"{name}\" is member of following organizations: {orgs}"
 msgstr ""
@@ -3676,7 +3702,7 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/register.py:180
-#: src/subscription_manager/cli_command/register.py:495
+#: src/subscription_manager/cli_command/register.py:497
 #, fuzzy
 #| msgid "This org does not have any environments."
 msgid "The entitlement server does not allow multiple environments"
@@ -3688,7 +3714,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:294
+#: src/subscription_manager/cli_command/register.py:293
 #: src/subscription_manager/cli_command/unregister.py:41
 #, fuzzy, python-brace-format
 #| msgid "Enter in the format hostname(:port)"
@@ -3697,20 +3723,20 @@ msgstr "வடிவ புரவலபெயரில் உள்ளிடவ�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:305
+#: src/subscription_manager/cli_command/register.py:304
 #, fuzzy, python-brace-format
 #| msgid "The system with UUID %s has been unregistered"
 msgid "The system with UUID {old_uuid} has been unregistered"
 msgstr "இந்த கணினி UUID %s உடன் பதிவுசெய்யப்படாது"
 
-#: src/subscription_manager/cli_command/register.py:329
+#: src/subscription_manager/cli_command/register.py:328
 #, python-brace-format
 msgid "Registering to: {hostname}:{port}{prefix}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:369
+#: src/subscription_manager/cli_command/register.py:368
 #, fuzzy, python-brace-format
 #| msgid "Error during registration: %s"
 msgid "Error during registration: {e}"
@@ -3718,32 +3744,32 @@ msgstr "பதிவுசெய்யும் போது பிழை: %s"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:372
+#: src/subscription_manager/cli_command/register.py:371
 #, fuzzy, python-brace-format
 #| msgid "The system has been registered with ID: %s "
 msgid "The system has been registered with ID: {id}"
 msgstr "கணினி ID உடன் பதிவுசெய்யப்பட்டுள்ளது: %s "
 
-#: src/subscription_manager/cli_command/register.py:373
+#: src/subscription_manager/cli_command/register.py:372
 #, python-brace-format
 msgid "The registered system name is: {name}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:375
+#: src/subscription_manager/cli_command/register.py:374
 #, fuzzy, python-brace-format
 #| msgid "Service level set to: %s"
 msgid "Service level set to: {level}"
 msgstr "சேவை நிலை அமைக்கப்பட்டது: %s"
 
-#: src/subscription_manager/cli_command/register.py:442
+#: src/subscription_manager/cli_command/register.py:444
 msgid "Error: --environments is a required parameter in non-interactive mode."
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:446
+#: src/subscription_manager/cli_command/register.py:448
 #, fuzzy
 #| msgid "Environment: "
 msgid "Environments: "
@@ -3751,18 +3777,18 @@ msgstr "சூழல்: "
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:448
+#: src/subscription_manager/cli_command/register.py:450
 msgid "Environment: "
 msgstr "சூழல்: "
 
-#: src/subscription_manager/cli_command/register.py:489
+#: src/subscription_manager/cli_command/register.py:491
 #, python-brace-format
 msgid "Hint: Organization \"{key}\" contains following environments: {list}"
 msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/cli_command/register.py:505
+#: src/subscription_manager/cli_command/register.py:507
 #, fuzzy, python-brace-format
 #| msgid "%s cannot register with any organizations."
 msgid "{name} cannot register with any organizations."
@@ -4324,11 +4350,11 @@ msgstr "அழிக்கப்பட்டது (rogue):"
 # document keys
 #: src/subscription_manager/exceptions.py:32
 msgid ""
-"Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
-"log for more information."
+"Network error, unable to connect to server. Please see /var/log/rhsm/"
+"rhsm.log for more information."
 msgstr ""
-"பிணைய பிழை, சேவையக்கத்துடன் இணைக்க முடியவில்லை. மேலும் தகவலுக்கு /var/log/rhsm/rhsm."
-"log ஐ பார்க்கவும்."
+"பிணைய பிழை, சேவையக்கத்துடன் இணைக்க முடியவில்லை. மேலும் தகவலுக்கு /var/log/rhsm/"
+"rhsm.log ஐ பார்க்கவும்."
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
@@ -4529,6 +4555,11 @@ msgstr "புதுப்பிப்புகள்:"
 msgid "Deleted:"
 msgstr "நீக்கியவை:"
 
+#: src/subscription_manager/pqc.py:65
+#, python-brace-format
+msgid "Using default value '{value}' for this run."
+msgstr ""
+
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/reasons.py:102
@@ -4598,7 +4629,7 @@ msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:343
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:445
 #, fuzzy
 #| msgid "This system is already registered. Use --force to override"
 msgid ""
@@ -4608,7 +4639,7 @@ msgstr "இந்த கணினி ஏற்கனவே பதிவுசெ
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:346
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:449
 #, fuzzy
 #| msgid "Register System"
 msgid "Registering the system"
@@ -4616,7 +4647,7 @@ msgstr "கணினியை பதிவுசெய்யவும்"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:357
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:460
 #, fuzzy
 #| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
@@ -4624,7 +4655,7 @@ msgstr "உரிம சான்றிதழ்களையும் தொக�
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
-#: src/subscription_manager/scripts/rhsmcertd_worker.py:430
+#: src/subscription_manager/scripts/rhsmcertd_worker.py:552
 msgid "Unable to update entitlement certificates and repositories"
 msgstr "உரிம சான்றிதழ்களையும் தொகுப்பதிவகங்களையும் புதுப்பிக்க முடியவில்லை"
 
@@ -6066,11 +6097,13 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #~ msgid ""
-#~ "Manage subscriptions and systems registered to Customer Portal via access."
-#~ "redhat.com or through one of our other subscription management services."
+#~ "Manage subscriptions and systems registered to Customer Portal via "
+#~ "access.redhat.com or through one of our other subscription management "
+#~ "services."
 #~ msgstr ""
-#~ "வாடிக்கையாளர் வலைவாசலில் பதிவு செய்த சந்தாக்களையும் கணினிகளையும் access.redhat."
-#~ "com மூலம் அல்லது எங்கள் மற்ற சந்தா நிர்வாக சேவைகளில் ஒன்றின் மூலம் நிர்வகிக்கலாம்."
+#~ "வாடிக்கையாளர் வலைவாசலில் பதிவு செய்த சந்தாக்களையும் கணினிகளையும் "
+#~ "access.redhat.com மூலம் அல்லது எங்கள் மற்ற சந்தா நிர்வாக சேவைகளில் ஒன்றின் மூலம் "
+#~ "நிர்வகிக்கலாம்."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys, author John Sefler
@@ -6078,8 +6111,8 @@ msgstr ""
 #~ "<small><b>Tip:</b> Red Hat values your privacy: http://www.redhat.com/"
 #~ "legal/privacy_statement.html</small>"
 #~ msgstr ""
-#~ "<small><b>குறிப்பு:</b> Red Hat உங்கள் தனியுரிமையை மதிக்கிறது: http://www."
-#~ "redhat.com/legal/privacy_statement.html</small>"
+#~ "<small><b>குறிப்பு:</b> Red Hat உங்கள் தனியுரிமையை மதிக்கிறது: http://"
+#~ "www.redhat.com/legal/privacy_statement.html</small>"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -6607,8 +6640,8 @@ msgstr ""
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #~ msgid ""
-#~ "Please provide a hostname with optional port and/or prefix: hostname[:"
-#~ "port][/prefix]"
+#~ "Please provide a hostname with optional port and/or prefix: "
+#~ "hostname[:port][/prefix]"
 #~ msgstr ""
 #~ "விரும்பினால் பயன்படுத்தக்கூடிய முனையம் மற்றும்/அல்லது hostname[:port][/prefix] என்ற "
 #~ "முன்னொட்டைக் கொன்ட ஒரு ஹோஸ்ட் பெயரை வழங்கவும்"
