@@ -1,8 +1,6 @@
 #!/bin/sh
 set -eux
 
-dnf install -y cockpit-ws python3-devel openssl-devel gcc
-
 rm -f /usr/*bin/subscription-manager
 
 cd /var/tmp
