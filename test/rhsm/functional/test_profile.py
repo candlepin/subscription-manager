@@ -38,6 +38,7 @@ class ProfileTests(unittest.TestCase):
             self.assertTrue("epoch" in pkg)
             self.assertTrue("arch" in pkg)
             self.assertTrue("vendor" in pkg)
+            self.assertTrue("persistence" in pkg)
 
     def test_package_objects(self):
         profile = get_profile("rpm")
@@ -49,8 +50,8 @@ class ProfileTests(unittest.TestCase):
 
     def test_load_profile_from_file(self):
         dummy_pkgs = [
-            Package(name="package1", version="1.0.0", release="1", arch="x86_64"),
-            Package(name="package2", version="2.0.0", release="2", arch="x86_64"),
+            Package(name="package1", version="1.0.0", release="1", arch="x86_64", persistence="persistent"),
+            Package(name="package2", version="2.0.0", release="2", arch="x86_64", persistence="persistent"),
         ]
         profile = self._mock_pkg_profile(dummy_pkgs)
         self.assertEqual(2, len(profile.packages))
@@ -72,16 +73,16 @@ class ProfileTests(unittest.TestCase):
 
     def test_equality_different_object_type(self):
         dummy_pkgs = [
-            Package(name="package1", version="1.0.0", release="1", arch="x86_64"),
-            Package(name="package2", version="2.0.0", release="2", arch="x86_64"),
+            Package(name="package1", version="1.0.0", release="1", arch="x86_64", persistence="persistent"),
+            Package(name="package2", version="2.0.0", release="2", arch="x86_64", persistence="persistent"),
         ]
         profile = self._mock_pkg_profile(dummy_pkgs)
         self.assertFalse(profile == "hello")
 
     def test_equality_no_change(self):
         dummy_pkgs = [
-            Package(name="package1", version="1.0.0", release="1", arch="x86_64"),
-            Package(name="package2", version="2.0.0", release="2", arch="x86_64"),
+            Package(name="package1", version="1.0.0", release="1", arch="x86_64", persistence="persistent"),
+            Package(name="package2", version="2.0.0", release="2", arch="x86_64", persistence="persistent"),
         ]
         profile = self._mock_pkg_profile(dummy_pkgs)
 
@@ -90,19 +91,21 @@ class ProfileTests(unittest.TestCase):
 
     def test_equality_packages_added(self):
         dummy_pkgs = [
-            Package(name="package1", version="1.0.0", release="1", arch="x86_64"),
-            Package(name="package2", version="2.0.0", release="2", arch="x86_64"),
+            Package(name="package1", version="1.0.0", release="1", arch="x86_64", persistence="persistent"),
+            Package(name="package2", version="2.0.0", release="2", arch="x86_64", persistence="persistent"),
         ]
         profile = self._mock_pkg_profile(dummy_pkgs)
 
-        dummy_pkgs.append(Package(name="package3", version="3.0.0", release="2", arch="x86_64"))
+        dummy_pkgs.append(
+            Package(name="package3", version="3.0.0", release="2", arch="x86_64", persistence="persistent")
+        )
         other = self._mock_pkg_profile(dummy_pkgs)
         self.assertFalse(profile == other)
 
     def test_equality_packages_removed(self):
         dummy_pkgs = [
-            Package(name="package1", version="1.0.0", release="1", arch="x86_64"),
-            Package(name="package2", version="2.0.0", release="2", arch="x86_64"),
+            Package(name="package1", version="1.0.0", release="1", arch="x86_64", persistence="persistent"),
+            Package(name="package2", version="2.0.0", release="2", arch="x86_64", persistence="persistent"),
         ]
         profile = self._mock_pkg_profile(dummy_pkgs)
 
@@ -112,8 +115,8 @@ class ProfileTests(unittest.TestCase):
 
     def test_equality_packages_updated(self):
         dummy_pkgs = [
-            Package(name="package1", version="1.0.0", release="1", arch="x86_64"),
-            Package(name="package2", version="2.0.0", release="2", arch="x86_64"),
+            Package(name="package1", version="1.0.0", release="1", arch="x86_64", persistence="persistent"),
+            Package(name="package2", version="2.0.0", release="2", arch="x86_64", persistence="persistent"),
         ]
         profile = self._mock_pkg_profile(dummy_pkgs)
 
@@ -124,13 +127,15 @@ class ProfileTests(unittest.TestCase):
 
     def test_equality_packages_replaced(self):
         dummy_pkgs = [
-            Package(name="package1", version="1.0.0", release="1", arch="x86_64"),
-            Package(name="package2", version="2.0.0", release="2", arch="x86_64"),
+            Package(name="package1", version="1.0.0", release="1", arch="x86_64", persistence="persistent"),
+            Package(name="package2", version="2.0.0", release="2", arch="x86_64", persistence="persistent"),
         ]
         profile = self._mock_pkg_profile(dummy_pkgs)
 
         # Remove package2, add package3:
         dummy_pkgs.pop()
-        dummy_pkgs.append(Package(name="package3", version="3.0.0", release="2", arch="x86_64"))
+        dummy_pkgs.append(
+            Package(name="package3", version="3.0.0", release="2", arch="x86_64", persistence="persistent")
+        )
         other = self._mock_pkg_profile(dummy_pkgs)
         self.assertFalse(profile == other)
