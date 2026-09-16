@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2026-09-16 14:02+0000\n"
-"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/cs/>\n"
 "Language: cs\n"
@@ -1010,8 +1010,8 @@ msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
 msgstr ""
-"Pokud chcete použít volbu no-archive je třeba, aby cílová složka "
-"„{destination}“ existovala na stejném souborovém systému jako složka pro "
+"Pokud chcete použít volbu no-archive je třeba, aby cílová složka „"
+"{destination}“ existovala na stejném souborovém systému jako složka pro "
 "skládání dat „{assembly}“."
 
 #: src/rhsm_debug/debug_commands.py:212
@@ -1147,8 +1147,8 @@ msgstr "Chyba: --ondate je možné použít pouze ve spojení s --available"
 #: src/rhsmlib/services/entitlement.py:504
 msgid "Error: --servicelevel is only applicable with --available or --consumed"
 msgstr ""
-"Chyba: --servicelevel je možné použít pouze ve spojení s --available nebo "
-"--consumed"
+"Chyba: --servicelevel je možné použít pouze ve spojení s --available nebo --"
+"consumed"
 
 #: src/rhsmlib/services/entitlement.py:508
 msgid "Error: --match-installed is only applicable with --available"
@@ -1162,8 +1162,8 @@ msgstr "Chyba: --no-overlapje možné použít pouze ve spojení s --available"
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
 msgstr ""
-"Chyba: --pool-only je možné použít pouze ve spojení s --available a/nebo "
-"--consumed"
+"Chyba: --pool-only je možné použít pouze ve spojení s --available a/nebo --"
+"consumed"
 
 #: src/rhsmlib/services/entitlement.py:519
 msgid "Error: this system is not registered"
@@ -1562,8 +1562,8 @@ msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
-"Nejsou zde k dispozici žádné dostupné hodnoty pro účel systému "
-"„{syspurpose_attr}“ z předplatných, která má tato organizace k dispozici."
+"Nejsou zde k dispozici žádné dostupné hodnoty pro účel systému „"
+"{syspurpose_attr}“ z předplatných, která má tato organizace k dispozici."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:397
 #, python-brace-format
@@ -1996,8 +1996,8 @@ msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
 msgstr ""
-"název přebití, které odebrat (je možné uvést vícekrát) – použijte s volbou "
-"--repo."
+"název přebití, které odebrat (je možné uvést vícekrát) – použijte s volbou --"
+"repo."
 
 #: src/subscription_manager/cli_command/override.py:56
 msgid ""
@@ -2011,8 +2011,8 @@ msgstr ""
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
 msgstr ""
-"odebrat veškerá přebití – může být specifické k repozitáři a to zadáním "
-"--repo"
+"odebrat veškerá přebití – může být specifické k repozitáři a to zadáním --"
+"repo"
 
 #: src/subscription_manager/cli_command/override.py:68
 msgid "list all overrides; can be specific to a repository by providing --repo"
@@ -2035,8 +2035,8 @@ msgstr "Chyba: Je třeba zadat který repozitář změnit"
 #: src/subscription_manager/cli_command/override.py:94
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
-"Chyba: Neměli byste používat --add nebo --remove ve spojení s --remove-all a "
-"--list"
+"Chyba: Neměli byste používat --add nebo --remove ve spojení s --remove-all "
+"a --list"
 
 #: src/subscription_manager/cli_command/override.py:97
 msgid "Error: You may not use --list with --remove-all"
@@ -2045,8 +2045,8 @@ msgstr "Chyba: Není možné použít --list a zároveň --remove-all"
 #: src/subscription_manager/cli_command/override.py:102
 msgid "Error: The --repo option must be used with --list or --add or --remove."
 msgstr ""
-"Chyba: Je třeba, aby volba --repo byla použita s --list nebo --add nebo "
-"--remove."
+"Chyba: Je třeba, aby volba --repo byla použita s --list nebo --add nebo --"
+"remove."
 
 #: src/subscription_manager/cli_command/override.py:107
 msgid "Error: You must specify an override name with --remove."
@@ -2817,8 +2817,8 @@ msgid ""
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
 "Zásuvné moduly yum/dnf: %s bylo automaticky povoleno kvůli Správě Red Hat "
-"předplatných. Pokud toto není chtěno, zablokujte toto chování pomocí "
-"„subscription-manager config --rhsm.auto_enable_yum_plugins=0\"."
+"předplatných. Pokud toto není chtěno, zablokujte toto chování pomocí „"
+"subscription-manager config --rhsm.auto_enable_yum_plugins=0\"."
 
 #: src/subscription_manager/repolib.py:678
 msgid "Repo updates"
