@@ -6,7 +6,7 @@
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023, 2026.
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021, 2023, 2025.
-# Transtats <suanand@redhat.com>, 2022, 2023.
+# Transtats <suanand@redhat.com>, 2022, 2023, 2026.
 # 김인수 <simmon@nplob.com>, 2024.
 # Matyas Horky <mhorky@redhat.com>, 2025.
 msgid ""
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-12 10:49+0200\n"
 "PO-Revision-Date: 2026-09-16 13:58+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ja/>\n"
 "Language: ja\n"
@@ -92,7 +92,9 @@ msgstr "'required' は、位置引数の無効な引数です"
 msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
-msgstr "無効なオプション文字列 %(option)r: 文字 %(prefix_chars)r で始まる必要があります"
+msgstr ""
+"無効なオプション文字列 %(option)r: 文字 %(prefix_chars)r で始まる必要がありま"
+"す"
 
 #: /usr/lib64/python3.12/argparse.py:1622
 #, python-format
@@ -308,8 +310,10 @@ msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
-msgstr "\n"
-"このシステムは、エンタイトルメントサーバーに登録されていません。subscription-manager で登録できます。\n"
+msgstr ""
+"\n"
+"このシステムは、エンタイトルメントサーバーに登録されていません。subscription-"
+"manager で登録できます。\n"
 
 #: src/plugins/dnf/subscription_manager.py:58
 msgid ""
@@ -1499,7 +1503,9 @@ msgstr "--add は --remove と併用できません"
 #, python-brace-format
 msgid ""
 "Error: you must register or specify --username and --password to list {attr}"
-msgstr "エラー: リスト {attr} に、--username と --password を指定または登録する必要があります"
+msgstr ""
+"エラー: リスト {attr} に、--username と --password を指定または登録する必要が"
+"あります"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:167
 msgid ""
@@ -1692,7 +1698,10 @@ msgstr "システムの証明書が破損しています。 再登録を行っ�
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
-msgstr "コンシューマープロファイル \"{uuid}\" は、サーバーから削除されています。ローカルのプロファイルは、clean または unregister コマンドを使って削除します。"
+msgstr ""
+"コンシューマープロファイル \"{uuid}\" は、サーバーから削除されています。"
+"ローカルのプロファイルは、clean または unregister コマンドを使って削除します"
+"。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/config.py:28
@@ -2394,7 +2403,9 @@ msgstr "リリースの詳細設定は解除されました"
 #, python-brace-format
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
-msgstr "どのリリースも '{release}' に一致しません。全一覧は、'release --list' で確認します。"
+msgstr ""
+"どのリリースも '{release}' に一致しません。全一覧は、'release --list' で確認"
+"します。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author khasida
 #: src/subscription_manager/cli_command/release.py:113
@@ -2488,7 +2499,9 @@ msgstr ""
 msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
-msgstr "エラー: '{repoid}' は有効なリポジトリー ID と一致しません。\"subscription-manager repos --list\" を使用すると有効なリポジトリーを表示できます。"
+msgstr ""
+"エラー: '{repoid}' は有効なリポジトリー ID と一致しません。\"subscription-"
+"manager repos --list\" を使用すると有効なリポジトリーを表示できます。"
 
 #: src/subscription_manager/cli_command/repos.py:271
 #, python-brace-format
@@ -2737,7 +2750,8 @@ msgstr "接続エラー: {message} (error code {code})"
 msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
-msgstr "不明なサーバー応答 (HTTP エラーコード {code}: {title}):\n"
+msgstr ""
+"不明なサーバー応答 (HTTP エラーコード {code}: {title}):\n"
 "{content}"
 
 #: src/subscription_manager/exceptions.py:37
@@ -2749,7 +2763,9 @@ msgstr "不明なサーバー応答 (HTTP エラーコード {code}: {title})"
 #, python-brace-format
 msgid ""
 "Proxy error: unable to connect to {hostname}: {message} (error code {code})"
-msgstr "プロキシーエラー: {hostname} に接続できません: {message} (エラーコード {code})"
+msgstr ""
+"プロキシーエラー: {hostname} に接続できません: {message} (エラーコード "
+"{code})"
 
 #: src/subscription_manager/exceptions.py:41
 #, python-brace-format
@@ -2848,7 +2864,8 @@ msgstr "不適切な証明書: {file}: [{library}] {message}"
 msgid ""
 "Bad certificate: [{library}] {message}\n"
 "{data}"
-msgstr "不適切な証明書: [{library}] {message}\n"
+msgstr ""
+"不適切な証明書: [{library}] {message}\n"
 "{data}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
@@ -2933,7 +2950,9 @@ msgstr "スタック "
 msgid ""
 "Error: More than one release product certificate installed. Certificate "
 "paths: %s"
-msgstr "エラー: リリースの製品証明書が 2 つ以上インストールされています。証明書パス: %s"
+msgstr ""
+"エラー: リリースの製品証明書が 2 つ以上インストールされています。証明書パス: "
+"%s"
 
 #: src/subscription_manager/repolib.py:94
 #, python-format
@@ -3010,7 +3029,9 @@ msgstr "および"
 msgid ""
 "Warning: Provided value \"{val}\" is not included in the list of valid "
 "values for attribute {attr}:"
-msgstr "警告: 指定された値 \"{val}\" は、属性 {attr} の有効な値のリストに含まれていません:"
+msgstr ""
+"警告: 指定された値 \"{val}\" は、属性 {attr} の有効な値のリストに含まれていま"
+"せん:"
 
 #: src/syspurpose/files.py:472
 #, python-brace-format
