@@ -23,7 +23,7 @@ from tempfile import NamedTemporaryFile
 import unittest
 
 from unittest.mock import patch
-from rhsm.config import RhsmConfigParser, RhsmHostConfigParser, in_container
+from rhsm.config import RhsmConfigParser, RhsmHostConfigParser, InvalidConfigValueError, in_container
 
 TEST_CONFIG = """
 [foo]
@@ -528,50 +528,40 @@ class IsValueValidTests(unittest.TestCase):
         self.fid = write_temp_file(TEST_CONFIG)
         self.parser = RhsmConfigParser(self.fid.name)
 
-    def test_unconstrained_key_returns_true(self):
-        self.assertTrue(self.parser.is_value_valid("server", "hostname", "anything"))
+    def test_unconstrained_key_does_not_raise(self):
+        self.parser.is_value_valid("server", "hostname", "anything")
 
     def test_certificate_algorithms_valid(self):
         for val in ("legacy", "current"):
-            self.assertTrue(self.parser.is_value_valid("rhsm", "certificate_algorithms", val))
-
-    def test_certificate_algorithms_invalid_returns_false(self):
-        self.assertFalse(
-            self.parser.is_value_valid("rhsm", "certificate_algorithms", "bad", print_warning=False)
-        )
+            self.parser.is_value_valid("rhsm", "certificate_algorithms", val)
 
     def test_certificate_algorithms_invalid_raises(self):
-        with self.assertRaises(ValueError):
-            self.parser.is_value_valid(
-                "rhsm", "certificate_algorithms", "bad", print_warning=False, raise_on_invalid=True
-            )
+        with self.assertRaises(InvalidConfigValueError):
+            self.parser.is_value_valid("rhsm", "certificate_algorithms", "bad")
 
     def test_log_level_valid(self):
         for val in ("CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"):
-            self.assertTrue(self.parser.is_value_valid("logging", "default_log_level", val))
+            self.parser.is_value_valid("logging", "default_log_level", val)
 
     def test_log_level_notset_accepted(self):
         # NOTSET is unadvertised but still accepted for backward compatibility
-        self.assertTrue(
-            self.parser.is_value_valid("logging", "default_log_level", "NOTSET", print_warning=False)
-        )
+        self.parser.is_value_valid("logging", "default_log_level", "NOTSET")
 
-    def test_log_level_notset_no_warning_with_print_warning_true(self):
-        # NOTSET is in the nohint list; it should not emit a warning even when print_warning=True
+    def test_log_level_notset_no_warning(self):
+        # NOTSET is in no_hint; it should not appear in the error messages
         stderr_buffer = io.StringIO()
         with contextlib.redirect_stderr(stderr_buffer):
-            self.assertTrue(
-                self.parser.is_value_valid("logging", "default_log_level", "NOTSET", print_warning=True)
-            )
+            self.parser.is_value_valid("logging", "default_log_level", "NOTSET")
         self.assertEqual("", stderr_buffer.getvalue())
 
-    def test_log_level_invalid_returns_false(self):
-        self.assertFalse(
-            self.parser.is_value_valid("logging", "default_log_level", "VERBOSE", print_warning=False)
-        )
-
     def test_log_level_invalid_raises(self):
-        with self.assertRaises(ValueError):
-            self.parser.is_value_valid(
-                "logging", "default_log_level", "VERBOSE", print_warning=False, raise_on_invalid=True
-            )
+        with self.assertRaises(InvalidConfigValueError):
+            self.parser.is_value_valid("logging", "default_log_level", "VERBOSE")
+
+    def test_invalid_value_error_messages_contain_hint(self):
+        try:
+            self.parser.is_value_valid("rhsm", "certificate_algorithms", "bad")
+        except InvalidConfigValueError as e:
+            msgs = e.messages()
+            self.assertTrue(any("subscription-manager config" in m for m in msgs))
+            self.assertTrue(any("Valid Values" in m for m in msgs))
