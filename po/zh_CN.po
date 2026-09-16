@@ -6,7 +6,7 @@
 # Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023, 2026.
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021, 2023, 2025.
-# Transtats <suanand@redhat.com>, 2022, 2023.
+# Transtats <suanand@redhat.com>, 2022, 2023, 2026.
 # Jingge Chen <mariocanfly@hotmail.com>, 2023.
 msgid ""
 msgstr ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-12 10:49+0200\n"
 "PO-Revision-Date: 2026-09-16 14:01+0000\n"
-"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
+"Last-Translator: Transtats <suanand@redhat.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -304,7 +304,8 @@ msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
-msgstr "\n"
+msgstr ""
+"\n"
 "本系统尚未在权利服务器中注册。可使用 subscription-manager 进行注册。\n"
 
 #: src/plugins/dnf/subscription_manager.py:58
@@ -1419,7 +1420,9 @@ msgid ""
 "Warning: A {attr} of \"{download_value}\" was recently set for this system "
 "by the entitlement server administrator.\n"
 "{advice}"
-msgstr "警告：\"{download_value}\" 的 {attr} 是最近由授权服务器管理员为这个系统设置的。\n"
+msgstr ""
+"警告：\"{download_value}\" 的 {attr} 是最近由授权服务器管理员为这个系统设置的"
+"。\n"
 "{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
@@ -1660,7 +1663,9 @@ msgstr "系统证书崩溃。请重新注册。"
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
-msgstr "已将消费者配置集 \"{uuid}\" 从服务器中删除。您可以使用 clean 或 unregister 命令删除本地配置集。"
+msgstr ""
+"已将消费者配置集 \"{uuid}\" 从服务器中删除。您可以使用 clean 或 unregister 命"
+"令删除本地配置集。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:28
@@ -2457,7 +2462,9 @@ msgstr "这个系统没有可通过订阅使用的库。"
 msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
-msgstr "错误：'{repoid}' 与有效软件仓库 ID 不匹配。请使用 \"subscription-manager repos --list\" 查看有效软件仓库。"
+msgstr ""
+"错误：'{repoid}' 与有效软件仓库 ID 不匹配。请使用 \"subscription-manager "
+"repos --list\" 查看有效软件仓库。"
 
 #: src/subscription_manager/cli_command/repos.py:271
 #, python-brace-format
@@ -2699,7 +2706,8 @@ msgstr "连接错误： {message} （错误代码 {code}）"
 msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
-msgstr "未知服务器回复 (HTTP 错误代码 {code}: {title}):\n"
+msgstr ""
+"未知服务器回复 (HTTP 错误代码 {code}: {title}):\n"
 "{content}"
 
 #: src/subscription_manager/exceptions.py:37
@@ -2806,7 +2814,8 @@ msgstr "错误证书： {file}: [{library}] {message}"
 msgid ""
 "Bad certificate: [{library}] {message}\n"
 "{data}"
-msgstr "错误证书： [{library}] {message}\n"
+msgstr ""
+"错误证书： [{library}] {message}\n"
 "{data}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
