@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-14 15:31+0200\n"
-"PO-Revision-Date: 2026-07-31 23:17+0000\n"
+"PO-Revision-Date: 2026-08-17 05:18+0000\n"
 "Last-Translator: Andrei Stepanov <adem4ik@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/ru/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 2026.7.1\n"
+"X-Generator: Weblate 2026.8.1\n"
 
 #: /usr/lib64/python3.9/argparse.py:296
 msgid "usage: "
@@ -334,6 +334,10 @@ msgid ""
 "seconds with the entitlement server. Please check your clock settings to "
 "ensure access to all entitled content.\n"
 msgstr ""
+"\n"
+"Системные часы смещены. Расхождение во времени с сервером подписок "
+"составляет {time_drift} секунд. Проверьте настройки часов, чтобы обеспечить "
+"доступ ко всему содержимому по подписке.\n"
 
 #: src/plugins/dnf/subscription_manager.py:120
 msgid "Not root, Subscription Management repositories not updated"
@@ -928,20 +932,16 @@ msgstr "Неизвестный тип сертификата"
 #: src/rhsm/config.py:283
 #, python-brace-format
 msgid "Invalid value '{val}' for {section}.{name}."
-msgstr ""
+msgstr "Недопустимое значение '{val}' для {section}.{name}."
 
 #: src/rhsm/config.py:290
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Please use:  subscription-manager config --logging.default_log_level=<Log "
-#| "Level> to set the default_log_level to a valid value."
+#, python-brace-format
 msgid ""
 "Please use:  subscription-manager config --{section}.{name}=<value> to set "
 "{name} to a valid value."
 msgstr ""
-"Используйте: subscription-manager config --"
-"logging.default_log_level=<уровень журнала> для установки default_log_level "
-"в допустимое значение."
+"Используйте: subscription-manager config --{section}.{name}=<значение> для "
+"установки {name} в допустимое значение."
 
 #: src/rhsm/config.py:295
 #, python-brace-format
@@ -952,6 +952,8 @@ msgstr "Допустимые значения: {valid_str}"
 #, python-brace-format
 msgid "Invalid value '{val}' for {section}.{name}. Valid values are: {valid}."
 msgstr ""
+"Недопустимое значение '{val}' для {section}.{name}. Допустимые значения: "
+"{valid}."
 
 #: src/rhsm/connection.py:1515
 msgid "Fetching supported resources"
@@ -1116,7 +1118,7 @@ msgstr "Получение задания"
 #: src/rhsm/logutil.py:211
 #, python-brace-format
 msgid "Using default value '{level}' for this run."
-msgstr ""
+msgstr "Для этого запуска используется значение по умолчанию '{level}'."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:39
@@ -2223,6 +2225,8 @@ msgid ""
 "Error: At least one environment must be set; use --list to get list of "
 "environments."
 msgstr ""
+"Ошибка: необходимо установить как минимум одну среду; используйте --list для "
+"получения списка сред."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:121
@@ -4041,7 +4045,7 @@ msgstr "Удалено:"
 #: src/subscription_manager/pqc.py:65
 #, python-brace-format
 msgid "Using default value '{value}' for this run."
-msgstr ""
+msgstr "Для этого запуска используется значение по умолчанию '{value}'."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/reasons.py:102
