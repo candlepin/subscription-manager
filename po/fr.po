@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2025-03-31 12:53+0000\n"
-"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
+"PO-Revision-Date: 2026-09-16 13:57+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
 "Language: fr\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -258,8 +258,8 @@ msgstr "essayer de procéder à l’auto-enregistrement."
 #: src/daemons/rhsmcertd.c:567
 msgid "For more information run: rhsmcertd --help\n"
 msgstr ""
-"Pour obtenir des informations supplémentaires, veuillez exécuter : rhsmcertd "
-"--help\n"
+"Pour obtenir des informations supplémentaires, veuillez exécuter : "
+"rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:673
@@ -419,8 +419,7 @@ msgstr "%(prog)s {name} [OPTIONS] CERT_FILE"
 #: src/rct/cert_commands.py:41
 #, python-brace-format
 msgid "Unable to read certificate file '{certificate}': {exception}"
-msgstr ""
-"Incapable de lire le fichier certificat « {certificate} » : {exception}"
+msgstr "Incapable de lire le fichier certificat « {certificate} » : {exception}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:49
@@ -2320,8 +2319,8 @@ msgstr "Erreur : vous devez spécifier un référentiel à modifier"
 #: src/subscription_manager/cli_command/override.py:94
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
-"Erreur : vous ne pouvez pas utiliser --add ou --remove avec --remove-all et "
-"--list"
+"Erreur : vous ne pouvez pas utiliser --add ou --remove avec --remove-all "
+"et --list"
 
 #: src/subscription_manager/cli_command/override.py:97
 msgid "Error: You may not use --list with --remove-all"
