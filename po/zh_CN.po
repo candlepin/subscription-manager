@@ -8,13 +8,14 @@
 # Pino Toscano <ptoscano@redhat.com>, 2021, 2023, 2025.
 # Transtats <suanand@redhat.com>, 2022, 2023, 2026.
 # Jingge Chen <mariocanfly@hotmail.com>, 2023, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-12 10:49+0200\n"
 "PO-Revision-Date: 2026-09-16 14:01+0000\n"
-"Last-Translator: Jingge Chen <mariocanfly@hotmail.com>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -928,14 +929,16 @@ msgid "Invalid value '{val}' for {section}.{name}."
 msgstr ""
 
 #: src/rhsm/config.py:289
-#, python-brace-format
+#, fuzzy, python-brace-format
 #| msgid ""
 #| "Please use:  subscription-manager config --logging.default_log_level=<Log "
 #| "Level> to set the default_log_level to a valid value."
 msgid ""
 "Please use:  subscription-manager config --{section}.{name}=<value> to set "
 "{name} to a valid value."
-msgstr "请使用： subscription-manager config --{section}.{name}=<value> 将 {name} 设置为一个有效的值。"
+msgstr ""
+"请使用：subscription-manager config --logging.default_log_level=<Log Level> "
+"将 default_log_level 设置为一个有效的值。"
 
 #: src/rhsm/config.py:294
 #, python-brace-format
