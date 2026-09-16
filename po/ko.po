@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2026-09-16 13:59+0000\n"
-"Last-Translator: 김인수 <simmon@nplob.com>\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Korean <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ko/>\n"
 "Language: ko\n"
@@ -1129,8 +1129,8 @@ msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
 msgstr ""
-"아카이브하지 않은 옵션을 사용하려면 대상 디렉토리 '{destination}'가 데이터 어"
-"셈블리 디렉토리 '{assembly}'와 동일한 파일 시스템에 존재해야 합니다."
+"아카이브하지 않은 옵션을 사용하려면 대상 디렉토리 '{destination}'가 데이터 "
+"어셈블리 디렉토리 '{assembly}'와 동일한 파일 시스템에 존재해야 합니다."
 
 #: src/rhsm_debug/debug_commands.py:212
 #, python-brace-format
@@ -1331,9 +1331,9 @@ msgid ""
 "with consumerid. Please use --force without --consumerid to re-register or "
 "use the clean command and try again without --force."
 msgstr ""
-"오류: consumerid로 등록을 복원하면서 등록을 강제 실행할 수 없습니다. 재등록하"
-"려면 --consumerid없이 --force를 사용하거나 clean 명령을 사용하여 --force 없"
-"이 다시 실행합니다."
+"오류: consumerid로 등록을 복원하면서 등록을 강제 실행할 수 없습니다. "
+"재등록하려면 --consumerid없이 --force를 사용하거나 clean 명령을 사용하여 --"
+"force 없이 다시 실행합니다."
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:260
@@ -1745,8 +1745,7 @@ msgstr "https://hostname:port/prefix 형식의 서버 URL"
 msgid ""
 "do not check the entitlement server SSL certificate against available "
 "certificate authorities"
-msgstr ""
-"사용 가능한 인증 기관에 대해 인타이틀먼트 서버 SSL 인증서를 확인하지 않습니다"
+msgstr "사용 가능한 인증 기관에 대해 인타이틀먼트 서버 SSL 인증서를 확인하지 않습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/cli.py:150
@@ -2222,8 +2221,7 @@ msgstr "오류: 수정하려는 저장소를 지정해야 합니다"
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:94
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
-msgstr ""
-"오류: --remove-all 및 --list와 함께 --add 또는 --remove를 사용할 수 없습니다"
+msgstr "오류: --remove-all 및 --list와 함께 --add 또는 --remove를 사용할 수 없습니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:97
@@ -2396,8 +2394,7 @@ msgstr "출시 버전 설정"
 msgid ""
 "include an implicit attempt to unregister before registering a new system "
 "identity"
-msgstr ""
-"새로운 시스템 식별을 등록하기 전에 등록해제에 암묵적인 시도를 포함합니다"
+msgstr "새로운 시스템 식별을 등록하기 전에 등록해제에 암묵적인 시도를 포함합니다"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:114
@@ -2861,8 +2858,8 @@ msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
 msgstr ""
-"네트워크 오류, 서버에 연결할 수 없음. 보다 자세한 정보는 /var/log/rhsm/rhsm."
-"log에서 확인하십시오."
+"네트워크 오류, 서버에 연결할 수 없음. 보다 자세한 정보는 /var/log/rhsm/"
+"rhsm.log에서 확인하십시오."
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format

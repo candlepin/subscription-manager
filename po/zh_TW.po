@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2025-04-27 05:53+0000\n"
-"Last-Translator: hsu zangmen <chzang55@gmail.com>\n"
+"PO-Revision-Date: 2026-09-16 14:01+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_TW/>\n"
 "Language: zh_TW\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -1288,8 +1288,8 @@ msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
 msgstr ""
-"錯誤：提供了無效的序列類型。僅允許使用「installed」、「consumed」，或"
-"「available」"
+"錯誤：提供了無效的序列類型。僅允許使用「installed」、「consumed」，或「"
+"available」"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/entitlement.py:497
@@ -1364,8 +1364,8 @@ msgid ""
 "with consumerid. Please use --force without --consumerid to re-register or "
 "use the clean command and try again without --force."
 msgstr ""
-"錯誤：嘗試使用 consumerid 復原時，無法強制註冊。請使用 --force 選項而不加上 "
-"--consumerid 以重新註冊，或使用 clean 指令而不加上 --force。"
+"錯誤：嘗試使用 consumerid 復原時，無法強制註冊。請使用 --force 選項而不加"
+"上 --consumerid 以重新註冊，或使用 clean 指令而不加上 --force。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:260
@@ -1549,8 +1549,7 @@ msgstr "提示：忘記帳號或密碼？請參閱 https://redhat.com/forgot_pas
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
-msgstr ""
-"consumer_uuid=%s 不是合於規定的 consumer_uuid。不會試圖與伺服器同步 %s 快取。"
+msgstr "consumer_uuid=%s 不是合於規定的 consumer_uuid。不會試圖與伺服器同步 %s 快取。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cert_sorter.py:292
@@ -2249,8 +2248,7 @@ msgstr "要移除的覆蓋項目之名稱（可以指定多個）；與 --repo �
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
-msgstr ""
-"要覆寫的選項之名稱與值，用冒號隔開（可以指定多個）；與 --repo 選項合用。"
+msgstr "要覆寫的選項之名稱與值，用冒號隔開（可以指定多個）；與 --repo 選項合用。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/override.py:63
@@ -2715,8 +2713,8 @@ msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
 msgstr ""
-"錯誤：「%s」與有效的軟體庫 ID 不符。請使用「subscription-manager repos --"
-"list」查看有效的軟體庫。"
+"錯誤：「%s」與有效的軟體庫 ID 不符。請使用「subscription-manager repos --list"
+"」查看有效的軟體庫。"
 
 #: src/subscription_manager/cli_command/repos.py:271
 #, fuzzy, python-brace-format
@@ -2943,8 +2941,7 @@ msgstr "已刪除（rogue）:"
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
-msgstr ""
-"發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
+msgstr "發生網路錯誤，無法連至伺服器。請查看 /var/log/rhsm/rhsm.log 以取得更多資訊。"
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
@@ -3004,8 +3001,8 @@ msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
-"遠端伺服器錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資"
-"訊。"
+"遠端伺服器錯誤。請檢查連線詳情，或查看 /var/log/rhsm/rhsm.log 以取得更多資訊"
+"。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/exceptions.py:50

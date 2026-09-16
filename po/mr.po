@@ -6,15 +6,16 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2015-09-25 02:52-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
-"Language-Team: Marathi <sshedmak@redhat.com>\n"
+"PO-Revision-Date: 2026-09-16 13:59+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Marathi <https://translate.fedoraproject.org/projects/"
+"subscription-manager/subscription-manager-main/mr/>\n"
 "Language: mr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Zanata 3.9.6\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -1661,7 +1662,8 @@ msgstr ""
 msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
-msgstr "ह्या प्रणालीला Customer Portal किंवा इतर सबस्क्रिप्शन मॅनेजमेंट सेवासह करा"
+msgstr ""
+"ह्या प्रणालीला Customer Portal किंवा इतर सबस्क्रिप्शन मॅनेजमेंट सेवासह करा"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1962,7 +1964,8 @@ msgstr ""
 #: src/subscription_manager/cli_command/clean.py:25
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr "सर्व्हरवर प्रभाव न टाकता सर्व स्थानीय प्रणाली व सबस्क्रिप्शन डाटा काढून टाका"
+msgstr ""
+"सर्व्हरवर प्रभाव न टाकता सर्व स्थानीय प्रणाली व सबस्क्रिप्शन डाटा काढून टाका"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2552,7 +2555,8 @@ msgstr ""
 # document keys
 #: src/subscription_manager/cli_command/override.py:68
 msgid "list all overrides; can be specific to a repository by providing --repo"
-msgstr "सर्व ओव्हरराइड्स दाखवतो; --repo निर्देशीत करून रेपॉजिटरिकरिता ठराविक असू शकते"
+msgstr ""
+"सर्व ओव्हरराइड्स दाखवतो; --repo निर्देशीत करून रेपॉजिटरिकरिता ठराविक असू शकते"
 
 #: src/subscription_manager/cli_command/override.py:76
 msgid "You must specify an override in the form of \"name:value\" with --add."
@@ -2623,7 +2627,8 @@ msgstr "ह्या प्रणालीकडे कोणतेही अं
 msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
-msgstr "रेपॉजिटरि '%s' सध्या अस्तित्वात नाही, परंतु ओव्हरराइड समाविष्ट केले गेले आहे."
+msgstr ""
+"रेपॉजिटरि '%s' सध्या अस्तित्वात नाही, परंतु ओव्हरराइड समाविष्ट केले गेले आहे."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2765,7 +2770,8 @@ msgstr "सर्व्हरपासून अस्तित्वाती�
 msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
-msgstr "संस्था किचा वापर करून, वापरकर्ताकरिता एकापेक्षाजास्त संस्थापैकी नोंदणी करा"
+msgstr ""
+"संस्था किचा वापर करून, वापरकर्ताकरिता एकापेक्षाजास्त संस्थापैकी नोंदणी करा"
 
 #: src/subscription_manager/cli_command/register.py:95
 msgid ""
@@ -3036,16 +3042,16 @@ msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"सुरू करण्याजोगी रेपॉजिटरि (एकापेक्षा जास्त वेळ निर्देशीत करणे शक्य). वाइल्डकार्ड्ज (* "
-"आणि ?) समर्थीत आहे."
+"सुरू करण्याजोगी रेपॉजिटरि (एकापेक्षा जास्त वेळ निर्देशीत करणे शक्य). वाइल्डकार्ड्ज (* आणि "
+"?) समर्थीत आहे."
 
 #: src/subscription_manager/cli_command/repos.py:102
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"बंद करण्याजोगी रेपॉजिटरि (एकापेक्षा जास्त वेळ निर्देशीत करणे शक्य). वाइल्डकार्ड्ज (* "
-"आणि ?) समर्थीत आहे."
+"बंद करण्याजोगी रेपॉजिटरि (एकापेक्षा जास्त वेळ निर्देशीत करणे शक्य). वाइल्डकार्ड्ज (* आणि "
+"?) समर्थीत आहे."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3336,8 +3342,8 @@ msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
 msgstr ""
-"नेटवर्क त्रुटी, सर्व्हरशी जोडणी करणे अशक्य. कृपया अधिक माहितीकरिता /var/log/rhsm/rhsm."
-"log लॉग पहा."
+"नेटवर्क त्रुटी, सर्व्हरशी जोडणी करणे अशक्य. कृपया अधिक माहितीकरिता /var/log/rhsm/"
+"rhsm.log लॉग पहा."
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
