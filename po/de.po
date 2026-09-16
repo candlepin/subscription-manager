@@ -5,15 +5,15 @@
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # CoconutNut <patrick.vollandt@mein-gym.de>, 2021, 2026.
 # Ludek Janda <ljanda@redhat.com>, 2021.
-# Ettore Atalan <atalanttore@googlemail.com>, 2021, 2022, 2024.
+# Ettore Atalan <atalanttore@googlemail.com>, 2021, 2022, 2024, 2026.
 # Pino Toscano <ptoscano@redhat.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2026-09-16 13:56+0000\n"
-"Last-Translator: CoconutNut <patrick.vollandt@mein-gym.de>\n"
+"PO-Revision-Date: 2026-09-16 13:57+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/de/>\n"
 "Language: de\n"
@@ -1205,8 +1205,8 @@ msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
 msgstr ""
-"Um die Option no-archive zu verwenden, muss das Zielverzeichnis "
-"»{destination}« auf demselben Dateisystem vorliegen wie das Data-Assembly-"
+"Um die Option no-archive zu verwenden, muss das Zielverzeichnis »"
+"{destination}« auf demselben Dateisystem vorliegen wie das Data-Assembly-"
 "Verzeichnis »{assembly}«."
 
 #: src/rhsm_debug/debug_commands.py:212
@@ -1222,8 +1222,7 @@ msgstr "Geschrieben: {destination_dir_name}"
 #: src/rhsm_debug/debug_commands.py:229
 #, python-brace-format
 msgid "Unable to create zip file of system information: {error}"
-msgstr ""
-"Zip-Datei mit Systeminformationen konnte nicht erstellt werden: {error}"
+msgstr "Zip-Datei mit Systeminformationen konnte nicht erstellt werden: {error}"
 
 #: src/rhsmlib/dbus/objects/register.py:158
 #, python-format
