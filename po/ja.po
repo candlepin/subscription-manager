@@ -9,13 +9,14 @@
 # Transtats <suanand@redhat.com>, 2022, 2023, 2026.
 # 김인수 <simmon@nplob.com>, 2024, 2026.
 # Matyas Horky <mhorky@redhat.com>, 2025, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-12 10:49+0200\n"
 "PO-Revision-Date: 2026-09-16 13:58+0000\n"
-"Last-Translator: Pino Toscano <ptoscano@redhat.com>\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ja/>\n"
 "Language: ja\n"
@@ -943,14 +944,16 @@ msgid "Invalid value '{val}' for {section}.{name}."
 msgstr ""
 
 #: src/rhsm/config.py:289
-#, python-brace-format
+#, fuzzy, python-brace-format
 #| msgid ""
 #| "Please use:  subscription-manager config --logging.default_log_level=<Log "
 #| "Level> to set the default_log_level to a valid value."
 msgid ""
 "Please use:  subscription-manager config --{section}.{name}=<value> to set "
 "{name} to a valid value."
-msgstr "{name} を有効な値に設定するには、subscription-manager config --{section}.{name}=<value> を使用してください。"
+msgstr ""
+"使用: subscription-manager config --logging.default_log_level=<Log Level> を"
+"使用して default_log_level を有効な値に設定してください。"
 
 #: src/rhsm/config.py:294
 #, python-brace-format
