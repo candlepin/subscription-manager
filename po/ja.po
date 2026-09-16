@@ -3,7 +3,7 @@
 # John Sefler <jsefler@redhat.com>, 2018. #zanata, 2023.
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # myamamot <myamamot@redhat.com>, 2018. #zanata
-# Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023.
+# Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023, 2026.
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021, 2023, 2025.
 # Transtats <suanand@redhat.com>, 2022, 2023.
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-12 10:49+0200\n"
 "PO-Revision-Date: 2026-09-16 13:58+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Ludek Janda <ljanda@redhat.com>\n"
 "Language-Team: Japanese <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ja/>\n"
 "Language: ja\n"
@@ -326,8 +326,11 @@ msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
-msgstr "\n"
-"このシステムは、エンタイトルメントーバーに登録されていますが、更新は受信していません。subscription-manager でサブスクリプションを割り当てることができます。\n"
+msgstr ""
+"\n"
+"このシステムは、エンタイトルメントーバーに登録されていますが、更新は受信して"
+"いません。subscription-manager でサブスクリプションを割り当てることができます"
+"。\n"
 
 #: src/plugins/dnf/subscription_manager.py:68
 #, python-brace-format
@@ -359,7 +362,9 @@ msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgid_plural "subscription-manager plugin disabled %d system repositories with respect of configuration in /etc/dnf/plugins/subscription-manager.conf"
-msgstr[0] "subscription-manager プラグインは /etc/dnf/plugins/subscription-manager.conf の設定を参照して %d システムリポジトリーを無効にします"
+msgstr[0] ""
+"subscription-manager プラグインは /etc/dnf/plugins/subscription-manager.conf "
+"の設定を参照して %d システムリポジトリーを無効にします"
 
 #: src/plugins/dnf/subscription_manager.py:154
 msgid "Updating Subscription Management repositories."
@@ -377,7 +382,9 @@ msgstr "subscription-manager はコンテナーモードで動作しています
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
-msgstr "結合されたプロファイルを Satellite サーバーにアップロードします (インストール済みの RPM、有効なリポジトリーとモジュールのリスト)"
+msgstr ""
+"結合されたプロファイルを Satellite サーバーにアップロードします (インストール"
+"済みの RPM、有効なリポジトリーとモジュールのリスト)"
 
 #: src/plugins/dnf/upload_profile.py:48
 #: src/subscription_manager/scripts/package_profile_upload.py:30
@@ -387,7 +394,9 @@ msgstr "パッケージプロファイルのアップロードを強制します
 #: src/plugins/dnf/upload_profile.py:65
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
-msgstr "実行された更新はありません。詳細は /var/log/rhsm/rhsm.log を参照してください。"
+msgstr ""
+"実行された更新はありません。詳細は /var/log/rhsm/rhsm.log を参照してください"
+"。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:33
@@ -698,7 +707,9 @@ msgstr "存在する可能性のあるファイルを上書きする"
 #: src/rct/manifest_commands.py:348
 #, python-brace-format
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
-msgstr "\"{filename}\" のファイルは存在しています。-f を使用して、このファイルを強制的に上書きします。"
+msgstr ""
+"\"{filename}\" のファイルは存在しています。-f を使用して、このファイルを強制"
+"的に上書きします。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/rct/manifest_commands.py:354
@@ -1232,7 +1243,9 @@ msgstr "サブスクリプション管理サービスでは、状態の詳細に
 msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
-msgstr "エラー: 無効な一覧表示タイプが指定されました。\"installed\"、\"consumed\"、\"available\" だけが利用できます"
+msgstr ""
+"エラー: 無効な一覧表示タイプが指定されました"
+"。\"installed\"、\"consumed\"、\"available\" だけが利用できます"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:481
@@ -1428,7 +1441,9 @@ msgid ""
 "Warning: A {attr} of \"{download_value}\" was recently set for this system "
 "by the entitlement server administrator.\n"
 "{advice}"
-msgstr "警告: \"{download_value}\" の {attr} は最近、エンタイトルメントサーバー管理者によってこのシステムに設定されました。\n"
+msgstr ""
+"警告: \"{download_value}\" の {attr} は最近、エンタイトルメントサーバー管理者"
+"によってこのシステムに設定されました。\n"
 "{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
@@ -1514,7 +1529,9 @@ msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
-msgstr "警告: この組織には、システム目的「{attr}」を提供するサブスクリプションがありません。この設定は、自動割り当てサブスクリプションには影響しません。"
+msgstr ""
+"警告: この組織には、システム目的「{attr}」を提供するサブスクリプションがあり"
+"ません。この設定は、自動割り当てサブスクリプションには影響しません。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:266
 #, python-brace-format
@@ -1553,7 +1570,9 @@ msgstr "利用可能な {syspurpose_attr}"
 msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
-msgstr "この組織には、利用可能なサブスクリプションからシステム目的の「{syspurpose_attr}」に使用できる値がありません。"
+msgstr ""
+"この組織には、利用可能なサブスクリプションからシステム目的の「"
+"{syspurpose_attr}」に使用できる値がありません。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:397
 #, python-brace-format
@@ -1628,7 +1647,9 @@ msgstr "進捗のメッセージを表示しない"
 #: src/subscription_manager/cli_command/cli.py:189
 msgid ""
 "Consumer identity either does not exist or is corrupted. Try register --help"
-msgstr "コンシューマー識別子が存在しないか、破損しています。register --help を試してください"
+msgstr ""
+"コンシューマー識別子が存在しないか、破損しています。register --help を試して"
+"ください"
 
 #: src/subscription_manager/cli_command/cli.py:247
 msgid ""
@@ -2212,7 +2233,10 @@ msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
-msgstr "宛先組織に含まれる特定の環境 (単一の値) または複数の環境 (コンマ区切りリスト) を指定して登録します。複数の環境を使用する機能は、エンタイトルメントサーバーで制御します"
+msgstr ""
+"宛先組織に含まれる特定の環境 (単一の値) または複数の環境 (コンマ区切り"
+"リスト) を指定して登録します。複数の環境を使用する機能は、"
+"エンタイトルメントサーバーで制御します"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:102
@@ -2244,7 +2268,9 @@ msgstr "エラー: アクティベーションキーでは、環境を指定で�
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/register.py:133
 msgid "Error: Must provide --org with activation keys."
-msgstr "エラー: --org を指定する場合は、アクティベーションキーを指定する必要があります。"
+msgstr ""
+"エラー: --org を指定する場合は、アクティベーションキーを指定する必要がありま"
+"す。"
 
 #: src/subscription_manager/cli_command/register.py:147
 msgid "Error: The --type option has been deprecated and may not be used."
@@ -2484,7 +2510,9 @@ msgstr "システム目的のサービスレベルの設定の表示または変
 
 #: src/subscription_manager/cli_command/service_level.py:70
 msgid "Error: --org is only supported with the --list or --set option"
-msgstr "エラー: --org は、 --list または --set オプションとの併用でのみサポートされます"
+msgstr ""
+"エラー: --org は、 --list または --set オプションとの併用でのみサポートされま"
+"す"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author noriko
 #: src/subscription_manager/cli_command/service_level.py:78
@@ -2690,7 +2718,9 @@ msgstr "削除済み (不正):"
 msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/"
 "rhsm.log for more information."
-msgstr "ネットワークエラーでサーバーに接続できません。詳細は /var/log/rhsm/rhsm.log をご覧ください。"
+msgstr ""
+"ネットワークエラーでサーバーに接続できません。詳細は /var/log/rhsm/rhsm.log "
+"をご覧ください。"
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
@@ -2748,7 +2778,9 @@ msgstr "禁止: 要求に対して無効な認証情報です。"
 msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
-msgstr "リモートサーバーエラーです。接続詳細を確認するか、/var/log/rhsm/rhsm.log をご覧ください。"
+msgstr ""
+"リモートサーバーエラーです。接続詳細を確認するか、/var/log/rhsm/rhsm.log をご"
+"覧ください。"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/exceptions.py:50
@@ -2844,7 +2876,9 @@ msgid ""
 "The server rate limit has been exceeded, please try again later. (Expires in "
 "{time} second)"
 msgid_plural "The server rate limit has been exceeded, please try again later. (Expires in {time} seconds)"
-msgstr[0] "サーバーレートの制限を超えました。後で再試行してください。({time} 秒後に期限が切れます)"
+msgstr[0] ""
+"サーバーレートの制限を超えました。後で再試行してください。({time} 秒後に期限"
+"が切れます)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/i18n_argparse.py:50
