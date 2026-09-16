@@ -1,7 +1,7 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata
-# Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023, 2025.
+# Pino Toscano <toscano.pino@tiscali.it>, 2021, 2022, 2023, 2025, 2026.
 # Salvatore Cocuzza <info@salvatorecocuzza.it>, 2024, 2025.
 # Weblate Translation Memory <noreply-mt-weblate-translation-memory@weblate.org>, 2025.
 # Ali Ciloqlu <ali.ciloqlu@murena.io>, 2026.
@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2026-09-16 13:58+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Pino Toscano <toscano.pino@tiscali.it>\n"
 "Language-Team: Italian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/it/>\n"
 "Language: it\n"
@@ -89,8 +89,8 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
-"stringa di opzione %(option)r non valida: deve iniziare con un carattere "
-"%(prefix_chars)r"
+"stringa di opzione %(option)r non valida: deve iniziare con un carattere %"
+"(prefix_chars)r"
 
 #: /usr/lib64/python3.12/argparse.py:1622
 #, python-format
@@ -394,8 +394,8 @@ msgstr "Forza l'invio del profilo di pacchetti"
 #: src/subscription_manager/scripts/package_profile_upload.py:37
 msgid "No updates performed. See /var/log/rhsm/rhsm.log for more information."
 msgstr ""
-"Non è stato effettuato alcun aggiornamento. Consultare /var/log/rhsm/rhsm."
-"log per ulteriori informazioni."
+"Non è stato effettuato alcun aggiornamento. Consultare /var/log/rhsm/"
+"rhsm.log per ulteriori informazioni."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/rct/cert_commands.py:33
@@ -1747,8 +1747,8 @@ msgid ""
 "Unable to get the list of valid values for the system purpose "
 "\"{syspurpose_attr}\"."
 msgstr ""
-"Impossibile recuperare la lista dei valori validi per lo scopo di sistema "
-"\"{syspurpose_attr}\"."
+"Impossibile recuperare la lista dei valori validi per lo scopo di sistema \""
+"{syspurpose_attr}\"."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author fvalen
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:461
@@ -2195,8 +2195,8 @@ msgstr "    Stato prodotti installati"
 #, python-brace-format
 msgid "No installed products were found matching the expression \"{filter}\"."
 msgstr ""
-"Nessun prodotto installato trovato che corrisponde all'espressione "
-"\"{filter}\"."
+"Nessun prodotto installato trovato che corrisponde all'espressione \"{filter}"
+"\"."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:87
@@ -2350,14 +2350,12 @@ msgstr "Organizzazioni"
 #: src/subscription_manager/cli_command/owners.py:62
 #, python-brace-format
 msgid "{username} cannot register with any organizations."
-msgstr ""
-"{username} non può eseguire la registrazione con alcuna organizzazione."
+msgstr "{username} non può eseguire la registrazione con alcuna organizzazione."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/owners.py:70
 msgid "Error: Unable to retrieve org list from server"
-msgstr ""
-"Errore: impossibile recuperare l'elenco delle organizzazioni dal server"
+msgstr "Errore: impossibile recuperare l'elenco delle organizzazioni dal server"
 
 #: src/subscription_manager/cli_command/plugins.py:25
 msgid "View and configure with 'subscription-manager plugins'"
@@ -2963,8 +2961,8 @@ msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
 msgstr ""
-"Risposta HTTP sconosciuta del server (codice d'errore HTTP {code}: "
-"{title}):\n"
+"Risposta HTTP sconosciuta del server (codice d'errore HTTP {code}: {title})"
+":\n"
 "{content}"
 
 #: src/subscription_manager/exceptions.py:37
