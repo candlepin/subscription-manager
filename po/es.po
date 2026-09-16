@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
 "PO-Revision-Date: 2026-09-16 13:57+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/es/>\n"
 "Language: es\n"
@@ -90,8 +90,8 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
-"opción de cadena %(option)r inválida: debe iniciar con un carácter "
-"%(prefix_chars)r"
+"opción de cadena %(option)r inválida: debe iniciar con un carácter %"
+"(prefix_chars)r"
 
 #: /usr/lib64/python3.12/argparse.py:1622
 #, python-format
@@ -1142,8 +1142,8 @@ msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
 msgstr ""
-"Para usar la opción no-archive, debe existir el directorio de destino "
-"'{destination}' en el mismo sistema de archivos como el directorio "
+"Para usar la opción no-archive, debe existir el directorio de destino '"
+"{destination}' en el mismo sistema de archivos como el directorio "
 "ensamblador de conjunto de datos '{assembly}'."
 
 #: src/rhsm_debug/debug_commands.py:212
@@ -2185,8 +2185,8 @@ msgstr "    Estatus de productos instalados"
 #, python-brace-format
 msgid "No installed products were found matching the expression \"{filter}\"."
 msgstr ""
-"No fueron encontrados productos instalados coincidentes con la expresión "
-"«{filter}»."
+"No fueron encontrados productos instalados coincidentes con la expresión «"
+"{filter}»."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:87
@@ -3152,8 +3152,8 @@ msgid ""
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
 "Los plugins yum/dnf: %s fueron auto-habilitados en beneficio de Red Hat "
-"Subscription Management. Si no lo desea, use “subscription-manager config "
-"--rhsm.auto_enable_yum_plugins=0” para bloquear este comportamiento."
+"Subscription Management. Si no lo desea, use “subscription-manager config --"
+"rhsm.auto_enable_yum_plugins=0” para bloquear este comportamiento."
 
 #: src/subscription_manager/repolib.py:678
 msgid "Repo updates"
