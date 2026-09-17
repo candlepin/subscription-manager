@@ -1,8 +1,8 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
-# John Sefler <jsefler@redhat.com>, 2019. #zanata, 2021, 2025.
+# John Sefler <jsefler@redhat.com>, 2019. #zanata, 2021, 2025, 2026.
 # ljanda <ljanda@redhat.com>, 2019. #zanata
-# Emilio Herrera <ehespinosa57@gmail.com>, 2021.
+# Emilio Herrera <ehespinosa57@gmail.com>, 2021, 2026.
 # Pino Toscano <ptoscano@redhat.com>, 2023.
 # Javier Francisco <fserrador@gmail.com>, 2025.
 # "Fco. Javier F. Serrador" <fserrador@gmail.com>, 2025, 2026.
@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2026-06-28 17:17+0000\n"
-"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
+"PO-Revision-Date: 2026-09-16 13:57+0000\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/es/>\n"
 "Language: es\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.6.1\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -90,8 +90,8 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
-"opción de cadena %(option)r inválida: debe iniciar con un carácter "
-"%(prefix_chars)r"
+"opción de cadena %(option)r inválida: debe iniciar con un carácter %"
+"(prefix_chars)r"
 
 #: /usr/lib64/python3.12/argparse.py:1622
 #, python-format
@@ -1106,8 +1106,8 @@ msgid ""
 "This system is not yet registered. Try 'subscription-manager register --"
 "help' for more information."
 msgstr ""
-"Este sistema no está registrado aún. Intente 'subscription-manager register "
-"--help' para obtener mayor información."
+"Este sistema no está registrado aún. Intente 'subscription-manager "
+"register --help' para obtener mayor información."
 
 #: src/rhsm_debug/debug_commands.py:53
 msgid "Assemble system information as a tar file or directory"
@@ -1142,8 +1142,8 @@ msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
 msgstr ""
-"Para usar la opción no-archive, debe existir el directorio de destino "
-"'{destination}' en el mismo sistema de archivos como el directorio "
+"Para usar la opción no-archive, debe existir el directorio de destino '"
+"{destination}' en el mismo sistema de archivos como el directorio "
 "ensamblador de conjunto de datos '{assembly}'."
 
 #: src/rhsm_debug/debug_commands.py:212
@@ -1735,8 +1735,8 @@ msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
-"No hay valores disponibles para el propósito del sistema "
-"\"{syspurpose_attr}\" en las suscripciones disponibles en esta organización."
+"No hay valores disponibles para el propósito del sistema \"{syspurpose_attr}"
+"\" en las suscripciones disponibles en esta organización."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:397
 #, python-brace-format
@@ -2185,8 +2185,8 @@ msgstr "    Estatus de productos instalados"
 #, python-brace-format
 msgid "No installed products were found matching the expression \"{filter}\"."
 msgstr ""
-"No fueron encontrados productos instalados coincidentes con la expresión "
-"«{filter}»."
+"No fueron encontrados productos instalados coincidentes con la expresión «"
+"{filter}»."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/list.py:87
@@ -2346,8 +2346,7 @@ msgstr "{username} no se puede registrar con ninguna organización."
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/cli_command/owners.py:70
 msgid "Error: Unable to retrieve org list from server"
-msgstr ""
-"Error: No se puede recuperar lista de la organización desde el servidor"
+msgstr "Error: No se puede recuperar lista de la organización desde el servidor"
 
 #: src/subscription_manager/cli_command/plugins.py:25
 msgid "View and configure with 'subscription-manager plugins'"
@@ -3153,8 +3152,8 @@ msgid ""
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
 "Los plugins yum/dnf: %s fueron auto-habilitados en beneficio de Red Hat "
-"Subscription Management. Si no lo desea, use “subscription-manager config "
-"--rhsm.auto_enable_yum_plugins=0” para bloquear este comportamiento."
+"Subscription Management. Si no lo desea, use “subscription-manager config --"
+"rhsm.auto_enable_yum_plugins=0” para bloquear este comportamiento."
 
 #: src/subscription_manager/repolib.py:678
 msgid "Repo updates"

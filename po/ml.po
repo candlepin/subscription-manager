@@ -5,15 +5,16 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2015-09-25 03:38-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
-"Language-Team: Malayalam\n"
+"PO-Revision-Date: 2026-09-16 13:59+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Malayalam <https://translate.fedoraproject.org/projects/"
+"subscription-manager/subscription-manager-main/ml/>\n"
 "Language: ml\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Zanata 3.9.6\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -290,7 +291,8 @@ msgstr "തെറ്റായ ആര്‍ഗ്യുമെന്റ് നല�
 # document keys
 #: src/daemons/rhsmcertd.c:748
 msgid "WARN: Deprecated CLI arguments are being used.\n"
-msgstr "മുന്നറിയിപ്പു്: നീക്കം ചെയ്ത സിഎല്‍ഐ ആര്‍ഗ്യുമെന്റുകള്‍ ഉപയോഗിയ്ക്കുന്നു.\n"
+msgstr ""
+"മുന്നറിയിപ്പു്: നീക്കം ചെയ്ത സിഎല്‍ഐ ആര്‍ഗ്യുമെന്റുകള്‍ ഉപയോഗിയ്ക്കുന്നു.\n"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -469,7 +471,8 @@ msgstr "സര്‍ട്ടിഫിക്കേറ്റിന്റെ വ�
 # document keys
 #: src/rct/cert_commands.py:92
 msgid "Print certificate statistics and sizes"
-msgstr "സര്‍ട്ടിഫിക്കേറ്റിന്റെ സ്ഥിതിവിവരക്കണക്കും വ്യാപ്തികളും പ്രിന്റ് ചെയ്യുക"
+msgstr ""
+"സര്‍ട്ടിഫിക്കേറ്റിന്റെ സ്ഥിതിവിവരക്കണക്കും വ്യാപ്തികളും പ്രിന്റ് ചെയ്യുക"
 
 #: src/rct/cert_commands.py:99
 #, python-brace-format
@@ -526,7 +529,8 @@ msgstr "മാനിഫസ്റ്റില്‍  \"%s\" ഫയല്‍ ക�
 # document keys
 #: src/rct/manifest_commands.py:108
 msgid "Manifest zip attempted to extract outside of the base directory."
-msgstr "മാനിഫസ്റ്റ് സിപ്പ് അടിസ്ഥാന ഡയറക്ടറിയുടെ പുറത്തു് നിന്നും എടുക്കുവാന്‍ ശ്രമിയ്ക്കുന്നു."
+msgstr ""
+"മാനിഫസ്റ്റ് സിപ്പ് അടിസ്ഥാന ഡയറക്ടറിയുടെ പുറത്തു് നിന്നും എടുക്കുവാന്‍ ശ്രമിയ്ക്കുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -789,7 +793,8 @@ msgstr "നിലവിലുള്ള ഫയലുകള്‍ തിരുത�
 #, fuzzy, python-brace-format
 #| msgid "File \"%s\" exists. Use -f to force overwriting the file."
 msgid "File \"{filename}\" exists. Use -f to force overwriting the file."
-msgstr "ഫയല്‍ \"%s\" നിലവിലുണ്ടു്. ഫയല്‍ നിര്‍ബന്ധിച്ചു് തിരുത്തിയെഴുതുന്നതിനു് -f ഉപയോഗിയ്ക്കുക."
+msgstr ""
+"ഫയല്‍ \"%s\" നിലവിലുണ്ടു്. ഫയല്‍ നിര്‍ബന്ധിച്ചു് തിരുത്തിയെഴുതുന്നതിനു് -f ഉപയോഗിയ്ക്കുക."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1292,7 +1297,8 @@ msgstr ""
 # document keys
 #: src/rhsm_debug/debug_commands.py:53
 msgid "Assemble system information as a tar file or directory"
-msgstr "സിസ്റ്റത്തിന്റെ വിവരങ്ങള്‍ റ്റാര്‍ ഫയല്‍ അല്ലെങ്കില്‍ ഡയറക്ടറിയായി ഒത്തു്ചേര്‍ക്കുക"
+msgstr ""
+"സിസ്റ്റത്തിന്റെ വിവരങ്ങള്‍ റ്റാര്‍ ഫയല്‍ അല്ലെങ്കില്‍ ഡയറക്ടറിയായി ഒത്തു്ചേര്‍ക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1455,7 +1461,8 @@ msgstr ""
 # document keys
 #: src/rhsmlib/services/entitlement.py:323
 msgid "Subscription management service doesn't support Status Details."
-msgstr "സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വീസ് അവസ്ഥ വിവരണങ്ങള്‍ പിന്തുണയ്ക്കുന്നില്ല."
+msgstr ""
+"സബ്സ്ക്രിപ്ഷന്‍ മാനേജ്മെന്റ് സര്‍വീസ് അവസ്ഥ വിവരണങ്ങള്‍ പിന്തുണയ്ക്കുന്നില്ല."
 
 #: src/rhsmlib/services/entitlement.py:492
 msgid ""
@@ -1493,12 +1500,14 @@ msgstr "പിശക്: --match-installed, --available-നു് മാത്�
 # document keys
 #: src/rhsmlib/services/entitlement.py:511
 msgid "Error: --no-overlap is only applicable with --available"
-msgstr "പിശക്: --no-overlap, --available-നൊപ്പം മാത്രമേ ഉപയോഗിയ്ക്കുവാന്‍ സാധിയ്ക്കു."
+msgstr ""
+"പിശക്: --no-overlap, --available-നൊപ്പം മാത്രമേ ഉപയോഗിയ്ക്കുവാന്‍ സാധിയ്ക്കു."
 
 #: src/rhsmlib/services/entitlement.py:516
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
-msgstr "പിശക്: --pool-only,  --available അല്ലെങ്കില്‍ --consumed-നു് മാത്രമേ ലഭ്യമുള്ളൂ."
+msgstr ""
+"പിശക്: --pool-only,  --available അല്ലെങ്കില്‍ --consumed-നു് മാത്രമേ ലഭ്യമുള്ളൂ."
 
 #: src/rhsmlib/services/entitlement.py:519
 msgid "Error: this system is not registered"
@@ -1557,7 +1566,8 @@ msgstr "പിശക്: ഒരു ആക്ടിവേഷന്‍ കീ ന�
 #: src/rhsmlib/services/register.py:262
 #: src/subscription_manager/cli_command/register.py:123
 msgid "Error: Activation keys do not require user credentials."
-msgstr "പിശക്: ആക്ടിവേഷന്‍ കീകള്‍ക്കു് ഉപയോക്താവിനുള്ള ആധികരികത ഉറപ്പാക്കല്‍ വിവരങ്ങള്‍ ആവശ്യമില്ല."
+msgstr ""
+"പിശക്: ആക്ടിവേഷന്‍ കീകള്‍ക്കു് ഉപയോക്താവിനുള്ള ആധികരികത ഉറപ്പാക്കല്‍ വിവരങ്ങള്‍ ആവശ്യമില്ല."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1790,7 +1800,8 @@ msgstr "%prog [ഐച്ഛികങ്ങള്‍]"
 #: src/subscription_manager/cli.py:123
 #, python-format
 msgid "Usage: %s MODULE-NAME [MODULE-OPTIONS] [--help]"
-msgstr "ഉപയോഗിയ്ക്കേണ്ട വിധം: %s ഘടകത്തിന്റെ പേരു് [ഘടകത്തിനുള്ള ഐച്ഛികങ്ങള്‍] [--help]"
+msgstr ""
+"ഉപയോഗിയ്ക്കേണ്ട വിധം: %s ഘടകത്തിന്റെ പേരു് [ഘടകത്തിനുള്ള ഐച്ഛികങ്ങള്‍] [--help]"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -1969,7 +1980,8 @@ msgstr ""
 #: src/subscription_manager/cli_command/clean.py:25
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr "സര്‍വറിനു് ബാധകമാകാതെ എല്ലാ പ്രാദേശിക സിസ്റ്റവും സബ്സ്ക്രിപ്ഷന്‍ ഡേറ്റയും നീക്കം ചെയ്യുക"
+msgstr ""
+"സര്‍വറിനു് ബാധകമാകാതെ എല്ലാ പ്രാദേശിക സിസ്റ്റവും സബ്സ്ക്രിപ്ഷന്‍ ഡേറ്റയും നീക്കം ചെയ്യുക"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2065,7 +2077,8 @@ msgstr "%s:%s%s-ലുള്ള സര്‍വര്‍ ലഭ്യമാക�
 # document keys
 #: src/subscription_manager/cli_command/cli.py:379
 msgid "Error: CA certificate for subscription service has not been installed."
-msgstr "പിശക്: സബ്സ്ക്രിപ്ഷന്‍ സര്‍വീസിനുള്ള സിഎ സര്‍ട്ടിഫിക്കേറ്റ് ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല."
+msgstr ""
+"പിശക്: സബ്സ്ക്രിപ്ഷന്‍ സര്‍വീസിനുള്ള സിഎ സര്‍ട്ടിഫിക്കേറ്റ് ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2085,8 +2098,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/config.py:28
 msgid "List, set, or remove the configuration parameters in use by this system"
 msgstr ""
-"ഈ സിസ്റ്റം ഉപയോഗിയ്ക്കുന്ന ക്രമീകരണ പരാമീറ്ററുകള്‍ ലഭ്യമാക്കുക, സജ്ജമാക്കുക അല്ലെങ്കില്‍ നീക്കം "
-"ചെയ്യുക"
+"ഈ സിസ്റ്റം ഉപയോഗിയ്ക്കുന്ന ക്രമീകരണ പരാമീറ്ററുകള്‍ ലഭ്യമാക്കുക, സജ്ജമാക്കുക അല്ലെങ്കില്‍ നീക്കം ചെയ്യുക"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2124,7 +2136,8 @@ msgstr ""
 msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
-msgstr "പിശക്: നീക്കം ചെയ്യുവാനുള്ള എന്‍ട്രിയുടെ ശൈലി [section.name] ആയിരിയ്ക്കണം"
+msgstr ""
+"പിശക്: നീക്കം ചെയ്യുവാനുള്ള എന്‍ട്രിയുടെ ശൈലി [section.name] ആയിരിയ്ക്കണം"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2188,7 +2201,8 @@ msgstr "ഒരു ഉപയോക്താവിനു് ലഭ്യമായ 
 # document keys
 #: src/subscription_manager/cli_command/environments.py:50
 msgid "specify organization for environment list, using organization key"
-msgstr "സ്ഥാപനത്തിനുള്ള കീ ഉപയോഗിച്ചു്, എന്‍വയണ്മെന്റ് പട്ടികയ്ക്കുള്ള സ്ഥാപനം നിഷ്കര്‍ഷിയ്ക്കുക"
+msgstr ""
+"സ്ഥാപനത്തിനുള്ള കീ ഉപയോഗിച്ചു്, എന്‍വയണ്മെന്റ് പട്ടികയ്ക്കുള്ള സ്ഥാപനം നിഷ്കര്‍ഷിയ്ക്കുക"
 
 #: src/subscription_manager/cli_command/environments.py:57
 msgid "set an ordered comma-separated list of environments for this consumer"
@@ -2333,8 +2347,8 @@ msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
 msgstr ""
-"സര്‍ട്ടിഫിക്കേറ്റ് വീണ്ടും ലഭ്യമാക്കല്‍ നിര്‍ബന്ധമാക്കുക (ഉപയോക്തൃനാമവും രഹസ്യവാക്കും); --"
-"regenerate-നൊപ്പം മാത്രം ഉപയോഗിയ്ക്കുന്നു"
+"സര്‍ട്ടിഫിക്കേറ്റ് വീണ്ടും ലഭ്യമാക്കല്‍ നിര്‍ബന്ധമാക്കുക (ഉപയോക്തൃനാമവും രഹസ്യവാക്കും); --regenerate-"
+"നൊപ്പം മാത്രം ഉപയോഗിയ്ക്കുന്നു"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2346,7 +2360,8 @@ msgstr "--force --regenerate-നൊപ്പം മാത്രമേ ഉപയ�
 # document keys
 #: src/subscription_manager/cli_command/identity.py:63
 msgid "--username and --password can only be used with --force"
-msgstr "--username, --password എന്നിവ --force-നൊപ്പം മാത്രമേ ഉപയോഗിയ്ക്കുവാന്‍ പാടുള്ളൂ"
+msgstr ""
+"--username, --password എന്നിവ --force-നൊപ്പം മാത്രമേ ഉപയോഗിയ്ക്കുവാന്‍ പാടുള്ളൂ"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2448,7 +2463,8 @@ msgstr "ഈ സിസ്റ്റത്തിനുള്ള സബ്സ്ക�
 # document keys
 #: src/subscription_manager/cli_command/list.py:46
 msgid "list shows those products which are installed (default)"
-msgstr "ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്ന (സ്വതവേയുള്ളവ) പ്രൊഡക്ടുകള്‍ ലിസ്റ്റ് ലഭ്യമാക്കുന്നു"
+msgstr ""
+"ഇന്‍സ്റ്റോള്‍ ചെയ്തിരിയ്ക്കുന്ന (സ്വതവേയുള്ളവ) പ്രൊഡക്ടുകള്‍ ലിസ്റ്റ് ലഭ്യമാക്കുന്നു"
 
 #: src/subscription_manager/cli_command/list.py:51
 #, fuzzy
@@ -2461,8 +2477,8 @@ msgid ""
 "information."
 msgstr ""
 "സബ്സ്ക്രിപ്ഷന്‍ അല്ലെങ്കില്‍ ഉല്‍പന്നത്തിന്റെ വിവരത്തില്‍ നല്‍കിയിട്ടുള്ള എക്സ്പ്രഷന്‍ അടങ്ങുന്ന "
-"സബ്സ്ക്രിപ്ഷനുകള്‍ അല്ലെങ്കില്‍ ഉല്‍പന്നങ്ങള്‍ മാത്രം ലഭ്യമാക്കുന്നു. ആവശ്യമുള്ള പട്ടികയും സര്‍വറിന്റെ "
-"പതിപ്പും മാറുന്നു."
+"സബ്സ്ക്രിപ്ഷനുകള്‍ അല്ലെങ്കില്‍ ഉല്‍പന്നങ്ങള്‍ മാത്രം ലഭ്യമാക്കുന്നു. ആവശ്യമുള്ള പട്ടികയും സര്‍വറിന്റെ പതിപ്പും "
+"മാറുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2474,7 +2490,8 @@ msgstr "    ഇന്‍സ്റ്റോള്‍ ചെയ്ത പ്രൊ
 #, fuzzy, python-brace-format
 #| msgid "No installed products were found matching the expression \"%s\"."
 msgid "No installed products were found matching the expression \"{filter}\"."
-msgstr "\"%s\" പൊരുത്തപ്പെടുന്ന എക്സ്പ്രഷന്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്ത ഉല്‍പന്നങ്ങളില്‍ ലഭ്യമല്ല."
+msgstr ""
+"\"%s\" പൊരുത്തപ്പെടുന്ന എക്സ്പ്രഷന്‍ ഇന്‍സ്റ്റോള്‍ ചെയ്ത ഉല്‍പന്നങ്ങളില്‍ ലഭ്യമല്ല."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2535,8 +2552,8 @@ msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
 msgstr ""
-"നീക്കം ചെയ്യുവാനുള്ള override-ന്റെ പേരു്  (ഒന്നില്‍ കൂടുതല്‍ തവണ നല്‍കാം); --repo "
-"ഐച്ഛികത്തിനൊപ്പം ഉപയോഗിയ്ക്കുന്നു."
+"നീക്കം ചെയ്യുവാനുള്ള override-ന്റെ പേരു്  (ഒന്നില്‍ കൂടുതല്‍ തവണ നല്‍കാം); --repo ഐച്ഛികത്തിനൊപ്പം "
+"ഉപയോഗിയ്ക്കുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2553,13 +2570,15 @@ msgstr ""
 #: src/subscription_manager/cli_command/override.py:63
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
-msgstr "എല്ലാ ഓവര്‍റൈഡുകളും നീക്കം ചെയ്യുന്നു; --repo നല്‍കി ഒരു റിപ്പോസിറ്ററി മാത്രമായി നല്‍കാം"
+msgstr ""
+"എല്ലാ ഓവര്‍റൈഡുകളും നീക്കം ചെയ്യുന്നു; --repo നല്‍കി ഒരു റിപ്പോസിറ്ററി മാത്രമായി നല്‍കാം"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/override.py:68
 msgid "list all overrides; can be specific to a repository by providing --repo"
-msgstr "എല്ലാ ഓവര്‍റൈഡുകളും ലഭ്യമാക്കുന്നു; --repo നല്‍കി ഒരു റിപ്പോസിറ്ററി മാത്രമായി നല്‍കാം"
+msgstr ""
+"എല്ലാ ഓവര്‍റൈഡുകളും ലഭ്യമാക്കുന്നു; --repo നല്‍കി ഒരു റിപ്പോസിറ്ററി മാത്രമായി നല്‍കാം"
 
 #: src/subscription_manager/cli_command/override.py:76
 msgid "You must specify an override in the form of \"name:value\" with --add."
@@ -2659,7 +2678,8 @@ msgstr "കീ:"
 # document keys
 #: src/subscription_manager/cli_command/owners.py:38
 msgid "Display the organizations against which a user can register a system"
-msgstr "ഒരു ഉപയോക്താവിനു് ഒരു സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുവാനുള്ള സ്ഥാപനങ്ങള്‍ കാണിയ്ക്കുക"
+msgstr ""
+"ഒരു ഉപയോക്താവിനു് ഒരു സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യുവാനുള്ള സ്ഥാപനങ്ങള്‍ കാണിയ്ക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2679,7 +2699,8 @@ msgstr "ഒരു സ്ഥാപനങ്ങള്‍ക്കും %s രജ�
 # document keys
 #: src/subscription_manager/cli_command/owners.py:70
 msgid "Error: Unable to retrieve org list from server"
-msgstr "പിശക്: സര്‍വറില്‍ നിന്നും സ്ഥാപനത്തിന്റെ പട്ടിക ലഭ്യമാക്കുവാന്‍ സാധ്യമല്ല"
+msgstr ""
+"പിശക്: സര്‍വറില്‍ നിന്നും സ്ഥാപനത്തിന്റെ പട്ടിക ലഭ്യമാക്കുവാന്‍ സാധ്യമല്ല"
 
 #: src/subscription_manager/cli_command/plugins.py:25
 msgid "View and configure with 'subscription-manager plugins'"
@@ -2753,7 +2774,8 @@ msgstr "എല്ലാ ലോക്കല്‍ ഡേറ്റയും പു
 
 #: src/subscription_manager/cli_command/register.py:64
 msgid "base URL for content in form of https://hostname:port/prefix"
-msgstr "ഉള്ളടക്കത്തിന്റെ അടിസ്ഥാന യുആര്‍എല്‍ https://hostname:port/prefix എന്ന രീതിയില്‍"
+msgstr ""
+"ഉള്ളടക്കത്തിന്റെ അടിസ്ഥാന യുആര്‍എല്‍ https://hostname:port/prefix എന്ന രീതിയില്‍"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2806,13 +2828,15 @@ msgstr "രജിസ്ട്രേഷനുള്ള ആക്ടിവേഷ�
 # document keys
 #: src/subscription_manager/cli_command/register.py:119
 msgid "This system is already registered. Use --force to override"
-msgstr "ഈ സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടുണ്ടു്. തിരുത്തി എഴുതുന്നതിനായി --force ഉപയോഗിയ്ക്കുക"
+msgstr ""
+"ഈ സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടുണ്ടു്. തിരുത്തി എഴുതുന്നതിനായി --force ഉപയോഗിയ്ക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/cli_command/register.py:129
 msgid "Error: Activation keys do not allow environments to be specified."
-msgstr "പിശക്: ആക്ടിവേഷന്‍ കീകള്‍ എന്‍വയണ്മെന്റുകള്‍ നല്‍കുവാന്‍ അനുവദിയ്ക്കുന്നില്ല."
+msgstr ""
+"പിശക്: ആക്ടിവേഷന്‍ കീകള്‍ എന്‍വയണ്മെന്റുകള്‍ നല്‍കുവാന്‍ അനുവദിയ്ക്കുന്നില്ല."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -2976,8 +3000,8 @@ msgstr "പതിപ്പിനുള്ള മുന്‍ഗണന വേണ�
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
 msgstr ""
-"'%s'-മായി പൊരുത്തപ്പെടുന്ന പതിപ്പുകള്‍ ലഭ്യമല്ല.  പൂര്‍ണ്ണമായി ലഭ്യമാകുന്നതിനായി 'release --"
-"list' കാണുക."
+"'%s'-മായി പൊരുത്തപ്പെടുന്ന പതിപ്പുകള്‍ ലഭ്യമല്ല.  പൂര്‍ണ്ണമായി ലഭ്യമാകുന്നതിനായി 'release --list' "
+"കാണുക."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3027,7 +3051,8 @@ msgstr "പ്രവര്‍ത്തനസജ്ജം:"
 # document keys
 #: src/subscription_manager/cli_command/repos.py:66
 msgid "List the repositories which this system is entitled to use"
-msgstr "ഈ സിസ്റ്റത്തിനു് ഉപയോഗിയ്ക്കുവാന്‍ സാധിയ്ക്കുന്ന റിപ്പോസിറ്ററികള്‍ കാണിയ്ക്കുക"
+msgstr ""
+"ഈ സിസ്റ്റത്തിനു് ഉപയോഗിയ്ക്കുവാന്‍ സാധിയ്ക്കുന്ന റിപ്പോസിറ്ററികള്‍ കാണിയ്ക്കുക"
 
 #: src/subscription_manager/cli_command/repos.py:73
 msgid "list all known repositories for this system"
@@ -3035,27 +3060,29 @@ msgstr "ഈ സിസ്റ്റത്തിനു് പരിചിതമാ�
 
 #: src/subscription_manager/cli_command/repos.py:79
 msgid "list known, enabled repositories for this system"
-msgstr "പരിചിതമായ പട്ടിക, ഈ സിസ്റ്റത്തിനു് പ്രവര്‍ത്തന സജ്ജമാക്കിയ റിപ്പോസിറ്ററികള്‍"
+msgstr ""
+"പരിചിതമായ പട്ടിക, ഈ സിസ്റ്റത്തിനു് പ്രവര്‍ത്തന സജ്ജമാക്കിയ റിപ്പോസിറ്ററികള്‍"
 
 #: src/subscription_manager/cli_command/repos.py:85
 msgid "list known, disabled repositories for this system"
-msgstr "പരിചിതമായ പട്ടിക, ഈ സിസ്റ്റത്തിനു് പ്രവര്‍ത്തന രഹിതമാക്കിയ റിപ്പോസിറ്ററികള്‍"
+msgstr ""
+"പരിചിതമായ പട്ടിക, ഈ സിസ്റ്റത്തിനു് പ്രവര്‍ത്തന രഹിതമാക്കിയ റിപ്പോസിറ്ററികള്‍"
 
 #: src/subscription_manager/cli_command/repos.py:93
 msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"പ്രവര്‍ത്തന സജ്ജമാക്കുന്നതിനുള്ള റിപ്പോസിറ്ററി (ഒന്നില്‍ കൂടുതല്‍ തവണ നല്‍കാം). വൈള്‍ഡ്കാര്‍ഡുകള്‍ "
-"(* , ?) പിന്തുണയ്ക്കുന്നു."
+"പ്രവര്‍ത്തന സജ്ജമാക്കുന്നതിനുള്ള റിപ്പോസിറ്ററി (ഒന്നില്‍ കൂടുതല്‍ തവണ നല്‍കാം). വൈള്‍ഡ്കാര്‍ഡുകള്‍ (* , ?) "
+"പിന്തുണയ്ക്കുന്നു."
 
 #: src/subscription_manager/cli_command/repos.py:102
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"പ്രവര്‍ത്തന രഹിതമാക്കുന്നതിനുള്ള റിപ്പോസിറ്ററി (ഒന്നില്‍ കൂടുതല്‍ തവണ നല്‍കാം). വൈള്‍ഡ്കാര്‍ഡുകള്‍ "
-"(* , ?) പിന്തുണയ്ക്കുന്നു."
+"പ്രവര്‍ത്തന രഹിതമാക്കുന്നതിനുള്ള റിപ്പോസിറ്ററി (ഒന്നില്‍ കൂടുതല്‍ തവണ നല്‍കാം). വൈള്‍ഡ്കാര്‍ഡുകള്‍ (* , ?) "
+"പിന്തുണയ്ക്കുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3067,7 +3094,8 @@ msgstr "    %s-ല്‍ ലഭ്യമായ റിപ്പോസിറ്റ
 
 #: src/subscription_manager/cli_command/repos.py:187
 msgid "There were no available repositories matching the specified criteria."
-msgstr "നല്‍കിയിരിയ്ക്കുന്ന വിഭാഗത്തിനു് പൊരുത്തപ്പെടുന്ന റിപ്പോസിറ്ററികള്‍ ലഭ്യമല്ല."
+msgstr ""
+"നല്‍കിയിരിയ്ക്കുന്ന വിഭാഗത്തിനു് പൊരുത്തപ്പെടുന്ന റിപ്പോസിറ്ററികള്‍ ലഭ്യമല്ല."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3087,13 +3115,15 @@ msgstr ""
 #, fuzzy, python-brace-format
 #| msgid "Repository '%s' is enabled for this system."
 msgid "Repository '{repoid}' is enabled for this system."
-msgstr "ഈ സിസ്റ്റത്തിനു് റിപ്പോസിറ്ററി '%s' പ്രവര്‍ത്തന സജ്ജമാക്കിയിരിയ്ക്കുന്നു."
+msgstr ""
+"ഈ സിസ്റ്റത്തിനു് റിപ്പോസിറ്ററി '%s' പ്രവര്‍ത്തന സജ്ജമാക്കിയിരിയ്ക്കുന്നു."
 
 #: src/subscription_manager/cli_command/repos.py:273
 #, fuzzy, python-brace-format
 #| msgid "Repository '%s' is disabled for this system."
 msgid "Repository '{repoid}' is disabled for this system."
-msgstr "ഈ സിസ്റ്റത്തിനു് റിപ്പോസിറ്ററി '%s' പ്രവര്‍ത്തന രഹിതമാക്കിയിരിയ്ക്കുന്നു."
+msgstr ""
+"ഈ സിസ്റ്റത്തിനു് റിപ്പോസിറ്ററി '%s' പ്രവര്‍ത്തന രഹിതമാക്കിയിരിയ്ക്കുന്നു."
 
 #: src/subscription_manager/cli_command/role.py:24
 msgid "Show or modify the system purpose role setting"
@@ -3114,8 +3144,8 @@ msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
 msgstr ""
-"പിശക്: സര്‍വീസ് ലവലുകള്‍ ലഭ്യമാകുന്നതിനായി രജിസ്ടര്‍ ചെയ്യണം അല്ലെങ്കില്‍ --username, --"
-"password എന്നിവ നിഷ്കര്‍ഷിയ്ക്കണം."
+"പിശക്: സര്‍വീസ് ലവലുകള്‍ ലഭ്യമാകുന്നതിനായി രജിസ്ടര്‍ ചെയ്യണം അല്ലെങ്കില്‍ --username, --password "
+"എന്നിവ നിഷ്കര്‍ഷിയ്ക്കണം."
 
 #: src/subscription_manager/cli_command/service_level.py:98
 msgid ""
@@ -3175,7 +3205,8 @@ msgstr "ലഭ്യമായ സര്‍വീസ് ലവലുകള്‍"
 #, fuzzy
 #| msgid "Show status information for this system's subscriptions and products"
 msgid "Show status information for this system"
-msgstr "ഈ സിസ്റ്റത്തിന്റെ സബ്സ്ക്രിപ്ഷനുകള്‍ക്കും പ്രൊഡക്ടുകള്‍ക്കുമുള്ള അവസ്ഥ വിവരം കാണിയ്ക്കുക"
+msgstr ""
+"ഈ സിസ്റ്റത്തിന്റെ സബ്സ്ക്രിപ്ഷനുകള്‍ക്കും പ്രൊഡക്ടുകള്‍ക്കുമുള്ള അവസ്ഥ വിവരം കാണിയ്ക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3346,8 +3377,8 @@ msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
 msgstr ""
-"നെറ്റ്‌വര്‍ക്ക് പിശക്, സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/"
-"rhsm/rhsm.log കാണുക."
+"നെറ്റ്‌വര്‍ക്ക് പിശക്, സര്‍വറിലേക്കു് കണക്ട് ചെയ്യുവാന്‍ സാധ്യമല്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി /var/log/rhsm/"
+"rhsm.log കാണുക."
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
@@ -3410,8 +3441,8 @@ msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
-"റിമോട്ട് സര്‍വര്‍ പിശക്്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍ കൂടുതല്‍ "
-"വിവരങ്ങള്‍ക്കായി/var/log/rhsm/rhsm.log കാണുക."
+"റിമോട്ട് സര്‍വര്‍ പിശക്്, കണക്ഷന്‍ വിവരങ്ങള്‍ ദയവായി പരിശോധിയ്ക്കുക, അല്ലാങ്കില്‍ കൂടുതല്‍ വിവരങ്ങള്‍ക്കായി/"
+"var/log/rhsm/rhsm.log കാണുക."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3425,7 +3456,8 @@ msgstr "തെറ്റായ സിഎ സര്‍ട്ടിഫിക്ക�
 # document keys
 #: src/subscription_manager/exceptions.py:51
 msgid "Your identity certificate has expired"
-msgstr "നിങ്ങളുടെ തിരിച്ചറിയല്‍ സര്‍ട്ടിഫിക്കേറ്റിന്റെ കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു."
+msgstr ""
+"നിങ്ങളുടെ തിരിച്ചറിയല്‍ സര്‍ട്ടിഫിക്കേറ്റിന്റെ കാലാവധി കഴിഞ്ഞിരിയ്ക്കുന്നു."
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3445,7 +3477,8 @@ msgstr "സര്‍വര്‍ യുആര്‍എല്‍ കാലിയ�
 #: src/subscription_manager/exceptions.py:54
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
-msgstr "സര്‍വര്‍ യുആര്‍എല്‍ ഒരു സ്കീമാ ആകുന്നു. ഇതില്‍ ഹോസ്റ്റ്നാമം, പോര്‍ട്ട്, പാഥ് എന്നിവ ഉള്‍പ്പെടുന്നു"
+msgstr ""
+"സര്‍വര്‍ യുആര്‍എല്‍ ഒരു സ്കീമാ ആകുന്നു. ഇതില്‍ ഹോസ്റ്റ്നാമം, പോര്‍ട്ട്, പാഥ് എന്നിവ ഉള്‍പ്പെടുന്നു"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3463,7 +3496,8 @@ msgstr "സര്‍വര്‍ യുആര്‍എല്‍ പോര്‍�
 # document keys
 #: src/subscription_manager/exceptions.py:57
 msgid "Server URL has an invalid scheme. http:// and https:// are supported"
-msgstr "സര്‍വര്‍ യുആര്‍എലിനു് തെറ്റായ സ്കീമുണ്ടു്. http:// and https:// പിന്തുണയ്ക്കുന്നു"
+msgstr ""
+"സര്‍വര്‍ യുആര്‍എലിനു് തെറ്റായ സ്കീമുണ്ടു്. http:// and https:// പിന്തുണയ്ക്കുന്നു"
 
 #: src/subscription_manager/exceptions.py:58
 msgid "The server rate limit has been exceeded, please try again later."
@@ -3620,7 +3654,8 @@ msgstr ""
 msgid ""
 "This system is already registered, ignoring request to automatically "
 "register."
-msgstr "ഈ സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടുണ്ടു്. തിരുത്തി എഴുതുന്നതിനായി --force ഉപയോഗിയ്ക്കുക"
+msgstr ""
+"ഈ സിസ്റ്റം രജിസ്ടര്‍ ചെയ്തിട്ടുണ്ടു്. തിരുത്തി എഴുതുന്നതിനായി --force ഉപയോഗിയ്ക്കുക"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
@@ -3636,13 +3671,15 @@ msgstr "സിസ്റ്റം രജിസ്ടര്‍ ചെയ്യു�
 #, fuzzy
 #| msgid "Updating entitlement certificates & repositories"
 msgid "Updating entitlement certificates & repositories."
-msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകളും റിപ്പോസിറ്ററികളും പരിഷ്കരിയ്ക്കുന്നു"
+msgstr ""
+"എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകളും റിപ്പോസിറ്ററികളും പരിഷ്കരിയ്ക്കുന്നു"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys
 #: src/subscription_manager/scripts/rhsmcertd_worker.py:419
 msgid "Unable to update entitlement certificates and repositories"
-msgstr "എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകളും റിപ്പോസിറ്ററികളും പരിഷ്കരിയ്ക്കുവാന്‍ സാധ്യമല്ല"
+msgstr ""
+"എന്റൈറ്റില്‍മെന്റ് സര്‍ട്ടിഫിക്കേറ്റുകളും റിപ്പോസിറ്ററികളും പരിഷ്കരിയ്ക്കുവാന്‍ സാധ്യമല്ല"
 
 # translation auto-copied from project subscription-manager, version 1.11.X,
 # document keys

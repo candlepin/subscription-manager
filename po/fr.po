@@ -4,22 +4,22 @@
 # khowell <khowell@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # ljanda <ljanda@redhat.com>, 2019. #zanata
-# Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023.
+# Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023, 2026.
 # John Sefler <jsefler@redhat.com>, 2021.
 # Sundeep Anand <suanand@redhat.com>, 2021.
-# Julien Humbert <julroy67@gmail.com>, 2022.
-# Jérôme Fenal <jfenal@free.fr>, 2022.
-# Transtats <suanand@redhat.com>, 2022, 2023.
-# blutch112 <vincent.lefebvre59@gmail.com>, 2022.
-# Pino Toscano <ptoscano@redhat.com>, 2023, 2025.
-# Léane GRASSER <leane.grasser@proton.me>, 2024, 2025.
+# Julien Humbert <julroy67@gmail.com>, 2022, 2026.
+# Jérôme Fenal <jfenal@free.fr>, 2022, 2026.
+# Transtats <suanand@redhat.com>, 2022, 2023, 2026.
+# blutch112 <vincent.lefebvre59@gmail.com>, 2022, 2026.
+# Pino Toscano <ptoscano@redhat.com>, 2023, 2025, 2026.
+# Léane GRASSER <leane.grasser@proton.me>, 2024, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2025-03-31 12:53+0000\n"
-"Last-Translator: Léane GRASSER <leane.grasser@proton.me>\n"
+"PO-Revision-Date: 2026-09-16 13:57+0000\n"
+"Last-Translator: Julien Humbert <julroy67@gmail.com>\n"
 "Language-Team: French <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/fr/>\n"
 "Language: fr\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -89,8 +89,7 @@ msgstr "impossible de fusionner les actions : deux groupes portent le nom %r"
 
 #: /usr/lib64/python3.12/argparse.py:1583
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
-"Le terme \"requis\" n'est pas un argument valable pour les positionnels"
+msgstr "Le terme \"requis\" n'est pas un argument valable pour les positionnels"
 
 #: /usr/lib64/python3.12/argparse.py:1604
 #, python-format
@@ -98,8 +97,8 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
-"chaîne d'option invalide %(option)r : doit commencer par un caractère "
-"%(prefix_chars)r"
+"chaîne d'option invalide %(option)r : doit commencer par un caractère %"
+"(prefix_chars)r"
 
 #: /usr/lib64/python3.12/argparse.py:1622
 #, python-format
@@ -258,8 +257,8 @@ msgstr "essayer de procéder à l’auto-enregistrement."
 #: src/daemons/rhsmcertd.c:567
 msgid "For more information run: rhsmcertd --help\n"
 msgstr ""
-"Pour obtenir des informations supplémentaires, veuillez exécuter : rhsmcertd "
-"--help\n"
+"Pour obtenir des informations supplémentaires, veuillez exécuter : "
+"rhsmcertd --help\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/daemons/rhsmcertd.c:673
@@ -419,8 +418,7 @@ msgstr "%(prog)s {name} [OPTIONS] CERT_FILE"
 #: src/rct/cert_commands.py:41
 #, python-brace-format
 msgid "Unable to read certificate file '{certificate}': {exception}"
-msgstr ""
-"Incapable de lire le fichier certificat « {certificate} » : {exception}"
+msgstr "Incapable de lire le fichier certificat « {certificate} » : {exception}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rct/cert_commands.py:49
@@ -1287,9 +1285,8 @@ msgid ""
 "Error: invalid listing type provided.  Only \"installed\", \"consumed\", or "
 "\"available\" are allowed"
 msgstr ""
-"Erreur : type de listing non valide. Valeurs autorisées : "
-"« installés » (installed) « consommés » (consumed) ou "
-"« disponibles » (available)"
+"Erreur : type de listing non valide. Valeurs autorisées : « installés » "
+"(installed) « consommés » (consumed) ou « disponibles » (available)"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/rhsmlib/services/entitlement.py:497
@@ -1344,8 +1341,8 @@ msgstr ""
 msgid ""
 "Environments: '{env_names}' do not have required type '{environment_type}'"
 msgstr ""
-"Les environnements '{env_names}' n'ont pas le type requis "
-"'{environment_type}'"
+"Les environnements '{env_names}' n'ont pas le type requis '{environment_type}"
+"'"
 
 #: src/rhsmlib/services/register.py:202
 msgid ""
@@ -1633,8 +1630,8 @@ msgstr ""
 #, python-brace-format
 msgid "If you'd like to overwrite the server side change please run: {command}"
 msgstr ""
-"Si vous souhaitez remplacer des données au niveau serveur, veuillez "
-"exécuter : {command}"
+"Si vous souhaitez remplacer des données au niveau serveur, veuillez exécuter "
+": {command}"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #. TRANSLATORS: this refers to a deprecated command
@@ -1765,8 +1762,8 @@ msgid ""
 "There are no available values for the system purpose \"{syspurpose_attr}\" "
 "from the available subscriptions in this organization."
 msgstr ""
-"Il n'y a pas de valeurs disponibles pour la finalité du système "
-"\"{syspurpose_attr}\" parmi les abonnements disponibles dans cette "
+"Il n'y a pas de valeurs disponibles pour la finalité du système \""
+"{syspurpose_attr}\" parmi les abonnements disponibles dans cette "
 "organisation."
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:397
@@ -2069,8 +2066,7 @@ msgstr "Cette opération de liste n'a pas d'environnement à signaler."
 
 #: src/subscription_manager/cli_command/environments.py:205
 msgid "Error: The same environment may not be listed more than once. "
-msgstr ""
-"Erreur : un même environnement ne peut pas être listé plus d'une fois. "
+msgstr "Erreur : un même environnement ne peut pas être listé plus d'une fois. "
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys, author samfreemanz
 #: src/subscription_manager/cli_command/environments.py:211
@@ -2320,8 +2316,8 @@ msgstr "Erreur : vous devez spécifier un référentiel à modifier"
 #: src/subscription_manager/cli_command/override.py:94
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
-"Erreur : vous ne pouvez pas utiliser --add ou --remove avec --remove-all et "
-"--list"
+"Erreur : vous ne pouvez pas utiliser --add ou --remove avec --remove-all "
+"et --list"
 
 #: src/subscription_manager/cli_command/override.py:97
 msgid "Error: You may not use --list with --remove-all"
@@ -3213,9 +3209,9 @@ msgid ""
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
 "Les greffons yum : %s ont été activées automatiquement au bénéfice de Red "
-"Hat Subscription Management. Si vous ne le souhaitez pas, utiliser "
-"« subscription-manager config --rhsm.auto_enable_yum_plugins=0 » pour "
-"bloquer ce comportement."
+"Hat Subscription Management. Si vous ne le souhaitez pas, utiliser « "
+"subscription-manager config --rhsm.auto_enable_yum_plugins=0 » pour bloquer "
+"ce comportement."
 
 #: src/subscription_manager/repolib.py:678
 msgid "Repo updates"

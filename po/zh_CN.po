@@ -3,18 +3,19 @@
 # John Sefler <jsefler@redhat.com>, 2018. #zanata, 2021, 2023.
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # tfu <tfu@redhat.com>, 2018. #zanata
-# Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023.
+# Ludek Janda <ljanda@redhat.com>, 2021, 2022, 2023, 2026.
 # Sundeep Anand <suanand@redhat.com>, 2021, 2022.
 # Pino Toscano <ptoscano@redhat.com>, 2021, 2023, 2025.
-# Transtats <suanand@redhat.com>, 2022, 2023.
-# Jingge Chen <mariocanfly@hotmail.com>, 2023.
+# Transtats <suanand@redhat.com>, 2022, 2023, 2026.
+# Jingge Chen <mariocanfly@hotmail.com>, 2023, 2026.
+# GitHub webhook <noreply-webhook-github@weblate.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-12 10:49+0200\n"
-"PO-Revision-Date: 2023-12-09 14:44+0000\n"
-"Last-Translator: Jingge Chen <mariocanfly@hotmail.com>\n"
+"PO-Revision-Date: 2026-09-16 14:01+0000\n"
+"Last-Translator: GitHub webhook <noreply-webhook-github@weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.fedoraproject.org/"
 "projects/subscription-manager/subscription-manager-main/zh_CN/>\n"
 "Language: zh_CN\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -291,18 +292,21 @@ msgid ""
 "It is important that you apply an active subscription in order to resume "
 "access to security and other critical updates. If you don't have other "
 "active subscriptions, you can renew the expired subscription.  "
-msgstr "\n"
+msgstr ""
+"\n"
 "*** 警告 ***\n"
 "以下产品订阅已过期：\n"
 "%s\n"
-" 您不能访问提供这些产品的软件仓库。您必须申请活跃订阅方可继续访问安全及其他重要更新。如果您没有其他活跃订阅，则可以续订已过期订阅。  "
+" 您不能访问提供这些产品的软件仓库。您必须申请活跃订阅方可继续访问安全及其他重"
+"要更新。如果您没有其他活跃订阅，则可以续订已过期订阅。  "
 
 #: src/plugins/dnf/subscription_manager.py:54
 msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "subscription-manager to register.\n"
-msgstr "\n"
+msgstr ""
+"\n"
 "本系统尚未在权利服务器中注册。可使用 subscription-manager 进行注册。\n"
 
 #: src/plugins/dnf/subscription_manager.py:58
@@ -310,16 +314,20 @@ msgid ""
 "\n"
 "This system is not registered with an entitlement server. You can use "
 "\"rhc\" or \"subscription-manager\" to register.\n"
-msgstr "\n"
-"本系统尚未在权利服务器中注册。可使用 \"rhc\" 或 \"subscription-manager\" 进行注册。\n"
+msgstr ""
+"\n"
+"本系统尚未在权利服务器中注册。可使用 \"rhc\" 或 \"subscription-manager\" 进行"
+"注册。\n"
 
 #: src/plugins/dnf/subscription_manager.py:63
 msgid ""
 "\n"
 "This system is registered with an entitlement server, but is not receiving "
 "updates. You can use subscription-manager to assign subscriptions.\n"
-msgstr "\n"
-"本系统已在权利服务器中注册，但没有接收更新。可使用 subscription-manager 分配订阅。\n"
+msgstr ""
+"\n"
+"本系统已在权利服务器中注册，但没有接收更新。可使用 subscription-manager 分配"
+"订阅。\n"
 
 #: src/plugins/dnf/subscription_manager.py:68
 #, python-brace-format
@@ -327,7 +335,8 @@ msgid ""
 "\n"
 "This system has release set to {release_version} and it receives updates "
 "only for this release.\n"
-msgstr "\n"
+msgstr ""
+"\n"
 "这个系统的发行版本被设置为 {release_version}，它只接收这个版本的更新。\n"
 
 #: src/plugins/dnf/subscription_manager.py:72
@@ -337,8 +346,7 @@ msgid ""
 "The system clock is skewed. There is a time difference of {time_drift} "
 "seconds with the entitlement server. Please check your clock settings to "
 "ensure access to all entitled content.\n"
-msgstr "\n"
-"系统时钟出现偏差。授权服务器有 {time_drift} 秒的时间差。请检查您的时钟设置以确保访问所有授权内容。\n"
+msgstr ""
 
 #: src/plugins/dnf/subscription_manager.py:107
 msgid "Not root, Subscription Management repositories not updated"
@@ -350,7 +358,9 @@ msgid ""
 "subscription-manager plugin disabled %d system repository with respect of "
 "configuration in /etc/dnf/plugins/subscription-manager.conf"
 msgid_plural "subscription-manager plugin disabled %d system repositories with respect of configuration in /etc/dnf/plugins/subscription-manager.conf"
-msgstr[0] "subscription-manager 插件禁用了在 /etc/dnf/plugins/subscription-manager.conf 中有相应配置的%d 系统仓库"
+msgstr[0] ""
+"subscription-manager 插件禁用了在 /etc/dnf/plugins/subscription-manager.conf "
+"中有相应配置的%d 系统仓库"
 
 #: src/plugins/dnf/subscription_manager.py:154
 msgid "Updating Subscription Management repositories."
@@ -368,7 +378,9 @@ msgstr "订阅管理器在容器模式中运行。"
 msgid ""
 "Upload combined profile to Satellite server (list of installed RPMs, enabled "
 "repositories and modules)"
-msgstr "将组合的配置文件上传到 Satellite 服务器（已安装的 RPM、已启用的仓库和模块的列表）"
+msgstr ""
+"将组合的配置文件上传到 Satellite 服务器（已安装的 RPM、已启用的仓库和模块的列"
+"表）"
 
 #: src/plugins/dnf/upload_profile.py:48
 #: src/subscription_manager/scripts/package_profile_upload.py:30
@@ -914,17 +926,19 @@ msgstr "未知证书类型"
 #: src/rhsm/config.py:282
 #, python-brace-format
 msgid "Invalid value '{val}' for {section}.{name}."
-msgstr "'{val}' 是无效的 {section}.{name} 值。"
+msgstr ""
 
 #: src/rhsm/config.py:289
-#, python-brace-format
+#, fuzzy, python-brace-format
 #| msgid ""
 #| "Please use:  subscription-manager config --logging.default_log_level=<Log "
 #| "Level> to set the default_log_level to a valid value."
 msgid ""
 "Please use:  subscription-manager config --{section}.{name}=<value> to set "
 "{name} to a valid value."
-msgstr "请使用： subscription-manager config --{section}.{name}=<value> 将 {name} 设置为一个有效的值。"
+msgstr ""
+"请使用：subscription-manager config --logging.default_log_level=<Log Level> "
+"将 default_log_level 设置为一个有效的值。"
 
 #: src/rhsm/config.py:294
 #, python-brace-format
@@ -934,7 +948,7 @@ msgstr "有效值：{valid_str}"
 #: src/rhsm/config.py:297
 #, python-brace-format
 msgid "Invalid value '{val}' for {section}.{name}. Valid values are: {valid}."
-msgstr "'{val}' 是无效的 {section}.{name} 值。有效值为：{valid}。"
+msgstr ""
 
 #: src/rhsm/connection.py:1515
 msgid "Fetching supported resources"
@@ -1075,7 +1089,7 @@ msgstr "获取作业"
 #: src/rhsm/logutil.py:222
 #, python-brace-format
 msgid "Using default value '{level}' for this run."
-msgstr "在这个运行中使用默认值 '{level}'。"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsm_debug/debug_commands.py:39
@@ -1120,7 +1134,9 @@ msgstr "通过“--destination”指定的目录必须已经存在。"
 msgid ""
 "To use the no-archive option, the destination directory '{destination}' must "
 "exist on the same file system as the data assembly directory '{assembly}'."
-msgstr "要使用 no-archive 选项，目标目录 '{destination}' 需要和数据组合目录 '{assembly}' 存在于相同的文件系统中。"
+msgstr ""
+"要使用 no-archive 选项，目标目录 '{destination}' 需要和数据组合目录 '"
+"{assembly}' 存在于相同的文件系统中。"
 
 #: src/rhsm_debug/debug_commands.py:215
 #, python-brace-format
@@ -1294,7 +1310,9 @@ msgid ""
 "Error: Can not force registration while attempting to recover registration "
 "with consumerid. Please use --force without --consumerid to re-register or "
 "use the clean command and try again without --force."
-msgstr "错误：尝试使用 consumerid 恢复注册时无法强制注册。请使用 --force 选项并除去 --consumerid 选项重新注册，或使用不带 --force 选项的 clean 命令再试一次。"
+msgstr ""
+"错误：尝试使用 consumerid 恢复注册时无法强制注册。请使用 --force 选项并除"
+"去 --consumerid 选项重新注册，或使用不带 --force 选项的 clean 命令再试一次。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/rhsmlib/services/register.py:269
@@ -1373,7 +1391,9 @@ msgstr "在客户门户网站或其它订阅管理服务中取消注册这个系
 msgid ""
 "consumer_uuid={consumer_uuid} is not a valid consumer_uuid. Not attempting "
 "to sync {class_name} cache with server."
-msgstr "consumer_uuid={consumer_uuid} 不是一个有效的 consumer_uuid。未尝试将 {class_name} 缓存与服务器同步。"
+msgstr ""
+"consumer_uuid={consumer_uuid} 不是一个有效的 consumer_uuid。未尝试将 "
+"{class_name} 缓存与服务器同步。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli.py:82
@@ -1403,7 +1423,9 @@ msgid ""
 "Warning: A {attr} of \"{download_value}\" was recently set for this system "
 "by the entitlement server administrator.\n"
 "{advice}"
-msgstr "警告：\"{download_value}\" 的 {attr} 是最近由授权服务器管理员为这个系统设置的。\n"
+msgstr ""
+"警告：\"{download_value}\" 的 {attr} 是最近由授权服务器管理员为这个系统设置的"
+"。\n"
 "{advice}"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:38
@@ -1487,7 +1509,9 @@ msgid ""
 "Warning: This organization does not have any subscriptions that provide a "
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
-msgstr "警告：这个机构没有提供系统目的为 \"{attr}\" 的订阅。这个设置不会影响到自动附加订阅。"
+msgstr ""
+"警告：这个机构没有提供系统目的为 \"{attr}\" 的订阅。这个设置不会影响到自动附"
+"加订阅。"
 
 #: src/subscription_manager/cli_command/abstract_syspurpose.py:266
 #, python-brace-format
@@ -1642,7 +1666,9 @@ msgstr "系统证书崩溃。请重新注册。"
 msgid ""
 "Consumer profile \"{uuid}\" has been deleted from the server. You can use "
 "command clean or unregister to remove local profile."
-msgstr "已将消费者配置集 \"{uuid}\" 从服务器中删除。您可以使用 clean 或 unregister 命令删除本地配置集。"
+msgstr ""
+"已将消费者配置集 \"{uuid}\" 从服务器中删除。您可以使用 clean 或 unregister 命"
+"令删除本地配置集。"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/config.py:28
@@ -1767,7 +1793,7 @@ msgstr "此操作需要用户凭证"
 msgid ""
 "Error: At least one environment must be set; use --list to get list of "
 "environments."
-msgstr "错误：必须至少设置一个环境；使用 --list 获取环境列表。"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/environments.py:122
@@ -2193,7 +2219,9 @@ msgid ""
 "register with a specific environment (single value) or multiple environments "
 "(a comma-separated list) in the destination org. The ability to use multiple "
 "environments is controlled by the entitlement server"
-msgstr "在目标机构中注册特定环境（单个值）或多个环境（以逗号分隔的列表）。使用多个环境的能力由授权服务器控制"
+msgstr ""
+"在目标机构中注册特定环境（单个值）或多个环境（以逗号分隔的列表）。使用多个环"
+"境的能力由授权服务器控制"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/cli_command/register.py:102
@@ -2437,7 +2465,9 @@ msgstr "这个系统没有可通过订阅使用的库。"
 msgid ""
 "Error: '{repoid}' does not match a valid repository ID. Use \"subscription-"
 "manager repos --list\" to see valid repositories."
-msgstr "错误：'{repoid}' 与有效软件仓库 ID 不匹配。请使用 \"subscription-manager repos --list\" 查看有效软件仓库。"
+msgstr ""
+"错误：'{repoid}' 与有效软件仓库 ID 不匹配。请使用 \"subscription-manager "
+"repos --list\" 查看有效软件仓库。"
 
 #: src/subscription_manager/cli_command/repos.py:271
 #, python-brace-format
@@ -2679,7 +2709,8 @@ msgstr "连接错误： {message} （错误代码 {code}）"
 msgid ""
 "Unknown server reply (HTTP error code {code}: {title}):\n"
 "{content}"
-msgstr "未知服务器回复 (HTTP 错误代码 {code}: {title}):\n"
+msgstr ""
+"未知服务器回复 (HTTP 错误代码 {code}: {title}):\n"
 "{content}"
 
 #: src/subscription_manager/exceptions.py:37
@@ -2786,7 +2817,8 @@ msgstr "错误证书： {file}: [{library}] {message}"
 msgid ""
 "Bad certificate: [{library}] {message}\n"
 "{data}"
-msgstr "错误证书： [{library}] {message}\n"
+msgstr ""
+"错误证书： [{library}] {message}\n"
 "{data}"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
@@ -2847,7 +2879,7 @@ msgstr "已删除："
 #: src/subscription_manager/pqc.py:65
 #, python-brace-format
 msgid "Using default value '{value}' for this run."
-msgstr "在这个运行中使用默认值 '{value}'。"
+msgstr ""
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/subscription_manager/reasons.py:102
@@ -2877,7 +2909,10 @@ msgid ""
 "The yum/dnf plugins: %s were automatically enabled for the benefit of Red "
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
-msgstr "yum/dnf plugins: %s 会为 Red Hat Subscription Management 自动启用。如果不需要，使用 \"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" 来禁用它。"
+msgstr ""
+"yum/dnf plugins: %s 会为 Red Hat Subscription Management 自动启用。如果不需要"
+"，使用 \"subscription-manager config --rhsm.auto_enable_yum_plugins=0\" 来禁"
+"用它。"
 
 #: src/subscription_manager/repolib.py:676
 msgid "Repo updates"
@@ -6257,4 +6292,3 @@ msgstr "警告：提供的键 \"{key}\" 没有包括在有效键列表中："
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #~ msgid "Unable to continue migration!"
 #~ msgstr "无法继续迁移！"
-

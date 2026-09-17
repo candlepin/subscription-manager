@@ -6,15 +6,16 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2015-09-25 03:30-0400\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
-"Language-Team: Bengali (India)\n"
-"Language: bn-IN\n"
+"PO-Revision-Date: 2026-09-16 13:56+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Bengali (India) <https://translate.fedoraproject.org/projects/"
+"subscription-manager/subscription-manager-main/bn_IN/>\n"
+"Language: bn_IN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Zanata 3.9.6\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -1476,12 +1477,14 @@ msgstr ""
 
 #: src/rhsmlib/services/entitlement.py:511
 msgid "Error: --no-overlap is only applicable with --available"
-msgstr "ত্রুটি: --no-overlap শুধুমাত্র --available বিকল্পের সাথে ব্যবহার করা যাবে"
+msgstr ""
+"ত্রুটি: --no-overlap শুধুমাত্র --available বিকল্পের সাথে ব্যবহার করা যাবে"
 
 #: src/rhsmlib/services/entitlement.py:516
 msgid ""
 "Error: --pool-only is only applicable with --available and/or --consumed"
-msgstr "ত্রুটি: --pool-only শুধুমাত্র --available এবং/অথবা --consumed সাথে প্রযোজ্য"
+msgstr ""
+"ত্রুটি: --pool-only শুধুমাত্র --available এবং/অথবা --consumed সাথে প্রযোজ্য"
 
 #: src/rhsmlib/services/entitlement.py:519
 msgid "Error: this system is not registered"
@@ -1540,7 +1543,8 @@ msgstr "ত্রুটি: একটি অ্যাক্টিভেশন-�
 #: src/rhsmlib/services/register.py:262
 #: src/subscription_manager/cli_command/register.py:123
 msgid "Error: Activation keys do not require user credentials."
-msgstr "ত্রুটি: অ্যাক্টিভেশন-কির ক্ষেত্রে ব্যবহারকারীর পরিচয় উল্লেখ করা আবশ্যক নয়"
+msgstr ""
+"ত্রুটি: অ্যাক্টিভেশন-কির ক্ষেত্রে ব্যবহারকারীর পরিচয় উল্লেখ করা আবশ্যক নয়"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author bnin
@@ -1637,8 +1641,7 @@ msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"গ্রাহক পোর্ট্যাল অথবা অন্য কোনো সাবস্ক্রিপশন পরিচালন ব্যবস্থার সাথে এই সিস্টেমটি "
-"নিবন্ধন করুন"
+"গ্রাহক পোর্ট্যাল অথবা অন্য কোনো সাবস্ক্রিপশন পরিচালন ব্যবস্থার সাথে এই সিস্টেমটি নিবন্ধন করুন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -1647,8 +1650,7 @@ msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"গ্রাহক পোর্ট্যাল অথবা অন্য সাবস্ক্রিপশন পরিসেবা ব্যবস্থা থেকে এই সিস্টেমের নিবন্ধন "
-"বাতিল করুন"
+"গ্রাহক পোর্ট্যাল অথবা অন্য সাবস্ক্রিপশন পরিসেবা ব্যবস্থা থেকে এই সিস্টেমের নিবন্ধন বাতিল করুন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -1952,7 +1954,8 @@ msgstr ""
 #: src/subscription_manager/cli_command/clean.py:25
 msgid ""
 "Remove all local system and subscription data without affecting the server"
-msgstr "সার্ভার প্রভাবিত না করে সকল স্থানীয় সিস্টেম ও সাবস্ক্রিপশনের তথ্য মুছে ফেলুন"
+msgstr ""
+"সার্ভার প্রভাবিত না করে সকল স্থানীয় সিস্টেম ও সাবস্ক্রিপশনের তথ্য মুছে ফেলুন"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2013,8 +2016,8 @@ msgid ""
 "subscription-manager is operating in container mode. Use your host system to "
 "manage subscriptions.\n"
 msgstr ""
-"subscription-manager একটি কন্টেনারের ভিতরে রান করার সময়ে নিষ্ক্রিয় করা হয়। দয়া "
-"করে সাবস্ক্রিপশন ব্যবস্থাপনার জন্য অাপনার হোস্ট সিস্টেম দেখুন।\n"
+"subscription-manager একটি কন্টেনারের ভিতরে রান করার সময়ে নিষ্ক্রিয় করা হয়। দয়া করে "
+"সাবস্ক্রিপশন ব্যবস্থাপনার জন্য অাপনার হোস্ট সিস্টেম দেখুন।\n"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2050,7 +2053,8 @@ msgstr "ত্রুটি: সাবস্ক্রিপশন পরিসে
 # document keys
 #: src/subscription_manager/cli_command/cli.py:401
 msgid "System certificates corrupted. Please reregister."
-msgstr "সিস্টেমের সার্টিফিকেট ক্ষতিগ্রস্ত হয়েছে। অনুগ্রহ করে পুনরায় নিবন্ধন করুন।"
+msgstr ""
+"সিস্টেমের সার্টিফিকেট ক্ষতিগ্রস্ত হয়েছে। অনুগ্রহ করে পুনরায় নিবন্ধন করুন।"
 
 #: src/subscription_manager/cli_command/cli.py:412
 #, python-brace-format
@@ -2093,8 +2097,8 @@ msgid ""
 "Error: --list should not be used with any other options for setting or "
 "removing configurations."
 msgstr ""
-"ত্রুটি: কনফিগারেশনের মান নির্ধারণ অথবা অপসারণের জন্য --list-র সাথে অন্য কোনো "
-"বিকল্প নির্ধারণ করা উচিত নয়।"
+"ত্রুটি: কনফিগারেশনের মান নির্ধারণ অথবা অপসারণের জন্য --list-র সাথে অন্য কোনো বিকল্প "
+"নির্ধারণ করা উচিত নয়।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
@@ -2103,8 +2107,8 @@ msgid ""
 "Error: configuration entry designation for removal must be of format "
 "[section.name]"
 msgstr ""
-"ত্রুটি: অপসারণের উদ্দেশ্যে কনফিগারেশন এনট্রি নির্ধারণের জন্য চিহ্নিত বিন্যাস ব্যবহার "
-"করা আবশ্যক [section.name]"
+"ত্রুটি: অপসারণের উদ্দেশ্যে কনফিগারেশন এনট্রি নির্ধারণের জন্য চিহ্নিত বিন্যাস ব্যবহার করা "
+"আবশ্যক [section.name]"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2311,8 +2315,8 @@ msgid ""
 "force certificate regeneration (requires username and password); Only used "
 "with --regenerate"
 msgstr ""
-"সার্টিফিকেট পুনরায় নির্মাণ করতে বাধ্য করা হবে (ব্যবহারকারীর নাম ও পাসওয়ার্ড "
-"আবশ্যক); শুধুমাত্র --regenerate দিয়ে ব্যবহৃত"
+"সার্টিফিকেট পুনরায় নির্মাণ করতে বাধ্য করা হবে (ব্যবহারকারীর নাম ও পাসওয়ার্ড আবশ্যক); শুধুমাত্র --"
+"regenerate দিয়ে ব্যবহৃত"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2437,9 +2441,8 @@ msgid ""
 "lists only products containing the specified expression in the product "
 "information."
 msgstr ""
-"সাবস্ক্রিপশন বা প্রোডাক্ট তথ্যে শুধুমাত্র নির্দিষ্ট এক্সপ্রেশন বিশিষ্ট সাবস্ক্রিপশন বা "
-"প্রোডাক্ট তালিকাভুক্ত করে, অনুরোধ জানানো তালিকা এবং সার্ভার সংস্করণ অনুসারে (কেস-"
-"অসংবেদী)।"
+"সাবস্ক্রিপশন বা প্রোডাক্ট তথ্যে শুধুমাত্র নির্দিষ্ট এক্সপ্রেশন বিশিষ্ট সাবস্ক্রিপশন বা প্রোডাক্ট "
+"তালিকাভুক্ত করে, অনুরোধ জানানো তালিকা এবং সার্ভার সংস্করণ অনুসারে (কেস-অসংবেদী)।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -2506,29 +2509,28 @@ msgid ""
 "name of the override to remove (can be specified more than once); used with "
 "--repo option."
 msgstr ""
-"সরানোর ওভার-রাইডের নাম (একবারের বেশি নির্দিষ্ট করা যেতে পারে); --repo বিকল্পের "
-"সংগে ব্যবহৃত।"
+"সরানোর ওভার-রাইডের নাম (একবারের বেশি নির্দিষ্ট করা যেতে পারে); --repo বিকল্পের সংগে "
+"ব্যবহৃত।"
 
 #: src/subscription_manager/cli_command/override.py:56
 msgid ""
 "name and value of the option to override separated by a colon (can be "
 "specified more than once); used with --repo option."
 msgstr ""
-"ওভার-রাইড করা বিকল্পের নাম এবং মান, কোলোন দ্বারা পৃথক করা (একবারের বেশি নির্দিষ্ট "
-"করা যেতে পারে); --repo বিকল্পের সংগে ব্যবহৃত।"
+"ওভার-রাইড করা বিকল্পের নাম এবং মান, কোলোন দ্বারা পৃথক করা (একবারের বেশি নির্দিষ্ট করা যেতে "
+"পারে); --repo বিকল্পের সংগে ব্যবহৃত।"
 
 #: src/subscription_manager/cli_command/override.py:63
 msgid ""
 "remove all overrides; can be specific to a repository by providing --repo"
 msgstr ""
-"সকল ওভার-রাইড সরান; --repo প্রদান করে কোনো সংগ্রহস্থলের ক্ষেত্রে নির্দিষ্ট করা যেতে "
-"পারে"
+"সকল ওভার-রাইড সরান; --repo প্রদান করে কোনো সংগ্রহস্থলের ক্ষেত্রে নির্দিষ্ট করা যেতে পারে"
 
 #: src/subscription_manager/cli_command/override.py:68
 msgid "list all overrides; can be specific to a repository by providing --repo"
 msgstr ""
-"সকল ওভার-রাইড তালিকাভুক্ত করুন; --repo প্রদান করে কোনো সংগ্রহস্থলের ক্ষেত্রে নির্দিষ্ট "
-"করা যেতে পারে"
+"সকল ওভার-রাইড তালিকাভুক্ত করুন; --repo প্রদান করে কোনো সংগ্রহস্থলের ক্ষেত্রে নির্দিষ্ট করা "
+"যেতে পারে"
 
 #: src/subscription_manager/cli_command/override.py:76
 msgid "You must specify an override in the form of \"name:value\" with --add."
@@ -2545,8 +2547,8 @@ msgstr "ত্রুটি: সংশোধনের জন্য অাপন�
 #: src/subscription_manager/cli_command/override.py:94
 msgid "Error: You may not use --add or --remove with --remove-all and --list"
 msgstr ""
-"ত্রুটি: অাপনি --remove-all এবং --list এর সংগে হয়তো --add বা --remove ব্যবহার "
-"করতে পারবেন না"
+"ত্রুটি: অাপনি --remove-all এবং --list এর সংগে হয়তো --add বা --remove ব্যবহার করতে "
+"পারবেন না"
 
 #: src/subscription_manager/cli_command/override.py:97
 msgid "Error: You may not use --list with --remove-all"
@@ -2583,7 +2585,8 @@ msgstr "এই সিস্টেমে ওভার-রাইড প্রয�
 msgid ""
 "Repository '{repo}' does not currently exist, but the override has been "
 "added."
-msgstr "বর্তমানে '%s' সংগ্রহস্থলের অস্তিত্ব নেই, কিন্তু ওভার-রাইড যোগ করা হয়েছে।"
+msgstr ""
+"বর্তমানে '%s' সংগ্রহস্থলের অস্তিত্ব নেই, কিন্তু ওভার-রাইড যোগ করা হয়েছে।"
 
 #: src/subscription_manager/cli_command/override.py:198
 #, fuzzy, python-brace-format
@@ -2723,8 +2726,7 @@ msgid ""
 "register with one of multiple organizations for the user, using organization "
 "key"
 msgstr ""
-"প্রতিষ্ঠান কী ব্যবহার করে, ব্যবহারকারীর জন্য একাধিক প্রতিষ্ঠানের একটির সাথে নিবন্ধন "
-"করুন"
+"প্রতিষ্ঠান কী ব্যবহার করে, ব্যবহারকারীর জন্য একাধিক প্রতিষ্ঠানের একটির সাথে নিবন্ধন করুন"
 
 #: src/subscription_manager/cli_command/register.py:95
 msgid ""
@@ -2925,8 +2927,8 @@ msgstr "রিলিজ সংক্রান্ত পছন্দ বাতি
 msgid ""
 "No releases match '{release}'.  Consult 'release --list' for a full listing."
 msgstr ""
-"'%s'-র সাথে মিলিয়ে কোনো রিলিজ সনাক্ত করা হয়নি। সম্পূর্ণ তালিকার জন্য 'release --"
-"list' পরীক্ষা করুন।"
+"'%s'-র সাথে মিলিয়ে কোনো রিলিজ সনাক্ত করা হয়নি। সম্পূর্ণ তালিকার জন্য 'release --list' "
+"পরীক্ষা করুন।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
@@ -2995,16 +2997,15 @@ msgid ""
 "repository to enable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"সক্রিয় করার সংগ্রহস্থল (একাধিক বার উল্লেখ করা যেতে পারে)। Wildcards (* এবং ?) "
-"সমর্থিত।"
+"সক্রিয় করার সংগ্রহস্থল (একাধিক বার উল্লেখ করা যেতে পারে)। Wildcards (* এবং ?) সমর্থিত।"
 
 #: src/subscription_manager/cli_command/repos.py:102
 msgid ""
 "repository to disable (can be specified more than once). Wildcards (* and ?) "
 "are supported."
 msgstr ""
-"নিষ্ক্রিয় করার সংগ্রহস্থল (একাধিক বার উল্লেখ করা যেতে পারে)। Wildcards (* এবং ?) "
-"সমর্থিত।"
+"নিষ্ক্রিয় করার সংগ্রহস্থল (একাধিক বার উল্লেখ করা যেতে পারে)। Wildcards (* এবং ?) সমর্থিত"
+"।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -3063,8 +3064,8 @@ msgid ""
 "Error: you must register or specify --username and --password to list "
 "service levels"
 msgstr ""
-"ত্রুটি: পরিসেবা স্তরের তালিকা প্রদর্শনপর জন্য নিবন্ধন করা অথবা --username ও --"
-"password উল্লেখ করা আবশ্যক।"
+"ত্রুটি: পরিসেবা স্তরের তালিকা প্রদর্শনপর জন্য নিবন্ধন করা অথবা --username ও --password "
+"উল্লেখ করা আবশ্যক।"
 
 #: src/subscription_manager/cli_command/service_level.py:98
 msgid ""
@@ -3293,8 +3294,8 @@ msgid ""
 "Network error, unable to connect to server. Please see /var/log/rhsm/rhsm."
 "log for more information."
 msgstr ""
-"নেটওয়ার্কের সমস্য, সার্ভারের সাথে সংযোগ স্থাপন করতে ব্যর্থ। অধিক বিবরণের জন্য অনুগ্রহ "
-"করে /var/log/rhsm/rhsm.log দেখুন।"
+"নেটওয়ার্কের সমস্য, সার্ভারের সাথে সংযোগ স্থাপন করতে ব্যর্থ। অধিক বিবরণের জন্য অনুগ্রহ করে /"
+"var/log/rhsm/rhsm.log দেখুন।"
 
 #: src/subscription_manager/exceptions.py:34
 #, python-brace-format
@@ -3353,8 +3354,8 @@ msgid ""
 "Remote server error. Please check the connection details, or see /var/log/"
 "rhsm/rhsm.log for more information."
 msgstr ""
-"দূরবর্তী সার্ভারে সমস্যা। অনুগ্রহ করে সংযোগের বিবরণ পরীক্ষা করুন অথবা অধিক বিবরণের "
-"জন্য /var/log/rhsm/rhsm.log দেখুন।"
+"দূরবর্তী সার্ভারে সমস্যা। অনুগ্রহ করে সংযোগের বিবরণ পরীক্ষা করুন অথবা অধিক বিবরণের জন্য /"
+"var/log/rhsm/rhsm.log দেখুন।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys
@@ -3389,8 +3390,7 @@ msgstr "সার্ভার URL ফাঁকা রাখা চলবে ন�
 msgid ""
 "Server URL is just a schema. Should include hostname, and/or port and path"
 msgstr ""
-"সার্ভার URL মূলত একটি স্কিমা। এর মধ্যে হোস্ট-নেম, এবং/অথবা পোর্ট ও পাথ অন্তর্ভুক্ত করা "
-"আবশ্যক।"
+"সার্ভার URL মূলত একটি স্কিমা। এর মধ্যে হোস্ট-নেম, এবং/অথবা পোর্ট ও পাথ অন্তর্ভুক্ত করা আবশ্যক।"
 
 # translation auto-copied from project subscription-manager, version 1.9.X,
 # document keys, author Runa Bhattacharjee
