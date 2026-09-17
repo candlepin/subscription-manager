@@ -11,8 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
 "PO-Revision-Date: 2026-04-26 19:59+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"Last-Translator: Jan Kalabza <jan.kalabza@gmail.com>\n"
 "Language-Team: Czech <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/cs/>\n"
 "Language: cs\n"
@@ -39,12 +38,12 @@ msgstr ""
 #: /usr/lib64/python3.6/argparse.py:1181
 #, python-format
 msgid "argument \"-\" with mode %r"
-msgstr "argument „-“ s režimem %r"
+msgstr "argument “-“ s režimem %r"
 
 #: /usr/lib64/python3.6/argparse.py:1189
 #, python-format
 msgid "can't open '%s': %s"
-msgstr "nelze otevřít „%s“:%s"
+msgstr "nelze otevřít ‘%s‘:%s"
 
 #: /usr/lib64/python3.6/argparse.py:1393
 #, python-format
@@ -78,9 +77,9 @@ msgstr "neplatná hodnota conflict_resolution: %r"
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "Kolidující volby %s"
-msgstr[1] "Kolidující volby %s"
-msgstr[2] "Kolidující volby %s"
+msgstr[0] "Kolidující volba: %s"
+msgstr[1] "Kolidující volby: %s"
+msgstr[2] "Kolidující volby: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1574
 msgid "mutually exclusive arguments must be optional"
@@ -839,6 +838,8 @@ msgid ""
 "Upload combined profile to Satellite server (list of installed rpms, enabled "
 "repositories and modules"
 msgstr ""
+"Nahrání kombinovaného profilu na server Satellite (seznam nainstalovaných "
+"rpm balíčků, povolených repozitářů a modulů)"
 
 #: src/dnf-plugins/upload-profile.py:44
 #: src/subscription_manager/scripts/package_profile_upload.py:34
@@ -927,7 +928,7 @@ msgstr ""
 #: src/rct/cert_commands.py:101
 #, python-format
 msgid "Content sets: %s"
-msgstr ""
+msgstr "Sady obsahu: %s"
 
 #: src/rct/manifest_commands.py:65
 msgid "Manifest zip is invalid."
@@ -1127,7 +1128,7 @@ msgstr "přepsat případné už existující soubory"
 #: src/rct/manifest_commands.py:328
 #, python-format
 msgid "File \"%s\" exists. Use -f to force overwriting the file."
-msgstr ""
+msgstr "Soubor „%s“ existuje. Pro vynucení přepsání souboru použijte -f."
 
 #: src/rct/manifest_commands.py:331
 msgid "Manifest could not be written:"
@@ -1136,7 +1137,7 @@ msgstr "Manifest nebylo možné zapsat:"
 #: src/rct/manifest_commands.py:344
 #, python-format
 msgid "The manifest has been dumped to the %s directory"
-msgstr ""
+msgstr "Manifest byl uložen do adresáře %s"
 
 #: src/rct/manifest_commands.py:347
 msgid "The manifest has been dumped to the current directory"
@@ -1807,7 +1808,7 @@ msgid ""
 "rhsm/rhsm.log for more information."
 msgstr ""
 "Chyba vzdáleného serveru. Zkontrolujte podrobnosti připojení nebo se "
-"podívejte do /var/log/rhsm/rhsm.log ohledně dalších informací."
+"podívejte do /var/log/rhsm/rhsm.log pro další informace."
 
 #: src/subscription_manager/exceptions.py:46
 #, python-brace-format
@@ -2020,12 +2021,12 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/activation_key.glade:30
 #: src/subscription_manager/gui/data/ui/activation_key.ui:47
 msgid "_Organization:"
-msgstr "Organizace"
+msgstr "_Organizace:"
 
 #: src/subscription_manager/gui/data/glade/activation_key.glade:44
 #: src/subscription_manager/gui/data/ui/activation_key.ui:63
 msgid "Activation _Key:"
-msgstr "Aktivační _klíč"
+msgstr "Aktivační _klíč:"
 
 #: src/subscription_manager/gui/data/glade/activation_key.glade:60
 #: src/subscription_manager/gui/data/glade/credentials.glade:234
@@ -2228,7 +2229,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/ui/subdetails.ui:74
 #: src/subscription_manager/gui/data/ui/subdetailscontract.ui:63
 msgid "<b>Subscription:</b>"
-msgstr "<b>Popis</b>"
+msgstr "<b>Popis:</b>"
 
 #: src/subscription_manager/gui/data/glade/contract_selection.glade:79
 #: src/subscription_manager/gui/data/ui/contract_selection.ui:90
@@ -2253,7 +2254,7 @@ msgstr "_Heslo:"
 #: src/subscription_manager/gui/data/glade/credentials.glade:162
 #: src/subscription_manager/gui/data/ui/credentials.ui:48
 msgid "_Login:"
-msgstr ""
+msgstr "_Přihlásit:"
 
 #: src/subscription_manager/gui/data/glade/credentials.glade:210
 #: src/subscription_manager/gui/data/ui/credentials.ui:233
@@ -2312,7 +2313,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:69
 #: src/subscription_manager/gui/data/ui/factsdialog.ui:71
 msgid "Organization:"
-msgstr "Organizace"
+msgstr "Organizace:"
 
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:88
 #: src/subscription_manager/gui/data/ui/factsdialog.ui:94
@@ -2338,7 +2339,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:207
 #: src/subscription_manager/gui/data/ui/factsdialog.ui:212
 msgid "Last Update:"
-msgstr "Naposledy aktualizováno"
+msgstr "Poslední aktualizace:"
 
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:224
 #: src/subscription_manager/gui/data/ui/factsdialog.ui:232
@@ -2434,7 +2435,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/ui/installed.ui:59
 #: src/subscription_manager/gui/data/ui/installed.ui:313
 msgid "<b>Status:</b>"
-msgstr ""
+msgstr "<b>Stav:</b>"
 
 #: src/subscription_manager/gui/data/glade/installed.glade:71
 #: src/subscription_manager/gui/data/ui/installed.ui:78
@@ -2534,7 +2535,7 @@ msgstr "Začínáme"
 #: src/subscription_manager/gui/data/glade/mainwindow.glade:110
 #: src/subscription_manager/gui/data/ui/mainwindow.ui:233
 msgid "_Online Documentation"
-msgstr "Dokumentace na Internetu:"
+msgstr "_Online dokumentace"
 
 #: src/subscription_manager/gui/data/glade/manually_subscribe.glade:34
 #: src/subscription_manager/gui/data/ui/manually_subscribe.ui:34
@@ -2565,7 +2566,7 @@ msgstr "Odstranit"
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:7
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:7
 msgid "Proxy Configuration"
-msgstr ""
+msgstr "Proxy konfigurace"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:25
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:99
@@ -2590,7 +2591,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:110
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:146
 msgid "_Proxy Location:"
-msgstr "Umístění proxy"
+msgstr "_Umístění proxy:"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:124
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:161
@@ -2615,12 +2616,12 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:185
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:253
 msgid "Proxy _Username:"
-msgstr "Uživatelské jméno pro proxy"
+msgstr "_Uživatelské jméno pro proxy:"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:198
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:267
 msgid "Proxy P_assword:"
-msgstr ""
+msgstr "Proxy H_eslo:"
 
 #: src/subscription_manager/gui/data/glade/networkConfig.glade:217
 #: src/subscription_manager/gui/data/ui/networkConfig.ui:286
@@ -2742,7 +2743,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/preferences.glade:141
 #: src/subscription_manager/gui/data/ui/preferences.ui:145
 msgid "Release version:"
-msgstr ""
+msgstr "Verze vydání:"
 
 #: src/subscription_manager/gui/data/glade/preferences.glade:156
 #: src/subscription_manager/gui/data/ui/preferences.ui:159
@@ -2759,7 +2760,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/preferences.glade:232
 #: src/subscription_manager/gui/data/ui/preferences.ui:237
 msgid "Service level preference:"
-msgstr "Preference úrovně služeb nenastavena"
+msgstr "Nastavení úrovně služeb:"
 
 #: src/subscription_manager/gui/data/glade/preferences.glade:247
 #: src/subscription_manager/gui/data/ui/preferences.ui:251
@@ -2803,7 +2804,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/redeem.glade:118
 #: src/subscription_manager/gui/data/ui/redeem.ui:121
 msgid "Email Address:"
-msgstr "E-mailová adresa"
+msgstr "E-mailová adresa:"
 
 #: src/subscription_manager/gui/data/glade/redeem.glade:134
 #: src/subscription_manager/gui/data/ui/redeem.ui:136
@@ -3155,7 +3156,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/subdetailscontract.glade:307
 #: src/subscription_manager/gui/data/ui/subdetailscontract.ui:301
 msgid "<b>Status Details:</b>"
-msgstr ""
+msgstr "<b>Podrobnosti o stavu:</b>"
 
 #: src/subscription_manager/gui/data/glade/subdetailscontract.glade:330
 #: src/subscription_manager/gui/data/ui/subdetailscontract.ui:323
@@ -3165,7 +3166,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/subdetailscontract.glade:347
 #: src/subscription_manager/gui/data/ui/subdetailscontract.ui:340
 msgid "<b>Provides Management:</b>"
-msgstr ""
+msgstr "<b>Zajišťuje správu:</b>"
 
 #: src/subscription_manager/gui/data/glade/subdetailscontract.glade:370
 #: src/subscription_manager/gui/data/ui/subdetailscontract.ui:362
@@ -3188,15 +3189,15 @@ msgstr ""
 
 #: src/subscription_manager/gui/data/ui/credentials.ui:18
 msgid "<b>Please enter your Red Hat account information:</b>"
-msgstr "Zadejte informace o svém Red Hat účtu:"
+msgstr "<b>Zadejte informace o svém Red Hat účtu:</b>"
 
 #: src/subscription_manager/gui/data/ui/credentials.ui:166
 msgid ""
 "<small>Tip: Forgot your login or password? Look it up at https://redhat.com/"
 "forgot_password</small>"
 msgstr ""
-"Tip: Zapomněli jste své přihlašovací jméno nebo heslo? Podívejte se do "
-"https://redhat.com/forgot_password"
+"<small>Tip: Zapomněli jste své přihlašovací jméno nebo heslo? Podívejte se "
+"do https://redhat.com/forgot_password</small>"
 
 #: src/subscription_manager/gui/data/ui/credentials.ui:199
 msgid "credentials_grid"
@@ -3330,7 +3331,7 @@ msgstr "Platnost končí"
 #: src/subscription_manager/gui/installedtab.py:207
 #, python-format
 msgid "Subscription %s is expired"
-msgstr "Platnost předplatného skončila"
+msgstr "Platnost předplatného %s skončila"
 
 #: src/subscription_manager/gui/installedtab.py:210
 #: src/subscription_manager/gui/installedtab.py:211
@@ -3340,7 +3341,7 @@ msgstr "Částečně pokryto předplatným"
 
 #: src/subscription_manager/gui/installedtab.py:216
 msgid "System is not registered."
-msgstr "Tento systém není zaregistrován"
+msgstr "Tento systém není zaregistrován."
 
 #: src/subscription_manager/gui/installedtab.py:219
 msgid "Entitlement server is unreachable."
@@ -3365,7 +3366,7 @@ msgstr "Nainstalované produkty"
 
 #: src/subscription_manager/gui/installedtab.py:324
 msgid "No installed products detected."
-msgstr "Nezjištěny žádné nainstalované produkty"
+msgstr "Nebyly zjištěny žádné nainstalované produkty."
 
 #: src/subscription_manager/gui/installedtab.py:328
 #, python-format
@@ -3488,15 +3489,15 @@ msgstr "Předplatné"
 
 #: src/subscription_manager/gui/mysubstab.py:283
 msgid "Subscription is current."
-msgstr "Předplatné je aktuální"
+msgstr "Předplatné je aktuální."
 
 #: src/subscription_manager/gui/mysubstab.py:286
 msgid "Subscription is expired."
-msgstr "Platnost předplatného skončila"
+msgstr "Platnost předplatného skončila."
 
 #: src/subscription_manager/gui/mysubstab.py:288
 msgid "Subscription has not begun."
-msgstr "Předplatné ještě nezačalo"
+msgstr "Předplatné ještě nezačalo."
 
 #: src/subscription_manager/gui/networkConfig.py:211
 msgid "There was an error saving your configuration."
@@ -3550,7 +3551,7 @@ msgstr "Tento systém v tuto chvíli není zaregistrován."
 
 #: src/subscription_manager/gui/registergui.py:379
 msgid "Error during registration."
-msgstr "Chyba při registraci: {e}"
+msgstr "Chyba při registraci."
 
 #: src/subscription_manager/gui/registergui.py:388
 #: src/subscription_manager/gui/registergui.py:441
@@ -3564,7 +3565,7 @@ msgstr ""
 
 #: src/subscription_manager/gui/registergui.py:808
 msgid "Subscription Attachment"
-msgstr ""
+msgstr "Příloha k předplatnému"
 
 #: src/subscription_manager/gui/registergui.py:1039
 #, python-format
@@ -3582,7 +3583,7 @@ msgstr "Nahrát profil balíčků"
 #: src/subscription_manager/gui/registergui.py:1150
 #: src/subscription_manager/gui/registergui.py:1706
 msgid "Attaching subscriptions"
-msgstr "Připojuji předplatné…"
+msgstr "Připojuji předplatné"
 
 #: src/subscription_manager/gui/registergui.py:1154
 #: src/subscription_manager/gui/registergui.py:1291
@@ -3664,7 +3665,7 @@ msgstr ""
 
 #: src/subscription_manager/gui/registergui.py:1558
 msgid "You must enter a password."
-msgstr "Je třeba nastavit heslo"
+msgstr "Je třeba nastavit heslo."
 
 #: src/subscription_manager/gui/registergui.py:1665
 msgid "You must enter an organization."
@@ -3834,12 +3835,12 @@ msgstr "{prog}: chyba: {msg}"
 #: src/subscription_manager/managercli.py:110
 #: src/subscription_manager/managercli.py:152
 msgid "Product Name:"
-msgstr "Název produktu"
+msgstr "Název produktu:"
 
 #: src/subscription_manager/managercli.py:100
 #: src/subscription_manager/managercli.py:111
 msgid "Product ID:"
-msgstr "Identif. produktu:"
+msgstr "ID produktu:"
 
 #: src/subscription_manager/managercli.py:101
 #: src/subscription_manager/managercli.py:112
@@ -3874,21 +3875,21 @@ msgstr "Začátek:"
 #: src/subscription_manager/managercli.py:182
 #: src/subscription_manager/managercli.py:205
 msgid "Ends:"
-msgstr "Končí"
+msgstr "Končí:"
 
 #: src/subscription_manager/managercli.py:117
 #: src/subscription_manager/managercli.py:137
 #: src/subscription_manager/managercli.py:167
 #: src/subscription_manager/managercli.py:187
 msgid "Subscription Name:"
-msgstr "Předplatné"
+msgstr "Jméno předplatného:"
 
 #: src/subscription_manager/managercli.py:118
 #: src/subscription_manager/managercli.py:138
 #: src/subscription_manager/managercli.py:168
 #: src/subscription_manager/managercli.py:188
 msgid "Provides:"
-msgstr "Poskytovatel"
+msgstr "Poskytovatel:"
 
 #: src/subscription_manager/managercli.py:119
 #: src/subscription_manager/managercli.py:139
@@ -3902,13 +3903,13 @@ msgstr ""
 #: src/subscription_manager/managercli.py:170
 #: src/subscription_manager/managercli.py:190
 msgid "Contract:"
-msgstr "Smlouva"
+msgstr "Smlouva:"
 
 #: src/subscription_manager/managercli.py:121
 #: src/subscription_manager/managercli.py:173
 #: src/subscription_manager/managercli.py:193
 msgid "Pool ID:"
-msgstr "Identif. fondu"
+msgstr "ID fondu:"
 
 #: src/subscription_manager/managercli.py:122
 #: src/subscription_manager/managercli.py:174
@@ -3918,7 +3919,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:123
 msgid "Available:"
-msgstr "Dostupný"
+msgstr "Dostupnost:"
 
 #: src/subscription_manager/managercli.py:124
 msgid "Suggested:"
@@ -3933,7 +3934,7 @@ msgstr "Typ služby:"
 #: src/subscription_manager/managercli.py:126
 #: src/subscription_manager/managercli.py:198
 msgid "Roles:"
-msgstr "Role"
+msgstr "Role:"
 
 #: src/subscription_manager/managercli.py:127
 #: src/subscription_manager/managercli.py:141
@@ -3973,11 +3974,11 @@ msgstr "Název repozitáře:"
 
 #: src/subscription_manager/managercli.py:147
 msgid "Repo URL:"
-msgstr "URL repozitáře"
+msgstr "URL repozitáře:"
 
 #: src/subscription_manager/managercli.py:148
 msgid "Enabled:"
-msgstr "Povoleno"
+msgstr "Povoleno:"
 
 #: src/subscription_manager/managercli.py:157
 #: src/subscription_manager/managercli.py:162
@@ -3995,7 +3996,7 @@ msgstr "_Klíč:"
 #: src/subscription_manager/managercli.py:171
 #: src/subscription_manager/managercli.py:191
 msgid "Account:"
-msgstr "Účty"
+msgstr "Účet:"
 
 #: src/subscription_manager/managercli.py:172
 #: src/subscription_manager/managercli.py:192
@@ -4010,7 +4011,7 @@ msgstr "Aktivní:"
 #: src/subscription_manager/managercli.py:176
 #: src/subscription_manager/managercli.py:196
 msgid "Quantity Used:"
-msgstr ""
+msgstr "Použité množství:"
 
 #: src/subscription_manager/managercli.py:183
 msgid "System Type:"
@@ -5333,6 +5334,8 @@ msgid ""
 "Date entered is invalid. Date should be in YYYY-MM-DD format (example: "
 "{dateexample})"
 msgstr ""
+"Zadané datum je neplatné. Datum by mělo být ve formátu RRRR-MM-DD (příklad: "
+"{dateexample})"
 
 #: src/subscription_manager/managercli.py:3351
 msgid "    Installed Product Status"
@@ -5345,7 +5348,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:3387
 msgid "No installed products to list"
-msgstr "Na tomto systému nejsou nainstalované žádné produkty."
+msgstr "Nejsou nainstalované žádné produkty"
 
 #: src/subscription_manager/managercli.py:3414
 msgid "Available Subscriptions"
@@ -5535,7 +5538,7 @@ msgstr ""
 
 #: src/subscription_manager/managercli.py:3763
 msgid "Registered"
-msgstr "Zaregistrováno."
+msgstr "Zaregistrováno"
 
 #: src/subscription_manager/managercli.py:3765
 #, python-brace-format
