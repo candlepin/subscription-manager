@@ -17,7 +17,13 @@ from unittest.mock import patch
 
 from cloud_what.providers import aws, azure, gcp
 
-from rhsm.profile import ModulesProfile, EnabledReposProfile
+from rhsm.profile import (
+    ModulesProfile,
+    EnabledReposProfile,
+    parse_rpm_string,
+    _is_ostree_system,
+    _get_immutable_packages,
+)
 
 
 class TestModulesProfile(unittest.TestCase):
@@ -225,3 +231,177 @@ class TestEnabledReposProfile(unittest.TestCase):
             self.assertEqual(
                 repo_list[0]["baseurl"], ["http://cdn.foo.com/content/dist/snakes/1.0/x86_64/os"]
             )
+
+
+class TestParseRpmString(unittest.TestCase):
+    """
+    Test case for parse_rpm_string function
+    """
+
+    def test_parse_valid_rpm_string_with_epoch(self):
+        """
+        Test parsing a valid RPM string with epoch
+        """
+        rpm_string = "NetworkManager-cloud-setup-1:1.54.0-2.fc43.x86_64"
+        result = parse_rpm_string(rpm_string)
+        self.assertIsNotNone(result)
+        self.assertEqual(result["name"], "NetworkManager-cloud-setup")
+        self.assertEqual(result["version"], "1.54.0")
+        self.assertEqual(result["epoch"], 1)
+        self.assertEqual(result["release"], "2.fc43")
+        self.assertEqual(result["arch"], "x86_64")
+
+    def test_parse_valid_rpm_string_without_epoch(self):
+        """
+        Test parsing a valid RPM string without epoch
+        """
+        rpm_string = "bash-completion-2.16-2.fc43.noarch"
+        result = parse_rpm_string(rpm_string)
+        self.assertIsNotNone(result)
+        self.assertEqual(result["name"], "bash-completion")
+        self.assertEqual(result["version"], "2.16")
+        self.assertEqual(result["epoch"], 0)
+        self.assertEqual(result["release"], "2.fc43")
+        self.assertEqual(result["arch"], "noarch")
+
+    def test_parse_rpm_string_with_hyphens_in_name(self):
+        """
+        Test parsing RPM string where package name contains multiple hyphens
+        """
+        rpm_string = "amd-ucode-firmware-20241210-164.fc42.noarch"
+        result = parse_rpm_string(rpm_string)
+        self.assertIsNotNone(result)
+        self.assertEqual(result["name"], "amd-ucode-firmware")
+        self.assertEqual(result["version"], "20241210")
+        self.assertEqual(result["epoch"], 0)
+        self.assertEqual(result["release"], "164.fc42")
+        self.assertEqual(result["arch"], "noarch")
+
+    def test_parse_rpm_string_with_leading_whitespace(self):
+        """
+        Test parsing RPM string with leading whitespace
+        """
+        rpm_string = "  bash-5.2.32-1.fc42.x86_64"
+        result = parse_rpm_string(rpm_string)
+        self.assertIsNotNone(result)
+        self.assertEqual(result["name"], "bash")
+        self.assertEqual(result["version"], "5.2.32")
+        self.assertEqual(result["epoch"], 0)
+        self.assertEqual(result["release"], "1.fc42")
+        self.assertEqual(result["arch"], "x86_64")
+
+    def test_parse_invalid_rpm_string(self):
+        """
+        Test parsing an invalid RPM string returns None
+        """
+        rpm_string = "invalid-package-string"
+        result = parse_rpm_string(rpm_string)
+        self.assertIsNone(result)
+
+    def test_parse_empty_string(self):
+        """
+        Test parsing an empty string returns None
+        """
+        rpm_string = ""
+        result = parse_rpm_string(rpm_string)
+        self.assertIsNone(result)
+
+
+class TestOstreeSystemDetection(unittest.TestCase):
+    """
+    Test case for ostree system detection functions
+    """
+
+    @patch("rhsm.profile.ostree_available", False)
+    def test_is_ostree_system_without_ostree_library(self):
+        """
+        Test detection when ostree library is not available
+        """
+        result = _is_ostree_system()
+        self.assertFalse(result)
+
+    @patch("rhsm.profile.ostree_available", True)
+    @patch("rhsm.profile.OSTree", create=True)
+    def test_is_ostree_system_with_booted_deployment(self, mock_ostree):
+        """
+        Test detection when there is a booted ostree deployment
+        """
+        mock_sysroot = mock.Mock()
+        mock_sysroot.load = mock.Mock()
+        mock_sysroot.get_booted_deployment = mock.Mock(return_value=mock.Mock())
+
+        mock_ostree.Sysroot.new_default.return_value = mock_sysroot
+
+        result = _is_ostree_system()
+        self.assertTrue(result)
+        mock_sysroot.load.assert_called_once_with(None)
+        mock_sysroot.get_booted_deployment.assert_called_once()
+
+    @patch("rhsm.profile.ostree_available", True)
+    @patch("rhsm.profile.OSTree", create=True)
+    def test_is_ostree_system_without_booted_deployment(self, mock_ostree):
+        """
+        Test detection when there is no booted ostree deployment
+        """
+        mock_sysroot = mock.Mock()
+        mock_sysroot.load = mock.Mock()
+        mock_sysroot.get_booted_deployment = mock.Mock(return_value=None)
+        mock_ostree.Sysroot.new_default.return_value = mock_sysroot
+        result = _is_ostree_system()
+        self.assertFalse(result)
+
+    @patch("rhsm.profile.ostree_available", True)
+    @patch("rhsm.profile.OSTree", create=True)
+    def test_is_ostree_system_with_ostree_api_exception(self, mock_ostree):
+        """
+        Test detection when OSTree API raises an exception
+        """
+        mock_ostree.Sysroot.new_default.side_effect = Exception("OSTree API error")
+
+        result = _is_ostree_system()
+        self.assertFalse(result)
+
+    @patch("subprocess.run")
+    @patch("rhsm.profile.json.loads")
+    def test_get_immutable_packages(self, mock_json_loads, mock_subprocess_run):
+        """
+        Test getting immutable packages from ostree system
+        """
+        # Mock rpm-ostree status output
+        mock_status = {"deployments": [{"checksum": "abc123def456"}]}
+
+        # Mock rpm-ostree db list output
+        mock_db_list_output = """ostree commit: abc123def456
+bash-5.2.32-1.fc42.x86_64
+systemd-257.3-1.fc42.x86_64
+NetworkManager-1:1.54.0-2.fc43.x86_64"""
+
+        mock_subprocess_run.side_effect = [
+            mock.Mock(stdout='{"deployments": [{"checksum": "abc123def456"}]}', returncode=0),
+            mock.Mock(stdout=mock_db_list_output, returncode=0),
+        ]
+
+        mock_json_loads.return_value = mock_status
+
+        result = _get_immutable_packages()
+
+        self.assertIsInstance(result, set)
+        # Check that result contains tuples with (name, version, epoch, release)
+        self.assertIn(("bash", "5.2.32", 0, "1.fc42"), result)
+        self.assertIn(("systemd", "257.3", 0, "1.fc42"), result)
+        self.assertIn(("NetworkManager", "1.54.0", 1, "2.fc43"), result)
+        self.assertEqual(len(result), 3)
+
+    @patch("subprocess.run")
+    def test_get_immutable_packages_command_failure(self, mock_run):
+        """
+        Test handling of rpm-ostree command failure
+        """
+        from subprocess import CalledProcessError
+
+        mock_run.side_effect = CalledProcessError(1, "rpm-ostree")
+
+        result = _get_immutable_packages()
+
+        self.assertIsInstance(result, set)
+        self.assertEqual(len(result), 0)
