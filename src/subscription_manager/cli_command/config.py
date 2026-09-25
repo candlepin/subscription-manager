@@ -15,8 +15,10 @@
 # in this software or its documentation.
 #
 import os
+import sys
 
 import rhsm.config
+from rhsm.config import InvalidConfigValueError
 
 from subscription_manager.cli import system_exit
 from subscription_manager.cli_command.cli import CliCommand, conf
@@ -90,8 +92,10 @@ class ConfigCommand(CliCommand):
                 if value is None:
                     continue
                 try:
-                    conf._parser.is_value_valid(s, name, value, print_warning=True, raise_on_invalid=True)
-                except ValueError:
+                    conf._parser.is_value_valid(s, name, value)
+                except InvalidConfigValueError as e:
+                    for msg in e.messages():
+                        print(msg, file=sys.stderr)
                     system_exit(os.EX_USAGE)
 
         if self.options.remove:

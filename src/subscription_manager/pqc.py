@@ -3,7 +3,7 @@ import sys
 from typing import Tuple, List
 
 from rhsm import _certificate
-from rhsm.config import get_config_parser
+from rhsm.config import get_config_parser, InvalidConfigValueError
 from subscription_manager.i18n import ugettext as _
 
 """
@@ -59,12 +59,16 @@ def get_crypto_capabilities() -> Tuple[List[str], List[str]]:
     signature_algorithms = []
 
     certificate_algorithms = cfg.get("rhsm", "certificate_algorithms")
-    if not cfg.is_value_valid("rhsm", "certificate_algorithms", certificate_algorithms):
+    try:
+        cfg.is_value_valid("rhsm", "certificate_algorithms", certificate_algorithms)
+    except InvalidConfigValueError as e:
         certificate_algorithms = cfg.get_default("rhsm", "certificate_algorithms")
-        print(
-            _("Using default value '{value}' for this run.").format(value=certificate_algorithms),
-            file=sys.stderr,
-        )
+        for msg in e.messages():
+            log.warning(msg)
+            print(msg, file=sys.stderr)
+        fallback_msg = _("Using default value '{value}' for this run.").format(value=certificate_algorithms)
+        log.warning(fallback_msg)
+        print(fallback_msg, file=sys.stderr)
 
     if certificate_algorithms == "current":
         key_algorithms = get_public_key_algorithms()
