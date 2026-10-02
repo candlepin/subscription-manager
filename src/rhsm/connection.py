@@ -1123,7 +1123,9 @@ class BaseRestLib:
                             % (result, normalized_host(self.host))
                         )
                 except ssl.SSLError:
-                    if self.cert_file and not self.cert_dir:
+                    # During the first registration there is no identity certificate yet;
+                    # check it only when it exists, so the real SSL error is raised.
+                    if self.cert_file and not self.cert_dir and os.path.exists(self.cert_file):
                         id_cert = certificate.create_from_file(self.cert_file)
                         if not id_cert.is_valid():
                             self.is_consumer_cert_key_valid = False

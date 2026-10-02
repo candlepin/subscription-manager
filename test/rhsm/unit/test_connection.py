@@ -898,6 +898,18 @@ class BaseRestLibTests(unittest.TestCase):
         # Access a value deep in the structure to make sure we recursed down.
         self.assertTrue(isinstance(data["phoneNumbers"][0][0]["type"], type("")))
 
+    def test_ssl_error_without_identity_cert_is_raised(self):
+        # First registration: the identity certificate does not exist yet,
+        # so the original SSL error must be raised, not a certificate error.
+        cert_file = "/nonexistent/consumer/cert.pem"
+        key_file = "/nonexistent/consumer/key.pem"
+        restlib = BaseRestLib("somehost", "123", "somehandler", cert_file=cert_file, key_file=key_file)
+        conn = Mock()
+        conn.request.side_effect = ssl.SSLError(1, "certificate verify failed")
+        with patch.object(restlib, "_create_connection", return_value=conn):
+            with self.assertRaises(ssl.SSLError):
+                restlib._make_request("GET", "/status", {}, None, [(cert_file, key_file)])
+
 
 # see #830767 and #842885 for examples of why this is
 # a useful test. Aka, sometimes we forget to make
