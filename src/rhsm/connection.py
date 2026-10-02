@@ -1363,7 +1363,7 @@ class BaseRestLib:
                     # it connects to the server without the identity cert
                     # even if the cert is valid
                     if self.proxy_hostname:
-                        if self.cert_file:
+                        if self.cert_file and os.path.exists(self.cert_file):
                             id_cert = certificate.create_from_file(self.cert_file)
                             if id_cert.is_valid():
                                 raise RestlibException(

@@ -764,6 +764,16 @@ class BaseRestLibValidateResponseTests(unittest.TestCase):
         else:
             self.fails("Should have raised a RestlibException")
 
+    def test_401_proxy_without_identity_cert(self):
+        # First registration through a proxy: the identity certificate does not
+        # exist yet, so the server's 401 error must be raised, not a certificate error.
+        self.restlib.proxy_hostname = "proxy.example.com"
+        self.restlib.cert_file = "/nonexistent/consumer/cert.pem"
+        content = '{"errors": ["Unauthorized message"]}'
+        with self.assertRaises(RestlibException) as cm:
+            self.vr("401", content)
+        self.assertEqual("401", cm.exception.code)
+
     def test_404_empty(self):
         try:
             self.vr("404", "")
