@@ -764,6 +764,16 @@ class BaseRestLibValidateResponseTests(unittest.TestCase):
         else:
             self.fails("Should have raised a RestlibException")
 
+    def test_401_proxy_without_identity_cert(self):
+        # First registration through a proxy: the identity certificate does not
+        # exist yet, so the server's 401 error must be raised, not a certificate error.
+        self.restlib.proxy_hostname = "proxy.example.com"
+        self.restlib.cert_file = "/nonexistent/consumer/cert.pem"
+        content = '{"errors": ["Unauthorized message"]}'
+        with self.assertRaises(RestlibException) as cm:
+            self.vr("401", content)
+        self.assertEqual("401", cm.exception.code)
+
     def test_404_empty(self):
         try:
             self.vr("404", "")
@@ -897,6 +907,18 @@ class BaseRestLibTests(unittest.TestCase):
         self.assertTrue(isinstance(data["message"], type("")))
         # Access a value deep in the structure to make sure we recursed down.
         self.assertTrue(isinstance(data["phoneNumbers"][0][0]["type"], type("")))
+
+    def test_ssl_error_without_identity_cert_is_raised(self):
+        # First registration: the identity certificate does not exist yet,
+        # so the original SSL error must be raised, not a certificate error.
+        cert_file = "/nonexistent/consumer/cert.pem"
+        key_file = "/nonexistent/consumer/key.pem"
+        restlib = BaseRestLib("somehost", "123", "somehandler", cert_file=cert_file, key_file=key_file)
+        conn = Mock()
+        conn.request.side_effect = ssl.SSLError(1, "certificate verify failed")
+        with patch.object(restlib, "_create_connection", return_value=conn):
+            with self.assertRaises(ssl.SSLError):
+                restlib._make_request("GET", "/status", {}, None, [(cert_file, key_file)])
 
 
 # see #830767 and #842885 for examples of why this is
