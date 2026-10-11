@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-02 12:40+0100\n"
-"PO-Revision-Date: 2026-03-18 12:58+0000\n"
+"PO-Revision-Date: 2026-03-19 08:58+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/syspurpose-1-28/ka/>\n"
@@ -49,7 +49,7 @@ msgstr "ქმედებების შერწმის შეცდომ�
 
 #: /usr/lib64/python3.6/argparse.py:1431
 msgid "'required' is an invalid argument for positionals"
-msgstr ""
+msgstr "'required' არასწორი არგუმენტია პოზიცირებისთვის"
 
 #: /usr/lib64/python3.6/argparse.py:1453
 #, python-format
@@ -57,27 +57,29 @@ msgid ""
 "invalid option string %(option)r: must start with a character "
 "%(prefix_chars)r"
 msgstr ""
+"არასწორი პარამეტრების სტრიქონი %(option)r: უნდა იწყებოდეს სიმბოლოთი %"
+"(prefix_chars)r"
 
 #: /usr/lib64/python3.6/argparse.py:1473
 #, python-format
 msgid "dest= is required for options like %r"
-msgstr ""
+msgstr "dest= აუცილებელია %r -ის მსგავსი პარამეტრებისთვის"
 
 #: /usr/lib64/python3.6/argparse.py:1490
 #, python-format
 msgid "invalid conflict_resolution value: %r"
-msgstr ""
+msgstr "conflict_resolution-ის არასწორი მნიშვნელობა: %r"
 
 #: /usr/lib64/python3.6/argparse.py:1508
 #, python-format
 msgid "conflicting option string: %s"
 msgid_plural "conflicting option strings: %s"
-msgstr[0] "კონფლიქტური პარამეტრის სტრიქონი: %s"
-msgstr[1] "კონფლიქტური პარამეტრების სტრიქონი: %s"
+msgstr[0] "შეუთავსებელი პარამეტრების სტრიქონი: %s"
+msgstr[1] "შეუთავსებელი პარამეტრების სტრიქონები: %s"
 
 #: /usr/lib64/python3.6/argparse.py:1574
 msgid "mutually exclusive arguments must be optional"
-msgstr ""
+msgstr "ურთიერთგამომრიცხავი არგუმენტები არასავალდებულო უნდა იყოს"
 
 #: /usr/lib64/python3.6/argparse.py:1637
 msgid "positional arguments"
@@ -93,7 +95,7 @@ msgstr "ამ დახმარების ჩვენება და გ�
 
 #: /usr/lib64/python3.6/argparse.py:1684
 msgid "cannot have multiple subparser arguments"
-msgstr ""
+msgstr "ერთზე მეტი ქვედამმუშავებლის პარამეტრი ვერ გექნებათ"
 
 #: /usr/lib64/python3.6/argparse.py:1736
 #, python-format
@@ -103,22 +105,22 @@ msgstr "გამოუცნობი არგუმენტები: %s"
 #: /usr/lib64/python3.6/argparse.py:1833
 #, python-format
 msgid "not allowed with argument %s"
-msgstr ""
+msgstr "დაუშვებელია არგუმენტით %s"
 
 #: /usr/lib64/python3.6/argparse.py:1879 /usr/lib64/python3.6/argparse.py:1893
 #, python-format
 msgid "ignored explicit argument %r"
-msgstr ""
+msgstr "გამოტოვებულია მკაფიო არგუმენტი %r"
 
 #: /usr/lib64/python3.6/argparse.py:2000
 #, python-format
 msgid "the following arguments are required: %s"
-msgstr ""
+msgstr "აუცილებელია შემდეგი არგუმენტები: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2015
 #, python-format
 msgid "one of the arguments %s is required"
-msgstr ""
+msgstr "აუცილებელია ერთ-ერთი არგუმენტი: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2058
 msgid "expected one argument"
@@ -142,27 +144,27 @@ msgstr[1] "მოველოდი %s არგუმენტს"
 #: /usr/lib64/python3.6/argparse.py:2122
 #, python-format
 msgid "ambiguous option: %(option)s could match %(matches)s"
-msgstr ""
+msgstr "გაურკვეველი პარამეტრი: %(option)s შეიძლება იყოს %(matches)s"
 
 #: /usr/lib64/python3.6/argparse.py:2185
 #, python-format
 msgid "unexpected option string: %s"
-msgstr ""
+msgstr "მოულოდნელი პარამეტრების სტრიქონი: %s"
 
 #: /usr/lib64/python3.6/argparse.py:2289
 #, python-format
 msgid "%r is not callable"
-msgstr ""
+msgstr "%r გამოძახებადი არაა"
 
 #: /usr/lib64/python3.6/argparse.py:2306
 #, python-format
 msgid "invalid %(type)s value: %(value)r"
-msgstr ""
+msgstr "არასწორი %(type)s-ის მნიშვნელობა: %(value)r"
 
 #: /usr/lib64/python3.6/argparse.py:2317
 #, python-format
 msgid "invalid choice: %(value)r (choose from %(choices)s)"
-msgstr ""
+msgstr "არასწორი არჩევანი: %(value)r (აირჩიეთ სიიდან %(choices)s)"
 
 #: /usr/lib64/python3.6/argparse.py:2393
 #, python-format
