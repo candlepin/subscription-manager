@@ -10,8 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
 "PO-Revision-Date: 2026-07-01 07:20+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ka/>\n"
 "Language: ka\n"
@@ -759,7 +758,7 @@ msgstr "არასწორი პარამეტრი: %s\n"
 #: src/daemons/rhsmcertd.c:844
 #, c-format
 msgid "Invalid argument specified: %s\n"
-msgstr ""
+msgstr "მითითებულია არასწორი არგუმენტი: %s\n"
 
 #: src/dnf-plugins/product-id.py:79
 msgid "Installed products updated."
@@ -1547,7 +1546,7 @@ msgstr ""
 #: src/subscription_manager/branding/__init__.py:94
 #: src/subscription_manager/branding/redhat_branding.py:20
 msgid "Red Hat Subscription Management"
-msgstr "Red Hat-ის გამოწერების მმართველი"
+msgstr "Red Hat-ის გამოწერების მართვა"
 
 #: src/subscription_manager/branding/redhat_branding.py:8
 msgid ""
@@ -1656,8 +1655,8 @@ msgstr "სხვა მოდულები:"
 #, python-format
 msgid "%s local certificate has been deleted."
 msgid_plural "%s local certificates have been deleted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s ლოკალური სერტიფიკატი წაიშალა."
+msgstr[1] "%s ლოკალური სერტიფიკატი წაიშალა."
 
 #: src/subscription_manager/entcertlib.py:474
 #, python-format
@@ -2125,7 +2124,7 @@ msgstr "proxy_button"
 #: src/subscription_manager/gui/data/glade/confirmsubs.glade:14
 #: src/subscription_manager/gui/data/ui/confirmsubs.ui:25
 msgid "<b>Confirm Subscriptions</b>"
-msgstr ""
+msgstr "<b>გამოწერების დადასტურება</b>"
 
 #: src/subscription_manager/gui/data/glade/confirmsubs.glade:38
 #: src/subscription_manager/gui/data/ui/confirmsubs.ui:57
@@ -2164,7 +2163,7 @@ msgstr "<b>გამოწერა:</b>"
 #: src/subscription_manager/gui/data/glade/contract_selection.glade:79
 #: src/subscription_manager/gui/data/ui/contract_selection.ui:90
 msgid "<b>Total Contracts:</b>"
-msgstr ""
+msgstr "<b>კონტრაქტები სულ:</b>"
 
 #: src/subscription_manager/gui/data/glade/contract_selection.glade:129
 #: src/subscription_manager/gui/data/ui/contract_selection.ui:170
@@ -2213,7 +2212,7 @@ msgstr "მზდაა!"
 #: src/subscription_manager/gui/data/glade/environment.glade:17
 #: src/subscription_manager/gui/data/ui/environment.ui:17
 msgid "<b>Environment Selection</b>"
-msgstr ""
+msgstr "<b>გარემოს არჩევანი</b>"
 
 #: src/subscription_manager/gui/data/glade/environment.glade:22
 #: src/subscription_manager/gui/data/ui/environment.ui:22
@@ -2233,7 +2232,7 @@ msgstr "Subscription Manager - ფაქტები"
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:37
 #: src/subscription_manager/gui/data/ui/factsdialog.ui:35
 msgid "System Identity:"
-msgstr ""
+msgstr "სისტემის იდენტიფიკატორი:"
 
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:54
 #: src/subscription_manager/gui/data/ui/factsdialog.ui:57
@@ -2279,7 +2278,7 @@ msgstr "განახლების დრო"
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:247
 #: src/subscription_manager/gui/data/ui/factsdialog.ui:276
 msgid "Update Facts"
-msgstr ""
+msgstr "ფაქტების განახლება"
 
 #: src/subscription_manager/gui/data/glade/factsdialog.glade:270
 #: src/subscription_manager/gui/data/glade/register_dialog.glade:29
@@ -2445,7 +2444,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/mainwindow.glade:70
 #: src/subscription_manager/gui/data/ui/mainwindow.ui:166
 msgid "Repo_sitories"
-msgstr ""
+msgstr "რეპო_ზიტორიები"
 
 #: src/subscription_manager/gui/data/glade/mainwindow.glade:79
 #: src/subscription_manager/gui/data/ui/mainwindow.ui:178
@@ -2717,7 +2716,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/redeem.glade:43
 #: src/subscription_manager/gui/data/ui/redeem.ui:43
 msgid "Redeem"
-msgstr ""
+msgstr "მიღება"
 
 #: src/subscription_manager/gui/data/glade/redeem.glade:78
 #: src/subscription_manager/gui/data/ui/redeem.ui:80
@@ -2766,7 +2765,7 @@ msgstr "register_widget_main_vbox"
 #: src/subscription_manager/gui/data/ui/registration.ui:31
 #: src/subscription_manager/gui/registergui.py:659
 msgid "<b>Registering</b>"
-msgstr ""
+msgstr "<b>მიმდინარეობს რეგისტრაცია</b>"
 
 #: src/subscription_manager/gui/data/glade/registration.glade:35
 #: src/subscription_manager/gui/data/ui/registration.ui:40
@@ -2891,7 +2890,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/registration_info.glade:419
 #: src/subscription_manager/gui/data/ui/registration_info.ui:514
 msgid "<b>Support:</b>"
-msgstr ""
+msgstr "<b>მხარდაჭერა:</b>"
 
 #: src/subscription_manager/gui/data/glade/registration_info.glade:457
 #: src/subscription_manager/gui/data/ui/registration_info.ui:552
@@ -2903,7 +2902,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/registration_info.glade:481
 #: src/subscription_manager/gui/data/ui/registration_info.ui:576
 msgid "<b>Management:</b>"
-msgstr ""
+msgstr "<b>მართვა:</b>"
 
 #: src/subscription_manager/gui/data/glade/registration_info.glade:486
 #: src/subscription_manager/gui/data/ui/registration_info.ui:581
@@ -2934,7 +2933,7 @@ msgstr "რეპოზიტორიების მართვა"
 #: src/subscription_manager/gui/data/glade/repositories.glade:19
 #: src/subscription_manager/gui/data/ui/repositories.ui:311
 msgid "manage_repositories_dialog"
-msgstr ""
+msgstr "manage_repositories_dialog"
 
 #: src/subscription_manager/gui/data/glade/repositories.glade:35
 #: src/subscription_manager/gui/data/ui/repositories.ui:113
@@ -2976,7 +2975,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/repositories.glade:247
 #: src/subscription_manager/gui/data/ui/repositories.ui:42
 msgid "remove_all_overrides_button"
-msgstr ""
+msgstr "remove_all_overrides_button"
 
 #: src/subscription_manager/gui/data/glade/repositories.glade:261
 #: src/subscription_manager/gui/data/ui/repositories.ui:54
@@ -3002,7 +3001,7 @@ msgstr "გამოწერის ტექსტი"
 #: src/subscription_manager/gui/data/ui/subdetails.ui:111
 #: src/subscription_manager/gui/data/ui/subdetailscontract.ui:260
 msgid "<b>Products:</b>"
-msgstr ""
+msgstr "<b>პროდუქტები:</b>"
 
 #: src/subscription_manager/gui/data/glade/subdetails.glade:131
 #: src/subscription_manager/gui/data/glade/subdetailscontract.glade:288
@@ -3044,7 +3043,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/ui/subdetails.ui:229
 #: src/subscription_manager/gui/data/ui/subdetailscontract.ui:420
 msgid "<b>SKU:</b>"
-msgstr ""
+msgstr "<b>SKU:</b>"
 
 #: src/subscription_manager/gui/data/glade/subdetails.glade:252
 #: src/subscription_manager/gui/data/glade/subdetailscontract.glade:452
@@ -3061,7 +3060,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/subdetailscontract.glade:95
 #: src/subscription_manager/gui/data/ui/subdetailscontract.ui:95
 msgid "<b>Contract:</b>"
-msgstr ""
+msgstr "<b>კონტრაქტი:</b>"
 
 #: src/subscription_manager/gui/data/glade/subdetailscontract.glade:181
 #: src/subscription_manager/gui/data/ui/subdetailscontract.ui:178
@@ -3076,7 +3075,7 @@ msgstr ""
 #: src/subscription_manager/gui/data/glade/subdetailscontract.glade:223
 #: src/subscription_manager/gui/data/ui/subdetailscontract.ui:219
 msgid "<b>Account:</b>"
-msgstr ""
+msgstr "<b>ანგარიში:</b>"
 
 #: src/subscription_manager/gui/data/glade/subdetailscontract.glade:246
 #: src/subscription_manager/gui/data/ui/subdetailscontract.ui:241
@@ -3489,7 +3488,7 @@ msgstr ""
 
 #: src/subscription_manager/gui/registergui.py:661
 msgid "<b>Attaching</b>"
-msgstr ""
+msgstr "<b>მიმაგრება</b>"
 
 #: src/subscription_manager/gui/registergui.py:808
 msgid "Subscription Attachment"
@@ -4437,8 +4436,8 @@ msgstr ""
 #, python-brace-format
 msgid "No such environment: {names}"
 msgid_plural "No such environments: {names}"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ასეთი გარემო არ არსებობს: {names}"
+msgstr[1] "ასეთი გარემოები არ არსებობს: {names}"
 
 #: src/subscription_manager/managercli.py:1578
 msgid "Set if subscriptions are attached on a schedule (default of daily)"
