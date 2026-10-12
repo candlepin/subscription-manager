@@ -138,6 +138,40 @@ def in_container() -> bool:
     return False
 
 
+class InvalidConfigValueError(ValueError):
+    """Raised when an invalid value is set for a constrained config key.
+
+    Carries enough context to format user-facing messages and log entries.
+    """
+
+    def __init__(self, section: str, name: str, value: str, valid_values: List[str]) -> None:
+        self.section = section
+        self.name = name
+        self.value = value
+        self.valid_values = valid_values
+        super().__init__(str(self))
+
+    def __str__(self) -> str:
+        valid_str = ", ".join(self.valid_values)
+        return _("Invalid value '{val}' for {section}.{name}. Valid values are: {valid}.").format(
+            val=self.value, section=self.section, name=self.name, valid=valid_str
+        )
+
+    def messages(self) -> List[str]:
+        """Return the full set of user-facing warning lines for this error."""
+        valid_str = ", ".join(self.valid_values)
+        return [
+            _("Invalid value '{val}' for {section}.{name}.").format(
+                val=self.value, section=self.section, name=self.name
+            ),
+            _(
+                "Please use:  subscription-manager config --{section}.{name}=<value>"
+                " to set {name} to a valid value."
+            ).format(section=self.section, name=self.name),
+            _("Valid Values: {valid_str}").format(valid_str=valid_str),
+        ]
+
+
 class RhsmConfigParser(SafeConfigParser):
     """Config file parser for rhsm configuration."""
 
@@ -240,65 +274,31 @@ class RhsmConfigParser(SafeConfigParser):
             if not self.has_section(section):
                 self.add_section(section)
             super(RhsmConfigParser, self).set(section, name, value)
-        self.is_value_valid(section, name, value)
+        try:
+            self.is_value_valid(section, name, value)
+        except InvalidConfigValueError as e:
+            for msg in e.messages():
+                print(msg, file=sys.stderr)
 
-    def is_value_valid(
-        self,
-        section: str,
-        name: str,
-        value: Optional[str],
-        print_warning: bool = True,
-        raise_on_invalid: bool = False,
-    ) -> bool:
+    def is_value_valid(self, section: str, name: str, value: Optional[str]) -> None:
         """Check whether a value is valid for the given config key.
-        The config key is a tuple of (section, name)
 
-        If the key is not in VALID_VALUES this is a no-op and returns True.
-        If the value is invalid and print_warning is True, a warning is printed to stderr.
-        If the value is invalid and raise_on_invalid is True, a ValueError is raised.
+        If the key is not in VALID_VALUES this is a no-op.
+        If the value is invalid, raises InvalidConfigValueError.
 
         :param section: config section
         :param name: config key
         :param value: the value to check
-        :param print_warning: print a warning to stderr when the value is invalid
-        :param raise_on_invalid: raise ValueError instead of returning False when invalid
-        :return: True when the value is valid or the key is unconstrained, otherwise False
-        :raises ValueError: when raise_on_invalid is True and the value is invalid
+        :raises InvalidConfigValueError: when the value is invalid for a constrained key
         """
         if (section, name) not in self.VALID_VALUES:
-            return True
+            return
 
         values = self.VALID_VALUES[(section, name)]["values"]
-
-        # no_hint is optional, so we must .get() it
         no_hint = self.VALID_VALUES[(section, name)].get("no_hint", [])
 
-        if value in values or value in no_hint:
-            return True
-
-        valid_str = ", ".join(values)
-        if print_warning:
-            print(
-                _("Invalid value '{val}' for {section}.{name}.").format(
-                    val=value, section=section, name=name
-                ),
-                file=sys.stderr,
-            )
-            print(
-                _(
-                    "Please use:  subscription-manager config --{section}.{name}=<value>"
-                    " to set {name} to a valid value."
-                ).format(section=section, name=name),
-                file=sys.stderr,
-            )
-            print(_("Valid Values: {valid_str}").format(valid_str=valid_str), file=sys.stderr)
-        if raise_on_invalid:
-            raise ValueError(
-                _("Invalid value '{val}' for {section}.{name}. Valid values are: {valid}.").format(
-                    val=value, section=section, name=name, valid=valid_str
-                )
-            )
-        return False
+        if value not in values and value not in no_hint:
+            raise InvalidConfigValueError(section, name, value, values)
 
     def get_int(self, section: str, prop: str) -> Optional[int]:
         """Get an int value from the config.
