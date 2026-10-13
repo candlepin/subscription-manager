@@ -21,8 +21,8 @@
 %global use_inotify 0
 %endif
 
-%global use_dnf (0%{?fedora} || (0%{?rhel}))
-%global create_libdnf_rpm (0%{?fedora} || 0%{?rhel})
+%global use_dnf ((0%{?fedora} && 0%{?fedora} < 46) || (0%{?rhel} && 0%{?rhel} < 11))
+%global create_libdnf_rpm ((0%{?fedora} && 0%{?fedora} < 46) || (0%{?rhel} && 0%{?rhel} < 11))
 
 %global _hardened_build 1
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro -Wl,-z,now}
