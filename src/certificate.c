@@ -247,14 +247,17 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 	if (pos < 0) {
 		return 0;
 	}
-	X509_EXTENSION *ext = X509_get_ext (x509, pos);
+#if OPENSSL_VERSION_MAJOR >= 4
+	const X509_EXTENSION *ext = X509_get_ext (x509, pos);
+#else
+    X509_EXTENSION *ext = X509_get_ext (x509, pos);
+#endif
 
 	int tag;
 	long len;
 	int tc;
-	const unsigned char *p = X509_EXTENSION_get_data(ext)->data;
-
-	ASN1_get_object (&p, &len, &tag, &tc, X509_EXTENSION_get_data(ext)->length);
+	const unsigned char *p = ASN1_STRING_get0_data (X509_EXTENSION_get_data(ext));
+	ASN1_get_object (&p, &len, &tag, &tc, ASN1_STRING_length (X509_EXTENSION_get_data(ext)));
 
 	size_t size;
 	switch (tag) {
@@ -266,8 +269,8 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 							  (ASN1_UTF8STRING));
 				*output = strndup ((const char *)
 						   ASN1_STRING_get0_data (str),
-						   str->length);
-				size = str->length;
+						   ASN1_STRING_length (str));
+				size = ASN1_STRING_length (str);
 				ASN1_UTF8STRING_free (str);
 				return size;
 			}
@@ -277,9 +280,9 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 					ASN1_item_unpack (X509_EXTENSION_get_data(ext),
 							  ASN1_ITEM_rptr
 							  (ASN1_OCTET_STRING));
-				*output = malloc (octstr->length);
-				memcpy (*output, octstr->data, octstr->length);
-				size = octstr->length;
+				*output = malloc (ASN1_STRING_length(octstr));
+				memcpy (*output, ASN1_STRING_get0_data(octstr), ASN1_STRING_length(octstr));
+				size = ASN1_STRING_length (octstr);
 				ASN1_OCTET_STRING_free (octstr);
 				return size;
 			}
