@@ -127,7 +127,6 @@ class TestLoadSO(unittest.TestCase):
         with self.assertRaises(rhsm._certificate.OpenSSLCertificateLoadingError):
             rhsm._certificate.load(pem="This is not a certificate")
 
-    @unittest.skip("raise_openssl_certificate_loading_error() segfaults for system errors")
     def test_load_cert_missing_file(self):
         """
         Test that loading of missing file raises exception

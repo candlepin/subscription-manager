@@ -267,9 +267,16 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 					ASN1_item_unpack (X509_EXTENSION_get_data(ext),
 							  ASN1_ITEM_rptr
 							  (ASN1_UTF8STRING));
+				if (str == NULL) {
+					return 0;
+				}
 				*output = strndup ((const char *)
 						   ASN1_STRING_get0_data (str),
 						   ASN1_STRING_length (str));
+				if (output == NULL) {
+					ASN1_UTF8STRING_free (str);
+					return 0;
+				}
 				size = ASN1_STRING_length (str);
 				ASN1_UTF8STRING_free (str);
 				return size;
@@ -280,7 +287,14 @@ get_extension_by_object (X509 *x509, ASN1_OBJECT *obj, char **output)
 					ASN1_item_unpack (X509_EXTENSION_get_data(ext),
 							  ASN1_ITEM_rptr
 							  (ASN1_OCTET_STRING));
+				if (octstr == NULL) {
+					return 0;
+				}
 				*output = malloc (ASN1_STRING_length(octstr));
+				if (output == NULL) {
+					ASN1_OCTET_STRING_free (octstr);
+					return 0;
+				}
 				memcpy (*output, ASN1_STRING_get0_data(octstr), ASN1_STRING_length(octstr));
 				size = ASN1_STRING_length (octstr);
 				ASN1_OCTET_STRING_free (octstr);
@@ -334,6 +348,12 @@ load_cert (PyObject *self, PyObject *args, PyObject *keywords)
 		bio = BIO_new_file (file_name, "r");
 	}
 
+	if (bio == NULL) {
+		ERR_clear_error ();
+		PyErr_SetString(PyExc_RuntimeError, "Failed to read certificate from file");
+		return NULL;
+	}
+
 	X509 *x509 = PEM_read_bio_X509 (bio, NULL, NULL, NULL);
 	BIO_free (bio);
 
@@ -367,10 +387,17 @@ load_private_key (PyObject *self, PyObject *args, PyObject *keywords)
 		bio = BIO_new_file (file_name, "r");
 	}
 
+	if (bio == NULL) {
+		ERR_clear_error ();
+		PyErr_SetString(PyExc_RuntimeError, "Failed to read private key from file");
+		return NULL;
+	}
+
 	EVP_PKEY* key = PEM_read_bio_PrivateKey (bio, NULL, NULL, NULL);
 	BIO_free (bio);
 
 	if (key == NULL) {
+		ERR_clear_error ();
 		Py_INCREF (Py_None);
 		return Py_None;
 	}
