@@ -21,4 +21,6 @@
 PyObject *get_signature_algorithms (PyObject *self, PyObject *args, PyObject *keywords);
 PyObject *get_public_key_algorithms (PyObject *self, PyObject *args, PyObject *keywords);
 
+PyMODINIT_FUNC PyInit__certificate (void);
+
 #endif //CRYPTO_ALGOS_CERTIFICATE_H
