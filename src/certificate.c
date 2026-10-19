@@ -334,6 +334,12 @@ load_cert (PyObject *self, PyObject *args, PyObject *keywords)
 		bio = BIO_new_file (file_name, "r");
 	}
 
+	if (bio == NULL) {
+		ERR_clear_error ();
+		PyErr_SetString(PyExc_RuntimeError, "Failed to read certificate from file");
+		return NULL;
+	}
+
 	X509 *x509 = PEM_read_bio_X509 (bio, NULL, NULL, NULL);
 	BIO_free (bio);
 
@@ -367,10 +373,17 @@ load_private_key (PyObject *self, PyObject *args, PyObject *keywords)
 		bio = BIO_new_file (file_name, "r");
 	}
 
+	if (bio == NULL) {
+		ERR_clear_error ();
+		PyErr_SetString(PyExc_RuntimeError, "Failed to read private key from file");
+		return NULL;
+	}
+
 	EVP_PKEY* key = PEM_read_bio_PrivateKey (bio, NULL, NULL, NULL);
 	BIO_free (bio);
 
 	if (key == NULL) {
+		ERR_clear_error ();
 		Py_INCREF (Py_None);
 		return Py_None;
 	}
