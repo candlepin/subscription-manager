@@ -22,6 +22,8 @@ from rhsm.utils import suppress_output
 from iniparse import SafeConfigParser, ConfigParser
 from cloud_what import provider
 
+from hawkey import split_nevra
+
 try:
     import dnf
 except ImportError:
@@ -36,6 +38,16 @@ try:
     import yum
 except ImportError:
     yum = None
+
+try:
+    import gi
+
+    gi.require_version("OSTree", "1.0")
+    from gi.repository import OSTree
+
+    ostree_available = True
+except (ImportError, ValueError):
+    ostree_available = False
 
 use_zypper: bool = importlib.util.find_spec("zypp_plugin") is not None
 
@@ -304,7 +316,14 @@ class Package:
     """
 
     def __init__(
-        self, name: str, version: str, release: str, arch: str, epoch: int = 0, vendor: str = None
+        self,
+        name: str,
+        version: str,
+        release: str,
+        arch: str,
+        epoch: int = 0,
+        vendor: str = None,
+        persistence: str = None,
     ) -> None:
         self.name: str = name
         self.version: str = version
@@ -312,17 +331,20 @@ class Package:
         self.arch: str = arch
         self.epoch: int = epoch
         self.vendor: str = vendor
+        self.persistence: str = persistence
 
     def to_dict(self) -> dict:
         """Returns a dict representation of this package info."""
-        return {
+        result = {
             "name": self._normalize_string(self.name),
             "version": self._normalize_string(self.version),
             "release": self._normalize_string(self.release),
             "arch": self._normalize_string(self.arch),
             "epoch": self._normalize_string(self.epoch),
             "vendor": self._normalize_string(self.vendor),  # bz1519512 handle vendors that aren't utf-8
+            "persistence": self._normalize_string(self.persistence),
         }
+        return result
 
     def __eq__(self, other: "Package") -> bool:
         """
@@ -338,6 +360,7 @@ class Package:
             and self.arch == other.arch
             and self.epoch == other.epoch
             and self._normalize_string(self.vendor) == self._normalize_string(other.vendor)
+            and self.persistence == other.persistence
         ):
             return True
 
@@ -352,6 +375,132 @@ class Package:
         if type(value) is bytes:
             return value.decode("utf-8", "replace")
         return value
+
+
+def parse_rpm_string(rpm_string: str) -> dict | None:
+    """
+    Parses a standard RPM package string into its NVR components using hawkey.
+
+        Args:
+        rpm_string (str): The full package string to parse.
+            Example: "NetworkManager-cloud-setup-1:1.54.0-2.fc43.x86_64"
+
+        Returns:
+        dict | None: A dictionary with the following keys if the match is successful:
+            - 'name': The package name (including any internal hyphens).
+            - 'version': The version string (e.g., '1.54.0').
+            - 'epoch': The epoch string (e.g., '1').
+            - 'release': The release string (e.g., '2.fc43').
+            - 'arch': The architecture (e.g., 'x86_64', 'noarch').
+            Returns None if the string does not follow the expected RPM format.
+    """
+    if not rpm_string or not isinstance(rpm_string, str):
+        return None
+
+    try:
+        nevra = split_nevra(rpm_string.strip())
+
+        if not nevra.name or not nevra.version:
+            return None
+
+        return {
+            "name": str(nevra.name),
+            "version": str(nevra.version),
+            "epoch": int(nevra.epoch),
+            "release": str(nevra.release),
+            "arch": str(nevra.arch),
+        }
+
+    except Exception as e:
+        logging.debug(f"Failed to parse rpm nevra string '{rpm_string}': {e}")
+        return None
+
+
+def _is_ostree_system() -> bool:
+    """
+    Check if the current system is running on ostree (bootc/silverblue/coreos).
+    """
+    if not ostree_available:
+        return False
+    try:
+        sysroot = OSTree.Sysroot.new_default()
+        sysroot.load(None)
+        return sysroot.get_booted_deployment() is not None
+    except Exception as e:
+        log.debug(f"Failed to detect ostree system: {e}")
+        return False
+
+
+def _get_immutable_packages() -> set:
+    """
+    Get the set of packages from the immutable ostree deployment.
+    For bootc systems, uses rpm-ostree to get the true base commit packages.
+    Returns a set of tuples (name, version, epoch, release).
+
+    The Python OSTree API does not provide information abot packages, this is why
+    this function calls the rpm-ostree tool and parses its output to get the need information.
+    """
+    immutable_packages = set()
+
+    try:
+        import subprocess
+
+        # Get rpm-ostree status to find the base commits
+        result = subprocess.run(
+            ["rpm-ostree", "status", "--json"], capture_output=True, text=True, check=True
+        )
+        status = json.loads(result.stdout)
+
+        deployments = status.get("deployments", [])
+        if not deployments:
+            log.debug("No deployments found in rpm-ostree status")
+            return immutable_packages
+
+        # Use deployments[0] since it's the most recent
+        base_checksum = deployments[0].get("checksum")
+        if not base_checksum:
+            log.debug("No base checksum found")
+            return immutable_packages
+
+        log.debug(f"Using checksum: {base_checksum[:10]} to get for immutable packages")
+
+        # Use rpm-ostree db list to get packages from the base_checksum
+        result = subprocess.run(
+            ["rpm-ostree", "db", "list", base_checksum], capture_output=True, text=True, check=True
+        )
+
+        # Skip first line since there is returned the consulted base_checksum
+        for line in result.stdout.strip().split("\n")[1:]:
+            line = line.strip()
+
+            try:
+                package_dict = parse_rpm_string(line)
+                # parse_rpm_string returned None or an empty dict; skip this malformed line
+                if not package_dict:
+                    continue
+                immutable_packages.add(
+                    (
+                        package_dict["name"],
+                        package_dict["version"],
+                        package_dict["epoch"],
+                        package_dict["release"],
+                    )
+                )
+
+            except (ValueError, IndexError) as e:
+                log.debug(f"Failed to parse package line '{line}': {e}")
+                continue
+
+        log.debug(f"Found {len(immutable_packages)} packages in base ostree commit {base_checksum[:10]}")
+
+    except subprocess.CalledProcessError as e:
+        log.debug(f"rpm-ostree command failed: {e}")
+    except ImportError:
+        log.debug("subprocess module not available")
+    except Exception as e:
+        log.debug(f"Failed to get immutable packages via rpm-ostree: {e}")
+
+    return immutable_packages
 
 
 class RPMProfile:
@@ -375,6 +524,7 @@ class RPMProfile:
                         arch=pkg_dict["arch"],
                         epoch=pkg_dict["epoch"],
                         vendor=pkg_dict["vendor"],
+                        persistence=pkg_dict.get("persistence") or "persistent",
                     )
                 )
         else:
@@ -393,20 +543,35 @@ class RPMProfile:
         """
 
         pkg_list = []
+
+        # Check if we're on an ostree system and get immutable packages if so
+        is_ostree = _is_ostree_system()
+        immutable_packages = set()
+        if is_ostree:
+            immutable_packages = _get_immutable_packages()
+            log.debug(f"Running on ostree system with {len(immutable_packages)} persistent packages")
+
         for h in rpm_header_list:
             if h["name"] == "gpg-pubkey":
                 # dbMatch includes imported gpg keys as well
                 # skip these for now as there isn't compelling
                 # reason for server to know this info
                 continue
+
+            epoch = h["epoch"] or 0
+            package_info = (h["name"], h["version"], epoch, h["release"])
+
             pkg_list.append(
                 Package(
                     name=h["name"],
                     version=h["version"],
                     release=h["release"],
                     arch=h["arch"],
-                    epoch=h["epoch"] or 0,
+                    epoch=epoch,
                     vendor=h["vendor"] or None,
+                    persistence=(
+                        "persistent" if (not is_ostree or package_info in immutable_packages) else "transient"
+                    ),
                 )
             )
         return pkg_list
