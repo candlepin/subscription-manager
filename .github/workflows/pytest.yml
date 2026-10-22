@@ -48,14 +48,3 @@ jobs:
             --cov-report 'xml:/tmp/coverage.xml' --junitxml '/tmp/pytest.xml'"
         run: |
           python3 -m pytest ${{ matrix.pytest_args }}
-
-      - name: "Publish coverage"
-        uses: MishaKav/pytest-coverage-comment@main
-        if: |
-          github.event.pull_request.head.repo.full_name == github.repository
-          && matrix.name == 'Fedora latest'
-        with:
-          title: "Coverage (computed on ${{ matrix.name }})"
-          report-only-changed-files: true
-          pytest-xml-coverage-path: /tmp/coverage.xml
-          junitxml-path: /tmp/pytest.xml
