@@ -21,16 +21,14 @@ jobs:
             git-core \
             python3-flake8 \
             python3-pip \
-            rpmlint
+            rpmlint \
+            black
 
     - uses: actions/checkout@v7
 
-    - uses: psf/black@stable
-      with:
-        version: "26.3.1"
-
-    - name: Setup flake8 annotations
-      uses: rbialon/flake8-annotations@v1
+    - name: Run black
+      run: |
+        black ./src ./test
 
     - name: Run flake8
       run: |
