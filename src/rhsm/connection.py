@@ -1223,9 +1223,14 @@ class BaseRestLib:
             log.debug("Connection closed by server")
             self.close_connection()
             log.debug("Trying request once again")
-            result, response = self._make_request(
-                request_type, handler, final_headers, body, cert_key_pairs, description
-            )
+            try:
+                result, response = self._make_request(
+                    request_type, handler, final_headers, body, cert_key_pairs, description
+                )
+            except httplib.RemoteDisconnected as err:
+                if self.proxy_hostname and self.proxy_port:
+                    raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port, exc=err)
+                raise
 
         self._print_debug_info_about_response(result)
 
