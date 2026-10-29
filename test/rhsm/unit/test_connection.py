@@ -890,6 +890,24 @@ class BaseRestLibValidateResponseTests(unittest.TestCase):
 
 
 class BaseRestLibTests(unittest.TestCase):
+    def _proxy_restlib(self):
+        return BaseRestLib(
+            "somehost", "123", "somehandler", proxy_hostname="proxy.example.com", proxy_port=3128
+        )
+
+    def _disconnected_connection(self):
+        conn = Mock()
+        conn.getresponse.side_effect = httplib.RemoteDisconnected(
+            "Remote end closed connection without response"
+        )
+        return conn
+
+    @staticmethod
+    def _ok_response():
+        response = Mock()
+        response.getheader.side_effect = lambda name, default=None: default
+        return {"content": "", "status": 200, "headers": {}}, response
+
     def test_json_uft8_encoding(self):
         # A unicode string containing JSON
         test_json = """
@@ -922,55 +940,75 @@ class BaseRestLibTests(unittest.TestCase):
             with self.assertRaises(ssl.SSLError):
                 restlib._make_request("GET", "/status", {}, None, [(cert_file, key_file)])
 
-    def test_remote_disconnected_with_proxy_is_not_proxy_error(self):
-        restlib = BaseRestLib(
-            "somehost", "123", "somehandler", proxy_hostname="proxy.example.com", proxy_port=3128
-        )
-        conn = Mock()
-        conn.getresponse.side_effect = httplib.RemoteDisconnected(
-            "Remote end closed connection without response"
-        )
-        with patch.object(restlib, "_create_connection", return_value=conn):
-            with self.assertRaises(httplib.RemoteDisconnected):
-                restlib._make_request("GET", "/status", {}, None, [(None, None)])
+    def test_connection_error_classification_with_proxy(self):
+        for getresponse_error, expected_error in (
+            (
+                httplib.RemoteDisconnected("Remote end closed connection without response"),
+                httplib.RemoteDisconnected,
+            ),
+            (ConnectionResetError("Connection reset by peer"), ProxyException),
+        ):
+            with self.subTest(error=type(getresponse_error).__name__):
+                restlib = self._proxy_restlib()
+                conn = Mock()
+                conn.getresponse.side_effect = getresponse_error
+                with patch.object(restlib, "_create_connection", return_value=conn):
+                    with self.assertRaises(expected_error):
+                        restlib._make_request("GET", "/status", {}, None, [(None, None)])
 
-    def test_request_retries_remote_disconnected_when_using_proxy(self):
-        restlib = BaseRestLib(
-            "somehost", "123", "somehandler", proxy_hostname="proxy.example.com", proxy_port=3128
-        )
+    def test_request_retries_closed_connection(self):
+        for request_type, path, params in (
+            ("GET", "/status", None),
+            ("PUT", "/consumers/someuuid/content_overrides", []),
+            ("POST", "/consumers", {"name": "client"}),
+        ):
+            with self.subTest(request_type=request_type):
+                restlib = self._proxy_restlib()
+                stale_conn = self._disconnected_connection()
+                restlib._BaseRestLib__conn = stale_conn
 
-        stale_conn = Mock()
-        stale_conn.getresponse.side_effect = httplib.RemoteDisconnected(
-            "Remote end closed connection without response"
-        )
-        fresh_response = Mock()
-        fresh_response.read.return_value = b'{"result": true}'
-        fresh_response.status = 200
-        fresh_response.getheaders.return_value = []
-        fresh_response.getheader.side_effect = lambda name, default=None: default
-        fresh_conn = Mock()
-        fresh_conn.getresponse.return_value = fresh_response
+                with patch.object(
+                    restlib,
+                    "_make_request",
+                    side_effect=[
+                        httplib.RemoteDisconnected("Remote end closed connection without response"),
+                        self._ok_response(),
+                    ],
+                ) as make_request:
+                    result = restlib._request(request_type, path, params, cert_key_pairs=[(None, None)])
 
+                stale_conn.close.assert_called_once()
+                self.assertIsNone(restlib._BaseRestLib__conn)
+                self.assertEqual(2, make_request.call_count)
+                self.assertEqual(make_request.call_args_list[0], make_request.call_args_list[1])
+                self.assertEqual(200, result["status"])
+
+    def test_request_reports_proxy_error_when_retry_also_disconnects(self):
+        restlib = self._proxy_restlib()
         with patch.object(
-            restlib, "_create_connection", side_effect=[stale_conn, fresh_conn]
-        ) as create_connection:
-            with patch.object(restlib, "close_connection") as close_connection:
-                result = restlib._request("GET", "/status", cert_key_pairs=[(None, None)])
+            restlib,
+            "_make_request",
+            side_effect=httplib.RemoteDisconnected("Remote end closed connection without response"),
+        ) as make_request:
+            with self.assertRaises(ProxyException) as cm:
+                restlib._request("GET", "/status", cert_key_pairs=[(None, None)])
 
-        close_connection.assert_called_once()
-        self.assertEqual(2, create_connection.call_count)
-        self.assertEqual(200, result["status"])
-        self.assertEqual('{"result": true}', result["content"])
+        self.assertEqual(2, make_request.call_count)
+        self.assertEqual("proxy.example.com", cm.exception.hostname)
+        self.assertEqual(3128, cm.exception.port)
+        self.assertIsInstance(cm.exception.exc, httplib.RemoteDisconnected)
 
-    def test_connection_error_with_proxy_is_still_proxy_error(self):
-        restlib = BaseRestLib(
-            "somehost", "123", "somehandler", proxy_hostname="proxy.example.com", proxy_port=3128
-        )
-        conn = Mock()
-        conn.getresponse.side_effect = ConnectionResetError("Connection reset by peer")
-        with patch.object(restlib, "_create_connection", return_value=conn):
-            with self.assertRaises(ProxyException):
-                restlib._make_request("GET", "/status", {}, None, [(None, None)])
+    def test_request_propagates_remote_disconnected_without_proxy(self):
+        restlib = BaseRestLib("somehost", "123", "somehandler")
+        with patch.object(
+            restlib,
+            "_make_request",
+            side_effect=httplib.RemoteDisconnected("Remote end closed connection without response"),
+        ) as make_request:
+            with self.assertRaises(httplib.RemoteDisconnected):
+                restlib._request("GET", "/status", cert_key_pairs=[(None, None)])
+
+        self.assertEqual(2, make_request.call_count)
 
 
 # see #830767 and #842885 for examples of why this is
