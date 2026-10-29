@@ -1137,10 +1137,14 @@ class BaseRestLib:
                         raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port, exc=err)
                     raise
                 except (socket.error, OSError) as err:
-                    # If we get a ConnectionError here and we are using a proxy,
-                    # then the issue was the connection to the proxy, not to the
-                    # destination host.
-                    if isinstance(err, ConnectionError) and self.proxy_hostname and self.proxy_port:
+                    # ConnectionErrors come from the proxy, except RemoteDisconnected,
+                    # which means the server closed the connection and _request() retries it.
+                    if (
+                        isinstance(err, ConnectionError)
+                        and not isinstance(err, httplib.RemoteDisconnected)
+                        and self.proxy_hostname
+                        and self.proxy_port
+                    ):
                         raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port, exc=err)
                     code = httplib.PROXY_AUTHENTICATION_REQUIRED.value
                     if str(code) in str(err):
