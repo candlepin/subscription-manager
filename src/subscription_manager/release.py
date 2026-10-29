@@ -25,7 +25,7 @@ from typing import Dict, Iterable, List, Optional, Set, Tuple, TYPE_CHECKING
 from rhsm.https import ssl
 
 import rhsm.config
-from rhsm.connection import NoValidEntitlement
+from rhsm.connection import NoValidEntitlement, ProxyException
 
 from subscription_manager import injection as inj
 from subscription_manager import listing
@@ -160,7 +160,13 @@ class CdnReleaseVersionProvider:
                 data: Optional[dict] = self.content_connection.get_versions(
                     path=listing_path, cert_key_pairs=ent_cert_key_pairs
                 )
-            except (socket.error, http.client.HTTPException, ssl.SSLError, NoValidEntitlement) as e:
+            except (
+                socket.error,
+                http.client.HTTPException,
+                ssl.SSLError,
+                NoValidEntitlement,
+                ProxyException,
+            ) as e:
                 # content connection doesn't handle any exceptions
                 # and the code that invokes this doesn't either, so
                 # swallow them here.

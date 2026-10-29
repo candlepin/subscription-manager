@@ -1137,8 +1137,10 @@ class BaseRestLib:
                         raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port, exc=err)
                     raise
                 except (socket.error, OSError) as err:
-                    # ConnectionErrors come from the proxy, except RemoteDisconnected,
-                    # which means the server closed the connection and _request() retries it.
+                    # If we get a ConnectionError here and we are using a proxy,
+                    # then the issue was the connection to the proxy, not to the
+                    # destination host. RemoteDisconnected is excluded: the peer
+                    # closed the connection and _request() retries it.
                     if (
                         isinstance(err, ConnectionError)
                         and not isinstance(err, httplib.RemoteDisconnected)
@@ -1215,17 +1217,21 @@ class BaseRestLib:
 
         # Try to do request, when it wasn't possible, because server closed connection,
         # then close existing connection and try it once again
-        try:
-            result, response = self._make_request(
-                request_type, handler, final_headers, body, cert_key_pairs, description
-            )
-        except httplib.RemoteDisconnected:
-            log.debug("Connection closed by server")
-            self.close_connection()
-            log.debug("Trying request once again")
-            result, response = self._make_request(
-                request_type, handler, final_headers, body, cert_key_pairs, description
-            )
+        attempts = 2
+        for attempt in range(1, attempts + 1):
+            try:
+                result, response = self._make_request(
+                    request_type, handler, final_headers, body, cert_key_pairs, description
+                )
+                break
+            except httplib.RemoteDisconnected as err:
+                log.debug("Connection closed by server")
+                self.close_connection()
+                if attempt == attempts:
+                    if self.proxy_hostname and self.proxy_port:
+                        raise ProxyException(hostname=self.proxy_hostname, port=self.proxy_port, exc=err)
+                    raise
+                log.debug("Trying request once again")
 
         self._print_debug_info_about_response(result)
 
@@ -1697,21 +1703,22 @@ class UEPConnection(BaseConnection):
 
         """
         if self.has_capability("hypervisors_async"):
-            priorContentType = self.conn.headers["Content-type"]
-            self.conn.headers["Content-type"] = "text/plain"
-
             params = {"env": env, "cloaked": False}
             if options and options.reporter_id and len(options.reporter_id) > 0:
                 params["reporter_id"] = options.reporter_id
 
             query_params = urlencode(params)
             url = "/hypervisors/%s?%s" % (owner, query_params)
-            res = self.conn.request_post(
-                url,
-                host_guest_mapping,
-                description=_("Updating detected virtual machines running on given host"),
-            )
-            self.conn.headers["Content-type"] = priorContentType
+            priorContentType = self.conn.headers["Content-type"]
+            self.conn.headers["Content-type"] = "text/plain"
+            try:
+                res = self.conn.request_post(
+                    url,
+                    host_guest_mapping,
+                    description=_("Updating detected virtual machines running on given host"),
+                )
+            finally:
+                self.conn.headers["Content-type"] = priorContentType
         else:
             # fall back to original report api
             # this results in the same json as in the result_data field
