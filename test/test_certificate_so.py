@@ -131,8 +131,23 @@ class TestLoadSO(unittest.TestCase):
         """
         Test that loading of missing file raises exception
         """
-        with self.assertRaises(rhsm._certificate.OpenSSLCertificateLoadingError):
+        with self.assertRaises(FileNotFoundError):
             rhsm._certificate.load(file="/nonexistent/directory/cert.pem")
+
+    def test_load_cert_no_arguments(self):
+        """
+        Test that loading a certificate without any argument raises exception
+        """
+        with self.assertRaises(ValueError):
+            rhsm._certificate.load()
+
+    def test_load_cert_mutually_exclusive_arguments(self):
+        """
+        Test that loading a certificate with both 'file' and 'pem' arguments
+        raises exception
+        """
+        with self.assertRaises(ValueError):
+            rhsm._certificate.load(file="/some/cert.pem", pem=TEST_CERT_PEM)
 
     def test_load_private_key(self):
         """
@@ -141,12 +156,46 @@ class TestLoadSO(unittest.TestCase):
         key = rhsm._certificate.load_private_key(pem=TEST_KEY_PEM)
         self.assertIsInstance(key, rhsm._certificate.PrivateKey)
 
+    def test_load_private_key_from_file(self):
+        """
+        Test loading private key from file
+        """
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".pem", delete=False) as key_file:
+            key_file.write(TEST_KEY_PEM)
+        try:
+            key = rhsm._certificate.load_private_key(file=key_file.name)
+        finally:
+            os.unlink(key_file.name)
+        self.assertIsInstance(key, rhsm._certificate.PrivateKey)
+
     def test_load_private_key_invalid(self):
         """
         Test that loading of invalid private key returns None
         """
         key = rhsm._certificate.load_private_key(pem="This is not a key")
         self.assertIsNone(key)
+
+    def test_load_private_key_missing_file(self):
+        """
+        Test that loading a private key from a missing file raises exception
+        """
+        with self.assertRaises(FileNotFoundError):
+            rhsm._certificate.load_private_key(file="/nonexistent/directory/key.pem")
+
+    def test_load_private_key_no_arguments(self):
+        """
+        Test that loading a private key without any argument raises exception
+        """
+        with self.assertRaises(ValueError):
+            rhsm._certificate.load_private_key()
+
+    def test_load_private_key_mutually_exclusive_arguments(self):
+        """
+        Test that loading a private key with both 'file' and 'pem' arguments
+        raises exception
+        """
+        with self.assertRaises(ValueError):
+            rhsm._certificate.load_private_key(file="/some/key.pem", pem=TEST_KEY_PEM)
 
 
 class TestX509SO(unittest.TestCase):

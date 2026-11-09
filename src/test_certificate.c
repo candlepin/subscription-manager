@@ -74,6 +74,28 @@ static PyObject *call_with_kwarg(PyObject *obj, const char *method, const char *
     return result;
 }
 
+static PyObject *call_with_kwargs(PyObject *obj, const char *method,
+                                  const char *key1, const char *value1,
+                                  const char *key2, const char *value2) {
+    PyObject *func = PyObject_GetAttrString(obj, method);
+    g_assert_nonnull(func);
+    PyObject *args = PyTuple_New(0);
+    PyObject *kwargs = Py_BuildValue("{s:s,s:s}", key1, value1, key2, value2);
+    PyObject *result = PyObject_Call(func, args, kwargs);
+    Py_DECREF(kwargs);
+    Py_DECREF(args);
+    Py_DECREF(func);
+    return result;
+}
+
+static PyObject *call_with_no_args(PyObject *obj, const char *method) {
+    PyObject *func = PyObject_GetAttrString(obj, method);
+    g_assert_nonnull(func);
+    PyObject *result = PyObject_CallObject(func, NULL);
+    Py_DECREF(func);
+    return result;
+}
+
 static void assert_instance_of(PyObject *obj, const char *type_name) {
     PyObject *type = PyObject_GetAttrString(certificate_module, type_name);
     g_assert_nonnull(type);
@@ -263,10 +285,28 @@ void test_load_cert_invalid_pem() {
     assert_raised(loading_error);
 }
 
+void test_load_cert_invalid_argument() {
+    PyObject *cert = call_with_kwarg(certificate_module, "load", "foo", "Bar");
+    g_assert_null(cert);
+    assert_raised(PyExc_TypeError);
+}
+
+void test_load_cert_no_arguments() {
+    PyObject *cert = call_with_no_args(certificate_module, "load");
+    g_assert_null(cert);
+    assert_raised(PyExc_ValueError);
+}
+
+void test_load_cert_mutually_exclusive_arguments() {
+    PyObject *cert = call_with_kwargs(certificate_module, "load", "file", "/some/file.pem", "pem", "some pem");
+    g_assert_null(cert);
+    assert_raised(PyExc_ValueError);
+}
+
 void test_load_cert_missing_file() {
     PyObject *cert = call_with_kwarg(certificate_module, "load", "file", "/nonexistent/directory/cert.pem");
     g_assert_null(cert);
-    assert_raised(PyExc_RuntimeError);
+    assert_raised(PyExc_FileNotFoundError);
 }
 
 void test_load_private_key(CertFixture *fixture, gconstpointer user_data) {
@@ -286,7 +326,19 @@ void test_load_private_key_invalid() {
 void test_load_private_key_missing_file() {
     PyObject *key = call_with_kwarg(certificate_module, "load_private_key", "file", "/nonexistent/directory/key.pem");
     g_assert_null(key);
-    assert_raised(PyExc_RuntimeError);
+    assert_raised(PyExc_FileNotFoundError);
+}
+
+void test_load_private_key_no_arguments() {
+    PyObject *key = call_with_no_args(certificate_module, "load_private_key");
+    g_assert_null(key);
+    assert_raised(PyExc_ValueError);
+}
+
+void test_load_private_key_mutually_exclusive_arguments() {
+    PyObject *key = call_with_kwargs(certificate_module, "load_private_key", "file", "/some/key.pem", "pem", "some pem");
+    g_assert_null(key);
+    assert_raised(PyExc_ValueError);
 }
 
 void test_get_subject(CertFixture *fixture, gconstpointer user_data) {
@@ -426,10 +478,15 @@ int main(int argc, char **argv) {
     add_cert_test("/test_certificate/test_load_cert_from_pem", test_load_cert_from_pem);
     add_cert_test("/test_certificate/test_load_cert_from_file", test_load_cert_from_file);
     g_test_add_func("/test_certificate/test_load_cert_invalid_pem", test_load_cert_invalid_pem);
+    g_test_add_func("/test_certificate/test_load_cert_invalid_argument", test_load_cert_invalid_argument);
+    g_test_add_func("/test_certificate/test_load_cert_no_arguments", test_load_cert_no_arguments);
+    g_test_add_func("/test_certificate/test_load_cert_mutually_exclusive_arguments", test_load_cert_mutually_exclusive_arguments);
     g_test_add_func("/test_certificate/test_load_cert_missing_file", test_load_cert_missing_file);
     add_cert_test("/test_certificate/test_load_private_key", test_load_private_key);
     g_test_add_func("/test_certificate/test_load_private_key_invalid", test_load_private_key_invalid);
     g_test_add_func("/test_certificate/test_load_private_key_missing_file", test_load_private_key_missing_file);
+    g_test_add_func("/test_certificate/test_load_private_key_no_arguments", test_load_private_key_no_arguments);
+    g_test_add_func("/test_certificate/test_load_private_key_mutually_exclusive_arguments", test_load_private_key_mutually_exclusive_arguments);
     add_cert_test("/test_certificate/test_get_subject", test_get_subject);
     add_cert_test("/test_certificate/test_get_issuer", test_get_issuer);
     add_cert_test("/test_certificate/test_get_serial_number", test_get_serial_number);
