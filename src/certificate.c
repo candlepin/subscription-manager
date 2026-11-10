@@ -50,6 +50,8 @@
 
 #include "Python.h"
 
+#include <unistd.h>
+
 #include <openssl/asn1.h>
 #include <openssl/asn1t.h>
 #include <openssl/err.h>
@@ -327,11 +329,39 @@ load_cert (PyObject *self, PyObject *args, PyObject *keywords)
 		return NULL;
 	}
 
-	BIO *bio;
+	if (pem != NULL && file_name != NULL) {
+		PyErr_SetString (PyExc_ValueError,
+		 "Arguments 'file' or 'pem' are mutually exclusive");
+		return NULL;
+	}
+
+	BIO *bio = NULL;
 	if (pem != NULL) {
 		bio = BIO_new_mem_buf ((void *) pem, strlen (pem));
-	} else {
+
+		if (bio == NULL) {
+			ERR_clear_error ();
+			PyErr_SetString (PyExc_RuntimeError, "Failed to read certificate from pem");
+			return NULL;
+		}
+	} else if (file_name != NULL) {
+		if (access (file_name, F_OK) != 0) {
+			PyErr_Format (PyExc_FileNotFoundError,
+				      "File '%s' does not exist", file_name);
+			return NULL;
+		}
 		bio = BIO_new_file (file_name, "r");
+
+		if (bio == NULL) {
+			ERR_clear_error ();
+			PyErr_Format  (PyExc_RuntimeError,
+				"Failed to read certificate from file %s", file_name);
+			return NULL;
+		}
+	} else {
+		PyErr_SetString (PyExc_ValueError,
+		 "Either 'file' or 'pem' argument has to be provided");
+		return NULL;
 	}
 
 	X509 *x509 = PEM_read_bio_X509 (bio, NULL, NULL, NULL);
@@ -360,17 +390,46 @@ load_private_key (PyObject *self, PyObject *args, PyObject *keywords)
 		return NULL;
 	}
 
-	BIO *bio;
+	if (pem != NULL && file_name != NULL) {
+		PyErr_SetString (PyExc_ValueError,
+		 "Arguments 'file' or 'pem' are mutually exclusive");
+		return NULL;
+	}
+
+	BIO *bio = NULL;
 	if (pem != NULL) {
 		bio = BIO_new_mem_buf ((void *) pem, strlen (pem));
-	} else {
+
+		if (bio == NULL) {
+			ERR_clear_error ();
+			PyErr_SetString (PyExc_RuntimeError, "Failed to read private key from pem");
+			return NULL;
+		}
+	} else if (file_name != NULL) {
+		if (access (file_name, F_OK) != 0) {
+			PyErr_Format (PyExc_FileNotFoundError,
+				      "File '%s' does not exist", file_name);
+			return NULL;
+		}
 		bio = BIO_new_file (file_name, "r");
+
+		if (bio == NULL) {
+			ERR_clear_error ();
+			PyErr_Format  (PyExc_RuntimeError,
+				"Failed to read private key from file %s", file_name);
+			return NULL;
+		}
+	} else {
+		PyErr_SetString (PyExc_ValueError,
+		 "Either 'file' or 'pem' argument has to be provided");
+		return NULL;
 	}
 
 	EVP_PKEY* key = PEM_read_bio_PrivateKey (bio, NULL, NULL, NULL);
 	BIO_free (bio);
 
 	if (key == NULL) {
+		ERR_clear_error ();
 		Py_INCREF (Py_None);
 		return Py_None;
 	}

@@ -38,7 +38,7 @@
 #define TEST_NOT_BEFORE 1767225600
 #define TEST_NOT_AFTER 2082844800
 #define TEST_NOT_BEFORE_STR "Jan  1 00:00:00 2026 GMT"
-#define TEST_NOT_AFTER_STR "Jan  1 00:00:00 2036 GMT"
+#define TEST_NOT_AFTER_STR "Jan  2 00:00:00 2036 GMT"
 #define TEST_UTF8_EXT_OID "1.3.6.1.4.1.2312.9.99.1"
 #define TEST_UTF8_EXT_VALUE "Red Hat Enterprise Linux"
 #define TEST_OCTET_EXT_OID "1.3.6.1.4.1.2312.9.99.2"
@@ -70,6 +70,28 @@ static PyObject *call_with_kwarg(PyObject *obj, const char *method, const char *
     PyObject *result = PyObject_Call(func, args, kwargs);
     Py_DECREF(kwargs);
     Py_DECREF(args);
+    Py_DECREF(func);
+    return result;
+}
+
+static PyObject *call_with_kwargs(PyObject *obj, const char *method,
+                                  const char *key1, const char *value1,
+                                  const char *key2, const char *value2) {
+    PyObject *func = PyObject_GetAttrString(obj, method);
+    g_assert_nonnull(func);
+    PyObject *args = PyTuple_New(0);
+    PyObject *kwargs = Py_BuildValue("{s:s,s:s}", key1, value1, key2, value2);
+    PyObject *result = PyObject_Call(func, args, kwargs);
+    Py_DECREF(kwargs);
+    Py_DECREF(args);
+    Py_DECREF(func);
+    return result;
+}
+
+static PyObject *call_with_no_args(PyObject *obj, const char *method) {
+    PyObject *func = PyObject_GetAttrString(obj, method);
+    g_assert_nonnull(func);
+    PyObject *result = PyObject_CallObject(func, NULL);
     Py_DECREF(func);
     return result;
 }
@@ -263,12 +285,29 @@ void test_load_cert_invalid_pem() {
     assert_raised(loading_error);
 }
 
-// TODO: Fix issue in the code
-// void test_load_cert_missing_file() {
-//     PyObject *cert = call_with_kwarg(certificate_module, "load", "file", "/nonexistent/directory/cert.pem");
-//     g_assert_null(cert);
-//     assert_raised(loading_error);
-// }
+void test_load_cert_invalid_argument() {
+    PyObject *cert = call_with_kwarg(certificate_module, "load", "foo", "Bar");
+    g_assert_null(cert);
+    assert_raised(PyExc_TypeError);
+}
+
+void test_load_cert_no_arguments() {
+    PyObject *cert = call_with_no_args(certificate_module, "load");
+    g_assert_null(cert);
+    assert_raised(PyExc_ValueError);
+}
+
+void test_load_cert_mutually_exclusive_arguments() {
+    PyObject *cert = call_with_kwargs(certificate_module, "load", "file", "/some/file.pem", "pem", "some pem");
+    g_assert_null(cert);
+    assert_raised(PyExc_ValueError);
+}
+
+void test_load_cert_missing_file() {
+    PyObject *cert = call_with_kwarg(certificate_module, "load", "file", "/nonexistent/directory/cert.pem");
+    g_assert_null(cert);
+    assert_raised(PyExc_FileNotFoundError);
+}
 
 void test_load_private_key(CertFixture *fixture, gconstpointer user_data) {
     PyObject *key = call_with_kwarg(certificate_module, "load_private_key", "pem", fixture->key_pem);
@@ -282,6 +321,24 @@ void test_load_private_key_invalid() {
     g_assert_true(key == Py_None);
     Py_DECREF(key);
     ERR_clear_error();
+}
+
+void test_load_private_key_missing_file() {
+    PyObject *key = call_with_kwarg(certificate_module, "load_private_key", "file", "/nonexistent/directory/key.pem");
+    g_assert_null(key);
+    assert_raised(PyExc_FileNotFoundError);
+}
+
+void test_load_private_key_no_arguments() {
+    PyObject *key = call_with_no_args(certificate_module, "load_private_key");
+    g_assert_null(key);
+    assert_raised(PyExc_ValueError);
+}
+
+void test_load_private_key_mutually_exclusive_arguments() {
+    PyObject *key = call_with_kwargs(certificate_module, "load_private_key", "file", "/some/key.pem", "pem", "some pem");
+    g_assert_null(key);
+    assert_raised(PyExc_ValueError);
 }
 
 void test_get_subject(CertFixture *fixture, gconstpointer user_data) {
@@ -321,13 +378,12 @@ void test_get_not_before(CertFixture *fixture, gconstpointer user_data) {
     Py_DECREF(not_before);
 }
 
-// TODO: Fix issue in the code
-// void test_get_not_after(CertFixture *fixture, gconstpointer user_data) {
-//     PyObject *not_after = PyObject_CallMethod(fixture->cert, "get_not_after", NULL);
-//     g_assert_nonnull(not_after);
-//     g_assert_cmpstr(PyUnicode_AsUTF8(not_after), ==, TEST_NOT_AFTER_STR);
-//     Py_DECREF(not_after);
-// }
+void test_get_not_after(CertFixture *fixture, gconstpointer user_data) {
+    PyObject *not_after = PyObject_CallMethod(fixture->cert, "get_not_after", NULL);
+    g_assert_nonnull(not_after);
+    g_assert_cmpstr(PyUnicode_AsUTF8(not_after), ==, TEST_NOT_AFTER_STR);
+    Py_DECREF(not_after);
+}
 
 void test_get_extension_utf8_string(CertFixture *fixture, gconstpointer user_data) {
     PyObject *value = call_with_kwarg(fixture->cert, "get_extension", "oid", TEST_UTF8_EXT_OID);
@@ -422,14 +478,20 @@ int main(int argc, char **argv) {
     add_cert_test("/test_certificate/test_load_cert_from_pem", test_load_cert_from_pem);
     add_cert_test("/test_certificate/test_load_cert_from_file", test_load_cert_from_file);
     g_test_add_func("/test_certificate/test_load_cert_invalid_pem", test_load_cert_invalid_pem);
-//    g_test_add_func("/test_certificate/test_load_cert_missing_file", test_load_cert_missing_file);
+    g_test_add_func("/test_certificate/test_load_cert_invalid_argument", test_load_cert_invalid_argument);
+    g_test_add_func("/test_certificate/test_load_cert_no_arguments", test_load_cert_no_arguments);
+    g_test_add_func("/test_certificate/test_load_cert_mutually_exclusive_arguments", test_load_cert_mutually_exclusive_arguments);
+    g_test_add_func("/test_certificate/test_load_cert_missing_file", test_load_cert_missing_file);
     add_cert_test("/test_certificate/test_load_private_key", test_load_private_key);
     g_test_add_func("/test_certificate/test_load_private_key_invalid", test_load_private_key_invalid);
+    g_test_add_func("/test_certificate/test_load_private_key_missing_file", test_load_private_key_missing_file);
+    g_test_add_func("/test_certificate/test_load_private_key_no_arguments", test_load_private_key_no_arguments);
+    g_test_add_func("/test_certificate/test_load_private_key_mutually_exclusive_arguments", test_load_private_key_mutually_exclusive_arguments);
     add_cert_test("/test_certificate/test_get_subject", test_get_subject);
     add_cert_test("/test_certificate/test_get_issuer", test_get_issuer);
     add_cert_test("/test_certificate/test_get_serial_number", test_get_serial_number);
     add_cert_test("/test_certificate/test_get_not_before", test_get_not_before);
-//    add_cert_test("/test_certificate/test_get_not_after", test_get_not_after);
+    add_cert_test("/test_certificate/test_get_not_after", test_get_not_after);
     add_cert_test("/test_certificate/test_get_extension_utf8_string", test_get_extension_utf8_string);
     add_cert_test("/test_certificate/test_get_extension_octet_string", test_get_extension_octet_string);
     add_cert_test("/test_certificate/test_get_extension_by_name", test_get_extension_by_name);
