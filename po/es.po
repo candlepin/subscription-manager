@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2025-05-28 18:53+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2025-05-31 18:09+0000\n"
+"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/es/>\n"
 "Language: es\n"
@@ -885,9 +885,8 @@ msgid "Unable to read consumer identity"
 msgstr "No se pudo leer identidad del consumidor"
 
 #: src/dnf-plugins/subscription-manager.py:136
-#, fuzzy
 msgid "subscription-manager is operating in container mode."
-msgstr "Subscription Manager está operando en modo de contenedor."
+msgstr "subscription-manager está operando en modo de contenedor."
 
 #: src/dnf-plugins/upload-profile.py:36
 msgid ""
@@ -1770,7 +1769,7 @@ msgstr ""
 #: src/subscription_manager/branding/__init__.py:94
 #: src/subscription_manager/branding/redhat_branding.py:20
 msgid "Red Hat Subscription Management"
-msgstr "Administración de la suscripción a Red Hat"
+msgstr "Administración de Suscripción de Red Hat"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:8
@@ -1778,8 +1777,8 @@ msgid ""
 "Register this system to the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"Registrar este sistema en el portal del cliente u otro servicio de "
-"administración de suscripciones"
+"Registre este sistema en el Portal del Cliente u otro servicio de "
+"administración de suscripción"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:9
@@ -1787,8 +1786,8 @@ msgid ""
 "Unregister this system from the Customer Portal or another subscription "
 "management service"
 msgstr ""
-"Anular el registro de este sistema del portal del cliente u otro servicio de "
-"administración de suscripciones"
+"Anular el registro de este sistema del Portal del Cliente u otro servicio de "
+"administración de suscripción"
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/branding/redhat_branding.py:11
@@ -4728,7 +4727,7 @@ msgstr "Error al leer baseurl:"
 #: src/subscription_manager/managercli.py:535
 msgid "Error: CA certificate for subscription service has not been installed."
 msgstr ""
-"Error: No se ha instalado el certificado CA para el servicio de suscripción."
+"Error: No se ha instalado el certificado AC para el servicio de suscripción."
 
 # translation auto-copied from project subscription-manager, version 1.9.X, document keys
 #: src/subscription_manager/managercli.py:557
@@ -4829,9 +4828,9 @@ msgid ""
 "system purpose \"{attr}\".  This setting will not influence auto-attaching "
 "subscriptions."
 msgstr ""
-"Advertencia: Esta organización no tiene ninguna suscripción que proporciones "
+"Advertencia: Esta organización no tiene ninguna suscripción que proporcione "
 "un propósito al sistema \"{attr}\".  Este ajuste no influirá en la "
-"suscripciones auto-attaching."
+"suscripciones auto-adjuntar."
 
 #: src/subscription_manager/managercli.py:798
 #, python-brace-format
@@ -6484,9 +6483,9 @@ msgid ""
 "Hat Subscription Management. If not desired, use \"subscription-manager "
 "config --rhsm.auto_enable_yum_plugins=0\" to block this behavior."
 msgstr ""
-"Los plugins yum/dnf: %s se habilitaron automáticamente en beneficio de Red "
-"Hat Subscription Management. Si no lo desea, use \"subscription-manager "
-"config --rhsm.auto_enable_yum_plugins=0\" para bloquear este comportamiento."
+"Los plugins yum/dnf: %s fueron auto-habilitados en beneficio de Red Hat "
+"Subscription Management. Si no lo desea, use “subscription-manager config "
+"--rhsm.auto_enable_yum_plugins=0” para bloquear este comportamiento."
 
 #: src/subscription_manager/repolib.py:663
 msgid "Repo updates"
