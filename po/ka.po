@@ -8,9 +8,8 @@ msgstr ""
 "Project-Id-Version: rhsm\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-17 10:10+0100\n"
-"PO-Revision-Date: 2026-09-26 01:33+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"PO-Revision-Date: 2026-11-11 12:18+0000\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-main/ka/>\n"
 "Language: ka\n"
@@ -18,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.1\n"
+"X-Generator: Weblate 2026.11.1\n"
 
 #: /usr/lib64/python3.12/argparse.py:228
 #, python-format
@@ -1776,7 +1775,7 @@ msgstr "არცერთი"
 msgid "environment name: {environment_name}"
 msgid_plural "environment names: {environment_name}"
 msgstr[0] "გარემოს სახელი: {environment_name}"
-msgstr[1] "გარემოს სახელი: {environment_name}"
+msgstr[1] "გარემოს სახელები: {environment_name}"
 
 #: src/subscription_manager/cli_command/identity.py:125
 msgid "Identity certificate has been regenerated."
@@ -1827,7 +1826,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:87
 msgid "No installed products to list"
-msgstr ""
+msgstr "ჩამოსათვლელად დაყენებული პროდუქტები აღმოჩენილი არაა"
 
 #: src/subscription_manager/cli_command/org.py:35
 msgid "specify an organization"
@@ -2037,7 +2036,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/register.py:103
 msgid "set a release version"
-msgstr ""
+msgstr "გამოცემის ვერსიის დაყენება"
 
 #: src/subscription_manager/cli_command/register.py:108
 msgid ""
@@ -2361,7 +2360,7 @@ msgstr "თქვენი სისტემა ამჟამად დაუ
 
 #: src/subscription_manager/cli_command/unregister.py:71
 msgid "System has been unregistered."
-msgstr ""
+msgstr "სისტემის რეგისტრაცია გაუქმდა."
 
 #: src/subscription_manager/cli_command/usage.py:24
 msgid "Show or modify the system purpose usage setting"
