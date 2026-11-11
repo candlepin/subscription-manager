@@ -1,6 +1,6 @@
 # ljanda <ljanda@redhat.com>, 2017. #zanata
 # ljanda <ljanda@redhat.com>, 2018. #zanata
-# John Sefler <jsefler@redhat.com>, 2019. #zanata
+# John Sefler <jsefler@redhat.com>, 2019. #zanata, 2025.
 # ljanda <ljanda@redhat.com>, 2019. #zanata
 # Emilio Herrera <ehespinosa57@gmail.com>, 2021.
 # Pino Toscano <ptoscano@redhat.com>, 2023.
@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2025-04-21 19:53+0000\n"
-"Last-Translator: \"Fco. Javier F. Serrador\" <fserrador@gmail.com>\n"
+"PO-Revision-Date: 2025-05-28 18:53+0000\n"
+"Last-Translator: John Sefler <jsefler@redhat.com>\n"
 "Language-Team: Spanish <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/es/>\n"
 "Language: es\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: /usr/lib64/python3.6/argparse.py:295
 msgid "usage: "
@@ -885,6 +885,7 @@ msgid "Unable to read consumer identity"
 msgstr "No se pudo leer identidad del consumidor"
 
 #: src/dnf-plugins/subscription-manager.py:136
+#, fuzzy
 msgid "subscription-manager is operating in container mode."
 msgstr "Subscription Manager está operando en modo de contenedor."
 
