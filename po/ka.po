@@ -9,8 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-14 15:31+0200\n"
 "PO-Revision-Date: 2026-11-11 12:18+0000\n"
-"Last-Translator: Weblate Translation Memory <noreply-mt-weblate-translation-"
-"memory@weblate.org>\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-29/ka/>\n"
 "Language: ka\n"
@@ -1563,7 +1562,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/attach.py:121
 msgid "Error: Quantity must be a positive integer."
-msgstr "რაოდენობა დადებითი რიცხვი უნდა იყოს."
+msgstr "შეცდომა: რაოდენობა დადებითი მთელი რიცხვი უნდა იყოს."
 
 #: src/subscription_manager/cli_command/attach.py:123
 msgid "Error: --quantity may not be used with an auto-attach"
@@ -1957,7 +1956,7 @@ msgstr "არცერთი"
 msgid "environment name: {environment_name}"
 msgid_plural "environment names: {environment_name}"
 msgstr[0] "გარემოს სახელი: {environment_name}"
-msgstr[1] "გარემოს სახელი: {environment_name}"
+msgstr[1] "გარემოს სახელები: {environment_name}"
 
 #: src/subscription_manager/cli_command/identity.py:137
 msgid "Identity certificate has been regenerated."
@@ -2009,7 +2008,7 @@ msgstr ""
 #: src/subscription_manager/cli_command/import_cert.py:100
 #, python-brace-format
 msgid "{file}: file not found."
-msgstr ""
+msgstr "{file}: ფაილი აღმოჩენილი არაა."
 
 #: src/subscription_manager/cli_command/list.py:49
 msgid "Future Subscription"
@@ -2332,7 +2331,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/list.py:412
 msgid "No installed products to list"
-msgstr "დაყენებული პროდუქტები აღმოჩენილი არაა"
+msgstr "ჩამოსათვლელად დაყენებული პროდუქტები აღმოჩენილი არაა"
 
 #: src/subscription_manager/cli_command/list.py:439
 msgid "Available Subscriptions"
@@ -2622,7 +2621,7 @@ msgstr ""
 
 #: src/subscription_manager/cli_command/register.py:107
 msgid "set a release version"
-msgstr ""
+msgstr "გამოცემის ვერსიის დაყენება"
 
 #: src/subscription_manager/cli_command/register.py:112
 msgid "Deprecated, see --auto-attach"
@@ -3074,7 +3073,7 @@ msgstr "თქვენი სისტემა ამჟამად დაუ
 
 #: src/subscription_manager/cli_command/unregister.py:71
 msgid "System has been unregistered."
-msgstr "სისტემა რეგისტრირებული არაა."
+msgstr "სისტემის რეგისტრაცია გაუქმდა."
 
 #: src/subscription_manager/cli_command/usage.py:24
 msgid "Show or modify the system purpose usage setting"
