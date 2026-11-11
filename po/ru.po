@@ -3,14 +3,14 @@
 # ljanda <ljanda@redhat.com>, 2018. #zanata
 # John Sefler <jsefler@redhat.com>, 2019. #zanata, 2025.
 # ljanda <ljanda@redhat.com>, 2019. #zanata
-# Aleksey Fedorov <aleksejfedorov963@gmail.com>, 2024.
+# Aleksey Fedorov <aleksejfedorov963@gmail.com>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-03-21 14:27+0100\n"
-"PO-Revision-Date: 2025-07-16 19:53+0000\n"
-"Last-Translator: John Sefler <jsefler@redhat.com>\n"
+"PO-Revision-Date: 2025-07-17 22:53+0000\n"
+"Last-Translator: Aleksey Fedorov <aleksejfedorov963@gmail.com>\n"
 "Language-Team: Russian <https://translate.fedoraproject.org/projects/"
 "subscription-manager/subscription-manager-1-28/ru/>\n"
 "Language: ru\n"
@@ -748,13 +748,12 @@ msgid "Unable to connect"
 msgstr "Не удалось подключиться"
 
 #: cockpit/src/subscriptions-view.jsx:514
-#, fuzzy
 msgid ""
 "Couldn't get system subscription status. Please ensure subscription-manager "
 "is installed. Reported status: $0 ($1)"
 msgstr ""
-"Не удалось получить статус подписки в системе. Убедитесь, что установлен "
-"менеджер подписок. Сообщаемый статус: $0 ($1)"
+"Не удалось получить статус подписки в системе. Убедитесь, что пакет "
+"subscription-manager установлен. Сообщаемый статус: $0 ($1)"
 
 # translation auto-copied from project subscription-manager, version 1.11.X, document keys
 #: src/daemons/rhsmcertd.c:111
