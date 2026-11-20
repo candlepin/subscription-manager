@@ -13,6 +13,7 @@ from typing import Dict, List, Union
 
 from rhsmlib.facts import collector
 from rhsmlib.facts import custom
+from rhsmlib.facts import disk
 from rhsmlib.facts import host_collector
 from rhsmlib.facts import hwprobe
 from rhsmlib.facts import insights
@@ -29,6 +30,7 @@ class AllFactsCollector(collector.FactsCollector):
             host_collector.HostCollector,
             hwprobe.HardwareCollector,
             network.NetworkCollector,
+            disk.DiskCollector,
             custom.CustomFactsCollector,
             insights.InsightsCollector,
             kpatch.KPatchCollector,
